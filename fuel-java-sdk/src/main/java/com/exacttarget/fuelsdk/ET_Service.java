@@ -1,5 +1,5 @@
 //
-// ET_GetService.java -
+// ET_Service.java -
 //
 //      x
 //
@@ -10,8 +10,6 @@
 
 package com.exacttarget.fuelsdk;
 
-public interface ET_GetService<T extends ET_Object>
-    extends ET_Service<T>
-{
-    public ET_ServiceResponse<T> get();
+public interface ET_Service<T extends ET_Object> {
+    
 }

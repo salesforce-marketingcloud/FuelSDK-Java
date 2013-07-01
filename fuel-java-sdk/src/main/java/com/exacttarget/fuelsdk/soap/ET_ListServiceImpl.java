@@ -18,6 +18,6 @@ public class ET_ListServiceImpl extends ET_CrudServiceImpl<ET_List>
     implements ET_ListService
 {
     public ET_ServiceResponse<ET_List> get() {
-        
+        return null; // XXX
     }
 }

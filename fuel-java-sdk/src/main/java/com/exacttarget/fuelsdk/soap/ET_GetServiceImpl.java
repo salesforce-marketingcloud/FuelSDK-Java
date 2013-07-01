@@ -15,7 +15,7 @@ import com.exacttarget.fuelsdk.ET_Object;
 import com.exacttarget.fuelsdk.ET_ServiceResponse;
 
 public class ET_GetServiceImpl<T extends ET_Object>
-    implements ET_GetService<T>
+    extends ET_ServiceImpl<T> implements ET_GetService<T>
 {
     public ET_ServiceResponse<T> get() {
         return null; // XXX
