@@ -20,11 +20,11 @@ public class ET_CrudServiceImpl<T extends ET_Object>
     public ET_ServiceResponse<T> post(T object) {
         return null; // XXX
     }
-    
+
     public ET_ServiceResponse<T> patch(T object) {
         return null; // XXX
     }
-    
+
     public ET_ServiceResponse<T> delete(T object) {
         return null; // XXX
     }

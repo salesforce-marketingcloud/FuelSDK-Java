@@ -11,5 +11,5 @@
 package com.exacttarget.fuelsdk;
 
 public interface ET_Service<T extends ET_Object> {
-    
+
 }

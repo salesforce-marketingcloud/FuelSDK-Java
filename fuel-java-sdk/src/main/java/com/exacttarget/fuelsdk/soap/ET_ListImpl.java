@@ -16,7 +16,7 @@ public class ET_ListImpl implements ET_List {
     private com.exacttarget.fuelsdk.internal.List list = null;
 
     // XXX populate list
-    
+
     public String getName() {
         return list.getListName();
     }
