@@ -10,8 +10,10 @@
 
 package com.exacttarget.fuelsdk.rest;
 
-import org.junit.Test;
 import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import static org.junit.Assert.*;
 
 import com.google.gson.JsonObject;
@@ -49,5 +51,20 @@ public class ET_ConnectionTest {
         int uid = jsonObject.get("user").
                 getAsJsonObject().get("id").getAsInt();
         assertEquals(UID, uid);
+    }
+
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+
+    @Test
+    public void testBadURL()
+        throws ET_SDKException
+    {
+        thrown.expect(ET_SDKException.class);
+        thrown.expectMessage("INVALID/platform/v1/tokenContext: bad URL");
+        ET_Configuration configuration = new ET_Configuration();
+        configuration.setEndpoint("INVALID");
+        connection = new ET_Connection(configuration);
+        connection.get("/platform/v1/tokenContext");
     }
 }
