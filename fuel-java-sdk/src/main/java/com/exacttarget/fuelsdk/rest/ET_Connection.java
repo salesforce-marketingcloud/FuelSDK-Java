@@ -33,8 +33,9 @@ import com.exacttarget.fuelsdk.ET_SDKException;
 public class ET_Connection {
     private static Logger logger = Logger.getLogger(ET_Connection.class);
 
-    private String endpoint = null;
-    private String authEndpoint = null;
+    // set endpoint and authEndpoint to production default values
+    private String endpoint = "https://www.exacttargetapis.com";
+    private String authEndpoint = "https://auth.exacttargetapis.com";
     private String clientId = null;
     private String clientSecret = null;
 
@@ -45,8 +46,12 @@ public class ET_Connection {
 //    private Gson gson = null;
 
     public ET_Connection(ET_Configuration configuration) {
-        endpoint = configuration.getEndpoint();
-        authEndpoint = configuration.getAuthEndpoint();
+        if (configuration.getEndpoint() != null) {
+            endpoint = configuration.getEndpoint();
+        }
+        if (configuration.getAuthEndpoint() != null) {
+            authEndpoint = configuration.getAuthEndpoint();
+        }
         clientId = configuration.getClientId();
         clientSecret = configuration.getClientSecret();
 
