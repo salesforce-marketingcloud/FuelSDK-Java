@@ -10,11 +10,15 @@
 
 package com.exacttarget.fuelsdk.rest;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import static org.junit.Assert.*;
+import static org.hamcrest.CoreMatchers.*;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -23,19 +27,22 @@ import com.exacttarget.fuelsdk.ET_Configuration;
 import com.exacttarget.fuelsdk.ET_SDKException;
 
 public class ET_ConnectionTest {
+    private ET_Configuration configuration = null;
     private ET_Connection connection = null;
 
     @Before
     public void setUp()
         throws ET_SDKException
     {
-        connection = new ET_Connection(new ET_Configuration("/fuelsdk-test.properties"));
+        configuration = new ET_Configuration("/fuelsdk-test.properties");
+        connection = new ET_Connection(configuration);
     }
 
     @Test
     public void testAuth()
         throws ET_SDKException
     {
+        // XXX these values should be specified via properties too
         int EID = 10212759;
         int OID = 10212759;
         int UID = 10737950;
@@ -57,13 +64,36 @@ public class ET_ConnectionTest {
     public ExpectedException thrown = ExpectedException.none();
 
     @Test
-    public void testBadURL()
+    public void testBadEndpoint1()
         throws ET_SDKException
     {
         thrown.expect(ET_SDKException.class);
-        thrown.expectMessage("INVALID/platform/v1/tokenContext: bad URL");
+        thrown.expectCause(isA(MalformedURLException.class));
         ET_Configuration configuration = new ET_Configuration();
         configuration.setEndpoint("INVALID");
+        connection = new ET_Connection(configuration);
+        connection.get("/platform/v1/tokenContext");
+    }
+
+    @Test
+    public void testBadEndpoint2()
+        throws ET_SDKException
+    {
+        thrown.expect(ET_SDKException.class);
+        thrown.expectCause(isA(IOException.class));
+        configuration.setEndpoint("https://ww.exacttargetapis.com");
+        connection = new ET_Connection(configuration);
+        connection.get("/platform/v1/tokenContext");
+    }
+
+    @Test
+    public void testBadAuthEndpoint1()
+        throws ET_SDKException
+    {
+        thrown.expect(ET_SDKException.class);
+        thrown.expectCause(isA(MalformedURLException.class));
+        ET_Configuration configuration = new ET_Configuration();
+        configuration.setAuthEndpoint("INVALID");
         connection = new ET_Connection(configuration);
         connection.get("/platform/v1/tokenContext");
     }
