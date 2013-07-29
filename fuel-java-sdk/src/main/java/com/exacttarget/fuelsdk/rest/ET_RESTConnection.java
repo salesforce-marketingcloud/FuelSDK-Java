@@ -1,5 +1,5 @@
 //
-// ET_Connection.java -
+// ET_RESTConnection.java -
 //
 //      x
 //
@@ -20,45 +20,39 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 
-//import com.google.gson.Gson;
-//import com.google.gson.GsonBuilder;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import org.apache.log4j.Logger;
 
-import com.exacttarget.fuelsdk.ET_Configuration;
+import com.exacttarget.fuelsdk.ET_Client;
 import com.exacttarget.fuelsdk.ET_SDKException;
 
-public class ET_Connection {
-    private static Logger logger = Logger.getLogger(ET_Connection.class);
+public class ET_RESTConnection {
+    private static Logger logger = Logger.getLogger(ET_RESTConnection.class);
 
-    // set endpoint and authEndpoint to production default values
-    private String endpoint = "https://www.exacttargetapis.com";
-    private String authEndpoint = "https://auth.exacttargetapis.com";
-    private String clientId = null;
-    private String clientSecret = null;
+    private ET_Client client = null;
 
-    private static final String PATH_REQUESTTOKEN = "/v1/requestToken";
+    private String endpoint = null;
 
-    private String accessToken = null;
+    private Gson gson = null;
 
-//    private Gson gson = null;
+    public ET_RESTConnection(ET_Client client, String endpoint)
+        throws ET_SDKException
+    {
+        this.client = client;
 
-    public ET_Connection(ET_Configuration configuration) {
-        if (configuration.getEndpoint() != null) {
-            endpoint = configuration.getEndpoint();
+        this.endpoint = endpoint;
+
+        //
+        // If log level is set to TRACE, configure Gson to do pretty printing:
+        //
+
+        if (logger.isTraceEnabled()) {
+            gson = new GsonBuilder().setPrettyPrinting().create();
         }
-        if (configuration.getAuthEndpoint() != null) {
-            authEndpoint = configuration.getAuthEndpoint();
-        }
-        clientId = configuration.getClientId();
-        clientSecret = configuration.getClientSecret();
-
-//        GsonBuilder gsonBuilder = new GsonBuilder();
-//        gson = gsonBuilder.create();
-//        // XXX make this an option
-//        //gson = gsonBuilder.setPrettyPrinting().create();
     }
 
     public String get(String path)
@@ -73,17 +67,16 @@ public class ET_Connection {
     public String post(String path, String payload)
         throws ET_SDKException
     {
-        return post(path, payload, true);
-    }
-
-    private String post(String path, String payload, boolean isAuthenticated)
-        throws ET_SDKException
-    {
-        HttpURLConnection connection = sendRequest(path, "POST", payload,
-                isAuthenticated);
+        HttpURLConnection connection = sendRequest(path, "POST", payload);
         String response = receiveResponse(connection);
         connection.disconnect();
         return response;
+    }
+
+    public String post(String path, JsonObject jsonObject)
+        throws ET_SDKException
+    {
+        return post(path, jsonObject.toString());
     }
 
 //    public <T> T get(String url, Class<T> entityClass)
@@ -119,32 +112,6 @@ public class ET_Connection {
 //        post(new URL(url), payload);
 //    }
 
-    private String requestToken(String clientId, String clientSecret)
-        throws ET_SDKException
-    {
-        logger.trace("requesting access token...");
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("clientId", clientId);
-        jsonObject.addProperty("clientSecret", clientSecret);
-        // XXX put this in a method?
-        URL url = null;
-        try {
-            url = new URL(authEndpoint + PATH_REQUESTTOKEN);
-        } catch (MalformedURLException ex) {
-            throw new ET_SDKException(authEndpoint + PATH_REQUESTTOKEN + ": bad URL",
-                    ex);
-        }
-        String payload = jsonObject.toString();
-        HttpURLConnection connection = sendRequest(url, "POST", payload, false);
-        String response = receiveResponse(connection);
-        connection.disconnect();
-        JsonParser jsonParser = new JsonParser();
-        jsonObject = jsonParser.parse(response).getAsJsonObject();
-        String accessToken = jsonObject.get("accessToken").getAsString();
-        logger.debug("refreshed accessToken: " + accessToken);
-        return accessToken;
-    }
-
     private HttpURLConnection sendRequest(String path, String method)
         throws ET_SDKException
     {
@@ -155,32 +122,19 @@ public class ET_Connection {
             String payload)
         throws ET_SDKException
     {
-        return sendRequest(path, method, payload, true);
-    }
-
-    private HttpURLConnection sendRequest(String path, String method,
-            String payload, boolean isAuthenticated)
-        throws ET_SDKException
-    {
         URL url = null;
         try {
             url = new URL(endpoint + path);
         } catch (MalformedURLException ex) {
             throw new ET_SDKException(endpoint + path + ": bad URL", ex);
         }
-        return sendRequest(url, method, payload, true);
+        return sendRequest(url, method, payload);
     }
 
     private HttpURLConnection sendRequest(URL url, String method,
-            String payload, boolean isAuthenticated)
+            String payload)
         throws ET_SDKException
     {
-        if (isAuthenticated) {
-            if (accessToken == null) {
-                accessToken = requestToken(clientId, clientSecret);
-            }
-        }
-
         logger.trace(method + " " + url);
 
         HttpURLConnection connection = null;
@@ -212,7 +166,8 @@ public class ET_Connection {
             throw new ET_SDKException("unsupported request method: " + method);
         }
 
-        if (isAuthenticated) {
+        String accessToken = client.getAccessToken();
+        if (accessToken != null) {
             connection.setRequestProperty("Authorization", "Bearer " + accessToken);
         }
 
@@ -224,7 +179,10 @@ public class ET_Connection {
 
         if (payload != null) {
             if (logger.isTraceEnabled()) {
-                for (String line : payload.split("\\n")) {
+                JsonParser jsonParser = new JsonParser();
+                String payloadPrettyPrinted =
+                        gson.toJson(jsonParser.parse(payload));
+                for (String line : payloadPrettyPrinted.split("\\n")) {
                     logger.trace(line);
                 }
             }
@@ -278,7 +236,10 @@ public class ET_Connection {
         String response = stringBuilder.toString();
 
         if (logger.isTraceEnabled()) {
-            for (String line : response.split("\\n")) {
+            JsonParser jsonParser = new JsonParser();
+            String responsePrettyPrinted =
+                    gson.toJson(jsonParser.parse(response));
+            for (String line : responsePrettyPrinted.split("\\n")) {
                 logger.trace(line);
             }
         }
