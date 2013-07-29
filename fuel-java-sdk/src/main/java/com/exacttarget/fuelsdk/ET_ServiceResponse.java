@@ -13,5 +13,7 @@ package com.exacttarget.fuelsdk;
 import java.util.List;
 
 public interface ET_ServiceResponse<T extends ET_Object> {
+    public String getRequestId();
+    public void setRequestId(String requestId);
     public List<T> getResults();
 }

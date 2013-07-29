@@ -11,13 +11,33 @@
 package com.exacttarget.fuelsdk.soap;
 
 import com.exacttarget.fuelsdk.ET_List;
+import com.exacttarget.fuelsdk.internal.List;
 
 public class ET_ListImpl implements ET_List {
-    private com.exacttarget.fuelsdk.internal.List list = null;
+    public static final String OBJECT_TYPE = "List";
+    public static final String[] PROPERTIES = {
+        "ListName"
+    };
 
-    // XXX populate list
+    private String name = null;
+
+    public ET_ListImpl() {
+        // XXX
+    }
+
+    public ET_ListImpl(List list) {
+        name = list.getListName();
+    }
 
     public String getName() {
-        return list.getListName();
+        return name;
+    }
+
+    public String getObjectType() {
+        return OBJECT_TYPE;
+    }
+
+    public String[] getProperties() {
+        return PROPERTIES;
     }
 }

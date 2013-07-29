@@ -10,6 +10,8 @@
 
 package com.exacttarget.fuelsdk;
 
-public interface ET_List extends ET_Object {
+import com.exacttarget.fuelsdk.soap.ET_SOAPObject;
+
+public interface ET_List extends ET_SOAPObject {
     public String getName();
 }
