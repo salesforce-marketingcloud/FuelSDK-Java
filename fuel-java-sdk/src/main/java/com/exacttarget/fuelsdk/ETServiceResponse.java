@@ -1,5 +1,5 @@
 //
-// ET_ServiceResponse.java -
+// ETServiceResponse.java -
 //
 //      x
 //
@@ -12,7 +12,7 @@ package com.exacttarget.fuelsdk;
 
 import java.util.List;
 
-public interface ET_ServiceResponse<T extends ET_Object> {
+public interface ETServiceResponse<T extends ETObject> {
     public String getRequestId();
     public void setRequestId(String requestId);
     public List<T> getResults();

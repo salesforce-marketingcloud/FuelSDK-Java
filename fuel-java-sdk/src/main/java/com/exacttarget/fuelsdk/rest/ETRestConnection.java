@@ -1,5 +1,5 @@
 //
-// ET_RESTConnection.java -
+// ETRestConnection.java -
 //
 //      x
 //
@@ -27,20 +27,20 @@ import com.google.gson.JsonParser;
 
 import org.apache.log4j.Logger;
 
-import com.exacttarget.fuelsdk.ET_Client;
-import com.exacttarget.fuelsdk.ET_SDKException;
+import com.exacttarget.fuelsdk.ETClient;
+import com.exacttarget.fuelsdk.ETSdkException;
 
-public class ET_RESTConnection {
-    private static Logger logger = Logger.getLogger(ET_RESTConnection.class);
+public class ETRestConnection {
+    private static Logger logger = Logger.getLogger(ETRestConnection.class);
 
-    private ET_Client client = null;
+    private ETClient client = null;
 
     private String endpoint = null;
 
     private Gson gson = null;
 
-    public ET_RESTConnection(ET_Client client, String endpoint)
-        throws ET_SDKException
+    public ETRestConnection(ETClient client, String endpoint)
+        throws ETSdkException
     {
         this.client = client;
 
@@ -56,7 +56,7 @@ public class ET_RESTConnection {
     }
 
     public String get(String path)
-        throws ET_SDKException
+        throws ETSdkException
     {
         HttpURLConnection connection = sendRequest(path, "GET");
         String response = receiveResponse(connection);
@@ -65,7 +65,7 @@ public class ET_RESTConnection {
     }
 
     public String post(String path, String payload)
-        throws ET_SDKException
+        throws ETSdkException
     {
         HttpURLConnection connection = sendRequest(path, "POST", payload);
         String response = receiveResponse(connection);
@@ -74,7 +74,7 @@ public class ET_RESTConnection {
     }
 
     public String post(String path, JsonObject jsonObject)
-        throws ET_SDKException
+        throws ETSdkException
     {
         return post(path, jsonObject.toString());
     }
@@ -113,27 +113,27 @@ public class ET_RESTConnection {
 //    }
 
     private HttpURLConnection sendRequest(String path, String method)
-        throws ET_SDKException
+        throws ETSdkException
     {
         return sendRequest(path, method, null);
     }
 
     private HttpURLConnection sendRequest(String path, String method,
             String payload)
-        throws ET_SDKException
+        throws ETSdkException
     {
         URL url = null;
         try {
             url = new URL(endpoint + path);
         } catch (MalformedURLException ex) {
-            throw new ET_SDKException(endpoint + path + ": bad URL", ex);
+            throw new ETSdkException(endpoint + path + ": bad URL", ex);
         }
         return sendRequest(url, method, payload);
     }
 
     private HttpURLConnection sendRequest(URL url, String method,
             String payload)
-        throws ET_SDKException
+        throws ETSdkException
     {
         logger.trace(method + " " + url);
 
@@ -141,14 +141,14 @@ public class ET_RESTConnection {
         try {
             connection = (HttpURLConnection) url.openConnection();
         } catch (IOException ex) {
-            throw new ET_SDKException("error opening " + url, ex);
+            throw new ETSdkException("error opening " + url, ex);
         }
 
         if (method.equals("GET")) {
             try {
                 connection.setRequestMethod("GET");
             } catch (ProtocolException ex) {
-                throw new ET_SDKException("error setting request method: GET", ex);
+                throw new ETSdkException("error setting request method: GET", ex);
             }
             connection.setDoInput(true);
             connection.setRequestProperty("Accept",
@@ -157,13 +157,13 @@ public class ET_RESTConnection {
             try {
                 connection.setRequestMethod("POST");
             } catch (ProtocolException ex) {
-                throw new ET_SDKException("error setting request method: POST", ex);
+                throw new ETSdkException("error setting request method: POST", ex);
             }
             connection.setDoOutput(true);
             connection.setRequestProperty("Content-Type",
                     "application/json");
         } else {
-            throw new ET_SDKException("unsupported request method: " + method);
+            throw new ETSdkException("unsupported request method: " + method);
         }
 
         String accessToken = client.getAccessToken();
@@ -191,7 +191,7 @@ public class ET_RESTConnection {
                 os.write(payload.getBytes());
                 os.flush();
             } catch (IOException ex) {
-                throw new ET_SDKException("error writing " + url, ex);
+                throw new ETSdkException("error writing " + url, ex);
             }
         }
 
@@ -199,20 +199,20 @@ public class ET_RESTConnection {
             logger.trace(connection.getResponseCode() + " "
                     + connection.getResponseMessage());
         } catch (IOException ex) {
-            throw new ET_SDKException("error getting response code / message", ex);
+            throw new ETSdkException("error getting response code / message", ex);
         }
 
         return connection;
     }
 
     private String receiveResponse(HttpURLConnection connection)
-        throws ET_SDKException
+        throws ETSdkException
     {
         InputStream is = null;
         try {
             is = connection.getInputStream();
         } catch (IOException ex) {
-            throw new ET_SDKException("error opening " + connection.getURL(), ex);
+            throw new ETSdkException("error opening " + connection.getURL(), ex);
         }
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -224,13 +224,13 @@ public class ET_RESTConnection {
                 stringBuilder.append(line);
             }
         } catch (IOException ex) {
-            throw new ET_SDKException("error reading " + connection.getURL(), ex);
+            throw new ETSdkException("error reading " + connection.getURL(), ex);
         }
 
         try {
             reader.close();
         } catch (IOException ex) {
-            throw new ET_SDKException("error closing " + connection.getURL(), ex);
+            throw new ETSdkException("error closing " + connection.getURL(), ex);
         }
 
         String response = stringBuilder.toString();

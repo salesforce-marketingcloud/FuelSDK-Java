@@ -1,5 +1,5 @@
 //
-// ET_SOAPConnection.java -
+// ETSoapConnection.java -
 //
 //      x
 //
@@ -28,23 +28,23 @@ import org.apache.cxf.message.Message;
 
 import org.apache.log4j.Logger;
 
-import com.exacttarget.fuelsdk.ET_Client;
-import com.exacttarget.fuelsdk.ET_SDKException;
+import com.exacttarget.fuelsdk.ETClient;
+import com.exacttarget.fuelsdk.ETSdkException;
 
 import com.exacttarget.fuelsdk.internal.PartnerAPI;
 import com.exacttarget.fuelsdk.internal.Soap;
 
-public class ET_SOAPConnection {
-    private static Logger logger = Logger.getLogger(ET_SOAPConnection.class);
+public class ETSoapConnection {
+    private static Logger logger = Logger.getLogger(ETSoapConnection.class);
 
-    private ET_Client client = null;
+    private ETClient client = null;
 
     private String endpoint = null;
 
     private Soap soap = null;
 
-    public ET_SOAPConnection(ET_Client client, String endpoint)
-        throws ET_SDKException
+    public ETSoapConnection(ETClient client, String endpoint)
+        throws ETSdkException
     {
         this.client = client;
 
@@ -111,7 +111,7 @@ public class ET_SOAPConnection {
             soapEndpoint.getInInterceptors().add(loggingInInterceptor);
             soapEndpoint.getOutInterceptors().add(loggingOutInterceptor);
         } catch (SOAPException ex) {
-            throw new ET_SDKException("could not initialize SOAP proxy", ex);
+            throw new ETSdkException("could not initialize SOAP proxy", ex);
         }
     }
 

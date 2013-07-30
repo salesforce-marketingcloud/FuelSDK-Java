@@ -1,5 +1,5 @@
 //
-// ET_ServiceResponseImpl.java -
+// ETServiceResponseImpl.java -
 //
 //      x
 //
@@ -13,11 +13,11 @@ package com.exacttarget.fuelsdk.soap;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.exacttarget.fuelsdk.ET_Object;
-import com.exacttarget.fuelsdk.ET_ServiceResponse;
+import com.exacttarget.fuelsdk.ETObject;
+import com.exacttarget.fuelsdk.ETServiceResponse;
 
-public class ET_ServiceResponseImpl<T extends ET_Object>
-    implements ET_ServiceResponse<T>
+public class ETServiceResponseImpl<T extends ETObject>
+    implements ETServiceResponse<T>
 {
     private String requestId = null;
     private List<T> results = new ArrayList<T>();

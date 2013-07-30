@@ -1,5 +1,5 @@
 //
-// ET_GetServiceImpl.java -
+// ETGetServiceImpl.java -
 //
 //      x
 //
@@ -15,28 +15,28 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.apache.log4j.Logger;
 
-import com.exacttarget.fuelsdk.ET_Client;
-import com.exacttarget.fuelsdk.ET_GetService;
-import com.exacttarget.fuelsdk.ET_Object;
-import com.exacttarget.fuelsdk.ET_SDKException;
-import com.exacttarget.fuelsdk.ET_ServiceResponse;
+import com.exacttarget.fuelsdk.ETClient;
+import com.exacttarget.fuelsdk.ETGetService;
+import com.exacttarget.fuelsdk.ETObject;
+import com.exacttarget.fuelsdk.ETSdkException;
+import com.exacttarget.fuelsdk.ETServiceResponse;
 import com.exacttarget.fuelsdk.internal.APIObject;
 import com.exacttarget.fuelsdk.internal.RetrieveRequest;
 import com.exacttarget.fuelsdk.internal.RetrieveRequestMsg;
 import com.exacttarget.fuelsdk.internal.RetrieveResponseMsg;
 import com.exacttarget.fuelsdk.internal.Soap;
 
-public class ET_GetServiceImpl<T extends ET_Object>
-    extends ET_ServiceImpl<T> implements ET_GetService<T>
+public class ETGetServiceImpl<T extends ETObject>
+    extends ETServiceImpl<T> implements ETGetService<T>
 {
-    private static Logger logger = Logger.getLogger(ET_GetServiceImpl.class);
+    private static Logger logger = Logger.getLogger(ETGetServiceImpl.class);
 
-    public ET_ServiceResponse<T> get(ET_Client client, Class<T> type)
-        throws ET_SDKException
+    public ETServiceResponse<T> get(ETClient client, Class<T> type)
+        throws ETSdkException
     {
         Soap soap = client.getSOAPConnection().getSoap();
 
-        ET_ServiceResponse<T> response = new ET_ServiceResponseImpl<T>();
+        ETServiceResponse<T> response = new ETServiceResponseImpl<T>();
 
         // XXX replace with getConstructor() call
         Constructor<T>[] constructors = null;
@@ -49,13 +49,13 @@ public class ET_GetServiceImpl<T extends ET_Object>
         try {
             objectType = (String) type.getField("OBJECT_TYPE").get(null);
         } catch (IllegalAccessException ex) {
-            throw new ET_SDKException("error determining objectType", ex);
+            throw new ETSdkException("error determining objectType", ex);
         } catch (IllegalArgumentException ex) {
-            throw new ET_SDKException("error determining objectType", ex);
+            throw new ETSdkException("error determining objectType", ex);
         } catch (NoSuchFieldException ex) {
-            throw new ET_SDKException("error determining objectType", ex);
+            throw new ETSdkException("error determining objectType", ex);
         } catch (SecurityException ex) {
-            throw new ET_SDKException("error determining objectType", ex);
+            throw new ETSdkException("error determining objectType", ex);
         }
 
         logger.debug("objectType: " + objectType);
@@ -64,13 +64,13 @@ public class ET_GetServiceImpl<T extends ET_Object>
         try {
             properties = (String[]) type.getField("PROPERTIES").get(null);
         } catch (IllegalAccessException ex) {
-            throw new ET_SDKException("error determining properties", ex);
+            throw new ETSdkException("error determining properties", ex);
         } catch (IllegalArgumentException ex) {
-            throw new ET_SDKException("error determining properties", ex);
+            throw new ETSdkException("error determining properties", ex);
         } catch (NoSuchFieldException ex) {
-            throw new ET_SDKException("error determining properties", ex);
+            throw new ETSdkException("error determining properties", ex);
         } catch (SecurityException ex) {
-            throw new ET_SDKException("error determining objectType", ex);
+            throw new ETSdkException("error determining objectType", ex);
         }
 
         logger.debug("properties:");
@@ -101,13 +101,13 @@ public class ET_GetServiceImpl<T extends ET_Object>
             try {
                 object = constructors[0].newInstance(apiObject);
             } catch (IllegalAccessException ex) {
-                throw new ET_SDKException("error instantiating object", ex);
+                throw new ETSdkException("error instantiating object", ex);
             } catch (IllegalArgumentException ex) {
-                throw new ET_SDKException("error instantiating object", ex);
+                throw new ETSdkException("error instantiating object", ex);
             } catch (InstantiationException ex) {
-                throw new ET_SDKException("error instantiating object", ex);
+                throw new ETSdkException("error instantiating object", ex);
             } catch (InvocationTargetException ex) {
-                throw new ET_SDKException("error instantiating object", ex);
+                throw new ETSdkException("error instantiating object", ex);
             }
             response.getResults().add(object);
         }

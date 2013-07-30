@@ -1,5 +1,5 @@
 //
-// ET_Client.java -
+// ETClient.java -
 //
 //      x
 //
@@ -17,17 +17,17 @@ import com.google.gson.JsonParser;
 
 import org.apache.log4j.Logger;
 
-import com.exacttarget.fuelsdk.rest.ET_RESTConnection;
-import com.exacttarget.fuelsdk.soap.ET_ListServiceImpl;
-import com.exacttarget.fuelsdk.soap.ET_SOAPConnection;
+import com.exacttarget.fuelsdk.rest.ETRestConnection;
+import com.exacttarget.fuelsdk.soap.ETListServiceImpl;
+import com.exacttarget.fuelsdk.soap.ETSoapConnection;
 
-public class ET_Client {
+public class ETClient {
     private static final String PATH_REQUESTTOKEN =
             "/v1/requestToken?legacy=1";
     private static final String PATH_ENDPOINTS_SOAP =
             "/platform/v1/endpoints/soap";
 
-    private static Logger logger = Logger.getLogger(ET_Client.class);
+    private static Logger logger = Logger.getLogger(ETClient.class);
 
     // set endpoint and authEndpoint to production default values
     private String endpoint = "https://www.exacttargetapis.com";
@@ -43,12 +43,12 @@ public class ET_Client {
 
     private long tokenExpirationTime = 0;
 
-    private ET_RESTConnection authConnection = null;
-    private ET_RESTConnection restConnection = null;
-    private ET_SOAPConnection soapConnection = null;
+    private ETRestConnection authConnection = null;
+    private ETRestConnection restConnection = null;
+    private ETSoapConnection soapConnection = null;
 
-    public ET_Client(ET_Configuration configuration)
-        throws ET_SDKException
+    public ETClient(ETConfiguration configuration)
+        throws ETSdkException
     {
         if (configuration.getEndpoint() != null) {
             endpoint = configuration.getEndpoint();
@@ -61,11 +61,11 @@ public class ET_Client {
         // XXX make sure clientSecret is specified
         clientSecret = configuration.getClientSecret();
 
-        authConnection = new ET_RESTConnection(this, authEndpoint);
+        authConnection = new ETRestConnection(this, authEndpoint);
 
         refreshToken();
 
-        restConnection = new ET_RESTConnection(this, endpoint);
+        restConnection = new ETRestConnection(this, endpoint);
 
         //
         // If a SOAP endpoint isn't specified automatically determine it:
@@ -81,11 +81,11 @@ public class ET_Client {
             logger.debug("SOAP endpoint: " + soapEndpoint);
         }
 
-        soapConnection = new ET_SOAPConnection(this, soapEndpoint);
+        soapConnection = new ETSoapConnection(this, soapEndpoint);
     }
 
     public void refreshToken()
-        throws ET_SDKException
+        throws ETSdkException
     {
         //
         // If the current token expires more than five
@@ -153,15 +153,15 @@ public class ET_Client {
         return legacyToken;
     }
 
-    public ET_RESTConnection getRESTConnection() {
+    public ETRestConnection getRESTConnection() {
         return restConnection;
     }
 
-    public ET_SOAPConnection getSOAPConnection() {
+    public ETSoapConnection getSOAPConnection() {
         return soapConnection;
     }
 
-    public ET_ListServiceImpl getListService() {
-        return new ET_ListServiceImpl();
+    public ETListServiceImpl getListService() {
+        return new ETListServiceImpl();
     }
 }

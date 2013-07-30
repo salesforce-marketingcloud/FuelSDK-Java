@@ -1,5 +1,5 @@
 //
-// ET_SDKException.java -
+// ETSdkException.java -
 //
 //      x
 //
@@ -11,18 +11,18 @@
 package com.exacttarget.fuelsdk;
 
 @SuppressWarnings("serial")
-public class ET_SDKException extends Exception {
-    public ET_SDKException() {}
+public class ETSdkException extends Exception {
+    public ETSdkException() {}
 
-    public ET_SDKException(Exception ex) {
+    public ETSdkException(Exception ex) {
         super(ex);
     }
 
-    public ET_SDKException(String message) {
+    public ETSdkException(String message) {
         super(message);
     }
 
-    public ET_SDKException(String message, Throwable cause) {
+    public ETSdkException(String message, Throwable cause) {
         super(message, cause);
     }
 }

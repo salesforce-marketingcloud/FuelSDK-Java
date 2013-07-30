@@ -1,5 +1,5 @@
 //
-// ET_List.java -
+// ETList.java -
 //
 //      x
 //
@@ -12,7 +12,7 @@ package com.exacttarget.fuelsdk;
 
 import com.exacttarget.fuelsdk.internal.List;
 
-public class ET_List implements ET_Object {
+public class ETList implements ETObject {
     public static final String OBJECT_TYPE = "List";
     public static final String[] PROPERTIES = {
         "ListName"
@@ -20,7 +20,7 @@ public class ET_List implements ET_Object {
 
     private String name = null;
 
-    public ET_List(List list) {
+    public ETList(List list) {
         name = list.getListName();
     }
 

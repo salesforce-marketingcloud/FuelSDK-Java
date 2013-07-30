@@ -1,5 +1,5 @@
 //
-// ET_RESTConnectionTest.java -
+// ETRestConnectionTest.java -
 //
 //      x
 //
@@ -23,25 +23,25 @@ import static org.hamcrest.CoreMatchers.*;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import com.exacttarget.fuelsdk.ET_Client;
-import com.exacttarget.fuelsdk.ET_Configuration;
-import com.exacttarget.fuelsdk.ET_SDKException;
+import com.exacttarget.fuelsdk.ETClient;
+import com.exacttarget.fuelsdk.ETConfiguration;
+import com.exacttarget.fuelsdk.ETSdkException;
 
-public class ET_RESTConnectionTest {
-    private ET_Client client = null;
-    private ET_Configuration configuration = null;
+public class ETRestConnectionTest {
+    private ETClient client = null;
+    private ETConfiguration configuration = null;
 
     @Before
     public void setUp()
-        throws ET_SDKException
+        throws ETSdkException
     {
-        configuration = new ET_Configuration("/fuelsdk-test.properties");
-        client = new ET_Client(configuration);
+        configuration = new ETConfiguration("/fuelsdk-test.properties");
+        client = new ETClient(configuration);
     }
 
     @Test
     public void testAuth()
-        throws ET_SDKException
+        throws ETSdkException
     {
         // XXX these values should be specified via properties too
         int EID = 10212759;
@@ -66,36 +66,36 @@ public class ET_RESTConnectionTest {
 
     @Test
     public void testBadEndpoint1()
-        throws ET_SDKException
+        throws ETSdkException
     {
-        thrown.expect(ET_SDKException.class);
+        thrown.expect(ETSdkException.class);
         thrown.expectCause(isA(MalformedURLException.class));
-        ET_Configuration configuration = new ET_Configuration();
+        ETConfiguration configuration = new ETConfiguration();
         configuration.setEndpoint("INVALID");
-        client = new ET_Client(configuration);
+        client = new ETClient(configuration);
         client.getRESTConnection().get("/platform/v1/tokenContext");
     }
 
     @Test
     public void testBadEndpoint2()
-        throws ET_SDKException
+        throws ETSdkException
     {
-        thrown.expect(ET_SDKException.class);
+        thrown.expect(ETSdkException.class);
         thrown.expectCause(isA(IOException.class));
         configuration.setEndpoint("https://ww.exacttargetapis.com");
-        client = new ET_Client(configuration);
+        client = new ETClient(configuration);
         client.getRESTConnection().get("/platform/v1/tokenContext");
     }
 
     @Test
     public void testBadAuthEndpoint1()
-        throws ET_SDKException
+        throws ETSdkException
     {
-        thrown.expect(ET_SDKException.class);
+        thrown.expect(ETSdkException.class);
         thrown.expectCause(isA(MalformedURLException.class));
-        ET_Configuration configuration = new ET_Configuration();
+        ETConfiguration configuration = new ETConfiguration();
         configuration.setAuthEndpoint("INVALID");
-        client = new ET_Client(configuration);
+        client = new ETClient(configuration);
         client.getRESTConnection().get("/platform/v1/tokenContext");
     }
 }

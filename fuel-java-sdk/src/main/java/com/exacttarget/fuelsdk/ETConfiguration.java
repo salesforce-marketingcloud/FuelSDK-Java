@@ -1,5 +1,5 @@
 //
-// ET_Configuration.java -
+// ETConfiguration.java -
 //
 //      x
 //
@@ -13,17 +13,17 @@ package com.exacttarget.fuelsdk;
 import java.io.IOException;
 import java.util.Properties;
 
-public class ET_Configuration {
+public class ETConfiguration {
     private String endpoint = null;
     private String authEndpoint = null;
     private String soapEndpoint = null;
     private String clientId = null;
     private String clientSecret = null;
 
-    public ET_Configuration() {}
+    public ETConfiguration() {}
 
-    public ET_Configuration(String file)
-        throws ET_SDKException
+    public ETConfiguration(String file)
+        throws ETSdkException
     {
         if (file == null) {
             file = "/fuelsdk.properties";
@@ -32,7 +32,7 @@ public class ET_Configuration {
         try {
             properties.load(getClass().getResourceAsStream(file));
         } catch (IOException ex) {
-            throw new ET_SDKException("error opening " + file, ex);
+            throw new ETSdkException("error opening " + file, ex);
         }
         endpoint = properties.getProperty("endpoint");
         authEndpoint = properties.getProperty("authEndpoint");
