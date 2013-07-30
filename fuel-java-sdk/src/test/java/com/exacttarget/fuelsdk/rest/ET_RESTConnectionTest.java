@@ -1,5 +1,5 @@
 //
-// ET_ConnectionTest.java -
+// ET_RESTConnectionTest.java -
 //
 //      x
 //
@@ -23,19 +23,20 @@ import static org.hamcrest.CoreMatchers.*;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import com.exacttarget.fuelsdk.ET_Client;
 import com.exacttarget.fuelsdk.ET_Configuration;
 import com.exacttarget.fuelsdk.ET_SDKException;
 
-public class ET_ConnectionTest {
+public class ET_RESTConnectionTest {
+    private ET_Client client = null;
     private ET_Configuration configuration = null;
-    private ET_Connection connection = null;
 
     @Before
     public void setUp()
         throws ET_SDKException
     {
         configuration = new ET_Configuration("/fuelsdk-test.properties");
-        connection = new ET_Connection(configuration);
+        client = new ET_Client(configuration);
     }
 
     @Test
@@ -46,7 +47,7 @@ public class ET_ConnectionTest {
         int EID = 10212759;
         int OID = 10212759;
         int UID = 10737950;
-        String json = connection.get("/platform/v1/tokenContext");
+        String json = client.getRESTConnection().get("/platform/v1/tokenContext");
         JsonParser jsonParser = new JsonParser();
         JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
         int eid = jsonObject.get("enterprise").
@@ -71,8 +72,8 @@ public class ET_ConnectionTest {
         thrown.expectCause(isA(MalformedURLException.class));
         ET_Configuration configuration = new ET_Configuration();
         configuration.setEndpoint("INVALID");
-        connection = new ET_Connection(configuration);
-        connection.get("/platform/v1/tokenContext");
+        client = new ET_Client(configuration);
+        client.getRESTConnection().get("/platform/v1/tokenContext");
     }
 
     @Test
@@ -82,8 +83,8 @@ public class ET_ConnectionTest {
         thrown.expect(ET_SDKException.class);
         thrown.expectCause(isA(IOException.class));
         configuration.setEndpoint("https://ww.exacttargetapis.com");
-        connection = new ET_Connection(configuration);
-        connection.get("/platform/v1/tokenContext");
+        client = new ET_Client(configuration);
+        client.getRESTConnection().get("/platform/v1/tokenContext");
     }
 
     @Test
@@ -94,7 +95,7 @@ public class ET_ConnectionTest {
         thrown.expectCause(isA(MalformedURLException.class));
         ET_Configuration configuration = new ET_Configuration();
         configuration.setAuthEndpoint("INVALID");
-        connection = new ET_Connection(configuration);
-        connection.get("/platform/v1/tokenContext");
+        client = new ET_Client(configuration);
+        client.getRESTConnection().get("/platform/v1/tokenContext");
     }
 }
