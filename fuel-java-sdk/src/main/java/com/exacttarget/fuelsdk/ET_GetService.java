@@ -13,5 +13,6 @@ package com.exacttarget.fuelsdk;
 public interface ET_GetService<T extends ET_Object>
     extends ET_Service<T>
 {
-    public ET_ServiceResponse<T> get(ET_Client client, T object);
+    public ET_ServiceResponse<T> get(ET_Client client, Class<T> type)
+        throws ET_SDKException;
 }

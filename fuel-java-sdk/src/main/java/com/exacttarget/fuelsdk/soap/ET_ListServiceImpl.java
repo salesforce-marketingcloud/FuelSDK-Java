@@ -10,14 +10,18 @@
 
 package com.exacttarget.fuelsdk.soap;
 
+import com.exacttarget.fuelsdk.ET_Client;
 import com.exacttarget.fuelsdk.ET_List;
 import com.exacttarget.fuelsdk.ET_ListService;
+import com.exacttarget.fuelsdk.ET_SDKException;
 import com.exacttarget.fuelsdk.ET_ServiceResponse;
 
 public class ET_ListServiceImpl extends ET_CrudServiceImpl<ET_List>
     implements ET_ListService
 {
-    public ET_ServiceResponse<ET_List> get() {
-        return null; // XXX
+    public ET_ServiceResponse<ET_List> get(ET_Client client)
+        throws ET_SDKException
+    {
+        return super.get(client, ET_List.class);
     }
 }

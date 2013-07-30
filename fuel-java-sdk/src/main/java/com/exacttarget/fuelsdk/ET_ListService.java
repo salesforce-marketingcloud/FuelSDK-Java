@@ -12,5 +12,6 @@ package com.exacttarget.fuelsdk;
 
 public interface ET_ListService extends ET_CrudService<ET_List>
 {
-    public ET_ServiceResponse<ET_List> get(ET_Client client);
+    public ET_ServiceResponse<ET_List> get(ET_Client client)
+        throws ET_SDKException;
 }
