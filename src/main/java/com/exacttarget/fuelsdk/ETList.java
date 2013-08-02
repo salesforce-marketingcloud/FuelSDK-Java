@@ -11,7 +11,6 @@
 package com.exacttarget.fuelsdk;
 
 import com.exacttarget.fuelsdk.annotations.InternalType;
-import com.exacttarget.fuelsdk.annotations.InternalTypeConstructor;
 import com.exacttarget.fuelsdk.internal.List;
 
 @InternalType(type = List.class, fields = {"ListName", "Description"})
@@ -20,7 +19,6 @@ public class ETList implements ETObject
     protected String name;
     protected String description;
 
-    @InternalTypeConstructor
     public ETList(List list) {
         name = list.getListName();
         description = list.getDescription();

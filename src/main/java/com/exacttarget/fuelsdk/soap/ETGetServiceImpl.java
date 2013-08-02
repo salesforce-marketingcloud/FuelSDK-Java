@@ -21,7 +21,6 @@ import com.exacttarget.fuelsdk.ETObject;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.ETServiceResponse;
 import com.exacttarget.fuelsdk.annotations.InternalType;
-import com.exacttarget.fuelsdk.annotations.InternalTypeConstructor;
 import com.exacttarget.fuelsdk.internal.APIObject;
 import com.exacttarget.fuelsdk.internal.RetrieveRequest;
 import com.exacttarget.fuelsdk.internal.RetrieveRequestMsg;
@@ -60,7 +59,8 @@ public class ETGetServiceImpl
 
         Constructor internalConstructor = null;
         for(Constructor c : type.getConstructors()) {
-            if(c.getAnnotation(InternalTypeConstructor.class) != null) {
+            Class<?>[] paramTypes = c.getParameterTypes();
+            if(paramTypes.length == 1 && paramTypes[0].equals(typeAnnotation.type())) {
                 internalConstructor = c;
                 break;
             }
