@@ -11,8 +11,10 @@
 package com.exacttarget.fuelsdk.soap;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 
+import com.exacttarget.fuelsdk.annotations.InternalField;
 import org.apache.log4j.Logger;
 
 import com.exacttarget.fuelsdk.ETClient;
@@ -20,18 +22,19 @@ import com.exacttarget.fuelsdk.ETGetService;
 import com.exacttarget.fuelsdk.ETObject;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.ETServiceResponse;
+import com.exacttarget.fuelsdk.annotations.InternalType;
 import com.exacttarget.fuelsdk.internal.APIObject;
 import com.exacttarget.fuelsdk.internal.RetrieveRequest;
 import com.exacttarget.fuelsdk.internal.RetrieveRequestMsg;
 import com.exacttarget.fuelsdk.internal.RetrieveResponseMsg;
 import com.exacttarget.fuelsdk.internal.Soap;
 
-public class ETGetServiceImpl<T extends ETObject>
-    extends ETServiceImpl<T> implements ETGetService<T>
+public class ETGetServiceImpl
+    extends ETServiceImpl implements ETGetService
 {
     private static Logger logger = Logger.getLogger(ETGetServiceImpl.class);
 
-    public ETServiceResponse<T> get(ETClient client, Class<T> type)
+    public <T extends ETObject> ETServiceResponse<T> get(ETClient client, Class<T> type)
         throws ETSdkException
     {
         Soap soap = client.getSOAPConnection().getSoap();
@@ -39,38 +42,16 @@ public class ETGetServiceImpl<T extends ETObject>
         ETServiceResponse<T> response = new ETServiceResponseImpl<T>();
 
         // XXX replace with getConstructor() call
-        Constructor<T>[] constructors = null;
-        constructors = (Constructor<T>[]) type.getConstructors();
-        for (Constructor<T> constructor : constructors) {
-            System.out.println(constructor);
-        }
+        Constructor<T>[] constructors = (Constructor<T>[]) type.getConstructors();
 
-        String objectType = null;
-        try {
-            objectType = (String) type.getField("OBJECT_TYPE").get(null);
-        } catch (IllegalAccessException ex) {
-            throw new ETSdkException("error determining objectType", ex);
-        } catch (IllegalArgumentException ex) {
-            throw new ETSdkException("error determining objectType", ex);
-        } catch (NoSuchFieldException ex) {
-            throw new ETSdkException("error determining objectType", ex);
-        } catch (SecurityException ex) {
-            throw new ETSdkException("error determining objectType", ex);
-        }
-
-        logger.debug("objectType: " + objectType);
-
-        String[] properties = null;
-        try {
-            properties = (String[]) type.getField("PROPERTIES").get(null);
-        } catch (IllegalAccessException ex) {
-            throw new ETSdkException("error determining properties", ex);
-        } catch (IllegalArgumentException ex) {
-            throw new ETSdkException("error determining properties", ex);
-        } catch (NoSuchFieldException ex) {
-            throw new ETSdkException("error determining properties", ex);
-        } catch (SecurityException ex) {
-            throw new ETSdkException("error determining objectType", ex);
+        java.util.List<String> properties = new java.util.ArrayList<String>();
+        for(Field f : type.getDeclaredFields())
+        {
+            InternalField fld = f.getAnnotation(InternalField.class);
+            if(fld != null)
+            {
+                properties.add(fld.name());
+            }
         }
 
         logger.debug("properties:");
@@ -81,7 +62,7 @@ public class ETGetServiceImpl<T extends ETObject>
         }
 
         RetrieveRequest retrieveRequest = new RetrieveRequest();
-        retrieveRequest.setObjectType(objectType);
+        retrieveRequest.setObjectType(type.getAnnotation(InternalType.class).type().getSimpleName());
         for (String property : properties) {
             retrieveRequest.getProperties().add(property);
         }
@@ -97,7 +78,7 @@ public class ETGetServiceImpl<T extends ETObject>
         response.setRequestId(retrieveResponseMsg.getRequestID());
 
         for (APIObject apiObject : retrieveResponseMsg.getResults()) {
-            T object = null;
+            T object;
             try {
                 object = constructors[0].newInstance(apiObject);
             } catch (IllegalAccessException ex) {

@@ -16,7 +16,7 @@ import com.exacttarget.fuelsdk.ETListService;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.ETServiceResponse;
 
-public class ETListServiceImpl extends ETCrudServiceImpl<ETList>
+public class ETListServiceImpl extends ETCrudServiceImpl
     implements ETListService
 {
     public ETServiceResponse<ETList> get(ETClient client)

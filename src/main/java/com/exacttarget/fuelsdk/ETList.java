@@ -10,15 +10,15 @@
 
 package com.exacttarget.fuelsdk;
 
+import com.exacttarget.fuelsdk.annotations.InternalField;
+import com.exacttarget.fuelsdk.annotations.InternalType;
 import com.exacttarget.fuelsdk.internal.List;
 
-public class ETList implements ETObject {
-    public static final String OBJECT_TYPE = "List";
-    public static final String[] PROPERTIES = {
-        "ListName"
-    };
-
-    private String name = null;
+@InternalType(type = List.class)
+public class ETList implements ETObject
+{
+    @InternalField(name="ListName")
+    protected String name;
 
     public ETList(List list) {
         name = list.getListName();

@@ -10,9 +10,9 @@
 
 package com.exacttarget.fuelsdk;
 
-public interface ETGetService<T extends ETObject>
-    extends ETService<T>
+public interface ETGetService
+    extends ETService
 {
-    public ETServiceResponse<T> get(ETClient client, Class<T> type)
+    public <T extends ETObject> ETServiceResponse<T> get(ETClient client, Class<T> type)
         throws ETSdkException;
 }
