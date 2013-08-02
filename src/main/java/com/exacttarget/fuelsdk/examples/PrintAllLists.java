@@ -19,17 +19,11 @@ import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.ETServiceResponse;
 
 public class PrintAllLists {
-    private static final String CLIENT_ID =
-            "PUT_CLIENT_ID_HERE";
-    private static final String CLIENT_SECRET =
-            "PUT_CLIENT_SECRET_HERE";
-
     public static void main(String[] args)
         throws ETSdkException
     {
-        ETConfiguration configuration = new ETConfiguration();
-        configuration.setClientId(CLIENT_ID);
-        configuration.setClientSecret(CLIENT_SECRET);
+        ETConfiguration configuration
+            = new ETConfiguration("/fuelsdk-test.properties");
         ETClient client = new ETClient(configuration);
         ETListService service = client.getListService();
         ETServiceResponse<ETList> response = service.get(client);
