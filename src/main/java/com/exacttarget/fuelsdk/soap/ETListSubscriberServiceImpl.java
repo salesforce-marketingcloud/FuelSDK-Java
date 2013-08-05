@@ -1,0 +1,17 @@
+package com.exacttarget.fuelsdk.soap;
+
+import com.exacttarget.fuelsdk.ETClient;
+import com.exacttarget.fuelsdk.ETListSubscriberService;
+import com.exacttarget.fuelsdk.ETSdkException;
+import com.exacttarget.fuelsdk.ETServiceResponse;
+import com.exacttarget.fuelsdk.model.ETListSubscriber;
+
+public class ETListSubscriberServiceImpl extends ETGetServiceImpl implements
+		ETListSubscriberService {
+
+	public ETServiceResponse<ETListSubscriber> get(ETClient client)
+			throws ETSdkException {
+		return super.get(client, ETListSubscriber.class);
+	}
+
+}

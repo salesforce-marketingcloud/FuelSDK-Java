@@ -10,8 +10,8 @@
 
 package com.exacttarget.fuelsdk.soap;
 
-import com.exacttarget.fuelsdk.ETObject;
 import com.exacttarget.fuelsdk.ETService;
+import com.exacttarget.fuelsdk.model.ETObject;
 
 public class ETServiceImpl
     implements ETService

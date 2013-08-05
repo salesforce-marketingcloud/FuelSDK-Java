@@ -10,23 +10,111 @@
 
 package com.exacttarget.fuelsdk.soap;
 
+import java.lang.reflect.InvocationTargetException;
+
+import org.apache.commons.beanutils.BeanUtils;
+
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETCrudService;
-import com.exacttarget.fuelsdk.ETObject;
+import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.ETServiceResponse;
+import com.exacttarget.fuelsdk.annotations.InternalType;
+import com.exacttarget.fuelsdk.internal.APIObject;
+import com.exacttarget.fuelsdk.internal.CreateOptions;
+import com.exacttarget.fuelsdk.internal.CreateRequest;
+import com.exacttarget.fuelsdk.internal.CreateResponse;
+import com.exacttarget.fuelsdk.internal.DeleteOptions;
+import com.exacttarget.fuelsdk.internal.DeleteRequest;
+import com.exacttarget.fuelsdk.internal.DeleteResponse;
+import com.exacttarget.fuelsdk.internal.Soap;
+import com.exacttarget.fuelsdk.model.ETObject;
 
 public class ETCrudServiceImpl
     extends ETGetServiceImpl implements ETCrudService
 {
-    public <T extends ETObject> ETServiceResponse<T> post(ETClient client, T object) {
+    public <T extends ETObject> ETServiceResponse<T> post(ETClient client, T object) 
+    	throws ETSdkException
+    {
+    	Soap soap = client.getSOAPConnection().getSoap();
+    	
+    	InternalType typeAnnotation = object.getClass().getAnnotation(InternalType.class);
+        if(typeAnnotation == null) {
+            throw new ETSdkException("The type specified does not wrap an internal ET APIObject.");
+        }
+        
+        ETServiceResponse<T> response = new ETServiceResponseImpl<T>();
+    	
+        
+        setupConvertUtils();
+        
+    	APIObject apiObject;
+		try {
+			apiObject = typeAnnotation.type().newInstance();
+			BeanUtils.copyProperties(apiObject, object);
+		} catch (InstantiationException e) {
+			throw new ETSdkException(e);
+		} catch (IllegalAccessException e) {
+			throw new ETSdkException(e);
+		} catch (InvocationTargetException e) {
+			throw new ETSdkException(e);
+		}
+    	
+    	CreateRequest createRequest = new CreateRequest();
+		createRequest.setOptions(new CreateOptions());
+		createRequest.getObjects().add(apiObject);
+
+		CreateResponse createResponse;
+
+		createResponse = soap.create(createRequest);
+		
+		response.setRequestId(createResponse.getRequestID());
+		
+		return response;
+    }
+
+    public <T extends ETObject> ETServiceResponse<T> patch(ETClient client, T object) 
+    	throws ETSdkException
+    {
         return null; // XXX
     }
 
-    public <T extends ETObject> ETServiceResponse<T> patch(ETClient client, T object) {
-        return null; // XXX
-    }
+    public <T extends ETObject> ETServiceResponse<T> delete(ETClient client, T object)
+    	throws ETSdkException
+    {
+        
+    	Soap soap = client.getSOAPConnection().getSoap();
+    	
+    	InternalType typeAnnotation = object.getClass().getAnnotation(InternalType.class);
+        if(typeAnnotation == null) {
+            throw new ETSdkException("The type specified does not wrap an internal ET APIObject.");
+        }
+        
+        ETServiceResponse<T> response = new ETServiceResponseImpl<T>();
+        
+        setupConvertUtils();
+        
+        APIObject apiObject;
+		try {
+			apiObject = typeAnnotation.type().newInstance();
+			BeanUtils.copyProperties(apiObject, object);
+		} catch (InstantiationException e) {
+			throw new ETSdkException(e);
+		} catch (IllegalAccessException e) {
+			throw new ETSdkException(e);
+		} catch (InvocationTargetException e) {
+			throw new ETSdkException(e);
+		}
+		
+        
+        final DeleteRequest deleteRequest = new DeleteRequest();
+		deleteRequest.setOptions(new DeleteOptions());
+		deleteRequest.getObjects().add(apiObject);
 
-    public <T extends ETObject> ETServiceResponse<T> delete(ETClient client, T object) {
-        return null; // XXX
+		DeleteResponse deleteResponse;
+		deleteResponse = soap.delete(deleteRequest);
+		response.setRequestId(deleteResponse.getRequestID());
+    	
+		return response;
+    	
     }
 }

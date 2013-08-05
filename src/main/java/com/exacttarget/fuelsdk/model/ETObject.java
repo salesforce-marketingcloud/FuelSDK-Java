@@ -8,7 +8,9 @@
 // Author(s): Ian Murdock <imurdock@exacttarget.com>
 //
 
-package com.exacttarget.fuelsdk;
+package com.exacttarget.fuelsdk.model;
+
 
 public interface ETObject {
+	
 }
