@@ -2,7 +2,6 @@ package com.exacttarget.fuelsdk.model;
 
 
 public enum ETListType {
-
     PUBLIC("Public"),
     PRIVATE("Private"),
     SALES_FORCE("SalesForce"),
@@ -26,5 +25,4 @@ public enum ETListType {
         }
         throw new IllegalArgumentException(v);
     }
-
 }

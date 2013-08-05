@@ -1,14 +1,16 @@
 package com.exacttarget.fuelsdk.annotations;
 
-import com.exacttarget.fuelsdk.internal.APIObject;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target({ElementType.TYPE})
+@Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface InternalType {
-    Class<? extends APIObject> type();
+public @interface InternalField {
+    /**
+     * The name of the Java field on the corresponding internal serializable class.
+     * @return
+     */
+    String name();
 }

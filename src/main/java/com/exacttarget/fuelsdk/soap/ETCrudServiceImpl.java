@@ -10,9 +10,7 @@
 
 package com.exacttarget.fuelsdk.soap;
 
-import java.lang.reflect.InvocationTargetException;
-
-import org.apache.commons.beanutils.BeanUtils;
+import com.exacttarget.fuelsdk.model.converter.ObjectConverter;
 
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETCrudService;
@@ -29,12 +27,8 @@ import com.exacttarget.fuelsdk.internal.DeleteResponse;
 import com.exacttarget.fuelsdk.internal.Soap;
 import com.exacttarget.fuelsdk.model.ETObject;
 
-public class ETCrudServiceImpl
-    extends ETGetServiceImpl implements ETCrudService
-{
-    public <T extends ETObject> ETServiceResponse<T> post(ETClient client, T object) 
-    	throws ETSdkException
-    {
+public class ETCrudServiceImpl extends ETGetServiceImpl implements ETCrudService {
+    public <T extends ETObject> ETServiceResponse<T> post(ETClient client, T object) throws ETSdkException {
     	Soap soap = client.getSOAPConnection().getSoap();
     	
     	InternalType typeAnnotation = object.getClass().getAnnotation(InternalType.class);
@@ -43,20 +37,13 @@ public class ETCrudServiceImpl
         }
         
         ETServiceResponse<T> response = new ETServiceResponseImpl<T>();
-    	
-        
-        setupConvertUtils();
         
     	APIObject apiObject;
 		try {
-			apiObject = typeAnnotation.type().newInstance();
-			BeanUtils.copyProperties(apiObject, object);
-		} catch (InstantiationException e) {
-			throw new ETSdkException(e);
-		} catch (IllegalAccessException e) {
-			throw new ETSdkException(e);
-		} catch (InvocationTargetException e) {
-			throw new ETSdkException(e);
+            apiObject = ObjectConverter.convertFromEtObject(object, typeAnnotation.type());
+		}
+        catch(Exception e) {
+            throw new ETSdkException("Error instantiating object", e);
 		}
     	
     	CreateRequest createRequest = new CreateRequest();
@@ -64,24 +51,17 @@ public class ETCrudServiceImpl
 		createRequest.getObjects().add(apiObject);
 
 		CreateResponse createResponse;
-
 		createResponse = soap.create(createRequest);
-		
 		response.setRequestId(createResponse.getRequestID());
 		
 		return response;
     }
 
-    public <T extends ETObject> ETServiceResponse<T> patch(ETClient client, T object) 
-    	throws ETSdkException
-    {
+    public <T extends ETObject> ETServiceResponse<T> patch(ETClient client, T object) throws ETSdkException {
         return null; // XXX
     }
 
-    public <T extends ETObject> ETServiceResponse<T> delete(ETClient client, T object)
-    	throws ETSdkException
-    {
-        
+    public <T extends ETObject> ETServiceResponse<T> delete(ETClient client, T object) throws ETSdkException {
     	Soap soap = client.getSOAPConnection().getSoap();
     	
     	InternalType typeAnnotation = object.getClass().getAnnotation(InternalType.class);
@@ -91,21 +71,14 @@ public class ETCrudServiceImpl
         
         ETServiceResponse<T> response = new ETServiceResponseImpl<T>();
         
-        setupConvertUtils();
-        
         APIObject apiObject;
 		try {
-			apiObject = typeAnnotation.type().newInstance();
-			BeanUtils.copyProperties(apiObject, object);
-		} catch (InstantiationException e) {
-			throw new ETSdkException(e);
-		} catch (IllegalAccessException e) {
-			throw new ETSdkException(e);
-		} catch (InvocationTargetException e) {
-			throw new ETSdkException(e);
+            apiObject = ObjectConverter.convertFromEtObject(object, typeAnnotation.type());
 		}
-		
-        
+        catch(Exception e) {
+            throw new ETSdkException("Error instantiating object", e);
+        }
+
         final DeleteRequest deleteRequest = new DeleteRequest();
 		deleteRequest.setOptions(new DeleteOptions());
 		deleteRequest.getObjects().add(apiObject);
@@ -115,6 +88,5 @@ public class ETCrudServiceImpl
 		response.setRequestId(deleteResponse.getRequestID());
     	
 		return response;
-    	
     }
 }

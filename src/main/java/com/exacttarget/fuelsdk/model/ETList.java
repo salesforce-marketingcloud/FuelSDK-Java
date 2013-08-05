@@ -10,41 +10,26 @@
 
 package com.exacttarget.fuelsdk.model;
 
-import java.util.Date;
-
+import com.exacttarget.fuelsdk.annotations.InternalField;
 import com.exacttarget.fuelsdk.annotations.InternalType;
 import com.exacttarget.fuelsdk.internal.List;
 
-@InternalType(type = List.class, fields = {"ListName", "Description"})
-public class ETList implements ETObject
+@InternalType(type = List.class)
+public class ETList extends BaseSerializableObject implements ETObject
 {
-	protected Integer id;
 	protected Integer categoryId;
-	protected String customerKey;
+    @InternalField(name="listName")
     protected String name;
+    @InternalField(name="description")
     protected String description;
     protected ETListClassification listClassification;
-    protected Date modifiedDate;
     protected ETListType listType;
-    
-    
-	public Integer getID() {
-		return id;
-	}
-	public void setID(Integer id) {
-		this.id = id;
-	}
+
 	public Integer getCategoryId() {
 		return categoryId;
 	}
 	public void setCategoryId(Integer categoryId) {
 		this.categoryId = categoryId;
-	}
-	public String getCustomerKey() {
-		return customerKey;
-	}
-	public void setCustomerKey(String customerKey) {
-		this.customerKey = customerKey;
 	}
 	public String getName() {
 		return name;
@@ -64,12 +49,6 @@ public class ETList implements ETObject
 	public void setListClassification(ETListClassification listClassification) {
 		this.listClassification = listClassification;
 	}
-	public Date getModifiedDate() {
-		return modifiedDate;
-	}
-	public void setModifiedDate(Date modifiedDate) {
-		this.modifiedDate = modifiedDate;
-	}
 	public ETListType getListType() {
 		return listType;
 	}
@@ -79,10 +58,10 @@ public class ETList implements ETObject
 	
 	@Override
 	public String toString() {
-		return "ETList [id=" + id + ", categoryId=" + categoryId + ", customerKey="
-				+ customerKey + ", name=" + name + ", description="
-				+ description + ", listClassification=" + listClassification
-				+ ", modifiedDate=" + modifiedDate + ", listType=" + listType
-				+ "]";
+		return "ETList [id=" + ID + ", categoryId=" + categoryId + ", customerKey="
+            + customerKey + ", name=" + name + ", description="
+            + description + ", listClassification=" + listClassification
+            + ", modifiedDate=" + modifiedDate + ", listType=" + listType
+            + "]";
 	}
 }

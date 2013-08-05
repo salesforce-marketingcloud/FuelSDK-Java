@@ -1,8 +1,6 @@
 package com.exacttarget.fuelsdk.model;
 
-
 public enum ETEmailType {
-    
     TEXT("Text"),
     HTML("HTML");
     private final String value;

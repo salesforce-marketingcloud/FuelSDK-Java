@@ -2,11 +2,8 @@ package com.exacttarget.fuelsdk.model;
 
 
 public enum ETListClassification {
-
 	EXACT_TARGET_LIST("ExactTargetList"),
-	    
     PUBLICATION_LIST("PublicationList"),
-    
     SUPPRESSION_LIST("SuppressionList");
     private final String value;
 
@@ -26,5 +23,4 @@ public enum ETListClassification {
         }
         throw new IllegalArgumentException(v);
     }
-
 }

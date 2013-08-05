@@ -2,7 +2,6 @@ package com.exacttarget.fuelsdk.model;
 
 
 public enum ETSubscriberStatus {
-
     ACTIVE("Active"),
     BOUNCED("Bounced"),
     HELD("Held"),
@@ -26,5 +25,4 @@ public enum ETSubscriberStatus {
         }
         throw new IllegalArgumentException(v);
     }
-
 }
