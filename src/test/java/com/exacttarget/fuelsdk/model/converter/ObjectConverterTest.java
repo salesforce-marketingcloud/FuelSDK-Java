@@ -2,15 +2,14 @@ package com.exacttarget.fuelsdk.model.converter;
 
 import static org.junit.Assert.*;
 
-import com.exacttarget.fuelsdk.internal.DataFolder;
-import com.exacttarget.fuelsdk.model.ETFolder;
 import org.junit.Test;
 
+import com.exacttarget.fuelsdk.internal.DataFolder;
 import com.exacttarget.fuelsdk.internal.List;
+import com.exacttarget.fuelsdk.model.ETFolder;
 import com.exacttarget.fuelsdk.model.ETList;
 
 import java.util.Arrays;
-
 
 public class ObjectConverterTest {
     @Test

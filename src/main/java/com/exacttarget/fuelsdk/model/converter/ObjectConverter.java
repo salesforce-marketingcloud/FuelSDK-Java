@@ -2,28 +2,25 @@ package com.exacttarget.fuelsdk.model.converter;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.datatype.XMLGregorianCalendar;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import com.exacttarget.fuelsdk.ETSdkException;
-import com.exacttarget.fuelsdk.annotations.InternalType;
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.beanutils.ConvertUtils;
-import org.apache.commons.beanutils.Converter;
-import org.apache.commons.beanutils.converters.IntegerConverter;
-
 import com.exacttarget.fuelsdk.annotations.InternalField;
+import com.exacttarget.fuelsdk.annotations.InternalType;
 import com.exacttarget.fuelsdk.internal.*;
 import com.exacttarget.fuelsdk.model.*;
 
-public class ObjectConverter {
-    //protected static final Map<Class<?>, Map<String, String>> internalPropertyToETPropertyMap = new ConcurrentHashMap<Class<?>, Map<String, String>>();
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.ConvertUtils;
+import org.apache.commons.beanutils.Converter;
+import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.beanutils.converters.IntegerConverter;
 
+public class ObjectConverter {
     static {
         /// Enums
         ConvertUtils.register(new Converter() {
@@ -86,7 +83,7 @@ public class ObjectConverter {
         T out = toType.newInstance();
 
         for(Map.Entry<String, String> props : createInternalToETPropertyMap(new HashMap<String, String>(), toType).entrySet()) {
-            BeanUtils.setProperty(out, props.getValue(), BeanUtils.getProperty(o, props.getKey()));
+            BeanUtils.setProperty(out, props.getValue(), PropertyUtils.getProperty(o, props.getKey()));
         }
 
         return out;
@@ -98,7 +95,7 @@ public class ObjectConverter {
         T out = toType.newInstance();
 
         for(Map.Entry<String, String> props : createInternalToETPropertyMap(new HashMap<String, String>(), o.getClass()).entrySet()) {
-            BeanUtils.setProperty(out, props.getKey(), BeanUtils.getProperty(o, props.getValue()));
+            BeanUtils.setProperty(out, props.getKey(), PropertyUtils.getProperty(o, props.getValue()));
         }
 
         return out;
