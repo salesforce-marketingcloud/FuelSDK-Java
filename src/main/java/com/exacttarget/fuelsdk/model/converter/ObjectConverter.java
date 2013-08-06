@@ -17,16 +17,14 @@ import com.exacttarget.fuelsdk.annotations.InternalType;
 import com.exacttarget.fuelsdk.internal.*;
 import com.exacttarget.fuelsdk.model.*;
 
-import org.apache.commons.beanutils.BeanUtils;
-import org.apache.commons.beanutils.ConvertUtils;
-import org.apache.commons.beanutils.Converter;
-import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.beanutils.*;
 import org.apache.commons.beanutils.converters.IntegerConverter;
 
 public class ObjectConverter {
     static {
+        ConvertUtilsBean convertUtils = BeanUtilsBean.getInstance().getConvertUtils();
         /// Enums
-        ConvertUtils.register(new Converter() {
+        convertUtils.register(new Converter() {
             public Object convert(Class arg0, Object obj) {
                 if (obj == null) return null;
                 if (arg0 == XMLGregorianCalendar.class) {
@@ -36,7 +34,7 @@ public class ObjectConverter {
             }
         }, Date.class);
 
-        ConvertUtils.register(new Converter() {
+        convertUtils.register(new Converter() {
             public Object convert(Class type, Object value) {
                 if (value == null) return null;
                 if (type == EmailType.class) {
@@ -46,7 +44,7 @@ public class ObjectConverter {
             }
         }, ETEmailType.class);
 
-        ConvertUtils.register(new Converter() {
+        convertUtils.register(new Converter() {
             public Object convert(Class type, Object value) {
                 if (value == null) return null;
                 if (type == SubscriberStatus.class) {
@@ -56,7 +54,7 @@ public class ObjectConverter {
             }
         }, ETSubscriberStatus.class);
 
-        ConvertUtils.register(new Converter() {
+        convertUtils.register(new Converter() {
             public Object convert(Class type, Object value) {
                 if (value == null) return null;
                 if (type == ListClassificationEnum.class) {
@@ -66,7 +64,7 @@ public class ObjectConverter {
             }
         }, ETListClassification.class);
 
-        ConvertUtils.register(new Converter() {
+        convertUtils.register(new Converter() {
             public Object convert(Class type, Object value) {
                 if (value == null) return null;
                 if (type == ListTypeEnum.class) {
@@ -75,8 +73,8 @@ public class ObjectConverter {
                 return null;
             }
         }, ETListType.class);
-        
-        ConvertUtils.register(new Converter() {
+
+        convertUtils.register(new Converter() {
             public Object convert(Class type, Object value) {
                 if (value == null) return null;
                 if (type == LayoutType.class) {
@@ -85,11 +83,9 @@ public class ObjectConverter {
                 return null;
             }
         }, ETLayoutType.class);
-        
-        
 
         // By default, IntegerConverter sets nulls as 0
-        ConvertUtils.register(new IntegerConverter(null), Integer.class);
+        convertUtils.register(new IntegerConverter(null), Integer.class);
     }
 
     public static <T extends ETObject> T convertToEtObject(APIObject o, Class<T> toType)
