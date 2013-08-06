@@ -98,8 +98,7 @@ public class ObjectConverter {
         T out = toType.newInstance();
 
         for(Map.Entry<String, String> props : createInternalToETPropertyMap(new HashMap<String, String>(), toType).entrySet()) {
-        	String toProp = props.getKey().equals("id") ? "ID" : props.getKey();
-            BeanUtils.setProperty(out, props.getValue(), PropertyUtils.getProperty(o, toProp));
+            BeanUtils.setProperty(out, props.getValue(), PropertyUtils.getProperty(o, resolvePropertyName(props.getKey())));
         }
 
         return out;
@@ -111,7 +110,7 @@ public class ObjectConverter {
         T out = toType.newInstance();
 
         for(Map.Entry<String, String> props : createInternalToETPropertyMap(new HashMap<String, String>(), o.getClass()).entrySet()) {
-            BeanUtils.setProperty(out, props.getKey(), PropertyUtils.getProperty(o, props.getValue()));
+            BeanUtils.setProperty(out, resolvePropertyName(props.getKey()), PropertyUtils.getProperty(o, props.getValue()));
         }
 
         return out;
@@ -171,5 +170,9 @@ public class ObjectConverter {
             }
         }
         return type.getSuperclass() == null ? properties : createInternalToETPropertyMap(properties, type.getSuperclass());
+    }
+
+    protected static String resolvePropertyName(String beanPropertyName) {
+        return beanPropertyName.equals("id") ? "ID" : beanPropertyName;
     }
 }
