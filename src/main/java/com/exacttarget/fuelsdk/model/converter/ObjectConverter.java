@@ -4,6 +4,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -72,6 +74,18 @@ public class ObjectConverter {
                 return null;
             }
         }, ETListType.class);
+        
+        ConvertUtils.register(new Converter() {
+            public Object convert(Class type, Object value) {
+                if (value == null) return null;
+                if (type == LayoutType.class) {
+                    return ETLayoutType.valueOf(((LayoutType) value).toString());
+                }
+                return null;
+            }
+        }, ETLayoutType.class);
+        
+        
 
         // By default, IntegerConverter sets nulls as 0
         ConvertUtils.register(new IntegerConverter(null), Integer.class);
@@ -83,7 +97,8 @@ public class ObjectConverter {
         T out = toType.newInstance();
 
         for(Map.Entry<String, String> props : createInternalToETPropertyMap(new HashMap<String, String>(), toType).entrySet()) {
-            BeanUtils.setProperty(out, props.getValue(), PropertyUtils.getProperty(o, props.getKey()));
+        	String toProp = props.getKey().equals("id") ? "ID" : props.getKey();
+            BeanUtils.setProperty(out, props.getValue(), PropertyUtils.getProperty(o, toProp));
         }
 
         return out;
@@ -111,11 +126,23 @@ public class ObjectConverter {
         Class internalType = classAnnotation.type();
 
         java.util.List<String> names = new java.util.ArrayList<String>();
-        for(Field declared : type.getDeclaredFields()) {
+        
+        java.util.List<Field> fields = new ArrayList<Field>(Arrays.asList(type.getDeclaredFields()));
+        if (null != type.getSuperclass()) {
+        	Class superType = type.getSuperclass();
+        	fields.addAll(Arrays.asList(superType.getDeclaredFields()));
+        }
+
+        for(Field declared : fields) {
             InternalField propAnnotation = declared.getAnnotation(InternalField.class);
             if(propAnnotation != null) {
                 // This field has an @InternalField annotation, let's find the corresponding property in the APIObject class
-                Field internalField = internalType.getDeclaredField(propAnnotation.name());
+                Field internalField = null;
+                try {
+                	internalField = internalType.getDeclaredField(propAnnotation.name());
+                } catch(NoSuchFieldException ex) {
+                	internalField = internalType.getSuperclass().getDeclaredField(propAnnotation.name());
+                }
                 XmlElement element = internalField.getAnnotation(XmlElement.class);
                 if(element != null) {
                     // This property is serializable, let's add it
@@ -123,6 +150,7 @@ public class ObjectConverter {
                 }
             }
         }
+        names.removeAll(Arrays.asList(classAnnotation.ignoredFields()));
         return names;
     }
 

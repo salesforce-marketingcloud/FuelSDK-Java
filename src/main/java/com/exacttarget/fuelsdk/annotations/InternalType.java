@@ -11,4 +11,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface InternalType {
     Class<? extends APIObject> type();
+
+	String[] ignoredFields() default {};
 }

@@ -98,7 +98,7 @@ public class ETEmail extends BaseSerializableObject implements ETObject {
 
 	@Override
 	public String toString() {
-		return "ETEmail [id=" + ID + ", characterSet=" + characterSet
+		return "ETEmail [id=" + id + ", characterSet=" + characterSet
             + ", contentCheckStatus=" + contentCheckStatus
             + ", createdDate=" + createdDate + ", customerKey="
             + customerKey + ", emailType=" + emailType

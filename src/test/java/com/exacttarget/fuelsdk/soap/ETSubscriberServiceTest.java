@@ -15,9 +15,21 @@ public class ETSubscriberServiceTest extends ETServiceTest<ETSubscriber> {
     {
 		super.setUp();
 		service = new ETSubscriberServiceImpl();
-		filter = new ETSimpleFilter("emailAddress", ETFilterOperators.EQUALS, "ryanjlowetest@gmail.com");
+		filter = new ETSimpleFilter("emailAddress", ETFilterOperators.EQUALS, "ryanjlowetest99@gmail.com");
+		filterUpdated = new ETSimpleFilter("subscriberKey", ETFilterOperators.EQUALS, "ryanjlowetest993@gmail.com");
+		
 		etObject = new ETSubscriber();
-		etObject.setEmailAddress("ryanjlowetest@gmail.com");
-		etObject.setSubscriberKey("ryanjlowetest@gmail.com");
+		etObject.setEmailAddress("ryanjlowetest99@gmail.com");
+		etObject.setSubscriberKey("ryanjlowetest99@gmail.com");
+		
+	}
+
+	@Override
+	protected void TestPatch(ETSubscriber found) throws ETSdkException {
+		
+		found.setEmailAddress("ryanjlowetest993@gmail.com");
+		
+		service.patch(client, found);
+		
 	}
 }

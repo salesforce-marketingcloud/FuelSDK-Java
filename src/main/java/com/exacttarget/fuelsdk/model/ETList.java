@@ -58,7 +58,7 @@ public class ETList extends BaseSerializableObject implements ETObject
 	
 	@Override
 	public String toString() {
-		return "ETList [id=" + ID + ", categoryId=" + categoryId + ", customerKey="
+		return "ETList [id=" + id + ", categoryId=" + categoryId + ", customerKey="
             + customerKey + ", name=" + name + ", description="
             + description + ", listClassification=" + listClassification
             + ", modifiedDate=" + modifiedDate + ", listType=" + listType

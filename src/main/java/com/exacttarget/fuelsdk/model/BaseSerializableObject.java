@@ -5,8 +5,8 @@ import com.exacttarget.fuelsdk.annotations.InternalField;
 import java.util.Date;
 
 public abstract class BaseSerializableObject {
-    @InternalField(name="ID")
-    protected Integer ID;
+    @InternalField(name="id")
+    protected Integer id;
     @InternalField(name="createdDate")
     protected Date createdDate;
     @InternalField(name="modifiedDate")
@@ -14,11 +14,11 @@ public abstract class BaseSerializableObject {
     @InternalField(name="customerKey")
     protected String customerKey;
 
-    public Integer getID() {
-        return ID;
+    public Integer getId() {
+        return id;
     }
-    public void setID(Integer id) {
-        this.ID = id;
+    public void setId(Integer id) {
+        this.id = id;
     }
     public Date getCreatedDate() {
         return createdDate;

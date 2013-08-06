@@ -34,7 +34,7 @@ public class ETListSubscriber extends BaseSerializableObject implements ETObject
 
 	@Override
 	public String toString() {
-        return "ETListSubscriber [id=" + ID + ", createdDate=" + createdDate
+        return "ETListSubscriber [id=" + id + ", createdDate=" + createdDate
             + ", listId=" + listId
             + ", modifiedDate=" + modifiedDate + ", status=" + status
             + ", subscriberKey=" + subscriberKey + "]";

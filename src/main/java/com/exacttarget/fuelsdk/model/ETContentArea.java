@@ -11,7 +11,7 @@ public class ETContentArea extends BaseSerializableObject implements ETObject {
     @InternalField(name="content")
 	protected String content;
     @InternalField(name="layout")
-	protected String layout;
+	protected ETLayoutType layout;
     @InternalField(name="name")
 	protected String name;
 
@@ -27,10 +27,10 @@ public class ETContentArea extends BaseSerializableObject implements ETObject {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public String getLayout() {
+	public ETLayoutType getLayout() {
 		return layout;
 	}
-	public void setLayout(String layout) {
+	public void setLayout(ETLayoutType layout) {
 		this.layout = layout;
 	}
 	public String getName() {
@@ -42,7 +42,7 @@ public class ETContentArea extends BaseSerializableObject implements ETObject {
 
 	@Override
 	public String toString() {
-        return "ETContentArea [id=" + ID + ", categoryId=" + categoryId
+        return "ETContentArea [id=" + id + ", categoryId=" + categoryId
             + ", content=" + content + ", customerKey=" + customerKey
             + ", createdDate=" + createdDate + ", layout=" + layout
             + ", modifiedDate=" + modifiedDate + ", name=" + name + "]";

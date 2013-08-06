@@ -66,7 +66,7 @@ public class ETFolder extends BaseSerializableObject implements ETObject {
 
 	@Override
 	public String toString() {
-		return "ETFolder [id=" + ID + ", allowChildren=" + allowChildren
+		return "ETFolder [id=" + id + ", allowChildren=" + allowChildren
             + ", contentType=" + contentType + ", customerKey="
             + customerKey + ", description=" + description + ", active="
             + active + ", editable=" + editable + ", name=" + name + "]";

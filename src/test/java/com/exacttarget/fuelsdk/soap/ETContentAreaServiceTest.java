@@ -16,8 +16,19 @@ public class ETContentAreaServiceTest extends ETServiceTest<ETContentArea> {
 		super.setUp();
 		service = new ETContentAreaServiceImpl();
 		filter = new ETSimpleFilter("name", ETFilterOperators.EQUALS, "TEST Content Area");
+		filterUpdated = new ETSimpleFilter("name", ETFilterOperators.EQUALS, "TEST Content Area UPDATED");
+		
 		etObject = new ETContentArea();
 		etObject.setName("TEST Content Area");
 		etObject.setContent("TEST CONTENT AREA CONTENT");
+	}
+
+	@Override
+	protected void TestPatch(ETContentArea found) throws ETSdkException {
+		
+		found.setName("TEST Content Area UPDATED");
+		
+		service.patch(client, found);
+		
 	}
 }

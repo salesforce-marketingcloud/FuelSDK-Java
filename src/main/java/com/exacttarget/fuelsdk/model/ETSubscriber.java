@@ -6,7 +6,7 @@ import com.exacttarget.fuelsdk.annotations.InternalField;
 import com.exacttarget.fuelsdk.annotations.InternalType;
 import com.exacttarget.fuelsdk.internal.Subscriber;
 
-@InternalType(type = Subscriber.class)
+@InternalType(type = Subscriber.class, ignoredFields = {"CustomerKey"})
 public class ETSubscriber extends BaseSerializableObject implements ETObject {
     @InternalField(name="emailAddress")
 	protected String emailAddress;
@@ -52,7 +52,7 @@ public class ETSubscriber extends BaseSerializableObject implements ETObject {
 
 	@Override
 	public String toString() {
-		return "ETSubscriber [id=" + ID + ", emailAddress=" + emailAddress
+		return "ETSubscriber [id=" + id + ", emailAddress=" + emailAddress
 				+ ", subscriberKey=" + subscriberKey + ", unsubscribedDate="
 				+ unsubscribedDate + ", status=" + status
 				+ ", emailTypePreference=" + emailTypePreference + "]";

@@ -27,7 +27,7 @@ public class ObjectConverterTest {
         assertNotNull(out);
         assertEquals(listName, out.getName());
         assertEquals(listDescription, out.getDescription());
-        assertEquals(listId, out.getID().intValue());
+        assertEquals(listId, out.getId().intValue());
     }
 
     @Test
@@ -39,7 +39,7 @@ public class ObjectConverterTest {
         ETList l = new ETList();
         l.setName(listName);
         l.setDescription(listDescription);
-        l.setID(listId);
+        l.setId(listId);
 
         List out = ObjectConverter.convertFromEtObject(l, List.class);
         assertNotNull(out);
@@ -53,18 +53,18 @@ public class ObjectConverterTest {
         final String description = "Great list description";
 
         ETFolder parent = new ETFolder();
-        parent.setID(2);
+        parent.setId(2);
 
         ETFolder f = new ETFolder();
         f.setActive(true);
         f.setDescription(description);
-        f.setID(1);
+        f.setId(1);
         f.setParentFolder(parent);
 
         DataFolder out = ObjectConverter.convertFromEtObject(f, DataFolder.class);
         assertNotNull(out);
         assertEquals(description, out.getDescription());
-        assertSame(out.getParentFolder().getID(), f.getParentFolder().getID());
+        assertSame(out.getParentFolder().getID(), f.getParentFolder().getId());
     }
 
     @Test

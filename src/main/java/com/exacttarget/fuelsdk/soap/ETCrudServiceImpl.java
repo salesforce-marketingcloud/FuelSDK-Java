@@ -25,6 +25,9 @@ import com.exacttarget.fuelsdk.internal.DeleteOptions;
 import com.exacttarget.fuelsdk.internal.DeleteRequest;
 import com.exacttarget.fuelsdk.internal.DeleteResponse;
 import com.exacttarget.fuelsdk.internal.Soap;
+import com.exacttarget.fuelsdk.internal.UpdateOptions;
+import com.exacttarget.fuelsdk.internal.UpdateRequest;
+import com.exacttarget.fuelsdk.internal.UpdateResponse;
 import com.exacttarget.fuelsdk.model.ETObject;
 
 public class ETCrudServiceImpl extends ETGetServiceImpl implements ETCrudService {
@@ -58,7 +61,32 @@ public class ETCrudServiceImpl extends ETGetServiceImpl implements ETCrudService
     }
 
     public <T extends ETObject> ETServiceResponse<T> patch(ETClient client, T object) throws ETSdkException {
-        return null; // XXX
+        
+    	Soap soap = client.getSOAPConnection().getSoap();
+    	
+    	InternalType typeAnnotation = object.getClass().getAnnotation(InternalType.class);
+        if(typeAnnotation == null) {
+            throw new ETSdkException("The type specified does not wrap an internal ET APIObject.");
+        }
+        
+        ETServiceResponse<T> response = new ETServiceResponseImpl<T>();
+    	
+        APIObject apiObject;
+		try {
+            apiObject = ObjectConverter.convertFromEtObject(object, typeAnnotation.type());
+		}
+        catch(Exception e) {
+            throw new ETSdkException("Error instantiating object", e);
+		}
+        
+    	UpdateRequest updateRequest = new UpdateRequest();
+		updateRequest.setOptions(new UpdateOptions());
+		updateRequest.getObjects().add(apiObject);
+
+		UpdateResponse updateResponse = soap.update(updateRequest);
+		response.setRequestId(updateResponse.getRequestID());
+		
+		return response;
     }
 
     public <T extends ETObject> ETServiceResponse<T> delete(ETClient client, T object) throws ETSdkException {

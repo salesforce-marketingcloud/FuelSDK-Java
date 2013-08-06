@@ -16,9 +16,18 @@ public class ETEmailServiceTest extends ETServiceTest<ETEmail> {
 		super.setUp();
 		service = new ETContentAreaServiceImpl();
 		filter = new ETSimpleFilter("name", ETFilterOperators.EQUALS, "TEST EMAIL");
+		filterUpdated = new ETSimpleFilter("name", ETFilterOperators.EQUALS, "TEST EMAIL UPDATED");
 		etObject = new ETEmail();
 		etObject.setName("TEST EMAIL");
 		etObject.setHtmlBody("<html><body>YEP</body></html>");
 		etObject.setSubject("TEST EMAIL SUBJECT");
+	}
+
+	@Override
+	protected void TestPatch(ETEmail found) throws ETSdkException {
+		
+		found.setName("TEST EMAIL UPDATED");
+		service.patch(client, found);
+		
 	}
 }

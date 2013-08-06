@@ -17,8 +17,17 @@ public class ETListServiceTest extends ETServiceTest<ETList> {
 		super.setUp();
 		service = new ETContentAreaServiceImpl();
 		filter = new ETSimpleFilter("listName", ETFilterOperators.EQUALS, "TEST LIST FROM SDK");
+		filterUpdated = new ETSimpleFilter("listName", ETFilterOperators.EQUALS, "TEST LIST FROM SDK UPDATED");
 		etObject = new ETList();
 		etObject.setName("TEST LIST FROM SDK");
 		etObject.setListType(ETListType.PUBLIC);
+	}
+
+	@Override
+	protected void TestPatch(ETList found) throws ETSdkException {
+		found.setName("TEST LIST FROM SDK UPDATED");
+		
+		service.patch(client, found);
+		
 	}
 }
