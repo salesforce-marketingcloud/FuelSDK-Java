@@ -39,7 +39,7 @@ public class ObjectConverter {
             public Object convert(Class type, Object value) {
                 if (value == null) return null;
                 if (type == EmailType.class) {
-                    return ETEmailType.valueOf(((EmailType) value).toString());
+                    return ETEmailType.valueOf((value).toString());
                 }
                 return null;
             }
@@ -49,7 +49,7 @@ public class ObjectConverter {
             public Object convert(Class type, Object value) {
                 if (value == null) return null;
                 if (type == SubscriberStatus.class) {
-                    return ETSubscriberStatus.valueOf(((SubscriberStatus) value).toString());
+                    return ETSubscriberStatus.valueOf((value).toString());
                 }
                 return null;
             }
@@ -59,7 +59,7 @@ public class ObjectConverter {
             public Object convert(Class type, Object value) {
                 if (value == null) return null;
                 if (type == ListClassificationEnum.class) {
-                    return ETListClassification.valueOf(((ListClassificationEnum) value).toString());
+                    return ETListClassification.valueOf((value).toString());
                 }
                 return null;
             }
@@ -69,7 +69,7 @@ public class ObjectConverter {
             public Object convert(Class type, Object value) {
                 if (value == null) return null;
                 if (type == ListTypeEnum.class) {
-                    return ETListType.valueOf(((ListTypeEnum) value).toString());
+                    return ETListType.valueOf((value).toString());
                 }
                 return null;
             }
@@ -79,7 +79,7 @@ public class ObjectConverter {
             public Object convert(Class type, Object value) {
                 if (value == null) return null;
                 if (type == LayoutType.class) {
-                    return ETLayoutType.valueOf(((LayoutType) value).toString());
+                    return ETLayoutType.valueOf((value).toString());
                 }
                 return null;
             }
@@ -137,7 +137,7 @@ public class ObjectConverter {
             InternalField propAnnotation = declared.getAnnotation(InternalField.class);
             if(propAnnotation != null) {
                 // This field has an @InternalField annotation, let's find the corresponding property in the APIObject class
-                Field internalField = null;
+                Field internalField;
                 try {
                 	internalField = internalType.getDeclaredField(propAnnotation.name());
                 } catch(NoSuchFieldException ex) {
