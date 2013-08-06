@@ -1,6 +1,7 @@
 package com.exacttarget.fuelsdk.model.converter;
 
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -147,6 +148,14 @@ public class ObjectConverter {
                 if(element != null) {
                     // This property is serializable, let's add it
                     names.add(element.name());
+                }
+                else {
+                    // Optional datetimes are annotated with XmlElementRef, so let's check that as well
+                    XmlElementRef elementRef = internalField.getAnnotation(XmlElementRef.class);
+                    if(elementRef != null) {
+                        // This property is serializable, let's add it
+                        names.add(elementRef.name());
+                    }
                 }
             }
         }
