@@ -69,6 +69,6 @@ public class ObjectConverterTest {
 
     @Test
     public void testShouldFindSerializablePropertyNames() throws Exception {
-        assertEquals(Arrays.asList("ListName", "Description"), ObjectConverter.findSerializablePropertyNames(ETList.class));
+        assertEquals(Arrays.asList("ListName", "Description", "ID", "CreatedDate", "ModifiedDate", "CustomerKey"), ObjectConverter.findSerializablePropertyNames(ETList.class));
     }
 }
