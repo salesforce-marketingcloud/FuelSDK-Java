@@ -5,6 +5,7 @@ import javax.xml.bind.annotation.XmlElementRef;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -19,6 +20,7 @@ import com.exacttarget.fuelsdk.model.*;
 
 import org.apache.commons.beanutils.*;
 import org.apache.commons.beanutils.converters.IntegerConverter;
+import org.apache.commons.beanutils.expression.Resolver;
 
 public class ObjectConverter {
     static {
@@ -84,29 +86,53 @@ public class ObjectConverter {
             }
         }, ETLayoutType.class);
 
+        // TODO - make this generic instead of specific to DataFolder
+        convertUtils.register(new Converter(){
+            public Object convert(Class type, Object value) {
+                try {
+                    return convertFromEtObject((ETObject) value, type);
+                }
+                catch(Exception e) {
+                    return null;
+                }
+            }
+        }, DataFolder.class);
+
+        // TODO - make this generic instead of specific to ETFolder
+        convertUtils.register(new Converter(){
+            public Object convert(Class type, Object value) {
+                try {
+                    return convertToEtObject((APIObject) value, type);
+                }
+                catch(Exception e) {
+                    return null;
+                }
+            }
+        }, ETFolder.class);
+
         // By default, IntegerConverter sets nulls as 0
         convertUtils.register(new IntegerConverter(null), Integer.class);
     }
 
     public static <T extends ETObject> T convertToEtObject(APIObject o, Class<T> toType)
-        throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+        throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchFieldException, NoSuchMethodException {
         // Convert o to ETObject type by examining toType's @InternalField annotations
         T out = toType.newInstance();
 
         for(Map.Entry<String, String> props : createInternalToETPropertyMap(new HashMap<String, String>(), toType).entrySet()) {
-            BeanUtils.setProperty(out, props.getValue(), PropertyUtils.getProperty(o, resolvePropertyName(props.getKey())));
+            setProperty(out, props.getValue(), getProperty(o, resolvePropertyName(props.getKey())));
         }
 
         return out;
     }
 
     public static <T extends APIObject> T convertFromEtObject(ETObject o, Class<T> toType)
-        throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+        throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchFieldException, NoSuchMethodException {
         // Convert o to APIObject type by examining o's @InternalField annotations
         T out = toType.newInstance();
 
         for(Map.Entry<String, String> props : createInternalToETPropertyMap(new HashMap<String, String>(), o.getClass()).entrySet()) {
-            BeanUtils.setProperty(out, resolvePropertyName(props.getKey()), PropertyUtils.getProperty(o, props.getValue()));
+            setProperty(out, resolvePropertyName(props.getKey()), getProperty(o, props.getValue()));
         }
 
         return out;
@@ -170,5 +196,38 @@ public class ObjectConverter {
 
     protected static String resolvePropertyName(String beanPropertyName) {
         return beanPropertyName.equals("id") ? "ID" : beanPropertyName;
+    }
+
+    protected static Object getProperty(Object bean, String property) throws IllegalAccessException, InvocationTargetException, NoSuchFieldException, NoSuchMethodException {
+        Field field = findDeclaredField(bean.getClass(), property);
+        if(field != null && field.getType().equals(Boolean.class)) {
+            String propName = property.substring(0,1).toUpperCase() + property.substring(1, property.length());
+            Method m = bean.getClass().getMethod("is" + propName);
+            return m.invoke(bean);
+        }
+        else {
+            return PropertyUtils.getProperty(bean, property);
+        }
+    }
+
+    protected static void setProperty(Object bean, String property, Object value) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+        if(value instanceof Boolean) {
+            // Since JAXB-generated classes violate the JavaBeans spec unless -enableIntrospection is turned on, let's call method differently
+            String propName = property.substring(0,1).toUpperCase() + property.substring(1, property.length());
+            Method m = bean.getClass().getMethod("set" + propName, Boolean.class);
+            m.invoke(bean, value);
+        }
+        else {
+            BeanUtils.setProperty(bean, property, value);
+        }
+    }
+
+    protected static Field findDeclaredField(Class clazz, String fieldName) {
+        for(Field f : clazz.getDeclaredFields()) {
+            if(f.getName().equals(fieldName)) {
+                return f;
+            }
+        }
+        return clazz.getSuperclass() == null ? null : findDeclaredField(clazz.getSuperclass(), fieldName);
     }
 }

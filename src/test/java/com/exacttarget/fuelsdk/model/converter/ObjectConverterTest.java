@@ -53,18 +53,39 @@ public class ObjectConverterTest {
         final String description = "Great list description";
 
         ETFolder parent = new ETFolder();
-        parent.setId(2);
+        parent.setId(1);
 
         ETFolder f = new ETFolder();
         f.setActive(true);
         f.setDescription(description);
-        f.setId(1);
+        f.setId(2);
         f.setParentFolder(parent);
 
         DataFolder out = ObjectConverter.convertFromEtObject(f, DataFolder.class);
         assertNotNull(out);
         assertEquals(description, out.getDescription());
-        assertSame(out.getParentFolder().getID(), f.getParentFolder().getId());
+        assertNotNull(out.getParentFolder());
+        assertEquals(f.getParentFolder().getId(), out.getParentFolder().getID());
+    }
+
+    @Test
+    public void testShouldConvertComplexObjectFromInternalObjectToETObject() throws Exception {
+        final String description = "Great list description";
+
+        DataFolder parent = new DataFolder();
+        parent.setID(1);
+
+        DataFolder f = new DataFolder();
+        f.setIsActive(true);
+        f.setDescription(description);
+        f.setID(2);
+        f.setParentFolder(parent);
+
+        ETFolder out = ObjectConverter.convertToEtObject(f, ETFolder.class);
+        assertNotNull(out);
+        assertEquals(description, out.getDescription());
+        assertNotNull(out.getParentFolder());
+        assertEquals(f.getParentFolder().getID(), out.getParentFolder().getId());
     }
 
     @Test
