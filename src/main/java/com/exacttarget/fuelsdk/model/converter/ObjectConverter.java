@@ -120,7 +120,7 @@ public class ObjectConverter {
         T out = toType.newInstance();
 
         for(Map.Entry<String, String> props : createInternalToETPropertyMap(new HashMap<String, String>(), toType).entrySet()) {
-            setProperty(out, props.getValue(), getProperty(o, resolvePropertyName(props.getKey())));
+            BeanUtils.setProperty(out, props.getValue(), getProperty(o, resolvePropertyName(props.getKey())));
         }
 
         return out;
@@ -132,7 +132,7 @@ public class ObjectConverter {
         T out = toType.newInstance();
 
         for(Map.Entry<String, String> props : createInternalToETPropertyMap(new HashMap<String, String>(), o.getClass()).entrySet()) {
-            setProperty(out, resolvePropertyName(props.getKey()), getProperty(o, props.getValue()));
+            BeanUtils.setProperty(out, resolvePropertyName(props.getKey()), getProperty(o, props.getValue()));
         }
 
         return out;
@@ -200,25 +200,13 @@ public class ObjectConverter {
 
     protected static Object getProperty(Object bean, String property) throws IllegalAccessException, InvocationTargetException, NoSuchFieldException, NoSuchMethodException {
         Field field = findDeclaredField(bean.getClass(), property);
-        if(field != null && field.getType().equals(Boolean.class)) {
+        if(field != null && bean instanceof APIObject && field.getType().equals(Boolean.class)) {
             String propName = property.substring(0,1).toUpperCase() + property.substring(1, property.length());
             Method m = bean.getClass().getMethod("is" + propName);
             return m.invoke(bean);
         }
         else {
             return PropertyUtils.getProperty(bean, property);
-        }
-    }
-
-    protected static void setProperty(Object bean, String property, Object value) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
-        if(value instanceof Boolean) {
-            // Since JAXB-generated classes violate the JavaBeans spec unless -enableIntrospection is turned on, let's call method differently
-            String propName = property.substring(0,1).toUpperCase() + property.substring(1, property.length());
-            Method m = bean.getClass().getMethod("set" + propName, Boolean.class);
-            m.invoke(bean, value);
-        }
-        else {
-            BeanUtils.setProperty(bean, property, value);
         }
     }
 

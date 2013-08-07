@@ -21,7 +21,7 @@ public class ETFolder extends BaseSerializableObject implements ETObject {
     @InternalField(name="parentFolder")
 	protected ETFolder parentFolder;
 
-	public Boolean isAllowChildren() {
+	public Boolean getAllowChildren() {
 		return allowChildren;
 	}
 	public void setAllowChildren(Boolean allowChildren) {
@@ -39,13 +39,13 @@ public class ETFolder extends BaseSerializableObject implements ETObject {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public Boolean isActive() {
+	public Boolean getActive() {
 		return active;
 	}
 	public void setActive(Boolean active) {
 		this.active = active;
 	}
-	public Boolean isEditable() {
+	public Boolean getEditable() {
 		return editable;
 	}
 	public void setEditable(Boolean editable) {
