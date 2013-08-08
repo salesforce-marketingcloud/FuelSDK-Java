@@ -2,6 +2,9 @@ package com.exacttarget.fuelsdk.model.converter;
 
 import static org.junit.Assert.*;
 
+import com.exacttarget.fuelsdk.internal.Subscriber;
+import com.exacttarget.fuelsdk.model.ETSubscriber;
+import com.exacttarget.fuelsdk.model.ETSubscriberStatus;
 import org.junit.Test;
 
 import com.exacttarget.fuelsdk.internal.DataFolder;
@@ -91,5 +94,21 @@ public class ObjectConverterTest {
     @Test
     public void testShouldFindSerializablePropertyNames() throws Exception {
         assertEquals(Arrays.asList("ListName", "Description", "ID", "CreatedDate", "ModifiedDate", "CustomerKey"), ObjectConverter.findSerializablePropertyNames(ETList.class));
+    }
+
+    @Test
+    public void testShouldConvertETObjectWithEnumToInternalObject() throws Exception {
+        final String email = "winampuser@nullsoft.com";
+
+        ETSubscriber s = new ETSubscriber();
+        s.setEmailAddress(email);
+        s.setId(1);
+        s.setStatus(ETSubscriberStatus.BOUNCED);
+
+        Subscriber out = ObjectConverter.convertFromEtObject(s, Subscriber.class);
+        assertNotNull(out);
+        assertEquals(email, out.getEmailAddress());
+        assertNotNull(out.getStatus());
+        assertEquals(s.getStatus().value(), out.getStatus().value());
     }
 }

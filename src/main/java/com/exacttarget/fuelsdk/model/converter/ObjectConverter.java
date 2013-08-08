@@ -20,7 +20,6 @@ import com.exacttarget.fuelsdk.model.*;
 
 import org.apache.commons.beanutils.*;
 import org.apache.commons.beanutils.converters.IntegerConverter;
-import org.apache.commons.beanutils.expression.Resolver;
 
 public class ObjectConverter {
     static {
@@ -97,6 +96,18 @@ public class ObjectConverter {
                 }
             }
         }, DataFolder.class);
+
+        // TODO - make this generic ET enum -> Internal enum instead of specific to SubscriberStatus
+        convertUtils.register(new Converter(){
+            public Object convert(Class type, Object value) {
+                try {
+                    return SubscriberStatus.valueOf(value.toString());
+                }
+                catch(Exception e) {
+                    return null;
+                }
+            }
+        }, SubscriberStatus.class);
 
         // TODO - make this generic instead of specific to ETFolder
         convertUtils.register(new Converter(){
