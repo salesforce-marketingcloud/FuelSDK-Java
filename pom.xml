@@ -61,6 +61,7 @@
                     <extraarg>-client</extraarg>
                     <extraarg>-p</extraarg>
                     <extraarg>com.exacttarget.fuelsdk.internal</extraarg>
+                    <extraarg>-xjc-enableIntrospection</extraarg>
                   </extraargs>
                 </wsdlOption>
               </wsdlOptions>
