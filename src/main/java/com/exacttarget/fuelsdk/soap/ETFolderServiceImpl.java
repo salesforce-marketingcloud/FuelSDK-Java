@@ -4,6 +4,7 @@ import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETFolderService;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.ETServiceResponse;
+import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.model.ETFolder;
 
 public class ETFolderServiceImpl extends ETCrudServiceImpl implements
@@ -12,6 +13,11 @@ public class ETFolderServiceImpl extends ETCrudServiceImpl implements
 	public ETServiceResponse<ETFolder> get(ETClient client)
 			throws ETSdkException {
 		return super.get(client, ETFolder.class);
+	}
+	
+	public ETServiceResponse<ETFolder> get(ETClient client, ETFilter filter)
+			throws ETSdkException {
+		return super.get(client, ETFolder.class, filter);
 	}
 
 }

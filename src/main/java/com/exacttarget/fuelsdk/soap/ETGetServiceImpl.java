@@ -25,10 +25,13 @@ import com.exacttarget.fuelsdk.ETGetService;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.ETServiceResponse;
 import com.exacttarget.fuelsdk.annotations.InternalType;
+import com.exacttarget.fuelsdk.filter.ETComplexFilter;
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.filter.ETSimpleFilter;
 import com.exacttarget.fuelsdk.internal.APIObject;
+import com.exacttarget.fuelsdk.internal.ComplexFilterPart;
 import com.exacttarget.fuelsdk.internal.FilterPart;
+import com.exacttarget.fuelsdk.internal.LogicalOperators;
 import com.exacttarget.fuelsdk.internal.RetrieveRequest;
 import com.exacttarget.fuelsdk.internal.RetrieveRequestMsg;
 import com.exacttarget.fuelsdk.internal.RetrieveResponseMsg;
@@ -104,6 +107,16 @@ public class ETGetServiceImpl extends ETServiceImpl implements ETGetService {
 					}
 				}
 			}
+		} else if (filter instanceof ETComplexFilter) {
+			filterPart = new ComplexFilterPart();
+			((ComplexFilterPart)filterPart).setLeftOperand(convertFilterPart(((ETComplexFilter) filter).getLeftOperand()));
+			((ComplexFilterPart)filterPart).setRightOperand(convertFilterPart(((ETComplexFilter) filter).getRightOperand()));
+			if (null != ((ETComplexFilter)filter).getAdditionalOperands()) {
+				for(ETFilter additional : ((ETComplexFilter)filter).getAdditionalOperands()) {
+					((ComplexFilterPart)filterPart).getAdditionalOperands().getOperand().add(convertFilterPart(additional));
+				}
+			}
+			((ComplexFilterPart)filterPart).setLogicalOperator(LogicalOperators.valueOf(((ETComplexFilter) filter).getOperator().toString()));
 		}
 		return filterPart;
 	}

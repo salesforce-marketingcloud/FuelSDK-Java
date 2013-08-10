@@ -2,10 +2,14 @@ package com.exacttarget.fuelsdk.soap;
 
 import org.junit.Before;
 
+import com.exacttarget.fuelsdk.ETFolderService;
 import com.exacttarget.fuelsdk.ETSdkException;
+import com.exacttarget.fuelsdk.ETServiceResponse;
+import com.exacttarget.fuelsdk.ETSubscriberService;
+import com.exacttarget.fuelsdk.filter.ETComplexFilter;
 import com.exacttarget.fuelsdk.filter.ETFilterOperators;
+import com.exacttarget.fuelsdk.filter.ETLogicalOperators;
 import com.exacttarget.fuelsdk.filter.ETSimpleFilter;
-import com.exacttarget.fuelsdk.internal.DataFolder;
 import com.exacttarget.fuelsdk.model.ETFolder;
 
 public class ETFolderServiceTest extends ETServiceTest<ETFolder>{
@@ -15,7 +19,7 @@ public class ETFolderServiceTest extends ETServiceTest<ETFolder>{
 	        throws ETSdkException
     {
 		super.setUp();
-		service = new ETSubscriberServiceImpl();
+		service = new ETFolderServiceImpl();
 		filter = new ETSimpleFilter("name", ETFilterOperators.EQUALS, "TEST FOLDER NAME");
 		filter = new ETSimpleFilter("name", ETFilterOperators.EQUALS, "TEST FOLDER NAME UPDATED");
 		
@@ -25,8 +29,14 @@ public class ETFolderServiceTest extends ETServiceTest<ETFolder>{
 		etObject.setContentType("DataExtension");
 		etObject.setEditable(true);
 		
-		ETFolder parent = new ETFolder();
-		parent.setId(100);
+		ETServiceResponse<ETFolder> response = ((ETFolderService)service).get(client, new ETComplexFilter(
+				new ETSimpleFilter("name",ETFilterOperators.EQUALS, "Data Extensions"),
+				new ETSimpleFilter("contentType",ETFilterOperators.EQUALS, "DataExtension"),
+				ETLogicalOperators.AND));
+		
+		
+		
+		ETFolder parent = response.getResults().get(0);
 		etObject.setParentFolder(parent);
 	}
 
