@@ -18,7 +18,7 @@ public class ETFolder extends BaseSerializableObject implements ETObject {
 	protected Boolean editable;
     @InternalField(name="name")
 	protected String name;
-    @InternalField(name="parentFolder")
+    @InternalField(name="parentFolder", serializedName="parentFolder.id")
 	protected ETFolder parentFolder;
 
 	public Boolean getAllowChildren() {

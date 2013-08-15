@@ -1,25 +1,41 @@
 package com.exacttarget.fuelsdk.model.converter;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementRef;
-import javax.xml.datatype.XMLGregorianCalendar;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementRef;
+import javax.xml.datatype.XMLGregorianCalendar;
+
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.BeanUtilsBean;
+import org.apache.commons.beanutils.ConvertUtilsBean;
+import org.apache.commons.beanutils.Converter;
+import org.apache.commons.beanutils.PropertyUtils;
+import org.apache.commons.beanutils.converters.IntegerConverter;
+
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.annotations.InternalField;
 import com.exacttarget.fuelsdk.annotations.InternalType;
-import com.exacttarget.fuelsdk.internal.*;
-import com.exacttarget.fuelsdk.model.*;
-
-import org.apache.commons.beanutils.*;
-import org.apache.commons.beanutils.converters.IntegerConverter;
+import com.exacttarget.fuelsdk.internal.APIObject;
+import com.exacttarget.fuelsdk.internal.DataFolder;
+import com.exacttarget.fuelsdk.internal.EmailType;
+import com.exacttarget.fuelsdk.internal.LayoutType;
+import com.exacttarget.fuelsdk.internal.ListClassificationEnum;
+import com.exacttarget.fuelsdk.internal.ListTypeEnum;
+import com.exacttarget.fuelsdk.internal.SubscriberStatus;
+import com.exacttarget.fuelsdk.model.ETEmailType;
+import com.exacttarget.fuelsdk.model.ETFolder;
+import com.exacttarget.fuelsdk.model.ETLayoutType;
+import com.exacttarget.fuelsdk.model.ETListClassification;
+import com.exacttarget.fuelsdk.model.ETListType;
+import com.exacttarget.fuelsdk.model.ETObject;
+import com.exacttarget.fuelsdk.model.ETSubscriberStatus;
 
 public class ObjectConverter {
     static {
@@ -171,6 +187,10 @@ public class ObjectConverter {
             if(propAnnotation != null) {
                 // This field has an @InternalField annotation, let's find the corresponding property in the APIObject class
                 Field internalField;
+                if (!propAnnotation.serializedName().equals("")) {
+                	names.add(propAnnotation.serializedName());
+                	continue;
+                }
                 try {
                 	internalField = internalType.getDeclaredField(propAnnotation.name());
                 } catch(NoSuchFieldException ex) {
@@ -206,6 +226,12 @@ public class ObjectConverter {
     }
 
     protected static String resolvePropertyName(String beanPropertyName) {
-        return beanPropertyName.equals("id") ? "ID" : beanPropertyName;
+    	
+    	if (beanPropertyName.equals("id")) {
+    		return "ID";
+    	} else if (beanPropertyName.indexOf('.') > -1) {
+    		return beanPropertyName.substring(0, beanPropertyName.indexOf('.'));
+    	}
+    	return beanPropertyName;
     }
 }

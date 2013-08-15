@@ -21,10 +21,11 @@ public class ETFolderServiceTest extends ETServiceTest<ETFolder>{
 		super.setUp();
 		service = new ETFolderServiceImpl();
 		filter = new ETSimpleFilter("name", ETFilterOperators.EQUALS, "TEST FOLDER NAME");
-		filter = new ETSimpleFilter("name", ETFilterOperators.EQUALS, "TEST FOLDER NAME UPDATED");
+		filterUpdated = new ETSimpleFilter("name", ETFilterOperators.EQUALS, "TEST FOLDER NAME UPDATED");
 		
 		etObject = new ETFolder();
 		etObject.setName("TEST FOLDER NAME");
+		etObject.setDescription("TEST Folder Description");
 		etObject.setActive(true);
 		etObject.setContentType("DataExtension");
 		etObject.setEditable(true);

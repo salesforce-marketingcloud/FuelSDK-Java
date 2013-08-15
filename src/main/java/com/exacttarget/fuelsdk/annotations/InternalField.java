@@ -13,4 +13,9 @@ public @interface InternalField {
      * @return
      */
     String name();
+    /**
+     * The Actual Serialized name for SOAP.  For Special Cases
+     * @return
+     */
+    String serializedName() default "";
 }
