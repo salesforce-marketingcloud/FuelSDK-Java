@@ -5,6 +5,7 @@ import org.junit.Before;
 import com.exacttarget.fuelsdk.ETFolderService;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.ETServiceResponse;
+import com.exacttarget.fuelsdk.ETServiceTest;
 import com.exacttarget.fuelsdk.ETSubscriberService;
 import com.exacttarget.fuelsdk.filter.ETComplexFilter;
 import com.exacttarget.fuelsdk.filter.ETFilterOperators;

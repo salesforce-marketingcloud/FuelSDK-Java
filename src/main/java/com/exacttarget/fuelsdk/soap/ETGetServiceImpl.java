@@ -24,7 +24,7 @@ import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETGetService;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.ETServiceResponse;
-import com.exacttarget.fuelsdk.annotations.InternalType;
+import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.filter.ETComplexFilter;
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.filter.ETSimpleFilter;
@@ -50,7 +50,7 @@ public class ETGetServiceImpl extends ETServiceImpl implements ETGetService {
 	public <T extends ETObject> ETServiceResponse<T> get(ETClient client, Class<T> type, ETFilter filter) throws ETSdkException {
 		Soap soap = client.getSOAPConnection().getSoap();
 
-        InternalType typeAnnotation = type.getAnnotation(InternalType.class);
+        InternalSoapType typeAnnotation = type.getAnnotation(InternalSoapType.class);
         if(typeAnnotation == null) {
             throw new ETSdkException("The type specified does not wrap an internal ET APIObject.");
         }

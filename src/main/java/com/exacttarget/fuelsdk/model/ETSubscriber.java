@@ -2,21 +2,21 @@ package com.exacttarget.fuelsdk.model;
 
 import java.util.Date;
 
-import com.exacttarget.fuelsdk.annotations.InternalField;
-import com.exacttarget.fuelsdk.annotations.InternalType;
+import com.exacttarget.fuelsdk.annotations.InternalSoapField;
+import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.Subscriber;
 
-@InternalType(type = Subscriber.class, ignoredFields = {"CustomerKey"})
-public class ETSubscriber extends BaseSerializableObject implements ETObject {
-    @InternalField(name="emailAddress")
+@InternalSoapType(type = Subscriber.class, ignoredFields = {"CustomerKey"})
+public class ETSubscriber extends BaseSoapSerializableObject implements ETObject {
+    @InternalSoapField(name="emailAddress")
 	protected String emailAddress;
-    @InternalField(name="subscriberKey")
+    @InternalSoapField(name="subscriberKey")
 	protected String subscriberKey;
-    @InternalField(name="unsubscribedDate")
+    @InternalSoapField(name="unsubscribedDate")
 	protected Date unsubscribedDate;
-    @InternalField(name="status")
+    @InternalSoapField(name="status")
 	protected ETSubscriberStatus status;
-    @InternalField(name="emailTypePreference")
+    @InternalSoapField(name="emailTypePreference")
 	protected ETEmailType emailTypePreference;
 
 	public String getEmailAddress() {

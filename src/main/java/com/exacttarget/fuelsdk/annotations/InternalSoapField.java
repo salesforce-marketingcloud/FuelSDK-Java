@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface InternalField {
+public @interface InternalSoapField {
     /**
      * The name of the Java field on the corresponding internal serializable class.
      * @return

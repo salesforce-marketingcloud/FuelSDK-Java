@@ -1,24 +1,24 @@
 package com.exacttarget.fuelsdk.model;
 
-import com.exacttarget.fuelsdk.annotations.InternalField;
-import com.exacttarget.fuelsdk.annotations.InternalType;
+import com.exacttarget.fuelsdk.annotations.InternalSoapField;
+import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.DataFolder;
 
-@InternalType(type = DataFolder.class)
-public class ETFolder extends BaseSerializableObject implements ETObject {
-    @InternalField(name="allowChildren")
+@InternalSoapType(type = DataFolder.class)
+public class ETFolder extends BaseSoapSerializableObject implements ETObject {
+    @InternalSoapField(name="allowChildren")
     protected Boolean allowChildren;
-    @InternalField(name="contentType")
+    @InternalSoapField(name="contentType")
 	protected String contentType;
-    @InternalField(name="description")
+    @InternalSoapField(name="description")
 	protected String description;
-    @InternalField(name="isActive")
+    @InternalSoapField(name="isActive")
 	protected Boolean active;
-    @InternalField(name="isEditable")
+    @InternalSoapField(name="isEditable")
 	protected Boolean editable;
-    @InternalField(name="name")
+    @InternalSoapField(name="name")
 	protected String name;
-    @InternalField(name="parentFolder", serializedName="parentFolder.id")
+    @InternalSoapField(name="parentFolder", serializedName="parentFolder.id")
 	protected ETFolder parentFolder;
 
 	public Boolean getAllowChildren() {

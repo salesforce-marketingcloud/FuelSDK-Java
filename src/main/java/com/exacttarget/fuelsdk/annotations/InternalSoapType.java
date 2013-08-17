@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
 
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface InternalType {
+public @interface InternalSoapType {
     Class<? extends APIObject> type();
 
 	String[] ignoredFields() default {};

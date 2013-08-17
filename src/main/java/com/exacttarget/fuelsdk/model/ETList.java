@@ -10,17 +10,17 @@
 
 package com.exacttarget.fuelsdk.model;
 
-import com.exacttarget.fuelsdk.annotations.InternalField;
-import com.exacttarget.fuelsdk.annotations.InternalType;
+import com.exacttarget.fuelsdk.annotations.InternalSoapField;
+import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.List;
 
-@InternalType(type = List.class)
-public class ETList extends BaseSerializableObject implements ETObject
+@InternalSoapType(type = List.class)
+public class ETList extends BaseSoapSerializableObject implements ETObject
 {
 	protected Integer categoryId;
-    @InternalField(name="listName")
+    @InternalSoapField(name="listName")
     protected String name;
-    @InternalField(name="description")
+    @InternalSoapField(name="description")
     protected String description;
     protected ETListClassification listClassification;
     protected ETListType listType;

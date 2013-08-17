@@ -1,17 +1,17 @@
 package com.exacttarget.fuelsdk.model;
 
-import com.exacttarget.fuelsdk.annotations.InternalField;
+import com.exacttarget.fuelsdk.annotations.InternalSoapField;
 
 import java.util.Date;
 
-public abstract class BaseSerializableObject {
-    @InternalField(name="id")
+public abstract class BaseSoapSerializableObject {
+    @InternalSoapField(name="id")
     protected Integer id;
-    @InternalField(name="createdDate")
+    @InternalSoapField(name="createdDate")
     protected Date createdDate;
-    @InternalField(name="modifiedDate")
+    @InternalSoapField(name="modifiedDate")
     protected Date modifiedDate;
-    @InternalField(name="customerKey")
+    @InternalSoapField(name="customerKey")
     protected String customerKey;
 
     public Integer getId() {

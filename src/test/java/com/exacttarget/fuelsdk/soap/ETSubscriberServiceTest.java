@@ -3,6 +3,7 @@ package com.exacttarget.fuelsdk.soap;
 import org.junit.Before;
 
 import com.exacttarget.fuelsdk.ETSdkException;
+import com.exacttarget.fuelsdk.ETServiceTest;
 import com.exacttarget.fuelsdk.filter.ETFilterOperators;
 import com.exacttarget.fuelsdk.filter.ETSimpleFilter;
 import com.exacttarget.fuelsdk.model.ETSubscriber;

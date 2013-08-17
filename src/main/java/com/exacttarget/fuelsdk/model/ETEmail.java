@@ -1,32 +1,32 @@
 package com.exacttarget.fuelsdk.model;
 
-import com.exacttarget.fuelsdk.annotations.InternalField;
-import com.exacttarget.fuelsdk.annotations.InternalType;
+import com.exacttarget.fuelsdk.annotations.InternalSoapField;
+import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.Email;
 
-@InternalType(type = Email.class)
-public class ETEmail extends BaseSerializableObject implements ETObject {
-    @InternalField(name="characterSet")
+@InternalSoapType(type = Email.class)
+public class ETEmail extends BaseSoapSerializableObject implements ETObject {
+    @InternalSoapField(name="characterSet")
 	protected String characterSet;
-    @InternalField(name="contentCheckStatus")
+    @InternalSoapField(name="contentCheckStatus")
 	protected String contentCheckStatus;
-    @InternalField(name="emailType")
+    @InternalSoapField(name="emailType")
 	protected String emailType;
-    @InternalField(name="hasDynamicSubjectLine")
+    @InternalSoapField(name="hasDynamicSubjectLine")
 	protected Boolean hasDynamicSubjectline;
-    @InternalField(name="htmlBody")
+    @InternalSoapField(name="htmlBody")
 	protected String htmlBody;
-    @InternalField(name="isActive")
+    @InternalSoapField(name="isActive")
 	protected Boolean active;
-    @InternalField(name="isHTMLPaste")
+    @InternalSoapField(name="isHTMLPaste")
 	protected Boolean htmlPaste;
-    @InternalField(name="name")
+    @InternalSoapField(name="name")
 	protected String name;
-    @InternalField(name="status")
+    @InternalSoapField(name="status")
 	protected String status;
-    @InternalField(name="subject")
+    @InternalSoapField(name="subject")
 	protected String subject;
-    @InternalField(name="textBody")
+    @InternalSoapField(name="textBody")
 	protected String textBody;
 
 	public String getCharacterSet() {

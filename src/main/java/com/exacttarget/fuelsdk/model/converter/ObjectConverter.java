@@ -20,8 +20,8 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.beanutils.converters.IntegerConverter;
 
 import com.exacttarget.fuelsdk.ETSdkException;
-import com.exacttarget.fuelsdk.annotations.InternalField;
-import com.exacttarget.fuelsdk.annotations.InternalType;
+import com.exacttarget.fuelsdk.annotations.InternalSoapField;
+import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.APIObject;
 import com.exacttarget.fuelsdk.internal.DataFolder;
 import com.exacttarget.fuelsdk.internal.EmailType;
@@ -168,7 +168,7 @@ public class ObjectConverter {
     public static java.util.List<String> findSerializablePropertyNames(Class<? extends ETObject> type) throws NoSuchFieldException, ETSdkException {
         // This method would be much simpler to write if we assume all fields with @XmlElement are to be transmitted
         // We are under the current assumption that we only want to return those fields which have been explicitly marked
-        InternalType classAnnotation = type.getAnnotation(InternalType.class);
+        InternalSoapType classAnnotation = type.getAnnotation(InternalSoapType.class);
         if(classAnnotation == null) {
             throw new ETSdkException("The type specified does not wrap an internal ET APIObject.");
         }
@@ -183,7 +183,7 @@ public class ObjectConverter {
         }
 
         for(Field declared : fields) {
-            InternalField propAnnotation = declared.getAnnotation(InternalField.class);
+            InternalSoapField propAnnotation = declared.getAnnotation(InternalSoapField.class);
             if(propAnnotation != null) {
                 // This field has an @InternalField annotation, let's find the corresponding property in the APIObject class
                 Field internalField;
@@ -217,7 +217,7 @@ public class ObjectConverter {
 
     protected static Map<String, String> createInternalToETPropertyMap(Map<String, String> properties, Class<?> type) {
         for(Field f : type.getDeclaredFields()) {
-            InternalField fld = f.getAnnotation(InternalField.class);
+            InternalSoapField fld = f.getAnnotation(InternalSoapField.class);
             if(fld != null) {
                 properties.put(fld.name(), f.getName());
             }

@@ -1,16 +1,16 @@
 package com.exacttarget.fuelsdk.model;
 
-import com.exacttarget.fuelsdk.annotations.InternalField;
-import com.exacttarget.fuelsdk.annotations.InternalType;
+import com.exacttarget.fuelsdk.annotations.InternalSoapField;
+import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.ListSubscriber;
 
-@InternalType(type = ListSubscriber.class)
-public class ETListSubscriber extends BaseSerializableObject implements ETObject {
-    @InternalField(name="listID")
+@InternalSoapType(type = ListSubscriber.class)
+public class ETListSubscriber extends BaseSoapSerializableObject implements ETObject {
+    @InternalSoapField(name="listID")
 	protected Integer listId;
-    @InternalField(name="status")
+    @InternalSoapField(name="status")
 	protected String status;
-    @InternalField(name="subscriberKey")
+    @InternalSoapField(name="subscriberKey")
 	protected String subscriberKey;
 
 	public Integer getListId() {

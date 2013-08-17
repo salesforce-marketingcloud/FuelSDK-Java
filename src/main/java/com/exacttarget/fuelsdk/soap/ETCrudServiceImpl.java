@@ -16,7 +16,7 @@ import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETCrudService;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.ETServiceResponse;
-import com.exacttarget.fuelsdk.annotations.InternalType;
+import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.APIObject;
 import com.exacttarget.fuelsdk.internal.CreateOptions;
 import com.exacttarget.fuelsdk.internal.CreateRequest;
@@ -34,7 +34,7 @@ public class ETCrudServiceImpl extends ETGetServiceImpl implements ETCrudService
     public <T extends ETObject> ETServiceResponse<T> post(ETClient client, T object) throws ETSdkException {
     	Soap soap = client.getSOAPConnection().getSoap();
     	
-    	InternalType typeAnnotation = object.getClass().getAnnotation(InternalType.class);
+    	InternalSoapType typeAnnotation = object.getClass().getAnnotation(InternalSoapType.class);
         if(typeAnnotation == null) {
             throw new ETSdkException("The type specified does not wrap an internal ET APIObject.");
         }
@@ -64,7 +64,7 @@ public class ETCrudServiceImpl extends ETGetServiceImpl implements ETCrudService
         
     	Soap soap = client.getSOAPConnection().getSoap();
     	
-    	InternalType typeAnnotation = object.getClass().getAnnotation(InternalType.class);
+    	InternalSoapType typeAnnotation = object.getClass().getAnnotation(InternalSoapType.class);
         if(typeAnnotation == null) {
             throw new ETSdkException("The type specified does not wrap an internal ET APIObject.");
         }
@@ -92,7 +92,7 @@ public class ETCrudServiceImpl extends ETGetServiceImpl implements ETCrudService
     public <T extends ETObject> ETServiceResponse<T> delete(ETClient client, T object) throws ETSdkException {
     	Soap soap = client.getSOAPConnection().getSoap();
     	
-    	InternalType typeAnnotation = object.getClass().getAnnotation(InternalType.class);
+    	InternalSoapType typeAnnotation = object.getClass().getAnnotation(InternalSoapType.class);
         if(typeAnnotation == null) {
             throw new ETSdkException("The type specified does not wrap an internal ET APIObject.");
         }

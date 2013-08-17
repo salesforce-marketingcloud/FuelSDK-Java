@@ -1,18 +1,18 @@
 package com.exacttarget.fuelsdk.model;
 
-import com.exacttarget.fuelsdk.annotations.InternalField;
-import com.exacttarget.fuelsdk.annotations.InternalType;
+import com.exacttarget.fuelsdk.annotations.InternalSoapField;
+import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.ContentArea;
 
-@InternalType(type = ContentArea.class)
-public class ETContentArea extends BaseSerializableObject implements ETObject {
-    @InternalField(name="categoryID")
+@InternalSoapType(type = ContentArea.class)
+public class ETContentArea extends BaseSoapSerializableObject implements ETObject {
+    @InternalSoapField(name="categoryID")
 	protected Integer categoryId;
-    @InternalField(name="content")
+    @InternalSoapField(name="content")
 	protected String content;
-    @InternalField(name="layout")
+    @InternalSoapField(name="layout")
 	protected ETLayoutType layout;
-    @InternalField(name="name")
+    @InternalSoapField(name="name")
 	protected String name;
 
 	public Integer getCategoryId() {

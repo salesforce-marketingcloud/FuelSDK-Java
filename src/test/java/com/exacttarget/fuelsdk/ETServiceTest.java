@@ -1,4 +1,4 @@
-package com.exacttarget.fuelsdk.soap;
+package com.exacttarget.fuelsdk;
 
 import org.junit.Assert;
 import org.junit.Before;
