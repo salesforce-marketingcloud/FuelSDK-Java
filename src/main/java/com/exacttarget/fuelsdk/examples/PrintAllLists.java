@@ -13,10 +13,10 @@ package com.exacttarget.fuelsdk.examples;
 
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETConfiguration;
-import com.exacttarget.fuelsdk.ETList;
 import com.exacttarget.fuelsdk.ETListService;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.ETServiceResponse;
+import com.exacttarget.fuelsdk.model.ETList;
 
 public class PrintAllLists {
     public static void main(String[] args)

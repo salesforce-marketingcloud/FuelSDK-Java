@@ -12,6 +12,8 @@ package com.exacttarget.fuelsdk;
 
 import java.util.List;
 
+import com.exacttarget.fuelsdk.model.ETObject;
+
 public interface ETServiceResponse<T extends ETObject> {
     public String getRequestId();
     public void setRequestId(String requestId);

@@ -50,10 +50,10 @@ public class ETClient {
     public ETClient(ETConfiguration configuration)
         throws ETSdkException
     {
-        if (configuration.getEndpoint() != null) {
+        if (configuration.getEndpoint() != null && !"".equals(configuration.getEndpoint())) {
             endpoint = configuration.getEndpoint();
         }
-        if (configuration.getAuthEndpoint() != null) {
+        if (configuration.getAuthEndpoint() != null && !"".equals(configuration.getAuthEndpoint())) {
             authEndpoint = configuration.getAuthEndpoint();
         }
         // XXX make sure clientId is specified

@@ -11,12 +11,12 @@
 package com.exacttarget.fuelsdk.soap;
 
 import com.exacttarget.fuelsdk.ETClient;
-import com.exacttarget.fuelsdk.ETList;
 import com.exacttarget.fuelsdk.ETListService;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.ETServiceResponse;
+import com.exacttarget.fuelsdk.model.ETList;
 
-public class ETListServiceImpl extends ETCrudServiceImpl<ETList>
+public class ETListServiceImpl extends ETCrudServiceImpl
     implements ETListService
 {
     public ETServiceResponse<ETList> get(ETClient client)
