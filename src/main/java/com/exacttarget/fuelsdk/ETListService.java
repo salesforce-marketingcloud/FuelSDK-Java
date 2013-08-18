@@ -10,7 +10,9 @@
 
 package com.exacttarget.fuelsdk;
 
-public interface ETListService extends ETCrudService<ETList>
+import com.exacttarget.fuelsdk.model.ETList;
+
+public interface ETListService extends ETCrudService
 {
     public ETServiceResponse<ETList> get(ETClient client)
         throws ETSdkException;
