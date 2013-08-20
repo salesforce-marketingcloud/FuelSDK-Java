@@ -3,10 +3,10 @@ package com.exacttarget.fuelsdk.rest;
 import org.junit.Before;
 
 import com.exacttarget.fuelsdk.ETSdkException;
-import com.exacttarget.fuelsdk.ETServiceTest;
+import com.exacttarget.fuelsdk.ETCrudServiceTest;
 import com.exacttarget.fuelsdk.model.ETCampaign;
 
-public class ETCampaignServiceTest extends ETServiceTest<ETCampaign>{
+public class ETCampaignServiceTest extends ETCrudServiceTest<ETCampaign>{
 
 	@Before
 	public void setUp()

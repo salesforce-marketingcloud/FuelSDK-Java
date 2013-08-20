@@ -12,38 +12,7 @@ import com.exacttarget.fuelsdk.ETServiceResponse;
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.model.ETObject;
 
-public abstract class ETServiceTest<T extends ETObject> {
-
-	protected ETCrudService service;
-	protected T etObject;
-	protected ETFilter filter;
-	protected ETFilter filterUpdated;
-	
-	protected ETClient client = null;
-	protected ETConfiguration configuration = null;
-
-    @Before
-    public void setUp()
-        throws ETSdkException
-    {
-        configuration = new ETConfiguration("/fuelsdk-test.properties");
-        client = new ETClient(configuration);
-    }
-	
-	@Test
-	public void TestGetCollectionService() throws ETSdkException
-	{
-		ETServiceResponse<T> response =  (ETServiceResponse<T>) service.get(client, etObject.getClass());
-		
-		Assert.assertNotNull(response);
-		Assert.assertNotNull(response.getResults());
-		
-		for (T ret : response.getResults()) {
-			System.out.println(ret.toString());
-		}
-		
-	}
-	
+public abstract class ETCrudServiceTest<T extends ETObject> extends ETGetServiceTest<ETObject> {
 	
 	@Test
 	public void TestCRUDService() throws ETSdkException
@@ -82,7 +51,7 @@ public abstract class ETServiceTest<T extends ETObject> {
 
 	protected void TestPost() throws ETSdkException
 	{
-		ETServiceResponse<T> response =  service.post(client, etObject);
+		ETServiceResponse<T> response =  (ETServiceResponse<T>) ((ETCrudService)service).post(client, etObject);
 	}
 	
 	protected abstract void TestPatch(T found) throws ETSdkException;
@@ -91,7 +60,7 @@ public abstract class ETServiceTest<T extends ETObject> {
 	protected void DeleteSingle(T etObject) throws ETSdkException
 	{
 				
-		ETServiceResponse<T> response2 = service.delete(client, etObject);
+		ETServiceResponse<T> response2 =  (ETServiceResponse<T>) ((ETCrudService)service).delete(client, etObject);
 		 
 	}
 	

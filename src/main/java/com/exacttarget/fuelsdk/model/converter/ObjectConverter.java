@@ -25,11 +25,13 @@ import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.APIObject;
 import com.exacttarget.fuelsdk.internal.DataFolder;
 import com.exacttarget.fuelsdk.internal.EmailType;
+import com.exacttarget.fuelsdk.internal.EventType;
 import com.exacttarget.fuelsdk.internal.LayoutType;
 import com.exacttarget.fuelsdk.internal.ListClassificationEnum;
 import com.exacttarget.fuelsdk.internal.ListTypeEnum;
 import com.exacttarget.fuelsdk.internal.SubscriberStatus;
 import com.exacttarget.fuelsdk.model.ETEmailType;
+import com.exacttarget.fuelsdk.model.ETEventType;
 import com.exacttarget.fuelsdk.model.ETFolder;
 import com.exacttarget.fuelsdk.model.ETLayoutType;
 import com.exacttarget.fuelsdk.model.ETListClassification;
@@ -100,6 +102,16 @@ public class ObjectConverter {
                 return null;
             }
         }, ETLayoutType.class);
+        
+        convertUtils.register(new Converter() {
+            public Object convert(Class type, Object value) {
+                if (value == null) return null;
+                if (type == EventType.class) {
+                    return ETEventType.valueOf((value).toString());
+                }
+                return null;
+            }
+        }, ETEventType.class);
 
         // TODO - make this generic instead of specific to DataFolder
         convertUtils.register(new Converter(){

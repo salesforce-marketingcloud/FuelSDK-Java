@@ -1,7 +1,6 @@
 package com.exacttarget.fuelsdk.model;
 
 import com.exacttarget.fuelsdk.annotations.InternalRestField;
-import com.google.gson.JsonObject;
 
 public abstract class BaseRestSerializableObject {
 	
