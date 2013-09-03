@@ -30,6 +30,7 @@ import com.exacttarget.fuelsdk.internal.LayoutType;
 import com.exacttarget.fuelsdk.internal.ListClassificationEnum;
 import com.exacttarget.fuelsdk.internal.ListTypeEnum;
 import com.exacttarget.fuelsdk.internal.SubscriberStatus;
+import com.exacttarget.fuelsdk.model.ETAccountType;
 import com.exacttarget.fuelsdk.model.ETEmailType;
 import com.exacttarget.fuelsdk.model.ETEventType;
 import com.exacttarget.fuelsdk.model.ETFolder;
@@ -112,6 +113,17 @@ public class ObjectConverter {
                 return null;
             }
         }, ETEventType.class);
+        
+        convertUtils.register(new Converter() {
+            public Object convert(Class type, Object value) {
+                if (value == null) return null;
+                if (type == ETAccountType.class) {
+                    return ETAccountType.valueOf((value).toString());
+                }
+                return null;
+            }
+        }, ETAccountType.class);
+        
 
         // TODO - make this generic instead of specific to DataFolder
         convertUtils.register(new Converter(){
