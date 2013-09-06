@@ -12,4 +12,5 @@ public @interface InternalRestType {
 	String collectionKey();
 	String[] ignoredFields() default {};
 	String restPath();
+	String primaryKey();
 }

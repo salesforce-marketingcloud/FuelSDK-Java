@@ -3,9 +3,13 @@ package com.exacttarget.fuelsdk.model;
 import com.exacttarget.fuelsdk.annotations.InternalRestField;
 import com.exacttarget.fuelsdk.annotations.InternalRestType;
 
-@InternalRestType(type = "Campaign", restPath="/hub/v1/campaigns", collectionKey="items")
+@InternalRestType(type = "Campaign", restPath="/hub/v1/campaigns", collectionKey="items", primaryKey="id")
 public class ETCampaign extends BaseRestSerializableObject implements ETObject{
 
+	/** The name. */
+	@InternalRestField(jsonKey = "id")
+	private String id;
+	
 	/** The name. */
 	@InternalRestField(jsonKey = "name")
 	private String name;
@@ -30,6 +34,24 @@ public class ETCampaign extends BaseRestSerializableObject implements ETObject{
 	 * Instantiates a new campaign.
 	 */
 	public ETCampaign() {
+	}
+
+	/**
+	 * Gets the id.
+	 * 
+	 * @return the id
+	 */
+	public String getId() {
+		return id;
+	}
+	
+	/**
+	 * Sets the id.
+	 * 
+	 * @param id the id to set
+	 */
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	/**

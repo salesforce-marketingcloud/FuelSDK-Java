@@ -12,6 +12,7 @@ import com.exacttarget.fuelsdk.ETServiceResponse;
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.model.ETObject;
 
+@SuppressWarnings("unchecked")
 public abstract class ETServiceTest<T extends ETObject> {
 
 	protected ETCrudService service;
