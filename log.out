@@ -1,0 +1,316 @@
+08:05:59,530 DEBUG ETCampaignServiceTest:35 - SetUp
+08:05:59,553 DEBUG ETClient:115 - requesting new access token...
+08:06:05,847 DEBUG ETClient:127 - received token:
+08:06:05,847 DEBUG ETClient:129 -   accessToken: ygek4q52djtdbdd996nfnsw4
+08:06:05,847 DEBUG ETClient:131 -   legacyToken: 0CKFmDORYX5w2vNbVnevNhd-ud0CLK6i-1LXT8z4nNoM949DouOs52fe24cBcgWIzqF33eSyuKXxXVEBnfgiK32l6I2JI2wpiYbxCWORzv6qCb6bq9OhDBu4Caq-BwkAwJK5oLf3FnM1SfSRoCh9WGkvN_yn8J_cyHv5Ncdaj6tu0i1kuXLNdpCphT9eXgh9E
+08:06:05,848 DEBUG ETClient:133 -   expiresIn: 1200
+08:06:05,848 DEBUG ETClient:135 -   refreshToken: 9ktevq77mnxapfrvrun557eg
+08:06:05,855 DEBUG ETClient:145 - token expires at Tue Sep 10 08:26:05 EDT 2013
+08:06:06,650 DEBUG ETClient:81 - SOAP endpoint: https://webservice.s4.exacttarget.com/Service.asmx
+08:06:13,409 DEBUG ETCampaignServiceTest:46 - TestClean()
+08:06:15,071 DEBUG ETCampaignServiceTest:50 - TestRetrieve
+08:08:11,443 DEBUG BooleanConverter:336 - Setting default value: false
+08:08:11,444 DEBUG BooleanConverter:127 - Converting 'Boolean' value 'false' to type 'Boolean'
+08:08:11,444 DEBUG BooleanConverter:149 -     No conversion required, value is already a Boolean
+08:08:11,447 DEBUG ByteConverter:336 - Setting default value: 0
+08:08:11,448 DEBUG ByteConverter:127 - Converting 'Integer' value '0' to type 'Byte'
+08:08:11,449 DEBUG ByteConverter:158 -     Converted to Byte value '0'
+08:08:11,449 DEBUG CharacterConverter:336 - Setting default value:  
+08:08:11,449 DEBUG CharacterConverter:127 - Converting 'Character' value ' ' to type 'Character'
+08:08:11,449 DEBUG CharacterConverter:149 -     No conversion required, value is already a Character
+08:08:11,450 DEBUG DoubleConverter:336 - Setting default value: 0
+08:08:11,450 DEBUG DoubleConverter:127 - Converting 'Integer' value '0' to type 'Double'
+08:08:11,451 DEBUG DoubleConverter:158 -     Converted to Double value '0.0'
+08:08:11,451 DEBUG FloatConverter:336 - Setting default value: 0
+08:08:11,451 DEBUG FloatConverter:127 - Converting 'Integer' value '0' to type 'Float'
+08:08:11,451 DEBUG FloatConverter:158 -     Converted to Float value '0.0'
+08:08:11,452 DEBUG IntegerConverter:336 - Setting default value: 0
+08:08:11,452 DEBUG IntegerConverter:127 - Converting 'Integer' value '0' to type 'Integer'
+08:08:11,452 DEBUG IntegerConverter:149 -     No conversion required, value is already a Integer
+08:08:11,453 DEBUG LongConverter:336 - Setting default value: 0
+08:08:11,453 DEBUG LongConverter:127 - Converting 'Integer' value '0' to type 'Long'
+08:08:11,453 DEBUG LongConverter:158 -     Converted to Long value '0'
+08:08:11,454 DEBUG ShortConverter:336 - Setting default value: 0
+08:08:11,454 DEBUG ShortConverter:127 - Converting 'Integer' value '0' to type 'Short'
+08:08:11,454 DEBUG ShortConverter:158 -     Converted to Short value '0'
+08:08:11,455 DEBUG BigDecimalConverter:336 - Setting default value: 0.0
+08:08:11,455 DEBUG BigDecimalConverter:127 - Converting 'BigDecimal' value '0.0' to type 'BigDecimal'
+08:08:11,455 DEBUG BigDecimalConverter:149 -     No conversion required, value is already a BigDecimal
+08:08:11,456 DEBUG BigIntegerConverter:336 - Setting default value: 0
+08:08:11,456 DEBUG BigIntegerConverter:127 - Converting 'BigInteger' value '0' to type 'BigInteger'
+08:08:11,456 DEBUG BigIntegerConverter:149 -     No conversion required, value is already a BigInteger
+08:08:11,456 DEBUG BooleanConverter:336 - Setting default value: false
+08:08:11,457 DEBUG BooleanConverter:127 - Converting 'Boolean' value 'false' to type 'Boolean'
+08:08:11,457 DEBUG BooleanConverter:149 -     No conversion required, value is already a Boolean
+08:08:11,457 DEBUG ByteConverter:336 - Setting default value: 0
+08:08:11,457 DEBUG ByteConverter:127 - Converting 'Integer' value '0' to type 'Byte'
+08:08:11,457 DEBUG ByteConverter:158 -     Converted to Byte value '0'
+08:08:11,457 DEBUG CharacterConverter:336 - Setting default value:  
+08:08:11,457 DEBUG CharacterConverter:127 - Converting 'Character' value ' ' to type 'Character'
+08:08:11,458 DEBUG CharacterConverter:149 -     No conversion required, value is already a Character
+08:08:11,458 DEBUG DoubleConverter:336 - Setting default value: 0
+08:08:11,458 DEBUG DoubleConverter:127 - Converting 'Integer' value '0' to type 'Double'
+08:08:11,458 DEBUG DoubleConverter:158 -     Converted to Double value '0.0'
+08:08:11,458 DEBUG FloatConverter:336 - Setting default value: 0
+08:08:11,458 DEBUG FloatConverter:127 - Converting 'Integer' value '0' to type 'Float'
+08:08:11,458 DEBUG FloatConverter:158 -     Converted to Float value '0.0'
+08:08:11,459 DEBUG IntegerConverter:336 - Setting default value: 0
+08:08:11,459 DEBUG IntegerConverter:127 - Converting 'Integer' value '0' to type 'Integer'
+08:08:11,459 DEBUG IntegerConverter:149 -     No conversion required, value is already a Integer
+08:08:11,459 DEBUG LongConverter:336 - Setting default value: 0
+08:08:11,459 DEBUG LongConverter:127 - Converting 'Integer' value '0' to type 'Long'
+08:08:11,459 DEBUG LongConverter:158 -     Converted to Long value '0'
+08:08:11,459 DEBUG ShortConverter:336 - Setting default value: 0
+08:08:11,460 DEBUG ShortConverter:127 - Converting 'Integer' value '0' to type 'Short'
+08:08:11,460 DEBUG ShortConverter:158 -     Converted to Short value '0'
+08:08:11,460 DEBUG StringConverter:336 - Setting default value: 
+08:08:11,460 DEBUG StringConverter:127 - Converting 'String' value '' to type 'String'
+08:08:11,467 DEBUG ArrayConverter:336 - Setting default value: [Z@9d1649f
+08:08:11,467 DEBUG ArrayConverter:127 - Converting 'boolean[]' value '[Z@9d1649f' to type 'boolean[]'
+08:08:11,468 DEBUG ArrayConverter:149 -     No conversion required, value is already a boolean[]
+08:08:11,468 DEBUG ArrayConverter:336 - Setting default value: [B@122507c2
+08:08:11,468 DEBUG ArrayConverter:127 - Converting 'byte[]' value '[B@122507c2' to type 'byte[]'
+08:08:11,468 DEBUG ArrayConverter:149 -     No conversion required, value is already a byte[]
+08:08:11,468 DEBUG ArrayConverter:336 - Setting default value: [C@3d205adc
+08:08:11,468 DEBUG ArrayConverter:127 - Converting 'char[]' value '[C@3d205adc' to type 'char[]'
+08:08:11,468 DEBUG ArrayConverter:149 -     No conversion required, value is already a char[]
+08:08:11,469 DEBUG ArrayConverter:336 - Setting default value: [D@172d40de
+08:08:11,469 DEBUG ArrayConverter:127 - Converting 'double[]' value '[D@172d40de' to type 'double[]'
+08:08:11,469 DEBUG ArrayConverter:149 -     No conversion required, value is already a double[]
+08:08:11,469 DEBUG ArrayConverter:336 - Setting default value: [F@1bfdbab5
+08:08:11,469 DEBUG ArrayConverter:127 - Converting 'float[]' value '[F@1bfdbab5' to type 'float[]'
+08:08:11,469 DEBUG ArrayConverter:149 -     No conversion required, value is already a float[]
+08:08:11,469 DEBUG ArrayConverter:336 - Setting default value: [I@2eeccf6e
+08:08:11,470 DEBUG ArrayConverter:127 - Converting 'int[]' value '[I@2eeccf6e' to type 'int[]'
+08:08:11,470 DEBUG ArrayConverter:149 -     No conversion required, value is already a int[]
+08:08:11,470 DEBUG ArrayConverter:336 - Setting default value: [J@3d2656d3
+08:08:11,470 DEBUG ArrayConverter:127 - Converting 'long[]' value '[J@3d2656d3' to type 'long[]'
+08:08:11,470 DEBUG ArrayConverter:149 -     No conversion required, value is already a long[]
+08:08:11,470 DEBUG ArrayConverter:336 - Setting default value: [S@200e5602
+08:08:11,470 DEBUG ArrayConverter:127 - Converting 'short[]' value '[S@200e5602' to type 'short[]'
+08:08:11,471 DEBUG ArrayConverter:149 -     No conversion required, value is already a short[]
+08:08:11,471 DEBUG ArrayConverter:336 - Setting default value: [Ljava.math.BigDecimal;@d30adbf
+08:08:11,471 DEBUG ArrayConverter:127 - Converting 'BigDecimal[]' value '[Ljava.math.BigDecimal;@d30adbf' to type 'BigDecimal[]'
+08:08:11,471 DEBUG ArrayConverter:149 -     No conversion required, value is already a BigDecimal[]
+08:08:11,471 DEBUG ArrayConverter:336 - Setting default value: [Ljava.math.BigInteger;@2196fffc
+08:08:11,471 DEBUG ArrayConverter:127 - Converting 'BigInteger[]' value '[Ljava.math.BigInteger;@2196fffc' to type 'BigInteger[]'
+08:08:11,471 DEBUG ArrayConverter:149 -     No conversion required, value is already a BigInteger[]
+08:08:11,472 DEBUG ArrayConverter:336 - Setting default value: [Ljava.lang.Boolean;@40800a9e
+08:08:11,472 DEBUG ArrayConverter:127 - Converting 'Boolean[]' value '[Ljava.lang.Boolean;@40800a9e' to type 'Boolean[]'
+08:08:11,472 DEBUG ArrayConverter:149 -     No conversion required, value is already a Boolean[]
+08:08:11,472 DEBUG ArrayConverter:336 - Setting default value: [Ljava.lang.Byte;@16392c27
+08:08:11,472 DEBUG ArrayConverter:127 - Converting 'Byte[]' value '[Ljava.lang.Byte;@16392c27' to type 'Byte[]'
+08:08:11,472 DEBUG ArrayConverter:149 -     No conversion required, value is already a Byte[]
+08:08:11,472 DEBUG ArrayConverter:336 - Setting default value: [Ljava.lang.Character;@381bfd7
+08:08:11,473 DEBUG ArrayConverter:127 - Converting 'Character[]' value '[Ljava.lang.Character;@381bfd7' to type 'Character[]'
+08:08:11,473 DEBUG ArrayConverter:149 -     No conversion required, value is already a Character[]
+08:08:11,473 DEBUG ArrayConverter:336 - Setting default value: [Ljava.lang.Double;@3b59be0d
+08:08:11,473 DEBUG ArrayConverter:127 - Converting 'Double[]' value '[Ljava.lang.Double;@3b59be0d' to type 'Double[]'
+08:08:11,473 DEBUG ArrayConverter:149 -     No conversion required, value is already a Double[]
+08:08:11,473 DEBUG ArrayConverter:336 - Setting default value: [Ljava.lang.Float;@cc65ec
+08:08:11,473 DEBUG ArrayConverter:127 - Converting 'Float[]' value '[Ljava.lang.Float;@cc65ec' to type 'Float[]'
+08:08:11,473 DEBUG ArrayConverter:149 -     No conversion required, value is already a Float[]
+08:08:11,474 DEBUG ArrayConverter:336 - Setting default value: [Ljava.lang.Integer;@2e64e02
+08:08:11,474 DEBUG ArrayConverter:127 - Converting 'Integer[]' value '[Ljava.lang.Integer;@2e64e02' to type 'Integer[]'
+08:08:11,474 DEBUG ArrayConverter:149 -     No conversion required, value is already a Integer[]
+08:08:11,474 DEBUG ArrayConverter:336 - Setting default value: [Ljava.lang.Long;@5e0b66ca
+08:08:11,474 DEBUG ArrayConverter:127 - Converting 'Long[]' value '[Ljava.lang.Long;@5e0b66ca' to type 'Long[]'
+08:08:11,474 DEBUG ArrayConverter:149 -     No conversion required, value is already a Long[]
+08:08:11,474 DEBUG ArrayConverter:336 - Setting default value: [Ljava.lang.Short;@3e898802
+08:08:11,475 DEBUG ArrayConverter:127 - Converting 'Short[]' value '[Ljava.lang.Short;@3e898802' to type 'Short[]'
+08:08:11,475 DEBUG ArrayConverter:149 -     No conversion required, value is already a Short[]
+08:08:11,475 DEBUG ArrayConverter:336 - Setting default value: [Ljava.lang.String;@37405b61
+08:08:11,475 DEBUG ArrayConverter:127 - Converting 'String[]' value '[Ljava.lang.String;@37405b61' to type 'String[]'
+08:08:11,475 DEBUG ArrayConverter:149 -     No conversion required, value is already a String[]
+08:08:11,475 DEBUG ArrayConverter:336 - Setting default value: [Ljava.lang.Class;@622f599d
+08:08:11,475 DEBUG ArrayConverter:127 - Converting 'Class[]' value '[Ljava.lang.Class;@622f599d' to type 'Class[]'
+08:08:11,476 DEBUG ArrayConverter:149 -     No conversion required, value is already a Class[]
+08:08:11,476 DEBUG ArrayConverter:336 - Setting default value: [Ljava.util.Date;@12a484c7
+08:08:11,476 DEBUG ArrayConverter:127 - Converting 'Date[]' value '[Ljava.util.Date;@12a484c7' to type 'Date[]'
+08:08:11,476 DEBUG ArrayConverter:149 -     No conversion required, value is already a Date[]
+08:08:11,476 DEBUG ArrayConverter:336 - Setting default value: [Ljava.util.Calendar;@43c3d993
+08:08:11,476 DEBUG ArrayConverter:127 - Converting 'Calendar[]' value '[Ljava.util.Calendar;@43c3d993' to type 'Calendar[]'
+08:08:11,476 DEBUG ArrayConverter:149 -     No conversion required, value is already a Calendar[]
+08:08:11,477 DEBUG ArrayConverter:336 - Setting default value: [Ljava.io.File;@44770739
+08:08:11,477 DEBUG ArrayConverter:127 - Converting 'java.io.File[]' value '[Ljava.io.File;@44770739' to type 'java.io.File[]'
+08:08:11,477 DEBUG ArrayConverter:149 -     No conversion required, value is already a java.io.File[]
+08:08:11,477 DEBUG ArrayConverter:336 - Setting default value: [Ljava.sql.Date;@627b524c
+08:08:11,477 DEBUG ArrayConverter:127 - Converting 'java.sql.Date[]' value '[Ljava.sql.Date;@627b524c' to type 'java.sql.Date[]'
+08:08:11,477 DEBUG ArrayConverter:149 -     No conversion required, value is already a java.sql.Date[]
+08:08:11,477 DEBUG ArrayConverter:336 - Setting default value: [Ljava.sql.Time;@3f39ef5c
+08:08:11,477 DEBUG ArrayConverter:127 - Converting 'java.sql.Time[]' value '[Ljava.sql.Time;@3f39ef5c' to type 'java.sql.Time[]'
+08:08:11,478 DEBUG ArrayConverter:149 -     No conversion required, value is already a java.sql.Time[]
+08:08:11,478 DEBUG ArrayConverter:336 - Setting default value: [Ljava.sql.Timestamp;@4fe3d81
+08:08:11,478 DEBUG ArrayConverter:127 - Converting 'java.sql.Timestamp[]' value '[Ljava.sql.Timestamp;@4fe3d81' to type 'java.sql.Timestamp[]'
+08:08:11,478 DEBUG ArrayConverter:149 -     No conversion required, value is already a java.sql.Timestamp[]
+08:08:11,478 DEBUG ArrayConverter:336 - Setting default value: [Ljava.net.URL;@47c5437c
+08:08:11,478 DEBUG ArrayConverter:127 - Converting 'java.net.URL[]' value '[Ljava.net.URL;@47c5437c' to type 'java.net.URL[]'
+08:08:11,478 DEBUG ArrayConverter:149 -     No conversion required, value is already a java.net.URL[]
+08:08:11,488 DEBUG ConvertUtils:460 - Convert string '3004' to class 'java.lang.String'
+08:08:11,488 DEBUG StringConverter:127 - Converting 'String' value '3004' to type 'String'
+08:08:11,490 DEBUG ConvertUtils:460 - Convert string 'MACTes2323' to class 'java.lang.String'
+08:08:11,490 DEBUG StringConverter:127 - Converting 'String' value 'MACTes2323' to type 'String'
+08:08:11,491 DEBUG ConvertUtils:460 - Convert string 'PHPSDKCreatedForTest' to class 'java.lang.String'
+08:08:11,491 DEBUG StringConverter:127 - Converting 'String' value 'PHPSDKCreatedForTest' to type 'String'
+08:08:11,491 DEBUG ConvertUtils:460 - Convert string 'MACTes2323' to class 'java.lang.String'
+08:08:11,491 DEBUG StringConverter:127 - Converting 'String' value 'MACTes2323' to type 'String'
+08:08:11,491 DEBUG ConvertUtils:460 - Convert string 'FF9933' to class 'java.lang.String'
+08:08:11,491 DEBUG StringConverter:127 - Converting 'String' value 'FF9933' to type 'String'
+08:08:11,492 DEBUG ConvertUtils:460 - Convert string 'false' to class 'boolean'
+08:08:11,492 DEBUG BooleanConverter:127 - Converting 'String' value 'false' to type 'Boolean'
+08:08:11,492 DEBUG BooleanConverter:158 -     Converted to Boolean value 'false'
+08:08:11,492 DEBUG ConvertUtils:460 - Convert string '3004' to class 'java.lang.String'
+08:08:11,492 DEBUG StringConverter:127 - Converting 'String' value '3004' to type 'String'
+08:08:11,492 DEBUG ConvertUtils:460 - Convert string '2013-02-25T14:09:08' to class 'java.lang.String'
+08:08:11,493 DEBUG StringConverter:127 - Converting 'String' value '2013-02-25T14:09:08' to type 'String'
+08:08:11,493 DEBUG ConvertUtils:460 - Convert string '2013-02-25T14:09:08' to class 'java.lang.String'
+08:08:11,493 DEBUG StringConverter:127 - Converting 'String' value '2013-02-25T14:09:08' to type 'String'
+08:08:11,493 DEBUG ConvertUtils:460 - Convert string '3003' to class 'java.lang.String'
+08:08:11,493 DEBUG StringConverter:127 - Converting 'String' value '3003' to type 'String'
+08:08:11,493 DEBUG ConvertUtils:460 - Convert string 'MACCAMPAIGN' to class 'java.lang.String'
+08:08:11,493 DEBUG StringConverter:127 - Converting 'String' value 'MACCAMPAIGN' to type 'String'
+08:08:11,494 DEBUG ConvertUtils:460 - Convert string '' to class 'java.lang.String'
+08:08:11,494 DEBUG StringConverter:127 - Converting 'String' value '' to type 'String'
+08:08:11,494 DEBUG ConvertUtils:460 - Convert string 'MACCAMPAIGN' to class 'java.lang.String'
+08:08:11,494 DEBUG StringConverter:127 - Converting 'String' value 'MACCAMPAIGN' to type 'String'
+08:08:11,494 DEBUG ConvertUtils:460 - Convert string 'FF9933' to class 'java.lang.String'
+08:08:11,494 DEBUG StringConverter:127 - Converting 'String' value 'FF9933' to type 'String'
+08:08:11,494 DEBUG ConvertUtils:460 - Convert string 'false' to class 'boolean'
+08:08:11,494 DEBUG BooleanConverter:127 - Converting 'String' value 'false' to type 'Boolean'
+08:08:11,495 DEBUG BooleanConverter:158 -     Converted to Boolean value 'false'
+08:08:11,495 DEBUG ConvertUtils:460 - Convert string '3003' to class 'java.lang.String'
+08:08:11,495 DEBUG StringConverter:127 - Converting 'String' value '3003' to type 'String'
+08:08:11,495 DEBUG ConvertUtils:460 - Convert string '2013-02-25T14:09:08' to class 'java.lang.String'
+08:08:11,495 DEBUG StringConverter:127 - Converting 'String' value '2013-02-25T14:09:08' to type 'String'
+08:08:11,495 DEBUG ConvertUtils:460 - Convert string '2013-02-25T14:09:08' to class 'java.lang.String'
+08:08:11,496 DEBUG StringConverter:127 - Converting 'String' value '2013-02-25T14:09:08' to type 'String'
+08:08:11,496 DEBUG ConvertUtils:460 - Convert string '2995' to class 'java.lang.String'
+08:08:11,496 DEBUG StringConverter:127 - Converting 'String' value '2995' to type 'String'
+08:08:11,496 DEBUG ConvertUtils:460 - Convert string 'Example Campaign' to class 'java.lang.String'
+08:08:11,496 DEBUG StringConverter:127 - Converting 'String' value 'Example Campaign' to type 'String'
+08:08:11,496 DEBUG ConvertUtils:460 - Convert string '' to class 'java.lang.String'
+08:08:11,496 DEBUG StringConverter:127 - Converting 'String' value '' to type 'String'
+08:08:11,497 DEBUG ConvertUtils:460 - Convert string 'ExampleCampaign' to class 'java.lang.String'
+08:08:11,497 DEBUG StringConverter:127 - Converting 'String' value 'ExampleCampaign' to type 'String'
+08:08:11,497 DEBUG ConvertUtils:460 - Convert string 'ffc7c7' to class 'java.lang.String'
+08:08:11,497 DEBUG StringConverter:127 - Converting 'String' value 'ffc7c7' to type 'String'
+08:08:11,497 DEBUG ConvertUtils:460 - Convert string 'false' to class 'boolean'
+08:08:11,497 DEBUG BooleanConverter:127 - Converting 'String' value 'false' to type 'Boolean'
+08:08:11,497 DEBUG BooleanConverter:158 -     Converted to Boolean value 'false'
+08:08:11,497 DEBUG ConvertUtils:460 - Convert string '2995' to class 'java.lang.String'
+08:08:11,498 DEBUG StringConverter:127 - Converting 'String' value '2995' to type 'String'
+08:08:11,498 DEBUG ConvertUtils:460 - Convert string '2013-02-25T14:09:08' to class 'java.lang.String'
+08:08:11,498 DEBUG StringConverter:127 - Converting 'String' value '2013-02-25T14:09:08' to type 'String'
+08:08:11,498 DEBUG ConvertUtils:460 - Convert string '2013-02-25T14:09:08' to class 'java.lang.String'
+08:08:11,498 DEBUG StringConverter:127 - Converting 'String' value '2013-02-25T14:09:08' to type 'String'
+08:08:11,498 DEBUG ETCampaignServiceTest:54 - Received Count during clean: 3
+08:08:11,499 DEBUG ETCampaignServiceTest:58 - Received during Clean: Campaign [id= null, createdDate=2013-02-25T14:09:08, modifiedDate=2013-02-25T14:09:08, name=MACTes2323, description=PHPSDKCreatedForTest, campaignCode=MACTes2323, color=FF9933, favorite=false]
+08:08:11,499 DEBUG ETCampaignServiceTest:58 - Received during Clean: Campaign [id= null, createdDate=2013-02-25T14:09:08, modifiedDate=2013-02-25T14:09:08, name=MACCAMPAIGN, description=, campaignCode=MACCAMPAIGN, color=FF9933, favorite=false]
+08:08:11,499 DEBUG ETCampaignServiceTest:58 - Received during Clean: Campaign [id= null, createdDate=2013-02-25T14:09:08, modifiedDate=2013-02-25T14:09:08, name=Example Campaign, description=, campaignCode=ExampleCampaign, color=ffc7c7, favorite=false]
+08:08:12,840 DEBUG ETCampaignServiceTest:73 - TestDelete()
+08:08:56,780 DEBUG StringConverter:127 - Converting 'String' value 'testCampaign' to type 'String'
+08:08:56,781 DEBUG StringConverter:127 - Converting 'String' value 'testCampaign' to type 'String'
+08:08:56,782 DEBUG StringConverter:127 - Converting 'String' value 'TestCode' to type 'String'
+08:08:56,784 DEBUG StringConverter:127 - Converting 'String' value '000fff' to type 'String'
+08:08:56,785 DEBUG StringConverter:127 - Converting 'Boolean' value 'false' to type 'String'
+08:12:25,759 DEBUG ETCampaignServiceTest:112 - TestPatch()
+08:12:36,124 DEBUG StringConverter:127 - Converting 'String' value 'testCampaign' to type 'String'
+08:12:36,124 DEBUG StringConverter:127 - Converting 'String' value 'testCampaign' to type 'String'
+08:12:36,125 DEBUG StringConverter:127 - Converting 'String' value 'TestCode' to type 'String'
+08:12:36,125 DEBUG StringConverter:127 - Converting 'String' value '000fff' to type 'String'
+08:12:36,126 DEBUG StringConverter:127 - Converting 'Boolean' value 'false' to type 'String'
+08:12:59,675 DEBUG ConvertUtils:460 - Convert string '3561' to class 'java.lang.String'
+08:12:59,675 DEBUG StringConverter:127 - Converting 'String' value '3561' to type 'String'
+08:12:59,676 DEBUG ConvertUtils:460 - Convert string 'testCampaign' to class 'java.lang.String'
+08:12:59,677 DEBUG StringConverter:127 - Converting 'String' value 'testCampaign' to type 'String'
+08:12:59,678 DEBUG ConvertUtils:460 - Convert string 'testCampaign' to class 'java.lang.String'
+08:12:59,678 DEBUG StringConverter:127 - Converting 'String' value 'testCampaign' to type 'String'
+08:12:59,679 DEBUG ConvertUtils:460 - Convert string 'TestCode' to class 'java.lang.String'
+08:12:59,679 DEBUG StringConverter:127 - Converting 'String' value 'TestCode' to type 'String'
+08:12:59,680 DEBUG ConvertUtils:460 - Convert string '000fff' to class 'java.lang.String'
+08:12:59,681 DEBUG StringConverter:127 - Converting 'String' value '000fff' to type 'String'
+08:12:59,682 DEBUG ConvertUtils:460 - Convert string 'false' to class 'boolean'
+08:12:59,682 DEBUG BooleanConverter:127 - Converting 'String' value 'false' to type 'Boolean'
+08:12:59,683 DEBUG BooleanConverter:158 -     Converted to Boolean value 'false'
+08:12:59,684 DEBUG ConvertUtils:460 - Convert string '3561' to class 'java.lang.String'
+08:12:59,684 DEBUG StringConverter:127 - Converting 'String' value '3561' to type 'String'
+08:12:59,685 DEBUG ConvertUtils:460 - Convert string '2013-09-10T06:12:43' to class 'java.lang.String'
+08:12:59,685 DEBUG StringConverter:127 - Converting 'String' value '2013-09-10T06:12:43' to type 'String'
+08:12:59,686 DEBUG ConvertUtils:460 - Convert string '2013-09-10T06:12:43' to class 'java.lang.String'
+08:12:59,687 DEBUG StringConverter:127 - Converting 'String' value '2013-09-10T06:12:43' to type 'String'
+08:14:03,784 DEBUG ConvertUtils:460 - Convert string '3561' to class 'java.lang.String'
+08:14:03,784 DEBUG StringConverter:127 - Converting 'String' value '3561' to type 'String'
+08:14:03,785 DEBUG ConvertUtils:460 - Convert string 'testCampaign' to class 'java.lang.String'
+08:14:03,786 DEBUG StringConverter:127 - Converting 'String' value 'testCampaign' to type 'String'
+08:14:03,787 DEBUG ConvertUtils:460 - Convert string 'testCampaign' to class 'java.lang.String'
+08:14:03,787 DEBUG StringConverter:127 - Converting 'String' value 'testCampaign' to type 'String'
+08:14:03,788 DEBUG ConvertUtils:460 - Convert string 'TestCode' to class 'java.lang.String'
+08:14:03,788 DEBUG StringConverter:127 - Converting 'String' value 'TestCode' to type 'String'
+08:14:03,789 DEBUG ConvertUtils:460 - Convert string '000fff' to class 'java.lang.String'
+08:14:03,790 DEBUG StringConverter:127 - Converting 'String' value '000fff' to type 'String'
+08:14:03,791 DEBUG ConvertUtils:460 - Convert string 'false' to class 'boolean'
+08:14:03,791 DEBUG BooleanConverter:127 - Converting 'String' value 'false' to type 'Boolean'
+08:14:03,791 DEBUG BooleanConverter:158 -     Converted to Boolean value 'false'
+08:14:03,792 DEBUG ConvertUtils:460 - Convert string '3561' to class 'java.lang.String'
+08:14:03,793 DEBUG StringConverter:127 - Converting 'String' value '3561' to type 'String'
+08:14:03,794 DEBUG ConvertUtils:460 - Convert string '2013-02-25T14:09:08' to class 'java.lang.String'
+08:14:03,794 DEBUG StringConverter:127 - Converting 'String' value '2013-02-25T14:09:08' to type 'String'
+08:14:03,795 DEBUG ConvertUtils:460 - Convert string '2013-02-25T14:09:08' to class 'java.lang.String'
+08:14:03,796 DEBUG StringConverter:127 - Converting 'String' value '2013-02-25T14:09:08' to type 'String'
+08:14:03,796 DEBUG ConvertUtils:460 - Convert string '3004' to class 'java.lang.String'
+08:14:03,797 DEBUG StringConverter:127 - Converting 'String' value '3004' to type 'String'
+08:14:03,797 DEBUG ConvertUtils:460 - Convert string 'MACTes2323' to class 'java.lang.String'
+08:14:03,798 DEBUG StringConverter:127 - Converting 'String' value 'MACTes2323' to type 'String'
+08:14:03,798 DEBUG ConvertUtils:460 - Convert string 'PHPSDKCreatedForTest' to class 'java.lang.String'
+08:14:03,799 DEBUG StringConverter:127 - Converting 'String' value 'PHPSDKCreatedForTest' to type 'String'
+08:14:03,799 DEBUG ConvertUtils:460 - Convert string 'MACTes2323' to class 'java.lang.String'
+08:14:03,800 DEBUG StringConverter:127 - Converting 'String' value 'MACTes2323' to type 'String'
+08:14:03,800 DEBUG ConvertUtils:460 - Convert string 'FF9933' to class 'java.lang.String'
+08:14:03,801 DEBUG StringConverter:127 - Converting 'String' value 'FF9933' to type 'String'
+08:14:03,801 DEBUG ConvertUtils:460 - Convert string 'false' to class 'boolean'
+08:14:03,802 DEBUG BooleanConverter:127 - Converting 'String' value 'false' to type 'Boolean'
+08:14:03,802 DEBUG BooleanConverter:158 -     Converted to Boolean value 'false'
+08:14:03,802 DEBUG ConvertUtils:460 - Convert string '3004' to class 'java.lang.String'
+08:14:03,803 DEBUG StringConverter:127 - Converting 'String' value '3004' to type 'String'
+08:14:03,803 DEBUG ConvertUtils:460 - Convert string '2013-02-25T14:09:08' to class 'java.lang.String'
+08:14:03,804 DEBUG StringConverter:127 - Converting 'String' value '2013-02-25T14:09:08' to type 'String'
+08:14:03,804 DEBUG ConvertUtils:460 - Convert string '2013-02-25T14:09:08' to class 'java.lang.String'
+08:14:03,805 DEBUG StringConverter:127 - Converting 'String' value '2013-02-25T14:09:08' to type 'String'
+08:14:03,805 DEBUG ConvertUtils:460 - Convert string '3003' to class 'java.lang.String'
+08:14:03,806 DEBUG StringConverter:127 - Converting 'String' value '3003' to type 'String'
+08:14:03,806 DEBUG ConvertUtils:460 - Convert string 'MACCAMPAIGN' to class 'java.lang.String'
+08:14:03,807 DEBUG StringConverter:127 - Converting 'String' value 'MACCAMPAIGN' to type 'String'
+08:14:03,807 DEBUG ConvertUtils:460 - Convert string '' to class 'java.lang.String'
+08:14:03,808 DEBUG StringConverter:127 - Converting 'String' value '' to type 'String'
+08:14:03,808 DEBUG ConvertUtils:460 - Convert string 'MACCAMPAIGN' to class 'java.lang.String'
+08:14:03,809 DEBUG StringConverter:127 - Converting 'String' value 'MACCAMPAIGN' to type 'String'
+08:14:03,809 DEBUG ConvertUtils:460 - Convert string 'FF9933' to class 'java.lang.String'
+08:14:03,810 DEBUG StringConverter:127 - Converting 'String' value 'FF9933' to type 'String'
+08:14:03,810 DEBUG ConvertUtils:460 - Convert string 'false' to class 'boolean'
+08:14:03,811 DEBUG BooleanConverter:127 - Converting 'String' value 'false' to type 'Boolean'
+08:14:03,811 DEBUG BooleanConverter:158 -     Converted to Boolean value 'false'
+08:14:03,812 DEBUG ConvertUtils:460 - Convert string '3003' to class 'java.lang.String'
+08:14:03,812 DEBUG StringConverter:127 - Converting 'String' value '3003' to type 'String'
+08:14:03,813 DEBUG ConvertUtils:460 - Convert string '2013-02-25T14:09:08' to class 'java.lang.String'
+08:14:03,813 DEBUG StringConverter:127 - Converting 'String' value '2013-02-25T14:09:08' to type 'String'
+08:14:03,814 DEBUG ConvertUtils:460 - Convert string '2013-02-25T14:09:08' to class 'java.lang.String'
+08:14:03,814 DEBUG StringConverter:127 - Converting 'String' value '2013-02-25T14:09:08' to type 'String'
+08:14:03,815 DEBUG ConvertUtils:460 - Convert string '2995' to class 'java.lang.String'
+08:14:03,815 DEBUG StringConverter:127 - Converting 'String' value '2995' to type 'String'
+08:14:03,816 DEBUG ConvertUtils:460 - Convert string 'Example Campaign' to class 'java.lang.String'
+08:14:03,816 DEBUG StringConverter:127 - Converting 'String' value 'Example Campaign' to type 'String'
+08:14:03,817 DEBUG ConvertUtils:460 - Convert string '' to class 'java.lang.String'
+08:14:03,817 DEBUG StringConverter:127 - Converting 'String' value '' to type 'String'
+08:14:03,818 DEBUG ConvertUtils:460 - Convert string 'ExampleCampaign' to class 'java.lang.String'
+08:14:03,818 DEBUG StringConverter:127 - Converting 'String' value 'ExampleCampaign' to type 'String'
+08:14:03,819 DEBUG ConvertUtils:460 - Convert string 'ffc7c7' to class 'java.lang.String'
+08:14:03,819 DEBUG StringConverter:127 - Converting 'String' value 'ffc7c7' to type 'String'
+08:14:03,819 DEBUG ConvertUtils:460 - Convert string 'false' to class 'boolean'
+08:14:03,820 DEBUG BooleanConverter:127 - Converting 'String' value 'false' to type 'Boolean'
+08:14:03,820 DEBUG BooleanConverter:158 -     Converted to Boolean value 'false'
+08:14:03,821 DEBUG ConvertUtils:460 - Convert string '2995' to class 'java.lang.String'
+08:14:03,821 DEBUG StringConverter:127 - Converting 'String' value '2995' to type 'String'
+08:14:03,824 DEBUG ConvertUtils:460 - Convert string '2013-02-25T14:09:08' to class 'java.lang.String'
+08:14:03,824 DEBUG StringConverter:127 - Converting 'String' value '2013-02-25T14:09:08' to type 'String'
+08:14:03,825 DEBUG ConvertUtils:460 - Convert string '2013-02-25T14:09:08' to class 'java.lang.String'
+08:14:03,825 DEBUG StringConverter:127 - Converting 'String' value '2013-02-25T14:09:08' to type 'String'

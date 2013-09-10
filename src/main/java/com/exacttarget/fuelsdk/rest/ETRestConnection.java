@@ -55,8 +55,7 @@ public class ETRestConnection {
         }
     }
 
-    public String get(String path)
-        throws ETSdkException
+    public String get(String path) throws ETSdkException
     {
         HttpURLConnection connection = sendRequest(path, "GET");
         String response = receiveResponse(connection);
@@ -64,63 +63,33 @@ public class ETRestConnection {
         return response;
     }
 
-    public String post(String path, String payload)
-        throws ETSdkException
+    public String post(String path, String payload) throws ETSdkException
     {
         HttpURLConnection connection = sendRequest(path, "POST", payload);
         String response = receiveResponse(connection);
         connection.disconnect();
         return response;
     }
+    
+    public String delete(String path) throws ETSdkException
+    {
+    	HttpURLConnection connection = sendRequest(path, "DELETE");
+        String response = receiveResponse(connection);
+        connection.disconnect();
+        return response;
+    }
 
-    public String post(String path, JsonObject jsonObject)
-        throws ETSdkException
+    public String post(String path, JsonObject jsonObject) throws ETSdkException
     {
         return post(path, jsonObject.toString());
     }
 
-//    public <T> T get(String url, Class<T> entityClass)
-//        throws ET_SDKException
-//    {
-//        String json = get(url);
-//        return gson.fromJson(json, entityClass);
-//    }
-
-//    public void post(String url, ET_Object object)
-//        throws ET_SDKException
-//    {
-//        post(url, gson.toJson(object));
-//    }
-
-//    public String get(String url, String... queryParams)
-//        throws ET_SDKException
-//    {
-//        url += "?access_token" + accessToken;
-//        for (String queryParam : queryParams) {
-//            url += "&" + queryParam;
-//        }
-//        return get(new URL(url));
-//    }
-
-//    public void post(String url, String payload, String... queryParams)
-//        throws ET_SDKException
-//    {
-//        url += "?access_token" + accessToken;
-//        for (String queryParam : queryParams) {
-//            url += "&" + queryParam;
-//        }
-//        post(new URL(url), payload);
-//    }
-
-    private HttpURLConnection sendRequest(String path, String method)
-        throws ETSdkException
+    private HttpURLConnection sendRequest(String path, String method) throws ETSdkException
     {
         return sendRequest(path, method, null);
     }
 
-    private HttpURLConnection sendRequest(String path, String method,
-            String payload)
-        throws ETSdkException
+    private HttpURLConnection sendRequest(String path, String method, String payload) throws ETSdkException
     {
         URL url = null;
         try {
@@ -131,12 +100,10 @@ public class ETRestConnection {
         return sendRequest(url, method, payload);
     }
 
-    private HttpURLConnection sendRequest(URL url, String method,
-            String payload)
-        throws ETSdkException
+    private HttpURLConnection sendRequest(URL url, String method, String payload) throws ETSdkException
     {
         logger.trace(method + " " + url);
-
+        
         HttpURLConnection connection = null;
         try {
             connection = (HttpURLConnection) url.openConnection();
@@ -150,23 +117,33 @@ public class ETRestConnection {
             } catch (ProtocolException ex) {
                 throw new ETSdkException("error setting request method: GET", ex);
             }
+            
             connection.setDoInput(true);
-            connection.setRequestProperty("Accept",
-                    "application/json");
+            connection.setRequestProperty("Accept", "application/json");
         } else if (method.equals("POST")) {
             try {
                 connection.setRequestMethod("POST");
             } catch (ProtocolException ex) {
                 throw new ETSdkException("error setting request method: POST", ex);
             }
+
             connection.setDoOutput(true);
-            connection.setRequestProperty("Content-Type",
-                    "application/json");
+            connection.setRequestProperty("Content-Type", "application/json");
+        } else if (method.equals("DELETE")) {
+            try {
+                connection.setRequestMethod("DELETE");
+            } catch (ProtocolException ex) {
+                throw new ETSdkException("error setting request method: DELETE", ex);
+            }
+
+            connection.setDoOutput(true);
+            connection.setRequestProperty("Content-Type", "application/json");
         } else {
             throw new ETSdkException("unsupported request method: " + method);
         }
 
         String accessToken = client.getAccessToken();
+        
         if (accessToken != null) {
             connection.setRequestProperty("Authorization", "Bearer " + accessToken);
         }
@@ -196,8 +173,8 @@ public class ETRestConnection {
         }
 
         try {
-            logger.trace(connection.getResponseCode() + " "
-                    + connection.getResponseMessage());
+            logger.trace(connection.getResponseCode() + " " + connection.getResponseMessage());
+            
         } catch (IOException ex) {
             throw new ETSdkException("error getting response code / message", ex);
         }
@@ -246,4 +223,38 @@ public class ETRestConnection {
 
         return response;
     }
+
+
+//  public <T> T get(String url, Class<T> entityClass)
+//      throws ET_SDKException
+//  {
+//      String json = get(url);
+//      return gson.fromJson(json, entityClass);
+//  }
+
+//  public void post(String url, ET_Object object)
+//      throws ET_SDKException
+//  {
+//      post(url, gson.toJson(object));
+//  }
+
+//  public String get(String url, String... queryParams)
+//      throws ET_SDKException
+//  {
+//      url += "?access_token" + accessToken;
+//      for (String queryParam : queryParams) {
+//          url += "&" + queryParam;
+//      }
+//      return get(new URL(url));
+//  }
+
+//  public void post(String url, String payload, String... queryParams)
+//      throws ET_SDKException
+//  {
+//      url += "?access_token" + accessToken;
+//      for (String queryParam : queryParams) {
+//          url += "&" + queryParam;
+//      }
+//      post(new URL(url), payload);
+//  }
 }
