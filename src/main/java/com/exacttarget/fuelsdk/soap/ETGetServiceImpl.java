@@ -79,7 +79,7 @@ public class ETGetServiceImpl extends ETServiceImpl implements ETGetService {
         
         try {
             for (APIObject apiObject : retrieveResponseMsg.getResults()) {
-                response.getResults().add(ObjectConverter.convertToEtObject(apiObject, type));
+                response.getResults().add(ObjectConverter.convertToEtObject(apiObject, type, false));
             }
         }
         catch (Exception ex) {
@@ -89,7 +89,7 @@ public class ETGetServiceImpl extends ETServiceImpl implements ETGetService {
         return response;
 	}
 
-	private FilterPart convertFilterPart(ETFilter filter) {
+	protected FilterPart convertFilterPart(ETFilter filter) {
 		FilterPart filterPart = null;
 		if (filter instanceof ETSimpleFilter) {
 			filterPart = new SimpleFilterPart();

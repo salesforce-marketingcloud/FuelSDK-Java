@@ -1,15 +1,8 @@
 package com.exacttarget.fuelsdk;
 
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
-import com.exacttarget.fuelsdk.ETClient;
-import com.exacttarget.fuelsdk.ETConfiguration;
-import com.exacttarget.fuelsdk.ETCrudService;
-import com.exacttarget.fuelsdk.ETSdkException;
-import com.exacttarget.fuelsdk.ETServiceResponse;
-import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.model.ETObject;
 
 public abstract class ETCrudServiceTest<T extends ETObject> extends ETGetServiceTest<ETObject> {
