@@ -48,6 +48,7 @@ public class ETListServiceTest {
 		ETServiceResponse<ETList> response =  service.get(client);
 		
 		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getStatus());
 		Assert.assertNotNull(response.getResults());
 		
 		for (ETList ret : response.getResults()) {
@@ -74,12 +75,14 @@ public class ETListServiceTest {
 	protected void TestPatch(ETList found) throws ETSdkException {
 		
 		found.setName("TEST LIST FROM SDK UPDATED");
-		service.patch(client, found);
+		ETServiceResponse<ETList> response = service.patch(client, found);
+		Assert.assertTrue(response.getStatus());
 		
 	}	
 	protected ETList TestRetrieveSingle() throws ETSdkException {
 		ETServiceResponse<ETList> response = service.get(client, filter);
 		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getStatus());
 		Assert.assertNotNull(response.getResults());
 		Assert.assertEquals(1, response.getResults().size());
 		System.out.println(response.getResults().get(0));
@@ -90,6 +93,7 @@ public class ETListServiceTest {
 	protected ETList TestRetrieveSingleUpdated() throws ETSdkException {
 		ETServiceResponse<ETList> response = service.get(client, filterUpdated);
 		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getStatus());
 		Assert.assertNotNull(response.getResults());
 		Assert.assertEquals(1, response.getResults().size());
 		System.out.println(response.getResults().get(0));
@@ -99,13 +103,15 @@ public class ETListServiceTest {
 	protected void TestPost() throws ETSdkException
 	{
 		ETServiceResponse<ETList> response =  service.post(client, etObject);
+		Assert.assertTrue(response.getStatus());
 	}
 		
 	
 	protected void DeleteSingle(ETList etObject) throws ETSdkException
 	{
 				
-		ETServiceResponse<ETList> response2 =  service.delete(client, etObject);
+		ETServiceResponse<ETList> response =  service.delete(client, etObject);
+		Assert.assertTrue(response.getStatus());
 		 
 	}
 	

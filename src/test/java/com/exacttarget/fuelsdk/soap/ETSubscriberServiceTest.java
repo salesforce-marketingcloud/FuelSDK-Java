@@ -47,6 +47,7 @@ public class ETSubscriberServiceTest {
 		ETServiceResponse<ETSubscriber> response =  service.get(client);
 		
 		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getStatus());
 		Assert.assertNotNull(response.getResults());
 		
 		for (ETSubscriber ret : response.getResults()) {
@@ -73,12 +74,14 @@ public class ETSubscriberServiceTest {
 	protected void TestPatch(ETSubscriber found) throws ETSdkException {
 		
 		found.setEmailAddress("ryanjlowetest993@gmail.com");
-		service.patch(client, found);
+		ETServiceResponse<ETSubscriber> response = service.patch(client, found);
+		Assert.assertTrue(response.getStatus());
 		
 	}	
 	protected ETSubscriber TestRetrieveSingle() throws ETSdkException {
 		ETServiceResponse<ETSubscriber> response = service.get(client, filter);
 		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getStatus());
 		Assert.assertNotNull(response.getResults());
 		Assert.assertEquals(1, response.getResults().size());
 		System.out.println(response.getResults().get(0));
@@ -89,6 +92,7 @@ public class ETSubscriberServiceTest {
 	protected ETSubscriber TestRetrieveSingleUpdated() throws ETSdkException {
 		ETServiceResponse<ETSubscriber> response = service.get(client, filterUpdated);
 		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getStatus());
 		Assert.assertNotNull(response.getResults());
 		Assert.assertEquals(1, response.getResults().size());
 		System.out.println(response.getResults().get(0));
@@ -98,13 +102,15 @@ public class ETSubscriberServiceTest {
 	protected void TestPost() throws ETSdkException
 	{
 		ETServiceResponse<ETSubscriber> response =  service.post(client, etObject);
+		Assert.assertTrue(response.getStatus());
 	}
 		
 	
 	protected void DeleteSingle(ETSubscriber etObject) throws ETSdkException
 	{
 				
-		ETServiceResponse<ETSubscriber> response2 =  service.delete(client, etObject);
+		ETServiceResponse<ETSubscriber> response =  service.delete(client, etObject);
+		Assert.assertTrue(response.getStatus());
 		 
 	}
 	

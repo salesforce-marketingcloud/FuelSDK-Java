@@ -36,6 +36,7 @@ public class ETOpenEventTest  {
 		ETServiceResponse<ETOpenEvent> response = service.get(client);
 		
 		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getStatus());
 		Assert.assertNotNull(response.getResults());
 		
 		for (ETOpenEvent ret : response.getResults()) {

@@ -53,9 +53,9 @@ public abstract class ETCrudServiceImpl extends ETGetServiceImpl implements ETCr
 		createRequest.setOptions(new CreateOptions());
 		createRequest.getObjects().add(apiObject);
 
-		CreateResponse createResponse;
-		createResponse = soap.create(createRequest);
+		CreateResponse createResponse = soap.create(createRequest);
 		response.setRequestId(createResponse.getRequestID());
+		response.setStatus(createResponse.getOverallStatus().equals("OK"));
 		
 		return response;
     }
@@ -85,6 +85,7 @@ public abstract class ETCrudServiceImpl extends ETGetServiceImpl implements ETCr
 
 		UpdateResponse updateResponse = soap.update(updateRequest);
 		response.setRequestId(updateResponse.getRequestID());
+		response.setStatus(updateResponse.getOverallStatus().equals("OK"));
 		
 		return response;
     }
@@ -111,9 +112,9 @@ public abstract class ETCrudServiceImpl extends ETGetServiceImpl implements ETCr
 		deleteRequest.setOptions(new DeleteOptions());
 		deleteRequest.getObjects().add(apiObject);
 
-		DeleteResponse deleteResponse;
-		deleteResponse = soap.delete(deleteRequest);
+		DeleteResponse deleteResponse = soap.delete(deleteRequest);
 		response.setRequestId(deleteResponse.getRequestID());
+		response.setStatus(deleteResponse.getOverallStatus().equals("OK"));
     	
 		return response;
     }

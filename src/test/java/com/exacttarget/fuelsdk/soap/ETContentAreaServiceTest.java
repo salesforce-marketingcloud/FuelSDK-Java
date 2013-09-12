@@ -45,6 +45,7 @@ public class ETContentAreaServiceTest {
 		ETServiceResponse<ETContentArea> response =  service.get(client);
 		
 		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getStatus());
 		Assert.assertNotNull(response.getResults());
 		
 		for (ETContentArea ret : response.getResults()) {
@@ -72,13 +73,15 @@ public class ETContentAreaServiceTest {
 		
 		found.setName("TEST Content Area UPDATED");
 		
-		((ETContentAreaService)service).patch(client, found);
+		ETServiceResponse<ETContentArea> response = service.patch(client, found);
+		Assert.assertTrue(response.getStatus());
 		
 	}
 	
 	protected ETContentArea TestRetrieveSingle() throws ETSdkException {
 		ETServiceResponse<ETContentArea> response = service.get(client, filter);
 		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getStatus());
 		Assert.assertNotNull(response.getResults());
 		Assert.assertEquals(1, response.getResults().size());
 		System.out.println(response.getResults().get(0));
@@ -89,6 +92,7 @@ public class ETContentAreaServiceTest {
 	protected ETContentArea TestRetrieveSingleUpdated() throws ETSdkException {
 		ETServiceResponse<ETContentArea> response = service.get(client, filterUpdated);
 		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getStatus());
 		Assert.assertNotNull(response.getResults());
 		Assert.assertEquals(1, response.getResults().size());
 		System.out.println(response.getResults().get(0));
@@ -98,13 +102,15 @@ public class ETContentAreaServiceTest {
 	protected void TestPost() throws ETSdkException
 	{
 		ETServiceResponse<ETContentArea> response =  service.post(client, etObject);
+		Assert.assertTrue(response.getStatus());
 	}
 		
 	
 	protected void DeleteSingle(ETContentArea etObject) throws ETSdkException
 	{
 				
-		ETServiceResponse<ETContentArea> response2 =  service.delete(client, etObject);
+		ETServiceResponse<ETContentArea> response =  service.delete(client, etObject);
+		Assert.assertTrue(response.getStatus());
 		 
 	}
 }

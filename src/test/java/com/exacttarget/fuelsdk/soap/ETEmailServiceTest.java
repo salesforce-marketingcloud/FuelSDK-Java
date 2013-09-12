@@ -2,6 +2,7 @@ package com.exacttarget.fuelsdk.soap;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.exacttarget.fuelsdk.ETClient;
@@ -47,6 +48,7 @@ public class ETEmailServiceTest {
 		ETServiceResponse<ETEmail> response =  service.get(client);
 		
 		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getStatus());
 		Assert.assertNotNull(response.getResults());
 		
 		for (ETEmail ret : response.getResults()) {
@@ -73,12 +75,14 @@ public class ETEmailServiceTest {
 	protected void TestPatch(ETEmail found) throws ETSdkException {
 		
 		found.setName("TEST EMAIL UPDATED");
-		service.patch(client, found);
+		ETServiceResponse<ETEmail> response = service.patch(client, found);
+		Assert.assertTrue(response.getStatus());
 		
 	}	
 	protected ETEmail TestRetrieveSingle() throws ETSdkException {
 		ETServiceResponse<ETEmail> response = service.get(client, filter);
 		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getStatus());
 		Assert.assertNotNull(response.getResults());
 		Assert.assertEquals(1, response.getResults().size());
 		System.out.println(response.getResults().get(0));
@@ -89,6 +93,7 @@ public class ETEmailServiceTest {
 	protected ETEmail TestRetrieveSingleUpdated() throws ETSdkException {
 		ETServiceResponse<ETEmail> response = service.get(client, filterUpdated);
 		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getStatus());
 		Assert.assertNotNull(response.getResults());
 		Assert.assertEquals(1, response.getResults().size());
 		System.out.println(response.getResults().get(0));
@@ -98,13 +103,15 @@ public class ETEmailServiceTest {
 	protected void TestPost() throws ETSdkException
 	{
 		ETServiceResponse<ETEmail> response =  service.post(client, etObject);
+		Assert.assertTrue(response.getStatus());
 	}
 		
 	
 	protected void DeleteSingle(ETEmail etObject) throws ETSdkException
 	{
 				
-		ETServiceResponse<ETEmail> response2 =  service.delete(client, etObject);
+		ETServiceResponse<ETEmail> response =  service.delete(client, etObject);
+		Assert.assertTrue(response.getStatus());
 		 
 	}
 	

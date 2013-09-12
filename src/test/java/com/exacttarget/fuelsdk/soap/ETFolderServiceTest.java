@@ -62,6 +62,7 @@ public class ETFolderServiceTest {
 		ETServiceResponse<ETFolder> response =  service.get(client);
 		
 		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getStatus());
 		Assert.assertNotNull(response.getResults());
 		
 		for (ETFolder ret : response.getResults()) {
@@ -88,12 +89,14 @@ public class ETFolderServiceTest {
 	protected void TestPatch(ETFolder found) throws ETSdkException {
 		
 		found.setName("TEST FOLDER NAME UPDATED");
-		service.patch(client, found);
+		ETServiceResponse<ETFolder> response = service.patch(client, found);
+		Assert.assertTrue(response.getStatus());
 		
 	}	
 	protected ETFolder TestRetrieveSingle() throws ETSdkException {
 		ETServiceResponse<ETFolder> response = service.get(client, filter);
 		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getStatus());
 		Assert.assertNotNull(response.getResults());
 		Assert.assertEquals(1, response.getResults().size());
 		System.out.println(response.getResults().get(0));
@@ -104,6 +107,7 @@ public class ETFolderServiceTest {
 	protected ETFolder TestRetrieveSingleUpdated() throws ETSdkException {
 		ETServiceResponse<ETFolder> response = service.get(client, filterUpdated);
 		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getStatus());
 		Assert.assertNotNull(response.getResults());
 		Assert.assertEquals(1, response.getResults().size());
 		System.out.println(response.getResults().get(0));
@@ -113,13 +117,15 @@ public class ETFolderServiceTest {
 	protected void TestPost() throws ETSdkException
 	{
 		ETServiceResponse<ETFolder> response =  service.post(client, etObject);
+		Assert.assertTrue(response.getStatus());
 	}
 		
 	
 	protected void DeleteSingle(ETFolder etObject) throws ETSdkException
 	{
 				
-		ETServiceResponse<ETFolder> response2 =  service.delete(client, etObject);
+		ETServiceResponse<ETFolder> response =  service.delete(client, etObject);
+		Assert.assertTrue(response.getStatus());
 		 
 	}
 	

@@ -34,17 +34,29 @@ import com.exacttarget.fuelsdk.internal.DataExtensionField;
 import com.exacttarget.fuelsdk.internal.DataExtensionFieldType;
 import com.exacttarget.fuelsdk.internal.DataExtensionObject.Keys;
 import com.exacttarget.fuelsdk.internal.DataFolder;
+import com.exacttarget.fuelsdk.internal.DeliveryProfileDomainTypeEnum;
+import com.exacttarget.fuelsdk.internal.DeliveryProfileSourceAddressTypeEnum;
+import com.exacttarget.fuelsdk.internal.Email;
 import com.exacttarget.fuelsdk.internal.EmailType;
 import com.exacttarget.fuelsdk.internal.EventType;
 import com.exacttarget.fuelsdk.internal.LayoutType;
 import com.exacttarget.fuelsdk.internal.ListClassificationEnum;
 import com.exacttarget.fuelsdk.internal.ListTypeEnum;
 import com.exacttarget.fuelsdk.internal.ObjectExtension;
+import com.exacttarget.fuelsdk.internal.SalutationSourceEnum;
+import com.exacttarget.fuelsdk.internal.SendClassification;
+import com.exacttarget.fuelsdk.internal.SendClassificationTypeEnum;
+import com.exacttarget.fuelsdk.internal.SendPriorityEnum;
 import com.exacttarget.fuelsdk.internal.SubscriberStatus;
 import com.exacttarget.fuelsdk.model.ETAccountType;
 import com.exacttarget.fuelsdk.model.ETDataExtension;
 import com.exacttarget.fuelsdk.model.ETDataExtensionColumn;
 import com.exacttarget.fuelsdk.model.ETDataExtensionFieldType;
+import com.exacttarget.fuelsdk.model.ETDataSourceType;
+import com.exacttarget.fuelsdk.model.ETDeliveryProfile;
+import com.exacttarget.fuelsdk.model.ETDeliveryProfileDomainType;
+import com.exacttarget.fuelsdk.model.ETDeliveryProfileSourceAddressType;
+import com.exacttarget.fuelsdk.model.ETEmail;
 import com.exacttarget.fuelsdk.model.ETEmailType;
 import com.exacttarget.fuelsdk.model.ETEventType;
 import com.exacttarget.fuelsdk.model.ETFolder;
@@ -52,6 +64,12 @@ import com.exacttarget.fuelsdk.model.ETLayoutType;
 import com.exacttarget.fuelsdk.model.ETListClassification;
 import com.exacttarget.fuelsdk.model.ETListType;
 import com.exacttarget.fuelsdk.model.ETObject;
+import com.exacttarget.fuelsdk.model.ETSalutationSource;
+import com.exacttarget.fuelsdk.model.ETSendClassification;
+import com.exacttarget.fuelsdk.model.ETSendClassificationType;
+import com.exacttarget.fuelsdk.model.ETSendDefinitionListType;
+import com.exacttarget.fuelsdk.model.ETSendPriority;
+import com.exacttarget.fuelsdk.model.ETSenderProfile;
 import com.exacttarget.fuelsdk.model.ETSubscriberStatus;
 
 public class ObjectConverter {
@@ -68,237 +86,42 @@ public class ObjectConverter {
             }
         }, Date.class);
 
-        convertUtils.register(new Converter() {
-            public Object convert(Class type, Object value) {
-                if (value == null) return null;
-                if (type == EmailType.class) {
-                    return ETEmailType.valueOf((value).toString());
-                }
-                return null;
-            }
-        }, ETEmailType.class);
-
-        convertUtils.register(new Converter() {
-            public Object convert(Class type, Object value) {
-                if (value == null) return null;
-                if (type == SubscriberStatus.class) {
-                    return ETSubscriberStatus.valueOf((value).toString());
-                }
-                return null;
-            }
-        }, ETSubscriberStatus.class);
-
-        convertUtils.register(new Converter() {
-            public Object convert(Class type, Object value) {
-                if (value == null) return null;
-                if (type == ListClassificationEnum.class) {
-                    return ETListClassification.valueOf((value).toString());
-                }
-                return null;
-            }
-        }, ETListClassification.class);
-
-        convertUtils.register(new Converter() {
-            public Object convert(Class type, Object value) {
-                if (value == null) return null;
-                if (type == ListTypeEnum.class) {
-                    return ETListType.valueOf((value).toString());
-                }
-                return null;
-            }
-        }, ETListType.class);
-
-        convertUtils.register(new Converter() {
-            public Object convert(Class type, Object value) {
-                if (value == null) return null;
-                if (type == LayoutType.class) {
-                    return ETLayoutType.valueOf((value).toString());
-                }
-                return null;
-            }
-        }, ETLayoutType.class);
+        // Convert ET Enums
+        convertUtils.register(new ETEnumConverter(), ETEmailType.class);
+        convertUtils.register(new ETEnumConverter(), ETSubscriberStatus.class);
+        convertUtils.register(new ETEnumConverter(), ETListClassification.class);
+        convertUtils.register(new ETEnumConverter(), ETListType.class);
+        convertUtils.register(new ETEnumConverter(), ETLayoutType.class);
+        convertUtils.register(new ETEnumConverter(), ETEventType.class);
+        convertUtils.register(new ETEnumConverter(), ETAccountType.class);
+        convertUtils.register(new ETEnumConverter(), ETDataExtensionFieldType.class);
+        convertUtils.register(new ETEnumConverter(), DataExtensionFieldType.class);
+        convertUtils.register(new ETEnumConverter(), ETDeliveryProfileDomainType.class);
+        convertUtils.register(new ETEnumConverter(), ETDeliveryProfileSourceAddressType.class);
+        convertUtils.register(new ETEnumConverter(), ETSalutationSource.class);
+        convertUtils.register(new ETEnumConverter(), ETSendClassificationType.class);
+        convertUtils.register(new ETEnumConverter(), ETSendPriority.class);
+        convertUtils.register(new ETEnumConverter(), SubscriberStatus.class);
+        convertUtils.register(new ETEnumConverter(), ETDataSourceType.class);
+        convertUtils.register(new ETEnumConverter(), ETSendDefinitionListType.class);
         
-        convertUtils.register(new Converter() {
-            public Object convert(Class type, Object value) {
-                if (value == null) return null;
-                if (type == EventType.class) {
-                    return ETEventType.valueOf((value).toString());
-                }
-                return null;
-            }
-        }, ETEventType.class);
+        // Convert ET Objects
+        convertUtils.register(new ETObjectConverter(), ETFolder.class);
+        convertUtils.register(new ETObjectConverter(), ETSendClassification.class);
+        convertUtils.register(new ETObjectConverter(), ETDeliveryProfile.class);
+        convertUtils.register(new ETObjectConverter(), ETEmail.class);
+        convertUtils.register(new ETObjectConverter(), ETSenderProfile.class);
         
-        convertUtils.register(new Converter() {
-            public Object convert(Class type, Object value) {
-                if (value == null) return null;
-                if (type == AccountTypeEnum.class) {
-                    return ETAccountType.valueOf((value).toString());
-                }
-                return null;
-            }
-        }, ETAccountType.class);
+        // Convert API Objects
+        convertUtils.register(new ETObjectConverter(), DataFolder.class);
+        convertUtils.register(new ETObjectConverter(), SendClassification.class);
+        convertUtils.register(new ETObjectConverter(), Email.class);
+        convertUtils.register(new ETObjectConverter(), DataExtension.Fields.class);
+        convertUtils.register(new ETObjectConverter(), Keys.class);
+        convertUtils.register(new ETObjectConverter(), ObjectExtension.Properties.class);
+        convertUtils.register(new ETObjectConverter(), ETDataExtensionColumn[].class);
+        convertUtils.register(new ETObjectConverter(), Map.class);
         
-        convertUtils.register(new Converter() {
-            public Object convert(Class type, Object value) {
-                if (value == null) return null;
-                if (type == DataExtensionFieldType.class) {
-                    return ETDataExtensionFieldType.valueOf((value).toString());
-                }
-                return null;
-            }
-        }, ETDataExtensionFieldType.class);
-        
-        convertUtils.register(new Converter() {
-            public Object convert(Class type, Object value) {
-                if (value == null) return null;
-                if (type == ETDataExtensionFieldType.class) {
-                    return DataExtensionFieldType.valueOf((value).toString());
-                }
-                return null;
-            }
-        }, DataExtensionFieldType.class);
-        
-
-        // TODO - make this generic instead of specific to DataFolder
-        convertUtils.register(new Converter(){
-            public Object convert(Class type, Object value) {
-                try {
-                    return convertFromEtObject((ETObject) value, type, false);
-                }
-                catch(Exception e) {
-                    return null;
-                }
-            }
-        }, DataFolder.class);
-
-        // TODO - make this generic ET enum -> Internal enum instead of specific to SubscriberStatus
-        convertUtils.register(new Converter(){
-            public Object convert(Class type, Object value) {
-                try {
-                    return SubscriberStatus.valueOf(value.toString());
-                }
-                catch(Exception e) {
-                    return null;
-                }
-            }
-        }, SubscriberStatus.class);
-
-        // TODO - make this generic instead of specific to ETFolder
-        convertUtils.register(new Converter(){
-            public Object convert(Class type, Object value) {
-                try {
-                    return convertToEtObject((APIObject) value, type, false);
-                }
-                catch(Exception e) {
-                    return null;
-                }
-            }
-        }, ETFolder.class);
-        
-        // TODO - make this generic instead of specific to ETFolder
-        convertUtils.register(new Converter(){
-            public Object convert(Class type, Object value) {
-                try {
-                    DataExtension.Fields fields = new Fields();
-                    
-                    List<ETDataExtensionColumn> columns = (List<ETDataExtensionColumn>) value;
-                    
-                    for(ETDataExtensionColumn col : columns) {
-                    	fields.getField().add(convertFromEtObject(col, DataExtensionField.class, false));
-                    }
-                    
-                    return fields;
-                    
-                }
-                catch(Exception e) {
-                    return null;
-                }
-            }
-        }, DataExtension.Fields.class);
-        
-        // TODO - make this generic instead of specific to ETFolder
-        convertUtils.register(new Converter(){
-            public Object convert(Class type, Object value) {
-                try {
-                	Keys keys = new Keys();
-                    
-                    Map<String, String> columns = (Map<String, String>) value;
-                    
-                    for(String key : columns.keySet()) {
-                    	APIProperty property = new APIProperty();
-                    	property.setName(key);
-                    	property.setValue(columns.get(key));
-                    	
-                    	keys.getKey().add(property);
-                    }
-                    
-                    return keys;
-                    
-                }
-                catch(Exception e) {
-                    return null;
-                }
-            }
-        }, Keys.class);
-        
-        // TODO - make this generic instead of specific to ETFolder
-        convertUtils.register(new Converter(){
-            public Object convert(Class type, Object value) {
-                try {
-                	ObjectExtension.Properties properties = new ObjectExtension.Properties();
-                    
-                    Map<String, String> columns = (Map<String, String>) value;
-                    
-                    for(String key : columns.keySet()) {
-                    	APIProperty property = new APIProperty();
-                    	property.setName(key);
-                    	property.setValue(columns.get(key));
-                    	
-                    	properties.getProperty().add(property);
-                    }
-                    
-                    return properties;
-                    
-                }
-                catch(Exception e) {
-                    return null;
-                }
-            }
-        }, ObjectExtension.Properties.class);
-        
-        // TODO - make this generic instead of specific to ETFolder
-        convertUtils.register(new Converter(){
-            public Object convert(Class type, Object value) {
-                try {
-                	ObjectExtension.Properties properties = (ObjectExtension.Properties) value;
-                    
-                    Map<String, String> columns = new HashMap<String, String>();
-                    
-                    for (APIProperty property : properties.getProperty()) {
-                    	columns.put(property.getName(), property.getValue());
-                    }
-                    
-                    return columns;
-                    
-                }
-                catch(Exception e) {
-                    return null;
-                }
-            }
-        }, Map.class);
-        
-        // TODO - make this generic instead of specific to ETFolder
-        convertUtils.register(new ArrayConverter(ETDataExtensionColumn[].class, new Converter() {
-			
-			public Object convert(Class type, Object value) {
-				try {
-                    return convertToEtObject((APIObject) value, type, false);
-                }
-                catch(Exception e) {
-                    return null;
-                }
-			}
-		}), ETDataExtensionColumn[].class);
         
         // By default, IntegerConverter sets nulls as 0
         convertUtils.register(new IntegerConverter(null), Integer.class);
@@ -349,15 +172,22 @@ public class ObjectConverter {
             InternalSoapField propAnnotation = declared.getAnnotation(InternalSoapField.class);
             if(propAnnotation != null) {
                 // This field has an @InternalField annotation, let's find the corresponding property in the APIObject class
-                Field internalField;
+                Field internalField = null;
                 if (!propAnnotation.serializedName().equals("")) {
                 	names.add(propAnnotation.serializedName());
                 	continue;
                 }
-                try {
-                	internalField = internalType.getDeclaredField(propAnnotation.name());
-                } catch(NoSuchFieldException ex) {
-                	internalField = internalType.getSuperclass().getDeclaredField(propAnnotation.name());
+                Class checkType = internalType;
+                while (checkType != null) {
+	                try {
+	                	internalField = checkType.getDeclaredField(propAnnotation.name());
+	                	break;
+	                } catch(NoSuchFieldException ex) {
+	                	checkType = checkType.getSuperclass();
+	                }
+                }
+                if (internalField == null) {
+                	throw new ETSdkException("Error inspecting serialization properties of specified type");
                 }
                 XmlElement element = internalField.getAnnotation(XmlElement.class);
                 if(element != null) {
@@ -392,9 +222,12 @@ public class ObjectConverter {
     	
     	if (beanPropertyName.equals("id")) {
     		return "ID";
+    	} else if (beanPropertyName.equals("htmlBody")) {
+    		return "HTMLBody";
     	} else if (beanPropertyName.indexOf('.') > -1) {
     		return beanPropertyName.substring(0, beanPropertyName.indexOf('.'));
     	}
     	return beanPropertyName;
     }
+    
 }
