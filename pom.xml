@@ -62,6 +62,8 @@
                     <extraarg>-p</extraarg>
                     <extraarg>com.exacttarget.fuelsdk.internal</extraarg>
                     <extraarg>-xjc-enableIntrospection</extraarg>
+                    <extraarg>-fe</extraarg>
+                    <extraarg>jaxws21</extraarg>
                   </extraargs>
                 </wsdlOption>
               </wsdlOptions>
