@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -18,38 +17,21 @@ import org.apache.commons.beanutils.BeanUtilsBean;
 import org.apache.commons.beanutils.ConvertUtilsBean;
 import org.apache.commons.beanutils.Converter;
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.commons.beanutils.converters.AbstractArrayConverter;
-import org.apache.commons.beanutils.converters.ArrayConverter;
 import org.apache.commons.beanutils.converters.IntegerConverter;
 
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.annotations.InternalSoapField;
 import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.APIObject;
-import com.exacttarget.fuelsdk.internal.APIProperty;
 import com.exacttarget.fuelsdk.internal.DataExtension;
-import com.exacttarget.fuelsdk.internal.DataExtension.Fields;
-import com.exacttarget.fuelsdk.internal.AccountTypeEnum;
-import com.exacttarget.fuelsdk.internal.DataExtensionField;
 import com.exacttarget.fuelsdk.internal.DataExtensionFieldType;
 import com.exacttarget.fuelsdk.internal.DataExtensionObject.Keys;
 import com.exacttarget.fuelsdk.internal.DataFolder;
-import com.exacttarget.fuelsdk.internal.DeliveryProfileDomainTypeEnum;
-import com.exacttarget.fuelsdk.internal.DeliveryProfileSourceAddressTypeEnum;
 import com.exacttarget.fuelsdk.internal.Email;
-import com.exacttarget.fuelsdk.internal.EmailType;
-import com.exacttarget.fuelsdk.internal.EventType;
-import com.exacttarget.fuelsdk.internal.LayoutType;
-import com.exacttarget.fuelsdk.internal.ListClassificationEnum;
-import com.exacttarget.fuelsdk.internal.ListTypeEnum;
 import com.exacttarget.fuelsdk.internal.ObjectExtension;
-import com.exacttarget.fuelsdk.internal.SalutationSourceEnum;
 import com.exacttarget.fuelsdk.internal.SendClassification;
-import com.exacttarget.fuelsdk.internal.SendClassificationTypeEnum;
-import com.exacttarget.fuelsdk.internal.SendPriorityEnum;
 import com.exacttarget.fuelsdk.internal.SubscriberStatus;
 import com.exacttarget.fuelsdk.model.ETAccountType;
-import com.exacttarget.fuelsdk.model.ETDataExtension;
 import com.exacttarget.fuelsdk.model.ETDataExtensionColumn;
 import com.exacttarget.fuelsdk.model.ETDataExtensionFieldType;
 import com.exacttarget.fuelsdk.model.ETDataSourceType;
@@ -77,7 +59,8 @@ public class ObjectConverter {
         ConvertUtilsBean convertUtils = BeanUtilsBean.getInstance().getConvertUtils();
         /// Enums
         convertUtils.register(new Converter() {
-            public Object convert(Class arg0, Object obj) {
+            @SuppressWarnings("rawtypes")
+			public Object convert(Class arg0, Object obj) {
                 if (obj == null) return null;
                 if (arg0 == XMLGregorianCalendar.class) {
                     return ((XMLGregorianCalendar) obj).toGregorianCalendar().getTime();
@@ -151,20 +134,21 @@ public class ObjectConverter {
         return out;
     }
 
-    public static java.util.List<String> findSerializablePropertyNames(Class<? extends ETObject> type) throws NoSuchFieldException, ETSdkException {
+    @SuppressWarnings("rawtypes")
+	public static java.util.List<String> findSerializablePropertyNames(Class<? extends ETObject> type) throws NoSuchFieldException, ETSdkException {
         // This method would be much simpler to write if we assume all fields with @XmlElement are to be transmitted
         // We are under the current assumption that we only want to return those fields which have been explicitly marked
         InternalSoapType classAnnotation = type.getAnnotation(InternalSoapType.class);
         if(classAnnotation == null) {
             throw new ETSdkException("The type specified does not wrap an internal ET APIObject.");
         }
-        Class internalType = classAnnotation.type();
+		Class internalType = classAnnotation.type();
 
         java.util.List<String> names = new java.util.ArrayList<String>();
         
         java.util.List<Field> fields = new ArrayList<Field>(Arrays.asList(type.getDeclaredFields()));
         if (null != type.getSuperclass()) {
-        	Class superType = type.getSuperclass();
+			Class superType = type.getSuperclass();
         	fields.addAll(Arrays.asList(superType.getDeclaredFields()));
         }
 

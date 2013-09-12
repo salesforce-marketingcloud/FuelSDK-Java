@@ -16,8 +16,6 @@ import java.util.GregorianCalendar;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
-import org.apache.log4j.Logger;
-
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETGetService;
 import com.exacttarget.fuelsdk.ETSdkException;
@@ -41,7 +39,8 @@ import com.exacttarget.fuelsdk.model.converter.ObjectConverter;
 
 public abstract class ETGetServiceImpl extends ETServiceImpl implements ETGetService {
 
-	private static Logger logger = Logger.getLogger(ETGetServiceImpl.class);
+	// TODO - use this
+	//private static Logger logger = Logger.getLogger(ETGetServiceImpl.class);
 
     protected <T extends ETObject> ETServiceResponse<T> get(ETClient client, Class<T> type) throws ETSdkException {
         return this.get(client, type, null);

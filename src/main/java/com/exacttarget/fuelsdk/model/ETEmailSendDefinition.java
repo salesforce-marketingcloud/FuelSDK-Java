@@ -5,7 +5,6 @@ import java.util.List;
 import com.exacttarget.fuelsdk.annotations.InternalSoapField;
 import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.EmailSendDefinition;
-import com.exacttarget.fuelsdk.internal.SendDefinitionList;
 
 @InternalSoapType(type = EmailSendDefinition.class, ignoredFields = {"ID"})
 public class ETEmailSendDefinition extends BaseSoapSerializableObject implements ETObject {

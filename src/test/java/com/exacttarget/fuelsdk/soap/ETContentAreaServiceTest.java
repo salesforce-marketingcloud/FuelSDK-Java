@@ -2,6 +2,7 @@ package com.exacttarget.fuelsdk.soap;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.exacttarget.fuelsdk.ETClient;
@@ -14,6 +15,7 @@ import com.exacttarget.fuelsdk.filter.ETFilterOperators;
 import com.exacttarget.fuelsdk.filter.ETSimpleFilter;
 import com.exacttarget.fuelsdk.model.ETContentArea;
 
+@Ignore
 public class ETContentAreaServiceTest {
 
 	protected ETContentAreaService service;

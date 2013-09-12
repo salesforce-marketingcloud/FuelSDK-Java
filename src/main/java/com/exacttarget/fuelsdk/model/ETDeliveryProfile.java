@@ -3,8 +3,6 @@ package com.exacttarget.fuelsdk.model;
 import com.exacttarget.fuelsdk.annotations.InternalSoapField;
 import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.DeliveryProfile;
-import com.exacttarget.fuelsdk.internal.PrivateDomain;
-import com.exacttarget.fuelsdk.internal.PrivateIP;
 
 @InternalSoapType(type = DeliveryProfile.class)
 public class ETDeliveryProfile extends BaseSoapSerializableObject implements ETObject{

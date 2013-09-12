@@ -35,9 +35,7 @@ public class ETEmailSendDefinitionTest {
 	
 	private String NewSendDefinitionName = "PHPSDKSendDefinition";
 	private String SendableDataExtensionCustomerKey = "DaveTSDE";
-	private String EmailIDForSendDefinition = "3113962";
 	private int ListIDForSendDefinition = 1667355;
-	private String SendClassificationCustomerKey = "DynamicFromTest"; //"1180";
 	
 	@BeforeClass
 	public static void setUp() throws ETSdkException {

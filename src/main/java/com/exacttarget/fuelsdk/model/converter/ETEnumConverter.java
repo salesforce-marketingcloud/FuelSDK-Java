@@ -35,6 +35,7 @@ import com.exacttarget.fuelsdk.model.ETSubscriberStatus;
 
 public class ETEnumConverter implements Converter {
 
+	@SuppressWarnings("rawtypes")
 	public Object convert(Class type, Object value) {
 		
         if (value == null) return null;
