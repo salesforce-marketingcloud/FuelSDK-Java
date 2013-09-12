@@ -18,4 +18,8 @@ public interface ETServiceResponse<T extends ETObject> {
     public String getRequestId();
     public void setRequestId(String requestId);
     public List<T> getResults();
+    public boolean hasMoreResults();
+    public void setMoreResults(boolean moreResults);
+    public boolean getStatus();
+    public void setStatus(boolean status);
 }

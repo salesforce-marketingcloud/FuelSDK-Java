@@ -77,6 +77,8 @@ public abstract class ETGetServiceImpl extends ETServiceImpl implements ETGetSer
         ETServiceResponse<T> response = new ETServiceResponseImpl<T>();
         response.setRequestId(retrieveResponseMsg.getRequestID());
         
+        response.setStatus(retrieveResponseMsg.getOverallStatus().equals("OK"));
+        
         try {
             for (APIObject apiObject : retrieveResponseMsg.getResults()) {
                 response.getResults().add(ObjectConverter.convertToEtObject(apiObject, type, false));
