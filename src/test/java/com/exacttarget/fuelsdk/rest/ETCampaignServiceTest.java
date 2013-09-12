@@ -160,7 +160,7 @@ public class ETCampaignServiceTest{
 	}
 	
 	protected ETCampaign TestRetrieveSingle() throws ETSdkException {
-		ETServiceResponse<ETCampaign> response = service.get(client, ETCampaign.class, filter);
+		ETServiceResponse<ETCampaign> response = service.get(client, filter);
 		Assert.assertNotNull(response);
 		Assert.assertNotNull(response.getResults());
 		Assert.assertNotNull(response.getResults().get(0));

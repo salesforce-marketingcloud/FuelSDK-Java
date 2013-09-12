@@ -16,8 +16,6 @@ import java.util.GregorianCalendar;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
-import com.exacttarget.fuelsdk.model.converter.ObjectConverter;
-
 import org.apache.log4j.Logger;
 
 import com.exacttarget.fuelsdk.ETClient;
@@ -39,15 +37,17 @@ import com.exacttarget.fuelsdk.internal.SimpleFilterPart;
 import com.exacttarget.fuelsdk.internal.SimpleOperators;
 import com.exacttarget.fuelsdk.internal.Soap;
 import com.exacttarget.fuelsdk.model.ETObject;
+import com.exacttarget.fuelsdk.model.converter.ObjectConverter;
 
-public class ETGetServiceImpl extends ETServiceImpl implements ETGetService {
-    private static Logger logger = Logger.getLogger(ETGetServiceImpl.class);
+public abstract class ETGetServiceImpl extends ETServiceImpl implements ETGetService {
 
-    public <T extends ETObject> ETServiceResponse<T> get(ETClient client, Class<T> type) throws ETSdkException {
+	private static Logger logger = Logger.getLogger(ETGetServiceImpl.class);
+
+    protected <T extends ETObject> ETServiceResponse<T> get(ETClient client, Class<T> type) throws ETSdkException {
         return this.get(client, type, null);
     }
 
-	public <T extends ETObject> ETServiceResponse<T> get(ETClient client, Class<T> type, ETFilter filter) throws ETSdkException {
+    protected <T extends ETObject> ETServiceResponse<T> get(ETClient client, Class<T> type, ETFilter filter) throws ETSdkException {
 		Soap soap = client.getSOAPConnection().getSoap();
 
         InternalSoapType typeAnnotation = type.getAnnotation(InternalSoapType.class);

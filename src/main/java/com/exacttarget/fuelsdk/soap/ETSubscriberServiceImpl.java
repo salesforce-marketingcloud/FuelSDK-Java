@@ -24,4 +24,14 @@ public class ETSubscriberServiceImpl extends ETCrudServiceImpl implements ETSubs
 		return super.post(client, subscriber);
 	}
 
+	public ETServiceResponse<ETSubscriber> patch(ETClient client,
+			ETSubscriber subscriber) throws ETSdkException {
+		return super.patch(client,  subscriber);
+	}
+
+	public ETServiceResponse<ETSubscriber> delete(ETClient client,
+			ETSubscriber subscriber) throws ETSdkException {
+		return super.delete(client,  subscriber);
+	}
+
 }

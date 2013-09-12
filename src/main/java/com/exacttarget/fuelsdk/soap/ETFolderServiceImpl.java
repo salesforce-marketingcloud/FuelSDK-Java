@@ -20,4 +20,19 @@ public class ETFolderServiceImpl extends ETCrudServiceImpl implements
 		return super.get(client, ETFolder.class, filter);
 	}
 
+	public ETServiceResponse<ETFolder> post(ETClient client, ETFolder folder)
+			throws ETSdkException {
+		return super.post(client, folder);
+	}
+
+	public ETServiceResponse<ETFolder> patch(ETClient client, ETFolder folder)
+			throws ETSdkException {
+		return super.patch(client, folder);
+	}
+
+	public ETServiceResponse<ETFolder> delete(ETClient client, ETFolder folder)
+			throws ETSdkException {
+		return super.delete(client, folder);
+	}
+
 }

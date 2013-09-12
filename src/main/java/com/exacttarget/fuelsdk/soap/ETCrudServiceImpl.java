@@ -30,8 +30,8 @@ import com.exacttarget.fuelsdk.internal.UpdateRequest;
 import com.exacttarget.fuelsdk.internal.UpdateResponse;
 import com.exacttarget.fuelsdk.model.ETObject;
 
-public class ETCrudServiceImpl extends ETGetServiceImpl implements ETCrudService {
-    public <T extends ETObject> ETServiceResponse<T> post(ETClient client, T object) throws ETSdkException {
+public abstract class ETCrudServiceImpl extends ETGetServiceImpl implements ETCrudService {
+	protected <T extends ETObject> ETServiceResponse<T> post(ETClient client, T object) throws ETSdkException {
     	Soap soap = client.getSOAPConnection().getSoap();
     	
     	InternalSoapType typeAnnotation = object.getClass().getAnnotation(InternalSoapType.class);
@@ -60,7 +60,7 @@ public class ETCrudServiceImpl extends ETGetServiceImpl implements ETCrudService
 		return response;
     }
 
-    public <T extends ETObject> ETServiceResponse<T> patch(ETClient client, T object) throws ETSdkException {
+	protected <T extends ETObject> ETServiceResponse<T> patch(ETClient client, T object) throws ETSdkException {
         
     	Soap soap = client.getSOAPConnection().getSoap();
     	
@@ -89,7 +89,7 @@ public class ETCrudServiceImpl extends ETGetServiceImpl implements ETCrudService
 		return response;
     }
 
-    public <T extends ETObject> ETServiceResponse<T> delete(ETClient client, T object) throws ETSdkException {
+	protected <T extends ETObject> ETServiceResponse<T> delete(ETClient client, T object) throws ETSdkException {
     	Soap soap = client.getSOAPConnection().getSoap();
     	
     	InternalSoapType typeAnnotation = object.getClass().getAnnotation(InternalSoapType.class);
