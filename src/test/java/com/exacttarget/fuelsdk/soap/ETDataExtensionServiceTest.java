@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
@@ -28,6 +29,7 @@ import com.exacttarget.fuelsdk.model.ETDataExtensionColumn;
 import com.exacttarget.fuelsdk.model.ETDataExtensionFieldType;
 import com.exacttarget.fuelsdk.model.ETDataExtensionRow;
 
+@Ignore
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ETDataExtensionServiceTest {
 

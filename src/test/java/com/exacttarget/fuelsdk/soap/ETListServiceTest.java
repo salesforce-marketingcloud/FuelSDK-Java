@@ -2,7 +2,10 @@ package com.exacttarget.fuelsdk.soap;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
+import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETConfiguration;
@@ -15,6 +18,8 @@ import com.exacttarget.fuelsdk.filter.ETSimpleFilter;
 import com.exacttarget.fuelsdk.model.ETList;
 import com.exacttarget.fuelsdk.model.ETListType;
 
+@Ignore
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ETListServiceTest {
 	
 	protected ETListService service;
