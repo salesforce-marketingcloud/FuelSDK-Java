@@ -16,6 +16,7 @@ import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.filter.ETFilterOperators;
 import com.exacttarget.fuelsdk.filter.ETSimpleFilter;
 import com.exacttarget.fuelsdk.model.ETSubscriber;
+import com.exacttarget.fuelsdk.model.ETSubscriberStatus;
 
 @Ignore
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -30,6 +31,8 @@ public class ETSubscriberServiceTest {
 	protected ETClient client = null;
 	protected ETConfiguration configuration = null;
 	
+	private String SubscriberTestEmail = "PHPSDKExample@bh.exacttarget.com";
+	
 	@Before
     public void setUp()
         throws ETSdkException
@@ -38,16 +41,11 @@ public class ETSubscriberServiceTest {
         client = new ETClient(configuration);
         
         service = new ETSubscriberServiceImpl();
-		filter = new ETSimpleFilter("emailAddress", ETFilterOperators.EQUALS, "ryanjlowetest99@gmail.com");
-		filterUpdated = new ETSimpleFilter("subscriberKey", ETFilterOperators.EQUALS, "ryanjlowetest993@gmail.com");
-		
-		etObject = new ETSubscriber();
-		etObject.setEmailAddress("ryanjlowetest99@gmail.com");
-		etObject.setSubscriberKey("ryanjlowetest99@gmail.com");    	
 	}
 	
+
 	@Test
-	public void TestGetCollectionService() throws ETSdkException
+	public void A_TestGetCollectionService() throws ETSdkException
 	{
 		ETServiceResponse<ETSubscriber> response =  service.get(client);
 		
@@ -60,63 +58,80 @@ public class ETSubscriberServiceTest {
 		}
 	}
 	
+
 	@Test
-	public void TestCRUDService() throws ETSdkException
-	{
+	public void B_TestPost() throws ETSdkException {
 		
-		TestPost();
+		ETSubscriber subscriber = new ETSubscriber();
+		subscriber.setEmailAddress(SubscriberTestEmail);
+		subscriber.setSubscriberKey(SubscriberTestEmail);
 		
-		ETSubscriber found = TestRetrieveSingle();
+		ETServiceResponse<ETSubscriber> response = service.post(client, subscriber);
 		
-		TestPatch(found);
-		
-		ETSubscriber foundUpdated = TestRetrieveSingleUpdated();
-		
-		DeleteSingle(foundUpdated);
-		
-	}
-
-	protected void TestPatch(ETSubscriber found) throws ETSdkException {
-		
-		found.setEmailAddress("ryanjlowetest993@gmail.com");
-		ETServiceResponse<ETSubscriber> response = service.patch(client, found);
-		Assert.assertTrue(response.getStatus());
-		
-	}	
-	protected ETSubscriber TestRetrieveSingle() throws ETSdkException {
-		ETServiceResponse<ETSubscriber> response = service.get(client, filter);
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
-		Assert.assertNotNull(response.getResults());
-		Assert.assertEquals(1, response.getResults().size());
-		System.out.println(response.getResults().get(0));
-		return response.getResults().get(0);
+		
+		// Test it was created
+		ETFilter filter = new ETSimpleFilter("SubscriberKey", ETFilterOperators.EQUALS, SubscriberTestEmail);
+		ETServiceResponse<ETSubscriber> responseFound = service.get(client, filter);
+		
+		Assert.assertNotNull(responseFound);
+		Assert.assertTrue(responseFound.getStatus());
+		Assert.assertNotNull(responseFound.getResults());
+		Assert.assertEquals(1, responseFound.getResults().size());
+		
+		for(ETSubscriber orgFound : responseFound.getResults()) {
+			
+			System.out.println(orgFound.toString());
+		}
+		
 		
 	}
 	
-	protected ETSubscriber TestRetrieveSingleUpdated() throws ETSdkException {
-		ETServiceResponse<ETSubscriber> response = service.get(client, filterUpdated);
+	@Test
+	public void C_TestPatch() throws ETSdkException {
+		
+		ETSubscriber subscriber = new ETSubscriber();
+		subscriber.setEmailAddress(SubscriberTestEmail);
+		subscriber.setSubscriberKey(SubscriberTestEmail);
+		subscriber.setStatus(ETSubscriberStatus.UNSUBSCRIBED);
+		
+		ETServiceResponse<ETSubscriber> response = service.patch(client, subscriber);
+		
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
-		Assert.assertNotNull(response.getResults());
-		Assert.assertEquals(1, response.getResults().size());
-		System.out.println(response.getResults().get(0));
-		return response.getResults().get(0);
-	}
-
-	protected void TestPost() throws ETSdkException
-	{
-		ETServiceResponse<ETSubscriber> response =  service.post(client, etObject);
-		Assert.assertTrue(response.getStatus());
-	}
 		
+		// Test it was created
+		ETFilter filter = new ETSimpleFilter("SubscriberKey", ETFilterOperators.EQUALS, SubscriberTestEmail);
+		ETServiceResponse<ETSubscriber> responseFound = service.get(client, filter);
+		
+		Assert.assertNotNull(responseFound);
+		Assert.assertTrue(responseFound.getStatus());
+		Assert.assertNotNull(responseFound.getResults());
+		Assert.assertEquals(1, responseFound.getResults().size());
+		Assert.assertEquals(ETSubscriberStatus.UNSUBSCRIBED, responseFound.getResults().get(0).getStatus());
+		
+	}
 	
-	protected void DeleteSingle(ETSubscriber etObject) throws ETSdkException
-	{
-				
-		ETServiceResponse<ETSubscriber> response =  service.delete(client, etObject);
+	@Test
+	public void D_TestDelete() throws ETSdkException {
+		
+		ETSubscriber subscriber = new ETSubscriber();
+		subscriber.setSubscriberKey(SubscriberTestEmail);
+		
+		ETServiceResponse<ETSubscriber> response = service.delete(client, subscriber);
+		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
-		 
+		
+		// Test it was deleted
+		ETFilter filter = new ETSimpleFilter("SubscriberKey", ETFilterOperators.EQUALS, SubscriberTestEmail);
+		ETServiceResponse<ETSubscriber> responseFound = service.get(client, filter);
+		
+		Assert.assertNotNull(responseFound);
+		Assert.assertTrue(responseFound.getStatus());
+		Assert.assertNotNull(responseFound.getResults());
+		Assert.assertEquals(0, responseFound.getResults().size());
+		
 	}
 	
 }

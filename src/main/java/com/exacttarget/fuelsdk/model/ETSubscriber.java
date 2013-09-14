@@ -6,7 +6,7 @@ import com.exacttarget.fuelsdk.annotations.InternalSoapField;
 import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.Subscriber;
 
-@InternalSoapType(type = Subscriber.class, ignoredFields = {"CustomerKey"})
+@InternalSoapType(type = Subscriber.class, ignoredFields = {"CustomerKey", "ModifiedDate"})
 public class ETSubscriber extends BaseSoapSerializableObject implements ETObject {
     @InternalSoapField(name="emailAddress")
 	protected String emailAddress;
