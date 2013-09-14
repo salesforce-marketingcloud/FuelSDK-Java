@@ -10,18 +10,19 @@ import org.junit.runners.MethodSorters;
 
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETConfiguration;
-import com.exacttarget.fuelsdk.ETOpenEventService;
 import com.exacttarget.fuelsdk.ETSdkException;
+import com.exacttarget.fuelsdk.ETSentEventService;
 import com.exacttarget.fuelsdk.ETServiceResponse;
-import com.exacttarget.fuelsdk.model.ETOpenEvent;
+import com.exacttarget.fuelsdk.model.ETSentEvent;
+
 
 @Ignore
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class ETOpenEventTest  {
+public class ETSentEventServiceTest  {
 
-	protected static Logger logger = Logger.getLogger(ETOpenEventTest.class);
+	protected static Logger logger = Logger.getLogger(ETOpenEventServiceTest.class);
 	
-	protected ETOpenEventService service;
+	protected ETSentEventService service;
 	protected ETClient client = null;
 	protected ETConfiguration configuration = null;
 	
@@ -32,21 +33,21 @@ public class ETOpenEventTest  {
         configuration = new ETConfiguration("/fuelsdk-test.properties");
         client = new ETClient(configuration);
         
-        service = new ETOpenEventServiceImpl();
+        service = new ETSentEventServiceImpl();
     }
 	
 	@Test
 	public void TestGetCollectionService() throws ETSdkException
 	{
-		ETServiceResponse<ETOpenEvent> response = service.get(client);
+		ETServiceResponse<ETSentEvent> response = service.get(client);
 		
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
 		Assert.assertNotNull(response.getResults());
 		
-		for (ETOpenEvent ret : response.getResults()) {
+		for (ETSentEvent ret : response.getResults()) {
 			logger.debug(ret.toString());
 		}
 	}
 }
-
+	

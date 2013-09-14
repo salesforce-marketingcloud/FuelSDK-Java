@@ -26,9 +26,9 @@ import com.exacttarget.fuelsdk.model.ETSendDefinitionList;
 
 @Ignore
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class ETEmailSendDefinitionTest {
+public class ETEmailSendDefinitionServiceTest {
 
-	protected static Logger logger = Logger.getLogger(ETEmailSendDefinitionTest.class);
+	protected static Logger logger = Logger.getLogger(ETEmailSendDefinitionServiceTest.class);
 	protected static ETEmailSendDefinitionService service;
 	protected static ETClient client = null;
 	protected static ETConfiguration configuration = null;
