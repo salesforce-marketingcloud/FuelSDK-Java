@@ -22,8 +22,6 @@ public class ETOpenEventTest  {
 	protected static Logger logger = Logger.getLogger(ETOpenEventTest.class);
 	
 	protected ETOpenEventService service;
-	protected ETOpenEvent etObject;
-	
 	protected ETClient client = null;
 	protected ETConfiguration configuration = null;
 	
@@ -35,7 +33,6 @@ public class ETOpenEventTest  {
         client = new ETClient(configuration);
         
         service = new ETOpenEventServiceImpl();
-		etObject = new ETOpenEvent();
     }
 	
 	@Test

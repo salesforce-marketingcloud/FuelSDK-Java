@@ -26,12 +26,10 @@ public class ETListServiceTest {
 	protected static Logger logger = Logger.getLogger(ETListServiceTest.class);
 	
 	protected ETListService service;
-	protected ETList etObject;
-	protected ETFilter filter;
-	protected ETFilter filterUpdated;
-	
 	protected ETClient client = null;
 	protected ETConfiguration configuration = null;
+	
+	private String NameOfTestList = "JavaSDKList";
 	
 	@Before
     public void setUp()
@@ -41,17 +39,10 @@ public class ETListServiceTest {
         client = new ETClient(configuration);
         
 		service = new ETListServiceImpl();
-		filter = new ETSimpleFilter("listName", ETFilterOperators.EQUALS, "TEST LIST FROM SDK");
-		filterUpdated = new ETSimpleFilter("listName", ETFilterOperators.EQUALS, "TEST LIST FROM SDK UPDATED");
-		etObject = new ETList();
-		etObject.setName("TEST LIST FROM SDK");
-		etObject.setListType(ETListType.PUBLIC);
-
-    	
 	}
 	
 	@Test
-	public void TestGetCollectionService() throws ETSdkException
+	public void A_TestGetCollectionService() throws ETSdkException
 	{
 		ETServiceResponse<ETList> response =  service.get(client);
 		
@@ -65,63 +56,78 @@ public class ETListServiceTest {
 	}
 	
 	@Test
-	public void TestCRUDService() throws ETSdkException
-	{
+	public void B_TestPost() throws ETSdkException {
 		
-		TestPost();
-		
-		ETList found = TestRetrieveSingle();
-		
-		TestPatch(found);
-		
-		ETList foundUpdated = TestRetrieveSingleUpdated();
-		
-		DeleteSingle(foundUpdated);
-		
-	}
+		ETList list = new ETList();
+		list.setCustomerKey(NameOfTestList);
+		list.setName(NameOfTestList);
+		list.setDescription("This list was created with the JavaSDK");
+		list.setListType(ETListType.PRIVATE);
 
-	protected void TestPatch(ETList found) throws ETSdkException {
+		ETServiceResponse<ETList> response = service.post(client, list);
 		
-		found.setName("TEST LIST FROM SDK UPDATED");
-		ETServiceResponse<ETList> response = service.patch(client, found);
-		Assert.assertTrue(response.getStatus());
-		
-	}	
-	protected ETList TestRetrieveSingle() throws ETSdkException {
-		ETServiceResponse<ETList> response = service.get(client, filter);
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
-		Assert.assertNotNull(response.getResults());
-		Assert.assertEquals(1, response.getResults().size());
-		logger.debug(response.getResults().get(0));
-		return response.getResults().get(0);
+		
+		// Test it was created
+		ETFilter filter = new ETSimpleFilter("CustomerKey", ETFilterOperators.EQUALS, NameOfTestList);
+		ETServiceResponse<ETList> responseFound = service.get(client, filter);
+		
+		Assert.assertNotNull(responseFound);
+		Assert.assertTrue(responseFound.getStatus());
+		Assert.assertNotNull(responseFound.getResults());
+		Assert.assertEquals(1, responseFound.getResults().size());
+		
+		for(ETList orgFound : responseFound.getResults()) {
+			logger.debug(orgFound.toString());
+		}
 		
 	}
 	
-	protected ETList TestRetrieveSingleUpdated() throws ETSdkException {
-		ETServiceResponse<ETList> response = service.get(client, filterUpdated);
+	@Test
+	public void C_TestPatch() throws ETSdkException {
+		
+		ETList list = new ETList();
+		list.setCustomerKey(NameOfTestList);
+		list.setDescription("New Description");
+		
+		ETServiceResponse<ETList> response = service.patch(client, list);
+		
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
-		Assert.assertNotNull(response.getResults());
-		Assert.assertEquals(1, response.getResults().size());
-		logger.debug(response.getResults().get(0));
-		return response.getResults().get(0);
-	}
-
-	protected void TestPost() throws ETSdkException
-	{
-		ETServiceResponse<ETList> response =  service.post(client, etObject);
-		Assert.assertTrue(response.getStatus());
-	}
 		
-	
-	protected void DeleteSingle(ETList etObject) throws ETSdkException
-	{
-				
-		ETServiceResponse<ETList> response =  service.delete(client, etObject);
-		Assert.assertTrue(response.getStatus());
-		 
+		// Test it was created
+		ETFilter filter = new ETSimpleFilter("CustomerKey", ETFilterOperators.EQUALS, NameOfTestList);
+		ETServiceResponse<ETList> responseFound = service.get(client, filter);
+		
+		Assert.assertNotNull(responseFound);
+		Assert.assertTrue(responseFound.getStatus());
+		Assert.assertNotNull(responseFound.getResults());
+		Assert.assertEquals(1, responseFound.getResults().size());
+		Assert.assertEquals("New Description", responseFound.getResults().get(0).getDescription());
+		
 	}
 	
+	@Test
+	public void D_TestDelete() throws ETSdkException {
+		
+		ETList list = new ETList();
+		list.setCustomerKey(NameOfTestList);
+		
+		ETServiceResponse<ETList> response = service.delete(client, list);
+		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getStatus());
+		
+		// Test it was deleted
+		ETFilter filter = new ETSimpleFilter("CustomerKey", ETFilterOperators.EQUALS, NameOfTestList);
+		ETServiceResponse<ETList> responseFound = service.get(client, filter);
+		
+		Assert.assertNotNull(responseFound);
+		Assert.assertTrue(responseFound.getStatus());
+		Assert.assertNotNull(responseFound.getResults());
+		Assert.assertEquals(0, responseFound.getResults().size());
+		
+	}
 }
+
 

@@ -33,7 +33,7 @@ public class ETEmailSendDefinitionTest {
 	protected static ETClient client = null;
 	protected static ETConfiguration configuration = null;
 	
-	private String NewSendDefinitionName = "PHPSDKSendDefinition";
+	private String NewSendDefinitionName = "JavaSDKSendDefinition";
 	private String SendableDataExtensionCustomerKey = "DaveTSDE";
 	private int ListIDForSendDefinition = 1667355;
 	

@@ -25,12 +25,10 @@ public class ETEmailServiceTest {
 	protected static Logger logger = Logger.getLogger(ETEmailServiceTest.class);
 	
 	protected ETEmailService service;
-	protected ETEmail etObject;
-	protected ETFilter filter;
-	protected ETFilter filterUpdated;
-	
 	protected ETClient client = null;
 	protected ETConfiguration configuration = null;
+	
+	private String NameOfTestEmail = "JavaSDKEmail";
 	
 	@Before
     public void setUp()
@@ -40,17 +38,10 @@ public class ETEmailServiceTest {
         client = new ETClient(configuration);
         
         service = new ETEmailServiceImpl();
-		filter = new ETSimpleFilter("name", ETFilterOperators.EQUALS, "TEST EMAIL");
-		filterUpdated = new ETSimpleFilter("name", ETFilterOperators.EQUALS, "TEST EMAIL UPDATED");
-		etObject = new ETEmail();
-		etObject.setName("TEST EMAIL");
-		etObject.setHtmlBody("<html><body>YEP</body></html>");
-		etObject.setSubject("TEST EMAIL SUBJECT");
-    	
 	}
 	
 	@Test
-	public void TestGetCollectionService() throws ETSdkException
+	public void A_TestGetCollectionService() throws ETSdkException
 	{
 		ETServiceResponse<ETEmail> response =  service.get(client);
 		
@@ -63,63 +54,85 @@ public class ETEmailServiceTest {
 		}
 	}
 	
+
 	@Test
-	public void TestCRUDService() throws ETSdkException
-	{
+	public void B_TestPost() throws ETSdkException {
 		
-		TestPost();
+		ETEmail email = new ETEmail();
+		email.setCustomerKey(NameOfTestEmail);
+		email.setName(NameOfTestEmail);
+		email.setSubject("Created with the Java SDK");
+		email.setHtmlBody("<b>Some HTML Goes here</b>");
+		email.setEmailType("HTML");
+		email.setHtmlPaste(true);
+
+		ETServiceResponse<ETEmail> response = service.post(client, email);
 		
-		ETEmail found = TestRetrieveSingle();
+		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getStatus());
 		
-		TestPatch(found);
+		// Test it was created
+		ETFilter filter = new ETSimpleFilter("CustomerKey", ETFilterOperators.EQUALS, NameOfTestEmail);
+		ETServiceResponse<ETEmail> responseFound = service.get(client, filter);
 		
-		ETEmail foundUpdated = TestRetrieveSingleUpdated();
+		Assert.assertNotNull(responseFound);
+		Assert.assertTrue(responseFound.getStatus());
+		Assert.assertNotNull(responseFound.getResults());
+		Assert.assertEquals(1, responseFound.getResults().size());
 		
-		DeleteSingle(foundUpdated);
+		for(ETEmail orgFound : responseFound.getResults()) {
+			logger.debug(orgFound.toString());
+		}
+		
+	}
+	
+	@Test
+	public void C_TestPatch() throws ETSdkException {
+		
+		ETEmail email = new ETEmail();
+		email.setCustomerKey(NameOfTestEmail);
+		email.setName(NameOfTestEmail);
+		email.setSubject("Created with the SDK!!! Now with more !!!!");
+		email.setHtmlBody("<b>Some HTML Content Goes here. NOW WITH NEW CONTENT</b>");
+		email.setHtmlPaste(true);
+		
+		ETServiceResponse<ETEmail> response = service.patch(client, email);
+		
+		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getStatus());
+		
+		// Test it was created
+		ETFilter filter = new ETSimpleFilter("CustomerKey", ETFilterOperators.EQUALS, NameOfTestEmail);
+		ETServiceResponse<ETEmail> responseFound = service.get(client, filter);
+		
+		Assert.assertNotNull(responseFound);
+		Assert.assertTrue(responseFound.getStatus());
+		Assert.assertNotNull(responseFound.getResults());
+		Assert.assertEquals(1, responseFound.getResults().size());
+		Assert.assertEquals("Created with the SDK!!! Now with more !!!!", responseFound.getResults().get(0).getSubject());
+		
+	}
+	
+	@Test
+	public void D_TestDelete() throws ETSdkException {
+		
+		ETEmail email = new ETEmail();
+		email.setCustomerKey(NameOfTestEmail);
+		
+		ETServiceResponse<ETEmail> response = service.delete(client, email);
+		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getStatus());
+		
+		// Test it was deleted
+		ETFilter filter = new ETSimpleFilter("CustomerKey", ETFilterOperators.EQUALS, NameOfTestEmail);
+		ETServiceResponse<ETEmail> responseFound = service.get(client, filter);
+		
+		Assert.assertNotNull(responseFound);
+		Assert.assertTrue(responseFound.getStatus());
+		Assert.assertNotNull(responseFound.getResults());
+		Assert.assertEquals(0, responseFound.getResults().size());
 		
 	}
 
-	protected void TestPatch(ETEmail found) throws ETSdkException {
-		
-		found.setName("TEST EMAIL UPDATED");
-		ETServiceResponse<ETEmail> response = service.patch(client, found);
-		Assert.assertTrue(response.getStatus());
-		
-	}	
-	protected ETEmail TestRetrieveSingle() throws ETSdkException {
-		ETServiceResponse<ETEmail> response = service.get(client, filter);
-		Assert.assertNotNull(response);
-		Assert.assertTrue(response.getStatus());
-		Assert.assertNotNull(response.getResults());
-		Assert.assertEquals(1, response.getResults().size());
-		logger.debug(response.getResults().get(0));
-		return response.getResults().get(0);
-		
-	}
-	
-	protected ETEmail TestRetrieveSingleUpdated() throws ETSdkException {
-		ETServiceResponse<ETEmail> response = service.get(client, filterUpdated);
-		Assert.assertNotNull(response);
-		Assert.assertTrue(response.getStatus());
-		Assert.assertNotNull(response.getResults());
-		Assert.assertEquals(1, response.getResults().size());
-		logger.debug(response.getResults().get(0));
-		return response.getResults().get(0);
-	}
-
-	protected void TestPost() throws ETSdkException
-	{
-		ETServiceResponse<ETEmail> response =  service.post(client, etObject);
-		Assert.assertTrue(response.getStatus());
-	}
-		
-	
-	protected void DeleteSingle(ETEmail etObject) throws ETSdkException
-	{
-				
-		ETServiceResponse<ETEmail> response =  service.delete(client, etObject);
-		Assert.assertTrue(response.getStatus());
-		 
-	}
-	
 }
+

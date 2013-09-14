@@ -25,12 +25,10 @@ public class ETContentAreaServiceTest {
 	protected static Logger logger = Logger.getLogger(ETContentAreaServiceTest.class);
 	
 	protected ETContentAreaService service;
-	protected ETContentArea etObject;
-	protected ETFilter filter;
-	protected ETFilter filterUpdated;
-	
 	protected ETClient client = null;
 	protected ETConfiguration configuration = null;
+	
+	private String NameOfTestContentArea = "JavaSDKContentArea";
 	
 	@Before
     public void setUp()
@@ -39,16 +37,10 @@ public class ETContentAreaServiceTest {
         configuration = new ETConfiguration("/fuelsdk-test.properties");
         client = new ETClient(configuration);
     	service = new ETContentAreaServiceImpl();
-		filter = new ETSimpleFilter("name", ETFilterOperators.EQUALS, "TEST Content Area");
-		filterUpdated = new ETSimpleFilter("name", ETFilterOperators.EQUALS, "TEST Content Area UPDATED");
-		
-		etObject = new ETContentArea();
-		etObject.setName("TEST Content Area");
-		etObject.setContent("TEST CONTENT AREA CONTENT");
 	}
 	
 	@Test
-	public void TestGetCollectionService() throws ETSdkException
+	public void A_TestGetCollectionService() throws ETSdkException
 	{
 		ETServiceResponse<ETContentArea> response =  service.get(client);
 		
@@ -61,64 +53,78 @@ public class ETContentAreaServiceTest {
 		}
 	}
 	
+
 	@Test
-	public void TestCRUDService() throws ETSdkException
-	{
+	public void B_TestPost() throws ETSdkException {
 		
-		TestPost();
+		ETContentArea contentArea = new ETContentArea();
+		contentArea.setCustomerKey(NameOfTestContentArea);
+		contentArea.setName(NameOfTestContentArea);
+		contentArea.setContent("<b>Some HTML Content Goes here</b>");
+
+		ETServiceResponse<ETContentArea> response = service.post(client, contentArea);
 		
-		ETContentArea found = TestRetrieveSingle();
+		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getStatus());
 		
-		TestPatch(found);
+		// Test it was created
+		ETFilter filter = new ETSimpleFilter("CustomerKey", ETFilterOperators.EQUALS, NameOfTestContentArea);
+		ETServiceResponse<ETContentArea> responseFound = service.get(client, filter);
 		
-		ETContentArea foundUpdated = TestRetrieveSingleUpdated();
+		Assert.assertNotNull(responseFound);
+		Assert.assertTrue(responseFound.getStatus());
+		Assert.assertNotNull(responseFound.getResults());
+		Assert.assertEquals(1, responseFound.getResults().size());
 		
-		DeleteSingle(foundUpdated);
+		for(ETContentArea orgFound : responseFound.getResults()) {
+			logger.debug(orgFound.toString());
+		}
+		
+	}
+	
+	@Test
+	public void C_TestPatch() throws ETSdkException {
+		
+		ETContentArea contentArea = new ETContentArea();
+		contentArea.setCustomerKey(NameOfTestContentArea);
+		contentArea.setContent("<b>Some HTML Content Goes here. NOW WITH NEW CONTENT</b>");
+		
+		ETServiceResponse<ETContentArea> response = service.patch(client, contentArea);
+		
+		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getStatus());
+		
+		// Test it was created
+		ETFilter filter = new ETSimpleFilter("CustomerKey", ETFilterOperators.EQUALS, NameOfTestContentArea);
+		ETServiceResponse<ETContentArea> responseFound = service.get(client, filter);
+		
+		Assert.assertNotNull(responseFound);
+		Assert.assertTrue(responseFound.getStatus());
+		Assert.assertNotNull(responseFound.getResults());
+		Assert.assertEquals(1, responseFound.getResults().size());
+		Assert.assertEquals("<b>Some HTML Content Goes here. NOW WITH NEW CONTENT</b>", responseFound.getResults().get(0).getContent());
+		
+	}
+	
+	@Test
+	public void D_TestDelete() throws ETSdkException {
+		
+		ETContentArea contentArea = new ETContentArea();
+		contentArea.setCustomerKey(NameOfTestContentArea);
+		
+		ETServiceResponse<ETContentArea> response = service.delete(client, contentArea);
+		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getStatus());
+		
+		// Test it was deleted
+		ETFilter filter = new ETSimpleFilter("CustomerKey", ETFilterOperators.EQUALS, NameOfTestContentArea);
+		ETServiceResponse<ETContentArea> responseFound = service.get(client, filter);
+		
+		Assert.assertNotNull(responseFound);
+		Assert.assertTrue(responseFound.getStatus());
+		Assert.assertNotNull(responseFound.getResults());
+		Assert.assertEquals(0, responseFound.getResults().size());
 		
 	}
 
-	protected void TestPatch(ETContentArea found) throws ETSdkException {
-		
-		found.setName("TEST Content Area UPDATED");
-		
-		ETServiceResponse<ETContentArea> response = service.patch(client, found);
-		Assert.assertTrue(response.getStatus());
-		
-	}
-	
-	protected ETContentArea TestRetrieveSingle() throws ETSdkException {
-		ETServiceResponse<ETContentArea> response = service.get(client, filter);
-		Assert.assertNotNull(response);
-		Assert.assertTrue(response.getStatus());
-		Assert.assertNotNull(response.getResults());
-		Assert.assertEquals(1, response.getResults().size());
-		logger.debug(response.getResults().get(0));
-		return response.getResults().get(0);
-		
-	}
-	
-	protected ETContentArea TestRetrieveSingleUpdated() throws ETSdkException {
-		ETServiceResponse<ETContentArea> response = service.get(client, filterUpdated);
-		Assert.assertNotNull(response);
-		Assert.assertTrue(response.getStatus());
-		Assert.assertNotNull(response.getResults());
-		Assert.assertEquals(1, response.getResults().size());
-		logger.debug(response.getResults().get(0));
-		return response.getResults().get(0);
-	}
-
-	protected void TestPost() throws ETSdkException
-	{
-		ETServiceResponse<ETContentArea> response =  service.post(client, etObject);
-		Assert.assertTrue(response.getStatus());
-	}
-		
-	
-	protected void DeleteSingle(ETContentArea etObject) throws ETSdkException
-	{
-				
-		ETServiceResponse<ETContentArea> response =  service.delete(client, etObject);
-		Assert.assertTrue(response.getStatus());
-		 
-	}
 }

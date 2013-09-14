@@ -33,7 +33,7 @@ public class ETSubscriberServiceTest {
 	protected ETClient client = null;
 	protected ETConfiguration configuration = null;
 	
-	private String SubscriberTestEmail = "PHPSDKExample@bh.exacttarget.com";
+	private String SubscriberTestEmail = "JavaSDKExample@bh.exacttarget.com";
 	
 	@Before
     public void setUp()
