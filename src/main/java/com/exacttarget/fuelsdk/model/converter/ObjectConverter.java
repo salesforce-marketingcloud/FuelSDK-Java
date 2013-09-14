@@ -23,6 +23,7 @@ import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.annotations.InternalSoapField;
 import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.APIObject;
+import com.exacttarget.fuelsdk.internal.AccountTypeEnum;
 import com.exacttarget.fuelsdk.internal.DataExtension;
 import com.exacttarget.fuelsdk.internal.DataExtensionFieldType;
 import com.exacttarget.fuelsdk.internal.DataExtensionObject.Keys;
@@ -87,6 +88,7 @@ public class ObjectConverter {
         convertUtils.register(new ETEnumConverter(), SubscriberStatus.class);
         convertUtils.register(new ETEnumConverter(), ETDataSourceType.class);
         convertUtils.register(new ETEnumConverter(), ETSendDefinitionListType.class);
+        convertUtils.register(new ETEnumConverter(), AccountTypeEnum.class);
         
         // Convert ET Objects
         convertUtils.register(new ETObjectConverter(), ETFolder.class);
