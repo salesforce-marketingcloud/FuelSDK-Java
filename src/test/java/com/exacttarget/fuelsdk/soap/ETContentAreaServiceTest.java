@@ -1,5 +1,6 @@
 package com.exacttarget.fuelsdk.soap;
 
+import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -21,6 +22,8 @@ import com.exacttarget.fuelsdk.model.ETContentArea;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ETContentAreaServiceTest {
 
+	protected static Logger logger = Logger.getLogger(ETContentAreaServiceTest.class);
+	
 	protected ETContentAreaService service;
 	protected ETContentArea etObject;
 	protected ETFilter filter;
@@ -54,7 +57,7 @@ public class ETContentAreaServiceTest {
 		Assert.assertNotNull(response.getResults());
 		
 		for (ETContentArea ret : response.getResults()) {
-			System.out.println(ret.toString());
+			logger.debug(ret.toString());
 		}
 	}
 	
@@ -89,7 +92,7 @@ public class ETContentAreaServiceTest {
 		Assert.assertTrue(response.getStatus());
 		Assert.assertNotNull(response.getResults());
 		Assert.assertEquals(1, response.getResults().size());
-		System.out.println(response.getResults().get(0));
+		logger.debug(response.getResults().get(0));
 		return response.getResults().get(0);
 		
 	}
@@ -100,7 +103,7 @@ public class ETContentAreaServiceTest {
 		Assert.assertTrue(response.getStatus());
 		Assert.assertNotNull(response.getResults());
 		Assert.assertEquals(1, response.getResults().size());
-		System.out.println(response.getResults().get(0));
+		logger.debug(response.getResults().get(0));
 		return response.getResults().get(0);
 	}
 

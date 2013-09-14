@@ -1,5 +1,6 @@
 package com.exacttarget.fuelsdk.soap;
 
+import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -18,6 +19,8 @@ import com.exacttarget.fuelsdk.model.ETOpenEvent;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ETOpenEventTest  {
 
+	protected static Logger logger = Logger.getLogger(ETOpenEventTest.class);
+	
 	protected ETOpenEventService service;
 	protected ETOpenEvent etObject;
 	
@@ -45,7 +48,7 @@ public class ETOpenEventTest  {
 		Assert.assertNotNull(response.getResults());
 		
 		for (ETOpenEvent ret : response.getResults()) {
-			System.out.println(ret.toString());
+			logger.debug(ret.toString());
 		}
 	}
 }

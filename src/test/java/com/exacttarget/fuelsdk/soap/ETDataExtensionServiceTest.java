@@ -62,7 +62,7 @@ public class ETDataExtensionServiceTest {
 		
 		for(ETDataExtension de : response.getResults()) {
 			
-			System.out.println(de.toString());
+			logger.debug(de.toString());
 		}
 		
 		
@@ -142,7 +142,7 @@ public class ETDataExtensionServiceTest {
 		
 		for (ETDataExtensionColumn col : response.getResults()) {
 			
-			System.out.println(col);
+			logger.debug(col);
 			
 		}
 	}
@@ -201,7 +201,7 @@ public class ETDataExtensionServiceTest {
 		
 		for (ETDataExtensionRow row : response.getResults()) {
 			
-			System.out.println(row);
+			logger.debug(row);
 			
 		}
 	}
@@ -242,7 +242,7 @@ public class ETDataExtensionServiceTest {
 		
 		for (ETDataExtensionRow row : response.getResults()) {
 			
-			System.out.println(row);
+			logger.debug(row);
 			
 		}
 	}

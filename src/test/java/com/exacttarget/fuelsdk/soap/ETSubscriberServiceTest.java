@@ -1,5 +1,6 @@
 package com.exacttarget.fuelsdk.soap;
 
+import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -22,6 +23,7 @@ import com.exacttarget.fuelsdk.model.ETSubscriberStatus;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ETSubscriberServiceTest {
 
+	protected static Logger logger = Logger.getLogger(ETSubscriberServiceTest.class);
 	
 	protected ETSubscriberService service;
 	protected ETSubscriber etObject;
@@ -54,7 +56,7 @@ public class ETSubscriberServiceTest {
 		Assert.assertNotNull(response.getResults());
 		
 		for (ETSubscriber ret : response.getResults()) {
-			System.out.println(ret.toString());
+			logger.debug(ret.toString());
 		}
 	}
 	
@@ -82,7 +84,7 @@ public class ETSubscriberServiceTest {
 		
 		for(ETSubscriber orgFound : responseFound.getResults()) {
 			
-			System.out.println(orgFound.toString());
+			logger.debug(orgFound.toString());
 		}
 		
 		

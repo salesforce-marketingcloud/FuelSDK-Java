@@ -56,7 +56,7 @@ public class ETEmailSendDefinitionTest {
 		Assert.assertNotNull(response.getResults());
 		
 		for (ETEmailSendDefinition sendDefinition : response.getResults()) {
-			System.out.println(sendDefinition);
+			logger.debug(sendDefinition);
 		}
 	}
 	

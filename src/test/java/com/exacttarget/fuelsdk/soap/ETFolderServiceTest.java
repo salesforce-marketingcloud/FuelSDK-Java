@@ -1,5 +1,6 @@
 package com.exacttarget.fuelsdk.soap;
 
+import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.FixMethodOrder;
@@ -23,6 +24,8 @@ import com.exacttarget.fuelsdk.model.ETFolder;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ETFolderServiceTest {
 
+	protected static Logger logger = Logger.getLogger(ETFolderServiceTest.class);
+	
 	protected ETFolderService service;
 	protected ETFolder etObject;
 	protected ETFilter filter;
@@ -71,7 +74,7 @@ public class ETFolderServiceTest {
 		Assert.assertNotNull(response.getResults());
 		
 		for (ETFolder ret : response.getResults()) {
-			System.out.println(ret.toString());
+			logger.debug(ret.toString());
 		}
 	}
 	
@@ -104,7 +107,7 @@ public class ETFolderServiceTest {
 		Assert.assertTrue(response.getStatus());
 		Assert.assertNotNull(response.getResults());
 		Assert.assertEquals(1, response.getResults().size());
-		System.out.println(response.getResults().get(0));
+		logger.debug(response.getResults().get(0));
 		return response.getResults().get(0);
 		
 	}
@@ -115,7 +118,7 @@ public class ETFolderServiceTest {
 		Assert.assertTrue(response.getStatus());
 		Assert.assertNotNull(response.getResults());
 		Assert.assertEquals(1, response.getResults().size());
-		System.out.println(response.getResults().get(0));
+		logger.debug(response.getResults().get(0));
 		return response.getResults().get(0);
 	}
 

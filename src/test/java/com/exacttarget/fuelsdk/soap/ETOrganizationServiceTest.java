@@ -71,7 +71,7 @@ public class ETOrganizationServiceTest {
 		
 		for(ETOrganiation org : response.getResults()) {
 			
-			System.out.println(org.toString());
+			logger.debug(org.toString());
 		}
 	}
 	
@@ -109,7 +109,7 @@ public class ETOrganizationServiceTest {
 		
 		for(ETOrganiation orgFound : responseFound.getResults()) {
 			
-			System.out.println(orgFound.toString());
+			logger.debug(orgFound.toString());
 		}
 	}
 
