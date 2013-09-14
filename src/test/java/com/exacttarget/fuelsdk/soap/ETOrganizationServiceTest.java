@@ -53,9 +53,10 @@ public class ETOrganizationServiceTest {
 		
 		for(ETOrganiation org : response.getResults()) {
 			
-			System.out.println(org.toString());
+			logger.debug(org.toString());
 		}
 	}
+	
 	
 	@Test
 	public void B_TestGetSingle() throws ETSdkException {
@@ -74,6 +75,7 @@ public class ETOrganizationServiceTest {
 		}
 	}
 	
+
 	@Test
 	public void C_TestPost() throws ETSdkException {
 		
