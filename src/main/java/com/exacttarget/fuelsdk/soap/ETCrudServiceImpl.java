@@ -21,6 +21,7 @@ import com.exacttarget.fuelsdk.internal.APIObject;
 import com.exacttarget.fuelsdk.internal.CreateOptions;
 import com.exacttarget.fuelsdk.internal.CreateRequest;
 import com.exacttarget.fuelsdk.internal.CreateResponse;
+import com.exacttarget.fuelsdk.internal.CreateResult;
 import com.exacttarget.fuelsdk.internal.DeleteOptions;
 import com.exacttarget.fuelsdk.internal.DeleteRequest;
 import com.exacttarget.fuelsdk.internal.DeleteResponse;
@@ -56,6 +57,15 @@ public abstract class ETCrudServiceImpl extends ETGetServiceImpl implements ETCr
 		CreateResponse createResponse = soap.create(createRequest);
 		response.setRequestId(createResponse.getRequestID());
 		response.setStatus(createResponse.getOverallStatus().equals("OK"));
+		
+		try {
+            for (CreateResult createResult : createResponse.getResults()) {
+                response.getResults().add((T) ObjectConverter.convertToEtObject(createResult.getObject(), object.getClass(), false));
+            }
+        }
+        catch (Exception ex) {
+            throw new ETSdkException("Error instantiating object", ex);
+        }
 		
 		return response;
     }

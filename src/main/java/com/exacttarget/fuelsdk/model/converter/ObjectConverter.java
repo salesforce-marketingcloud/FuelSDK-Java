@@ -2,8 +2,10 @@ package com.exacttarget.fuelsdk.model.converter;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,8 +31,10 @@ import com.exacttarget.fuelsdk.internal.DataExtensionFieldType;
 import com.exacttarget.fuelsdk.internal.DataExtensionObject.Keys;
 import com.exacttarget.fuelsdk.internal.DataFolder;
 import com.exacttarget.fuelsdk.internal.Email;
+import com.exacttarget.fuelsdk.internal.ListSubscriber;
 import com.exacttarget.fuelsdk.internal.ObjectExtension;
 import com.exacttarget.fuelsdk.internal.SendClassification;
+import com.exacttarget.fuelsdk.internal.SubscriberList;
 import com.exacttarget.fuelsdk.internal.SubscriberStatus;
 import com.exacttarget.fuelsdk.model.ETAccountType;
 import com.exacttarget.fuelsdk.model.ETDataExtensionColumn;
@@ -44,7 +48,9 @@ import com.exacttarget.fuelsdk.model.ETEmailType;
 import com.exacttarget.fuelsdk.model.ETEventType;
 import com.exacttarget.fuelsdk.model.ETFolder;
 import com.exacttarget.fuelsdk.model.ETLayoutType;
+import com.exacttarget.fuelsdk.model.ETList;
 import com.exacttarget.fuelsdk.model.ETListClassification;
+import com.exacttarget.fuelsdk.model.ETListSubscriber;
 import com.exacttarget.fuelsdk.model.ETListType;
 import com.exacttarget.fuelsdk.model.ETObject;
 import com.exacttarget.fuelsdk.model.ETSalutationSource;
@@ -53,6 +59,8 @@ import com.exacttarget.fuelsdk.model.ETSendClassificationType;
 import com.exacttarget.fuelsdk.model.ETSendDefinitionListType;
 import com.exacttarget.fuelsdk.model.ETSendPriority;
 import com.exacttarget.fuelsdk.model.ETSenderProfile;
+import com.exacttarget.fuelsdk.model.ETSubscriber;
+import com.exacttarget.fuelsdk.model.ETSubscriberList;
 import com.exacttarget.fuelsdk.model.ETSubscriberStatus;
 
 public class ObjectConverter {
@@ -96,11 +104,18 @@ public class ObjectConverter {
         convertUtils.register(new ETObjectConverter(), ETDeliveryProfile.class);
         convertUtils.register(new ETObjectConverter(), ETEmail.class);
         convertUtils.register(new ETObjectConverter(), ETSenderProfile.class);
+        convertUtils.register(new ETObjectConverter(), ETSubscriber.class);
+        convertUtils.register(new ETObjectConverter(), ETSubscriberList.class);
+        convertUtils.register(new ETObjectConverter(), ETListSubscriber.class);
+        convertUtils.register(new ETObjectConverter(), ETList.class);
         
         // Convert API Objects
         convertUtils.register(new ETObjectConverter(), DataFolder.class);
         convertUtils.register(new ETObjectConverter(), SendClassification.class);
         convertUtils.register(new ETObjectConverter(), Email.class);
+        convertUtils.register(new ETObjectConverter(), ListSubscriber.class);
+        convertUtils.register(new ETObjectConverter(), SubscriberList.class);
+        convertUtils.register(new ETObjectConverter(), com.exacttarget.fuelsdk.internal.List.class);
         convertUtils.register(new ETObjectConverter(), DataExtension.Fields.class);
         convertUtils.register(new ETObjectConverter(), Keys.class);
         convertUtils.register(new ETObjectConverter(), ObjectExtension.Properties.class);
@@ -124,13 +139,29 @@ public class ObjectConverter {
         return out;
     }
 
-    public static <T extends APIObject> T convertFromEtObject(ETObject o, Class<T> toType, boolean isPatch)
-        throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+    @SuppressWarnings("unchecked")
+	public static <T extends APIObject> T convertFromEtObject(ETObject o, Class<T> toType, boolean isPatch)
+        throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException, SecurityException, NoSuchFieldException {
         // Convert o to APIObject type by examining o's @InternalField annotations
         T out = toType.newInstance();
 
         for(Map.Entry<String, String> props : createInternalToETPropertyMap(new HashMap<String, String>(), o.getClass(), isPatch).entrySet()) {
-            BeanUtils.setProperty(out, resolvePropertyName(props.getKey()), PropertyUtils.getProperty(o, props.getValue()));
+        	
+        	String propertyName = resolvePropertyName(props.getKey());
+        	Object prop = PropertyUtils.getProperty(out, propertyName);
+        	
+        	if (null != prop && prop.getClass() == ArrayList.class) {
+        		ArrayList<APIObject> propList = (ArrayList<APIObject>)prop;
+        		Collection<ETObject> fromCollection = (Collection<ETObject>) PropertyUtils.getProperty(o, props.getValue());
+        		if (null != fromCollection) {
+	        		for (ETObject etObject : fromCollection) {
+	        			propList.add(convertFromEtObject(etObject,(Class<T>) ((ParameterizedType) out.getClass().getDeclaredField(propertyName).getGenericType()).getActualTypeArguments()[0], isPatch));
+	        		}
+        		}
+        		
+        	} else {
+        		BeanUtils.setProperty(out, propertyName, PropertyUtils.getProperty(o, props.getValue()));
+        	}
         }
 
         return out;
