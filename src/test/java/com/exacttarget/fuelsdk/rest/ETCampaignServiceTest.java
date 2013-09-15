@@ -9,6 +9,7 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
+import com.exacttarget.fuelsdk.ETCampaignService;
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETConfiguration;
 import com.exacttarget.fuelsdk.ETCrudService;
@@ -23,7 +24,7 @@ public class ETCampaignServiceTest{
 	private static final String TEST_CAMPAIGN_CODE_PATCH = "TestCode_PATCH";
 	private static final String TEST_CAMPAIGN_CODE = "TestCode";
 	protected static Logger logger = Logger.getLogger(ETCampaignServiceTest.class);
-	protected static ETCrudService service;
+	protected static ETCampaignService service;
 	protected static ETClient client = null;
 	protected static ETConfiguration configuration = null;
 	protected ETFilter filter;
@@ -152,14 +153,14 @@ public class ETCampaignServiceTest{
 	}
 	
 	protected List<ETCampaign> TestRetrieve() throws ETSdkException {
-		ETServiceResponse<ETCampaign> response = service.get(client, ETCampaign.class, filter);
+		ETServiceResponse<ETCampaign> response = service.get(client);
 		Assert.assertNotNull(response);
 		Assert.assertNotNull(response.getResults());
 		return response.getResults();
 	}
 	
 	protected ETCampaign TestRetrieveSingle() throws ETSdkException {
-		ETServiceResponse<ETCampaign> response = service.get(client, ETCampaign.class, filter);
+		ETServiceResponse<ETCampaign> response = service.get(client, filter);
 		Assert.assertNotNull(response);
 		Assert.assertNotNull(response.getResults());
 		Assert.assertNotNull(response.getResults().get(0));

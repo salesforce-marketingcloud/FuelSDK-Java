@@ -20,6 +20,11 @@ public class ETFolder extends BaseSoapSerializableObject implements ETObject {
 	protected String name;
     @InternalSoapField(name="parentFolder", serializedName="parentFolder.id")
 	protected ETFolder parentFolder;
+    
+    public ETFolder() {
+    	this.active = true;
+    	this.editable = true;
+    }
 
 	public Boolean getAllowChildren() {
 		return allowChildren;

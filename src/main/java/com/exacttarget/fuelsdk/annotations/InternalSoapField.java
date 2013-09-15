@@ -18,4 +18,5 @@ public @interface InternalSoapField {
      * @return
      */
     String serializedName() default "";
+	boolean ignoreOnPatch() default false;
 }

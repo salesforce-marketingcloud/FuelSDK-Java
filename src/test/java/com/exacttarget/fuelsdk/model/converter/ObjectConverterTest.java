@@ -26,7 +26,7 @@ public class ObjectConverterTest {
         l.setDescription(listDescription);
         l.setID(listId);
 
-        ETList out = ObjectConverter.convertToEtObject(l, ETList.class);
+        ETList out = ObjectConverter.convertToEtObject(l, ETList.class, true);
         assertNotNull(out);
         assertEquals(listName, out.getName());
         assertEquals(listDescription, out.getDescription());
@@ -44,7 +44,7 @@ public class ObjectConverterTest {
         l.setDescription(listDescription);
         l.setId(listId);
 
-        List out = ObjectConverter.convertFromEtObject(l, List.class);
+        List out = ObjectConverter.convertFromEtObject(l, List.class, true);
         assertNotNull(out);
         assertEquals(listName, out.getListName());
         assertEquals(listDescription, out.getDescription());
@@ -64,7 +64,7 @@ public class ObjectConverterTest {
         f.setId(2);
         f.setParentFolder(parent);
 
-        DataFolder out = ObjectConverter.convertFromEtObject(f, DataFolder.class);
+        DataFolder out = ObjectConverter.convertFromEtObject(f, DataFolder.class, true);
         assertNotNull(out);
         assertEquals(description, out.getDescription());
         assertNotNull(out.getParentFolder());
@@ -84,7 +84,7 @@ public class ObjectConverterTest {
         f.setID(2);
         f.setParentFolder(parent);
 
-        ETFolder out = ObjectConverter.convertToEtObject(f, ETFolder.class);
+        ETFolder out = ObjectConverter.convertToEtObject(f, ETFolder.class, true);
         assertNotNull(out);
         assertEquals(description, out.getDescription());
         assertNotNull(out.getParentFolder());
@@ -105,7 +105,7 @@ public class ObjectConverterTest {
         s.setId(1);
         s.setStatus(ETSubscriberStatus.BOUNCED);
 
-        Subscriber out = ObjectConverter.convertFromEtObject(s, Subscriber.class);
+        Subscriber out = ObjectConverter.convertFromEtObject(s, Subscriber.class, true);
         assertNotNull(out);
         assertEquals(email, out.getEmailAddress());
         assertNotNull(out.getStatus());
