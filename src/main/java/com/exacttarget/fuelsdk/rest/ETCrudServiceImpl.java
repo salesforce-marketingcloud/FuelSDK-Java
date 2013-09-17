@@ -65,7 +65,7 @@ public class ETCrudServiceImpl extends ETGetServiceImpl implements ETCrudService
 		String json = connection.delete(path);
 		logger.info("delete - json: " + json);
 		
-		return createResponseETObject(type, json, false);
+		return createResponseETObject(type, json);
 	}
 
 	protected <T extends ETObject> ETServiceResponse<T> updateETObject(ETClient client, T object) throws ETSdkException {
@@ -89,7 +89,7 @@ public class ETCrudServiceImpl extends ETGetServiceImpl implements ETCrudService
 		
 		String json = connection.post(path, jsonObject);
 		
-		return createResponseETObject(type, json, false);
+		return createResponseETObject(type, json);
 	}
 
 	protected <T extends ETObject> JsonObject createRequest(T object, Class<T> type) throws ETSdkException {

@@ -22,10 +22,11 @@ import org.junit.runners.MethodSorters;
 import com.exacttarget.fuelsdk.ETCampaignService;
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETConfiguration;
-import com.exacttarget.fuelsdk.ETCrudService;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.ETServiceResponse;
 import com.exacttarget.fuelsdk.filter.ETFilter;
+import com.exacttarget.fuelsdk.filter.ETFilterOperators;
+import com.exacttarget.fuelsdk.filter.ETSimpleFilter;
 import com.exacttarget.fuelsdk.model.ETCampaign;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -42,25 +43,24 @@ public class ETCampaignServiceTest{
 	
 	
 	@BeforeClass
-	public static void setUp() throws ETSdkException {
+	public static void setUp() throws ETSdkException 
+	{
 		logger.debug("SetUp");
 		configuration = new ETConfiguration("/fuelsdk-test.properties");
         client = new ETClient(configuration);
-		
 		service = new ETCampaignServiceImpl();
-		//filter = new ETSimpleFilter("name", ETFilterOperators.EQUALS, "testCampaign");
-		//filterUpdated = new ETSimpleFilter("name", ETFilterOperators.EQUALS, "testCampaign");
 	}
 	
 	@Test
-	public void TestClean() {
+	public void TestClean() 
+	{
 		logger.debug("TestClean()");
 		
 		try {
 			
 			logger.debug("TestRetrieve");
 			
-			List<ETCampaign> campaigns = TestRetrieve();
+			List<ETCampaign> campaigns = retrieveAllCampaigns();
 
 			logger.debug("Received Count during clean: " + campaigns.size());
 			
@@ -70,7 +70,7 @@ public class ETCampaignServiceTest{
 				if( TEST_CAMPAIGN_CODE.equals(c.getCampaignCode()) || TEST_CAMPAIGN_CODE_PATCH.equals(c.getCampaignCode()))
 				{
 					logger.debug("Deleting during Clean: " + c);
-					DeleteSingle(c);
+					deleteCampaign(c);
 				}
 			}
 			
@@ -80,23 +80,37 @@ public class ETCampaignServiceTest{
 	}
 	
 	@Test
-	public void TestDelete() {
+	public void TestDelete() 
+	{
 		logger.debug("TestDelete()");
 		
-		try {
-			createCampaign(TEST_CAMPAIGN_CODE);
+		try 
+		{
+			ETCampaign createdCampaign = createCampaign(TEST_CAMPAIGN_CODE);
 			
-			ETCampaign testCampaign1 = TestRetrieveSingle();
+			Assert.assertNotNull(createdCampaign);
 			
-			Assert.assertEquals(TEST_CAMPAIGN_CODE, testCampaign1.getCampaignCode());
+			String createdId = createdCampaign.getId();
 			
-			DeleteSingle(testCampaign1);
+			ETCampaign retrievedCampaign = retrieveSingle(createdId);
 			
-			ETCampaign testCampaign2 = TestRetrieveSingle();
+			Assert.assertEquals(TEST_CAMPAIGN_CODE, retrievedCampaign.getCampaignCode());
+
+			Assert.assertEquals( createdId, retrievedCampaign.getId() );
 			
-			Assert.assertNotEquals(TEST_CAMPAIGN_CODE, testCampaign2.getCampaignCode());
+			//Delete
+			deleteCampaign(retrievedCampaign);
 			
-		} catch (ETSdkException e) {
+			//Validate Deleted
+			List<ETCampaign> campaigns = retrieveAllCampaigns();
+			
+			for( ETCampaign c: campaigns )
+			{
+				Assert.assertNotEquals( createdId, c.getId() );
+			}
+		} 
+		catch (ETSdkException e) 
+		{
 			Assert.fail(e.getMessage());
 		}
 	}
@@ -105,13 +119,19 @@ public class ETCampaignServiceTest{
 		logger.debug("TestPost()");
 
 		try {
-			createCampaign(TEST_CAMPAIGN_CODE);
+			ETCampaign createdCampaign = createCampaign(TEST_CAMPAIGN_CODE);
 			
-			ETCampaign testCampaign1 = TestRetrieveSingle();
+			Assert.assertNotNull(createdCampaign);
 			
-			Assert.assertEquals(TEST_CAMPAIGN_CODE, testCampaign1.getCampaignCode());
+			String createdId = createdCampaign.getId();
 			
-			DeleteSingle(testCampaign1);
+			ETCampaign retrievedCampaign = retrieveSingle(createdId);
+			
+			Assert.assertEquals(TEST_CAMPAIGN_CODE, retrievedCampaign.getCampaignCode());
+
+			Assert.assertEquals( createdId, retrievedCampaign.getId() );
+			
+			deleteCampaign(retrievedCampaign);
 			
 		} catch (ETSdkException e) {
 			Assert.fail(e.getMessage());
@@ -123,25 +143,30 @@ public class ETCampaignServiceTest{
 		logger.debug("TestPatch()");
 		
 		try {
-			createCampaign(TEST_CAMPAIGN_CODE);
+			ETCampaign createdCampaign = createCampaign(TEST_CAMPAIGN_CODE);
 			
-			ETCampaign testCampaign1 = TestRetrieveSingle();
-			Assert.assertNotNull(testCampaign1);
-
-			testCampaign1.setCampaignCode(TEST_CAMPAIGN_CODE_PATCH);
-
-			Assert.assertEquals(TEST_CAMPAIGN_CODE_PATCH, testCampaign1.getCampaignCode());
+			Assert.assertNotNull(createdCampaign);
 			
-			ETServiceResponse<ETCampaign> response = service.patch(client, testCampaign1);
+			String createdId = createdCampaign.getId();
+			
+			ETCampaign retrievedCampaign = retrieveSingle(createdId);
+			
+			Assert.assertEquals(TEST_CAMPAIGN_CODE, retrievedCampaign.getCampaignCode());
+
+			retrievedCampaign.setCampaignCode(TEST_CAMPAIGN_CODE_PATCH);
+
+			Assert.assertEquals(TEST_CAMPAIGN_CODE_PATCH, retrievedCampaign.getCampaignCode());
+			
+			ETServiceResponse<ETCampaign> response = service.patch(client, retrievedCampaign);
 			Assert.assertNotNull(response);
 			Assert.assertNotNull(response.getResults());
 			Assert.assertEquals(1, response.getResults().size());
 			Assert.assertEquals(TEST_CAMPAIGN_CODE_PATCH, response.getResults().get(0).getCampaignCode());
 			
-			ETCampaign testCampaign2 = TestRetrieveSingle();
-			Assert.assertEquals(TEST_CAMPAIGN_CODE_PATCH, testCampaign2.getCampaignCode());
+			ETCampaign updatedCampaign = retrieveSingle(response.getResults().get(0).getId());
+			Assert.assertEquals(TEST_CAMPAIGN_CODE_PATCH, updatedCampaign.getCampaignCode());
 			
-			DeleteSingle(testCampaign2);
+			deleteCampaign(updatedCampaign);
 			
 		} catch (ETSdkException e) {
 			Assert.fail(e.getMessage());
@@ -162,22 +187,20 @@ public class ETCampaignServiceTest{
 		return response.getResults().get(0);
 	}
 	
-	protected List<ETCampaign> TestRetrieve() throws ETSdkException {
+	protected List<ETCampaign> retrieveAllCampaigns() throws ETSdkException {
 		ETServiceResponse<ETCampaign> response = service.get(client);
 		Assert.assertNotNull(response);
 		Assert.assertNotNull(response.getResults());
 		return response.getResults();
 	}
 	
-	protected ETCampaign TestRetrieveSingle() throws ETSdkException {
-		ETServiceResponse<ETCampaign> response = service.get(client, filter);
+	protected ETCampaign retrieveSingle(String id) throws ETSdkException {
+		ETServiceResponse<ETCampaign> response = service.get(client, new ETSimpleFilter("id", ETFilterOperators.EQUALS, id));
 		Assert.assertNotNull(response);
-		Assert.assertNotNull(response.getResults());
-		Assert.assertNotNull(response.getResults().get(0));
-		return response.getResults().get(0);
+		return response.getResults().size()==0?null:response.getResults().get(0);
 	}
 	
-	protected void DeleteSingle(ETCampaign etObject) throws ETSdkException
+	protected void deleteCampaign(ETCampaign etObject) throws ETSdkException
 	{
 		ETServiceResponse<ETCampaign> response = service.delete(client, etObject);
 		Assert.assertNotNull(response);
