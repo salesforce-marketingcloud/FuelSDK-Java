@@ -55,9 +55,9 @@ public class ETCrudServiceImpl extends ETGetServiceImpl implements ETCrudService
 		logger.info("delete - path: " + path);
 		String json = connection.delete(path);
 		logger.info("delete - json: " + json);
-		return createETObject(type, json, false);
+		
+		return createResponseETObject(type, json, false);
 	}
-
 
 	protected <T extends ETObject> ETServiceResponse<T> updateETObject(ETClient client, T object) throws ETSdkException {
 		@SuppressWarnings("unchecked")
@@ -71,9 +71,7 @@ public class ETCrudServiceImpl extends ETGetServiceImpl implements ETCrudService
 
 		ETRestConnection connection = client.getRESTConnection();
 		
-		JsonObject jsonObject = createJsonObject(object, type);
-
-		jsonObject.addProperty("favorite", Boolean.FALSE);
+		JsonObject jsonObject = createRequest(object, type);
 		
 		String restPath = typeAnnotation.restPath();
 		String accessToken = client.getAccessToken();
@@ -83,10 +81,10 @@ public class ETCrudServiceImpl extends ETGetServiceImpl implements ETCrudService
 		
 		String json = connection.post(path, jsonObject);
 		
-		return createETObject(type, json, false);
+		return createResponseETObject(type, json, false);
 	}
 
-	protected <T extends ETObject> JsonObject createJsonObject(T object, Class<T> type) throws ETSdkException {
+	protected <T extends ETObject> JsonObject createRequest(T object, Class<T> type) throws ETSdkException {
 		
 		JsonObject jsonObject = new JsonObject();
 		

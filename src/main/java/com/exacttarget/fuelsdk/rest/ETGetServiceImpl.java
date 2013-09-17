@@ -17,6 +17,7 @@ import com.exacttarget.fuelsdk.ETServiceResponse;
 import com.exacttarget.fuelsdk.annotations.InternalRestField;
 import com.exacttarget.fuelsdk.annotations.InternalRestType;
 import com.exacttarget.fuelsdk.filter.ETFilter;
+import com.exacttarget.fuelsdk.filter.ETSimpleFilter;
 import com.exacttarget.fuelsdk.model.ETObject;
 import com.exacttarget.fuelsdk.soap.ETServiceResponseImpl;
 import com.google.gson.JsonArray;
@@ -44,15 +45,29 @@ public class ETGetServiceImpl implements ETGetService {
             throw new ETSdkException("The type specified does not wrap an internal ET APIObject.");
         }
 		
-		String path = buildPath(typeAnnotation.restPath(), client.getAccessToken(), null);
+		String id = null;
+		
+		if( filter != null )
+		{
+			if( filter instanceof ETSimpleFilter)
+			{
+				if( "ID".equals(((ETSimpleFilter)filter).getProperty()))
+				{
+					id = ((ETSimpleFilter)filter).getValues().get(0);
+				}
+			}
+		}
+		
+		String path = buildPath(typeAnnotation.restPath(), client.getAccessToken(), id);
 		String json = connection.get(path);
         
-		return createETObject(type, json, true);
+		return createResponseETObject(type, json, true);
 	}
 
 
-	protected <T extends ETObject> ETServiceResponse<T> createETObject(Class<T> type, String json, boolean get)  throws ETSdkException {
+	protected <T extends ETObject> ETServiceResponse<T> createResponseETObject(Class<T> type, String json, boolean get)  throws ETSdkException {
 		
+		logger.debug("returned json" + json);
 		JsonArray items;
 		try {
 			
@@ -64,7 +79,17 @@ public class ETGetServiceImpl implements ETGetService {
 			
 			JsonParser jsonParser = new JsonParser();
 			
-			JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
+			JsonElement jsonElement = null;
+			
+			if( json.startsWith("[") )
+			{
+				jsonElement = jsonParser.parse(json).getAsJsonArray();
+				logger.debug(jsonElement);
+			}
+			else
+			{
+				jsonElement = jsonParser.parse(json).getAsJsonObject();
+			}
 			
 			InternalRestType typeAnnotation = type.getAnnotation(InternalRestType.class);
 			
@@ -72,13 +97,23 @@ public class ETGetServiceImpl implements ETGetService {
 
 			if(get)
 			{
-				String collectionKey = typeAnnotation.collectionKey();
-			    items = jsonObject.get(collectionKey).getAsJsonArray();
+				if( jsonElement.isJsonArray() )
+					items = (JsonArray)jsonElement;
+				else if( jsonElement.isJsonObject() )
+				{
+					String collectionKey = typeAnnotation.collectionKey();
+				    items = ((JsonObject)jsonElement).get(collectionKey).getAsJsonArray();
+				}
 			}
 			else
 			{
-				items = new JsonArray();
-				items.add(jsonObject);
+				if( jsonElement.isJsonArray() )
+					items = (JsonArray)jsonElement;
+				else if( jsonElement.isJsonObject() )
+				{
+					items = new JsonArray();
+					items.add(jsonElement);
+				}
 			}
 			
 		} catch (JsonSyntaxException e) {
@@ -111,7 +146,11 @@ public class ETGetServiceImpl implements ETGetService {
 				for(Field f : fields) {
 					InternalRestField fld = f.getAnnotation(InternalRestField.class);
 		            if(fld != null) {
-		                BeanUtils.setProperty(etObject, f.getName(), item.get(fld.jsonKey()).getAsString());
+		            	String jsonKey = fld.jsonKey();
+		            	if( item.get(jsonKey) == null ) continue;
+		            	String jsonValue = item.get(jsonKey).getAsString();
+		            	String fieldName = f.getName();
+		                BeanUtils.setProperty(etObject, fieldName, jsonValue);
 		            }
 		        }
 				response.getResults().add(etObject);

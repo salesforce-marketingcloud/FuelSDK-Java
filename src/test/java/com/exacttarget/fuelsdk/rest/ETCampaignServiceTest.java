@@ -149,7 +149,7 @@ public class ETCampaignServiceTest{
 		ETServiceResponse<ETCampaign> response =  service.post(client, etObject);
 		Assert.assertNotNull(response);
 		
-		return etObject;
+		return response.getResults().get(0);
 	}
 	
 	protected List<ETCampaign> TestRetrieve() throws ETSdkException {

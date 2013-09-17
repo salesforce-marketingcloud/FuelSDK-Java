@@ -82,6 +82,8 @@ public abstract class BaseRestSerializableObject {
 	 */
 	@Override
 	public String toString() {
-		return "id= " + id + ", createdDate=" + createdDate + ", modifiedDate=" + modifiedDate;
+		return "id=" + id + ", createdDate=" + createdDate + ", modifiedDate=" + modifiedDate;
 	}
+	
+	public abstract String getRequestBody();
 }
