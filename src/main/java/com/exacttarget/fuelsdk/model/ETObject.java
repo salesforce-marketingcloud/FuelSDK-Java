@@ -8,7 +8,5 @@
 
 package com.exacttarget.fuelsdk.model;
 
-
 public interface ETObject {
-
 }
