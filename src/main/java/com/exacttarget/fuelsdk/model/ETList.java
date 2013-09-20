@@ -8,25 +8,27 @@
 
 package com.exacttarget.fuelsdk.model;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
 import com.exacttarget.fuelsdk.annotations.InternalSoapField;
 import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.List;
 
 @InternalSoapType(type = List.class)
-public class ETList extends ETSoapObject implements ETObject
+public class ETList extends ETSoapObject
 {
     @InternalSoapField(name="listName")
-    protected String name;
+    protected String name = null;
     @InternalSoapField(name="description")
-    protected String description;
+    protected String description = null;
     // XXX?
     //@InternalSoapField(name="category")
-    protected Integer categoryId;
+    protected Integer categoryId = null;
     @InternalSoapField(name="listClassification")
-    protected ETListClassification listClassification;
+    protected ETListClassification listClassification = null;
     // XXX?
     //@InternalSoapField(name="type")
-    protected ETListType listType;
+    protected ETListType listType = null;
 
     public String getName() {
         return name;
@@ -70,10 +72,6 @@ public class ETList extends ETSoapObject implements ETObject
 
     @Override
     public String toString() {
-        return "ETList [id=" + id + ", categoryId=" + categoryId + ", customerKey="
-                + customerKey + ", name=" + name + ", description="
-                        + description + ", listClassification=" + listClassification
-                        + ", modifiedDate=" + modifiedDate + ", listType=" + listType
-                        + "]";
+        return ToStringBuilder.reflectionToString(this);
     }
 }

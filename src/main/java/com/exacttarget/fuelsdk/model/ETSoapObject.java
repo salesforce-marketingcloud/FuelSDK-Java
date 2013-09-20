@@ -10,19 +10,19 @@
 
 package com.exacttarget.fuelsdk.model;
 
-import com.exacttarget.fuelsdk.annotations.InternalSoapField;
-
 import java.util.Date;
 
-public abstract class ETSoapObject {
+import com.exacttarget.fuelsdk.annotations.InternalSoapField;
+
+public abstract class ETSoapObject implements ETObject {
     @InternalSoapField(name="id")
-    protected Integer id;
+    protected Integer id = null;
     @InternalSoapField(name="customerKey")
-    protected String customerKey;
+    protected String customerKey = null;
     @InternalSoapField(name="createdDate")
-    protected Date createdDate;
+    protected Date createdDate = null;
     @InternalSoapField(name="modifiedDate")
-    protected Date modifiedDate;
+    protected Date modifiedDate = null;
 
     public Integer getId() {
         return id;
