@@ -48,38 +48,10 @@ public class ETCampaignAssetServiceImpl extends ETCrudServiceImpl implements ETC
 	public ETServiceResponse<ETCampaignAsset> delete(ETClient client, ETCampaignAsset asset) 
 		throws ETSdkException 
 	{
-		
-		Class<ETCampaignAsset> type = (Class<ETCampaignAsset>) asset.getClass();
-		
-		InternalRestType typeAnnotation = (InternalRestType) type.getAnnotation(InternalRestType.class);
-		
-		if(typeAnnotation == null) {
-            throw new ETSdkException("The type specified does not wrap an internal ET APIObject.");
-        }
-
-		ETRestConnection connection = client.getRESTConnection();
-		
-		String restPath = typeAnnotation.restPath();
-		String accessToken = client.getAccessToken();
-		
-		StringBuilder path = new StringBuilder(buildPath(restPath, accessToken, asset.getCampaignId()));
-		
-		path.insert(path.indexOf("?access_token"), "/" + asset.getId());
-		
-		String json = connection.delete(path.toString());
-		
-		return createResponseETObject(type, json, false);
+		return super.delete(client, asset);
 	}
 
-	@Override
-	protected String buildPath(String restPath, String accessToken, String id) 
-	{
-		StringBuilder sb = new StringBuilder(super.buildPath(restPath, accessToken, null));
-
-		sb.replace(sb.indexOf("{"), sb.indexOf("}")+1, id);
-		
-		return sb.toString();
-	}
+	
 
 	@Override
 	protected <T extends ETObject> JsonObject createRequest(T object, Class<T> type) throws ETSdkException {

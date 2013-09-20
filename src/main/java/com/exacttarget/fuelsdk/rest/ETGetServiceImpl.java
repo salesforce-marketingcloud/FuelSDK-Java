@@ -53,22 +53,9 @@ public class ETGetServiceImpl implements ETGetService {
 		
 		if(typeAnnotation == null) {
             throw new ETSdkException("The type specified does not wrap an internal ET APIObject.");
-        }
+        }		
 		
-		String id = null;
-		
-		if( filter != null )
-		{
-			if( filter instanceof ETSimpleFilter)
-			{
-				if( "ID".equals(((ETSimpleFilter)filter).getProperty()))
-				{
-					id = ((ETSimpleFilter)filter).getValues().get(0);
-				}
-			}
-		}
-		
-		String path = buildPath(typeAnnotation.restPath(), client.getAccessToken(), id);
+		String path = buildPath(typeAnnotation.restPath(), client.getAccessToken(), typeAnnotation, filter);
 		String json = connection.get(path);
         
 		return createResponseETObject(type, json, true);
@@ -176,19 +163,44 @@ public class ETGetServiceImpl implements ETGetService {
 		return response;
 	}
 	
-	protected String buildPath(String restPath, String accessToken, String id) {
+	protected String buildPath(String restPath, String accessToken, InternalRestType typeAnnotation, ETFilter filter) {
+		
 		
 		StringBuilder path = new StringBuilder(restPath);
 		
-		if( id != null && !"".equals(id) ) {
-			path.append("/");
-			path.append(id);
+		if( filter != null )
+		{
+			if( filter instanceof ETSimpleFilter)
+			{
+				ETSimpleFilter simpleFilter = (ETSimpleFilter) filter;
+				
+				if (Arrays.asList(typeAnnotation.urlProps()).contains(simpleFilter.getProperty()) && simpleFilter.getValues().size() > 0) {
+					replaceURLPropWithValue(path, simpleFilter.getProperty(), simpleFilter.getValues().get(0));
+				}
+			}
+		}
+		// TODO -- Complex Filter Parts
+		
+		
+		// Remove all remaining URL Props
+		for(String prop : typeAnnotation.urlProps()) {
+			replaceURLPropWithValue(path, prop, "");
 		}
 		
+				
 		path.append( "?access_token=" );
 		path.append( accessToken );
 		
 		return path.toString();
+	}
+	
+	protected void replaceURLPropWithValue(StringBuilder sb, String prop,
+			String value) {
+		
+		if (sb.indexOf("{" + prop + "}") > -1) {
+			value = (value == null) ? "" : value;
+			sb.replace(sb.indexOf("{" + prop + "}"), sb.indexOf("{" + prop + "}") + new String("{" + prop + "}").length(), value);
+		}
 	}
 	
 }

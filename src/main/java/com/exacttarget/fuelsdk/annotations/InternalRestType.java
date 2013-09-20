@@ -23,4 +23,5 @@ public @interface InternalRestType {
 	String[] ignoredFields() default {};
 	String restPath();
 	String primaryKey();
+	String[] urlProps() default {};
 }

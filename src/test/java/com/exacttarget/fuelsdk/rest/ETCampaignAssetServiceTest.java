@@ -14,6 +14,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -45,8 +46,8 @@ public class ETCampaignAssetServiceTest{
 	protected ETFilter filterUpdated;
 	
 	
-	@BeforeClass
-	public static void setUp() throws ETSdkException {
+	@Before
+	public void setUp() throws ETSdkException {
 		logger.debug("SetUp");
 		configuration = new ETConfiguration("/fuelsdk-test.properties");
         client = new ETClient(configuration);
@@ -56,115 +57,101 @@ public class ETCampaignAssetServiceTest{
 	}
 	
 	@Test
-	public void ATestClean() {
+	public void ATestClean() throws ETSdkException {
 		logger.debug("TestClean()");
 		
-		try {
-			
-			logger.debug("TestRetrieve");
-			
-			List<ETCampaign> campaigns = TestRetrieve();
+		logger.debug("TestRetrieve");
+		
+		List<ETCampaign> campaigns = TestRetrieve();
 
-			logger.debug("Received Count during clean: " + campaigns.size());
-			
-			for( ETCampaign c: campaigns )
+		logger.debug("Received Count during clean: " + campaigns.size());
+		
+		for( ETCampaign c: campaigns )
+		{
+			logger.debug("Received during Clean: " + c);
+			if( TEST_CAMPAIGN_CODE.equals(c.getCampaignCode()) || TEST_CAMPAIGN_CODE_PATCH.equals(c.getCampaignCode()))
 			{
-				logger.debug("Received during Clean: " + c);
-				if( TEST_CAMPAIGN_CODE.equals(c.getCampaignCode()) || TEST_CAMPAIGN_CODE_PATCH.equals(c.getCampaignCode()))
-				{
-					logger.debug("Deleting during Clean: " + c);
-					deleteCampaign(c);
-				}
+				logger.debug("Deleting during Clean: " + c);
+				deleteCampaign(c);
 			}
-			
-		} catch (ETSdkException e) {
-			Assert.fail(e.getMessage());
 		}
+	
 	}
 	
 	@Test
-	public void TestAssociateAsset(){
+	public void TestAssociateAsset() throws ETSdkException{
 		logger.debug("TestAssociateAsset()");
 
-		try 
-		{
-			ETCampaign campaign = createCampaign(TEST_CAMPAIGN_CODE);
-			
-			ETCampaignAsset asset = new ETCampaignAsset();
-			asset.setCampaignId(campaign.getId());
-			asset.setItemID("321");
-			asset.setType("EMAIL");
-			
-			ETServiceResponse<ETCampaignAsset> response = assetService.post(client, asset);
-			
-			Assert.assertNotNull(response);
-			
-			String campaignID = response.getResults().get(0).getCampaignId();
-			
-			response = assetService.get(client, new ETSimpleFilter("ID", ETFilterOperators.EQUALS, campaignID ));
-			
-			Assert.assertNotNull(response);
+		ETCampaign campaign = createCampaign(TEST_CAMPAIGN_CODE);
+		
+		ETCampaignAsset asset = new ETCampaignAsset();
+		asset.setCampaignId(campaign.getId());
+		asset.setItemID("321");
+		asset.setType("EMAIL");
+		
+		ETServiceResponse<ETCampaignAsset> response = assetService.post(client, asset);
+		
+		Assert.assertNotNull(response);
+		
+		String campaignID = response.getResults().get(0).getCampaignId();
+		
+		response = assetService.get(client, new ETSimpleFilter("campaignId", ETFilterOperators.EQUALS, campaignID ));
+		
+		Assert.assertNotNull(response);
 
-			ETCampaignAsset responseAsset = response.getResults().get(0);
+		ETCampaignAsset responseAsset = response.getResults().get(0);
+		
+		Assert.assertNotNull(responseAsset);
+		
+		Assert.assertEquals(campaignID, responseAsset.getCampaignId());
+		
+		deleteCampaign(campaign);
 			
-			Assert.assertNotNull(responseAsset);
-			
-			Assert.assertEquals(campaignID, responseAsset.getCampaignId());
-			
-			deleteCampaign(campaign);
-			
-		} catch (ETSdkException e) {
-			Assert.fail(e.getMessage());
-		}
 	}
 
 	@Test
-	public void TestUnassociateAsset()
+	public void TestUnassociateAsset() throws ETSdkException
 	{
 		logger.debug("TestUnassociateAsset()");
 
-		try {
-			ETCampaign campaign = createCampaign(TEST_CAMPAIGN_CODE);
+		ETCampaign campaign = createCampaign(TEST_CAMPAIGN_CODE);
+		
+		ETCampaignAsset asset = new ETCampaignAsset();
+		asset.setCampaignId(campaign.getId());
+		asset.setItemID("321");
+		asset.setType("EMAIL");
+		
+		ETServiceResponse<ETCampaignAsset> response = assetService.post(client, asset);
+		
+		Assert.assertNotNull(response);
+		
+		String campaignID = response.getResults().get(0).getCampaignId();
+		
+		response = assetService.get(client, new ETSimpleFilter("campaignId", ETFilterOperators.EQUALS, campaignID ));
+		
+		Assert.assertNotNull(response);
+		
+		ETCampaignAsset responseAsset = response.getResults().get(0);
+		
+		Assert.assertNotNull(responseAsset);
+		
+		String responseCampaignId = responseAsset.getCampaignId();
+		
+		Assert.assertEquals(campaignID, responseCampaignId);
+		
+		//Delete
+		assetService.delete(client, responseAsset);
+		
+		response = null;
+		
+		//Validate it's been deleted
+		response = assetService.get(client, new ETSimpleFilter("campaignId", ETFilterOperators.EQUALS, campaignID ));
+		
+		Assert.assertEquals(0,response.getResults().size());
+		
+		deleteCampaign(campaign);
 			
-			ETCampaignAsset asset = new ETCampaignAsset();
-			asset.setCampaignId(campaign.getId());
-			asset.setItemID("321");
-			asset.setType("EMAIL");
-			
-			ETServiceResponse<ETCampaignAsset> response = assetService.post(client, asset);
-			
-			Assert.assertNotNull(response);
-			
-			String campaignID = response.getResults().get(0).getCampaignId();
-			
-			//TODO: refactor the get
-			response = assetService.get(client, new ETSimpleFilter("ID", ETFilterOperators.EQUALS, campaignID ));
-			
-			Assert.assertNotNull(response);
-			
-			ETCampaignAsset responseAsset = response.getResults().get(0);
-			
-			Assert.assertNotNull(responseAsset);
-			
-			String responseCampaignId = responseAsset.getCampaignId();
-			
-			Assert.assertEquals(campaignID, responseCampaignId);
-			
-			//Delete
-			assetService.delete(client, responseAsset);
-			
-			response = null;
-			
-			//Validate it's been deleted
-			response = assetService.get(client, new ETSimpleFilter("ID", ETFilterOperators.EQUALS, campaignID ));
-			
-			Assert.assertEquals(0,response.getResults().size());
-			
-			deleteCampaign(campaign);
-			
-		} catch (ETSdkException e) {
-			Assert.fail(e.getMessage());
-		}
+		
 	}
 	private ETCampaign createCampaign(String campaign) throws ETSdkException 
 	{

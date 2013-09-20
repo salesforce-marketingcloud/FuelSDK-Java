@@ -17,7 +17,7 @@ import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.List;
 
 @InternalSoapType(type = List.class)
-public class ETList extends ETSoapObject
+public class ETList extends ETSoapObject implements ETObject
 {
     @InternalSoapField(name="listName")
     protected String name = null;

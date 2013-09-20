@@ -13,7 +13,7 @@ package com.exacttarget.fuelsdk.model;
 import com.exacttarget.fuelsdk.annotations.InternalRestField;
 import com.exacttarget.fuelsdk.annotations.InternalRestType;
 
-@InternalRestType(type = "Campaign", restPath="/hub/v1/campaigns", collectionKey="items", primaryKey="id")
+@InternalRestType(type = "Campaign", restPath="/hub/v1/campaigns/{id}", collectionKey="items", primaryKey="id", urlProps={"id"})
 public class ETCampaign extends BaseRestSerializableObject implements ETObject{
 
 	/** The name. */

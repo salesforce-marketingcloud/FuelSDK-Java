@@ -59,9 +59,8 @@ public class ETCrudServiceImpl extends ETGetServiceImpl implements ETCrudService
 		
 		String restPath = typeAnnotation.restPath();
 		String accessToken = client.getAccessToken();
-		String id = getPrimaryKey(object, type);
-		logger.info("delete - id: " + id);
-		String path = buildPath(restPath, accessToken, id);
+		logger.info("delete - obj: " + object);
+		String path = buildPath(restPath, accessToken, object, typeAnnotation);
 		logger.info("delete - path: " + path);
 		String json = connection.delete(path);
 		logger.info("delete - json: " + json);
@@ -85,9 +84,8 @@ public class ETCrudServiceImpl extends ETGetServiceImpl implements ETCrudService
 		
 		String restPath = typeAnnotation.restPath();
 		String accessToken = client.getAccessToken();
-		String id = getPrimaryKey(object, type);
 		
-		String path = buildPath(restPath, accessToken, id);
+		String path = buildPath(restPath, accessToken, object, typeAnnotation);
 		
 		String json = connection.post(path, jsonObject);
 		
@@ -143,4 +141,32 @@ public class ETCrudServiceImpl extends ETGetServiceImpl implements ETCrudService
 			throw new ETSdkException("Error instantiating object", ex);
 		}
 	}
+	
+	protected <T> String buildPath(String restPath, String accessToken, T etObject, InternalRestType typeAnnotation) throws ETSdkException
+	{
+		StringBuilder sb = new StringBuilder(restPath);
+		
+		for(String prop : typeAnnotation.urlProps()) {
+			
+			String value = "";
+			
+				try {
+					value = BeanUtils.getProperty(etObject, prop);
+				} catch (IllegalAccessException e) {
+					throw new ETSdkException("Error instantiating object", e);
+				} catch (InvocationTargetException e) {
+					throw new ETSdkException("Error instantiating object", e);
+				} catch (NoSuchMethodException e) {
+					throw new ETSdkException("Error instantiating object", e);
+				}
+			
+			replaceURLPropWithValue(sb, prop, value);
+			
+		}
+		sb.append( "?access_token=" );
+		sb.append( accessToken );
+		
+		return sb.toString();
+	}
+
 }
