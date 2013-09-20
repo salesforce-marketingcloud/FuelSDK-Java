@@ -18,7 +18,7 @@ import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.Account;
 
 @InternalSoapType(type = Account.class)
-public class ETOrganiation extends BaseSoapSerializableObject implements
+public class ETOrganization extends BaseSoapSerializableObject implements
 		ETObject {
 
 	@InternalSoapField(name="accountType")
@@ -70,7 +70,7 @@ public class ETOrganiation extends BaseSoapSerializableObject implements
 	private Boolean isTrialAccount;
 
 	@InternalSoapField(name="parentAccount", serializedName="ParentAccount.id")
-	private ETOrganiation parentOrganization;
+	private ETOrganization parentOrganization;
 
 	@InternalSoapField(name="parentID")
 	private Integer parentId;
@@ -93,7 +93,7 @@ public class ETOrganiation extends BaseSoapSerializableObject implements
 	@InternalSoapField(name="zip")
 	private String zip;
 
-	public ETOrganiation(){ }
+	public ETOrganization(){ }
 
 	public ETAccountType getAccountType() {
 		return accountType;
@@ -223,11 +223,11 @@ public class ETOrganiation extends BaseSoapSerializableObject implements
 		this.isTrialAccount = isTrialAccount;
 	}
 
-	public ETOrganiation getParentOrganization() {
+	public ETOrganization getParentOrganization() {
 		return parentOrganization;
 	}
 
-	public void setParentOrganization(ETOrganiation parentOrganization) {
+	public void setParentOrganization(ETOrganization parentOrganization) {
 		this.parentOrganization = parentOrganization;
 	}
 

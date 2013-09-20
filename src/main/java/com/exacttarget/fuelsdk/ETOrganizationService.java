@@ -11,23 +11,23 @@
 package com.exacttarget.fuelsdk;
 
 import com.exacttarget.fuelsdk.filter.ETFilter;
-import com.exacttarget.fuelsdk.model.ETOrganiation;
+import com.exacttarget.fuelsdk.model.ETOrganization;
 
 public interface ETOrganizationService extends ETCrudService {
 
-	public ETServiceResponse<ETOrganiation> get(ETClient client)
+	public ETServiceResponse<ETOrganization> get(ETClient client)
 	        throws ETSdkException;
 
-	public ETServiceResponse<ETOrganiation> get(ETClient client, ETFilter filter)
+	public ETServiceResponse<ETOrganization> get(ETClient client, ETFilter filter)
 	        throws ETSdkException;
 
-	public ETServiceResponse<ETOrganiation> post(ETClient client, ETOrganiation organization)
+	public ETServiceResponse<ETOrganization> post(ETClient client, ETOrganization organization)
 	    	throws ETSdkException;
 
-	public ETServiceResponse<ETOrganiation> patch(ETClient client, ETOrganiation organization)
+	public ETServiceResponse<ETOrganization> patch(ETClient client, ETOrganization organization)
 			throws ETSdkException;
 
-	public ETServiceResponse<ETOrganiation> delete(ETClient client, ETOrganiation organization)
+	public ETServiceResponse<ETOrganization> delete(ETClient client, ETOrganization organization)
 	    	throws ETSdkException;
 
 }

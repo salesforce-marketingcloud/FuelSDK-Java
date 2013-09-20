@@ -15,33 +15,33 @@ import com.exacttarget.fuelsdk.ETOrganizationService;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.ETServiceResponse;
 import com.exacttarget.fuelsdk.filter.ETFilter;
-import com.exacttarget.fuelsdk.model.ETOrganiation;
+import com.exacttarget.fuelsdk.model.ETOrganization;
 
 public class ETOrganizationServiceImpl extends ETCrudServiceImpl implements
 		ETOrganizationService {
 
-	public ETServiceResponse<ETOrganiation> get(ETClient client)
+	public ETServiceResponse<ETOrganization> get(ETClient client)
 			throws ETSdkException {
-		return super.get(client, ETOrganiation.class);
+		return super.get(client, ETOrganization.class);
 	}
 
-	public ETServiceResponse<ETOrganiation> get(ETClient client, ETFilter filter)
+	public ETServiceResponse<ETOrganization> get(ETClient client, ETFilter filter)
 			throws ETSdkException {
-		return super.get(client, ETOrganiation.class, filter);
+		return super.get(client, ETOrganization.class, filter);
 	}
 
-	public ETServiceResponse<ETOrganiation> post(ETClient client,
-			ETOrganiation organization) throws ETSdkException {
+	public ETServiceResponse<ETOrganization> post(ETClient client,
+			ETOrganization organization) throws ETSdkException {
 		return super.post(client, organization);
 	}
 
-	public ETServiceResponse<ETOrganiation> patch(ETClient client,
-			ETOrganiation organization) throws ETSdkException {
+	public ETServiceResponse<ETOrganization> patch(ETClient client,
+			ETOrganization organization) throws ETSdkException {
 		return super.patch(client, organization);
 	}
 
-	public ETServiceResponse<ETOrganiation> delete(ETClient client,
-			ETOrganiation organization) throws ETSdkException {
+	public ETServiceResponse<ETOrganization> delete(ETClient client,
+			ETOrganization organization) throws ETSdkException {
 		return super.delete(client, organization);
 	}
 

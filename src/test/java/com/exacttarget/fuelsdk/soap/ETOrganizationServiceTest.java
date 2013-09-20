@@ -27,7 +27,7 @@ import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.filter.ETFilterOperators;
 import com.exacttarget.fuelsdk.filter.ETSimpleFilter;
 import com.exacttarget.fuelsdk.model.ETAccountType;
-import com.exacttarget.fuelsdk.model.ETOrganiation;
+import com.exacttarget.fuelsdk.model.ETOrganization;
 
 @Ignore
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -55,13 +55,13 @@ public class ETOrganizationServiceTest {
 	@Test
 	public void A_TestGet() throws ETSdkException {
 		
-		ETServiceResponse<ETOrganiation> response = service.get(client);
+		ETServiceResponse<ETOrganization> response = service.get(client);
 		
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
 		Assert.assertNotNull(response.getResults());
 		
-		for(ETOrganiation org : response.getResults()) {
+		for(ETOrganization org : response.getResults()) {
 			
 			logger.debug(org.toString());
 		}
@@ -72,14 +72,14 @@ public class ETOrganizationServiceTest {
 	public void B_TestGetSingle() throws ETSdkException {
 		
 		ETFilter filter = new ETSimpleFilter("CustomerKey", ETFilterOperators.EQUALS, CustomerKeyofExistingOrganization);
-		ETServiceResponse<ETOrganiation> response = service.get(client, filter);
+		ETServiceResponse<ETOrganization> response = service.get(client, filter);
 		
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
 		Assert.assertNotNull(response.getResults());
 		Assert.assertEquals(1, response.getResults().size());
 		
-		for(ETOrganiation org : response.getResults()) {
+		for(ETOrganization org : response.getResults()) {
 			
 			logger.debug(org.toString());
 		}
@@ -89,7 +89,7 @@ public class ETOrganizationServiceTest {
 	@Test
 	public void C_TestPost() throws ETSdkException {
 		
-		ETOrganiation org = new ETOrganiation();
+		ETOrganization org = new ETOrganization();
 		org.setCustomerKey(CustomerKeyOfTestOrganization);
 		org.setName(NameOfTestOrganization);
 		org.setAccountType(ETAccountType.PRO_CONNECT);
@@ -104,20 +104,20 @@ public class ETOrganizationServiceTest {
 		org.setEditionId(3);
 		org.setIsActive(true);
 		
-		ETServiceResponse<ETOrganiation> response = service.post(client, org);
+		ETServiceResponse<ETOrganization> response = service.post(client, org);
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
 		
 		// Test it was created
 		ETFilter filter = new ETSimpleFilter("CustomerKey", ETFilterOperators.EQUALS, CustomerKeyOfTestOrganization);
-		ETServiceResponse<ETOrganiation> responseFound = service.get(client, filter);
+		ETServiceResponse<ETOrganization> responseFound = service.get(client, filter);
 		
 		Assert.assertNotNull(responseFound);
 		Assert.assertTrue(responseFound.getStatus());
 		Assert.assertNotNull(responseFound.getResults());
 		Assert.assertEquals(1, responseFound.getResults().size());
 		
-		for(ETOrganiation orgFound : responseFound.getResults()) {
+		for(ETOrganization orgFound : responseFound.getResults()) {
 			
 			logger.debug(orgFound.toString());
 		}
@@ -126,7 +126,7 @@ public class ETOrganizationServiceTest {
 	@Test
 	public void D_TestPatch() throws ETSdkException {
 		
-		ETOrganiation org = new ETOrganiation();
+		ETOrganization org = new ETOrganization();
 		org.setCustomerKey(CustomerKeyOfTestOrganization);
 		org.setName("New TestOrganizationName");
 		org.setAccountType(ETAccountType.PRO_CONNECT);
@@ -141,13 +141,13 @@ public class ETOrganizationServiceTest {
 		org.setEditionId(3);
 		org.setIsActive(true);
 		
-		ETServiceResponse<ETOrganiation> response = service.patch(client, org);
+		ETServiceResponse<ETOrganization> response = service.patch(client, org);
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
 		
 		// Test it was updated
 		ETFilter filter = new ETSimpleFilter("CustomerKey", ETFilterOperators.EQUALS, CustomerKeyOfTestOrganization);
-		ETServiceResponse<ETOrganiation> responseFound = service.get(client, filter);
+		ETServiceResponse<ETOrganization> responseFound = service.get(client, filter);
 		
 		Assert.assertNotNull(responseFound);
 		Assert.assertTrue(responseFound.getStatus());
@@ -160,16 +160,16 @@ public class ETOrganizationServiceTest {
 	@Test
 	public void E_TestDelete() throws ETSdkException {
 		
-		ETOrganiation organization = new ETOrganiation();
+		ETOrganization organization = new ETOrganization();
 		organization.setCustomerKey(CustomerKeyOfTestOrganization);
 		
-		ETServiceResponse<ETOrganiation> response = service.delete(client, organization);
+		ETServiceResponse<ETOrganization> response = service.delete(client, organization);
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
 		
 		// Test it was deleted
 		ETFilter filter = new ETSimpleFilter("CustomerKey", ETFilterOperators.EQUALS, CustomerKeyOfTestOrganization);
-		ETServiceResponse<ETOrganiation> responseFound = service.get(client, filter);
+		ETServiceResponse<ETOrganization> responseFound = service.get(client, filter);
 		
 		Assert.assertNotNull(responseFound);
 		Assert.assertTrue(responseFound.getStatus());
