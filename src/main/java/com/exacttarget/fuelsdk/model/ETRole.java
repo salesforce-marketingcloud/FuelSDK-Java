@@ -1,3 +1,13 @@
+//
+// ETRole.java -
+//
+//      x
+//
+// Copyright (C) 2013 ExactTarget
+//
+// @COPYRIGHT@
+//
+
 package com.exacttarget.fuelsdk.model;
 
 import java.util.List;
@@ -11,25 +21,25 @@ public class ETRole extends BaseSoapSerializableObject implements ETObject {
 
 	@InternalSoapField(name="name")
     protected String name;
-	
+
 	@InternalSoapField(name="description")
     protected String description;
-	
+
 	@InternalSoapField(name="isPrivate")
     protected Boolean isPrivate;
-	
+
 	@InternalSoapField(name="isSystemDefined")
     protected Boolean isSystemDefined;
-	
+
 	@InternalSoapField(name="forceInheritance")
     protected Boolean forceInheritance;
-	
+
 	@InternalSoapField(name="permissionSets")
     protected boolean permissionSets;
-    
+
 	@InternalSoapField(name="permissions")
 	protected List<ETPermission> permissions;
-	
+
 	public ETRole() { }
 
 	public String getName() {

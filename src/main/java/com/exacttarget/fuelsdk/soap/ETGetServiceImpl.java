@@ -5,8 +5,6 @@
 //
 // Copyright (C) 2013 ExactTarget
 //
-// Author(s): Ian Murdock <imurdock@exacttarget.com>
-//
 
 package com.exacttarget.fuelsdk.soap;
 
@@ -62,7 +60,7 @@ public abstract class ETGetServiceImpl extends ETServiceImpl implements ETGetSer
         catch(Exception e) {
             throw new ETSdkException("Error inspecting serialization properties of specified type", e);
         }
-        
+
         if (filter != null) {
         	FilterPart filterPart = convertFilterPart(filter);
             retrieveRequest.setFilter(filterPart);
@@ -75,9 +73,9 @@ public abstract class ETGetServiceImpl extends ETServiceImpl implements ETGetSer
 
         ETServiceResponse<T> response = new ETServiceResponseImpl<T>();
         response.setRequestId(retrieveResponseMsg.getRequestID());
-        
+
         response.setStatus(retrieveResponseMsg.getOverallStatus().equals("OK"));
-        
+
         try {
             for (APIObject apiObject : retrieveResponseMsg.getResults()) {
                 response.getResults().add(ObjectConverter.convertToEtObject(apiObject, type, false));

@@ -1,3 +1,13 @@
+//
+// ETSubscriber.java -
+//
+//      x
+//
+// Copyright (C) 2013 ExactTarget
+//
+// @COPYRIGHT@
+//
+
 package com.exacttarget.fuelsdk.model;
 
 import java.util.Date;
@@ -9,22 +19,22 @@ import com.exacttarget.fuelsdk.internal.Subscriber;
 
 @InternalSoapType(type = Subscriber.class, ignoredFields = {"CustomerKey", "ModifiedDate", "Lists"})
 public class ETSubscriber extends BaseSoapSerializableObject implements ETObject {
-    
+
 	@InternalSoapField(name="emailAddress")
 	private String emailAddress;
-    
+
 	@InternalSoapField(name="subscriberKey")
 	private String subscriberKey;
-    
+
     @InternalSoapField(name="unsubscribedDate")
     private Date unsubscribedDate;
-    
+
     @InternalSoapField(name="status")
     private ETSubscriberStatus status;
-    
+
     @InternalSoapField(name="emailTypePreference")
     private ETEmailType emailTypePreference;
-    
+
     @InternalSoapField(name="lists")
     private List<ETSubscriberList> lists;
 
@@ -88,6 +98,6 @@ public class ETSubscriber extends BaseSoapSerializableObject implements ETObject
 				+ ", modifiedDate=" + modifiedDate + ", customerKey="
 				+ customerKey + "]";
 	}
- 
-    
+
+
 }

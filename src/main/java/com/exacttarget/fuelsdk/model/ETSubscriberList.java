@@ -1,3 +1,13 @@
+//
+// ETSubscriberList.java -
+//
+//      x
+//
+// Copyright (C) 2013 ExactTarget
+//
+// @COPYRIGHT@
+//
+
 package com.exacttarget.fuelsdk.model;
 
 import com.exacttarget.fuelsdk.annotations.InternalSoapField;
@@ -10,16 +20,16 @@ public class ETSubscriberList extends BaseSoapSerializableObject implements
 
 	@InternalSoapField(name = "status")
     private ETSubscriberStatus status;
-    
+
 	@InternalSoapField(name = "list")
 	private ETList list;
-	
+
 	@InternalSoapField(name = "action")
 	private String action;
-	
+
 	@InternalSoapField(name = "subscriber")
 	private ETSubscriber subscriber;
-	
+
 	public ETSubscriberList() {}
 
 	public ETSubscriberStatus getStatus() {
@@ -61,7 +71,7 @@ public class ETSubscriberList extends BaseSoapSerializableObject implements
 				+ id + ", createdDate=" + createdDate + ", modifiedDate="
 				+ modifiedDate + ", customerKey=" + customerKey + "]";
 	}
-	
-	
-	
+
+
+
 }

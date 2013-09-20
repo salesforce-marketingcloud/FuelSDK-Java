@@ -1,3 +1,13 @@
+//
+// ETCampaignAsset.java -
+//
+//      x
+//
+// Copyright (C) 2013 ExactTarget
+//
+// @COPYRIGHT@
+//
+
 package com.exacttarget.fuelsdk.model;
 
 import com.exacttarget.fuelsdk.annotations.InternalRestField;
@@ -9,7 +19,7 @@ public class ETCampaignAsset extends BaseRestSerializableObject implements ETObj
 	/** The id of {@link ETCampaign} to which this Asset is associated. */
 	@InternalRestField(jsonKey = "campaignId")
 	private String campaignId;
-	
+
 	/** The type. */
 	@InternalRestField(jsonKey = "type")
 	private String type;
@@ -50,7 +60,7 @@ public class ETCampaignAsset extends BaseRestSerializableObject implements ETObj
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.exacttarget.model.rest.BaseRestObject#toString()
 	 */
 	@Override
@@ -61,7 +71,7 @@ public class ETCampaignAsset extends BaseRestSerializableObject implements ETObj
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -74,7 +84,7 @@ public class ETCampaignAsset extends BaseRestSerializableObject implements ETObj
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override

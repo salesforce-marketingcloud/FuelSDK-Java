@@ -1,3 +1,13 @@
+//
+// ETDataExtension.java -
+//
+//      x
+//
+// Copyright (C) 2013 ExactTarget
+//
+// @COPYRIGHT@
+//
+
 package com.exacttarget.fuelsdk.model;
 
 import java.util.List;
@@ -11,48 +21,48 @@ public class ETDataExtension extends BaseSoapSerializableObject implements ETObj
 
 	@InternalSoapField(name="name")
 	private String name;
-	
+
 	@InternalSoapField(name="description")
 	private String description;
-	
+
 	@InternalSoapField(name="isSendable")
 	private Boolean isSendable;
-	
+
 	@InternalSoapField(name="isTestable")
 	private Boolean isTestable;
-	
+
 //	private DataExtensionField sendableDataExtensionField;
 //	private Attribute sendableSubscriberField;
 //	private DataExtensionTemplate template;
-	
+
 	@InternalSoapField(name="dataRetentionPeriodLength", ignoreOnPatch=true)
 	private Integer dataRetentionPeriodLength;
-	
+
 	@InternalSoapField(name="dataRetentionPeriodUnitOfMeasure", ignoreOnPatch=true)
 	private Integer dataRetentionPeriodUnitOfMeasure;
-	
+
 	@InternalSoapField(name="rowBasedRetention", ignoreOnPatch=true)
 	private Boolean rowBasedRetention;
-	
+
 	@InternalSoapField(name="resetRetentionPeriodOnImport", ignoreOnPatch=true)
 	private Boolean resetRetentionPeriodOnImport;
-	
+
 	@InternalSoapField(name="deleteAtEndOfRetentionPeriod", ignoreOnPatch=true)
 	private Boolean deleteAtEndOfRetentionPeriod;
-	
+
 	@InternalSoapField(name="retainUntil", ignoreOnPatch=true)
 	private String retainUntil;
-	
+
 	@InternalSoapField(name="fields")
 	private List<ETDataExtensionColumn> columns;
 	//private DateTimeUnitOfMeasure dataRetentionPeriod;
-	
+
 	@InternalSoapField(name="categoryID")
 	private Long categoryID;
-	
+
 	@InternalSoapField(name="status")
 	private String status;
-	
+
 	public ETDataExtension() {}
 
 	public String getName() {
@@ -176,7 +186,7 @@ public class ETDataExtension extends BaseSoapSerializableObject implements ETObj
 				+ createdDate + ", modifiedDate=" + modifiedDate
 				+ ", customerKey=" + customerKey + "]";
 	}
-	
-	
-	
+
+
+
 }

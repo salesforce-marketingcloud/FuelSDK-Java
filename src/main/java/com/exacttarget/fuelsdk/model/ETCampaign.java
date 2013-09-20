@@ -1,3 +1,13 @@
+//
+// ETCampaign.java -
+//
+//      x
+//
+// Copyright (C) 2013 ExactTarget
+//
+// @COPYRIGHT@
+//
+
 package com.exacttarget.fuelsdk.model;
 
 import com.exacttarget.fuelsdk.annotations.InternalRestField;
@@ -34,7 +44,7 @@ public class ETCampaign extends BaseRestSerializableObject implements ETObject{
 
 	/**
 	 * Gets the name.
-	 * 
+	 *
 	 * @return the name
 	 */
 	public String getName() {
@@ -43,7 +53,7 @@ public class ETCampaign extends BaseRestSerializableObject implements ETObject{
 
 	/**
 	 * Sets the name.
-	 * 
+	 *
 	 * @param name the name to set
 	 */
 	public void setName(String name) {
@@ -52,7 +62,7 @@ public class ETCampaign extends BaseRestSerializableObject implements ETObject{
 
 	/**
 	 * Gets the description.
-	 * 
+	 *
 	 * @return the description
 	 */
 	public String getDescription() {
@@ -61,7 +71,7 @@ public class ETCampaign extends BaseRestSerializableObject implements ETObject{
 
 	/**
 	 * Sets the description.
-	 * 
+	 *
 	 * @param description the description to set
 	 */
 	public void setDescription(String description) {
@@ -70,7 +80,7 @@ public class ETCampaign extends BaseRestSerializableObject implements ETObject{
 
 	/**
 	 * Gets the campaign code.
-	 * 
+	 *
 	 * @return the campaignCode
 	 */
 	public String getCampaignCode() {
@@ -79,7 +89,7 @@ public class ETCampaign extends BaseRestSerializableObject implements ETObject{
 
 	/**
 	 * Sets the campaign code.
-	 * 
+	 *
 	 * @param campaignCode the campaignCode to set
 	 */
 	public void setCampaignCode(String campaignCode) {
@@ -88,7 +98,7 @@ public class ETCampaign extends BaseRestSerializableObject implements ETObject{
 
 	/**
 	 * Gets the color.
-	 * 
+	 *
 	 * @return the color
 	 */
 	public String getColor() {
@@ -97,7 +107,7 @@ public class ETCampaign extends BaseRestSerializableObject implements ETObject{
 
 	/**
 	 * Sets the color.
-	 * 
+	 *
 	 * @param color the color to set
 	 */
 	public void setColor(String color) {
@@ -106,7 +116,7 @@ public class ETCampaign extends BaseRestSerializableObject implements ETObject{
 
 	/**
 	 * Checks if is favorite.
-	 * 
+	 *
 	 * @return the favorite
 	 */
 	public boolean isFavorite() {
@@ -115,7 +125,7 @@ public class ETCampaign extends BaseRestSerializableObject implements ETObject{
 
 	/**
 	 * Sets the favorite.
-	 * 
+	 *
 	 * @param favorite the favorite to set
 	 */
 	public void setFavorite(boolean favorite) {
@@ -124,7 +134,7 @@ public class ETCampaign extends BaseRestSerializableObject implements ETObject{
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see com.exacttarget.model.rest.BaseRestObject#toString()
 	 */
 	@Override
@@ -136,7 +146,7 @@ public class ETCampaign extends BaseRestSerializableObject implements ETObject{
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -149,7 +159,7 @@ public class ETCampaign extends BaseRestSerializableObject implements ETObject{
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override

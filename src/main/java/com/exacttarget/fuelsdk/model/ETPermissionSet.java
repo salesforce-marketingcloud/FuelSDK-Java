@@ -1,3 +1,13 @@
+//
+// ETPermissionSet.java -
+//
+//      x
+//
+// Copyright (C) 2013 ExactTarget
+//
+// @COPYRIGHT@
+//
+
 package com.exacttarget.fuelsdk.model;
 
 import java.util.List;
@@ -12,22 +22,22 @@ public class ETPermissionSet extends BaseSoapSerializableObject implements
 
 	@InternalSoapField(name="name")
     protected String name;
-	
+
 	@InternalSoapField(name="description")
     protected String description;
-	
+
 	@InternalSoapField(name="isAllowed")
     protected Boolean isAllowed;
-	
+
 	@InternalSoapField(name="isDenied")
     protected Boolean isDenied;
-	
+
 	@InternalSoapField(name="permissionSets")
     protected List<ETPermissionSet> permissionSets;
-	
+
 	@InternalSoapField(name="permissions")
     protected List<ETPermission> permissions;
-	
+
 	public ETPermissionSet() {}
 
 	public String getName() {

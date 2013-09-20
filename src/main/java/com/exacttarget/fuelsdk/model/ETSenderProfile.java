@@ -1,3 +1,13 @@
+//
+// ETSenderProfile.java -
+//
+//      x
+//
+// Copyright (C) 2013 ExactTarget
+//
+// @COPYRIGHT@
+//
+
 package com.exacttarget.fuelsdk.model;
 
 import com.exacttarget.fuelsdk.annotations.InternalSoapField;
@@ -10,16 +20,16 @@ public class ETSenderProfile extends BaseSoapSerializableObject implements
 
 	@InternalSoapField(name = "name")
     protected String name;
-    
+
 	@InternalSoapField(name = "name")
 	protected String description;
-	
+
 	@InternalSoapField(name = "name")
     protected String fromName;
-	
+
 	@InternalSoapField(name = "name")
     protected String fromAddress;
-	
+
 	public ETSenderProfile() {}
 
 	public String getName() {
@@ -62,6 +72,6 @@ public class ETSenderProfile extends BaseSoapSerializableObject implements
 				+ ", modifiedDate=" + modifiedDate + ", customerKey="
 				+ customerKey + "]";
 	}
-	
-    
+
+
 }

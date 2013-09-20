@@ -1,3 +1,13 @@
+//
+// ETCampaignAssetServiceTest.java -
+//
+//      x
+//
+// Copyright (C) 2013 ExactTarget
+//
+// @COPYRIGHT@
+//
+
 package com.exacttarget.fuelsdk.rest;
 
 import java.util.List;

@@ -1,3 +1,13 @@
+//
+// ETEmailSendDefinition.java -
+//
+//      x
+//
+// Copyright (C) 2013 ExactTarget
+//
+// @COPYRIGHT@
+//
+
 package com.exacttarget.fuelsdk.model;
 
 import java.util.List;
@@ -11,70 +21,70 @@ public class ETEmailSendDefinition extends BaseSoapSerializableObject implements
 
 	@InternalSoapField(name = "name")
     protected String name;
-	
+
 	@InternalSoapField(name = "description")
     protected String description;
 
 	@InternalSoapField(name = "categoryID")
     protected Integer categoryID;
-    
+
     @InternalSoapField(name = "sendClassification", serializedName = "SendClassification.CustomerKey")
     protected ETSendClassification sendClassification;
-    
+
     @InternalSoapField(name = "senderProfile", serializedName = "SenderProfile.CustomerKey")
     protected ETSenderProfile senderProfile;
 
     @InternalSoapField(name = "deliveryProfile", serializedName = "DeliveryProfile.CustomerKey")
     protected ETDeliveryProfile deliveryProfile;
-    
+
     @InternalSoapField(name = "sendDefinitionList")
     protected List<ETSendDefinitionList> sendDefinitionList;
-    
+
     @InternalSoapField(name = "suppressTracking")
     protected Boolean suppressTracking;
-    
+
     @InternalSoapField(name = "isSendLogging")
     protected Boolean isSendLogging;
 
     @InternalSoapField(name="email", serializedName = "Email.ID")
     protected ETEmail email;
-    
+
     @InternalSoapField(name = "bccEmail")
     protected String bccEmail;
-    
+
     @InternalSoapField(name = "autoBccEmail")
     protected String autoBccEmail;
-    
+
     @InternalSoapField(name = "testEmailAddr")
     protected String testEmailAddr;
-    
+
     @InternalSoapField(name = "emailSubject")
     protected String emailSubject;
-    
+
     @InternalSoapField(name = "dynamicEmailSubject")
     protected String dynamicEmailSubject;
-    
+
     @InternalSoapField(name = "isMultipart")
     protected Boolean isMultipart;
-    
+
     @InternalSoapField(name = "isWrapped")
     protected Boolean isWrapped;
-    
+
     @InternalSoapField(name = "sendLimit")
     protected Integer sendLimit;
-    
+
     //@InternalSoapField(name = "sendWindowOpen")
     //protected XMLGregorianCalendar sendWindowOpen;
-    
+
     //@InternalSoapField(name = "sendWindowClose")
     //protected XMLGregorianCalendar sendWindowClose;
-    
+
     @InternalSoapField(name = "deduplicateByEmail")
     protected Boolean deduplicateByEmail;
-    
+
     @InternalSoapField(name = "exclusionFilter")
     protected String exclusionFilter;
-    
+
     @InternalSoapField(name = "additional")
     protected String additional;
 
@@ -268,6 +278,6 @@ public class ETEmailSendDefinition extends BaseSoapSerializableObject implements
 				+ modifiedDate + ", customerKey=" + customerKey + "]";
 	}
 
-    
-    
+
+
 }

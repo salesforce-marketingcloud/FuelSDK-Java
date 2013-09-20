@@ -1,3 +1,13 @@
+//
+// ETSimpleFilter.java -
+//
+//      x
+//
+// Copyright (C) 2013 ExactTarget
+//
+// @COPYRIGHT@
+//
+
 package com.exacttarget.fuelsdk.filter;
 
 import java.util.Arrays;
@@ -6,21 +16,21 @@ import java.util.List;
 
 public class ETSimpleFilter implements ETFilter {
 
-	
+
 	protected String property;
 	protected ETFilterOperators operator;
 	protected List<String> values;
 	protected List<Date> dateValues;
-	
+
 	public ETSimpleFilter(){
-		
+
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public ETSimpleFilter(String property, ETFilterOperators operator, @SuppressWarnings("rawtypes") List values) {
 		this.property = property;
 		this.operator = operator;
-		
+
 		if (values.size() > 0) {
 			Object o = values.get(0);
 			if (o instanceof String) {
@@ -29,15 +39,15 @@ public class ETSimpleFilter implements ETFilter {
 				this.dateValues = (List<Date>)values;
 			}
 		}
-		
+
 	}
-	
+
 	public ETSimpleFilter(String property, ETFilterOperators operator, String value) {
 		this.property = property;
 		this.operator = operator;
 		this.values = Arrays.asList(value);
 	}
-	
+
 	public ETSimpleFilter(String property, ETFilterOperators operator, Date value) {
 		this.property = property;
 		this.operator = operator;
@@ -75,6 +85,6 @@ public class ETSimpleFilter implements ETFilter {
 	public void setDateValues(List<Date> dateValues) {
 		this.dateValues = dateValues;
 	}
-	
-	
+
+
 }

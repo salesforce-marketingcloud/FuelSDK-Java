@@ -1,3 +1,13 @@
+//
+// ETPermission.java -
+//
+//      x
+//
+// Copyright (C) 2013 ExactTarget
+//
+// @COPYRIGHT@
+//
+
 package com.exacttarget.fuelsdk.model;
 
 import com.exacttarget.fuelsdk.annotations.InternalSoapField;
@@ -10,25 +20,25 @@ public class ETPermission extends BaseSoapSerializableObject implements
 
 	@InternalSoapField(name="name")
     protected String name;
-    
+
 	@InternalSoapField(name="description")
 	protected String description;
-	
+
 	@InternalSoapField(name="objectType")
     protected String objectType;
-	
+
 	@InternalSoapField(name="operation")
     protected String operation;
-	
+
 	@InternalSoapField(name="isShareable")
     protected Boolean isShareable;
-	
+
 	@InternalSoapField(name="isAllowed")
     protected Boolean isAllowed;
-	
+
 	@InternalSoapField(name="isDenied")
     protected Boolean isDenied;
-	
+
 	public ETPermission() {}
 
 	public String getName() {
@@ -96,6 +106,6 @@ public class ETPermission extends BaseSoapSerializableObject implements
 				+ createdDate + ", modifiedDate=" + modifiedDate
 				+ ", customerKey=" + customerKey + "]";
 	}
-	
-	
+
+
 }

@@ -1,3 +1,13 @@
+//
+// ETSendClassification.java -
+//
+//      x
+//
+// Copyright (C) 2013 ExactTarget
+//
+// @COPYRIGHT@
+//
+
 package com.exacttarget.fuelsdk.model;
 
 import com.exacttarget.fuelsdk.annotations.InternalSoapField;
@@ -8,31 +18,31 @@ import com.exacttarget.fuelsdk.internal.SendClassification;
 @InternalSoapType(type = SendClassification.class, ignoredFields = {"SenderProfile","DeliveryProfile","SendPriority","ID"})
 public class ETSendClassification extends BaseSoapSerializableObject implements
 		ETObject {
-	
+
 	@InternalSoapField(name = "sendClassificationType")
     protected ETSendClassificationType sendClassificationType;
-    
+
 	@InternalSoapField(name = "name")
     protected String name;
-    
+
 	@InternalSoapField(name = "description")
     protected String description;
-    
+
 	@InternalSoapField(name = "senderProfile")
     protected ETSenderProfile senderProfile;
-    
+
 	@InternalSoapField(name = "deliveryProfile")
     protected DeliveryProfile deliveryProfile;
-    
+
 	//@InternalSoapField(name = "honorPublicationListOptOutsForTransactionalSends")
     protected Boolean honorPublicationListOptOutsForTransactionalSends;
-    
+
 	@InternalSoapField(name = "sendPriority")
     protected ETSendPriority sendPriority;
-    
+
 	//@InternalSoapField(name = "archiveEmail")
     protected Boolean archiveEmail;
-	
+
 	public ETSendClassification() {}
 
 	public ETSendClassificationType getSendClassificationType() {
@@ -114,6 +124,6 @@ public class ETSendClassification extends BaseSoapSerializableObject implements
 				+ ", modifiedDate=" + modifiedDate + ", customerKey="
 				+ customerKey + "]";
 	}
-	
-	
+
+
 }

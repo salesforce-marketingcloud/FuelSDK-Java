@@ -5,8 +5,6 @@
 //
 // Copyright (C) 2013 ExactTarget
 //
-// Author(s): Ian Murdock <imurdock@exacttarget.com>
-//
 
 package com.exacttarget.fuelsdk.soap;
 
@@ -39,7 +37,7 @@ public class ETServiceResponseImpl<T extends ETObject>
 	public boolean hasMoreResults() {
 		return moreResults;
 	}
-	
+
 	public void setMoreResults(boolean moreResults) {
 		this.moreResults = moreResults;
 	}
@@ -47,7 +45,7 @@ public class ETServiceResponseImpl<T extends ETObject>
 	public boolean getStatus() {
 		return status;
 	}
-	
+
 	public void setStatus(boolean status) {
 		this.status = status;
 	}

@@ -5,8 +5,6 @@
 //
 // Copyright (C) 2013 ExactTarget
 //
-// Author(s): Ian Murdock <imurdock@exacttarget.com>
-//
 
 package com.exacttarget.fuelsdk.rest;
 
@@ -70,7 +68,7 @@ public class ETRestConnection {
         connection.disconnect();
         return response;
     }
-    
+
     public String delete(String path) throws ETSdkException
     {
     	HttpURLConnection connection = sendRequest(path, "DELETE");
@@ -103,7 +101,7 @@ public class ETRestConnection {
     private HttpURLConnection sendRequest(URL url, String method, String payload) throws ETSdkException
     {
         logger.trace(method + " " + url);
-        
+
         HttpURLConnection connection = null;
         try {
             connection = (HttpURLConnection) url.openConnection();
@@ -117,7 +115,7 @@ public class ETRestConnection {
             } catch (ProtocolException ex) {
                 throw new ETSdkException("error setting request method: GET", ex);
             }
-            
+
             connection.setDoInput(true);
             connection.setRequestProperty("Accept", "application/json");
         } else if (method.equals("POST")) {
@@ -143,7 +141,7 @@ public class ETRestConnection {
         }
 
         String accessToken = client.getAccessToken();
-        
+
         if (accessToken != null) {
             connection.setRequestProperty("Authorization", "Bearer " + accessToken);
         }
@@ -174,7 +172,7 @@ public class ETRestConnection {
 
         try {
             logger.trace(connection.getResponseCode() + " " + connection.getResponseMessage());
-            
+
         } catch (IOException ex) {
             throw new ETSdkException("error getting response code / message", ex);
         }

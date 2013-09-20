@@ -1,3 +1,13 @@
+//
+// ETDataExtensionRowService.java -
+//
+//      x
+//
+// Copyright (C) 2013 ExactTarget
+//
+// @COPYRIGHT@
+//
+
 package com.exacttarget.fuelsdk;
 
 import java.util.List;
@@ -9,16 +19,16 @@ public interface ETDataExtensionRowService extends ETCrudService {
 
 	public ETServiceResponse<ETDataExtensionRow> get(ETClient client, String dataExtensionCustomerKey, List<String> columns)
 			throws ETSdkException;
-	
+
 	public ETServiceResponse<ETDataExtensionRow> get(ETClient client, String dataExtensionCustomerKey, List<String> columns, ETFilter filter)
 	        throws ETSdkException;
-	
+
 	public ETServiceResponse<ETDataExtensionRow> post(ETClient client, ETDataExtensionRow row)
 	    	throws ETSdkException;
-	
+
     public ETServiceResponse<ETDataExtensionRow> patch(ETClient client, ETDataExtensionRow row)
     		throws ETSdkException;
-    
+
     public ETServiceResponse<ETDataExtensionRow> delete(ETClient client, ETDataExtensionRow row)
 	    	throws ETSdkException;
 }

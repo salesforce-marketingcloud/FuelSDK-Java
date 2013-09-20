@@ -1,3 +1,13 @@
+//
+// ETDataExtensionColumn.java -
+//
+//      x
+//
+// Copyright (C) 2013 ExactTarget
+//
+// @COPYRIGHT@
+//
+
 package com.exacttarget.fuelsdk.model;
 
 import com.exacttarget.fuelsdk.annotations.InternalSoapField;
@@ -6,85 +16,85 @@ import com.exacttarget.fuelsdk.internal.DataExtensionField;
 
 @InternalSoapType(type = DataExtensionField.class, ignoredFields = {"DataExtension","IsCreatable","IsUpdatable","IsRetrievable","PartnerMap","Precision","Label","Description","MinLength","MinValue","MaxValue","IsViewable","IsEditable","IsRestrictedPicklist","IsSendTime","DisplayOrder","Status"})
 public class ETDataExtensionColumn implements ETObject {
-	
+
 	@InternalSoapField(name="name")
 	private String name;
-	
+
 	@InternalSoapField(name="ordinal")
 	private Integer ordinal;
-    
+
 	@InternalSoapField(name="isPrimaryKey")
 	private Boolean isPrimaryKey;
-    
+
 	@InternalSoapField(name="fieldType")
 	private ETDataExtensionFieldType fieldType;
-    
+
 	@InternalSoapField(name="dataExtension")
 	private ETDataExtension dataExtension;
-	
+
 	@InternalSoapField(name="isCreatable")
 	private Boolean isCreatable;
-	
+
 	@InternalSoapField(name="isUpdatable")
 	private Boolean isUpdatable;
-	
+
 	@InternalSoapField(name="isRetrievable")
 	private Boolean isRetrievable;
-	
+
 	@InternalSoapField(name="partnerMap")
 	private String partnerMap;
-	
+
 	@InternalSoapField(name="precision")
 	private Integer precision;
-	
+
 	@InternalSoapField(name="scale")
 	private Integer scale;
-	
+
 	@InternalSoapField(name="label")
 	private String label;
-	
+
 	@InternalSoapField(name="description")
 	private String description;
-	
+
 	@InternalSoapField(name="defaultValue")
 	private String defaultValue;
-	
+
 	@InternalSoapField(name="minLength")
 	private Integer minLength;
-	
+
 	@InternalSoapField(name="maxLength")
 	private Integer maxLength;
-	
+
 	@InternalSoapField(name="minValue")
 	private String minValue;
-	
+
 	@InternalSoapField(name="maxValue")
 	private String maxValue;
-	
+
 	@InternalSoapField(name="isRequired")
 	private Boolean isRequired;
-	
+
 	@InternalSoapField(name="isViewable")
 	private Boolean isViewable;
-	
+
 	@InternalSoapField(name="isEditable")
 	private Boolean isEditable;
-	
+
 	@InternalSoapField(name="isRestrictedPicklist")
 	private Boolean isRestrictedPicklist;
-	
+
 	//@InternalSoapField(name="isPrimaryKey")
     //private PropertyDefinition.PicklistItems picklistItems;
-	
+
 	@InternalSoapField(name="isSendTime")
 	private Boolean isSendTime;
-	
+
 	@InternalSoapField(name="displayOrder")
 	private Integer displayOrder;
-	
+
 	@InternalSoapField(name="status")
     private String status;
-	
+
 	public ETDataExtensionColumn() {}
 
 	public String getName() {
@@ -304,6 +314,6 @@ public class ETDataExtensionColumn implements ETObject {
 				+ ", isSendTime=" + isSendTime + ", displayOrder="
 				+ displayOrder + ", status=" + status + "]";
 	}
-	
-	
+
+
 }

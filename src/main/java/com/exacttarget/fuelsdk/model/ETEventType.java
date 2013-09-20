@@ -1,8 +1,18 @@
+//
+// ETEventType.java -
+//
+//      x
+//
+// Copyright (C) 2013 ExactTarget
+//
+// @COPYRIGHT@
+//
+
 package com.exacttarget.fuelsdk.model;
 
 
 public enum ETEventType {
-    
+
 	OPEN("Open"),
     CLICK("Click"),
     HARD_BOUNCE("HardBounce"),

@@ -5,7 +5,7 @@
 //
 // Copyright (C) 2013 ExactTarget
 //
-// Author(s): Ian Murdock <imurdock@exacttarget.com>
+// @COPYRIGHT@
 //
 
 package com.exacttarget.fuelsdk;

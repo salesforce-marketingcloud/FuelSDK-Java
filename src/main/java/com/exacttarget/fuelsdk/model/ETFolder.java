@@ -1,3 +1,13 @@
+//
+// ETFolder.java -
+//
+//      x
+//
+// Copyright (C) 2013 ExactTarget
+//
+// @COPYRIGHT@
+//
+
 package com.exacttarget.fuelsdk.model;
 
 import com.exacttarget.fuelsdk.annotations.InternalSoapField;
@@ -20,7 +30,7 @@ public class ETFolder extends BaseSoapSerializableObject implements ETObject {
 	protected String name;
     @InternalSoapField(name="parentFolder", serializedName="parentFolder.id")
 	protected ETFolder parentFolder;
-    
+
     public ETFolder() {
     	this.active = true;
     	this.editable = true;

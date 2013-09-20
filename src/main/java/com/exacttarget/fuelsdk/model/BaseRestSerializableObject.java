@@ -1,17 +1,27 @@
+//
+// BaseRestSerializableObject.java -
+//
+//      x
+//
+// Copyright (C) 2013 ExactTarget
+//
+// @COPYRIGHT@
+//
+
 package com.exacttarget.fuelsdk.model;
 
 import com.exacttarget.fuelsdk.annotations.InternalRestField;
 
 public abstract class BaseRestSerializableObject {
-	
+
 	/** The id. */
 	@InternalRestField(jsonKey = "id")
 	protected String id;
-	
+
 	/** The created date. */
 	@InternalRestField(jsonKey = "createdDate")
 	protected String createdDate;
-	
+
 	/** The modified date. */
 	@InternalRestField(jsonKey = "modifiedDate")
 	protected String modifiedDate;
@@ -76,7 +86,7 @@ public abstract class BaseRestSerializableObject {
 	public void setModifiedDate(String modifiedDate) {
 		this.modifiedDate = modifiedDate;
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */
@@ -84,6 +94,6 @@ public abstract class BaseRestSerializableObject {
 	public String toString() {
 		return "id=" + id + ", createdDate=" + createdDate + ", modifiedDate=" + modifiedDate;
 	}
-	
+
 	public abstract String getRequestBody();
 }

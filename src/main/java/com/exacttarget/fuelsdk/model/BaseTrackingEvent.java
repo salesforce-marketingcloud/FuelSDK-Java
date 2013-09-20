@@ -1,3 +1,13 @@
+//
+// BaseTrackingEvent.java -
+//
+//      x
+//
+// Copyright (C) 2013 ExactTarget
+//
+// @COPYRIGHT@
+//
+
 package com.exacttarget.fuelsdk.model;
 
 import java.util.Date;
@@ -8,22 +18,22 @@ public abstract class BaseTrackingEvent extends BaseSoapSerializableObject {
 
 	@InternalSoapField(name="sendID")
 	 private Integer sendId;
-	 
+
 	 @InternalSoapField(name="subscriberKey")
 	 private String subscriberKey;
-	 
+
 	 @InternalSoapField(name="eventDate")
 	 private Date eventDate;
-	
+
 	 @InternalSoapField(name="eventType")
 	 private ETEventType eventType;
-	
+
 	 @InternalSoapField(name="batchID")
 	 private Integer batchId;
-	 
+
 	 @InternalSoapField(name="triggeredSendDefinitionObjectID")
 	 private Integer triggeredSendDefinitionObjectId;
-	 
+
 	 //@InternalSoapField(name="partnerKey")
 	 private String partnerKey;
 
@@ -95,6 +105,6 @@ public abstract class BaseTrackingEvent extends BaseSoapSerializableObject {
 				+ ", modifiedDate=" + modifiedDate + ", customerKey="
 				+ customerKey + "]";
 	}
-	
-	
+
+
 }

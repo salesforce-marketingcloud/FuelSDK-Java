@@ -1,3 +1,13 @@
+//
+// ETSendDefinitionList.java -
+//
+//      x
+//
+// Copyright (C) 2013 ExactTarget
+//
+// @COPYRIGHT@
+//
+
 package com.exacttarget.fuelsdk.model;
 
 import com.exacttarget.fuelsdk.annotations.InternalSoapField;
@@ -8,34 +18,34 @@ import com.exacttarget.fuelsdk.internal.SendDefinitionList;
 @InternalSoapType(type = SendDefinitionList.class)
 public class ETSendDefinitionList extends BaseSoapSerializableObject implements
 		ETObject {
-	
+
 	@InternalSoapField(name = "list")
     private ETList list;
-    
+
 	@InternalSoapField(name = "sendDefinitionListType")
 	private ETSendDefinitionListType sendDefinitionListType;
-	
+
 	@InternalSoapField(name = "customObjectID")
     private String customObjectID;
-	
+
 	@InternalSoapField(name = "dataSourceTypeID")
     private ETDataSourceType dataSourceTypeID;
-	
+
 	@InternalSoapField(name = "filterDefinition")
     private FilterDefinition filterDefinition;
-	
+
 	@InternalSoapField(name = "isTestObject")
     private Boolean isTestObject;
-	
+
 	@InternalSoapField(name = "salesForceObjectID")
     private String salesForceObjectID;
-	
+
 	@InternalSoapField(name = "name")
     private String name;
-	
+
 	//@InternalSoapField(name = "list")
     //private SendDefinitionList.Parameters parameters;
-	
+
 	public ETSendDefinitionList() {}
 
 	public ETList getList() {
@@ -114,7 +124,7 @@ public class ETSendDefinitionList extends BaseSoapSerializableObject implements
 				+ ", createdDate=" + createdDate + ", modifiedDate="
 				+ modifiedDate + ", customerKey=" + customerKey + "]";
 	}
-	
-	
+
+
 
 }

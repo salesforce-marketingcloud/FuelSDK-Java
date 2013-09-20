@@ -1,3 +1,11 @@
+//
+// InternalRestType.java -
+//
+//      x
+//
+// Copyright (C) 2013 ExactTarget
+//
+
 package com.exacttarget.fuelsdk.annotations;
 
 import java.lang.annotation.ElementType;

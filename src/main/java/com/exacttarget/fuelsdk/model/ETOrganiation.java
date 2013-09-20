@@ -1,3 +1,13 @@
+//
+// ETOrganization.java -
+//
+//      x
+//
+// Copyright (C) 2013 ExactTarget
+//
+// @COPYRIGHT@
+//
+
 package com.exacttarget.fuelsdk.model;
 
 import java.util.Date;
@@ -13,76 +23,76 @@ public class ETOrganiation extends BaseSoapSerializableObject implements
 
 	@InternalSoapField(name="accountType")
 	private ETAccountType accountType;
-	
+
 	@InternalSoapField(name="name")
 	private String name;
-	
+
 	@InternalSoapField(name="address")
 	private String address;
-	
+
 	@InternalSoapField(name="brandID")
 	private Integer brandId;
-	
+
 	@InternalSoapField(name="businessName")
 	private String businessName;
-	
+
 	@InternalSoapField(name="city")
 	private String city;
-	
+
 	@InternalSoapField(name="country")
 	private String country;
-	
+
 	@InternalSoapField(name="deletedDate")
 	private Date deletedDate;
-	
+
 	@InternalSoapField(name="editionID")
 	private Integer editionId;
-	
+
 	@InternalSoapField(name="email")
 	private String email;
-	
+
 	@InternalSoapField(name="fax")
 	private String fax;
 
 	@InternalSoapField(name="fromName")
 	private String fromName;
-	
+
 	@InternalSoapField(name="inheritAddress")
 	private Boolean inheritAddress;
-	
+
 	@InternalSoapField(name="isActive")
 	private Boolean isActive;
-	
+
 	@InternalSoapField(name="isTestAccount")
 	private Boolean isTestAccount;
-	
+
 	@InternalSoapField(name="isTrialAccount")
 	private Boolean isTrialAccount;
-	
+
 	@InternalSoapField(name="parentAccount", serializedName="ParentAccount.id")
 	private ETOrganiation parentOrganization;
-	
+
 	@InternalSoapField(name="parentID")
 	private Integer parentId;
-	
+
 	@InternalSoapField(name="parentName")
 	private String parentName;
-	
+
 	@InternalSoapField(name="phone")
 	private String phone;
-	
+
 	@InternalSoapField(name="privateLabelID")
 	private Integer privateLabelId;
-	
+
 	@InternalSoapField(name="roles")
 	private List<ETRole> roles;
-	
+
 	@InternalSoapField(name="state")
 	private String state;
-	
+
 	@InternalSoapField(name="zip")
 	private String zip;
-	
+
 	public ETOrganiation(){ }
 
 	public ETAccountType getAccountType() {
@@ -295,8 +305,8 @@ public class ETOrganiation extends BaseSoapSerializableObject implements
 				+ ", modifiedDate=" + modifiedDate + ", customerKey="
 				+ customerKey + "]";
 	}
-	
-	
+
+
 }
 
 

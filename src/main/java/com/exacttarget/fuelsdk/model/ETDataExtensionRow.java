@@ -1,3 +1,13 @@
+//
+// ETDataExtensionRow.java -
+//
+//      x
+//
+// Copyright (C) 2013 ExactTarget
+//
+// @COPYRIGHT@
+//
+
 package com.exacttarget.fuelsdk.model;
 
 import java.util.Map;
@@ -11,13 +21,13 @@ public class ETDataExtensionRow extends BaseSoapSerializableObject implements ET
 
 	@InternalSoapField(name="name")
     private String name;
-	
+
 	@InternalSoapField(name="keys")
     private Map<String, String> keys;
-    
+
 	@InternalSoapField(name="properties")
     protected Map<String, String> columns;
-	
+
 	public ETDataExtensionRow() {}
 
 	public String getName() {
@@ -51,6 +61,6 @@ public class ETDataExtensionRow extends BaseSoapSerializableObject implements ET
 				+ createdDate + ", modifiedDate=" + modifiedDate
 				+ ", customerKey=" + customerKey + "]";
 	}
-	
-	
+
+
 }

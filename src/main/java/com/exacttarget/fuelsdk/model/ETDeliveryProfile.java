@@ -1,3 +1,13 @@
+//
+// ETDeliveryProfile.java -
+//
+//      x
+//
+// Copyright (C) 2013 ExactTarget
+//
+// @COPYRIGHT@
+//
+
 package com.exacttarget.fuelsdk.model;
 
 import com.exacttarget.fuelsdk.annotations.InternalSoapField;
@@ -9,28 +19,28 @@ public class ETDeliveryProfile extends BaseSoapSerializableObject implements ETO
 
 	@InternalSoapField(name = "name")
     protected String name;
-	
+
 	@InternalSoapField(name = "description")
     protected String description;
-	
+
 	@InternalSoapField(name = "sourceAddressType")
     protected ETDeliveryProfileSourceAddressType sourceAddressType;
-	
+
 	@InternalSoapField(name = "privateIP")
     protected String privateIP;
-	
+
 	@InternalSoapField(name = "domainType")
     protected ETDeliveryProfileDomainType domainType;
-	
+
 	//@InternalSoapField(name = "privateDomain")
     //protected PrivateDomain privateDomain;
-	
+
 	@InternalSoapField(name = "headerSalutationSource")
     protected ETSalutationSource headerSalutationSource;
-	
+
 	@InternalSoapField(name = "footerSalutationSource")
     protected ETSalutationSource footerSalutationSource;
-	
+
 	public ETDeliveryProfile() {}
 
 	public String getName() {
@@ -101,7 +111,7 @@ public class ETDeliveryProfile extends BaseSoapSerializableObject implements ETO
 				+ ", modifiedDate=" + modifiedDate + ", customerKey="
 				+ customerKey + "]";
 	}
-	
-	
-	
+
+
+
 }

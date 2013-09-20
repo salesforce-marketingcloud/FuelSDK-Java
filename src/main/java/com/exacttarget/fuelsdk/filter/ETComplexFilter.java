@@ -1,3 +1,13 @@
+//
+// ETComplexFilter.java -
+//
+//      x
+//
+// Copyright (C) 2013 ExactTarget
+//
+// @COPYRIGHT@
+//
+
 package com.exacttarget.fuelsdk.filter;
 
 import java.util.List;
@@ -8,9 +18,9 @@ public class ETComplexFilter implements ETFilter {
 	protected ETFilter rightOperand;
 	protected ETLogicalOperators operator;
 	protected List<ETFilter> additionalOperands;
-	
+
 	public ETComplexFilter(){
-		
+
 	}
 
 	public ETComplexFilter(ETFilter leftOperand, ETFilter rightOperand,
@@ -20,7 +30,7 @@ public class ETComplexFilter implements ETFilter {
 		this.rightOperand = rightOperand;
 		this.operator = operator;
 	}
-	
+
 
 	public ETComplexFilter(ETFilter leftOperand, ETFilter rightOperand,
 			ETLogicalOperators operator, List<ETFilter> additionalOperands) {
@@ -69,5 +79,5 @@ public class ETComplexFilter implements ETFilter {
 				+ ", rightOperand=" + rightOperand + ", operator=" + operator
 				+ ", additionalOperands=" + additionalOperands + "]";
 	}
-	
+
 }

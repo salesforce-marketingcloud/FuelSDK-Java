@@ -1,3 +1,13 @@
+//
+// ObjectConverter.java -
+//
+//      x
+//
+// Copyright (C) 2013 ExactTarget
+//
+// @COPYRIGHT@
+//
+
 package com.exacttarget.fuelsdk.model.converter;
 
 import java.lang.reflect.Field;
@@ -97,7 +107,7 @@ public class ObjectConverter {
         convertUtils.register(new ETEnumConverter(), ETDataSourceType.class);
         convertUtils.register(new ETEnumConverter(), ETSendDefinitionListType.class);
         convertUtils.register(new ETEnumConverter(), AccountTypeEnum.class);
-        
+
         // Convert ET Objects
         convertUtils.register(new ETObjectConverter(), ETFolder.class);
         convertUtils.register(new ETObjectConverter(), ETSendClassification.class);
@@ -108,7 +118,7 @@ public class ObjectConverter {
         convertUtils.register(new ETObjectConverter(), ETSubscriberList.class);
         convertUtils.register(new ETObjectConverter(), ETListSubscriber.class);
         convertUtils.register(new ETObjectConverter(), ETList.class);
-        
+
         // Convert API Objects
         convertUtils.register(new ETObjectConverter(), DataFolder.class);
         convertUtils.register(new ETObjectConverter(), SendClassification.class);
@@ -121,8 +131,8 @@ public class ObjectConverter {
         convertUtils.register(new ETObjectConverter(), ObjectExtension.Properties.class);
         convertUtils.register(new ETObjectConverter(), ETDataExtensionColumn[].class);
         convertUtils.register(new ETObjectConverter(), Map.class);
-        
-        
+
+
         // By default, IntegerConverter sets nulls as 0
         convertUtils.register(new IntegerConverter(null), Integer.class);
     }
@@ -146,10 +156,10 @@ public class ObjectConverter {
         T out = toType.newInstance();
 
         for(Map.Entry<String, String> props : createInternalToETPropertyMap(new HashMap<String, String>(), o.getClass(), isPatch).entrySet()) {
-        	
+
         	String propertyName = resolvePropertyName(props.getKey());
         	Object prop = PropertyUtils.getProperty(out, propertyName);
-        	
+
         	if (null != prop && prop.getClass() == ArrayList.class) {
         		ArrayList<APIObject> propList = (ArrayList<APIObject>)prop;
         		Collection<ETObject> fromCollection = (Collection<ETObject>) PropertyUtils.getProperty(o, props.getValue());
@@ -158,7 +168,7 @@ public class ObjectConverter {
 	        			propList.add(convertFromEtObject(etObject,(Class<T>) ((ParameterizedType) out.getClass().getDeclaredField(propertyName).getGenericType()).getActualTypeArguments()[0], isPatch));
 	        		}
         		}
-        		
+
         	} else {
         		BeanUtils.setProperty(out, propertyName, PropertyUtils.getProperty(o, props.getValue()));
         	}
@@ -178,7 +188,7 @@ public class ObjectConverter {
 		Class internalType = classAnnotation.type();
 
         java.util.List<String> names = new java.util.ArrayList<String>();
-        
+
         java.util.List<Field> fields = new ArrayList<Field>(Arrays.asList(type.getDeclaredFields()));
         if (null != type.getSuperclass()) {
 			Class superType = type.getSuperclass();
@@ -236,7 +246,7 @@ public class ObjectConverter {
     }
 
     protected static String resolvePropertyName(String beanPropertyName) {
-    	
+
     	if (beanPropertyName.equals("id")) {
     		return "ID";
     	} else if (beanPropertyName.equals("htmlBody")) {
@@ -246,5 +256,5 @@ public class ObjectConverter {
     	}
     	return beanPropertyName;
     }
-    
+
 }

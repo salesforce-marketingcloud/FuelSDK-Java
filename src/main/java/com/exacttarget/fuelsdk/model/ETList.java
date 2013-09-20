@@ -5,8 +5,6 @@
 //
 // Copyright (C) 2013 ExactTarget
 //
-// Author(s): Ian Murdock <imurdock@exacttarget.com>
-//
 
 package com.exacttarget.fuelsdk.model;
 
@@ -55,7 +53,7 @@ public class ETList extends BaseSoapSerializableObject implements ETObject
 	public void setListType(ETListType listType) {
 		this.listType = listType;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "ETList [id=" + id + ", categoryId=" + categoryId + ", customerKey="

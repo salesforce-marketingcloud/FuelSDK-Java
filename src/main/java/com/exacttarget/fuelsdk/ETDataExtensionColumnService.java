@@ -1,3 +1,13 @@
+//
+// ETDataExtensionColumnService.java -
+//
+//      x
+//
+// Copyright (C) 2013 ExactTarget
+//
+// @COPYRIGHT@
+//
+
 package com.exacttarget.fuelsdk;
 
 import com.exacttarget.fuelsdk.filter.ETFilter;
@@ -7,8 +17,8 @@ public interface ETDataExtensionColumnService extends ETGetService {
 
 	public ETServiceResponse<ETDataExtensionColumn> get(ETClient client)
 	        throws ETSdkException;
-	
+
 	public ETServiceResponse<ETDataExtensionColumn> get(ETClient client, ETFilter filter)
 	        throws ETSdkException;
-	
+
 }

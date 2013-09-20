@@ -1,3 +1,13 @@
+//
+// ETEmail.java -
+//
+//      x
+//
+// Copyright (C) 2013 ExactTarget
+//
+// @COPYRIGHT@
+//
+
 package com.exacttarget.fuelsdk.model;
 
 import com.exacttarget.fuelsdk.annotations.InternalSoapField;
@@ -108,5 +118,5 @@ public class ETEmail extends BaseSoapSerializableObject implements ETObject {
             + ", name=" + name + ", status=" + status + ", subject="
             + subject + ", textBody=" + textBody + "]";
 	}
-	
+
 }
