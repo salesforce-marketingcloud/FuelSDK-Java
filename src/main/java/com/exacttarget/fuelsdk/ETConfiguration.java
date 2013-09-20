@@ -14,19 +14,24 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class ETConfiguration {
+    private static final String DEFAULT_FILE_NAME = "/fuelsdk.properties";
     private String endpoint = null;
     private String authEndpoint = null;
     private String soapEndpoint = null;
     private String clientId = null;
     private String clientSecret = null;
 
-    public ETConfiguration() {}
+    public ETConfiguration()
+        throws ETSdkException
+    {
+        this(DEFAULT_FILE_NAME);
+    }
 
     public ETConfiguration(String file)
         throws ETSdkException
     {
         if (file == null) {
-            file = "/fuelsdk.properties";
+            file = DEFAULT_FILE_NAME;
         }
         Properties properties = new Properties();
         try {
