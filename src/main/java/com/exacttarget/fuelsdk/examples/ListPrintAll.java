@@ -1,12 +1,11 @@
 //
-// PrintAllLists.java -
+// ListPrintAll.java -
 //
-//      Prints the names of all lists in the ExactTarget account
-//      represented by the specified CLIENT_ID and CLIENT_SECRET.
+//      x
 //
 // Copyright (C) 2013 ExactTarget
 //
-// Author(s): Ian Murdock <imurdock@exacttarget.com>
+// @COPYRIGHT@
 //
 
 package com.exacttarget.fuelsdk.examples;
@@ -18,14 +17,28 @@ import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.ETServiceResponse;
 import com.exacttarget.fuelsdk.model.ETList;
 
-public class PrintAllLists {
+public class ListPrintAll {
+    private static final String NAME = ListPrintAll.class.getSimpleName();
+    private static final String[] ARGS = {};
+
     public static void main(String[] args)
         throws ETSdkException
     {
-        ETConfiguration configuration
-            = new ETConfiguration("/fuelsdk-test.properties");
+        if (args.length != ARGS.length) {
+            System.out.print("Usage: " + NAME);
+            for (String arg : ARGS) {
+                System.out.print(" " + arg);
+            }
+            System.out.println();
+            System.exit(1);
+        }
+
+        ETConfiguration configuration = new ETConfiguration();
+
         ETClient client = new ETClient(configuration);
+
         ETListService service = client.getListService();
+
         ETServiceResponse<ETList> response = service.get(client);
         for (ETList list : response.getResults()) {
             System.out.println(list.getName());
