@@ -16,7 +16,7 @@ import com.exacttarget.fuelsdk.internal.FilterDefinition;
 import com.exacttarget.fuelsdk.internal.SendDefinitionList;
 
 @InternalSoapType(type = SendDefinitionList.class)
-public class ETSendDefinitionList extends BaseSoapSerializableObject implements
+public class ETSendDefinitionList extends ETSoapObject implements
 		ETObject {
 
 	@InternalSoapField(name = "list")

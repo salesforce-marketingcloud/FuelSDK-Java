@@ -14,7 +14,7 @@ import java.util.Date;
 
 import com.exacttarget.fuelsdk.annotations.InternalSoapField;
 
-public abstract class BaseTrackingEvent extends BaseSoapSerializableObject {
+public abstract class BaseTrackingEvent extends ETSoapObject {
 
 	@InternalSoapField(name="sendID")
 	 private Integer sendId;

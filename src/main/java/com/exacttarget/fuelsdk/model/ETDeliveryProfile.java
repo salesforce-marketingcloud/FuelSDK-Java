@@ -15,7 +15,7 @@ import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.DeliveryProfile;
 
 @InternalSoapType(type = DeliveryProfile.class)
-public class ETDeliveryProfile extends BaseSoapSerializableObject implements ETObject{
+public class ETDeliveryProfile extends ETSoapObject implements ETObject{
 
 	@InternalSoapField(name = "name")
     protected String name;

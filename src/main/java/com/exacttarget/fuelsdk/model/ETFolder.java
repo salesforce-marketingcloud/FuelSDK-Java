@@ -15,7 +15,7 @@ import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.DataFolder;
 
 @InternalSoapType(type = DataFolder.class)
-public class ETFolder extends BaseSoapSerializableObject implements ETObject {
+public class ETFolder extends ETSoapObject implements ETObject {
     @InternalSoapField(name="allowChildren")
     protected Boolean allowChildren;
     @InternalSoapField(name="contentType")

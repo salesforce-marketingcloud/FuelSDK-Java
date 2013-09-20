@@ -15,7 +15,7 @@ import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.Email;
 
 @InternalSoapType(type = Email.class)
-public class ETEmail extends BaseSoapSerializableObject implements ETObject {
+public class ETEmail extends ETSoapObject implements ETObject {
     @InternalSoapField(name="characterSet")
 	protected String characterSet;
     @InternalSoapField(name="contentCheckStatus")

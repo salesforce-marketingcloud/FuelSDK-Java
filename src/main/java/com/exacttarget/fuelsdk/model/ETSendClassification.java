@@ -16,7 +16,7 @@ import com.exacttarget.fuelsdk.internal.DeliveryProfile;
 import com.exacttarget.fuelsdk.internal.SendClassification;
 
 @InternalSoapType(type = SendClassification.class, ignoredFields = {"SenderProfile","DeliveryProfile","SendPriority","ID"})
-public class ETSendClassification extends BaseSoapSerializableObject implements
+public class ETSendClassification extends ETSoapObject implements
 		ETObject {
 
 	@InternalSoapField(name = "sendClassificationType")

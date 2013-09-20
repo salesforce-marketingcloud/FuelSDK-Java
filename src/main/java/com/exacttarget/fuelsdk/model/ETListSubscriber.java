@@ -15,7 +15,7 @@ import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.ListSubscriber;
 
 @InternalSoapType(type = ListSubscriber.class, ignoredFields = {"CustomerKey"})
-public class ETListSubscriber extends BaseSoapSerializableObject implements ETObject {
+public class ETListSubscriber extends ETSoapObject implements ETObject {
     @InternalSoapField(name="listID")
 	protected Integer listId;
     @InternalSoapField(name="status")

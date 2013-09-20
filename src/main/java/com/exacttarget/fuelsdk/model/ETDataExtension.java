@@ -17,7 +17,7 @@ import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.DataExtension;
 
 @InternalSoapType(type = DataExtension.class, ignoredFields={"ID", "Fields"})
-public class ETDataExtension extends BaseSoapSerializableObject implements ETObject {
+public class ETDataExtension extends ETSoapObject implements ETObject {
 
 	@InternalSoapField(name="name")
 	private String name;

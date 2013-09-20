@@ -17,7 +17,7 @@ import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.EmailSendDefinition;
 
 @InternalSoapType(type = EmailSendDefinition.class, ignoredFields = {"ID"})
-public class ETEmailSendDefinition extends BaseSoapSerializableObject implements ETObject {
+public class ETEmailSendDefinition extends ETSoapObject implements ETObject {
 
 	@InternalSoapField(name = "name")
     protected String name;

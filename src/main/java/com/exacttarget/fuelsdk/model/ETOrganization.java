@@ -18,7 +18,7 @@ import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.Account;
 
 @InternalSoapType(type = Account.class)
-public class ETOrganization extends BaseSoapSerializableObject implements
+public class ETOrganization extends ETSoapObject implements
 		ETObject {
 
 	@InternalSoapField(name="accountType")

@@ -15,7 +15,7 @@ import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.Permission;
 
 @InternalSoapType(type = Permission.class)
-public class ETPermission extends BaseSoapSerializableObject implements
+public class ETPermission extends ETSoapObject implements
 		ETObject {
 
 	@InternalSoapField(name="name")

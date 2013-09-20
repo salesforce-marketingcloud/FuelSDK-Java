@@ -15,7 +15,7 @@ import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.ContentArea;
 
 @InternalSoapType(type = ContentArea.class)
-public class ETContentArea extends BaseSoapSerializableObject implements ETObject {
+public class ETContentArea extends ETSoapObject implements ETObject {
     @InternalSoapField(name="categoryID")
 	protected Integer categoryId;
     @InternalSoapField(name="content")

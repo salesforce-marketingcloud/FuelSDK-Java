@@ -15,7 +15,7 @@ import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.SubscriberList;
 
 @InternalSoapType(type = SubscriberList.class)
-public class ETSubscriberList extends BaseSoapSerializableObject implements
+public class ETSubscriberList extends ETSoapObject implements
 		ETObject {
 
 	@InternalSoapField(name = "status")
