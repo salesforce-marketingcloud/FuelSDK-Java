@@ -10,29 +10,28 @@
 
 package com.exacttarget.fuelsdk.model;
 
-
 public enum ETListType {
-    PUBLIC("Public"),
-    PRIVATE("Private"),
-    SALES_FORCE("SalesForce"),
     GLOBAL_UNSUBSCRIBE("GlobalUnsubscribe"),
-    MASTER("Master");
+    MASTER("Master"),
+    PRIVATE("Private"),
+    PUBLIC("Public"),
+    SALES_FORCE("SalesForce");
     private final String value;
 
-    ETListType(String v) {
-        value = v;
+    ETListType(String value) {
+        this.value = value;
     }
 
     public String value() {
         return value;
     }
 
-    public static ETListType fromValue(String v) {
-        for (ETListType c: ETListType.values()) {
-            if (c.value.equals(v)) {
-                return c;
+    public static ETListType fromValue(String value) {
+        for (ETListType t: ETListType.values()) {
+            if (t.value.equals(value)) {
+                return t;
             }
         }
-        throw new IllegalArgumentException(v);
+        throw new IllegalArgumentException(value);
     }
 }

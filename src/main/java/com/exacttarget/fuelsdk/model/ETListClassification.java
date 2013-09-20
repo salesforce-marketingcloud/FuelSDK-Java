@@ -10,27 +10,26 @@
 
 package com.exacttarget.fuelsdk.model;
 
-
 public enum ETListClassification {
-        EXACT_TARGET_LIST("ExactTargetList"),
+    EXACT_TARGET_LIST("ExactTargetList"),
     PUBLICATION_LIST("PublicationList"),
     SUPPRESSION_LIST("SuppressionList");
     private final String value;
 
-    ETListClassification(String v) {
-        value = v;
+    ETListClassification(String value) {
+        this.value = value;
     }
 
     public String value() {
         return value;
     }
 
-    public static ETListClassification fromValue(String v) {
+    public static ETListClassification fromValue(String value) {
         for (ETListClassification c: ETListClassification.values()) {
-            if (c.value.equals(v)) {
+            if (c.value.equals(value)) {
                 return c;
             }
         }
-        throw new IllegalArgumentException(v);
+        throw new IllegalArgumentException(value);
     }
 }
