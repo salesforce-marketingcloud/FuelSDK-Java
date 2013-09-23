@@ -22,7 +22,6 @@ import org.junit.runners.MethodSorters;
 import com.exacttarget.fuelsdk.ETCampaignService;
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETConfiguration;
-import com.exacttarget.fuelsdk.ETCrudService;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.ETServiceResponse;
 import com.exacttarget.fuelsdk.filter.ETFilter;
@@ -48,8 +47,6 @@ public class ETCampaignServiceTest{
         client = new ETClient(configuration);
 		
 		service = new ETCampaignServiceImpl();
-		//filter = new ETSimpleFilter("name", ETFilterOperators.EQUALS, "testCampaign");
-		//filterUpdated = new ETSimpleFilter("name", ETFilterOperators.EQUALS, "testCampaign");
 	}
 	
 	@Test

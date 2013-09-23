@@ -94,6 +94,4 @@ public abstract class BaseRestSerializableObject {
 	public String toString() {
 		return "id=" + id + ", createdDate=" + createdDate + ", modifiedDate=" + modifiedDate;
 	}
-
-	public abstract String getRequestBody();
 }

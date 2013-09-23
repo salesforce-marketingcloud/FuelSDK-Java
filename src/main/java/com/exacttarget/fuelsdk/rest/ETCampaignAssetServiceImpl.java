@@ -14,7 +14,6 @@ import com.exacttarget.fuelsdk.ETCampaignAssetService;
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.ETServiceResponse;
-import com.exacttarget.fuelsdk.annotations.InternalRestType;
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.model.ETCampaignAsset;
 import com.exacttarget.fuelsdk.model.ETObject;
@@ -43,15 +42,12 @@ public class ETCampaignAssetServiceImpl extends ETCrudServiceImpl implements ETC
 		throws ETSdkException {
 		return super.patch(client, asset);
 	}
-
-	@SuppressWarnings("unchecked")
+	
 	public ETServiceResponse<ETCampaignAsset> delete(ETClient client, ETCampaignAsset asset) 
 		throws ETSdkException 
 	{
 		return super.delete(client, asset);
 	}
-
-	
 
 	@Override
 	protected <T extends ETObject> JsonObject createRequest(T object, Class<T> type) throws ETSdkException {

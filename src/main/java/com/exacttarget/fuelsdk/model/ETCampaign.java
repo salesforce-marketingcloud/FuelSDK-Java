@@ -178,10 +178,4 @@ public class ETCampaign extends BaseRestSerializableObject implements ETObject{
 			return false;
 		return true;
 	}
-
-	@Override
-	public String getRequestBody() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }

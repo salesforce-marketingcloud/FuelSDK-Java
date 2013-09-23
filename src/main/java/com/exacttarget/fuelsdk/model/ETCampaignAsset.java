@@ -104,10 +104,4 @@ public class ETCampaignAsset extends BaseRestSerializableObject implements ETObj
 			return false;
 		return true;
 	}
-
-	@Override
-	public String getRequestBody() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
