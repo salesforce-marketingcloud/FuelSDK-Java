@@ -26,6 +26,7 @@ import com.exacttarget.fuelsdk.ETServiceResponse;
 import com.exacttarget.fuelsdk.annotations.InternalRestField;
 import com.exacttarget.fuelsdk.annotations.InternalRestType;
 import com.exacttarget.fuelsdk.model.ETObject;
+import com.exacttarget.fuelsdk.soap.ETServiceResponseImpl;
 import com.google.gson.JsonObject;
 
 public class ETCrudServiceImpl extends ETGetServiceImpl implements ETCrudService {
@@ -59,13 +60,13 @@ public class ETCrudServiceImpl extends ETGetServiceImpl implements ETCrudService
 		
 		String restPath = typeAnnotation.restPath();
 		String accessToken = client.getAccessToken();
-		logger.info("delete - obj: " + object);
 		String path = buildPath(restPath, accessToken, object, typeAnnotation);
-		logger.info("delete - path: " + path);
 		String json = connection.delete(path);
-		logger.info("delete - json: " + json);
 		
-		return createResponseETObject(type, json, false);
+		ETServiceResponse<T> response = new ETServiceResponseImpl<T>();
+		response.setStatus( connection.getResponseCode() == 200 );
+		
+		return createResponseETObject(type, json, response);
 	}
 
 	protected <T extends ETObject> ETServiceResponse<T> updateETObject(ETClient client, T object) throws ETSdkException {
@@ -88,8 +89,12 @@ public class ETCrudServiceImpl extends ETGetServiceImpl implements ETCrudService
 		String path = buildPath(restPath, accessToken, object, typeAnnotation);
 		
 		String json = connection.post(path, jsonObject);
+
+		ETServiceResponse<T> response = new ETServiceResponseImpl<T>();
 		
-		return createResponseETObject(type, json, false);
+		response.setStatus( connection.getResponseCode() == 200 );
+		
+		return createResponseETObject(type, json, response);
 	}
 
 	protected <T extends ETObject> JsonObject createRequest(T object, Class<T> type) throws ETSdkException {

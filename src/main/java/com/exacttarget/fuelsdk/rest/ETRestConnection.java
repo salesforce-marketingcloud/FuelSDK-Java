@@ -31,6 +31,15 @@ import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETSdkException;
 
 public class ETRestConnection {
+	
+	/**
+	 * Specifies which Rest Method being used.
+	 */
+	private enum Method
+	{
+		POST,GET,DELETE
+	}
+	
     private static Logger logger = Logger.getLogger(ETRestConnection.class);
 
     private ETClient client = null;
@@ -38,18 +47,16 @@ public class ETRestConnection {
     private String endpoint = null;
 
     private Gson gson = null;
+    
+    private int responseCode = -1;
 
-    public ETRestConnection(ETClient client, String endpoint)
-        throws ETSdkException
+    public ETRestConnection(ETClient client, String endpoint) throws ETSdkException
     {
         this.client = client;
 
         this.endpoint = endpoint;
 
-        //
         // If log level is set to TRACE, configure Gson to do pretty printing:
-        //
-
         if (logger.isTraceEnabled()) {
             gson = new GsonBuilder().setPrettyPrinting().create();
         }
@@ -57,24 +64,42 @@ public class ETRestConnection {
 
     public String get(String path) throws ETSdkException
     {
-        HttpURLConnection connection = sendRequest(path, "GET");
+    	setResponseCode(-1);
+        HttpURLConnection connection = sendRequest(path, Method.GET);
         String response = receiveResponse(connection);
+        try {
+			setResponseCode(connection.getResponseCode());
+		} catch (IOException e) {
+			throw new ETSdkException(e);
+		}
         connection.disconnect();
         return response;
     }
 
     public String post(String path, String payload) throws ETSdkException
     {
-        HttpURLConnection connection = sendRequest(path, "POST", payload);
+    	setResponseCode(-1);
+        HttpURLConnection connection = sendRequest(path, Method.POST, payload);
         String response = receiveResponse(connection);
+        try {
+			setResponseCode(connection.getResponseCode());
+		} catch (IOException e) {
+			throw new ETSdkException(e);
+		}
         connection.disconnect();
         return response;
     }
 
     public String delete(String path) throws ETSdkException
     {
-    	HttpURLConnection connection = sendRequest(path, "DELETE");
+    	setResponseCode(-1);
+    	HttpURLConnection connection = sendRequest(path, Method.DELETE);
         String response = receiveResponse(connection);
+        try {
+			setResponseCode(connection.getResponseCode());
+		} catch (IOException e) {
+			throw new ETSdkException(e);
+		}
         connection.disconnect();
         return response;
     }
@@ -84,12 +109,20 @@ public class ETRestConnection {
         return post(path, jsonObject.toString());
     }
 
-    private HttpURLConnection sendRequest(String path, String method) throws ETSdkException
+    public int getResponseCode() {
+		return responseCode;
+	}
+
+	private void setResponseCode(int responseCode) {
+		this.responseCode = responseCode;
+	}
+
+	private HttpURLConnection sendRequest(String path, Method method) throws ETSdkException
     {
         return sendRequest(path, method, null);
     }
 
-    private HttpURLConnection sendRequest(String path, String method, String payload) throws ETSdkException
+    private HttpURLConnection sendRequest(String path, Method method, String payload) throws ETSdkException
     {
         URL url = null;
         try {
@@ -100,48 +133,38 @@ public class ETRestConnection {
         return sendRequest(url, method, payload);
     }
 
-    private HttpURLConnection sendRequest(URL url, String method, String payload) throws ETSdkException
+    private HttpURLConnection sendRequest(URL url, Method method, String payload) throws ETSdkException
     {
-        logger.trace(method + " " + url);
+        logger.debug(method + " " + url);
 
         HttpURLConnection connection = null;
+        
         try {
+        	
             connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod(method.toString());
+        
+        } catch (ProtocolException ex) {
+            throw new ETSdkException("error setting request method: " + method.toString(), ex);
         } catch (IOException ex) {
             throw new ETSdkException("error opening " + url, ex);
-        }
-
-        if (method.equals("GET")) {
-            try {
-                connection.setRequestMethod("GET");
-            } catch (ProtocolException ex) {
-                throw new ETSdkException("error setting request method: GET", ex);
-            }
-
+        } 
+        
+        switch( method )
+        {
+        case GET:
             connection.setDoInput(true);
             connection.setRequestProperty("Accept", "application/json");
-        } else if (method.equals("POST")) {
-            try {
-                connection.setRequestMethod("POST");
-            } catch (ProtocolException ex) {
-                throw new ETSdkException("error setting request method: POST", ex);
-            }
-
+        	break;
+        case POST:
+        case DELETE:
             connection.setDoOutput(true);
             connection.setRequestProperty("Content-Type", "application/json");
-        } else if (method.equals("DELETE")) {
-            try {
-                connection.setRequestMethod("DELETE");
-            } catch (ProtocolException ex) {
-                throw new ETSdkException("error setting request method: DELETE", ex);
-            }
-
-            connection.setDoOutput(true);
-            connection.setRequestProperty("Content-Type", "application/json");
-        } else {
-            throw new ETSdkException("unsupported request method: " + method);
+        	break;
+        default:
+        	throw new ETSdkException("unsupported request method: " + method);
         }
-
+        
         String accessToken = client.getAccessToken();
 
         if (accessToken != null) {
@@ -173,7 +196,7 @@ public class ETRestConnection {
         }
 
         try {
-            logger.trace(connection.getResponseCode() + " " + connection.getResponseMessage());
+            logger.debug(connection.getResponseCode() + " " + connection.getResponseMessage());
 
         } catch (IOException ex) {
             throw new ETSdkException("error getting response code / message", ex);
@@ -182,10 +205,10 @@ public class ETRestConnection {
         return connection;
     }
 
-    private String receiveResponse(HttpURLConnection connection)
-        throws ETSdkException
+    private String receiveResponse(HttpURLConnection connection) throws ETSdkException
     {
         InputStream is = null;
+        
         try {
             is = connection.getInputStream();
         } catch (IOException ex) {
@@ -193,8 +216,8 @@ public class ETRestConnection {
         }
 
         StringBuilder stringBuilder = new StringBuilder();
-        BufferedReader reader =
-            new BufferedReader(new InputStreamReader(is));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        
         try {
             String line = null;
             while ((line = reader.readLine()) != null) {
@@ -214,8 +237,7 @@ public class ETRestConnection {
 
         if (logger.isTraceEnabled()) {
             JsonParser jsonParser = new JsonParser();
-            String responsePrettyPrinted =
-                    gson.toJson(jsonParser.parse(response));
+            String responsePrettyPrinted = gson.toJson(jsonParser.parse(response));
             for (String line : responsePrettyPrinted.split("\\n")) {
                 logger.trace(line);
             }
@@ -223,38 +245,4 @@ public class ETRestConnection {
 
         return response;
     }
-
-
-//  public <T> T get(String url, Class<T> entityClass)
-//      throws ET_SDKException
-//  {
-//      String json = get(url);
-//      return gson.fromJson(json, entityClass);
-//  }
-
-//  public void post(String url, ET_Object object)
-//      throws ET_SDKException
-//  {
-//      post(url, gson.toJson(object));
-//  }
-
-//  public String get(String url, String... queryParams)
-//      throws ET_SDKException
-//  {
-//      url += "?access_token" + accessToken;
-//      for (String queryParam : queryParams) {
-//          url += "&" + queryParam;
-//      }
-//      return get(new URL(url));
-//  }
-
-//  public void post(String url, String payload, String... queryParams)
-//      throws ET_SDKException
-//  {
-//      url += "?access_token" + accessToken;
-//      for (String queryParam : queryParams) {
-//          url += "&" + queryParam;
-//      }
-//      post(new URL(url), payload);
-//  }
 }

@@ -66,9 +66,4 @@ public class ETCampaignAssetServiceImpl extends ETCrudServiceImpl implements ETC
 		
 		return root;
 	}
-
-	@Override
-	protected <T extends ETObject> ETServiceResponse<T> createResponseETObject(Class<T> type, String json, boolean get) throws ETSdkException {
-		return super.createResponseETObject(type, json, true);
-	}
 }

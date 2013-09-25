@@ -46,6 +46,7 @@ public class ETGetServiceImpl implements ETGetService {
 
 	
 	public <T extends ETObject> ETServiceResponse<T> get(ETClient client, Class<T> type, ETFilter filter) throws ETSdkException {
+		
 		logger.trace("get ");
 		ETRestConnection connection = client.getRESTConnection();
 		
@@ -57,20 +58,26 @@ public class ETGetServiceImpl implements ETGetService {
 		
 		String path = buildPath(typeAnnotation.restPath(), client.getAccessToken(), typeAnnotation, filter);
 		String json = connection.get(path);
+        boolean status = connection.getResponseCode() == 200;
         
-		return createResponseETObject(type, json, true);
+		ETServiceResponse<T> response = new ETServiceResponseImpl<T>();
+		response.setStatus(status);
+        
+		return createResponseETObject(type, json, response);
+		
 	}
 
 
-	protected <T extends ETObject> ETServiceResponse<T> createResponseETObject(Class<T> type, String json, boolean get)  throws ETSdkException {
+	protected <T extends ETObject> ETServiceResponse<T> createResponseETObject(Class<T> type, String json, ETServiceResponse<T> response)  throws ETSdkException {
 		
 		logger.debug("returned json" + json);
 		JsonArray items;
 		try {
 			
+			//TODO process response and set status and pages
+			
 			if( "\"\"".equals(json) )
 			{
-				ETServiceResponse<T> response = new ETServiceResponseImpl<T>();
 				return response;
 			}
 			
@@ -91,25 +98,20 @@ public class ETGetServiceImpl implements ETGetService {
 			InternalRestType typeAnnotation = type.getAnnotation(InternalRestType.class);
 			
 			items = null;
-
-			if(get)
+			
+			if( jsonElement.isJsonArray() )
+				items = (JsonArray)jsonElement;
+			else if( jsonElement.isJsonObject() )
 			{
-				if( jsonElement.isJsonArray() )
-					items = (JsonArray)jsonElement;
-				else if( jsonElement.isJsonObject() )
-				{
-					String collectionKey = typeAnnotation.collectionKey();
-				    items = ((JsonObject)jsonElement).get(collectionKey).getAsJsonArray();
-				}
-			}
-			else
-			{
-				if( jsonElement.isJsonArray() )
-					items = (JsonArray)jsonElement;
-				else if( jsonElement.isJsonObject() )
+				String collectionKey = typeAnnotation.collectionKey();
+				if(((JsonObject)jsonElement).get(collectionKey) == null )
 				{
 					items = new JsonArray();
 					items.add(jsonElement);
+				}
+				else
+				{
+					items = ((JsonObject)jsonElement).get(collectionKey).getAsJsonArray();
 				}
 			}
 			
@@ -117,21 +119,19 @@ public class ETGetServiceImpl implements ETGetService {
 			throw new ETSdkException(e);
 		}
 
-		return createETObject(type, items);
+		return createETObject(type, items, response);
 	}
 
-	private <T extends ETObject> ETServiceResponse<T> createETObject(Class<T> type, JsonArray items) 
-			throws ETSdkException {
-		
+	private <T extends ETObject> ETServiceResponse<T> createETObject(Class<T> type, JsonArray items, ETServiceResponse<T> response) throws ETSdkException 
+	{	
 		if( items == null ) return null;
 		
 		List<Field> fields = new ArrayList<Field>(Arrays.asList(type.getDeclaredFields()));
 
-		if (null != type.getSuperclass()) {
+		if (null != type.getSuperclass()) 
+		{
         	fields.addAll(Arrays.asList(type.getSuperclass().getDeclaredFields()));
         }
-		
-		ETServiceResponse<T> response = new ETServiceResponseImpl<T>();
 		
 		try {
 			Iterator<JsonElement> iter = items.iterator();

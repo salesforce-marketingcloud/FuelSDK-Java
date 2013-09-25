@@ -16,8 +16,7 @@ import java.util.List;
 import com.exacttarget.fuelsdk.ETServiceResponse;
 import com.exacttarget.fuelsdk.model.ETObject;
 
-public class ETServiceResponseImpl<T extends ETObject>
-    implements ETServiceResponse<T>
+public class ETServiceResponseImpl<T extends ETObject> implements ETServiceResponse<T>
 {
     private String requestId = null;
     private List<T> results = new ArrayList<T>();
@@ -49,6 +48,7 @@ public class ETServiceResponseImpl<T extends ETObject>
 	}
 
 	public void setStatus(boolean status) {
+		//if 200 status is true else false
 		this.status = status;
 	}
 }
