@@ -10,6 +10,7 @@
 
 package com.exacttarget.fuelsdk.rest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -24,6 +25,7 @@ import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETConfiguration;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.ETServiceResponse;
+import com.exacttarget.fuelsdk.filter.ETComplexFilter;
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.filter.ETFilterOperators;
 import com.exacttarget.fuelsdk.filter.ETSimpleFilter;
@@ -38,8 +40,6 @@ public class ETCampaignServiceTest{
 	protected static ETCampaignService service;
 	protected static ETClient client = null;
 	protected static ETConfiguration configuration = null;
-	protected ETFilter filter;
-	protected ETFilter filterUpdated;
 	
 	
 	@BeforeClass
@@ -66,11 +66,64 @@ public class ETCampaignServiceTest{
 			for( ETCampaign c: campaigns )
 			{
 				logger.debug("Received during Clean: " + c);
-				if( TEST_CAMPAIGN_CODE.equals(c.getCampaignCode()) || TEST_CAMPAIGN_CODE_PATCH.equals(c.getCampaignCode()))
+				if( c.getCampaignCode().startsWith(TEST_CAMPAIGN_CODE) || TEST_CAMPAIGN_CODE_PATCH.equals(c.getCampaignCode()))
 				{
 					logger.debug("Deleting during Clean: " + c);
-					DeleteSingle(c);
+					deleteCampaign(c);
 				}
+			}
+			
+		} catch (ETSdkException e) {
+			Assert.fail(e.getMessage());
+		}
+	}
+
+	@Test
+	public void TestURLParameters() {
+		try {
+			logger.debug("TestURLParameters()");
+			List<String> ids = new ArrayList<String>();
+			
+			for( int i=0;i<5;++i )
+			{
+				ETCampaign c = createCampaign(TEST_CAMPAIGN_CODE + i);
+				ids.add(c.getId());
+			}
+			
+			List<ETFilter> simpleFilters = new ArrayList<ETFilter>();
+			ETComplexFilter filter = new ETComplexFilter();
+			simpleFilters.add(new ETSimpleFilter("page", ETFilterOperators.EQUALS, "1"));
+			simpleFilters.add(new ETSimpleFilter("pageSize", ETFilterOperators.EQUALS, "2"));
+			filter.setAdditionalOperands(simpleFilters);
+			
+			ETServiceResponse<ETCampaign> response = null;
+			response = service.get(client, filter);
+			Assert.assertNotNull(response.getResults());
+			Assert.assertEquals(2, response.getResults().size());
+			
+			simpleFilters.clear();
+			simpleFilters.add(new ETSimpleFilter("page", ETFilterOperators.EQUALS, "2"));
+			simpleFilters.add(new ETSimpleFilter("pageSize", ETFilterOperators.EQUALS, "2"));
+			filter.setAdditionalOperands(simpleFilters);
+
+			response = service.get(client, filter);
+			Assert.assertNotNull(response.getResults());
+			Assert.assertEquals(2, response.getResults().size());
+			
+			simpleFilters.clear();
+			simpleFilters.add(new ETSimpleFilter("page", ETFilterOperators.EQUALS, "3"));
+			simpleFilters.add(new ETSimpleFilter("pageSize", ETFilterOperators.EQUALS, "2"));
+			filter.setAdditionalOperands(simpleFilters);
+			
+			response = service.get(client, filter);
+			Assert.assertNotNull(response.getResults());
+			Assert.assertEquals(1, response.getResults().size());
+			
+			for( String id: ids )
+			{
+				ETCampaign c = new ETCampaign();
+				c.setId( id );
+				deleteCampaign(c);
 			}
 			
 		} catch (ETSdkException e) {
@@ -91,7 +144,7 @@ public class ETCampaignServiceTest{
 			
 			Assert.assertEquals(TEST_CAMPAIGN_CODE, testCampaign1.getCampaignCode());
 			
-			DeleteSingle(testCampaign1);
+			deleteCampaign(testCampaign1);
 			
 			//Validate campaign was deleted
 			List<ETCampaign> campaigns = retrieveAllCampaigns();
@@ -121,7 +174,7 @@ public class ETCampaignServiceTest{
 			
 			Assert.assertEquals(TEST_CAMPAIGN_CODE, testCampaign1.getCampaignCode());
 			
-			DeleteSingle(testCampaign1);
+			deleteCampaign(testCampaign1);
 			
 		} catch (ETSdkException e) {
 			Assert.fail(e.getMessage());
@@ -156,7 +209,7 @@ public class ETCampaignServiceTest{
 			Assert.assertEquals(TEST_CAMPAIGN_CODE_PATCH, testCampaign2.getCampaignCode());
 			//Test end
 			
-			DeleteSingle(testCampaign2);
+			deleteCampaign(testCampaign2);
 			
 		} catch (ETSdkException e) {
 			Assert.fail(e.getMessage());
@@ -196,7 +249,7 @@ public class ETCampaignServiceTest{
 		return response.getResults().get(0);
 	}
 	
-	protected void DeleteSingle(ETCampaign etObject) throws ETSdkException
+	protected void deleteCampaign(ETCampaign etObject) throws ETSdkException
 	{
 		ETServiceResponse<ETCampaign> response = service.delete(client, etObject);
 		Assert.assertNotNull(response);

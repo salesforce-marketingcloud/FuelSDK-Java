@@ -10,6 +10,7 @@
 
 package com.exacttarget.fuelsdk.rest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -98,17 +99,7 @@ public class ETCampaignAssetServiceTest{
 		String campaignID = returnedAsset.getCampaignId();
 		String id = returnedAsset.getId();
 		
-		ETComplexFilter filter = new ETComplexFilter();
-		filter.setLeftOperand(new ETSimpleFilter("campaignId", ETFilterOperators.EQUALS, campaignID ));
-		filter.setRightOperand(new ETSimpleFilter("id", ETFilterOperators.EQUALS, id ));
-		
-		response = assetService.get(client, filter);
-		
-		Assert.assertNotNull(response);
-		Assert.assertTrue(response.getStatus());
-		Assert.assertEquals(1,response.getResults().size());
-		
-		ETCampaignAsset responseAsset = response.getResults().get(0);
+		ETCampaignAsset responseAsset = retrieveAsset(campaignID, id);
 		
 		Assert.assertNotNull(responseAsset);
 		
@@ -139,17 +130,7 @@ public class ETCampaignAssetServiceTest{
 		String campaignID = returnedAsset.getCampaignId();
 		String id = returnedAsset.getId();
 		
-		ETComplexFilter filter = new ETComplexFilter();
-		filter.setLeftOperand(new ETSimpleFilter("campaignId", ETFilterOperators.EQUALS, campaignID ));
-		filter.setRightOperand(new ETSimpleFilter("id", ETFilterOperators.EQUALS, id ));
-		
-		response = assetService.get(client, filter);
-		
-		Assert.assertNotNull(response);
-		Assert.assertTrue(response.getStatus());
-		Assert.assertEquals(1,response.getResults().size());
-		
-		ETCampaignAsset responseAsset = response.getResults().get(0);
+		ETCampaignAsset responseAsset = retrieveAsset(campaignID, id);
 		
 		Assert.assertNotNull(responseAsset);
 		
@@ -174,6 +155,24 @@ public class ETCampaignAssetServiceTest{
 		Assert.assertEquals(0,response.getResults().size());
 		
 		deleteCampaign(campaign);
+	}
+
+	private ETCampaignAsset retrieveAsset(String campaignID, String id) throws ETSdkException {
+		ETServiceResponse<ETCampaignAsset> response;
+		ETComplexFilter filter = new ETComplexFilter();
+		List<ETFilter> filters = new ArrayList<ETFilter>();
+		filters.add(new ETSimpleFilter("campaignId", ETFilterOperators.EQUALS, campaignID ));
+		filters.add(new ETSimpleFilter("id", ETFilterOperators.EQUALS, id ));
+		filter.setAdditionalOperands(filters);
+		
+		response = assetService.get(client, filter);
+		
+		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getStatus());
+		Assert.assertEquals(1,response.getResults().size());
+		
+		ETCampaignAsset responseAsset = response.getResults().get(0);
+		return responseAsset;
 	}
 	
 	private ETCampaign createCampaign(String campaign) throws ETSdkException 

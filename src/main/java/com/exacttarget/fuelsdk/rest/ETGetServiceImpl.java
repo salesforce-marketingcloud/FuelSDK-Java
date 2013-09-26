@@ -167,15 +167,15 @@ public class ETGetServiceImpl implements ETGetService {
 		{
 			logger.debug("PROPS: "+prop);
 		}
+
+		List<String> props = Arrays.asList(typeAnnotation.urlProps());
+		path.append( "?" );
 		
 		if( filter != null )
 		{
-			List<String> props = Arrays.asList(typeAnnotation.urlProps());
-			
 			if( filter instanceof ETSimpleFilter )
 			{
 				ETSimpleFilter simpleFilter = (ETSimpleFilter) filter;
-				
 				if (props.contains(simpleFilter.getProperty()) && simpleFilter.getValues().size() > 0) {
 					replaceURLPropWithValue(path, simpleFilter.getProperty(), simpleFilter.getValues().get(0));
 				}
@@ -183,30 +183,36 @@ public class ETGetServiceImpl implements ETGetService {
 			else if( filter instanceof ETComplexFilter )
 			{
 				ETComplexFilter complexFilter = (ETComplexFilter) filter;
-				if( complexFilter.getLeftOperand() instanceof ETSimpleFilter )
-				{
-					ETSimpleFilter simpleFilter = (ETSimpleFilter) complexFilter.getLeftOperand();
-					if (props.contains(simpleFilter.getProperty()) && simpleFilter.getValues().size() > 0) {
-						replaceURLPropWithValue(path, simpleFilter.getProperty(), simpleFilter.getValues().get(0));
-					}
-				}
 				
-				if( complexFilter.getRightOperand() instanceof ETSimpleFilter )
+				for( ETFilter f: complexFilter.getAdditionalOperands())
 				{
-					ETSimpleFilter simpleFilter = (ETSimpleFilter) complexFilter.getRightOperand();
-					if (props.contains(simpleFilter.getProperty()) && simpleFilter.getValues().size() > 0) {
-						replaceURLPropWithValue(path, simpleFilter.getProperty(), simpleFilter.getValues().get(0));
+					if( f instanceof ETSimpleFilter )
+					{
+						ETSimpleFilter simpleFilter = (ETSimpleFilter) f;
+						if (props.contains(simpleFilter.getProperty())) 
+						{
+							if( simpleFilter.getValues().size() > 0 )
+								replaceURLPropWithValue(path, simpleFilter.getProperty(), simpleFilter.getValues().get(0));
+						}
+						else
+						{
+							path.append("$");
+							path.append(simpleFilter.getProperty());
+							path.append("=");
+							path.append(simpleFilter.getValues().get(0));
+							path.append("&");
+						}
 					}
 				}
 			}
 		}
 		
 		// Remove all remaining URL Props
-		for(String prop : typeAnnotation.urlProps()) {
+		for(String prop : props) {
 			replaceURLPropWithValue(path, prop, "");
 		}
-				
-		path.append( "?access_token=" );
+		
+		path.append( "access_token=" );
 		path.append( accessToken );
 		
 		logger.debug("PATH: " + path.toString());
