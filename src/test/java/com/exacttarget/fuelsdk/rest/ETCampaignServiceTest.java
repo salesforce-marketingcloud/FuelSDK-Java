@@ -93,41 +93,31 @@ public class ETCampaignServiceTest{
 			
 			//Query First page and 2 at a time
 			//this should return 2 items and have more results
-			List<ETFilter> simpleFilters = new ArrayList<ETFilter>();
-			ETComplexFilter filter = new ETComplexFilter();
-			simpleFilters.add(new ETSimpleFilter(ETCampaign.URLParmeters.page.toString(), ETFilterOperators.EQUALS, "1"));
-			simpleFilters.add(new ETSimpleFilter(ETCampaign.URLParmeters.pageSize.toString(), ETFilterOperators.EQUALS, "2"));
-			filter.setAdditionalOperands(simpleFilters);
-			
-			ETServiceResponse<ETCampaign> response = null;
-			response = service.get(client, filter);
-			Assert.assertNotNull(response.getResults());
-			Assert.assertEquals(2, response.getResults().size());
-			Assert.assertTrue(response.hasMoreResults());
+			getAllCampaigns("1", "2", 2, true);
 
 			//Query Second page and 2 at a time
 			//this should return 2 items and have more results
-			simpleFilters.clear();
-			simpleFilters.add(new ETSimpleFilter(ETCampaign.URLParmeters.page.toString(), ETFilterOperators.EQUALS, "2"));
-			simpleFilters.add(new ETSimpleFilter(ETCampaign.URLParmeters.pageSize.toString(), ETFilterOperators.EQUALS, "2"));
-			filter.setAdditionalOperands(simpleFilters);
-
-			response = service.get(client, filter);
-			Assert.assertNotNull(response.getResults());
-			Assert.assertEquals(2, response.getResults().size());
-			Assert.assertTrue(response.hasMoreResults());
+			getAllCampaigns("2", "2", 2, true);
 
 			//Query Third page and 2 at a time
 			//this should return 1 items and NOT have more results
-			simpleFilters.clear();
-			simpleFilters.add(new ETSimpleFilter(ETCampaign.URLParmeters.page.toString(), ETFilterOperators.EQUALS, "3"));
-			simpleFilters.add(new ETSimpleFilter(ETCampaign.URLParmeters.pageSize.toString(), ETFilterOperators.EQUALS, "2"));
-			filter.setAdditionalOperands(simpleFilters);
+			getAllCampaigns("3", "2", 1, false);
 			
-			response = service.get(client, filter);
-			Assert.assertNotNull(response.getResults());
-			Assert.assertEquals(1, response.getResults().size());
-			Assert.assertFalse(response.hasMoreResults());
+			// --
+			
+			//Query First page and 3 at a time
+			//this should return 3 items and have more results
+			getAllCampaigns("1", "3", 3, true);
+
+			//Query Second page and 3 at a time
+			//this should return 2 items and NOT have more results
+			getAllCampaigns("2", "3", 2, false);
+			
+			// --
+			
+			//Query First page and 5 at a time
+			//this should return 5 items and NOT have more results
+			getAllCampaigns("1", "5", 5, false);
 			
 			//Delete all created Campaigns (cleanup)
 			for( String id: ids )
@@ -172,6 +162,7 @@ public class ETCampaignServiceTest{
 			Assert.fail(e.getMessage());
 		}
 	}
+	
 	@Test
 	public void TestPost(){
 		logger.debug("TestPost()");
@@ -227,6 +218,21 @@ public class ETCampaignServiceTest{
 		}
 	}
 
+	private void getAllCampaigns(String page, String pageSize, int expectedNumOfItems, boolean hasMoreResults ) throws ETSdkException
+	{
+		List<ETFilter> simpleFilters = new ArrayList<ETFilter>();
+		ETComplexFilter filter = new ETComplexFilter();
+		simpleFilters.add(new ETSimpleFilter(ETCampaign.URLParmeters.page.toString(), ETFilterOperators.EQUALS, page));
+		simpleFilters.add(new ETSimpleFilter(ETCampaign.URLParmeters.pageSize.toString(), ETFilterOperators.EQUALS, pageSize));
+		filter.setAdditionalOperands(simpleFilters);
+		
+		ETServiceResponse<ETCampaign> response = null;
+		response = service.get(client, filter);
+		Assert.assertNotNull(response.getResults());
+		Assert.assertEquals(expectedNumOfItems, response.getResults().size());
+		Assert.assertEquals(response.hasMoreResults(), hasMoreResults);
+	}
+	
 	private ETCampaign createCampaign(String campaign) throws ETSdkException {
 		ETCampaign etObject = new ETCampaign();
 		etObject.setName("testCampaign");
