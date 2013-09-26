@@ -26,6 +26,7 @@ import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.ETServiceResponse;
 import com.exacttarget.fuelsdk.annotations.InternalRestField;
 import com.exacttarget.fuelsdk.annotations.InternalRestType;
+import com.exacttarget.fuelsdk.filter.ETComplexFilter;
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.filter.ETSimpleFilter;
 import com.exacttarget.fuelsdk.model.ETObject;
@@ -65,7 +66,6 @@ public class ETGetServiceImpl implements ETGetService {
 		return createResponseETObject(type, json, response);
 		
 	}
-
 
 	protected <T extends ETObject> ETServiceResponse<T> createResponseETObject(Class<T> type, String json, ETServiceResponse<T> response)  throws ETSdkException {
 		
@@ -162,42 +162,65 @@ public class ETGetServiceImpl implements ETGetService {
 	
 	protected String buildPath(String restPath, String accessToken, InternalRestType typeAnnotation, ETFilter filter) {
 		
-		
 		StringBuilder path = new StringBuilder(restPath);
+		for( String prop: typeAnnotation.urlProps() )
+		{
+			logger.debug("PROPS: "+prop);
+		}
 		
 		if( filter != null )
 		{
-			if( filter instanceof ETSimpleFilter)
+			List<String> props = Arrays.asList(typeAnnotation.urlProps());
+			
+			if( filter instanceof ETSimpleFilter )
 			{
 				ETSimpleFilter simpleFilter = (ETSimpleFilter) filter;
 				
-				if (Arrays.asList(typeAnnotation.urlProps()).contains(simpleFilter.getProperty()) && simpleFilter.getValues().size() > 0) {
+				if (props.contains(simpleFilter.getProperty()) && simpleFilter.getValues().size() > 0) {
 					replaceURLPropWithValue(path, simpleFilter.getProperty(), simpleFilter.getValues().get(0));
 				}
 			}
+			else if( filter instanceof ETComplexFilter )
+			{
+				ETComplexFilter complexFilter = (ETComplexFilter) filter;
+				if( complexFilter.getLeftOperand() instanceof ETSimpleFilter )
+				{
+					ETSimpleFilter simpleFilter = (ETSimpleFilter) complexFilter.getLeftOperand();
+					if (props.contains(simpleFilter.getProperty()) && simpleFilter.getValues().size() > 0) {
+						replaceURLPropWithValue(path, simpleFilter.getProperty(), simpleFilter.getValues().get(0));
+					}
+				}
+				
+				if( complexFilter.getRightOperand() instanceof ETSimpleFilter )
+				{
+					ETSimpleFilter simpleFilter = (ETSimpleFilter) complexFilter.getRightOperand();
+					if (props.contains(simpleFilter.getProperty()) && simpleFilter.getValues().size() > 0) {
+						replaceURLPropWithValue(path, simpleFilter.getProperty(), simpleFilter.getValues().get(0));
+					}
+				}
+			}
 		}
-		// TODO -- Complex Filter Parts
-		
 		
 		// Remove all remaining URL Props
 		for(String prop : typeAnnotation.urlProps()) {
 			replaceURLPropWithValue(path, prop, "");
 		}
-		
 				
 		path.append( "?access_token=" );
 		path.append( accessToken );
 		
+		logger.debug("PATH: " + path.toString());
+		
 		return path.toString();
 	}
 	
-	protected void replaceURLPropWithValue(StringBuilder sb, String prop,
-			String value) {
+	protected void replaceURLPropWithValue(StringBuilder sb, String prop, String value) {
 		
 		if (sb.indexOf("{" + prop + "}") > -1) {
 			value = (value == null) ? "" : value;
 			sb.replace(sb.indexOf("{" + prop + "}"), sb.indexOf("{" + prop + "}") + new String("{" + prop + "}").length(), value);
 		}
+
 	}
 	
 }

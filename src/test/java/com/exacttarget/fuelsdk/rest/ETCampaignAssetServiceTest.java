@@ -25,6 +25,7 @@ import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETConfiguration;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.ETServiceResponse;
+import com.exacttarget.fuelsdk.filter.ETComplexFilter;
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.filter.ETFilterOperators;
 import com.exacttarget.fuelsdk.filter.ETSimpleFilter;
@@ -59,9 +60,7 @@ public class ETCampaignAssetServiceTest{
 	public void ATestClean() throws ETSdkException {
 		logger.debug("TestClean()");
 		
-		logger.debug("TestRetrieve");
-		
-		List<ETCampaign> campaigns = TestRetrieve();
+		List<ETCampaign> campaigns = retrieveAllCampaigns();
 
 		logger.debug("Received Count during clean: " + campaigns.size());
 		
@@ -88,29 +87,37 @@ public class ETCampaignAssetServiceTest{
 		asset.setItemID("321");
 		asset.setType("EMAIL");
 		
+		//TEST begin
 		ETServiceResponse<ETCampaignAsset> response = assetService.post(client, asset);
 		
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
 		Assert.assertNotNull(response.getResults().get(0));
 		
-		String campaignID = response.getResults().get(0).getCampaignId();
+		ETCampaignAsset returnedAsset = response.getResults().get(0);		
+		String campaignID = returnedAsset.getCampaignId();
+		String id = returnedAsset.getId();
 		
-		response = assetService.get(client, new ETSimpleFilter("campaignId", ETFilterOperators.EQUALS, campaignID ));
+		ETComplexFilter filter = new ETComplexFilter();
+		filter.setLeftOperand(new ETSimpleFilter("campaignId", ETFilterOperators.EQUALS, campaignID ));
+		filter.setRightOperand(new ETSimpleFilter("id", ETFilterOperators.EQUALS, id ));
+		
+		response = assetService.get(client, filter);
 		
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
-
+		Assert.assertEquals(1,response.getResults().size());
+		
 		ETCampaignAsset responseAsset = response.getResults().get(0);
 		
 		Assert.assertNotNull(responseAsset);
 		
 		Assert.assertEquals(campaignID, responseAsset.getCampaignId());
+		//TEST end
 		
 		deleteCampaign(campaign);
-			
 	}
-
+	
 	@Test
 	public void TestUnassociateAsset() throws ETSdkException
 	{
@@ -128,12 +135,19 @@ public class ETCampaignAssetServiceTest{
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
 		
-		String campaignID = response.getResults().get(0).getCampaignId();
+		ETCampaignAsset returnedAsset = response.getResults().get(0);		
+		String campaignID = returnedAsset.getCampaignId();
+		String id = returnedAsset.getId();
 		
-		response = assetService.get(client, new ETSimpleFilter("campaignId", ETFilterOperators.EQUALS, campaignID ));
+		ETComplexFilter filter = new ETComplexFilter();
+		filter.setLeftOperand(new ETSimpleFilter("campaignId", ETFilterOperators.EQUALS, campaignID ));
+		filter.setRightOperand(new ETSimpleFilter("id", ETFilterOperators.EQUALS, id ));
+		
+		response = assetService.get(client, filter);
 		
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
+		Assert.assertEquals(1,response.getResults().size());
 		
 		ETCampaignAsset responseAsset = response.getResults().get(0);
 		
@@ -160,9 +174,8 @@ public class ETCampaignAssetServiceTest{
 		Assert.assertEquals(0,response.getResults().size());
 		
 		deleteCampaign(campaign);
-			
-		
 	}
+	
 	private ETCampaign createCampaign(String campaign) throws ETSdkException 
 	{
 		ETCampaign etObject = new ETCampaign();
@@ -186,20 +199,11 @@ public class ETCampaignAssetServiceTest{
 		Assert.assertTrue(response.getStatus());
 	}
 
-	protected List<ETCampaign> TestRetrieve() throws ETSdkException {
+	protected List<ETCampaign> retrieveAllCampaigns() throws ETSdkException {
 		ETServiceResponse<ETCampaign> response = campaignService.get(client);
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
 		Assert.assertNotNull(response.getResults());
 		return response.getResults();
-	}
-
-	protected ETCampaign TestRetrieveSingle() throws ETSdkException {
-		ETServiceResponse<ETCampaign> response = campaignService.get(client, filter);
-		Assert.assertNotNull(response);
-		Assert.assertTrue(response.getStatus());
-		Assert.assertNotNull(response.getResults());
-		Assert.assertNotNull(response.getResults().get(0));
-		return response.getResults().get(0);
 	}
 }
