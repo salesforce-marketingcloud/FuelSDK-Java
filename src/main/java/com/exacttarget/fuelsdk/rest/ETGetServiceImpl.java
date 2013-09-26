@@ -44,7 +44,6 @@ public class ETGetServiceImpl implements ETGetService {
 		return this.get(client, type, null);
 	}
 
-	
 	public <T extends ETObject> ETServiceResponse<T> get(ETClient client, Class<T> type, ETFilter filter) throws ETSdkException {
 		
 		logger.trace("get ");
