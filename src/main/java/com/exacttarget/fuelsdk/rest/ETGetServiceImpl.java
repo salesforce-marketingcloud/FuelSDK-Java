@@ -62,9 +62,8 @@ public class ETGetServiceImpl implements ETGetService {
         
 		ETServiceResponse<T> response = new ETServiceResponseImpl<T>();
 		response.setStatus(status);
-        
-		return createResponseETObject(type, json, response);
 		
+		return createResponseETObject(type, json, response);
 	}
 
 	protected <T extends ETObject> ETServiceResponse<T> createResponseETObject(Class<T> type, String json, ETServiceResponse<T> response)  throws ETSdkException {
@@ -81,27 +80,34 @@ public class ETGetServiceImpl implements ETGetService {
 			JsonParser jsonParser = new JsonParser();
 			
 			JsonElement jsonElement = null;
+
+			InternalRestType typeAnnotation = type.getAnnotation(InternalRestType.class);
+			
+			items = null;
 			
 			if( json.startsWith("[") )
 			{
 				jsonElement = jsonParser.parse(json).getAsJsonArray();
 				logger.debug(jsonElement);
+				items = (JsonArray)jsonElement;
 			}
 			else
 			{
 				jsonElement = jsonParser.parse(json).getAsJsonObject();
-			}
-			
-			InternalRestType typeAnnotation = type.getAnnotation(InternalRestType.class);
-			
-			items = null;
-			
-			if( jsonElement.isJsonArray() )
-				items = (JsonArray)jsonElement;
-			else if( jsonElement.isJsonObject() )
-			{
+				JsonObject jobject = (JsonObject)jsonElement;
+				
+				if( jobject.get("page") != null && jobject.get("pageSize") != null && jobject.get("count") != null )
+				{
+					int page = jobject.get("page").getAsInt();
+					int pageSize = jobject.get("pageSize").getAsInt();
+					int count = jobject.get("count").getAsInt();
+					
+					response.setMoreResults( count > page*pageSize );
+					logger.debug("HAS MORE RESULTS: " + response.hasMoreResults());
+				}
+				
 				String collectionKey = typeAnnotation.collectionKey();
-				if(((JsonObject)jsonElement).get(collectionKey) == null )
+				if(jobject.get(collectionKey) == null )
 				{
 					items = new JsonArray();
 					items.add(jsonElement);
@@ -111,7 +117,6 @@ public class ETGetServiceImpl implements ETGetService {
 					items = ((JsonObject)jsonElement).get(collectionKey).getAsJsonArray();
 				}
 			}
-			
 		} catch (JsonSyntaxException e) {
 			throw new ETSdkException(e);
 		}
@@ -163,12 +168,9 @@ public class ETGetServiceImpl implements ETGetService {
 	protected String buildPath(String restPath, String accessToken, InternalRestType typeAnnotation, ETFilter filter) {
 		
 		StringBuilder path = new StringBuilder(restPath);
-		for( String prop: typeAnnotation.urlProps() )
-		{
-			logger.debug("PROPS: "+prop);
-		}
 
 		List<String> props = Arrays.asList(typeAnnotation.urlProps());
+		List<String> params = Arrays.asList(typeAnnotation.urlParameters());
 		path.append( "?" );
 		
 		if( filter != null )
@@ -194,7 +196,7 @@ public class ETGetServiceImpl implements ETGetService {
 							if( simpleFilter.getValues().size() > 0 )
 								replaceURLPropWithValue(path, simpleFilter.getProperty(), simpleFilter.getValues().get(0));
 						}
-						else
+						else if( params.contains(simpleFilter.getProperty()) )
 						{
 							path.append("$");
 							path.append(simpleFilter.getProperty());

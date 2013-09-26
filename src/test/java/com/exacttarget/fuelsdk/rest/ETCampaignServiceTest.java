@@ -84,41 +84,52 @@ public class ETCampaignServiceTest{
 			logger.debug("TestURLParameters()");
 			List<String> ids = new ArrayList<String>();
 			
+			//Create 5 unique Campaigns
 			for( int i=0;i<5;++i )
 			{
 				ETCampaign c = createCampaign(TEST_CAMPAIGN_CODE + i);
 				ids.add(c.getId());
 			}
 			
+			//Query First page and 2 at a time
+			//this should return 2 items and have more results
 			List<ETFilter> simpleFilters = new ArrayList<ETFilter>();
 			ETComplexFilter filter = new ETComplexFilter();
-			simpleFilters.add(new ETSimpleFilter("page", ETFilterOperators.EQUALS, "1"));
-			simpleFilters.add(new ETSimpleFilter("pageSize", ETFilterOperators.EQUALS, "2"));
+			simpleFilters.add(new ETSimpleFilter(ETCampaign.URLParmeters.page.toString(), ETFilterOperators.EQUALS, "1"));
+			simpleFilters.add(new ETSimpleFilter(ETCampaign.URLParmeters.pageSize.toString(), ETFilterOperators.EQUALS, "2"));
 			filter.setAdditionalOperands(simpleFilters);
 			
 			ETServiceResponse<ETCampaign> response = null;
 			response = service.get(client, filter);
 			Assert.assertNotNull(response.getResults());
 			Assert.assertEquals(2, response.getResults().size());
-			
+			Assert.assertTrue(response.hasMoreResults());
+
+			//Query Second page and 2 at a time
+			//this should return 2 items and have more results
 			simpleFilters.clear();
-			simpleFilters.add(new ETSimpleFilter("page", ETFilterOperators.EQUALS, "2"));
-			simpleFilters.add(new ETSimpleFilter("pageSize", ETFilterOperators.EQUALS, "2"));
+			simpleFilters.add(new ETSimpleFilter(ETCampaign.URLParmeters.page.toString(), ETFilterOperators.EQUALS, "2"));
+			simpleFilters.add(new ETSimpleFilter(ETCampaign.URLParmeters.pageSize.toString(), ETFilterOperators.EQUALS, "2"));
 			filter.setAdditionalOperands(simpleFilters);
 
 			response = service.get(client, filter);
 			Assert.assertNotNull(response.getResults());
 			Assert.assertEquals(2, response.getResults().size());
-			
+			Assert.assertTrue(response.hasMoreResults());
+
+			//Query Third page and 2 at a time
+			//this should return 1 items and NOT have more results
 			simpleFilters.clear();
-			simpleFilters.add(new ETSimpleFilter("page", ETFilterOperators.EQUALS, "3"));
-			simpleFilters.add(new ETSimpleFilter("pageSize", ETFilterOperators.EQUALS, "2"));
+			simpleFilters.add(new ETSimpleFilter(ETCampaign.URLParmeters.page.toString(), ETFilterOperators.EQUALS, "3"));
+			simpleFilters.add(new ETSimpleFilter(ETCampaign.URLParmeters.pageSize.toString(), ETFilterOperators.EQUALS, "2"));
 			filter.setAdditionalOperands(simpleFilters);
 			
 			response = service.get(client, filter);
 			Assert.assertNotNull(response.getResults());
 			Assert.assertEquals(1, response.getResults().size());
+			Assert.assertFalse(response.hasMoreResults());
 			
+			//Delete all created Campaigns (cleanup)
 			for( String id: ids )
 			{
 				ETCampaign c = new ETCampaign();

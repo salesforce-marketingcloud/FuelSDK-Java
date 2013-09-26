@@ -24,4 +24,5 @@ public @interface InternalRestType {
 	String restPath();
 	String primaryKey();
 	String[] urlProps() default {};
+	String[] urlParameters() default {};
 }
