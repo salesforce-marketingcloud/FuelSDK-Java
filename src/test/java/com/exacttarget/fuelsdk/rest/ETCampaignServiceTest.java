@@ -131,6 +131,7 @@ public class ETCampaignServiceTest{
 			
 			ETServiceResponse<ETCampaign> response = service.patch(client, testCampaign1);
 			Assert.assertNotNull(response);
+			Assert.assertTrue(response.getStatus());
 			Assert.assertNotNull(response.getResults());
 			Assert.assertEquals(1, response.getResults().size());
 			Assert.assertEquals(TEST_CAMPAIGN_CODE_PATCH, response.getResults().get(0).getCampaignCode());
@@ -155,6 +156,7 @@ public class ETCampaignServiceTest{
 		
 		ETServiceResponse<ETCampaign> response =  service.post(client, etObject);
 		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getStatus());
 		
 		return response.getResults().get(0);
 	}
@@ -162,6 +164,7 @@ public class ETCampaignServiceTest{
 	protected List<ETCampaign> TestRetrieve() throws ETSdkException {
 		ETServiceResponse<ETCampaign> response = service.get(client);
 		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getStatus());
 		Assert.assertNotNull(response.getResults());
 		return response.getResults();
 	}
@@ -169,6 +172,7 @@ public class ETCampaignServiceTest{
 	protected ETCampaign TestRetrieveSingle() throws ETSdkException {
 		ETServiceResponse<ETCampaign> response = service.get(client, filter);
 		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getStatus());
 		Assert.assertNotNull(response.getResults());
 		Assert.assertNotNull(response.getResults().get(0));
 		return response.getResults().get(0);
@@ -178,5 +182,6 @@ public class ETCampaignServiceTest{
 	{
 		ETServiceResponse<ETCampaign> response = service.delete(client, etObject);
 		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getStatus());
 	}
 }

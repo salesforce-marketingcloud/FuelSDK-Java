@@ -91,12 +91,15 @@ public class ETCampaignAssetServiceTest{
 		ETServiceResponse<ETCampaignAsset> response = assetService.post(client, asset);
 		
 		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getStatus());
+		Assert.assertNotNull(response.getResults().get(0));
 		
 		String campaignID = response.getResults().get(0).getCampaignId();
 		
 		response = assetService.get(client, new ETSimpleFilter("campaignId", ETFilterOperators.EQUALS, campaignID ));
 		
 		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getStatus());
 
 		ETCampaignAsset responseAsset = response.getResults().get(0);
 		
@@ -123,12 +126,14 @@ public class ETCampaignAssetServiceTest{
 		ETServiceResponse<ETCampaignAsset> response = assetService.post(client, asset);
 		
 		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getStatus());
 		
 		String campaignID = response.getResults().get(0).getCampaignId();
 		
 		response = assetService.get(client, new ETSimpleFilter("campaignId", ETFilterOperators.EQUALS, campaignID ));
 		
 		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getStatus());
 		
 		ETCampaignAsset responseAsset = response.getResults().get(0);
 		
@@ -137,15 +142,21 @@ public class ETCampaignAssetServiceTest{
 		String responseCampaignId = responseAsset.getCampaignId();
 		
 		Assert.assertEquals(campaignID, responseCampaignId);
-		
+
+		response = null;
 		//Delete
-		assetService.delete(client, responseAsset);
+		response = assetService.delete(client, responseAsset);
+
+		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getStatus());
 		
 		response = null;
 		
 		//Validate it's been deleted
 		response = assetService.get(client, new ETSimpleFilter("campaignId", ETFilterOperators.EQUALS, campaignID ));
-		
+
+		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getStatus());
 		Assert.assertEquals(0,response.getResults().size());
 		
 		deleteCampaign(campaign);
@@ -163,6 +174,7 @@ public class ETCampaignAssetServiceTest{
 		
 		ETServiceResponse<ETCampaign> response =  campaignService.post(client, etObject);
 		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getStatus());
 		
 		return response.getResults().get(0);
 	}
@@ -171,11 +183,13 @@ public class ETCampaignAssetServiceTest{
 	{
 		ETServiceResponse<ETCampaign> response = campaignService.delete(client, etObject);
 		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getStatus());
 	}
 
 	protected List<ETCampaign> TestRetrieve() throws ETSdkException {
 		ETServiceResponse<ETCampaign> response = campaignService.get(client);
 		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getStatus());
 		Assert.assertNotNull(response.getResults());
 		return response.getResults();
 	}
@@ -183,6 +197,7 @@ public class ETCampaignAssetServiceTest{
 	protected ETCampaign TestRetrieveSingle() throws ETSdkException {
 		ETServiceResponse<ETCampaign> response = campaignService.get(client, filter);
 		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getStatus());
 		Assert.assertNotNull(response.getResults());
 		Assert.assertNotNull(response.getResults().get(0));
 		return response.getResults().get(0);

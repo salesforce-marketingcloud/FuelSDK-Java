@@ -74,8 +74,6 @@ public class ETGetServiceImpl implements ETGetService {
 		JsonArray items;
 		try {
 			
-			//TODO process response and set status and pages
-			
 			if( "\"\"".equals(json) )
 			{
 				return response;
