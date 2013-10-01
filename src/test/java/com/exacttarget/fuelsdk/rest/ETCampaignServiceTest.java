@@ -10,8 +10,12 @@
 
 package com.exacttarget.fuelsdk.rest;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 import org.junit.Assert;
@@ -77,15 +81,69 @@ public class ETCampaignServiceTest{
 			Assert.fail(e.getMessage());
 		}
 	}
-
+	
 	@Test
-	public void TestURLParameters() {
-		try {
-			logger.debug("TestURLParameters()");
+	public void TestOrderByParameters() 
+	{
+		try 
+		{
+			logger.debug("TestOrderByParameters()");
 			List<String> ids = new ArrayList<String>();
 			
 			//Create 5 unique Campaigns
 			for( int i=0;i<5;++i )
+			{
+				TimeUnit.SECONDS.sleep(1);
+				ETCampaign c = createCampaign(TEST_CAMPAIGN_CODE + i);
+				ids.add(c.getId());
+			}
+			
+			getAllCampaignsWithOrderBy( ETCampaignService.ORDER_BY.Name_ASC );
+			
+			getAllCampaignsWithOrderBy( ETCampaignService.ORDER_BY.Name_DESC );
+
+			getAllCampaignsWithOrderBy( ETCampaignService.ORDER_BY.ModifiedDate_ASC );
+
+			getAllCampaignsWithOrderBy( ETCampaignService.ORDER_BY.ModifiedDate_DESC );
+
+			getAllCampaignsWithOrderBy( ETCampaignService.ORDER_BY.CreatedDate_ASC );
+
+			getAllCampaignsWithOrderBy( ETCampaignService.ORDER_BY.CreatedDate_DESC );
+
+			getAllCampaignsWithOrderBy( ETCampaignService.ORDER_BY.CampaignCode_ASC );
+
+			getAllCampaignsWithOrderBy( ETCampaignService.ORDER_BY.CampaignCode_DESC );
+
+			//TODO: turn back on when ID issue is fixed?
+			//getAllCampaignsWithOrderBy( ETCampaignService.ORDER_BY.Id_ASC.toString() );
+
+			//getAllCampaignsWithOrderBy( ETCampaignService.ORDER_BY.Id_DESC.toString() );
+			
+			//Delete all created Campaigns (cleanup)
+			for( String id: ids )
+			{
+				ETCampaign c = new ETCampaign();
+				c.setId( id );
+				deleteCampaign(c);
+			}
+			
+		} catch (ETSdkException e) {
+			Assert.fail(e.getMessage());
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void TestPagingParameters() 
+	{
+		try 
+		{
+			logger.debug("TestPagingParameters()");
+			List<String> ids = new ArrayList<String>();
+			
+			//Create 5 unique Campaigns
+			for( int i=5;i<10;++i )
 			{
 				ETCampaign c = createCampaign(TEST_CAMPAIGN_CODE + i);
 				ids.add(c.getId());
@@ -93,31 +151,133 @@ public class ETCampaignServiceTest{
 			
 			//Query First page and 2 at a time
 			//this should return 2 items and have more results
-			getAllCampaigns("1", "2", 2, true);
+			getAllCampaignsWithPaging("1", "2", 2, true);
 
 			//Query Second page and 2 at a time
 			//this should return 2 items and have more results
-			getAllCampaigns("2", "2", 2, true);
+			getAllCampaignsWithPaging("2", "2", 2, true);
 
 			//Query Third page and 2 at a time
 			//this should return 1 items and NOT have more results
-			getAllCampaigns("3", "2", 1, false);
+			getAllCampaignsWithPaging("3", "2", 1, false);
 			
 			// --
 			
 			//Query First page and 3 at a time
 			//this should return 3 items and have more results
-			getAllCampaigns("1", "3", 3, true);
+			getAllCampaignsWithPaging("1", "3", 3, true);
 
 			//Query Second page and 3 at a time
 			//this should return 2 items and NOT have more results
-			getAllCampaigns("2", "3", 2, false);
+			getAllCampaignsWithPaging("2", "3", 2, false);
 			
 			// --
 			
 			//Query First page and 5 at a time
 			//this should return 5 items and NOT have more results
-			getAllCampaigns("1", "5", 5, false);
+			getAllCampaignsWithPaging("1", "5", 5, false);
+			
+			//Delete all created Campaigns (cleanup)
+			for( String id: ids )
+			{
+				ETCampaign c = new ETCampaign();
+				c.setId( id );
+				deleteCampaign(c);
+			}
+			
+		} catch (ETSdkException e) {
+			Assert.fail(e.getMessage());
+		}
+	}
+
+	@Test
+	public void TestURLParameters() 
+	{
+		try 
+		{
+			logger.debug("TestURLParameters()");
+			List<String> ids = new ArrayList<String>();
+			
+			//Create 5 unique Campaigns
+			for( int i=10;i<15;++i )
+			{
+				ETCampaign c = createCampaign(TEST_CAMPAIGN_CODE + i);
+				ids.add(c.getId());
+			}
+			
+			//Query First page and 2 at a time
+			//this should return 2 items and have more results
+			getAllCampaignsWithPagingAndOrderby("1", "2", 2, true, ETCampaignService.ORDER_BY.Name_ASC);
+
+			//Query Second page and 2 at a time
+			//this should return 2 items and have more results
+			getAllCampaignsWithPagingAndOrderby("2", "2", 2, true, ETCampaignService.ORDER_BY.Name_DESC);
+
+			//Query Third page and 2 at a time
+			//this should return 1 items and NOT have more results
+			getAllCampaignsWithPagingAndOrderby("3", "2", 1, false, ETCampaignService.ORDER_BY.Name_ASC);
+
+			// --
+
+			//Query First page and 2 at a time
+			//this should return 2 items and have more results
+			getAllCampaignsWithPagingAndOrderby("1", "2", 2, true, ETCampaignService.ORDER_BY.ModifiedDate_ASC);
+
+			//Query Second page and 2 at a time
+			//this should return 2 items and have more results
+			getAllCampaignsWithPagingAndOrderby("2", "2", 2, true, ETCampaignService.ORDER_BY.ModifiedDate_DESC);
+
+			//Query Third page and 2 at a time
+			//this should return 1 items and NOT have more results
+			getAllCampaignsWithPagingAndOrderby("3", "2", 1, false, ETCampaignService.ORDER_BY.ModifiedDate_ASC);
+
+			// --
+
+			//TODO: turn back on when ID issue is fixed?
+			
+			//Query First page and 2 at a time
+			//this should return 2 items and have more results
+			//getAllCampaignsWithPagingAndOrderby("1", "2", 2, true, ETCampaignService.ORDER_BY.Id_DESC);
+
+			//Query Second page and 2 at a time
+			//this should return 2 items and have more results
+			//getAllCampaignsWithPagingAndOrderby("2", "2", 2, true, ETCampaignService.ORDER_BY.Id_ASC);
+
+			//Query Third page and 2 at a time
+			//this should return 1 items and NOT have more results
+			//getAllCampaignsWithPagingAndOrderby("3", "2", 1, false, ETCampaignService.ORDER_BY.Id_DESC);
+			
+			// --
+			
+			//Query First page and 3 at a time
+			//this should return 3 items and have more results
+			getAllCampaignsWithPagingAndOrderby("1", "3", 3, true, ETCampaignService.ORDER_BY.CampaignCode_ASC);
+
+			//Query Second page and 3 at a time
+			//this should return 2 items and NOT have more results
+			getAllCampaignsWithPagingAndOrderby("2", "3", 2, false, ETCampaignService.ORDER_BY.CampaignCode_DESC);
+
+			// --
+			
+			//Query First page and 3 at a time
+			//this should return 3 items and have more results
+			getAllCampaignsWithPagingAndOrderby("1", "3", 3, true, ETCampaignService.ORDER_BY.CreatedDate_ASC);
+
+			//Query Second page and 3 at a time
+			//this should return 2 items and NOT have more results
+			getAllCampaignsWithPagingAndOrderby("2", "3", 2, false, ETCampaignService.ORDER_BY.CreatedDate_DESC);
+			
+			// --
+			
+			//Query First page and 5 at a time
+			//this should return 5 items and NOT have more results
+			getAllCampaignsWithPagingAndOrderby("1", "5", 5, false, ETCampaignService.ORDER_BY.ModifiedDate_ASC);
+			
+			// --
+			
+			//Query First page and 5 at a time
+			//this should return 5 items and NOT have more results
+			getAllCampaignsWithPagingAndOrderby("1", "5", 5, false, ETCampaignService.ORDER_BY.ModifiedDate_DESC);
 			
 			//Delete all created Campaigns (cleanup)
 			for( String id: ids )
@@ -136,7 +296,8 @@ public class ETCampaignServiceTest{
 	public void TestDelete() {
 		logger.debug("TestDelete()");
 		
-		try {
+		try 
+		{
 			ETCampaign createdCampaign = createCampaign(TEST_CAMPAIGN_CODE);
 			String createdCampaignID = createdCampaign.getId();
 			ETFilter createdCampaignFilter = new ETSimpleFilter("id", ETFilterOperators.EQUALS, createdCampaignID);
@@ -164,10 +325,12 @@ public class ETCampaignServiceTest{
 	}
 	
 	@Test
-	public void TestPost(){
+	public void TestPost()
+	{
 		logger.debug("TestPost()");
 
-		try {
+		try 
+		{
 			ETCampaign createdCampaign = createCampaign(TEST_CAMPAIGN_CODE);
 			String createdCampaignID = createdCampaign.getId();
 			ETFilter createdCampaignFilter = new ETSimpleFilter("id", ETFilterOperators.EQUALS, createdCampaignID);
@@ -217,13 +380,36 @@ public class ETCampaignServiceTest{
 			Assert.fail(e.getMessage());
 		}
 	}
-
-	private void getAllCampaigns(String page, String pageSize, int expectedNumOfItems, boolean hasMoreResults ) throws ETSdkException
+	
+	private void getAllCampaignsWithPagingAndOrderby(String page, String pageSize, int expectedNumOfItems, boolean hasMoreResults, ETCampaignService.ORDER_BY orderby ) throws ETSdkException
 	{
 		List<ETFilter> simpleFilters = new ArrayList<ETFilter>();
 		ETComplexFilter filter = new ETComplexFilter();
-		simpleFilters.add(new ETSimpleFilter(ETCampaign.URLParmeters.page.toString(), ETFilterOperators.EQUALS, page));
-		simpleFilters.add(new ETSimpleFilter(ETCampaign.URLParmeters.pageSize.toString(), ETFilterOperators.EQUALS, pageSize));
+		simpleFilters.add(new ETSimpleFilter(ETCampaignService.URL_PARAM.page.toString(), ETFilterOperators.EQUALS, page));
+		simpleFilters.add(new ETSimpleFilter(ETCampaignService.URL_PARAM.pageSize.toString(), ETFilterOperators.EQUALS, pageSize));
+		simpleFilters.add(new ETSimpleFilter(ETCampaignService.URL_PARAM.orderBy.toString(),  ETFilterOperators.EQUALS,  orderby.toString()));
+		
+		//TODO: cool to use Additional Operands? ignor left/right?
+		filter.setAdditionalOperands(simpleFilters);
+		
+		ETServiceResponse<ETCampaign> response = null;
+		response = service.get(client, filter);
+		Assert.assertNotNull(response.getResults());
+		Assert.assertEquals(expectedNumOfItems, response.getResults().size());
+		Assert.assertEquals(response.hasMoreResults(), hasMoreResults);
+		
+		validateOrderBy(orderby, response.getResults());
+	}
+
+	
+	private void getAllCampaignsWithPaging(String page, String pageSize, int expectedNumOfItems, boolean hasMoreResults ) throws ETSdkException
+	{
+		List<ETFilter> simpleFilters = new ArrayList<ETFilter>();
+		ETComplexFilter filter = new ETComplexFilter();
+		simpleFilters.add(new ETSimpleFilter(ETCampaignService.URL_PARAM.page.toString(), ETFilterOperators.EQUALS, page));
+		simpleFilters.add(new ETSimpleFilter(ETCampaignService.URL_PARAM.pageSize.toString(), ETFilterOperators.EQUALS, pageSize));
+		
+		//TODO: cool to use Additional Operands? ignor left/right?
 		filter.setAdditionalOperands(simpleFilters);
 		
 		ETServiceResponse<ETCampaign> response = null;
@@ -232,11 +418,23 @@ public class ETCampaignServiceTest{
 		Assert.assertEquals(expectedNumOfItems, response.getResults().size());
 		Assert.assertEquals(response.hasMoreResults(), hasMoreResults);
 	}
-	
+
+	private void getAllCampaignsWithOrderBy( ETCampaignService.ORDER_BY orderby ) throws ETSdkException
+	{
+		ETSimpleFilter filter = new ETSimpleFilter( ETCampaignService.URL_PARAM.orderBy.toString(),  ETFilterOperators.EQUALS,  orderby.toString() );
+		
+		ETServiceResponse<ETCampaign> response = null;
+		response = service.get(client, filter);
+		
+		Assert.assertNotNull(response.getResults());
+		
+		validateOrderBy(orderby, response.getResults());
+	}
+
 	private ETCampaign createCampaign(String campaign) throws ETSdkException {
 		ETCampaign etObject = new ETCampaign();
-		etObject.setName("testCampaign");
-		etObject.setDescription("testCampaign");
+		etObject.setName("NAME-"+campaign);
+		etObject.setDescription("DESCRIPTION-"+campaign);
 		etObject.setCampaignCode(campaign);
 		etObject.setColor("000fff");
 		etObject.setFavorite(false);
@@ -272,4 +470,84 @@ public class ETCampaignServiceTest{
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
 	}
+
+	private void validateOrderBy(ETCampaignService.ORDER_BY orderby, List<ETCampaign> results) throws ETSdkException 
+	{
+		ETCampaign prevCampaign = null;
+		for( ETCampaign c: results )
+		{
+			if( prevCampaign == null )
+			{
+				prevCampaign = c;
+				continue;
+			}
+			
+			switch (orderby) 
+			{
+			case Name_ASC:
+				Assert.assertTrue(prevCampaign.getName().compareTo(c.getName()) < 0);
+				break;
+			case Name_DESC:
+				Assert.assertTrue(prevCampaign.getName().compareTo(c.getName()) > 0);
+				break;
+			case ModifiedDate_ASC:
+				compareDate(prevCampaign.getModifiedDate(), c.getModifiedDate(), true);
+				break;
+			case ModifiedDate_DESC:
+				compareDate(prevCampaign.getModifiedDate(), c.getModifiedDate(), false);
+				break;
+			case CreatedDate_ASC:
+				compareDate(prevCampaign.getCreatedDate(), c.getCreatedDate(), true);
+				break;
+			case CreatedDate_DESC:
+				compareDate(prevCampaign.getCreatedDate(), c.getCreatedDate(), false);
+				break;
+			case CampaignCode_ASC:
+				Assert.assertTrue(prevCampaign.getCampaignCode().compareTo(c.getCampaignCode()) < 0);
+				break;
+			case CampaignCode_DESC:
+				Assert.assertTrue(prevCampaign.getCampaignCode().compareTo(c.getCampaignCode()) > 0);
+				break;
+			case Id_ASC:
+				Assert.assertTrue(prevCampaign.getId().compareTo(c.getId()) < 0);
+				break;
+			case Id_DESC:
+				Assert.assertTrue(prevCampaign.getId().compareTo(c.getId()) > 0);
+				break;
+			default:
+				break;
+			}
+		}
+	}
+	
+	private void compareDate(String prevDate, String currentDate, boolean ascend) throws ETSdkException 
+	{
+		String dateFormat = "yyyy-MM-dd'T'HH:mm:ss";
+		SimpleDateFormat formatter = new SimpleDateFormat(dateFormat);
+		
+		try 
+		{
+			Date pDate = formatter.parse(prevDate);
+			Date cDate = formatter.parse(currentDate);
+			
+			if( ascend )
+			{
+				logger.debug("ASC PrevDate: " + pDate + " : Current Date: " + cDate);
+				//TODO: turn back on when DATE issue is fixed?
+				//Assert.assertTrue( prevDate.before(date) );
+			}
+			else
+			{
+				logger.debug("DESC PrevDate: " + pDate + " : Current Date: " + cDate);
+				//TODO: turn back on when DATE issue is fixed?
+				//Assert.assertTrue( prevDate.after(date) );
+			}
+			
+		} 
+		catch (ParseException e) 
+		{
+			throw new ETSdkException("Date format should be: " + dateFormat, e);
+		}
+	}
+	
 }

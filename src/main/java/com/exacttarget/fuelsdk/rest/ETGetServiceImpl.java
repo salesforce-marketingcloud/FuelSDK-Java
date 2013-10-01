@@ -45,8 +45,8 @@ public class ETGetServiceImpl implements ETGetService {
 		return this.get(client, type, null);
 	}
 
-	public <T extends ETObject> ETServiceResponse<T> get(ETClient client, Class<T> type, ETFilter filter) throws ETSdkException {
-		
+	public <T extends ETObject> ETServiceResponse<T> get(ETClient client, Class<T> type, ETFilter filter) throws ETSdkException 
+	{
 		logger.trace("get ");
 		ETRestConnection connection = client.getRESTConnection();
 		
@@ -58,10 +58,10 @@ public class ETGetServiceImpl implements ETGetService {
 		
 		String path = buildPath(typeAnnotation.restPath(), client.getAccessToken(), typeAnnotation, filter);
 		String json = connection.get(path);
-        boolean status = connection.getResponseCode() == 200;
-        
+		
 		ETServiceResponse<T> response = new ETServiceResponseImpl<T>();
-		response.setStatus(status);
+		
+		response.setStatus(connection.getResponseCode() == 200);
 		
 		return createResponseETObject(type, json, response);
 	}
@@ -72,6 +72,7 @@ public class ETGetServiceImpl implements ETGetService {
 		JsonArray items;
 		try {
 			
+			//TODO: refactor how to process empty response.
 			if( "\"\"".equals(json) )
 			{
 				return response;
@@ -102,6 +103,7 @@ public class ETGetServiceImpl implements ETGetService {
 					int pageSize = jobject.get("pageSize").getAsInt();
 					int count = jobject.get("count").getAsInt();
 					
+					//TODO: acceptable way to calculate hasMoreResults()?
 					response.setMoreResults( count > page*pageSize );
 					logger.debug("HAS MORE RESULTS: " + response.hasMoreResults());
 				}
@@ -135,7 +137,8 @@ public class ETGetServiceImpl implements ETGetService {
         	fields.addAll(Arrays.asList(type.getSuperclass().getDeclaredFields()));
         }
 		
-		try {
+		try 
+		{
 			Iterator<JsonElement> iter = items.iterator();
 
 			while (iter.hasNext()) {
@@ -165,54 +168,38 @@ public class ETGetServiceImpl implements ETGetService {
 		return response;
 	}
 	
-	protected String buildPath(String restPath, String accessToken, InternalRestType typeAnnotation, ETFilter filter) {
-		
-		StringBuilder path = new StringBuilder(restPath);
-
+	protected String buildPath(String restPath, String accessToken, InternalRestType typeAnnotation, ETFilter filter) 
+	{
 		List<String> props = Arrays.asList(typeAnnotation.urlProps());
 		List<String> params = Arrays.asList(typeAnnotation.urlParameters());
+		
+		StringBuilder path = new StringBuilder(restPath);
 		path.append( "?" );
 		
 		if( filter != null )
 		{
 			if( filter instanceof ETSimpleFilter )
 			{
-				ETSimpleFilter simpleFilter = (ETSimpleFilter) filter;
-				if (props.contains(simpleFilter.getProperty()) && simpleFilter.getValues().size() > 0) {
-					replaceURLPropWithValue(path, simpleFilter.getProperty(), simpleFilter.getValues().get(0));
-				}
+				buildPathFromSimpletFilter(path, (ETSimpleFilter) filter, props, params);
 			}
 			else if( filter instanceof ETComplexFilter )
 			{
 				ETComplexFilter complexFilter = (ETComplexFilter) filter;
-				
+
+				//TODO: cool to use Additional Operands? ignore left/right?
 				for( ETFilter f: complexFilter.getAdditionalOperands())
 				{
 					if( f instanceof ETSimpleFilter )
 					{
-						ETSimpleFilter simpleFilter = (ETSimpleFilter) f;
-						if (props.contains(simpleFilter.getProperty())) 
-						{
-							if( simpleFilter.getValues().size() > 0 )
-								replaceURLPropWithValue(path, simpleFilter.getProperty(), simpleFilter.getValues().get(0));
-						}
-						else if( params.contains(simpleFilter.getProperty()) )
-						{
-							path.append("$");
-							path.append(simpleFilter.getProperty());
-							path.append("=");
-							path.append(simpleFilter.getValues().get(0));
-							path.append("&");
-						}
+						buildPathFromSimpletFilter(path, (ETSimpleFilter) f, props, params);
 					}
 				}
 			}
 		}
 		
 		// Remove all remaining URL Props
-		for(String prop : props) {
+		for(String prop : props)
 			replaceURLPropWithValue(path, prop, "");
-		}
 		
 		path.append( "access_token=" );
 		path.append( accessToken );
@@ -222,13 +209,34 @@ public class ETGetServiceImpl implements ETGetService {
 		return path.toString();
 	}
 	
-	protected void replaceURLPropWithValue(StringBuilder sb, String prop, String value) {
-		
-		if (sb.indexOf("{" + prop + "}") > -1) {
-			value = (value == null) ? "" : value;
-			sb.replace(sb.indexOf("{" + prop + "}"), sb.indexOf("{" + prop + "}") + new String("{" + prop + "}").length(), value);
+	protected void buildPathFromSimpletFilter( StringBuilder path, ETSimpleFilter simpleFilter, List<String> props, List<String> params )
+	{
+		if (props.contains(simpleFilter.getProperty()) && simpleFilter.getValues().size() > 0) 
+		{
+			replaceURLPropWithValue(path, simpleFilter.getProperty(), simpleFilter.getValues().get(0));
 		}
-
+		else if( params.contains(simpleFilter.getProperty()) )
+		{
+			path.append("$");
+			path.append(simpleFilter.getProperty());
+			path.append("=");
+			path.append(simpleFilter.getValues().get(0));
+			path.append("&");
+		}
 	}
 	
+	protected void replaceURLPropWithValue(StringBuilder sb, String prop, String value) 
+	{
+		if (sb.indexOf("{" + prop + "}") > -1) 
+		{
+			value = (value == null) ? "" : value;
+			
+			int startIndex = sb.indexOf("{" + prop + "}");
+			int endIndex = startIndex + new String("{" + prop + "}").length();
+			
+			if( "".equals(value) ) startIndex -= 1;
+			
+			sb.replace(startIndex, endIndex, value);
+		}
+	}
 }

@@ -14,17 +14,9 @@ import com.exacttarget.fuelsdk.annotations.InternalRestField;
 import com.exacttarget.fuelsdk.annotations.InternalRestType;
 
 @InternalRestType(type = "Campaign", restPath="/hub/v1/campaigns/{id}", collectionKey="items", 
-				primaryKey="id", urlProps={"id"}, urlParameters={"page","pageSize"})
-public class ETCampaign extends BaseRestSerializableObject implements ETObject{
-
-	/**
-	 * Enum that represents all available URL Parameters 
-	 */
-	public static enum URLParmeters
-	{
-		page,pageSize
-	}
-	
+				primaryKey="id", urlProps={"id"}, urlParameters={"page","pageSize","orderBy"})
+public class ETCampaign extends BaseRestSerializableObject implements ETObject
+{
 	/** The name. */
 	@InternalRestField(jsonKey = "name")
 	private String name;
