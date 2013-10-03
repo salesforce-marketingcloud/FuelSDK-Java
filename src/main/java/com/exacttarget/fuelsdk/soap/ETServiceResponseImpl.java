@@ -22,6 +22,7 @@ public class ETServiceResponseImpl<T extends ETObject> implements ETServiceRespo
     private List<T> results = new ArrayList<T>();
     private boolean status = true;
     private boolean moreResults = false;
+    private String message = null;
 
     public String getRequestId() {
         return requestId;
@@ -48,7 +49,14 @@ public class ETServiceResponseImpl<T extends ETObject> implements ETServiceRespo
 	}
 
 	public void setStatus(boolean status) {
-		//if 200 status is true else false
 		this.status = status;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
 	}
 }

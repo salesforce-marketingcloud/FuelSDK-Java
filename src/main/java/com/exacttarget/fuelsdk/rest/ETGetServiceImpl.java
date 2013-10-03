@@ -41,6 +41,8 @@ public class ETGetServiceImpl implements ETGetService {
 	
 	private static Logger logger = Logger.getLogger(ETGetServiceImpl.class);
 	
+	private static List<Integer> successfulResponses = Arrays.asList(200,201,202);
+	
 	public <T extends ETObject> ETServiceResponse<T> get(ETClient client, Class<T> type) throws ETSdkException {
 		return this.get(client, type, null);
 	}
@@ -56,23 +58,63 @@ public class ETGetServiceImpl implements ETGetService {
             throw new ETSdkException("The type specified does not wrap an internal ET APIObject.");
         }		
 		
-		String path = buildPath(typeAnnotation.restPath(), client.getAccessToken(), typeAnnotation, filter);
-		String json = connection.get(path);
+		String path = null;
 		
+		try {
+			path = buildPath(typeAnnotation.restPath(), client.getAccessToken(), typeAnnotation, filter);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+
 		ETServiceResponse<T> response = new ETServiceResponseImpl<T>();
 		
-		response.setStatus(connection.getResponseCode() == 200);
+		String json = connection.get(path);
+		
+		response.setStatus(successfulResponses.contains(connection.getResponseCode()));
+		
+		if( !response.getStatus() )
+			return getErrorResponse( json, response );
 		
 		return createResponseETObject(type, json, response);
 	}
 
+	protected <T extends ETObject> ETServiceResponse<T> getErrorResponse( String json, ETServiceResponse<T> response )
+	{
+		try 
+		{
+			if( json == null ) return response;
+			
+			JsonParser jsonParser = new JsonParser();
+			JsonObject jObject = jsonParser.parse(json).getAsJsonObject();
+			
+			if( jObject.get("message") != null )
+			{
+				if( jObject.get("errorcode") == null )
+				{
+					response.setMessage(jObject.get("message").getAsString());
+				}
+				else
+				{
+					String message = jObject.get("message").getAsString();
+					String errorcode = jObject.get("errorcode").getAsString();
+					response.setMessage(message + " - ErrorCode: " + errorcode);
+				}
+			}
+		} 
+		catch (JsonSyntaxException e) 
+		{
+			logger.error("Error parsing Error Response: " + e);
+		}
+		
+		return response;
+	}
+	
 	protected <T extends ETObject> ETServiceResponse<T> createResponseETObject(Class<T> type, String json, ETServiceResponse<T> response)  throws ETSdkException {
 		
 		logger.debug("returned json" + json);
 		JsonArray items;
 		try {
 			
-			//TODO: refactor how to process empty response.
 			if( "\"\"".equals(json) )
 			{
 				return response;
@@ -103,7 +145,6 @@ public class ETGetServiceImpl implements ETGetService {
 					int pageSize = jobject.get("pageSize").getAsInt();
 					int count = jobject.get("count").getAsInt();
 					
-					//TODO: acceptable way to calculate hasMoreResults()?
 					response.setMoreResults( count > page*pageSize );
 					logger.debug("HAS MORE RESULTS: " + response.hasMoreResults());
 				}
@@ -185,9 +226,15 @@ public class ETGetServiceImpl implements ETGetService {
 			else if( filter instanceof ETComplexFilter )
 			{
 				ETComplexFilter complexFilter = (ETComplexFilter) filter;
+				List<ETFilter> filters = new ArrayList<ETFilter>();
 
-				//TODO: cool to use Additional Operands? ignore left/right?
-				for( ETFilter f: complexFilter.getAdditionalOperands())
+				filters.add(complexFilter.getLeftOperand());
+				filters.add(complexFilter.getRightOperand());
+				
+				if( !complexFilter.getAdditionalOperands().isEmpty() )
+					filters.addAll(complexFilter.getAdditionalOperands());
+				
+				for( ETFilter f: filters)
 				{
 					if( f instanceof ETSimpleFilter )
 					{

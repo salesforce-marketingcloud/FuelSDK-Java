@@ -195,10 +195,12 @@ public class ETRestConnection {
             }
         }
 
-        try {
-            logger.debug(connection.getResponseCode() + " " + connection.getResponseMessage());
-
-        } catch (IOException ex) {
+        try 
+        {
+        	logger.debug("RESPONSE CODE: " + connection.getResponseCode() + " " + "RESPONSE MSG: " + connection.getResponseMessage());
+        } 
+        catch (IOException ex) 
+        {
             throw new ETSdkException("error getting response code / message", ex);
         }
 
@@ -209,21 +211,35 @@ public class ETRestConnection {
     {
         InputStream is = null;
         
-        try {
-            is = connection.getInputStream();
-        } catch (IOException ex) {
+        try 
+        {
+        	if (connection.getResponseCode() >= 400) 
+        	{
+        	    is = connection.getErrorStream();
+        	} 
+        	else 
+        	{
+        	    is = connection.getInputStream();
+        	}
+        } 
+        catch (IOException ex) 
+        {
             throw new ETSdkException("error opening " + connection.getURL(), ex);
         }
 
         StringBuilder stringBuilder = new StringBuilder();
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         
-        try {
+        try 
+        {
             String line = null;
-            while ((line = reader.readLine()) != null) {
+            while ((line = reader.readLine()) != null) 
+            {
                 stringBuilder.append(line);
             }
-        } catch (IOException ex) {
+        } 
+        catch (IOException ex) 
+        {
             throw new ETSdkException("error reading " + connection.getURL(), ex);
         }
 

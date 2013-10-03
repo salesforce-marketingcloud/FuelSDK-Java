@@ -10,14 +10,15 @@
 
 package com.exacttarget.fuelsdk.filter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ETComplexFilter implements ETFilter {
 
 	protected ETFilter leftOperand;
 	protected ETFilter rightOperand;
-	protected ETLogicalOperators operator;
-	protected List<ETFilter> additionalOperands;
+	protected ETLogicalOperators operator = ETLogicalOperators.AND;
+	protected List<ETFilter> additionalOperands = new ArrayList<ETFilter>();
 
 	public ETComplexFilter(){
 

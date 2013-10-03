@@ -15,13 +15,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ErrorCollector;
+import org.hamcrest.CoreMatchers;
 import org.junit.runners.MethodSorters;
 
 import com.exacttarget.fuelsdk.ETCampaignService;
@@ -44,7 +45,9 @@ public class ETCampaignServiceTest{
 	protected static ETCampaignService service;
 	protected static ETClient client = null;
 	protected static ETConfiguration configuration = null;
-	
+
+    @Rule
+    public ErrorCollector collector = new ErrorCollector();
 	
 	@BeforeClass
 	public static void setUp() throws ETSdkException {
@@ -78,22 +81,21 @@ public class ETCampaignServiceTest{
 			}
 			
 		} catch (ETSdkException e) {
-			Assert.fail(e.getMessage());
+			collector.addError(e);
 		}
 	}
 	
 	@Test
 	public void TestOrderByParameters() 
 	{
+		logger.debug("TestOrderByParameters()");
+		List<String> ids = new ArrayList<String>();
+		
 		try 
 		{
-			logger.debug("TestOrderByParameters()");
-			List<String> ids = new ArrayList<String>();
-			
 			//Create 5 unique Campaigns
 			for( int i=0;i<5;++i )
 			{
-				TimeUnit.SECONDS.sleep(1);
 				ETCampaign c = createCampaign(TEST_CAMPAIGN_CODE + i);
 				ids.add(c.getId());
 			}
@@ -114,34 +116,42 @@ public class ETCampaignServiceTest{
 
 			getAllCampaignsWithOrderBy( ETCampaignService.ORDER_BY.CampaignCode_DESC );
 
-			//TODO: turn back on when ID issue is fixed?
-			//getAllCampaignsWithOrderBy( ETCampaignService.ORDER_BY.Id_ASC.toString() );
+			getAllCampaignsWithOrderBy( ETCampaignService.ORDER_BY.Id_ASC );
 
-			//getAllCampaignsWithOrderBy( ETCampaignService.ORDER_BY.Id_DESC.toString() );
+			getAllCampaignsWithOrderBy( ETCampaignService.ORDER_BY.Id_DESC );
 			
-			//Delete all created Campaigns (cleanup)
-			for( String id: ids )
+		} 
+		catch (ETSdkException e) 
+		{
+			collector.addError(e);
+		} 
+		finally
+		{
+			try 
 			{
-				ETCampaign c = new ETCampaign();
-				c.setId( id );
-				deleteCampaign(c);
+				//Delete all created Campaigns (cleanup)
+				for( String id: ids )
+				{
+					ETCampaign c = new ETCampaign();
+					c.setId( id );
+					deleteCampaign(c);
+				}
+			} 
+			catch (ETSdkException e) 
+			{
+				e.printStackTrace();
 			}
-			
-		} catch (ETSdkException e) {
-			Assert.fail(e.getMessage());
-		} catch (InterruptedException e) {
-			e.printStackTrace();
 		}
 	}
 	
 	@Test
 	public void TestPagingParameters() 
 	{
+		logger.debug("TestPagingParameters()");
+		List<String> ids = new ArrayList<String>();
+		
 		try 
 		{
-			logger.debug("TestPagingParameters()");
-			List<String> ids = new ArrayList<String>();
-			
 			//Create 5 unique Campaigns
 			for( int i=5;i<10;++i )
 			{
@@ -177,27 +187,38 @@ public class ETCampaignServiceTest{
 			//this should return 5 items and NOT have more results
 			getAllCampaignsWithPaging("1", "5", 5, false);
 			
-			//Delete all created Campaigns (cleanup)
-			for( String id: ids )
+		} 
+		catch (ETSdkException e) 
+		{
+			collector.addError(e);
+		}
+		finally
+		{
+			try 
 			{
-				ETCampaign c = new ETCampaign();
-				c.setId( id );
-				deleteCampaign(c);
+				//Delete all created Campaigns (cleanup)
+				for( String id: ids )
+				{
+					ETCampaign c = new ETCampaign();
+					c.setId( id );
+					deleteCampaign(c);
+				}
+			} 
+			catch (ETSdkException e) 
+			{
+				e.printStackTrace();
 			}
-			
-		} catch (ETSdkException e) {
-			Assert.fail(e.getMessage());
 		}
 	}
 
 	@Test
 	public void TestURLParameters() 
 	{
+		logger.debug("TestURLParameters()");
+		List<String> ids = new ArrayList<String>();
+		
 		try 
 		{
-			logger.debug("TestURLParameters()");
-			List<String> ids = new ArrayList<String>();
-			
 			//Create 5 unique Campaigns
 			for( int i=10;i<15;++i )
 			{
@@ -233,19 +254,17 @@ public class ETCampaignServiceTest{
 
 			// --
 
-			//TODO: turn back on when ID issue is fixed?
-			
 			//Query First page and 2 at a time
 			//this should return 2 items and have more results
-			//getAllCampaignsWithPagingAndOrderby("1", "2", 2, true, ETCampaignService.ORDER_BY.Id_DESC);
+			getAllCampaignsWithPagingAndOrderby("1", "2", 2, true, ETCampaignService.ORDER_BY.Id_DESC);
 
 			//Query Second page and 2 at a time
 			//this should return 2 items and have more results
-			//getAllCampaignsWithPagingAndOrderby("2", "2", 2, true, ETCampaignService.ORDER_BY.Id_ASC);
+			getAllCampaignsWithPagingAndOrderby("2", "2", 2, true, ETCampaignService.ORDER_BY.Id_ASC);
 
 			//Query Third page and 2 at a time
 			//this should return 1 items and NOT have more results
-			//getAllCampaignsWithPagingAndOrderby("3", "2", 1, false, ETCampaignService.ORDER_BY.Id_DESC);
+			getAllCampaignsWithPagingAndOrderby("3", "2", 1, false, ETCampaignService.ORDER_BY.Id_DESC);
 			
 			// --
 			
@@ -279,16 +298,27 @@ public class ETCampaignServiceTest{
 			//this should return 5 items and NOT have more results
 			getAllCampaignsWithPagingAndOrderby("1", "5", 5, false, ETCampaignService.ORDER_BY.ModifiedDate_DESC);
 			
-			//Delete all created Campaigns (cleanup)
-			for( String id: ids )
+		} 
+		catch (ETSdkException e) 
+		{
+			collector.addError(e);
+		}
+		finally
+		{
+			try 
 			{
-				ETCampaign c = new ETCampaign();
-				c.setId( id );
-				deleteCampaign(c);
+				//Delete all created Campaigns (cleanup)
+				for( String id: ids )
+				{
+					ETCampaign c = new ETCampaign();
+					c.setId( id );
+					deleteCampaign(c);
+				}
+			} 
+			catch (ETSdkException e) 
+			{
+				e.printStackTrace();
 			}
-			
-		} catch (ETSdkException e) {
-			Assert.fail(e.getMessage());
 		}
 	}
 	
@@ -304,7 +334,7 @@ public class ETCampaignServiceTest{
 			
 			ETCampaign testCampaign1 = retrieveCampaign(createdCampaignFilter);
 			
-			Assert.assertEquals(TEST_CAMPAIGN_CODE, testCampaign1.getCampaignCode());
+			collector.checkThat(TEST_CAMPAIGN_CODE, CoreMatchers.is(testCampaign1.getCampaignCode()));
 			
 			deleteCampaign(testCampaign1);
 			
@@ -313,14 +343,13 @@ public class ETCampaignServiceTest{
 			
 			for( ETCampaign c: campaigns )
 			{
-				if( createdCampaignID.equals(c.getId()) )
-				{
-					Assert.fail("Campaign with ID: " + createdCampaignID + " should have been deleted and was present!");
-				}
+				assertTrue("Campaign with ID: " + createdCampaignID + " should have been deleted and was present!", !createdCampaignID.equals(c.getId()));
 			}
 			
-		} catch (ETSdkException e) {
-			Assert.fail(e.getMessage());
+		} 
+		catch (ETSdkException e) 
+		{
+			collector.addError(e);
 		}
 	}
 	
@@ -336,13 +365,15 @@ public class ETCampaignServiceTest{
 			ETFilter createdCampaignFilter = new ETSimpleFilter("id", ETFilterOperators.EQUALS, createdCampaignID);
 			
 			ETCampaign testCampaign1 = retrieveCampaign(createdCampaignFilter);
-			
-			Assert.assertEquals(TEST_CAMPAIGN_CODE, testCampaign1.getCampaignCode());
+
+			collector.checkThat(TEST_CAMPAIGN_CODE, CoreMatchers.is(testCampaign1.getCampaignCode()));
 			
 			deleteCampaign(testCampaign1);
 			
-		} catch (ETSdkException e) {
-			Assert.fail(e.getMessage());
+		} 
+		catch (ETSdkException e) 
+		{
+			collector.addError(e);
 		}
 	}
 
@@ -356,28 +387,30 @@ public class ETCampaignServiceTest{
 			ETFilter createdCampaignFilter = new ETSimpleFilter("id", ETFilterOperators.EQUALS, createdCampaignID);
 			
 			ETCampaign testCampaign1 = retrieveCampaign(createdCampaignFilter);
-			Assert.assertNotNull(testCampaign1);
+			assertNotNull("",testCampaign1);
 
 			//TEST begin - update existing Campaign 
 			testCampaign1.setCampaignCode(TEST_CAMPAIGN_CODE_PATCH);
 
-			Assert.assertEquals(TEST_CAMPAIGN_CODE_PATCH, testCampaign1.getCampaignCode());
+			assertEquals("",TEST_CAMPAIGN_CODE_PATCH, testCampaign1.getCampaignCode());
 			
 			ETServiceResponse<ETCampaign> response = service.patch(client, testCampaign1);
-			Assert.assertNotNull(response);
-			Assert.assertTrue(response.getStatus());
-			Assert.assertNotNull(response.getResults());
-			Assert.assertEquals(1, response.getResults().size());
-			Assert.assertEquals(TEST_CAMPAIGN_CODE_PATCH, response.getResults().get(0).getCampaignCode());
+			assertNotNull("",response);
+			assertTrue("",response.getStatus());
+			assertNotNull("",response.getResults());
+			assertEquals("",1, response.getResults().size());
+			assertEquals("",TEST_CAMPAIGN_CODE_PATCH, response.getResults().get(0).getCampaignCode());
 			
 			ETCampaign testCampaign2 = retrieveCampaign(createdCampaignFilter);
-			Assert.assertEquals(TEST_CAMPAIGN_CODE_PATCH, testCampaign2.getCampaignCode());
+
+			assertEquals("",TEST_CAMPAIGN_CODE_PATCH, testCampaign2.getCampaignCode());
 			//Test end
 			
 			deleteCampaign(testCampaign2);
-			
-		} catch (ETSdkException e) {
-			Assert.fail(e.getMessage());
+		} 
+		catch (ETSdkException e) 
+		{
+			collector.addError(e);
 		}
 	}
 	
@@ -385,18 +418,18 @@ public class ETCampaignServiceTest{
 	{
 		List<ETFilter> simpleFilters = new ArrayList<ETFilter>();
 		ETComplexFilter filter = new ETComplexFilter();
-		simpleFilters.add(new ETSimpleFilter(ETCampaignService.URL_PARAM.page.toString(), ETFilterOperators.EQUALS, page));
-		simpleFilters.add(new ETSimpleFilter(ETCampaignService.URL_PARAM.pageSize.toString(), ETFilterOperators.EQUALS, pageSize));
-		simpleFilters.add(new ETSimpleFilter(ETCampaignService.URL_PARAM.orderBy.toString(),  ETFilterOperators.EQUALS,  orderby.toString()));
+		filter.setLeftOperand(new ETSimpleFilter(ETCampaignService.URL_PARAM.page.toString(), ETFilterOperators.EQUALS, page));
+		filter.setRightOperand(new ETSimpleFilter(ETCampaignService.URL_PARAM.pageSize.toString(), ETFilterOperators.EQUALS, pageSize));
 		
-		//TODO: cool to use Additional Operands? ignor left/right?
+		simpleFilters.add(new ETSimpleFilter(ETCampaignService.URL_PARAM.orderBy.toString(),  ETFilterOperators.EQUALS,  orderby.toString()));
+
 		filter.setAdditionalOperands(simpleFilters);
 		
 		ETServiceResponse<ETCampaign> response = null;
 		response = service.get(client, filter);
-		Assert.assertNotNull(response.getResults());
-		Assert.assertEquals(expectedNumOfItems, response.getResults().size());
-		Assert.assertEquals(response.hasMoreResults(), hasMoreResults);
+		assertNotNull("The call response.getResults() was expected to be NOT null:", response.getResults());
+		assertEquals("Received Incorrect Number of of results: ", expectedNumOfItems, response.getResults().size());
+		assertEquals("HasMoreResults: ", hasMoreResults, response.hasMoreResults());
 		
 		validateOrderBy(orderby, response.getResults());
 	}
@@ -404,34 +437,41 @@ public class ETCampaignServiceTest{
 	
 	private void getAllCampaignsWithPaging(String page, String pageSize, int expectedNumOfItems, boolean hasMoreResults ) throws ETSdkException
 	{
-		List<ETFilter> simpleFilters = new ArrayList<ETFilter>();
 		ETComplexFilter filter = new ETComplexFilter();
-		simpleFilters.add(new ETSimpleFilter(ETCampaignService.URL_PARAM.page.toString(), ETFilterOperators.EQUALS, page));
-		simpleFilters.add(new ETSimpleFilter(ETCampaignService.URL_PARAM.pageSize.toString(), ETFilterOperators.EQUALS, pageSize));
+		filter.setLeftOperand(new ETSimpleFilter(ETCampaignService.URL_PARAM.page.toString(), ETFilterOperators.EQUALS, page));
+		filter.setRightOperand(new ETSimpleFilter(ETCampaignService.URL_PARAM.pageSize.toString(), ETFilterOperators.EQUALS, pageSize));
 		
-		//TODO: cool to use Additional Operands? ignor left/right?
-		filter.setAdditionalOperands(simpleFilters);
-		
-		ETServiceResponse<ETCampaign> response = null;
-		response = service.get(client, filter);
-		Assert.assertNotNull(response.getResults());
-		Assert.assertEquals(expectedNumOfItems, response.getResults().size());
-		Assert.assertEquals(response.hasMoreResults(), hasMoreResults);
+		ETServiceResponse<ETCampaign> response = service.get(client, filter);
+
+		assertNotNull("The call response.getResults() was expected to be NOT null:", response.getResults());
+		assertEquals("Received Incorrect Number of of results: ", expectedNumOfItems, response.getResults().size());
+		assertEquals("HasMoreResults: ", hasMoreResults, response.hasMoreResults());
+		assertTrue("Response Status should be True: ",response.getStatus());
 	}
 
 	private void getAllCampaignsWithOrderBy( ETCampaignService.ORDER_BY orderby ) throws ETSdkException
 	{
 		ETSimpleFilter filter = new ETSimpleFilter( ETCampaignService.URL_PARAM.orderBy.toString(),  ETFilterOperators.EQUALS,  orderby.toString() );
 		
-		ETServiceResponse<ETCampaign> response = null;
-		response = service.get(client, filter);
+		ETServiceResponse<ETCampaign> response = service.get(client, filter);
+
+		assertNotNull("Reponse should be non-Null: ",response);
 		
-		Assert.assertNotNull(response.getResults());
+		if( !response.getStatus() )
+		{
+			assertNotNull("Reponse Message should be non-Null: ",response.getMessage());
+			logger.error("Bad Response when calling orderBy=" + orderby.toString() + "- with message:" + response.getMessage());
+			assertTrue("Bad Response when calling orderBy=" + orderby.toString() + "- with message:" + response.getMessage(),response.getStatus());
+		}
+		
+		assertNotNull("Response Results should be non-Null:",response.getResults());
+		assertTrue("Response Status should be True: ",response.getStatus());
 		
 		validateOrderBy(orderby, response.getResults());
 	}
 
-	private ETCampaign createCampaign(String campaign) throws ETSdkException {
+	private ETCampaign createCampaign(String campaign) throws ETSdkException 
+	{
 		ETCampaign etObject = new ETCampaign();
 		etObject.setName("NAME-"+campaign);
 		etObject.setDescription("DESCRIPTION-"+campaign);
@@ -440,35 +480,40 @@ public class ETCampaignServiceTest{
 		etObject.setFavorite(false);
 		
 		ETServiceResponse<ETCampaign> response =  service.post(client, etObject);
-		Assert.assertNotNull(response);
-		Assert.assertTrue(response.getStatus());
+		
+		assertNotNull("Reponse should be non-Null: ",response);
+		assertTrue("Response Status should be True: ",response.getStatus());
 		
 		return response.getResults().get(0);
 	}
 	
-	protected List<ETCampaign> retrieveAllCampaigns() throws ETSdkException {
+	protected List<ETCampaign> retrieveAllCampaigns() throws ETSdkException 
+	{
 		ETServiceResponse<ETCampaign> response = service.get(client);
-		Assert.assertNotNull(response);
-		Assert.assertTrue(response.getStatus());
-		Assert.assertNotNull(response.getResults());
+
+		assertNotNull("Reponse should be non-Null: ",response);
+		assertTrue("Response Status should be True: ",response.getStatus());
+		assertNotNull("Response Results should be non-Null:",response.getResults());
 		return response.getResults();
 	}
 	
-	protected ETCampaign retrieveCampaign(ETFilter f) throws ETSdkException {
+	protected ETCampaign retrieveCampaign(ETFilter f) throws ETSdkException 
+	{
 		ETServiceResponse<ETCampaign> response = service.get(client, f);
-		Assert.assertNotNull(response);
-		Assert.assertTrue(response.getStatus());
-		Assert.assertNotNull(response.getResults());
-		Assert.assertEquals(1,response.getResults().size());
-		Assert.assertNotNull(response.getResults().get(0));
+		assertNotNull("Reponse should be non-Null: ",response);
+		assertTrue("Response Status should be True: ",response.getStatus());
+		assertNotNull("Response Results should be non-Null:",response.getResults());
+		assertEquals("Recieved incorrect number of Results: ",1,response.getResults().size());
+		assertNotNull("",response.getResults().get(0));
 		return response.getResults().get(0);
 	}
 	
 	protected void deleteCampaign(ETCampaign etObject) throws ETSdkException
 	{
 		ETServiceResponse<ETCampaign> response = service.delete(client, etObject);
-		Assert.assertNotNull(response);
-		Assert.assertTrue(response.getStatus());
+		
+		assertNotNull("Reponse should be non-Null: ",response);
+		assertTrue("Response Status should be True: ",response.getStatus());
 	}
 
 	private void validateOrderBy(ETCampaignService.ORDER_BY orderby, List<ETCampaign> results) throws ETSdkException 
@@ -485,10 +530,10 @@ public class ETCampaignServiceTest{
 			switch (orderby) 
 			{
 			case Name_ASC:
-				Assert.assertTrue(prevCampaign.getName().compareTo(c.getName()) < 0);
+				assertTrue("Name ASC: previous name should be alfabatized before current name: ", prevCampaign.getName().compareTo(c.getName()) < 0);
 				break;
 			case Name_DESC:
-				Assert.assertTrue(prevCampaign.getName().compareTo(c.getName()) > 0);
+				assertTrue("",prevCampaign.getName().compareTo(c.getName()) > 0);
 				break;
 			case ModifiedDate_ASC:
 				compareDate(prevCampaign.getModifiedDate(), c.getModifiedDate(), true);
@@ -503,16 +548,16 @@ public class ETCampaignServiceTest{
 				compareDate(prevCampaign.getCreatedDate(), c.getCreatedDate(), false);
 				break;
 			case CampaignCode_ASC:
-				Assert.assertTrue(prevCampaign.getCampaignCode().compareTo(c.getCampaignCode()) < 0);
+				assertTrue("",prevCampaign.getCampaignCode().compareTo(c.getCampaignCode()) < 0);
 				break;
 			case CampaignCode_DESC:
-				Assert.assertTrue(prevCampaign.getCampaignCode().compareTo(c.getCampaignCode()) > 0);
+				assertTrue("",prevCampaign.getCampaignCode().compareTo(c.getCampaignCode()) > 0);
 				break;
 			case Id_ASC:
-				Assert.assertTrue(prevCampaign.getId().compareTo(c.getId()) < 0);
+				assertTrue("",prevCampaign.getId().compareTo(c.getId()) < 0);
 				break;
 			case Id_DESC:
-				Assert.assertTrue(prevCampaign.getId().compareTo(c.getId()) > 0);
+				assertTrue("",prevCampaign.getId().compareTo(c.getId()) > 0);
 				break;
 			default:
 				break;
@@ -533,16 +578,13 @@ public class ETCampaignServiceTest{
 			if( ascend )
 			{
 				logger.debug("ASC PrevDate: " + pDate + " : Current Date: " + cDate);
-				//TODO: turn back on when DATE issue is fixed?
-				//Assert.assertTrue( prevDate.before(date) );
+				assertTrue("Previous date ("+ pDate +") should've happened before Current Date ("+ cDate +").", pDate.before(cDate));
 			}
 			else
 			{
-				logger.debug("DESC PrevDate: " + pDate + " : Current Date: " + cDate);
-				//TODO: turn back on when DATE issue is fixed?
-				//Assert.assertTrue( prevDate.after(date) );
+				logger.debug("Previous date ("+ pDate +") should've happened after Current Date ("+ cDate +").");
+				assertTrue("Previous date ("+ pDate +") should've happened after Current Date ("+ cDate +").", pDate.after(cDate));
 			}
-			
 		} 
 		catch (ParseException e) 
 		{
@@ -550,4 +592,18 @@ public class ETCampaignServiceTest{
 		}
 	}
 	
+	private void assertTrue( String msg, boolean arg)
+	{
+		collector.checkThat(msg, arg, CoreMatchers.equalTo(true));
+	}
+	
+	private void assertNotNull(String msg, Object o )
+	{
+		collector.checkThat(msg, o != null, CoreMatchers.equalTo(true));
+	}
+	
+	private void assertEquals(String msg, Object exp, Object actual)
+	{
+		collector.checkThat(msg, actual, CoreMatchers.equalTo(exp));
+	}
 }

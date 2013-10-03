@@ -26,21 +26,28 @@ public interface ETCampaignService extends ETCrudService {
 	/** Represents all available orderBy options. */
 	public static enum ORDER_BY
 	{
-		ModifiedDate_ASC,
-		Name_ASC,
-		CreatedDate_ASC,
-		CampaignCode_ASC,
-		Id_ASC,
-		ModifiedDate_DESC,
-		Name_DESC,
-		CreatedDate_DESC,
-		CampaignCode_DESC,
-		Id_DESC;
+		ModifiedDate_ASC("ModifiedDate%20ASC"),
+		Name_ASC("Name%20ASC"),
+		CreatedDate_ASC("CreatedDate%20ASC"),
+		CampaignCode_ASC("CampaignCode%20ASC"),
+		Id_ASC("Id%20ASC"),
+		ModifiedDate_DESC("ModifiedDate%20DESC"),
+		Name_DESC("Name%20DESC"),
+		CreatedDate_DESC("CreatedDate%20DESC"),
+		CampaignCode_DESC("CampaignCode%20DESC"),
+		Id_DESC("Id%20DESC");
+
+	    private final String value;
+		
+		ORDER_BY( String v )
+		{
+			value = v;
+		}
 		
 		@Override
 		public String toString()
 		{
-			return name().replace("_", "%20");
+			return value;
 		}
 	}
 	

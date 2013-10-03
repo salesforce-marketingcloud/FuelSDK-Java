@@ -22,4 +22,6 @@ public interface ETServiceResponse<T extends ETObject> {
     public void setMoreResults(boolean moreResults);
     public boolean getStatus();
     public void setStatus(boolean status);
+    public String getMessage();
+    public void setMessage(String message);
 }
