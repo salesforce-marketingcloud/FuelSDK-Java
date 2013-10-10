@@ -92,13 +92,13 @@ public class ETCampaignAssetServiceTest{
 		try 
 		{
 			//Create 5 unique Campaigns
-			for( int i=0;i<5;++i )
+			for( int i=0;i<14;++i )
 			{
 				ETCampaign c = createCampaign(TEST_CAMPAIGN_CODE + i);
 				ids.add(c.getId());
 			}
 			
-			int i = 9;
+			int i = 0;
 			for( String id: ids )
 			{
 				ETCampaignAsset asset = new ETCampaignAsset();
@@ -116,15 +116,18 @@ public class ETCampaignAssetServiceTest{
 				assertNotNull("Results should not be null",response.getResults());
 				assertEquals("When associating Assets with type=\'" +type+"\' There should be 1 result",1,response.getResults().size());
 				
-				ETCampaignAsset returnedAsset = response.getResults().get(0);		
-				String campaignID = returnedAsset.getCampaignId();
-				String returnedId = returnedAsset.getId();
-				
-				ETCampaignAsset responseAsset = retrieveAsset(campaignID, returnedId);
-				
-				assertNotNull("Response from Asset Retrieve should not be null",responseAsset);
-				
-				assertEquals("CampaignIDs should match",campaignID, responseAsset.getCampaignId());
+				if( response.getResults().size() > 0 )
+				{
+					ETCampaignAsset returnedAsset = response.getResults().get(0);		
+					String campaignID = returnedAsset.getCampaignId();
+					String returnedId = returnedAsset.getId();
+					
+					ETCampaignAsset responseAsset = retrieveAsset(campaignID, returnedId);
+					
+					assertNotNull("Response from Asset Retrieve should not be null",responseAsset);
+					
+					assertEquals("CampaignIDs should match",campaignID, responseAsset.getCampaignId());
+				}
 				
 				i++;
 				//TEST end				
@@ -279,9 +282,9 @@ public class ETCampaignAssetServiceTest{
 		
 		response = assetService.get(client, filter);
 		
-		assertNotNull("",response);
-		assertTrue("",response.getStatus());
-		assertEquals("",1,response.getResults().size());
+		assertNotNull("Response should not be null.",response);
+		assertTrue("Response Status should be True.",response.getStatus());
+		assertEquals("There should only be 1 Result.",1,response.getResults().size());
 		
 		ETCampaignAsset responseAsset = response.getResults().get(0);
 		return responseAsset;
@@ -293,9 +296,9 @@ public class ETCampaignAssetServiceTest{
 		ETSimpleFilter filter = new ETSimpleFilter("campaignId", ETFilterOperators.EQUALS, campaignID );
 		
 		response = assetService.get(client, filter);
-		
-		assertNotNull("",response);
-		assertTrue("",response.getStatus());
+
+		assertNotNull("Response should not be null.",response);
+		assertTrue("Response Status should be True.",response.getStatus());
 		
 		return response;
 	}
@@ -310,8 +313,9 @@ public class ETCampaignAssetServiceTest{
 		etObject.setFavorite(false);
 		
 		ETServiceResponse<ETCampaign> response =  campaignService.post(client, etObject);
-		assertNotNull("",response);
-		assertTrue("",response.getStatus());
+
+		assertNotNull("Response should not be null.",response);
+		assertTrue("Response Status should be True.",response.getStatus());
 		
 		return response.getResults().get(0);
 	}
@@ -319,14 +323,17 @@ public class ETCampaignAssetServiceTest{
 	protected void deleteCampaign(ETCampaign etObject) throws ETSdkException
 	{
 		ETServiceResponse<ETCampaign> response = campaignService.delete(client, etObject);
-		assertNotNull("",response);
-		assertTrue("",response.getStatus());
+		
+		assertNotNull("Response should not be null.",response);
+		assertTrue("Response Status should be True.",response.getStatus());
 	}
 
-	protected List<ETCampaign> retrieveAllCampaigns() throws ETSdkException {
+	protected List<ETCampaign> retrieveAllCampaigns() throws ETSdkException 
+	{
 		ETServiceResponse<ETCampaign> response = campaignService.get(client);
-		assertNotNull("",response);
-		assertTrue("",response.getStatus());
+
+		assertNotNull("Response should not be null.",response);
+		assertTrue("Response Status should be True.",response.getStatus());
 		assertNotNull("",response.getResults());
 		return response.getResults();
 	}
