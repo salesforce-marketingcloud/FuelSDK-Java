@@ -109,9 +109,10 @@ public class ETGetServiceImpl implements ETGetService {
 		return response;
 	}
 	
-	protected <T extends ETObject> ETServiceResponse<T> createResponseETObject(Class<T> type, String json, ETServiceResponse<T> response)  throws ETSdkException {
+	protected <T extends ETObject> ETServiceResponse<T> createResponseETObject(Class<T> type, String json, ETServiceResponse<T> response)  throws ETSdkException 
+	{
+		logger.debug("Returned Raw Json:" + json);
 		
-		logger.debug("returned json" + json);
 		JsonArray items;
 		try {
 			

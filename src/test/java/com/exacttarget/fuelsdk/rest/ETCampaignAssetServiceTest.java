@@ -14,10 +14,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.junit.Assert;
-import org.junit.Before;
+import org.hamcrest.CoreMatchers;
+import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ErrorCollector;
 import org.junit.runners.MethodSorters;
 
 import com.exacttarget.fuelsdk.ETCampaignAssetService;
@@ -45,10 +47,12 @@ public class ETCampaignAssetServiceTest{
 	protected static ETConfiguration configuration = null;
 	protected ETFilter filter;
 	protected ETFilter filterUpdated;
+
+    @Rule
+    public ErrorCollector collector = new ErrorCollector();
 	
-	
-	@Before
-	public void setUp() throws ETSdkException {
+    @BeforeClass
+	public static void setUp() throws ETSdkException {
 		logger.debug("SetUp");
 		configuration = new ETConfiguration("/fuelsdk-test.properties");
         client = new ETClient(configuration);
@@ -68,7 +72,8 @@ public class ETCampaignAssetServiceTest{
 		for( ETCampaign c: campaigns )
 		{
 			logger.debug("Received during Clean: " + c);
-			if( TEST_CAMPAIGN_CODE.equals(c.getCampaignCode()) || TEST_CAMPAIGN_CODE_PATCH.equals(c.getCampaignCode()))
+			
+			if( c.getCampaignCode().contains(TEST_CAMPAIGN_CODE) || c.getCampaignCode().contains(TEST_CAMPAIGN_CODE_PATCH) )
 			{
 				logger.debug("Deleting during Clean: " + c);
 				deleteCampaign(c);
@@ -78,35 +83,74 @@ public class ETCampaignAssetServiceTest{
 	}
 	
 	@Test
-	public void TestAssociateAsset() throws ETSdkException{
-		logger.debug("TestAssociateAsset()");
+	public void TestAssociateAsset() throws ETSdkException
+	{
+		List<String> ids = new ArrayList<String>();
 
-		ETCampaign campaign = createCampaign(TEST_CAMPAIGN_CODE);
+		logger.debug("TestAssociateAsset()");
 		
-		ETCampaignAsset asset = new ETCampaignAsset();
-		asset.setCampaignId(campaign.getId());
-		asset.setItemID("321");
-		asset.setType("EMAIL");
-		
-		//TEST begin
-		ETServiceResponse<ETCampaignAsset> response = assetService.post(client, asset);
-		
-		Assert.assertNotNull(response);
-		Assert.assertTrue(response.getStatus());
-		Assert.assertNotNull(response.getResults().get(0));
-		
-		ETCampaignAsset returnedAsset = response.getResults().get(0);		
-		String campaignID = returnedAsset.getCampaignId();
-		String id = returnedAsset.getId();
-		
-		ETCampaignAsset responseAsset = retrieveAsset(campaignID, id);
-		
-		Assert.assertNotNull(responseAsset);
-		
-		Assert.assertEquals(campaignID, responseAsset.getCampaignId());
-		//TEST end
-		
-		deleteCampaign(campaign);
+		try 
+		{
+			//Create 5 unique Campaigns
+			for( int i=0;i<5;++i )
+			{
+				ETCampaign c = createCampaign(TEST_CAMPAIGN_CODE + i);
+				ids.add(c.getId());
+			}
+			
+			int i = 9;
+			for( String id: ids )
+			{
+				ETCampaignAsset asset = new ETCampaignAsset();
+				asset.setCampaignId(id);
+				asset.setItemID(id + i);
+				String type = ETCampaignAssetService.TYPE.values()[i].toString();
+				logger.debug("Association Type: " + type );
+				asset.setType(type);
+				
+				//TEST begin
+				ETServiceResponse<ETCampaignAsset> response = assetService.post(client, asset);
+				
+				assertNotNull("Response should not be null", response);
+				assertTrue("Status should be True",response.getStatus());
+				assertNotNull("Results should not be null",response.getResults());
+				assertEquals("When associating Assets with type=\'" +type+"\' There should be 1 result",1,response.getResults().size());
+				
+				ETCampaignAsset returnedAsset = response.getResults().get(0);		
+				String campaignID = returnedAsset.getCampaignId();
+				String returnedId = returnedAsset.getId();
+				
+				ETCampaignAsset responseAsset = retrieveAsset(campaignID, returnedId);
+				
+				assertNotNull("Response from Asset Retrieve should not be null",responseAsset);
+				
+				assertEquals("CampaignIDs should match",campaignID, responseAsset.getCampaignId());
+				
+				i++;
+				//TEST end				
+			}
+		} 
+		catch (Exception e) 
+		{
+			collector.addError(e);
+		}
+		finally
+		{
+			try 
+			{
+				//Delete all created Campaigns (cleanup)
+				for( String id: ids )
+				{
+					ETCampaign c = new ETCampaign();
+					c.setId( id );
+					deleteCampaign(c);
+				}
+			} 
+			catch (ETSdkException e) 
+			{
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	@Test
@@ -119,12 +163,12 @@ public class ETCampaignAssetServiceTest{
 		ETCampaignAsset asset = new ETCampaignAsset();
 		asset.setCampaignId(campaign.getId());
 		asset.setItemID("321");
-		asset.setType("EMAIL");
+		asset.setType(ETCampaignAssetService.TYPE.LANDING_PAGE.toString());
 		
 		ETServiceResponse<ETCampaignAsset> response = assetService.post(client, asset);
 		
-		Assert.assertNotNull(response);
-		Assert.assertTrue(response.getStatus());
+		assertNotNull("",response);
+		assertTrue("",response.getStatus());
 		
 		ETCampaignAsset returnedAsset = response.getResults().get(0);		
 		String campaignID = returnedAsset.getCampaignId();
@@ -132,32 +176,100 @@ public class ETCampaignAssetServiceTest{
 		
 		ETCampaignAsset responseAsset = retrieveAsset(campaignID, id);
 		
-		Assert.assertNotNull(responseAsset);
+		assertNotNull("",responseAsset);
 		
 		String responseCampaignId = responseAsset.getCampaignId();
 		
-		Assert.assertEquals(campaignID, responseCampaignId);
+		assertEquals("CampaignIDs should match.",campaignID, responseCampaignId);
 
 		response = null;
 		//Delete
 		response = assetService.delete(client, responseAsset);
 
-		Assert.assertNotNull(response);
-		Assert.assertTrue(response.getStatus());
+		assertNotNull("",response);
+		assertTrue("",response.getStatus());
 		
 		response = null;
 		
 		//Validate it's been deleted
 		response = assetService.get(client, new ETSimpleFilter("campaignId", ETFilterOperators.EQUALS, campaignID ));
 
-		Assert.assertNotNull(response);
-		Assert.assertTrue(response.getStatus());
-		Assert.assertEquals(0,response.getResults().size());
+		assertNotNull("",response);
+		assertTrue("",response.getStatus());
+		assertEquals("",0,response.getResults().size());
 		
 		deleteCampaign(campaign);
 	}
 
-	private ETCampaignAsset retrieveAsset(String campaignID, String id) throws ETSdkException {
+	@Test
+	public void TestRetrieveAllAssets()
+	{
+		logger.debug("TestRetrieveAllAssets()");
+		String campaignId = null;
+		
+		try 
+		{
+			ETCampaign c = createCampaign(TEST_CAMPAIGN_CODE);
+			campaignId = c.getId();
+			
+			//9, 10 were chosen because there were issues with other 'Association Types'
+			for( int i=9; i<11; ++i )
+			{
+				ETCampaignAsset asset = new ETCampaignAsset();
+				asset.setCampaignId(campaignId);
+				asset.setItemID(campaignId + 77);
+				String type = ETCampaignAssetService.TYPE.values()[i].toString();
+				logger.debug("Association Type: " + type );
+				asset.setType(type);
+				
+				ETServiceResponse<ETCampaignAsset> response = assetService.post(client, asset);
+				
+				assertNotNull("Response should not be null", response);
+				assertTrue("Status should be True",response.getStatus());
+				assertNotNull("Results should not be null",response.getResults());
+				assertEquals("When associating Assets with type=\'" +type+"\' There should be 1 result",1,response.getResults().size());	
+			}
+
+			//Test that there are 2 Assets associated to the 1 campaign.
+			ETServiceResponse<ETCampaignAsset> response = retrieveAllAssets(campaignId);
+			
+			assertNotNull("Response should not be null", response);
+			assertTrue("Status should be True",response.getStatus());
+			assertNotNull("Results should not be null",response.getResults());
+			assertEquals("There should be 2 result",2,response.getResults().size());
+			
+			//Cleanup assets
+			for( ETCampaignAsset asset: response.getResults() )
+			{
+				logger.debug("Unassociate Asset: " + asset.getId() + " from Campaign: " + asset.getCampaignId());
+				assetService.delete(client, asset);
+			}
+			
+		} 
+		catch (Exception e) 
+		{
+			collector.addError(e);
+		}
+		finally
+		{
+			try 
+			{
+				if( campaignId != null )
+				{
+					ETCampaign c = new ETCampaign();
+					c.setId( campaignId );
+					deleteCampaign(c);
+				}
+			} 
+			catch (ETSdkException e) 
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	private ETCampaignAsset retrieveAsset(String campaignID, String id) throws ETSdkException 
+	{
 		ETServiceResponse<ETCampaignAsset> response;
 		ETComplexFilter filter = new ETComplexFilter();
 		List<ETFilter> filters = new ArrayList<ETFilter>();
@@ -167,12 +279,25 @@ public class ETCampaignAssetServiceTest{
 		
 		response = assetService.get(client, filter);
 		
-		Assert.assertNotNull(response);
-		Assert.assertTrue(response.getStatus());
-		Assert.assertEquals(1,response.getResults().size());
+		assertNotNull("",response);
+		assertTrue("",response.getStatus());
+		assertEquals("",1,response.getResults().size());
 		
 		ETCampaignAsset responseAsset = response.getResults().get(0);
 		return responseAsset;
+	}
+	
+	private ETServiceResponse<ETCampaignAsset> retrieveAllAssets(String campaignID) throws ETSdkException 
+	{
+		ETServiceResponse<ETCampaignAsset> response;
+		ETSimpleFilter filter = new ETSimpleFilter("campaignId", ETFilterOperators.EQUALS, campaignID );
+		
+		response = assetService.get(client, filter);
+		
+		assertNotNull("",response);
+		assertTrue("",response.getStatus());
+		
+		return response;
 	}
 	
 	private ETCampaign createCampaign(String campaign) throws ETSdkException 
@@ -185,8 +310,8 @@ public class ETCampaignAssetServiceTest{
 		etObject.setFavorite(false);
 		
 		ETServiceResponse<ETCampaign> response =  campaignService.post(client, etObject);
-		Assert.assertNotNull(response);
-		Assert.assertTrue(response.getStatus());
+		assertNotNull("",response);
+		assertTrue("",response.getStatus());
 		
 		return response.getResults().get(0);
 	}
@@ -194,15 +319,30 @@ public class ETCampaignAssetServiceTest{
 	protected void deleteCampaign(ETCampaign etObject) throws ETSdkException
 	{
 		ETServiceResponse<ETCampaign> response = campaignService.delete(client, etObject);
-		Assert.assertNotNull(response);
-		Assert.assertTrue(response.getStatus());
+		assertNotNull("",response);
+		assertTrue("",response.getStatus());
 	}
 
 	protected List<ETCampaign> retrieveAllCampaigns() throws ETSdkException {
 		ETServiceResponse<ETCampaign> response = campaignService.get(client);
-		Assert.assertNotNull(response);
-		Assert.assertTrue(response.getStatus());
-		Assert.assertNotNull(response.getResults());
+		assertNotNull("",response);
+		assertTrue("",response.getStatus());
+		assertNotNull("",response.getResults());
 		return response.getResults();
+	}
+
+	private void assertTrue( String msg, boolean arg)
+	{
+		collector.checkThat(msg, arg, CoreMatchers.equalTo(true));
+	}
+	
+	private void assertNotNull(String msg, Object o )
+	{
+		collector.checkThat(msg, o != null, CoreMatchers.equalTo(true));
+	}
+	
+	private void assertEquals(String msg, Object exp, Object actual)
+	{
+		collector.checkThat(msg, actual, CoreMatchers.equalTo(exp));
 	}
 }

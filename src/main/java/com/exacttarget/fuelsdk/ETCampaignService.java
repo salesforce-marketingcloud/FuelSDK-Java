@@ -26,16 +26,16 @@ public interface ETCampaignService extends ETCrudService {
 	/** Represents all available orderBy options. */
 	public static enum ORDER_BY
 	{
-		ModifiedDate_ASC("ModifiedDate%20ASC"),
-		Name_ASC("Name%20ASC"),
-		CreatedDate_ASC("CreatedDate%20ASC"),
-		CampaignCode_ASC("CampaignCode%20ASC"),
-		Id_ASC("Id%20ASC"),
-		ModifiedDate_DESC("ModifiedDate%20DESC"),
-		Name_DESC("Name%20DESC"),
-		CreatedDate_DESC("CreatedDate%20DESC"),
-		CampaignCode_DESC("CampaignCode%20DESC"),
-		Id_DESC("Id%20DESC");
+		ModifiedDate_ASC( "ModifiedDate%20ASC" ),
+		Name_ASC("Name%20ASC" ),
+		CreatedDate_ASC( "CreatedDate%20ASC" ),
+		CampaignCode_ASC( "CampaignCode%20ASC" ),
+		Id_ASC( "Id%20ASC" ),
+		ModifiedDate_DESC( "ModifiedDate%20DESC" ),
+		Name_DESC( "Name%20DESC" ),
+		CreatedDate_DESC( "CreatedDate%20DESC" ),
+		CampaignCode_DESC( "CampaignCode%20DESC" ),
+		Id_DESC( "Id%20DESC" );
 
 	    private final String value;
 		

@@ -83,6 +83,8 @@ public class ETCrudServiceImpl extends ETGetServiceImpl implements ETCrudService
 		
 		JsonObject jsonObject = createRequest(object, type);
 		
+		logger.debug("REQUEST Json: " + jsonObject);
+		
 		String restPath = typeAnnotation.restPath();
 		String accessToken = client.getAccessToken();
 		
