@@ -83,9 +83,6 @@ public class ETDataExtensionColumn implements ETObject {
 	@InternalSoapField(name="isRestrictedPicklist")
 	private Boolean isRestrictedPicklist;
 
-	//@InternalSoapField(name="isPrimaryKey")
-    //private PropertyDefinition.PicklistItems picklistItems;
-
 	@InternalSoapField(name="isSendTime")
 	private Boolean isSendTime;
 

@@ -10,6 +10,8 @@
 
 package com.exacttarget.fuelsdk;
 
+import java.util.List;
+
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.model.ETEmail;
 
@@ -28,5 +30,14 @@ public interface ETEmailService extends ETCrudService {
 			throws ETSdkException;
 
 	public ETServiceResponse<ETEmail> delete(ETClient client, ETEmail email)
+	    	throws ETSdkException;
+	
+	public ETServiceResponse<ETEmail> post(ETClient client, List<ETEmail> emails)
+	    	throws ETSdkException;
+
+	public ETServiceResponse<ETEmail> patch(ETClient client, List<ETEmail> emails)
+			throws ETSdkException;
+
+	public ETServiceResponse<ETEmail> delete(ETClient client, List<ETEmail> emails)
 	    	throws ETSdkException;
 }

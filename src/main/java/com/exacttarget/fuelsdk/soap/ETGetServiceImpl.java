@@ -16,6 +16,8 @@ import java.util.GregorianCalendar;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
+import org.apache.log4j.Logger;
+
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETGetService;
 import com.exacttarget.fuelsdk.ETSdkException;
@@ -37,20 +39,21 @@ import com.exacttarget.fuelsdk.internal.Soap;
 import com.exacttarget.fuelsdk.model.ETObject;
 import com.exacttarget.fuelsdk.model.converter.ObjectConverter;
 
-public abstract class ETGetServiceImpl extends ETServiceImpl implements ETGetService {
+public abstract class ETGetServiceImpl<T extends ETObject> extends ETServiceImpl implements ETGetService {
 
-	// TODO - use this
-	//private static Logger logger = Logger.getLogger(ETGetServiceImpl.class);
+	private static Logger logger = Logger.getLogger(ETGetServiceImpl.class);
 
-    protected <T extends ETObject> ETServiceResponse<T> get(ETClient client, Class<T> type) throws ETSdkException {
+    protected ETServiceResponse<T> get(ETClient client, Class<T> type) throws ETSdkException {
         return this.get(client, type, null);
     }
 
-    protected <T extends ETObject> ETServiceResponse<T> get(ETClient client, Class<T> type, ETFilter filter) throws ETSdkException {
+    protected ETServiceResponse<T> get(ETClient client, Class<T> type, ETFilter filter) throws ETSdkException {
+    	    	
 		Soap soap = client.getSOAPConnection().getSoap();
 
         InternalSoapType typeAnnotation = type.getAnnotation(InternalSoapType.class);
         if(typeAnnotation == null) {
+        	logger.error("The type specified does not wrap an internal ET APIObject.");
             throw new ETSdkException("The type specified does not wrap an internal ET APIObject.");
         }
 
@@ -60,6 +63,7 @@ public abstract class ETGetServiceImpl extends ETServiceImpl implements ETGetSer
             retrieveRequest.getProperties().addAll(ObjectConverter.findSerializablePropertyNames(type));
         }
         catch(Exception e) {
+        	logger.error("Error inspecting serialization properties of specified type", e);
             throw new ETSdkException("Error inspecting serialization properties of specified type", e);
         }
 
@@ -77,6 +81,7 @@ public abstract class ETGetServiceImpl extends ETServiceImpl implements ETGetSer
         response.setRequestId(retrieveResponseMsg.getRequestID());
 
         response.setStatus(retrieveResponseMsg.getOverallStatus().equals("OK"));
+        response.setMessage(retrieveResponseMsg.getOverallStatus());
 
         try {
             for (APIObject apiObject : retrieveResponseMsg.getResults()) {
@@ -84,13 +89,14 @@ public abstract class ETGetServiceImpl extends ETServiceImpl implements ETGetSer
             }
         }
         catch (Exception ex) {
+        	logger.error("Error instantiating object", ex);
             throw new ETSdkException("Error instantiating object", ex);
         }
 
         return response;
 	}
 
-	protected FilterPart convertFilterPart(ETFilter filter) {
+	protected FilterPart convertFilterPart(ETFilter filter) throws ETSdkException {
 		FilterPart filterPart = null;
 		if (filter instanceof ETSimpleFilter) {
 			filterPart = new SimpleFilterPart();
@@ -104,7 +110,7 @@ public abstract class ETGetServiceImpl extends ETServiceImpl implements ETGetSer
 					try {
 						((SimpleFilterPart)filterPart).getDateValue().add(DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorian));
 					} catch (DatatypeConfigurationException e) {
-						// TODO
+						throw new ETSdkException("Error Converting FilterPart object", e);
 					}
 				}
 			}

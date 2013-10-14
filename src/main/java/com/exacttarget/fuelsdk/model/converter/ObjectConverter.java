@@ -42,6 +42,7 @@ import com.exacttarget.fuelsdk.internal.DataExtensionObject.Keys;
 import com.exacttarget.fuelsdk.internal.DataFolder;
 import com.exacttarget.fuelsdk.internal.Email;
 import com.exacttarget.fuelsdk.internal.ListSubscriber;
+import com.exacttarget.fuelsdk.internal.ListTypeEnum;
 import com.exacttarget.fuelsdk.internal.ObjectExtension;
 import com.exacttarget.fuelsdk.internal.SendClassification;
 import com.exacttarget.fuelsdk.internal.SubscriberList;
@@ -93,6 +94,7 @@ public class ObjectConverter {
         convertUtils.register(new ETEnumConverter(), ETSubscriberStatus.class);
         convertUtils.register(new ETEnumConverter(), ETListClassification.class);
         convertUtils.register(new ETEnumConverter(), ETListType.class);
+        convertUtils.register(new ETEnumConverter(), ListTypeEnum.class);
         convertUtils.register(new ETEnumConverter(), ETLayoutType.class);
         convertUtils.register(new ETEnumConverter(), ETEventType.class);
         convertUtils.register(new ETEnumConverter(), ETAccountType.class);

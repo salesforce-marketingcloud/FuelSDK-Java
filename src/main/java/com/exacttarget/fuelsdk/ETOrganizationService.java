@@ -10,6 +10,8 @@
 
 package com.exacttarget.fuelsdk;
 
+import java.util.List;
+
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.model.ETOrganization;
 
@@ -28,6 +30,15 @@ public interface ETOrganizationService extends ETCrudService {
 			throws ETSdkException;
 
 	public ETServiceResponse<ETOrganization> delete(ETClient client, ETOrganization organization)
+	    	throws ETSdkException;
+	
+	public ETServiceResponse<ETOrganization> post(ETClient client, List<ETOrganization> organizations)
+	    	throws ETSdkException;
+
+	public ETServiceResponse<ETOrganization> patch(ETClient client, List<ETOrganization> organizations)
+			throws ETSdkException;
+
+	public ETServiceResponse<ETOrganization> delete(ETClient client, List<ETOrganization> organizations)
 	    	throws ETSdkException;
 
 }

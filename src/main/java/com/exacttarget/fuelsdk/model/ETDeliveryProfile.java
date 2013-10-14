@@ -32,9 +32,6 @@ public class ETDeliveryProfile extends ETSoapObject implements ETObject{
 	@InternalSoapField(name = "domainType")
     protected ETDeliveryProfileDomainType domainType;
 
-	//@InternalSoapField(name = "privateDomain")
-    //protected PrivateDomain privateDomain;
-
 	@InternalSoapField(name = "headerSalutationSource")
     protected ETSalutationSource headerSalutationSource;
 

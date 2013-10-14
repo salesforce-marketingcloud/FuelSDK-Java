@@ -10,6 +10,8 @@
 
 package com.exacttarget.fuelsdk;
 
+import java.util.List;
+
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.model.ETEmailSendDefinition;
 
@@ -32,4 +34,13 @@ public interface ETEmailSendDefinitionService extends ETCrudService {
 
 	public ETServiceResponse<ETEmailSendDefinition> send(ETClient client, ETEmailSendDefinition emailSendDefinition)
 			throws ETSdkException;
+	
+	public ETServiceResponse<ETEmailSendDefinition> post(ETClient client, List<ETEmailSendDefinition> emailSendDefinitions)
+	    	throws ETSdkException;
+	
+	public ETServiceResponse<ETEmailSendDefinition> patch(ETClient client, List<ETEmailSendDefinition> emailSendDefinitions)
+    		throws ETSdkException;
+
+    public ETServiceResponse<ETEmailSendDefinition> delete(ETClient client, List<ETEmailSendDefinition> emailSendDefinitions)
+	    	throws ETSdkException;
 }

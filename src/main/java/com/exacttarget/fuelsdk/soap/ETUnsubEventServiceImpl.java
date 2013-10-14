@@ -17,7 +17,7 @@ import com.exacttarget.fuelsdk.ETServiceResponse;
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.model.ETUnsubEvent;
 
-public class ETUnsubEventServiceImpl extends ETGetServiceImpl implements
+public class ETUnsubEventServiceImpl extends ETGetServiceImpl<ETUnsubEvent> implements
 		ETUnsubEventService {
 
 	public ETServiceResponse<ETUnsubEvent> get(ETClient client)

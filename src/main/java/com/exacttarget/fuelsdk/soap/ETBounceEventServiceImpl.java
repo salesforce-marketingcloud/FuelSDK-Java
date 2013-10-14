@@ -17,7 +17,7 @@ import com.exacttarget.fuelsdk.ETServiceResponse;
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.model.ETBounceEvent;
 
-public class ETBounceEventServiceImpl extends ETGetServiceImpl implements
+public class ETBounceEventServiceImpl extends ETGetServiceImpl<ETBounceEvent> implements
 		ETBounceEventService {
 
 	public ETServiceResponse<ETBounceEvent> get(ETClient client)

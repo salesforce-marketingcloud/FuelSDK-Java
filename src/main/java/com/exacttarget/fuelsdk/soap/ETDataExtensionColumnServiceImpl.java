@@ -17,7 +17,7 @@ import com.exacttarget.fuelsdk.ETServiceResponse;
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.model.ETDataExtensionColumn;
 
-public class ETDataExtensionColumnServiceImpl extends ETGetServiceImpl
+public class ETDataExtensionColumnServiceImpl extends ETGetServiceImpl<ETDataExtensionColumn> 
 		implements ETDataExtensionColumnService {
 
 	public ETServiceResponse<ETDataExtensionColumn> get(ETClient client)

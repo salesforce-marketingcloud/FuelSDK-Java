@@ -10,6 +10,9 @@
 
 package com.exacttarget.fuelsdk.soap;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.junit.Assert;
 import org.junit.Before;
@@ -39,7 +42,7 @@ public class ETListServiceTest {
 	protected ETClient client = null;
 	protected ETConfiguration configuration = null;
 	
-	private String NameOfTestList = "JavaSDKList";
+	private String NameOfTestList = "JavaSDKListTest";
 	
 	@Before
     public void setUp()
@@ -125,6 +128,84 @@ public class ETListServiceTest {
 		list.setCustomerKey(NameOfTestList);
 		
 		ETServiceResponse<ETList> response = service.delete(client, list);
+		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getStatus());
+		
+		// Test it was deleted
+		ETFilter filter = new ETSimpleFilter("CustomerKey", ETFilterOperators.EQUALS, NameOfTestList);
+		ETServiceResponse<ETList> responseFound = service.get(client, filter);
+		
+		Assert.assertNotNull(responseFound);
+		Assert.assertTrue(responseFound.getStatus());
+		Assert.assertNotNull(responseFound.getResults());
+		Assert.assertEquals(0, responseFound.getResults().size());
+		
+	}
+	
+	@Test
+	public void E_TestBatchPost() throws ETSdkException {
+		
+		List<ETList> lists = new ArrayList<ETList>();
+		
+		ETList list = new ETList();
+		list.setCustomerKey(NameOfTestList);
+		list.setName(NameOfTestList);
+		list.setDescription("This list was created with the JavaSDK");
+		list.setListType(ETListType.PRIVATE);
+		lists.add(list);
+		
+		ETList list2 = new ETList();
+		list2.setCustomerKey(NameOfTestList + "2");
+		list2.setName(NameOfTestList);
+		list2.setDescription("This list was created with the JavaSDK");
+		list2.setListType(ETListType.PRIVATE);
+		lists.add(list2);
+		
+		ETList list3 = new ETList();
+		list3.setCustomerKey(NameOfTestList + "3");
+		list3.setName(NameOfTestList);
+		list3.setDescription("This list was created with the JavaSDK");
+		list3.setListType(ETListType.PRIVATE);
+		lists.add(list3);
+
+		ETServiceResponse<ETList> response = service.post(client, lists);
+		
+		Assert.assertNotNull(response);
+		Assert.assertTrue(response.getStatus());
+		
+		// Test it was created
+		ETFilter filter = new ETSimpleFilter("CustomerKey", ETFilterOperators.EQUALS, NameOfTestList);
+		ETServiceResponse<ETList> responseFound = service.get(client, filter);
+		
+		Assert.assertNotNull(responseFound);
+		Assert.assertTrue(responseFound.getStatus());
+		Assert.assertNotNull(responseFound.getResults());
+		Assert.assertEquals(1, responseFound.getResults().size());
+		
+		for(ETList orgFound : responseFound.getResults()) {
+			logger.debug(orgFound.toString());
+		}
+		
+	}
+	
+	@Test
+	public void F_TestBatchDelete() throws ETSdkException {
+		
+		List<ETList> lists = new ArrayList<ETList>();
+		
+		ETList list = new ETList();
+		list.setCustomerKey(NameOfTestList);
+		lists.add(list);
+		ETList list2 = new ETList();
+		list2.setCustomerKey(NameOfTestList + "2");
+		lists.add(list2);
+		
+		ETList list3 = new ETList();
+		list3.setCustomerKey(NameOfTestList + "3");
+		lists.add(list3);
+		
+		
+		ETServiceResponse<ETList> response = service.delete(client, lists);
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
 		

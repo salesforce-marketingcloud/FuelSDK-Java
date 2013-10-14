@@ -31,10 +31,6 @@ public class ETDataExtension extends ETSoapObject implements ETObject {
 	@InternalSoapField(name="isTestable")
 	private Boolean isTestable;
 
-//	private DataExtensionField sendableDataExtensionField;
-//	private Attribute sendableSubscriberField;
-//	private DataExtensionTemplate template;
-
 	@InternalSoapField(name="dataRetentionPeriodLength", ignoreOnPatch=true)
 	private Integer dataRetentionPeriodLength;
 
@@ -55,7 +51,6 @@ public class ETDataExtension extends ETSoapObject implements ETObject {
 
 	@InternalSoapField(name="fields")
 	private List<ETDataExtensionColumn> columns;
-	//private DateTimeUnitOfMeasure dataRetentionPeriod;
 
 	@InternalSoapField(name="categoryID")
 	private Long categoryID;

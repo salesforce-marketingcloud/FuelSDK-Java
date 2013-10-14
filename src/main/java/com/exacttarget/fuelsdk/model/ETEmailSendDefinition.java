@@ -73,12 +73,6 @@ public class ETEmailSendDefinition extends ETSoapObject implements ETObject {
     @InternalSoapField(name = "sendLimit")
     protected Integer sendLimit;
 
-    //@InternalSoapField(name = "sendWindowOpen")
-    //protected XMLGregorianCalendar sendWindowOpen;
-
-    //@InternalSoapField(name = "sendWindowClose")
-    //protected XMLGregorianCalendar sendWindowClose;
-
     @InternalSoapField(name = "deduplicateByEmail")
     protected Boolean deduplicateByEmail;
 

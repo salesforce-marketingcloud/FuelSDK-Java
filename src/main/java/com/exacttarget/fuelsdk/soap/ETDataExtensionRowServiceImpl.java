@@ -26,7 +26,7 @@ import com.exacttarget.fuelsdk.internal.Soap;
 import com.exacttarget.fuelsdk.model.ETDataExtensionRow;
 import com.exacttarget.fuelsdk.model.converter.ObjectConverter;
 
-public class ETDataExtensionRowServiceImpl extends ETCrudServiceImpl implements
+public class ETDataExtensionRowServiceImpl extends ETCrudServiceImpl<ETDataExtensionRow> implements
 		ETDataExtensionRowService {
 
 
@@ -46,6 +46,24 @@ public class ETDataExtensionRowServiceImpl extends ETCrudServiceImpl implements
 			ETDataExtensionRow row) throws ETSdkException {
 		
 		return super.delete(client, row);
+	}
+	
+	public ETServiceResponse<ETDataExtensionRow> post(ETClient client,
+			List<ETDataExtensionRow> rows) throws ETSdkException {
+		
+		return super.post(client, rows);
+	}
+
+	public ETServiceResponse<ETDataExtensionRow> patch(ETClient client,
+			List<ETDataExtensionRow> rows) throws ETSdkException {
+		
+		return super.patch(client, rows);
+	}
+
+	public ETServiceResponse<ETDataExtensionRow> delete(ETClient client,
+			List<ETDataExtensionRow> rows) throws ETSdkException {
+		
+		return super.delete(client, rows);
 	}
 
 	public ETServiceResponse<ETDataExtensionRow> get(ETClient client, String dataExtensionName, List<String> columns)

@@ -17,7 +17,7 @@ import com.exacttarget.fuelsdk.ETServiceResponse;
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.model.ETListSubscriber;
 
-public class ETListSubscriberServiceImpl extends ETGetServiceImpl implements
+public class ETListSubscriberServiceImpl extends ETGetServiceImpl<ETListSubscriber> implements
 		ETListSubscriberService {
 
 	public ETServiceResponse<ETListSubscriber> get(ETClient client)

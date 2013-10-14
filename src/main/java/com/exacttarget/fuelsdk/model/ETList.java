@@ -23,13 +23,11 @@ public class ETList extends ETSoapObject implements ETObject
     protected String name = null;
     @InternalSoapField(name="description")
     protected String description = null;
-    // XXX?
-    //@InternalSoapField(name="category")
+    @InternalSoapField(name="category")
     protected Integer categoryId = null;
     @InternalSoapField(name="listClassification")
     protected ETListClassification listClassification = null;
-    // XXX?
-    //@InternalSoapField(name="type")
+    @InternalSoapField(name="type")
     protected ETListType listType = null;
 
     public String getName() {

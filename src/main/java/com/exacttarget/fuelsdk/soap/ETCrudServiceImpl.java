@@ -10,6 +10,9 @@
 
 package com.exacttarget.fuelsdk.soap;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.exacttarget.fuelsdk.model.converter.ObjectConverter;
 
 import com.exacttarget.fuelsdk.ETClient;
@@ -25,106 +28,167 @@ import com.exacttarget.fuelsdk.internal.CreateResult;
 import com.exacttarget.fuelsdk.internal.DeleteOptions;
 import com.exacttarget.fuelsdk.internal.DeleteRequest;
 import com.exacttarget.fuelsdk.internal.DeleteResponse;
+import com.exacttarget.fuelsdk.internal.DeleteResult;
 import com.exacttarget.fuelsdk.internal.Soap;
 import com.exacttarget.fuelsdk.internal.UpdateOptions;
 import com.exacttarget.fuelsdk.internal.UpdateRequest;
 import com.exacttarget.fuelsdk.internal.UpdateResponse;
+import com.exacttarget.fuelsdk.internal.UpdateResult;
 import com.exacttarget.fuelsdk.model.ETObject;
 
-public abstract class ETCrudServiceImpl extends ETGetServiceImpl implements ETCrudService {
-	protected <T extends ETObject> ETServiceResponse<T> post(ETClient client, T object) throws ETSdkException {
+public abstract class ETCrudServiceImpl<T extends ETObject> extends ETGetServiceImpl<T> implements ETCrudService {
+
+	@SuppressWarnings("unchecked")
+	protected ETServiceResponse<T> post(ETClient client, T object) throws ETSdkException {
+		return post(client, Arrays.asList(object));
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected ETServiceResponse<T> post(ETClient client, List<T> objects) throws ETSdkException {
+	
+		ETServiceResponse<T> response = new ETServiceResponseImpl<T>();
+		
+		if (objects == null || objects.size() == 0) {
+			return response;
+		}
+		
     	Soap soap = client.getSOAPConnection().getSoap();
 
-    	InternalSoapType typeAnnotation = object.getClass().getAnnotation(InternalSoapType.class);
+    	InternalSoapType typeAnnotation = objects.get(0).getClass().getAnnotation(InternalSoapType.class);
         if(typeAnnotation == null) {
             throw new ETSdkException("The type specified does not wrap an internal ET APIObject.");
         }
 
-        ETServiceResponse<T> response = new ETServiceResponseImpl<T>();
-
-    	APIObject apiObject;
-		try {
-            apiObject = ObjectConverter.convertFromEtObject(object, typeAnnotation.type(), false);
-		}
-        catch(Exception e) {
-            throw new ETSdkException("Error instantiating object", e);
-		}
-
     	CreateRequest createRequest = new CreateRequest();
 		createRequest.setOptions(new CreateOptions());
-		createRequest.getObjects().add(apiObject);
+        
+        for(T object : objects) {
+        
+	    	APIObject apiObject;
+			try {
+	            apiObject = ObjectConverter.convertFromEtObject(object, typeAnnotation.type(), false);
+	            createRequest.getObjects().add(apiObject);
+			}
+	        catch(Exception e) {
+	            throw new ETSdkException("Error instantiating object", e);
+			}
+        }
 
 		CreateResponse createResponse = soap.create(createRequest);
 		response.setRequestId(createResponse.getRequestID());
 		response.setStatus(createResponse.getOverallStatus().equals("OK"));
+		StringBuffer message = new StringBuffer(createResponse.getOverallStatus());
+		
 
 		try {
             for (CreateResult createResult : createResponse.getResults()) {
-                response.getResults().add((T) ObjectConverter.convertToEtObject(createResult.getObject(), object.getClass(), false));
+                response.getResults().add((T) ObjectConverter.convertToEtObject(createResult.getObject(), objects.get(0).getClass(), false));
+                message.append(", ");
+                message.append(createResult.getStatusMessage());
             }
         }
         catch (Exception ex) {
             throw new ETSdkException("Error instantiating object", ex);
         }
-
+		response.setMessage(message.toString());
+		
 		return response;
     }
 
-	protected <T extends ETObject> ETServiceResponse<T> patch(ETClient client, T object) throws ETSdkException {
+	@SuppressWarnings("unchecked")
+	protected ETServiceResponse<T> patch(ETClient client, T object) throws ETSdkException {
+		return patch(client, Arrays.asList(object));
+	}
+	
+	protected ETServiceResponse<T> patch(ETClient client, List<T> objects) throws ETSdkException {
 
+		ETServiceResponse<T> response = new ETServiceResponseImpl<T>();
+		
+		if (objects == null || objects.size() == 0) {
+			return response;
+		}
+		
+		
     	Soap soap = client.getSOAPConnection().getSoap();
 
-    	InternalSoapType typeAnnotation = object.getClass().getAnnotation(InternalSoapType.class);
+    	InternalSoapType typeAnnotation = objects.get(0).getClass().getAnnotation(InternalSoapType.class);
         if(typeAnnotation == null) {
             throw new ETSdkException("The type specified does not wrap an internal ET APIObject.");
         }
 
-        ETServiceResponse<T> response = new ETServiceResponseImpl<T>();
-
-        APIObject apiObject;
-		try {
-            apiObject = ObjectConverter.convertFromEtObject(object, typeAnnotation.type(), true);
-		}
-        catch(Exception e) {
-            throw new ETSdkException("Error instantiating object", e);
-		}
-
-    	UpdateRequest updateRequest = new UpdateRequest();
+        UpdateRequest updateRequest = new UpdateRequest();
 		updateRequest.setOptions(new UpdateOptions());
-		updateRequest.getObjects().add(apiObject);
+		
+        for (T object : objects) {
+	        APIObject apiObject;
+			try {
+	            apiObject = ObjectConverter.convertFromEtObject(object, typeAnnotation.type(), true);
+	            updateRequest.getObjects().add(apiObject);
+			}
+	        catch(Exception e) {
+	            throw new ETSdkException("Error instantiating object", e);
+			}
+        }
 
-		UpdateResponse updateResponse = soap.update(updateRequest);
+        UpdateResponse updateResponse = soap.update(updateRequest);
 		response.setRequestId(updateResponse.getRequestID());
 		response.setStatus(updateResponse.getOverallStatus().equals("OK"));
+		
+		StringBuffer message = new StringBuffer(updateResponse.getOverallStatus());
+		for (UpdateResult result : updateResponse.getResults()) {
+			message.append(", ");
+			message.append(result.getStatusMessage());
+		}
+		response.setMessage(message.toString());
+		
 
 		return response;
     }
 
-	protected <T extends ETObject> ETServiceResponse<T> delete(ETClient client, T object) throws ETSdkException {
-    	Soap soap = client.getSOAPConnection().getSoap();
+	@SuppressWarnings("unchecked")
+	protected ETServiceResponse<T> delete(ETClient client, T object) throws ETSdkException {
+		return delete(client, Arrays.asList(object));
+	}
+	
+	protected ETServiceResponse<T> delete(ETClient client, List<T> objects) throws ETSdkException {
+    	
+		ETServiceResponse<T> response = new ETServiceResponseImpl<T>();
+		
+		if (objects == null || objects.size() == 0) {
+			return response;
+		}
+		
+		Soap soap = client.getSOAPConnection().getSoap();
 
-    	InternalSoapType typeAnnotation = object.getClass().getAnnotation(InternalSoapType.class);
+    	InternalSoapType typeAnnotation = objects.get(0).getClass().getAnnotation(InternalSoapType.class);
         if(typeAnnotation == null) {
             throw new ETSdkException("The type specified does not wrap an internal ET APIObject.");
-        }
-
-        ETServiceResponse<T> response = new ETServiceResponseImpl<T>();
-
-        APIObject apiObject;
-		try {
-            apiObject = ObjectConverter.convertFromEtObject(object, typeAnnotation.type(), false);
-		}
-        catch(Exception e) {
-            throw new ETSdkException("Error instantiating object", e);
         }
 
         final DeleteRequest deleteRequest = new DeleteRequest();
 		deleteRequest.setOptions(new DeleteOptions());
-		deleteRequest.getObjects().add(apiObject);
+		
+        for (T object : objects) {
+	        APIObject apiObject;
+			try {
+	            apiObject = ObjectConverter.convertFromEtObject(object, typeAnnotation.type(), false);
+	            deleteRequest.getObjects().add(apiObject);
+			}
+	        catch(Exception e) {
+	            throw new ETSdkException("Error instantiating object", e);
+	        }
+        }
 
 		DeleteResponse deleteResponse = soap.delete(deleteRequest);
 		response.setRequestId(deleteResponse.getRequestID());
 		response.setStatus(deleteResponse.getOverallStatus().equals("OK"));
+		
+		StringBuffer message = new StringBuffer(deleteResponse.getOverallStatus());
+		for (DeleteResult result : deleteResponse.getResults()) {
+			message.append(", ");
+			message.append(result.getStatusMessage());
+		}
+		response.setMessage(message.toString());
 
 		return response;
     }

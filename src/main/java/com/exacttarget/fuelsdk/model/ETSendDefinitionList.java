@@ -42,10 +42,7 @@ public class ETSendDefinitionList extends ETSoapObject implements
 
 	@InternalSoapField(name = "name")
     private String name;
-
-	//@InternalSoapField(name = "list")
-    //private SendDefinitionList.Parameters parameters;
-
+	
 	public ETSendDefinitionList() {}
 
 	public ETList getList() {

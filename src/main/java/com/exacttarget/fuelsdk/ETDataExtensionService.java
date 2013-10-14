@@ -10,6 +10,8 @@
 
 package com.exacttarget.fuelsdk;
 
+import java.util.List;
+
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.model.ETDataExtension;
 
@@ -28,5 +30,14 @@ public interface ETDataExtensionService extends ETCrudService {
     		throws ETSdkException;
 
     public ETServiceResponse<ETDataExtension> delete(ETClient client, ETDataExtension dataExtension)
+	    	throws ETSdkException;
+    
+    public ETServiceResponse<ETDataExtension> post(ETClient client, List<ETDataExtension> dataExtensions)
+	    	throws ETSdkException;
+
+    public ETServiceResponse<ETDataExtension> patch(ETClient client, List<ETDataExtension> dataExtensions)
+    		throws ETSdkException;
+
+    public ETServiceResponse<ETDataExtension> delete(ETClient client, List<ETDataExtension> dataExtensions)
 	    	throws ETSdkException;
 }

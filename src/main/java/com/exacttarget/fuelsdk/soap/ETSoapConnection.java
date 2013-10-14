@@ -50,8 +50,6 @@ public class ETSoapConnection {
 
         this.endpoint = endpoint;
 
-        // XXX refresh WSDL?
-
         //
         // Initialize the SOAP proxy:
         //

@@ -56,11 +56,17 @@ public class ETClient {
         if (configuration.getAuthEndpoint() != null && !"".equals(configuration.getAuthEndpoint())) {
             authEndpoint = configuration.getAuthEndpoint();
         }
-        // XXX make sure clientId is specified
+        
         clientId = configuration.getClientId();
-        // XXX make sure clientSecret is specified
+        if (null == clientId || "".equals(clientId)) {
+        	throw new ETSdkException("Required clientId is missing from the SDK Configuration File");
+        }
+        
         clientSecret = configuration.getClientSecret();
-
+        if (null == clientSecret || "".equals(clientSecret)) {
+        	throw new ETSdkException("Required clientSecret is missing from the SDK Configuration File");
+        }
+        
         authConnection = new ETRestConnection(this, authEndpoint);
 
         refreshToken();
@@ -70,9 +76,6 @@ public class ETClient {
         //
         // If a SOAP endpoint isn't specified automatically determine it:
         //
-
-        // XXX use Endpoints object
-
         if (soapEndpoint == null) {
             String response = restConnection.get(PATH_ENDPOINTS_SOAP);
             JsonParser jsonParser = new JsonParser();

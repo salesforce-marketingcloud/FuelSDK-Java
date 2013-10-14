@@ -12,6 +12,7 @@ package com.exacttarget.fuelsdk.rest;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.util.Properties;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -30,23 +31,27 @@ import com.exacttarget.fuelsdk.ETSdkException;
 public class ETRestConnectionTest {
     private ETClient client = null;
     private ETConfiguration configuration = null;
+    private String propertiesFile = "/fuelsdk.properties";
 
     @Before
     public void setUp()
         throws ETSdkException
     {
-        configuration = new ETConfiguration("/fuelsdk-test.properties");
+        configuration = new ETConfiguration(propertiesFile);
         client = new ETClient(configuration);
     }
 
     @Test
     public void testAuth()
-        throws ETSdkException
+        throws ETSdkException, IOException
     {
-        // XXX these values should be specified via properties too
-        int EID = 10212759;
-        int OID = 10212759;
-        int UID = 10737950;
+    	Properties properties = new Properties();
+    	properties.load(getClass().getResourceAsStream(propertiesFile));
+        
+        int EID = Integer.parseInt(properties.getProperty("enterpriseId"));
+        int OID = Integer.parseInt(properties.getProperty("organizationId"));
+        int UID = Integer.parseInt(properties.getProperty("userId"));
+        
         String json = client.getRESTConnection().get("/platform/v1/tokenContext");
         JsonParser jsonParser = new JsonParser();
         JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();

@@ -17,7 +17,7 @@ import com.exacttarget.fuelsdk.ETServiceResponse;
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.model.ETOpenEvent;
 
-public class ETOpenEventServiceImpl extends ETGetServiceImpl implements
+public class ETOpenEventServiceImpl extends ETGetServiceImpl<ETOpenEvent> implements
 		ETOpenEventService {
 
 	public ETServiceResponse<ETOpenEvent> get(ETClient client)

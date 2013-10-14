@@ -10,6 +10,8 @@
 
 package com.exacttarget.fuelsdk.soap;
 
+import java.util.List;
+
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETDataExtensionService;
 import com.exacttarget.fuelsdk.ETSdkException;
@@ -17,7 +19,7 @@ import com.exacttarget.fuelsdk.ETServiceResponse;
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.model.ETDataExtension;
 
-public class ETDataExtensionServiceImpl extends ETCrudServiceImpl implements
+public class ETDataExtensionServiceImpl extends ETCrudServiceImpl<ETDataExtension> implements
 		ETDataExtensionService {
 
 	public ETServiceResponse<ETDataExtension> get(ETClient client)
@@ -48,6 +50,24 @@ public class ETDataExtensionServiceImpl extends ETCrudServiceImpl implements
 			ETDataExtension dataExtension) throws ETSdkException {
 
 		return super.delete(client, dataExtension);
+	}
+	
+	public ETServiceResponse<ETDataExtension> post(ETClient client,
+			List<ETDataExtension> dataExtensions) throws ETSdkException {
+
+		return super.post(client, dataExtensions);
+	}
+
+	public ETServiceResponse<ETDataExtension> patch(ETClient client,
+			List<ETDataExtension> dataExtensions) throws ETSdkException {
+
+		return super.patch(client, dataExtensions);
+	}
+
+	public ETServiceResponse<ETDataExtension> delete(ETClient client,
+			List<ETDataExtension> dataExtensions) throws ETSdkException {
+
+		return super.delete(client, dataExtensions);
 	}
 
 

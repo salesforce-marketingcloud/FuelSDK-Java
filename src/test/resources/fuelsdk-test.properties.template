@@ -3,3 +3,10 @@ authEndpoint=
 soapEndpoint=
 clientId=
 clientSecret=
+
+
+enterpriseId=
+organizationId=
+userId=
+
+

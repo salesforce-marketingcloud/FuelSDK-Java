@@ -10,6 +10,8 @@
 
 package com.exacttarget.fuelsdk;
 
+import java.util.List;
+
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.model.ETSendClassification;
 
@@ -28,5 +30,14 @@ public interface ETSendClassificationService extends ETCrudService {
 			throws ETSdkException;
 
 	public ETServiceResponse<ETSendClassification> delete(ETClient client, ETSendClassification sendClassificiation)
+	    	throws ETSdkException;
+	
+	public ETServiceResponse<ETSendClassification> post(ETClient client, List<ETSendClassification> sendClassificiations)
+	    	throws ETSdkException;
+
+	public ETServiceResponse<ETSendClassification> patch(ETClient client, List<ETSendClassification> sendClassificiations)
+			throws ETSdkException;
+
+	public ETServiceResponse<ETSendClassification> delete(ETClient client, List<ETSendClassification> sendClassificiations)
 	    	throws ETSdkException;
 }

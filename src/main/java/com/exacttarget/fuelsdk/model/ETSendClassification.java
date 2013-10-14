@@ -34,14 +34,8 @@ public class ETSendClassification extends ETSoapObject implements
 	@InternalSoapField(name = "deliveryProfile")
     protected DeliveryProfile deliveryProfile;
 
-	//@InternalSoapField(name = "honorPublicationListOptOutsForTransactionalSends")
-    protected Boolean honorPublicationListOptOutsForTransactionalSends;
-
 	@InternalSoapField(name = "sendPriority")
     protected ETSendPriority sendPriority;
-
-	//@InternalSoapField(name = "archiveEmail")
-    protected Boolean archiveEmail;
 
 	public ETSendClassification() {}
 
@@ -86,15 +80,6 @@ public class ETSendClassification extends ETSoapObject implements
 		this.deliveryProfile = deliveryProfile;
 	}
 
-	public Boolean getHonorPublicationListOptOutsForTransactionalSends() {
-		return honorPublicationListOptOutsForTransactionalSends;
-	}
-
-	public void setHonorPublicationListOptOutsForTransactionalSends(
-			Boolean honorPublicationListOptOutsForTransactionalSends) {
-		this.honorPublicationListOptOutsForTransactionalSends = honorPublicationListOptOutsForTransactionalSends;
-	}
-
 	public ETSendPriority getSendPriority() {
 		return sendPriority;
 	}
@@ -103,24 +88,13 @@ public class ETSendClassification extends ETSoapObject implements
 		this.sendPriority = sendPriority;
 	}
 
-	public Boolean getArchiveEmail() {
-		return archiveEmail;
-	}
-
-	public void setArchiveEmail(Boolean archiveEmail) {
-		this.archiveEmail = archiveEmail;
-	}
-
 	@Override
 	public String toString() {
 		return "ETSendClassification [sendClassificationType="
 				+ sendClassificationType + ", name=" + name + ", description="
 				+ description + ", senderProfile=" + senderProfile
 				+ ", deliveryProfile=" + deliveryProfile
-				+ ", honorPublicationListOptOutsForTransactionalSends="
-				+ honorPublicationListOptOutsForTransactionalSends
-				+ ", sendPriority=" + sendPriority + ", archiveEmail="
-				+ archiveEmail + ", id=" + id + ", createdDate=" + createdDate
+				+ ", sendPriority=" + sendPriority + ", id=" + id + ", createdDate=" + createdDate
 				+ ", modifiedDate=" + modifiedDate + ", customerKey="
 				+ customerKey + "]";
 	}

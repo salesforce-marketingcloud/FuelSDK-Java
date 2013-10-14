@@ -10,6 +10,8 @@
 
 package com.exacttarget.fuelsdk.soap;
 
+import java.util.List;
+
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETEmailSendDefinitionService;
 import com.exacttarget.fuelsdk.ETSdkException;
@@ -24,7 +26,7 @@ import com.exacttarget.fuelsdk.internal.Soap;
 import com.exacttarget.fuelsdk.model.ETEmailSendDefinition;
 import com.exacttarget.fuelsdk.model.converter.ObjectConverter;
 
-public class ETEmailSendDefinitionServiceImpl extends ETCrudServiceImpl
+public class ETEmailSendDefinitionServiceImpl extends ETCrudServiceImpl<ETEmailSendDefinition>
 		implements ETEmailSendDefinitionService {
 
 	public ETServiceResponse<ETEmailSendDefinition> get(ETClient client)
@@ -55,6 +57,24 @@ public class ETEmailSendDefinitionServiceImpl extends ETCrudServiceImpl
 			ETEmailSendDefinition emailSendDefinition) throws ETSdkException {
 		
 		return super.delete(client, emailSendDefinition);
+	}
+	
+	public ETServiceResponse<ETEmailSendDefinition> post(ETClient client,
+			List<ETEmailSendDefinition> emailSendDefinitions) throws ETSdkException {
+		
+		return super.post(client, emailSendDefinitions);
+	}
+
+	public ETServiceResponse<ETEmailSendDefinition> patch(ETClient client,
+			List<ETEmailSendDefinition> emailSendDefinitions) throws ETSdkException {
+		
+		return super.patch(client, emailSendDefinitions);
+	}
+
+	public ETServiceResponse<ETEmailSendDefinition> delete(ETClient client,
+			List<ETEmailSendDefinition> emailSendDefinitions) throws ETSdkException {
+		
+		return super.delete(client, emailSendDefinitions);
 	}
 
 	public ETServiceResponse<ETEmailSendDefinition> send(ETClient client,
