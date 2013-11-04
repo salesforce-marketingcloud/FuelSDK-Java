@@ -23,7 +23,9 @@ public abstract class ETSoapObject implements ETObject {
     protected Date createdDate = null;
     @InternalSoapField(name="modifiedDate")
     protected Date modifiedDate = null;
-
+    @InternalSoapField(name="client")
+    protected ETClientID clientId = null;
+    
     public Integer getId() {
         return id;
     }
@@ -55,4 +57,14 @@ public abstract class ETSoapObject implements ETObject {
     public void setModifiedDate(Date modifiedDate) {
         this.modifiedDate = modifiedDate;
     }
+
+	public ETClientID getClientId() {
+		return clientId;
+	}
+
+	public void setClientId(ETClientID clientId) {
+		this.clientId = clientId;
+	}
+    
+    
 }

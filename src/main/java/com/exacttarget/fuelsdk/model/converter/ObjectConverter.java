@@ -32,10 +32,12 @@ import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.beanutils.converters.IntegerConverter;
 
 import com.exacttarget.fuelsdk.ETSdkException;
+import com.exacttarget.fuelsdk.annotations.InternalClientObject;
 import com.exacttarget.fuelsdk.annotations.InternalSoapField;
 import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.APIObject;
 import com.exacttarget.fuelsdk.internal.AccountTypeEnum;
+import com.exacttarget.fuelsdk.internal.ClientID;
 import com.exacttarget.fuelsdk.internal.DataExtension;
 import com.exacttarget.fuelsdk.internal.DataExtensionFieldType;
 import com.exacttarget.fuelsdk.internal.DataExtensionObject.Keys;
@@ -184,10 +186,19 @@ public class ObjectConverter {
         // This method would be much simpler to write if we assume all fields with @XmlElement are to be transmitted
         // We are under the current assumption that we only want to return those fields which have been explicitly marked
         InternalSoapType classAnnotation = type.getAnnotation(InternalSoapType.class);
-        if(classAnnotation == null) {
+        
+        boolean isClientID = type.getAnnotation(InternalClientObject.class) != null;
+        
+        if(!isClientID && classAnnotation == null) {        	
             throw new ETSdkException("The type specified does not wrap an internal ET APIObject.");
         }
-		Class internalType = classAnnotation.type();
+        
+		Class internalType = null;
+		if (isClientID) {
+			internalType = ClientID.class;
+		} else {
+			internalType = classAnnotation.type();
+		}
 
         java.util.List<String> names = new java.util.ArrayList<String>();
 
@@ -233,7 +244,13 @@ public class ObjectConverter {
                 }
             }
         }
-        names.removeAll(Arrays.asList(classAnnotation.ignoredFields()));
+        // ClientID is not retrievable
+        if (names.contains("Client")) {
+        	names.remove("Client");
+        }
+        if (!isClientID) {
+        	names.removeAll(Arrays.asList(classAnnotation.ignoredFields()));
+        }
         return names;
     }
 
