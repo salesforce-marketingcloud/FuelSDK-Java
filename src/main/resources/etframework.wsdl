@@ -1668,6 +1668,7 @@
               <element name="Unlock" minOccurs="0" maxOccurs="1" type="xsd:boolean" />
               <element name="BusinessUnit" minOccurs="0" maxOccurs="1" type="xsd:int" />
               <element name="DefaultBusinessUnit" minOccurs="0" maxOccurs="1" type="xsd:int" />
+              <element name="DefaultApplication" minOccurs="0" maxOccurs="1" type="xsd:string" />
               <element name="Locale" minOccurs="0" maxOccurs="1" type="tns:Locale" />
               <element name="TimeZone" minOccurs="0" maxOccurs="1" type="tns:TimeZone" />
               <element name="DefaultBusinessUnitObject" minOccurs="0" maxOccurs="1" type="tns:BusinessUnit" />
@@ -1829,6 +1830,9 @@
               <element name="CharacterSet" type="xsd:string" minOccurs="0" maxOccurs="1" />
               <element name="HasDynamicSubjectLine" type="xsd:boolean" minOccurs="0" maxOccurs="1" />
               <element name="ContentCheckStatus" type="xsd:string" minOccurs="0" maxOccurs="1" />
+              <element name="SyncTextWithHTML" type="xsd:boolean" minOccurs="0" maxOccurs="1" />
+              <element name="PreHeader" type="xsd:string" minOccurs="0" maxOccurs="1" />
+              <element name="IsApproved" type="xsd:boolean" minOccurs="0" maxOccurs="1" />
             </sequence>
           </extension>
         </complexContent>
@@ -1845,6 +1849,15 @@
               <element name="Layout" type="tns:LayoutType" minOccurs="0" maxOccurs="1" />
               <element name="IsDynamicContent" type="xsd:boolean" minOccurs="0" maxOccurs="1" />
               <element name="IsSurvey" type="xsd:boolean" minOccurs="0" maxOccurs="1" />
+              <element name="BackgroundColor" type="xsd:string" minOccurs="0" maxOccurs="1" />
+              <element name="BorderColor" type="xsd:string" minOccurs="0" maxOccurs="1" />
+              <element name="BorderWidth" type="xsd:int" minOccurs="0" maxOccurs="1" />
+              <element name="Cellpadding" type="xsd:int" minOccurs="0" maxOccurs="1" />
+              <element name="Cellspacing" type="xsd:int" minOccurs="0" maxOccurs="1" />
+              <element name="Width" type="xsd:string" minOccurs="0" maxOccurs="1" />
+              <element name="FontFamily" type="xsd:string" minOccurs="0" maxOccurs="1" />
+              <element name="HasFontSize" type="xsd:boolean" minOccurs="0" maxOccurs="1" />
+              <element name="IsLocked" type="xsd:boolean" minOccurs="0" maxOccurs="1" />
             </sequence>
           </extension>
         </complexContent>
@@ -1914,7 +1927,12 @@
       </complexType>
       <complexType name="UnsubEvent">
         <complexContent>
-          <extension base="tns:TrackingEvent" />
+          <extension base="tns:TrackingEvent">
+            <sequence>
+              <element name="List" minOccurs="0" maxOccurs="1" type="tns:List" />
+              <element name="IsMasterUnsubscribed" minOccurs="0" maxOccurs="1" type="xsd:boolean" />
+            </sequence>
+          </extension>
         </complexContent>
       </complexType>
       <complexType name="ClickEvent">
@@ -2323,6 +2341,7 @@
               <element name="SendSourceDataExtension" minOccurs="0" maxOccurs="1" type="tns:DataExtension" />
               <element name="IsAlwaysOn" minOccurs="0" maxOccurs="1" type="xsd:boolean" />
               <element name="DisableOnEmailBuildError" minOccurs="0" maxOccurs="1" type="xsd:boolean" />
+              <element name="PreHeader" minOccurs="0" maxOccurs="1" type="xsd:string" />
             </sequence>
           </extension>
         </complexContent>
@@ -2740,6 +2759,7 @@
               <element name="IsSeedListSend" minOccurs="0" maxOccurs="1" type="xsd:boolean" />
               <element name="TimeZone" type="tns:TimeZone" minOccurs="0" maxOccurs="1" />
               <element name="SeedListOccurance" minOccurs="0" maxOccurs="1" type="xsd:int" />
+              <element name="PreHeader" minOccurs="0" maxOccurs="1" type="xsd:string" />
             </sequence>
           </extension>
         </complexContent>
@@ -3027,6 +3047,11 @@
           <extension base="tns:InteractionDefinition" />
         </complexContent>
       </complexType>
+      <complexType name="MobilePushSendMessageActivity">
+        <complexContent>
+          <extension base="tns:InteractionDefinition" />
+        </complexContent>
+      </complexType>
       <complexType name="ReportActivity">
         <complexContent>
           <extension base="tns:InteractionDefinition" />
@@ -3299,6 +3324,9 @@
               <element name="Filter" minOccurs="0" maxOccurs="1" type="xsd:string" />
               <element name="DateFormattingLocale" minOccurs="0" maxOccurs="1" type="tns:Locale" />
               <element name="DeleteFile" minOccurs="0" maxOccurs="1" type="xsd:boolean" />
+              <element name="SourceObject" minOccurs="0" maxOccurs="1" type="tns:APIObject" />
+              <element name="DestinationType" minOccurs="0" maxOccurs="1" type="xsd:int" />
+              <element name="SubscriptionDefinitionId" minOccurs="0" maxOccurs="1" type="xsd:string" />
             </sequence>
           </extension>
         </complexContent>
@@ -3343,6 +3371,7 @@
               <element name="Description" minOccurs="0" maxOccurs="1" type="xsd:string" />
               <element name="DataSource" minOccurs="0" maxOccurs="1" type="tns:APIObject" />
               <element name="DataFilter" minOccurs="0" maxOccurs="1" type="tns:FilterPart" />
+              <element name="CategoryID" minOccurs="0" maxOccurs="1" type="xsd:int" />
             </sequence>
           </extension>
         </complexContent>
@@ -3529,6 +3558,32 @@
               <element name="ThumbURL" type="xsd:string" minOccurs="0" maxOccurs="1" />
               <element name="CacheClearTime" type="xsd:dateTime" minOccurs="0" maxOccurs="1" />
               <element name="CategoryType" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            </sequence>
+          </extension>
+        </complexContent>
+      </complexType>
+      <complexType name="Template">
+        <complexContent>
+          <extension base="tns:APIObject">
+            <sequence>
+              <element name="TemplateName" type="xsd:string" minOccurs="0" maxOccurs="1" />
+              <element name="LayoutHTML" type="xsd:string" minOccurs="0" maxOccurs="1" />
+              <element name="BackgroundColor" type="xsd:string" minOccurs="0" maxOccurs="1" />
+              <element name="BorderColor" type="xsd:string" minOccurs="0" maxOccurs="1" />
+              <element name="BorderWidth" type="xsd:int" minOccurs="0" maxOccurs="1" />
+              <element name="Cellpadding" type="xsd:int" minOccurs="0" maxOccurs="1" />
+              <element name="Cellspacing" type="xsd:int" minOccurs="0" maxOccurs="1" />
+              <element name="Width" type="xsd:int" minOccurs="0" maxOccurs="1" />
+              <element name="Align" type="xsd:string" minOccurs="0" maxOccurs="1" />
+              <element name="ActiveFlag" type="xsd:int" minOccurs="0" maxOccurs="1" />
+              <element name="CategoryID" type="xsd:int" minOccurs="0" maxOccurs="1" />
+              <element name="CategoryType" type="xsd:string" minOccurs="0" maxOccurs="1" />
+              <element name="OwnerID" type="xsd:int" minOccurs="0" maxOccurs="1" />
+              <element name="HeaderContent" type="tns:ContentArea" minOccurs="0" maxOccurs="1" />
+              <element name="Layout" type="tns:Layout" minOccurs="0" maxOccurs="1" />
+              <element name="TemplateSubject" type="xsd:string" minOccurs="0" maxOccurs="1" />
+              <element name="IsTemplateSubjectLocked" type="xsd:boolean" minOccurs="0" maxOccurs="1" />
+              <element name="PreHeader" type="xsd:string" minOccurs="0" maxOccurs="1" />
             </sequence>
           </extension>
         </complexContent>
