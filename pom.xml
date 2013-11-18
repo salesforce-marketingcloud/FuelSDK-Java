@@ -6,7 +6,7 @@
   <groupId>com.exacttarget</groupId>
   <artifactId>fuelsdk</artifactId>
   <packaging>jar</packaging>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.99</version>
   <name>Fuel Java SDK</name>
   <url>http://code.exacttarget.com</url>
   <properties>
