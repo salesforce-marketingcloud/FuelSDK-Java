@@ -56,6 +56,9 @@ public class ETClient {
         if (configuration.getAuthEndpoint() != null && !"".equals(configuration.getAuthEndpoint())) {
             authEndpoint = configuration.getAuthEndpoint();
         }
+        if (configuration.getSoapEndpoint() != null && !"".equals(configuration.getSoapEndpoint())) {
+            soapEndpoint = configuration.getSoapEndpoint();
+        }
         
         clientId = configuration.getClientId();
         if (null == clientId || "".equals(clientId)) {
