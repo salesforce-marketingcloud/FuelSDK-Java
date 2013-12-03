@@ -11,6 +11,7 @@
 package com.exacttarget.fuelsdk;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class ETConfiguration {
@@ -33,11 +34,15 @@ public class ETConfiguration {
         if (file == null) {
             file = DEFAULT_FILE_NAME;
         }
+        InputStream is = getClass().getResourceAsStream(file);
+        if (is == null) {
+            throw new ETSdkException("error opening " + file);
+        }
         Properties properties = new Properties();
         try {
-            properties.load(getClass().getResourceAsStream(file));
+            properties.load(is);
         } catch (IOException ex) {
-            throw new ETSdkException("error opening " + file, ex);
+            throw new ETSdkException("error reading " + file, ex);
         }
         endpoint = properties.getProperty("endpoint");
         authEndpoint = properties.getProperty("authEndpoint");
