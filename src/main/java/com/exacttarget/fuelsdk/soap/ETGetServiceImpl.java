@@ -21,7 +21,7 @@ import org.apache.log4j.Logger;
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETGetService;
 import com.exacttarget.fuelsdk.ETSdkException;
-import com.exacttarget.fuelsdk.ETServiceResponse;
+import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.filter.ETComplexFilter;
 import com.exacttarget.fuelsdk.filter.ETFilter;
@@ -43,11 +43,11 @@ public abstract class ETGetServiceImpl<T extends ETObject> extends ETServiceImpl
 
 	private static Logger logger = Logger.getLogger(ETGetServiceImpl.class);
 
-    protected ETServiceResponse<T> get(ETClient client, Class<T> type) throws ETSdkException {
+    protected ETResponse<T> get(ETClient client, Class<T> type) throws ETSdkException {
         return this.get(client, type, null);
     }
 
-    protected ETServiceResponse<T> get(ETClient client, Class<T> type, ETFilter filter) throws ETSdkException {
+    protected ETResponse<T> get(ETClient client, Class<T> type, ETFilter filter) throws ETSdkException {
     	    	
 		Soap soap = client.getSOAPConnection().getSoap();
 
@@ -77,7 +77,7 @@ public abstract class ETGetServiceImpl<T extends ETObject> extends ETServiceImpl
 
         RetrieveResponseMsg retrieveResponseMsg = soap.retrieve(retrieveRequestMsg);
 
-        ETServiceResponse<T> response = new ETServiceResponseImpl<T>();
+        ETResponse<T> response = new ETServiceResponseImpl<T>();
         response.setRequestId(retrieveResponseMsg.getRequestID());
 
         response.setStatus(retrieveResponseMsg.getOverallStatus().equals("OK"));

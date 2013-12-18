@@ -47,14 +47,14 @@ public interface ETCampaignAssetService extends ETCrudService {
 		}
 	}
 	
-	ETServiceResponse<ETCampaignAsset> get(ETClient client) throws ETSdkException ;
+	ETResponse<ETCampaignAsset> get(ETClient client) throws ETSdkException ;
 
-	ETServiceResponse<ETCampaignAsset> get(ETClient client, ETFilter filter) throws ETSdkException ;
+	ETResponse<ETCampaignAsset> get(ETClient client, ETFilter filter) throws ETSdkException ;
 
-	ETServiceResponse<ETCampaignAsset> post(ETClient client, ETCampaignAsset asset) throws ETSdkException ;
+	ETResponse<ETCampaignAsset> post(ETClient client, ETCampaignAsset asset) throws ETSdkException ;
 
-	ETServiceResponse<ETCampaignAsset> patch(ETClient client, ETCampaignAsset asset) throws ETSdkException ;
+	ETResponse<ETCampaignAsset> patch(ETClient client, ETCampaignAsset asset) throws ETSdkException ;
 
-	ETServiceResponse<ETCampaignAsset> delete(ETClient client, ETCampaignAsset asset) throws ETSdkException ;
+	ETResponse<ETCampaignAsset> delete(ETClient client, ETCampaignAsset asset) throws ETSdkException ;
 
 }

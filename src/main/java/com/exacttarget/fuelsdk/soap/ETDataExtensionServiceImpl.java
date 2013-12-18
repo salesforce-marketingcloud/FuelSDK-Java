@@ -15,56 +15,56 @@ import java.util.List;
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETDataExtensionService;
 import com.exacttarget.fuelsdk.ETSdkException;
-import com.exacttarget.fuelsdk.ETServiceResponse;
+import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.model.ETDataExtension;
 
 public class ETDataExtensionServiceImpl extends ETCrudServiceImpl<ETDataExtension> implements
 		ETDataExtensionService {
 
-	public ETServiceResponse<ETDataExtension> get(ETClient client)
+	public ETResponse<ETDataExtension> get(ETClient client)
 			throws ETSdkException {
 
 		return super.get(client, ETDataExtension.class);
 	}
 
-	public ETServiceResponse<ETDataExtension> get(ETClient client,
+	public ETResponse<ETDataExtension> get(ETClient client,
 			ETFilter filter) throws ETSdkException {
 
 		return super.get(client, ETDataExtension.class, filter);
 	}
 
-	public ETServiceResponse<ETDataExtension> post(ETClient client,
+	public ETResponse<ETDataExtension> post(ETClient client,
 			ETDataExtension dataExtension) throws ETSdkException {
 
 		return super.post(client, dataExtension);
 	}
 
-	public ETServiceResponse<ETDataExtension> patch(ETClient client,
+	public ETResponse<ETDataExtension> patch(ETClient client,
 			ETDataExtension dataExtension) throws ETSdkException {
 
 		return super.patch(client, dataExtension);
 	}
 
-	public ETServiceResponse<ETDataExtension> delete(ETClient client,
+	public ETResponse<ETDataExtension> delete(ETClient client,
 			ETDataExtension dataExtension) throws ETSdkException {
 
 		return super.delete(client, dataExtension);
 	}
 	
-	public ETServiceResponse<ETDataExtension> post(ETClient client,
+	public ETResponse<ETDataExtension> post(ETClient client,
 			List<ETDataExtension> dataExtensions) throws ETSdkException {
 
 		return super.post(client, dataExtensions);
 	}
 
-	public ETServiceResponse<ETDataExtension> patch(ETClient client,
+	public ETResponse<ETDataExtension> patch(ETClient client,
 			List<ETDataExtension> dataExtensions) throws ETSdkException {
 
 		return super.patch(client, dataExtensions);
 	}
 
-	public ETServiceResponse<ETDataExtension> delete(ETClient client,
+	public ETResponse<ETDataExtension> delete(ETClient client,
 			List<ETDataExtension> dataExtensions) throws ETSdkException {
 
 		return super.delete(client, dataExtensions);

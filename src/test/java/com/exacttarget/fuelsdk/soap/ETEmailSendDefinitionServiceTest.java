@@ -27,7 +27,7 @@ import com.exacttarget.fuelsdk.ETEmailSendDefinitionService;
 import com.exacttarget.fuelsdk.ETEmailService;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.ETSendClassificationService;
-import com.exacttarget.fuelsdk.ETServiceResponse;
+import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.model.ETDataSourceType;
 import com.exacttarget.fuelsdk.model.ETEmail;
 import com.exacttarget.fuelsdk.model.ETEmailSendDefinition;
@@ -59,7 +59,7 @@ public class ETEmailSendDefinitionServiceTest {
 	@Test
 	public void A_TestRetrieve() throws ETSdkException {
 		
-		ETServiceResponse<ETEmailSendDefinition> response = service.get(client);
+		ETResponse<ETEmailSendDefinition> response = service.get(client);
 		
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
@@ -84,7 +84,7 @@ public class ETEmailSendDefinitionServiceTest {
 		sendDefinitionListCollection.add(sendDefinitionList);
 		
 		ETEmailService emailService = new ETEmailServiceImpl();
-		ETServiceResponse<ETEmail> emailResponse = emailService.get(client);
+		ETResponse<ETEmail> emailResponse = emailService.get(client);
 		
 		ETEmailSendDefinition emailSendDefinition = new ETEmailSendDefinition();
 		emailSendDefinition.setName(NewSendDefinitionName);
@@ -94,7 +94,7 @@ public class ETEmailSendDefinitionServiceTest {
 		emailSendDefinition.setSendDefinitionList(sendDefinitionListCollection);
 		emailSendDefinition.setEmail(emailResponse.getResults().get(0));
 		
-		ETServiceResponse<ETEmailSendDefinition> response = service.post(client, emailSendDefinition);
+		ETResponse<ETEmailSendDefinition> response = service.post(client, emailSendDefinition);
 		
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
@@ -106,7 +106,7 @@ public class ETEmailSendDefinitionServiceTest {
 		ETEmailSendDefinition emailSendDefinition = new ETEmailSendDefinition();
 		emailSendDefinition.setCustomerKey(NewSendDefinitionName);
 		
-		ETServiceResponse<ETEmailSendDefinition> response = service.delete(client, emailSendDefinition);
+		ETResponse<ETEmailSendDefinition> response = service.delete(client, emailSendDefinition);
 		
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
@@ -126,7 +126,7 @@ public class ETEmailSendDefinitionServiceTest {
 		sendDefinitionListCollection.add(sendDefinitionList);
 		
 		ETEmailService emailService = new ETEmailServiceImpl();
-		ETServiceResponse<ETEmail> emailResponse = emailService.get(client);
+		ETResponse<ETEmail> emailResponse = emailService.get(client);
 		
 		ETEmailSendDefinition emailSendDefinition = new ETEmailSendDefinition();
 		emailSendDefinition.setName(NewSendDefinitionName);
@@ -136,7 +136,7 @@ public class ETEmailSendDefinitionServiceTest {
 		emailSendDefinition.setSendDefinitionList(sendDefinitionListCollection);
 		emailSendDefinition.setEmail(emailResponse.getResults().get(0));
 		
-		ETServiceResponse<ETEmailSendDefinition> response = service.post(client, emailSendDefinition);
+		ETResponse<ETEmailSendDefinition> response = service.post(client, emailSendDefinition);
 		
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
@@ -148,7 +148,7 @@ public class ETEmailSendDefinitionServiceTest {
 		ETEmailSendDefinition emailSendDefinition = new ETEmailSendDefinition();
 		emailSendDefinition.setCustomerKey(NewSendDefinitionName);
 		
-		ETServiceResponse<ETEmailSendDefinition> response = service.send(client, emailSendDefinition);
+		ETResponse<ETEmailSendDefinition> response = service.send(client, emailSendDefinition);
 		
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());

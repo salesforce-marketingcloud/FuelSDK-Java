@@ -17,28 +17,28 @@ import com.exacttarget.fuelsdk.model.ETFolder;
 
 public interface ETFolderService extends ETCrudService {
 
-	public ETServiceResponse<ETFolder> get(ETClient client)
+	public ETResponse<ETFolder> get(ETClient client)
 	        throws ETSdkException;
 
-	public ETServiceResponse<ETFolder> get(ETClient client, ETFilter filter)
+	public ETResponse<ETFolder> get(ETClient client, ETFilter filter)
 	        throws ETSdkException;
 
-	public ETServiceResponse<ETFolder> post(ETClient client, ETFolder folder)
+	public ETResponse<ETFolder> post(ETClient client, ETFolder folder)
 	    	throws ETSdkException;
 
-	public ETServiceResponse<ETFolder> patch(ETClient client, ETFolder folder)
+	public ETResponse<ETFolder> patch(ETClient client, ETFolder folder)
 			throws ETSdkException;
 
-	public ETServiceResponse<ETFolder> delete(ETClient client, ETFolder folder)
+	public ETResponse<ETFolder> delete(ETClient client, ETFolder folder)
 	    	throws ETSdkException;
 	
-	public ETServiceResponse<ETFolder> post(ETClient client, List<ETFolder> folders)
+	public ETResponse<ETFolder> post(ETClient client, List<ETFolder> folders)
 	    	throws ETSdkException;
 
-	public ETServiceResponse<ETFolder> patch(ETClient client, List<ETFolder> folders)
+	public ETResponse<ETFolder> patch(ETClient client, List<ETFolder> folders)
 			throws ETSdkException;
 
-	public ETServiceResponse<ETFolder> delete(ETClient client, List<ETFolder> folders)
+	public ETResponse<ETFolder> delete(ETClient client, List<ETFolder> folders)
 	    	throws ETSdkException;
 
 }

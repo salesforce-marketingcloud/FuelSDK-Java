@@ -21,7 +21,7 @@ import org.junit.runners.MethodSorters;
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETConfiguration;
 import com.exacttarget.fuelsdk.ETSdkException;
-import com.exacttarget.fuelsdk.ETServiceResponse;
+import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.ETUnsubEventService;
 import com.exacttarget.fuelsdk.model.ETUnsubEvent;
 
@@ -49,7 +49,7 @@ public class ETUnsubEventServiceTest  {
 	@Test
 	public void TestGetCollectionService() throws ETSdkException
 	{
-		ETServiceResponse<ETUnsubEvent> response = service.get(client);
+		ETResponse<ETUnsubEvent> response = service.get(client);
 		
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());

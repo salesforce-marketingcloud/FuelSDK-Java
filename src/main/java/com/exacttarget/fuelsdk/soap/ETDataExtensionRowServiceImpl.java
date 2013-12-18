@@ -15,7 +15,7 @@ import java.util.List;
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETDataExtensionRowService;
 import com.exacttarget.fuelsdk.ETSdkException;
-import com.exacttarget.fuelsdk.ETServiceResponse;
+import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.internal.APIObject;
 import com.exacttarget.fuelsdk.internal.FilterPart;
@@ -30,49 +30,49 @@ public class ETDataExtensionRowServiceImpl extends ETCrudServiceImpl<ETDataExten
 		ETDataExtensionRowService {
 
 
-	public ETServiceResponse<ETDataExtensionRow> post(ETClient client,
+	public ETResponse<ETDataExtensionRow> post(ETClient client,
 			ETDataExtensionRow row) throws ETSdkException {
 		
 		return super.post(client, row);
 	}
 
-	public ETServiceResponse<ETDataExtensionRow> patch(ETClient client,
+	public ETResponse<ETDataExtensionRow> patch(ETClient client,
 			ETDataExtensionRow row) throws ETSdkException {
 		
 		return super.patch(client, row);
 	}
 
-	public ETServiceResponse<ETDataExtensionRow> delete(ETClient client,
+	public ETResponse<ETDataExtensionRow> delete(ETClient client,
 			ETDataExtensionRow row) throws ETSdkException {
 		
 		return super.delete(client, row);
 	}
 	
-	public ETServiceResponse<ETDataExtensionRow> post(ETClient client,
+	public ETResponse<ETDataExtensionRow> post(ETClient client,
 			List<ETDataExtensionRow> rows) throws ETSdkException {
 		
 		return super.post(client, rows);
 	}
 
-	public ETServiceResponse<ETDataExtensionRow> patch(ETClient client,
+	public ETResponse<ETDataExtensionRow> patch(ETClient client,
 			List<ETDataExtensionRow> rows) throws ETSdkException {
 		
 		return super.patch(client, rows);
 	}
 
-	public ETServiceResponse<ETDataExtensionRow> delete(ETClient client,
+	public ETResponse<ETDataExtensionRow> delete(ETClient client,
 			List<ETDataExtensionRow> rows) throws ETSdkException {
 		
 		return super.delete(client, rows);
 	}
 
-	public ETServiceResponse<ETDataExtensionRow> get(ETClient client, String dataExtensionName, List<String> columns)
+	public ETResponse<ETDataExtensionRow> get(ETClient client, String dataExtensionName, List<String> columns)
 			throws ETSdkException {
 		
 		return this.get(client, dataExtensionName, columns, null);
 	}
 	
-	public ETServiceResponse<ETDataExtensionRow> get(ETClient client, String dataExtensionName, List<String> columns, ETFilter filter)
+	public ETResponse<ETDataExtensionRow> get(ETClient client, String dataExtensionName, List<String> columns, ETFilter filter)
 			throws ETSdkException {
 		
 		Soap soap = client.getSOAPConnection().getSoap();
@@ -91,7 +91,7 @@ public class ETDataExtensionRowServiceImpl extends ETCrudServiceImpl<ETDataExten
 
         RetrieveResponseMsg retrieveResponseMsg = soap.retrieve(retrieveRequestMsg);
 
-        ETServiceResponse<ETDataExtensionRow> response = new ETServiceResponseImpl<ETDataExtensionRow>();
+        ETResponse<ETDataExtensionRow> response = new ETServiceResponseImpl<ETDataExtensionRow>();
         response.setRequestId(retrieveResponseMsg.getRequestID());
         
         try {

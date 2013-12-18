@@ -51,14 +51,14 @@ public interface ETCampaignService extends ETCrudService {
 		}
 	}
 	
-	ETServiceResponse<ETCampaign> get(ETClient client) throws ETSdkException ;
+	ETResponse<ETCampaign> get(ETClient client) throws ETSdkException ;
 
-	ETServiceResponse<ETCampaign> get(ETClient client, ETFilter filter) throws ETSdkException ;
+	ETResponse<ETCampaign> get(ETClient client, ETFilter filter) throws ETSdkException ;
 
-	ETServiceResponse<ETCampaign> post(ETClient client, ETCampaign campaign) throws ETSdkException ;
+	ETResponse<ETCampaign> post(ETClient client, ETCampaign campaign) throws ETSdkException ;
 
-	ETServiceResponse<ETCampaign> patch(ETClient client, ETCampaign campaign) throws ETSdkException ;
+	ETResponse<ETCampaign> patch(ETClient client, ETCampaign campaign) throws ETSdkException ;
 
-	ETServiceResponse<ETCampaign> delete(ETClient client, ETCampaign campaign) throws ETSdkException ;
+	ETResponse<ETCampaign> delete(ETClient client, ETCampaign campaign) throws ETSdkException ;
 
 }

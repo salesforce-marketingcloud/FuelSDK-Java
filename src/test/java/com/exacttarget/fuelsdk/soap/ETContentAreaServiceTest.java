@@ -22,7 +22,7 @@ import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETConfiguration;
 import com.exacttarget.fuelsdk.ETContentAreaService;
 import com.exacttarget.fuelsdk.ETSdkException;
-import com.exacttarget.fuelsdk.ETServiceResponse;
+import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.filter.ETFilterOperators;
 import com.exacttarget.fuelsdk.filter.ETSimpleFilter;
@@ -52,7 +52,7 @@ public class ETContentAreaServiceTest {
 	@Test
 	public void A_TestGetCollectionService() throws ETSdkException
 	{
-		ETServiceResponse<ETContentArea> response =  service.get(client);
+		ETResponse<ETContentArea> response =  service.get(client);
 		
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
@@ -72,14 +72,14 @@ public class ETContentAreaServiceTest {
 		contentArea.setName(NameOfTestContentArea);
 		contentArea.setContent("<b>Some HTML Content Goes here</b>");
 
-		ETServiceResponse<ETContentArea> response = service.post(client, contentArea);
+		ETResponse<ETContentArea> response = service.post(client, contentArea);
 		
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
 		
 		// Test it was created
 		ETFilter filter = new ETSimpleFilter("CustomerKey", ETFilterOperators.EQUALS, NameOfTestContentArea);
-		ETServiceResponse<ETContentArea> responseFound = service.get(client, filter);
+		ETResponse<ETContentArea> responseFound = service.get(client, filter);
 		
 		Assert.assertNotNull(responseFound);
 		Assert.assertTrue(responseFound.getStatus());
@@ -99,14 +99,14 @@ public class ETContentAreaServiceTest {
 		contentArea.setCustomerKey(NameOfTestContentArea);
 		contentArea.setContent("<b>Some HTML Content Goes here. NOW WITH NEW CONTENT</b>");
 		
-		ETServiceResponse<ETContentArea> response = service.patch(client, contentArea);
+		ETResponse<ETContentArea> response = service.patch(client, contentArea);
 		
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
 		
 		// Test it was created
 		ETFilter filter = new ETSimpleFilter("CustomerKey", ETFilterOperators.EQUALS, NameOfTestContentArea);
-		ETServiceResponse<ETContentArea> responseFound = service.get(client, filter);
+		ETResponse<ETContentArea> responseFound = service.get(client, filter);
 		
 		Assert.assertNotNull(responseFound);
 		Assert.assertTrue(responseFound.getStatus());
@@ -122,13 +122,13 @@ public class ETContentAreaServiceTest {
 		ETContentArea contentArea = new ETContentArea();
 		contentArea.setCustomerKey(NameOfTestContentArea);
 		
-		ETServiceResponse<ETContentArea> response = service.delete(client, contentArea);
+		ETResponse<ETContentArea> response = service.delete(client, contentArea);
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
 		
 		// Test it was deleted
 		ETFilter filter = new ETSimpleFilter("CustomerKey", ETFilterOperators.EQUALS, NameOfTestContentArea);
-		ETServiceResponse<ETContentArea> responseFound = service.get(client, filter);
+		ETResponse<ETContentArea> responseFound = service.get(client, filter);
 		
 		Assert.assertNotNull(responseFound);
 		Assert.assertTrue(responseFound.getStatus());

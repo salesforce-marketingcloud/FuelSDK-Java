@@ -14,7 +14,7 @@ import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETConfiguration;
 import com.exacttarget.fuelsdk.ETListService;
 import com.exacttarget.fuelsdk.ETSdkException;
-import com.exacttarget.fuelsdk.ETServiceResponse;
+import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.model.ETList;
 import com.exacttarget.fuelsdk.soap.ETListServiceImpl;
 
@@ -40,7 +40,7 @@ public class ListPrintAll {
 
         ETListService service = new ETListServiceImpl();
 
-        ETServiceResponse<ETList> response = service.get(client);
+        ETResponse<ETList> response = service.get(client);
         for (ETList list : response.getResults()) {
             System.out.println(list.getName());
         }

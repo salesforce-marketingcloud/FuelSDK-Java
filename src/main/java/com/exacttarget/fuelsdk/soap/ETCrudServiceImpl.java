@@ -18,7 +18,7 @@ import com.exacttarget.fuelsdk.model.converter.ObjectConverter;
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETCrudService;
 import com.exacttarget.fuelsdk.ETSdkException;
-import com.exacttarget.fuelsdk.ETServiceResponse;
+import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.APIObject;
 import com.exacttarget.fuelsdk.internal.CreateOptions;
@@ -39,14 +39,14 @@ import com.exacttarget.fuelsdk.model.ETObject;
 public abstract class ETCrudServiceImpl<T extends ETObject> extends ETGetServiceImpl<T> implements ETCrudService {
 
 	@SuppressWarnings("unchecked")
-	protected ETServiceResponse<T> post(ETClient client, T object) throws ETSdkException {
+	protected ETResponse<T> post(ETClient client, T object) throws ETSdkException {
 		return post(client, Arrays.asList(object));
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected ETServiceResponse<T> post(ETClient client, List<T> objects) throws ETSdkException {
+	protected ETResponse<T> post(ETClient client, List<T> objects) throws ETSdkException {
 	
-		ETServiceResponse<T> response = new ETServiceResponseImpl<T>();
+		ETResponse<T> response = new ETServiceResponseImpl<T>();
 		
 		if (objects == null || objects.size() == 0) {
 			return response;
@@ -96,13 +96,13 @@ public abstract class ETCrudServiceImpl<T extends ETObject> extends ETGetService
     }
 
 	@SuppressWarnings("unchecked")
-	protected ETServiceResponse<T> patch(ETClient client, T object) throws ETSdkException {
+	protected ETResponse<T> patch(ETClient client, T object) throws ETSdkException {
 		return patch(client, Arrays.asList(object));
 	}
 	
-	protected ETServiceResponse<T> patch(ETClient client, List<T> objects) throws ETSdkException {
+	protected ETResponse<T> patch(ETClient client, List<T> objects) throws ETSdkException {
 
-		ETServiceResponse<T> response = new ETServiceResponseImpl<T>();
+		ETResponse<T> response = new ETServiceResponseImpl<T>();
 		
 		if (objects == null || objects.size() == 0) {
 			return response;
@@ -146,13 +146,13 @@ public abstract class ETCrudServiceImpl<T extends ETObject> extends ETGetService
     }
 
 	@SuppressWarnings("unchecked")
-	protected ETServiceResponse<T> delete(ETClient client, T object) throws ETSdkException {
+	protected ETResponse<T> delete(ETClient client, T object) throws ETSdkException {
 		return delete(client, Arrays.asList(object));
 	}
 	
-	protected ETServiceResponse<T> delete(ETClient client, List<T> objects) throws ETSdkException {
+	protected ETResponse<T> delete(ETClient client, List<T> objects) throws ETSdkException {
     	
-		ETServiceResponse<T> response = new ETServiceResponseImpl<T>();
+		ETResponse<T> response = new ETServiceResponseImpl<T>();
 		
 		if (objects == null || objects.size() == 0) {
 			return response;

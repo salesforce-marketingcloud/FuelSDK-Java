@@ -22,7 +22,7 @@ import org.apache.log4j.Logger;
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETCrudService;
 import com.exacttarget.fuelsdk.ETSdkException;
-import com.exacttarget.fuelsdk.ETServiceResponse;
+import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.annotations.InternalRestField;
 import com.exacttarget.fuelsdk.annotations.InternalRestType;
 import com.exacttarget.fuelsdk.model.ETObject;
@@ -33,17 +33,17 @@ public class ETCrudServiceImpl extends ETGetServiceImpl implements ETCrudService
 	
 	private static Logger logger = Logger.getLogger(ETCrudServiceImpl.class);
 
-	public <T extends ETObject> ETServiceResponse<T> post(ETClient client, T object) throws ETSdkException {
+	public <T extends ETObject> ETResponse<T> post(ETClient client, T object) throws ETSdkException {
 		logger.trace("post: " + object.toString());
 		return updateETObject(client, object);
 	}
 
-	public <T extends ETObject> ETServiceResponse<T> patch(ETClient client, T object) throws ETSdkException {
+	public <T extends ETObject> ETResponse<T> patch(ETClient client, T object) throws ETSdkException {
 		logger.trace("patch: " + object.toString());
 		return updateETObject(client, object);
 	}
 
-	public <T extends ETObject> ETServiceResponse<T> delete(ETClient client, T object) throws ETSdkException {
+	public <T extends ETObject> ETResponse<T> delete(ETClient client, T object) throws ETSdkException {
 		
 		logger.trace("delete: " + object.toString());
 		
@@ -63,13 +63,13 @@ public class ETCrudServiceImpl extends ETGetServiceImpl implements ETCrudService
 		String path = buildPath(restPath, accessToken, object, typeAnnotation);
 		String json = connection.delete(path);
 		
-		ETServiceResponse<T> response = new ETServiceResponseImpl<T>();
+		ETResponse<T> response = new ETServiceResponseImpl<T>();
 		response.setStatus( connection.getResponseCode() == 200 );
 		
 		return createResponseETObject(type, json, response);
 	}
 
-	protected <T extends ETObject> ETServiceResponse<T> updateETObject(ETClient client, T object) throws ETSdkException {
+	protected <T extends ETObject> ETResponse<T> updateETObject(ETClient client, T object) throws ETSdkException {
 		@SuppressWarnings("unchecked")
 		Class<T> type = (Class<T>) object.getClass();
 		
@@ -92,7 +92,7 @@ public class ETCrudServiceImpl extends ETGetServiceImpl implements ETCrudService
 		
 		String json = connection.post(path, jsonObject);
 
-		ETServiceResponse<T> response = new ETServiceResponseImpl<T>();
+		ETResponse<T> response = new ETServiceResponseImpl<T>();
 		
 		response.setStatus( connection.getResponseCode() == 200 );
 		

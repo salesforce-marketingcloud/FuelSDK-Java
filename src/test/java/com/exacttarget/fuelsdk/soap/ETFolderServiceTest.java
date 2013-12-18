@@ -22,7 +22,7 @@ import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETConfiguration;
 import com.exacttarget.fuelsdk.ETFolderService;
 import com.exacttarget.fuelsdk.ETSdkException;
-import com.exacttarget.fuelsdk.ETServiceResponse;
+import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.filter.ETComplexFilter;
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.filter.ETFilterOperators;
@@ -56,7 +56,7 @@ public class ETFolderServiceTest {
         service = new ETFolderServiceImpl();
 		
 		// Get the Parent Folder
-		ETServiceResponse<ETFolder> response = ((ETFolderService)service).get(client, new ETComplexFilter(
+		ETResponse<ETFolder> response = ((ETFolderService)service).get(client, new ETComplexFilter(
 				new ETSimpleFilter("name",ETFilterOperators.EQUALS, "Data Extensions"),
 				new ETSimpleFilter("contentType",ETFilterOperators.EQUALS, "DataExtension"),
 				ETLogicalOperators.AND));
@@ -70,7 +70,7 @@ public class ETFolderServiceTest {
 	@Test
 	public void A_TestGetCollectionService() throws ETSdkException
 	{
-		ETServiceResponse<ETFolder> response =  service.get(client);
+		ETResponse<ETFolder> response =  service.get(client);
 		
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
@@ -93,14 +93,14 @@ public class ETFolderServiceTest {
 		folder.setContentType("DataExtension");
 		folder.setParentFolder(parent);
 
-		ETServiceResponse<ETFolder> response = service.post(client, folder);
+		ETResponse<ETFolder> response = service.post(client, folder);
 		
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
 		
 		// Test it was created
 		ETFilter filter = new ETSimpleFilter("CustomerKey", ETFilterOperators.EQUALS, NameOfTestFolder);
-		ETServiceResponse<ETFolder> responseFound = service.get(client, filter);
+		ETResponse<ETFolder> responseFound = service.get(client, filter);
 		
 		Assert.assertNotNull(responseFound);
 		Assert.assertTrue(responseFound.getStatus());
@@ -120,14 +120,14 @@ public class ETFolderServiceTest {
 		folder.setCustomerKey(NameOfTestFolder);
 		folder.setDescription("New Description");
 		
-		ETServiceResponse<ETFolder> response = service.patch(client, folder);
+		ETResponse<ETFolder> response = service.patch(client, folder);
 		
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
 		
 		// Test it was created
 		ETFilter filter = new ETSimpleFilter("CustomerKey", ETFilterOperators.EQUALS, NameOfTestFolder);
-		ETServiceResponse<ETFolder> responseFound = service.get(client, filter);
+		ETResponse<ETFolder> responseFound = service.get(client, filter);
 		
 		Assert.assertNotNull(responseFound);
 		Assert.assertTrue(responseFound.getStatus());
@@ -143,13 +143,13 @@ public class ETFolderServiceTest {
 		ETFolder folder = new ETFolder();
 		folder.setCustomerKey(NameOfTestFolder);
 		
-		ETServiceResponse<ETFolder> response = service.delete(client, folder);
+		ETResponse<ETFolder> response = service.delete(client, folder);
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
 		
 		// Test it was deleted
 		ETFilter filter = new ETSimpleFilter("CustomerKey", ETFilterOperators.EQUALS, NameOfTestFolder);
-		ETServiceResponse<ETFolder> responseFound = service.get(client, filter);
+		ETResponse<ETFolder> responseFound = service.get(client, filter);
 		
 		Assert.assertNotNull(responseFound);
 		Assert.assertTrue(responseFound.getStatus());

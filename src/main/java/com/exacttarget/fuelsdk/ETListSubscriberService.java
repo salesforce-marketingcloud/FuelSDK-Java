@@ -15,9 +15,9 @@ import com.exacttarget.fuelsdk.model.ETListSubscriber;
 
 public interface ETListSubscriberService extends ETGetService {
 
-	public ETServiceResponse<ETListSubscriber> get(ETClient client)
+	public ETResponse<ETListSubscriber> get(ETClient client)
 	        throws ETSdkException;
 
-	public ETServiceResponse<ETListSubscriber> get(ETClient client, ETFilter filter)
+	public ETResponse<ETListSubscriber> get(ETClient client, ETFilter filter)
 		 	throws ETSdkException;
 }

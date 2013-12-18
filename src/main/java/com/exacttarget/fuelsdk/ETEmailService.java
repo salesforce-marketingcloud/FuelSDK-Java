@@ -17,27 +17,27 @@ import com.exacttarget.fuelsdk.model.ETEmail;
 
 public interface ETEmailService extends ETCrudService {
 
-	public ETServiceResponse<ETEmail> get(ETClient client)
+	public ETResponse<ETEmail> get(ETClient client)
 	        throws ETSdkException;
 
-	public ETServiceResponse<ETEmail> get(ETClient client, ETFilter filter)
+	public ETResponse<ETEmail> get(ETClient client, ETFilter filter)
 	        throws ETSdkException;
 
-	public ETServiceResponse<ETEmail> post(ETClient client, ETEmail email)
+	public ETResponse<ETEmail> post(ETClient client, ETEmail email)
 	    	throws ETSdkException;
 
-	public ETServiceResponse<ETEmail> patch(ETClient client, ETEmail email)
+	public ETResponse<ETEmail> patch(ETClient client, ETEmail email)
 			throws ETSdkException;
 
-	public ETServiceResponse<ETEmail> delete(ETClient client, ETEmail email)
+	public ETResponse<ETEmail> delete(ETClient client, ETEmail email)
 	    	throws ETSdkException;
 	
-	public ETServiceResponse<ETEmail> post(ETClient client, List<ETEmail> emails)
+	public ETResponse<ETEmail> post(ETClient client, List<ETEmail> emails)
 	    	throws ETSdkException;
 
-	public ETServiceResponse<ETEmail> patch(ETClient client, List<ETEmail> emails)
+	public ETResponse<ETEmail> patch(ETClient client, List<ETEmail> emails)
 			throws ETSdkException;
 
-	public ETServiceResponse<ETEmail> delete(ETClient client, List<ETEmail> emails)
+	public ETResponse<ETEmail> delete(ETClient client, List<ETEmail> emails)
 	    	throws ETSdkException;
 }

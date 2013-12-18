@@ -15,10 +15,10 @@ import com.exacttarget.fuelsdk.model.ETDataExtensionColumn;
 
 public interface ETDataExtensionColumnService extends ETGetService {
 
-	public ETServiceResponse<ETDataExtensionColumn> get(ETClient client)
+	public ETResponse<ETDataExtensionColumn> get(ETClient client)
 	        throws ETSdkException;
 
-	public ETServiceResponse<ETDataExtensionColumn> get(ETClient client, ETFilter filter)
+	public ETResponse<ETDataExtensionColumn> get(ETClient client, ETFilter filter)
 	        throws ETSdkException;
 
 }

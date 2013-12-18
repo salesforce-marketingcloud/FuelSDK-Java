@@ -30,7 +30,7 @@ import com.exacttarget.fuelsdk.ETDataExtensionColumnService;
 import com.exacttarget.fuelsdk.ETDataExtensionRowService;
 import com.exacttarget.fuelsdk.ETDataExtensionService;
 import com.exacttarget.fuelsdk.ETSdkException;
-import com.exacttarget.fuelsdk.ETServiceResponse;
+import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.filter.ETFilterOperators;
 import com.exacttarget.fuelsdk.filter.ETSimpleFilter;
@@ -64,7 +64,7 @@ public class ETDataExtensionServiceTest {
 	@Test
 	public void A_TestGet() throws ETSdkException {
 		
-		ETServiceResponse<ETDataExtension> response = service.get(client);
+		ETResponse<ETDataExtension> response = service.get(client);
 		
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
@@ -103,7 +103,7 @@ public class ETDataExtensionServiceTest {
 		de.setCustomerKey(DataExtensionNameForTesting);
 		de.setColumns(columns);
 		
-		ETServiceResponse<ETDataExtension> response = service.post(client, de);
+		ETResponse<ETDataExtension> response = service.post(client, de);
 		
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
@@ -125,7 +125,7 @@ public class ETDataExtensionServiceTest {
 		de.setCustomerKey(DataExtensionNameForTesting);
 		de.setColumns(columns);
 		
-		ETServiceResponse<ETDataExtension> response = service.patch(client, de);
+		ETResponse<ETDataExtension> response = service.patch(client, de);
 		
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
@@ -144,7 +144,7 @@ public class ETDataExtensionServiceTest {
 		ETFilter filter = new ETSimpleFilter("DataExtension.CustomerKey", ETFilterOperators.EQUALS, Arrays.asList(DataExtensionNameForTesting));
 		
 		ETDataExtensionColumnService columnService = new ETDataExtensionColumnServiceImpl();
-		ETServiceResponse<ETDataExtensionColumn> response = columnService.get(client, filter);
+		ETResponse<ETDataExtensionColumn> response = columnService.get(client, filter);
 		
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
@@ -171,7 +171,7 @@ public class ETDataExtensionServiceTest {
 		row.setColumns(columns);
 		row.setName(DataExtensionNameForTesting);
 		
-		ETServiceResponse<ETDataExtensionRow> response = rowService.post(client, row);
+		ETResponse<ETDataExtensionRow> response = rowService.post(client, row);
 		
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
@@ -192,7 +192,7 @@ public class ETDataExtensionServiceTest {
 		row.setColumns(columns);
 		row.setCustomerKey(DataExtensionNameForTesting);
 		
-		ETServiceResponse<ETDataExtensionRow> response = rowService.post(client, row);
+		ETResponse<ETDataExtensionRow> response = rowService.post(client, row);
 		
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
@@ -204,7 +204,7 @@ public class ETDataExtensionServiceTest {
 		
 		ETDataExtensionRowService rowService = new ETDataExtensionRowServiceImpl();
 		
-		ETServiceResponse<ETDataExtensionRow> response = rowService.get(client, DataExtensionNameForTesting, Arrays.asList("Key", "Value"));
+		ETResponse<ETDataExtensionRow> response = rowService.get(client, DataExtensionNameForTesting, Arrays.asList("Key", "Value"));
 		
 		Assert.assertNotNull(response.getResults());
 		Assert.assertTrue(response.getStatus());
@@ -230,7 +230,7 @@ public class ETDataExtensionServiceTest {
 		row.setColumns(columns);
 		row.setCustomerKey(DataExtensionNameForTesting);
 		
-		ETServiceResponse<ETDataExtensionRow> response = rowService.patch(client, row);
+		ETResponse<ETDataExtensionRow> response = rowService.patch(client, row);
 		
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
@@ -245,7 +245,7 @@ public class ETDataExtensionServiceTest {
 		
 		ETFilter filter = new ETSimpleFilter("Key", ETFilterOperators.EQUALS, Arrays.asList("JavaSDKTEST2"));
 		
-		ETServiceResponse<ETDataExtensionRow> response = rowService.get(client, DataExtensionNameForTesting, Arrays.asList("Key", "Value"), filter);
+		ETResponse<ETDataExtensionRow> response = rowService.get(client, DataExtensionNameForTesting, Arrays.asList("Key", "Value"), filter);
 		
 		Assert.assertNotNull(response.getResults());
 		Assert.assertTrue(response.getStatus());
@@ -270,7 +270,7 @@ public class ETDataExtensionServiceTest {
 		row.setKeys(keys);
 		row.setCustomerKey(DataExtensionNameForTesting);
 		
-		ETServiceResponse<ETDataExtensionRow> response = rowService.delete(client, row);
+		ETResponse<ETDataExtensionRow> response = rowService.delete(client, row);
 		
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
@@ -284,7 +284,7 @@ public class ETDataExtensionServiceTest {
 		dataExtension.setCustomerKey(DataExtensionNameForTesting);
 		dataExtension.setName(DataExtensionNameForTesting);
 		
-		ETServiceResponse<ETDataExtension> response = service.delete(client, dataExtension);
+		ETResponse<ETDataExtension> response = service.delete(client, dataExtension);
 		Assert.assertTrue(response.getStatus());
 		
 	}

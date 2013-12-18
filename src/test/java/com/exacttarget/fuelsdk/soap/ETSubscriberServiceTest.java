@@ -21,7 +21,7 @@ import org.junit.runners.MethodSorters;
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETConfiguration;
 import com.exacttarget.fuelsdk.ETSdkException;
-import com.exacttarget.fuelsdk.ETServiceResponse;
+import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.ETSubscriberService;
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.filter.ETFilterOperators;
@@ -59,7 +59,7 @@ public class ETSubscriberServiceTest {
 	@Test
 	public void A_TestGetCollectionService() throws ETSdkException
 	{
-		ETServiceResponse<ETSubscriber> response =  service.get(client);
+		ETResponse<ETSubscriber> response =  service.get(client);
 		
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
@@ -78,14 +78,14 @@ public class ETSubscriberServiceTest {
 		subscriber.setEmailAddress(SubscriberTestEmail);
 		subscriber.setSubscriberKey(SubscriberTestEmail);
 		
-		ETServiceResponse<ETSubscriber> response = service.post(client, subscriber);
+		ETResponse<ETSubscriber> response = service.post(client, subscriber);
 		
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
 		
 		// Test it was created
 		ETFilter filter = new ETSimpleFilter("SubscriberKey", ETFilterOperators.EQUALS, SubscriberTestEmail);
-		ETServiceResponse<ETSubscriber> responseFound = service.get(client, filter);
+		ETResponse<ETSubscriber> responseFound = service.get(client, filter);
 		
 		Assert.assertNotNull(responseFound);
 		Assert.assertTrue(responseFound.getStatus());
@@ -108,14 +108,14 @@ public class ETSubscriberServiceTest {
 		subscriber.setSubscriberKey(SubscriberTestEmail);
 		subscriber.setStatus(ETSubscriberStatus.UNSUBSCRIBED);
 		
-		ETServiceResponse<ETSubscriber> response = service.patch(client, subscriber);
+		ETResponse<ETSubscriber> response = service.patch(client, subscriber);
 		
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
 		
 		// Test it was created
 		ETFilter filter = new ETSimpleFilter("SubscriberKey", ETFilterOperators.EQUALS, SubscriberTestEmail);
-		ETServiceResponse<ETSubscriber> responseFound = service.get(client, filter);
+		ETResponse<ETSubscriber> responseFound = service.get(client, filter);
 		
 		Assert.assertNotNull(responseFound);
 		Assert.assertTrue(responseFound.getStatus());
@@ -131,13 +131,13 @@ public class ETSubscriberServiceTest {
 		ETSubscriber subscriber = new ETSubscriber();
 		subscriber.setSubscriberKey(SubscriberTestEmail);
 		
-		ETServiceResponse<ETSubscriber> response = service.delete(client, subscriber);
+		ETResponse<ETSubscriber> response = service.delete(client, subscriber);
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
 		
 		// Test it was deleted
 		ETFilter filter = new ETSimpleFilter("SubscriberKey", ETFilterOperators.EQUALS, SubscriberTestEmail);
-		ETServiceResponse<ETSubscriber> responseFound = service.get(client, filter);
+		ETResponse<ETSubscriber> responseFound = service.get(client, filter);
 		
 		Assert.assertNotNull(responseFound);
 		Assert.assertTrue(responseFound.getStatus());

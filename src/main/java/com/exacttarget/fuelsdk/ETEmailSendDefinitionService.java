@@ -17,30 +17,30 @@ import com.exacttarget.fuelsdk.model.ETEmailSendDefinition;
 
 public interface ETEmailSendDefinitionService extends ETCrudService {
 
-	public ETServiceResponse<ETEmailSendDefinition> get(ETClient client)
+	public ETResponse<ETEmailSendDefinition> get(ETClient client)
 	        throws ETSdkException;
 
-	public ETServiceResponse<ETEmailSendDefinition> get(ETClient client, ETFilter filter)
+	public ETResponse<ETEmailSendDefinition> get(ETClient client, ETFilter filter)
 	        throws ETSdkException;
 
-	public ETServiceResponse<ETEmailSendDefinition> post(ETClient client, ETEmailSendDefinition emailSendDefinition)
+	public ETResponse<ETEmailSendDefinition> post(ETClient client, ETEmailSendDefinition emailSendDefinition)
 	    	throws ETSdkException;
 
-    public ETServiceResponse<ETEmailSendDefinition> patch(ETClient client, ETEmailSendDefinition emailSendDefinition)
+    public ETResponse<ETEmailSendDefinition> patch(ETClient client, ETEmailSendDefinition emailSendDefinition)
     		throws ETSdkException;
 
-    public ETServiceResponse<ETEmailSendDefinition> delete(ETClient client, ETEmailSendDefinition emailSendDefinition)
+    public ETResponse<ETEmailSendDefinition> delete(ETClient client, ETEmailSendDefinition emailSendDefinition)
 	    	throws ETSdkException;
 
-	public ETServiceResponse<ETEmailSendDefinition> send(ETClient client, ETEmailSendDefinition emailSendDefinition)
+	public ETResponse<ETEmailSendDefinition> send(ETClient client, ETEmailSendDefinition emailSendDefinition)
 			throws ETSdkException;
 	
-	public ETServiceResponse<ETEmailSendDefinition> post(ETClient client, List<ETEmailSendDefinition> emailSendDefinitions)
+	public ETResponse<ETEmailSendDefinition> post(ETClient client, List<ETEmailSendDefinition> emailSendDefinitions)
 	    	throws ETSdkException;
 	
-	public ETServiceResponse<ETEmailSendDefinition> patch(ETClient client, List<ETEmailSendDefinition> emailSendDefinitions)
+	public ETResponse<ETEmailSendDefinition> patch(ETClient client, List<ETEmailSendDefinition> emailSendDefinitions)
     		throws ETSdkException;
 
-    public ETServiceResponse<ETEmailSendDefinition> delete(ETClient client, List<ETEmailSendDefinition> emailSendDefinitions)
+    public ETResponse<ETEmailSendDefinition> delete(ETClient client, List<ETEmailSendDefinition> emailSendDefinitions)
 	    	throws ETSdkException;
 }

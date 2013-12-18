@@ -26,7 +26,7 @@ import com.exacttarget.fuelsdk.ETConfiguration;
 import com.exacttarget.fuelsdk.ETListService;
 import com.exacttarget.fuelsdk.ETListSubscriberService;
 import com.exacttarget.fuelsdk.ETSdkException;
-import com.exacttarget.fuelsdk.ETServiceResponse;
+import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.ETSubscriberService;
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.filter.ETFilterOperators;
@@ -97,7 +97,7 @@ public class ETListSubscriberServiceTest {
 		subscriber.setSubscriberKey(SubscriberTestEmail);
 		subscriber.setLists(Arrays.asList(subscriberList));
 		
-		ETServiceResponse<ETSubscriber> response = subscriberService.post(client, subscriber);
+		ETResponse<ETSubscriber> response = subscriberService.post(client, subscriber);
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
 		Assert.assertNotNull(response.getResults());
@@ -108,7 +108,7 @@ public class ETListSubscriberServiceTest {
 	public void B_TestGetCollectionSubscribersOnListService() throws ETSdkException {
 		
 		ETFilter filter = new ETSimpleFilter("ListID", ETFilterOperators.EQUALS, Arrays.asList(""+list.getId()));
-		ETServiceResponse<ETListSubscriber> response =  service.get(client, filter);
+		ETResponse<ETListSubscriber> response =  service.get(client, filter);
 		
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());

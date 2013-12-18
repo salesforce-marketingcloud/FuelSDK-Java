@@ -15,9 +15,9 @@ import com.exacttarget.fuelsdk.model.ETClickEvent;
 
 public interface ETClickEventService extends ETGetService {
 
-	public ETServiceResponse<ETClickEvent> get(ETClient client)
+	public ETResponse<ETClickEvent> get(ETClient client)
 	        throws ETSdkException;
 
-	public ETServiceResponse<ETClickEvent> get(ETClient client, ETFilter filter)
+	public ETResponse<ETClickEvent> get(ETClient client, ETFilter filter)
 	        throws ETSdkException;
 }

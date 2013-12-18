@@ -29,7 +29,7 @@ import com.exacttarget.fuelsdk.ETCampaignService;
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETConfiguration;
 import com.exacttarget.fuelsdk.ETSdkException;
-import com.exacttarget.fuelsdk.ETServiceResponse;
+import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.filter.ETComplexFilter;
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.filter.ETFilterOperators;
@@ -394,7 +394,7 @@ public class ETCampaignServiceTest{
 
 			assertEquals("",TEST_CAMPAIGN_CODE_PATCH, testCampaign1.getCampaignCode());
 			
-			ETServiceResponse<ETCampaign> response = service.patch(client, testCampaign1);
+			ETResponse<ETCampaign> response = service.patch(client, testCampaign1);
 			assertNotNull("",response);
 			assertTrue("",response.getStatus());
 			assertNotNull("",response.getResults());
@@ -425,7 +425,7 @@ public class ETCampaignServiceTest{
 
 		filter.setAdditionalOperands(simpleFilters);
 		
-		ETServiceResponse<ETCampaign> response = null;
+		ETResponse<ETCampaign> response = null;
 		response = service.get(client, filter);
 		assertNotNull("The call response.getResults() was expected to be NOT null:", response.getResults());
 		assertEquals("Received Incorrect Number of of results: ", expectedNumOfItems, response.getResults().size());
@@ -441,7 +441,7 @@ public class ETCampaignServiceTest{
 		filter.setLeftOperand(new ETSimpleFilter(ETCampaignService.URL_PARAM.page.toString(), ETFilterOperators.EQUALS, page));
 		filter.setRightOperand(new ETSimpleFilter(ETCampaignService.URL_PARAM.pageSize.toString(), ETFilterOperators.EQUALS, pageSize));
 		
-		ETServiceResponse<ETCampaign> response = service.get(client, filter);
+		ETResponse<ETCampaign> response = service.get(client, filter);
 
 		assertNotNull("The call response.getResults() was expected to be NOT null:", response.getResults());
 		assertEquals("Received Incorrect Number of of results: ", expectedNumOfItems, response.getResults().size());
@@ -453,7 +453,7 @@ public class ETCampaignServiceTest{
 	{
 		ETSimpleFilter filter = new ETSimpleFilter( ETCampaignService.URL_PARAM.orderBy.toString(),  ETFilterOperators.EQUALS,  orderby.toString() );
 		
-		ETServiceResponse<ETCampaign> response = service.get(client, filter);
+		ETResponse<ETCampaign> response = service.get(client, filter);
 
 		assertNotNull("Reponse should be non-Null: ",response);
 		
@@ -479,7 +479,7 @@ public class ETCampaignServiceTest{
 		etObject.setColor("000fff");
 		etObject.setFavorite(false);
 		
-		ETServiceResponse<ETCampaign> response =  service.post(client, etObject);
+		ETResponse<ETCampaign> response =  service.post(client, etObject);
 		
 		assertNotNull("Reponse should be non-Null: ",response);
 		assertTrue("Response Status should be True: ",response.getStatus());
@@ -489,7 +489,7 @@ public class ETCampaignServiceTest{
 	
 	protected List<ETCampaign> retrieveAllCampaigns() throws ETSdkException 
 	{
-		ETServiceResponse<ETCampaign> response = service.get(client);
+		ETResponse<ETCampaign> response = service.get(client);
 
 		assertNotNull("Reponse should be non-Null: ",response);
 		assertTrue("Response Status should be True: ",response.getStatus());
@@ -499,7 +499,7 @@ public class ETCampaignServiceTest{
 	
 	protected ETCampaign retrieveCampaign(ETFilter f) throws ETSdkException 
 	{
-		ETServiceResponse<ETCampaign> response = service.get(client, f);
+		ETResponse<ETCampaign> response = service.get(client, f);
 		assertNotNull("Reponse should be non-Null: ",response);
 		assertTrue("Response Status should be True: ",response.getStatus());
 		assertNotNull("Response Results should be non-Null:",response.getResults());
@@ -510,7 +510,7 @@ public class ETCampaignServiceTest{
 	
 	protected void deleteCampaign(ETCampaign etObject) throws ETSdkException
 	{
-		ETServiceResponse<ETCampaign> response = service.delete(client, etObject);
+		ETResponse<ETCampaign> response = service.delete(client, etObject);
 		
 		assertNotNull("Reponse should be non-Null: ",response);
 		assertTrue("Response Status should be True: ",response.getStatus());

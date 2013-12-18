@@ -17,28 +17,28 @@ import com.exacttarget.fuelsdk.model.ETSubscriber;
 
 public interface ETSubscriberService extends ETCrudService {
 
-	public ETServiceResponse<ETSubscriber> get(ETClient client)
+	public ETResponse<ETSubscriber> get(ETClient client)
 			throws ETSdkException;
 
-	public ETServiceResponse<ETSubscriber> get(ETClient client, ETFilter filter)
+	public ETResponse<ETSubscriber> get(ETClient client, ETFilter filter)
 			throws ETSdkException;
 
-	public ETServiceResponse<ETSubscriber> post(ETClient client, ETSubscriber subscriber)
+	public ETResponse<ETSubscriber> post(ETClient client, ETSubscriber subscriber)
 	    	throws ETSdkException;
 	
-	public ETServiceResponse<ETSubscriber> post(ETClient client, List<ETSubscriber> subscribers) 
+	public ETResponse<ETSubscriber> post(ETClient client, List<ETSubscriber> subscribers) 
 			throws ETSdkException;
 
-	public ETServiceResponse<ETSubscriber> patch(ETClient client, ETSubscriber subscriber)
+	public ETResponse<ETSubscriber> patch(ETClient client, ETSubscriber subscriber)
 			throws ETSdkException;
 	
-	public ETServiceResponse<ETSubscriber> patch(ETClient client, List<ETSubscriber> subscribers)
+	public ETResponse<ETSubscriber> patch(ETClient client, List<ETSubscriber> subscribers)
 			throws ETSdkException;
 
-	public ETServiceResponse<ETSubscriber> delete(ETClient client, ETSubscriber subscriber)
+	public ETResponse<ETSubscriber> delete(ETClient client, ETSubscriber subscriber)
 	    	throws ETSdkException;
 	
-	public ETServiceResponse<ETSubscriber> delete(ETClient client, List<ETSubscriber> subscribers)
+	public ETResponse<ETSubscriber> delete(ETClient client, List<ETSubscriber> subscribers)
 	    	throws ETSdkException;
 
 }

@@ -17,27 +17,27 @@ import com.exacttarget.fuelsdk.model.ETDataExtension;
 
 public interface ETDataExtensionService extends ETCrudService {
 
-	public ETServiceResponse<ETDataExtension> get(ETClient client)
+	public ETResponse<ETDataExtension> get(ETClient client)
 	        throws ETSdkException;
 
-	public ETServiceResponse<ETDataExtension> get(ETClient client, ETFilter filter)
+	public ETResponse<ETDataExtension> get(ETClient client, ETFilter filter)
 	        throws ETSdkException;
 
-	public ETServiceResponse<ETDataExtension> post(ETClient client, ETDataExtension dataExtension)
+	public ETResponse<ETDataExtension> post(ETClient client, ETDataExtension dataExtension)
 	    	throws ETSdkException;
 
-    public ETServiceResponse<ETDataExtension> patch(ETClient client, ETDataExtension dataExtension)
+    public ETResponse<ETDataExtension> patch(ETClient client, ETDataExtension dataExtension)
     		throws ETSdkException;
 
-    public ETServiceResponse<ETDataExtension> delete(ETClient client, ETDataExtension dataExtension)
+    public ETResponse<ETDataExtension> delete(ETClient client, ETDataExtension dataExtension)
 	    	throws ETSdkException;
     
-    public ETServiceResponse<ETDataExtension> post(ETClient client, List<ETDataExtension> dataExtensions)
+    public ETResponse<ETDataExtension> post(ETClient client, List<ETDataExtension> dataExtensions)
 	    	throws ETSdkException;
 
-    public ETServiceResponse<ETDataExtension> patch(ETClient client, List<ETDataExtension> dataExtensions)
+    public ETResponse<ETDataExtension> patch(ETClient client, List<ETDataExtension> dataExtensions)
     		throws ETSdkException;
 
-    public ETServiceResponse<ETDataExtension> delete(ETClient client, List<ETDataExtension> dataExtensions)
+    public ETResponse<ETDataExtension> delete(ETClient client, List<ETDataExtension> dataExtensions)
 	    	throws ETSdkException;
 }

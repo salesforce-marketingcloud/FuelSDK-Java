@@ -23,7 +23,7 @@ import org.apache.log4j.Logger;
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETGetService;
 import com.exacttarget.fuelsdk.ETSdkException;
-import com.exacttarget.fuelsdk.ETServiceResponse;
+import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.annotations.InternalRestField;
 import com.exacttarget.fuelsdk.annotations.InternalRestType;
 import com.exacttarget.fuelsdk.filter.ETComplexFilter;
@@ -43,11 +43,11 @@ public class ETGetServiceImpl implements ETGetService {
 	
 	private static List<Integer> successfulResponses = Arrays.asList(200,201,202);
 	
-	public <T extends ETObject> ETServiceResponse<T> get(ETClient client, Class<T> type) throws ETSdkException {
+	public <T extends ETObject> ETResponse<T> get(ETClient client, Class<T> type) throws ETSdkException {
 		return this.get(client, type, null);
 	}
 
-	public <T extends ETObject> ETServiceResponse<T> get(ETClient client, Class<T> type, ETFilter filter) throws ETSdkException 
+	public <T extends ETObject> ETResponse<T> get(ETClient client, Class<T> type, ETFilter filter) throws ETSdkException 
 	{
 		logger.trace("get ");
 		ETRestConnection connection = client.getRESTConnection();
@@ -66,7 +66,7 @@ public class ETGetServiceImpl implements ETGetService {
 			e1.printStackTrace();
 		}
 
-		ETServiceResponse<T> response = new ETServiceResponseImpl<T>();
+		ETResponse<T> response = new ETServiceResponseImpl<T>();
 		
 		String json = connection.get(path);
 		
@@ -78,7 +78,7 @@ public class ETGetServiceImpl implements ETGetService {
 		return createResponseETObject(type, json, response);
 	}
 
-	protected <T extends ETObject> ETServiceResponse<T> getErrorResponse( String json, ETServiceResponse<T> response )
+	protected <T extends ETObject> ETResponse<T> getErrorResponse( String json, ETResponse<T> response )
 	{
 		try 
 		{
@@ -109,7 +109,7 @@ public class ETGetServiceImpl implements ETGetService {
 		return response;
 	}
 	
-	protected <T extends ETObject> ETServiceResponse<T> createResponseETObject(Class<T> type, String json, ETServiceResponse<T> response)  throws ETSdkException 
+	protected <T extends ETObject> ETResponse<T> createResponseETObject(Class<T> type, String json, ETResponse<T> response)  throws ETSdkException 
 	{
 		logger.debug("Returned Raw Json:" + json);
 		
@@ -168,7 +168,7 @@ public class ETGetServiceImpl implements ETGetService {
 		return createETObject(type, items, response);
 	}
 
-	private <T extends ETObject> ETServiceResponse<T> createETObject(Class<T> type, JsonArray items, ETServiceResponse<T> response) throws ETSdkException 
+	private <T extends ETObject> ETResponse<T> createETObject(Class<T> type, JsonArray items, ETResponse<T> response) throws ETSdkException 
 	{	
 		if( items == null ) return null;
 		

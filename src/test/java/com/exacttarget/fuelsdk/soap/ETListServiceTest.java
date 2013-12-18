@@ -25,7 +25,7 @@ import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETConfiguration;
 import com.exacttarget.fuelsdk.ETListService;
 import com.exacttarget.fuelsdk.ETSdkException;
-import com.exacttarget.fuelsdk.ETServiceResponse;
+import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.filter.ETFilterOperators;
 import com.exacttarget.fuelsdk.filter.ETSimpleFilter;
@@ -57,7 +57,7 @@ public class ETListServiceTest {
 	@Test
 	public void A_TestGetCollectionService() throws ETSdkException
 	{
-		ETServiceResponse<ETList> response =  service.get(client);
+		ETResponse<ETList> response =  service.get(client);
 		
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
@@ -77,14 +77,14 @@ public class ETListServiceTest {
 		list.setDescription("This list was created with the JavaSDK");
 		list.setListType(ETListType.PRIVATE);
 
-		ETServiceResponse<ETList> response = service.post(client, list);
+		ETResponse<ETList> response = service.post(client, list);
 		
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
 		
 		// Test it was created
 		ETFilter filter = new ETSimpleFilter("CustomerKey", ETFilterOperators.EQUALS, NameOfTestList);
-		ETServiceResponse<ETList> responseFound = service.get(client, filter);
+		ETResponse<ETList> responseFound = service.get(client, filter);
 		
 		Assert.assertNotNull(responseFound);
 		Assert.assertTrue(responseFound.getStatus());
@@ -104,14 +104,14 @@ public class ETListServiceTest {
 		list.setCustomerKey(NameOfTestList);
 		list.setDescription("New Description");
 		
-		ETServiceResponse<ETList> response = service.patch(client, list);
+		ETResponse<ETList> response = service.patch(client, list);
 		
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
 		
 		// Test it was created
 		ETFilter filter = new ETSimpleFilter("CustomerKey", ETFilterOperators.EQUALS, NameOfTestList);
-		ETServiceResponse<ETList> responseFound = service.get(client, filter);
+		ETResponse<ETList> responseFound = service.get(client, filter);
 		
 		Assert.assertNotNull(responseFound);
 		Assert.assertTrue(responseFound.getStatus());
@@ -127,13 +127,13 @@ public class ETListServiceTest {
 		ETList list = new ETList();
 		list.setCustomerKey(NameOfTestList);
 		
-		ETServiceResponse<ETList> response = service.delete(client, list);
+		ETResponse<ETList> response = service.delete(client, list);
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
 		
 		// Test it was deleted
 		ETFilter filter = new ETSimpleFilter("CustomerKey", ETFilterOperators.EQUALS, NameOfTestList);
-		ETServiceResponse<ETList> responseFound = service.get(client, filter);
+		ETResponse<ETList> responseFound = service.get(client, filter);
 		
 		Assert.assertNotNull(responseFound);
 		Assert.assertTrue(responseFound.getStatus());
@@ -168,14 +168,14 @@ public class ETListServiceTest {
 		list3.setListType(ETListType.PRIVATE);
 		lists.add(list3);
 
-		ETServiceResponse<ETList> response = service.post(client, lists);
+		ETResponse<ETList> response = service.post(client, lists);
 		
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
 		
 		// Test it was created
 		ETFilter filter = new ETSimpleFilter("CustomerKey", ETFilterOperators.EQUALS, NameOfTestList);
-		ETServiceResponse<ETList> responseFound = service.get(client, filter);
+		ETResponse<ETList> responseFound = service.get(client, filter);
 		
 		Assert.assertNotNull(responseFound);
 		Assert.assertTrue(responseFound.getStatus());
@@ -205,13 +205,13 @@ public class ETListServiceTest {
 		lists.add(list3);
 		
 		
-		ETServiceResponse<ETList> response = service.delete(client, lists);
+		ETResponse<ETList> response = service.delete(client, lists);
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
 		
 		// Test it was deleted
 		ETFilter filter = new ETSimpleFilter("CustomerKey", ETFilterOperators.EQUALS, NameOfTestList);
-		ETServiceResponse<ETList> responseFound = service.get(client, filter);
+		ETResponse<ETList> responseFound = service.get(client, filter);
 		
 		Assert.assertNotNull(responseFound);
 		Assert.assertTrue(responseFound.getStatus());

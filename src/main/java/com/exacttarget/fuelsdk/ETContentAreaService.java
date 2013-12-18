@@ -17,28 +17,28 @@ import com.exacttarget.fuelsdk.model.ETContentArea;
 
 public interface ETContentAreaService extends ETCrudService {
 
-	public ETServiceResponse<ETContentArea> get(ETClient client)
+	public ETResponse<ETContentArea> get(ETClient client)
 	        throws ETSdkException;
 
-	public ETServiceResponse<ETContentArea> get(ETClient client, ETFilter filter)
+	public ETResponse<ETContentArea> get(ETClient client, ETFilter filter)
 	        throws ETSdkException;
 
-	public ETServiceResponse<ETContentArea> post(ETClient client, ETContentArea contentArea)
+	public ETResponse<ETContentArea> post(ETClient client, ETContentArea contentArea)
 	    	throws ETSdkException;
 
-    public ETServiceResponse<ETContentArea> patch(ETClient client, ETContentArea contentArea)
+    public ETResponse<ETContentArea> patch(ETClient client, ETContentArea contentArea)
     		throws ETSdkException;
 
-    public ETServiceResponse<ETContentArea> delete(ETClient client, ETContentArea contentArea)
+    public ETResponse<ETContentArea> delete(ETClient client, ETContentArea contentArea)
 	    	throws ETSdkException;
     
-    public ETServiceResponse<ETContentArea> post(ETClient client, List<ETContentArea> contentAreas)
+    public ETResponse<ETContentArea> post(ETClient client, List<ETContentArea> contentAreas)
 			throws ETSdkException;
 	
-	public ETServiceResponse<ETContentArea> patch(ETClient client, List<ETContentArea> contentAreas)
+	public ETResponse<ETContentArea> patch(ETClient client, List<ETContentArea> contentAreas)
 			throws ETSdkException;
 	
-	public ETServiceResponse<ETContentArea> delete(ETClient client, List<ETContentArea> contentAreas)
+	public ETResponse<ETContentArea> delete(ETClient client, List<ETContentArea> contentAreas)
 			throws ETSdkException;
 }
 

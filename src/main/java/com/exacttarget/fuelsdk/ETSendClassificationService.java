@@ -17,27 +17,27 @@ import com.exacttarget.fuelsdk.model.ETSendClassification;
 
 public interface ETSendClassificationService extends ETCrudService {
 
-	public ETServiceResponse<ETSendClassification> get(ETClient client)
+	public ETResponse<ETSendClassification> get(ETClient client)
 	        throws ETSdkException;
 
-	public ETServiceResponse<ETSendClassification> get(ETClient client, ETFilter filter)
+	public ETResponse<ETSendClassification> get(ETClient client, ETFilter filter)
 	        throws ETSdkException;
 
-	public ETServiceResponse<ETSendClassification> post(ETClient client, ETSendClassification sendClassificiation)
+	public ETResponse<ETSendClassification> post(ETClient client, ETSendClassification sendClassificiation)
 	    	throws ETSdkException;
 
-	public ETServiceResponse<ETSendClassification> patch(ETClient client, ETSendClassification sendClassificiation)
+	public ETResponse<ETSendClassification> patch(ETClient client, ETSendClassification sendClassificiation)
 			throws ETSdkException;
 
-	public ETServiceResponse<ETSendClassification> delete(ETClient client, ETSendClassification sendClassificiation)
+	public ETResponse<ETSendClassification> delete(ETClient client, ETSendClassification sendClassificiation)
 	    	throws ETSdkException;
 	
-	public ETServiceResponse<ETSendClassification> post(ETClient client, List<ETSendClassification> sendClassificiations)
+	public ETResponse<ETSendClassification> post(ETClient client, List<ETSendClassification> sendClassificiations)
 	    	throws ETSdkException;
 
-	public ETServiceResponse<ETSendClassification> patch(ETClient client, List<ETSendClassification> sendClassificiations)
+	public ETResponse<ETSendClassification> patch(ETClient client, List<ETSendClassification> sendClassificiations)
 			throws ETSdkException;
 
-	public ETServiceResponse<ETSendClassification> delete(ETClient client, List<ETSendClassification> sendClassificiations)
+	public ETResponse<ETSendClassification> delete(ETClient client, List<ETSendClassification> sendClassificiations)
 	    	throws ETSdkException;
 }

@@ -15,9 +15,9 @@ import com.exacttarget.fuelsdk.model.ETBounceEvent;
 
 public interface ETBounceEventService extends ETGetService {
 
-	public ETServiceResponse<ETBounceEvent> get(ETClient client)
+	public ETResponse<ETBounceEvent> get(ETClient client)
 	        throws ETSdkException;
 
-	public ETServiceResponse<ETBounceEvent> get(ETClient client, ETFilter filter)
+	public ETResponse<ETBounceEvent> get(ETClient client, ETFilter filter)
 	        throws ETSdkException;
 }

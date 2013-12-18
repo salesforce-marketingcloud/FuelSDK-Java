@@ -27,7 +27,7 @@ import com.exacttarget.fuelsdk.ETCampaignService;
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETConfiguration;
 import com.exacttarget.fuelsdk.ETSdkException;
-import com.exacttarget.fuelsdk.ETServiceResponse;
+import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.filter.ETComplexFilter;
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.filter.ETFilterOperators;
@@ -109,7 +109,7 @@ public class ETCampaignAssetServiceTest{
 				asset.setType(type);
 				
 				//TEST begin
-				ETServiceResponse<ETCampaignAsset> response = assetService.post(client, asset);
+				ETResponse<ETCampaignAsset> response = assetService.post(client, asset);
 				
 				assertNotNull("Response should not be null", response);
 				assertTrue("Status should be True",response.getStatus());
@@ -168,7 +168,7 @@ public class ETCampaignAssetServiceTest{
 		asset.setItemID("321");
 		asset.setType(ETCampaignAssetService.TYPE.LANDING_PAGE.toString());
 		
-		ETServiceResponse<ETCampaignAsset> response = assetService.post(client, asset);
+		ETResponse<ETCampaignAsset> response = assetService.post(client, asset);
 		
 		assertNotNull("",response);
 		assertTrue("",response.getStatus());
@@ -225,7 +225,7 @@ public class ETCampaignAssetServiceTest{
 				logger.debug("Association Type: " + type );
 				asset.setType(type);
 				
-				ETServiceResponse<ETCampaignAsset> response = assetService.post(client, asset);
+				ETResponse<ETCampaignAsset> response = assetService.post(client, asset);
 				
 				assertNotNull("Response should not be null", response);
 				assertTrue("Status should be True",response.getStatus());
@@ -234,7 +234,7 @@ public class ETCampaignAssetServiceTest{
 			}
 
 			//Test that there are 2 Assets associated to the 1 campaign.
-			ETServiceResponse<ETCampaignAsset> response = retrieveAllAssets(campaignId);
+			ETResponse<ETCampaignAsset> response = retrieveAllAssets(campaignId);
 			
 			assertNotNull("Response should not be null", response);
 			assertTrue("Status should be True",response.getStatus());
@@ -273,7 +273,7 @@ public class ETCampaignAssetServiceTest{
 	
 	private ETCampaignAsset retrieveAsset(String campaignID, String id) throws ETSdkException 
 	{
-		ETServiceResponse<ETCampaignAsset> response;
+		ETResponse<ETCampaignAsset> response;
 		ETComplexFilter filter = new ETComplexFilter();
 		List<ETFilter> filters = new ArrayList<ETFilter>();
 		filters.add(new ETSimpleFilter("campaignId", ETFilterOperators.EQUALS, campaignID ));
@@ -290,9 +290,9 @@ public class ETCampaignAssetServiceTest{
 		return responseAsset;
 	}
 	
-	private ETServiceResponse<ETCampaignAsset> retrieveAllAssets(String campaignID) throws ETSdkException 
+	private ETResponse<ETCampaignAsset> retrieveAllAssets(String campaignID) throws ETSdkException 
 	{
-		ETServiceResponse<ETCampaignAsset> response;
+		ETResponse<ETCampaignAsset> response;
 		ETSimpleFilter filter = new ETSimpleFilter("campaignId", ETFilterOperators.EQUALS, campaignID );
 		
 		response = assetService.get(client, filter);
@@ -312,7 +312,7 @@ public class ETCampaignAssetServiceTest{
 		etObject.setColor("000fff");
 		etObject.setFavorite(false);
 		
-		ETServiceResponse<ETCampaign> response =  campaignService.post(client, etObject);
+		ETResponse<ETCampaign> response =  campaignService.post(client, etObject);
 
 		assertNotNull("Response should not be null.",response);
 		assertTrue("Response Status should be True.",response.getStatus());
@@ -322,7 +322,7 @@ public class ETCampaignAssetServiceTest{
 	
 	protected void deleteCampaign(ETCampaign etObject) throws ETSdkException
 	{
-		ETServiceResponse<ETCampaign> response = campaignService.delete(client, etObject);
+		ETResponse<ETCampaign> response = campaignService.delete(client, etObject);
 		
 		assertNotNull("Response should not be null.",response);
 		assertTrue("Response Status should be True.",response.getStatus());
@@ -330,7 +330,7 @@ public class ETCampaignAssetServiceTest{
 
 	protected List<ETCampaign> retrieveAllCampaigns() throws ETSdkException 
 	{
-		ETServiceResponse<ETCampaign> response = campaignService.get(client);
+		ETResponse<ETCampaign> response = campaignService.get(client);
 
 		assertNotNull("Response should not be null.",response);
 		assertTrue("Response Status should be True.",response.getStatus());

@@ -22,7 +22,7 @@ import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETConfiguration;
 import com.exacttarget.fuelsdk.ETOrganizationService;
 import com.exacttarget.fuelsdk.ETSdkException;
-import com.exacttarget.fuelsdk.ETServiceResponse;
+import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.filter.ETFilterOperators;
 import com.exacttarget.fuelsdk.filter.ETSimpleFilter;
@@ -55,7 +55,7 @@ public class ETOrganizationServiceTest {
 	@Test
 	public void A_TestGet() throws ETSdkException {
 		
-		ETServiceResponse<ETOrganization> response = service.get(client);
+		ETResponse<ETOrganization> response = service.get(client);
 		
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
@@ -72,7 +72,7 @@ public class ETOrganizationServiceTest {
 	public void B_TestGetSingle() throws ETSdkException {
 		
 		ETFilter filter = new ETSimpleFilter("CustomerKey", ETFilterOperators.EQUALS, CustomerKeyofExistingOrganization);
-		ETServiceResponse<ETOrganization> response = service.get(client, filter);
+		ETResponse<ETOrganization> response = service.get(client, filter);
 		
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
@@ -104,13 +104,13 @@ public class ETOrganizationServiceTest {
 		org.setEditionId(3);
 		org.setIsActive(true);
 		
-		ETServiceResponse<ETOrganization> response = service.post(client, org);
+		ETResponse<ETOrganization> response = service.post(client, org);
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
 		
 		// Test it was created
 		ETFilter filter = new ETSimpleFilter("CustomerKey", ETFilterOperators.EQUALS, CustomerKeyOfTestOrganization);
-		ETServiceResponse<ETOrganization> responseFound = service.get(client, filter);
+		ETResponse<ETOrganization> responseFound = service.get(client, filter);
 		
 		Assert.assertNotNull(responseFound);
 		Assert.assertTrue(responseFound.getStatus());
@@ -141,13 +141,13 @@ public class ETOrganizationServiceTest {
 		org.setEditionId(3);
 		org.setIsActive(true);
 		
-		ETServiceResponse<ETOrganization> response = service.patch(client, org);
+		ETResponse<ETOrganization> response = service.patch(client, org);
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
 		
 		// Test it was updated
 		ETFilter filter = new ETSimpleFilter("CustomerKey", ETFilterOperators.EQUALS, CustomerKeyOfTestOrganization);
-		ETServiceResponse<ETOrganization> responseFound = service.get(client, filter);
+		ETResponse<ETOrganization> responseFound = service.get(client, filter);
 		
 		Assert.assertNotNull(responseFound);
 		Assert.assertTrue(responseFound.getStatus());
@@ -163,13 +163,13 @@ public class ETOrganizationServiceTest {
 		ETOrganization organization = new ETOrganization();
 		organization.setCustomerKey(CustomerKeyOfTestOrganization);
 		
-		ETServiceResponse<ETOrganization> response = service.delete(client, organization);
+		ETResponse<ETOrganization> response = service.delete(client, organization);
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());
 		
 		// Test it was deleted
 		ETFilter filter = new ETSimpleFilter("CustomerKey", ETFilterOperators.EQUALS, CustomerKeyOfTestOrganization);
-		ETServiceResponse<ETOrganization> responseFound = service.get(client, filter);
+		ETResponse<ETOrganization> responseFound = service.get(client, filter);
 		
 		Assert.assertNotNull(responseFound);
 		Assert.assertTrue(responseFound.getStatus());

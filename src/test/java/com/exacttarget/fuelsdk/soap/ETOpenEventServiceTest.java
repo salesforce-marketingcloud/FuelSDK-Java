@@ -22,7 +22,7 @@ import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETConfiguration;
 import com.exacttarget.fuelsdk.ETOpenEventService;
 import com.exacttarget.fuelsdk.ETSdkException;
-import com.exacttarget.fuelsdk.ETServiceResponse;
+import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.model.ETOpenEvent;
 
 @Ignore
@@ -48,7 +48,7 @@ public class ETOpenEventServiceTest  {
 	@Test
 	public void TestGetCollectionService() throws ETSdkException
 	{
-		ETServiceResponse<ETOpenEvent> response = service.get(client);
+		ETResponse<ETOpenEvent> response = service.get(client);
 		
 		Assert.assertNotNull(response);
 		Assert.assertTrue(response.getStatus());

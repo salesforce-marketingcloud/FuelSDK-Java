@@ -17,27 +17,27 @@ import com.exacttarget.fuelsdk.model.ETDataExtensionRow;
 
 public interface ETDataExtensionRowService extends ETCrudService {
 
-	public ETServiceResponse<ETDataExtensionRow> get(ETClient client, String dataExtensionCustomerKey, List<String> columns)
+	public ETResponse<ETDataExtensionRow> get(ETClient client, String dataExtensionCustomerKey, List<String> columns)
 			throws ETSdkException;
 
-	public ETServiceResponse<ETDataExtensionRow> get(ETClient client, String dataExtensionCustomerKey, List<String> columns, ETFilter filter)
+	public ETResponse<ETDataExtensionRow> get(ETClient client, String dataExtensionCustomerKey, List<String> columns, ETFilter filter)
 	        throws ETSdkException;
 
-	public ETServiceResponse<ETDataExtensionRow> post(ETClient client, ETDataExtensionRow row)
+	public ETResponse<ETDataExtensionRow> post(ETClient client, ETDataExtensionRow row)
 	    	throws ETSdkException;
 
-    public ETServiceResponse<ETDataExtensionRow> patch(ETClient client, ETDataExtensionRow row)
+    public ETResponse<ETDataExtensionRow> patch(ETClient client, ETDataExtensionRow row)
     		throws ETSdkException;
 
-    public ETServiceResponse<ETDataExtensionRow> delete(ETClient client, ETDataExtensionRow row)
+    public ETResponse<ETDataExtensionRow> delete(ETClient client, ETDataExtensionRow row)
 	    	throws ETSdkException;
     
-	public ETServiceResponse<ETDataExtensionRow> post(ETClient client, List<ETDataExtensionRow> rows)
+	public ETResponse<ETDataExtensionRow> post(ETClient client, List<ETDataExtensionRow> rows)
 	    	throws ETSdkException;
 
-    public ETServiceResponse<ETDataExtensionRow> patch(ETClient client, List<ETDataExtensionRow> rows)
+    public ETResponse<ETDataExtensionRow> patch(ETClient client, List<ETDataExtensionRow> rows)
     		throws ETSdkException;
 
-    public ETServiceResponse<ETDataExtensionRow> delete(ETClient client, List<ETDataExtensionRow> rows)
+    public ETResponse<ETDataExtensionRow> delete(ETClient client, List<ETDataExtensionRow> rows)
 	    	throws ETSdkException;
 }

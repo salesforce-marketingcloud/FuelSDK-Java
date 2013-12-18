@@ -17,28 +17,28 @@ import com.exacttarget.fuelsdk.model.ETOrganization;
 
 public interface ETOrganizationService extends ETCrudService {
 
-	public ETServiceResponse<ETOrganization> get(ETClient client)
+	public ETResponse<ETOrganization> get(ETClient client)
 	        throws ETSdkException;
 
-	public ETServiceResponse<ETOrganization> get(ETClient client, ETFilter filter)
+	public ETResponse<ETOrganization> get(ETClient client, ETFilter filter)
 	        throws ETSdkException;
 
-	public ETServiceResponse<ETOrganization> post(ETClient client, ETOrganization organization)
+	public ETResponse<ETOrganization> post(ETClient client, ETOrganization organization)
 	    	throws ETSdkException;
 
-	public ETServiceResponse<ETOrganization> patch(ETClient client, ETOrganization organization)
+	public ETResponse<ETOrganization> patch(ETClient client, ETOrganization organization)
 			throws ETSdkException;
 
-	public ETServiceResponse<ETOrganization> delete(ETClient client, ETOrganization organization)
+	public ETResponse<ETOrganization> delete(ETClient client, ETOrganization organization)
 	    	throws ETSdkException;
 	
-	public ETServiceResponse<ETOrganization> post(ETClient client, List<ETOrganization> organizations)
+	public ETResponse<ETOrganization> post(ETClient client, List<ETOrganization> organizations)
 	    	throws ETSdkException;
 
-	public ETServiceResponse<ETOrganization> patch(ETClient client, List<ETOrganization> organizations)
+	public ETResponse<ETOrganization> patch(ETClient client, List<ETOrganization> organizations)
 			throws ETSdkException;
 
-	public ETServiceResponse<ETOrganization> delete(ETClient client, List<ETOrganization> organizations)
+	public ETResponse<ETOrganization> delete(ETClient client, List<ETOrganization> organizations)
 	    	throws ETSdkException;
 
 }
