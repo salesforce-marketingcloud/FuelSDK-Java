@@ -11,7 +11,6 @@
 package com.exacttarget.fuelsdk.examples;
 
 import com.exacttarget.fuelsdk.ETClient;
-import com.exacttarget.fuelsdk.ETConfiguration;
 import com.exacttarget.fuelsdk.ETListService;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.ETResponse;
@@ -34,9 +33,7 @@ public class ListPrintAll {
             System.exit(1);
         }
 
-        ETConfiguration configuration = new ETConfiguration();
-
-        ETClient client = new ETClient(configuration);
+        ETClient client = new ETClient();
 
         ETListService service = new ETListServiceImpl();
 
