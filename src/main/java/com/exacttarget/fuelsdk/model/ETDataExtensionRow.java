@@ -12,13 +12,12 @@ package com.exacttarget.fuelsdk.model;
 
 import java.util.Map;
 
-import com.exacttarget.fuelsdk.ETObject;
 import com.exacttarget.fuelsdk.annotations.InternalSoapField;
 import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.DataExtensionObject;
 
 @InternalSoapType(type = DataExtensionObject.class)
-public class ETDataExtensionRow extends ETSoapObject implements ETObject {
+public class ETDataExtensionRow extends ETSoapObject {
 
 	@InternalSoapField(name="name")
     private String name;

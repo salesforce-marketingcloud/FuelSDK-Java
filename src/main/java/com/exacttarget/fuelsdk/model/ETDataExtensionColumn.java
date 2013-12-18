@@ -16,7 +16,8 @@ import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.DataExtensionField;
 
 @InternalSoapType(type = DataExtensionField.class, ignoredFields = {"DataExtension","IsCreatable","IsUpdatable","IsRetrievable","PartnerMap","Precision","Label","Description","MinLength","MinValue","MaxValue","IsViewable","IsEditable","IsRestrictedPicklist","IsSendTime","DisplayOrder","Status"})
-public class ETDataExtensionColumn implements ETObject {
+// XXX or should this be ETSoapObject?
+public class ETDataExtensionColumn extends ETObject {
 
 	@InternalSoapField(name="name")
 	private String name;

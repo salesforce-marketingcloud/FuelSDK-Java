@@ -10,13 +10,12 @@
 
 package com.exacttarget.fuelsdk.model;
 
-import com.exacttarget.fuelsdk.ETObject;
 import com.exacttarget.fuelsdk.annotations.InternalSoapField;
 import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.ContentArea;
 
 @InternalSoapType(type = ContentArea.class)
-public class ETContentArea extends ETSoapObject implements ETObject {
+public class ETContentArea extends ETSoapObject {
     @InternalSoapField(name="categoryID")
 	protected Integer categoryId;
     @InternalSoapField(name="content")

@@ -10,5 +10,11 @@
 
 package com.exacttarget.fuelsdk;
 
-public interface ETObject {
+import org.apache.commons.lang.builder.ToStringBuilder;
+
+public abstract class ETObject {
+    @Override
+    public String toString() {
+        return ToStringBuilder.reflectionToString(this);
+    }
 }

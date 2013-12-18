@@ -10,13 +10,12 @@
 
 package com.exacttarget.fuelsdk.model;
 
-import com.exacttarget.fuelsdk.ETObject;
 import com.exacttarget.fuelsdk.annotations.InternalSoapField;
 import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.DataFolder;
 
 @InternalSoapType(type = DataFolder.class)
-public class ETFolder extends ETSoapObject implements ETObject {
+public class ETFolder extends ETSoapObject {
     @InternalSoapField(name="allowChildren")
     protected Boolean allowChildren;
     @InternalSoapField(name="contentType")

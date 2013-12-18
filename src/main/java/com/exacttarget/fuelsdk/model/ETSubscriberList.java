@@ -10,14 +10,12 @@
 
 package com.exacttarget.fuelsdk.model;
 
-import com.exacttarget.fuelsdk.ETObject;
 import com.exacttarget.fuelsdk.annotations.InternalSoapField;
 import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.SubscriberList;
 
 @InternalSoapType(type = SubscriberList.class)
-public class ETSubscriberList extends ETSoapObject implements
-		ETObject {
+public class ETSubscriberList extends ETSoapObject {
 
 	@InternalSoapField(name = "status")
     private ETSubscriberStatus status;

@@ -10,15 +10,13 @@
 
 package com.exacttarget.fuelsdk.model;
 
-import com.exacttarget.fuelsdk.ETObject;
 import com.exacttarget.fuelsdk.annotations.InternalSoapField;
 import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.FilterDefinition;
 import com.exacttarget.fuelsdk.internal.SendDefinitionList;
 
 @InternalSoapType(type = SendDefinitionList.class)
-public class ETSendDefinitionList extends ETSoapObject implements
-		ETObject {
+public class ETSendDefinitionList extends ETSoapObject {
 
 	@InternalSoapField(name = "list")
     private ETList list;
@@ -43,7 +41,7 @@ public class ETSendDefinitionList extends ETSoapObject implements
 
 	@InternalSoapField(name = "name")
     private String name;
-	
+
 	public ETSendDefinitionList() {}
 
 	public ETList getList() {

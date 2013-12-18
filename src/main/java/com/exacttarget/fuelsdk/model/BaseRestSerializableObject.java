@@ -10,9 +10,10 @@
 
 package com.exacttarget.fuelsdk.model;
 
+import com.exacttarget.fuelsdk.ETObject;
 import com.exacttarget.fuelsdk.annotations.InternalRestField;
 
-public abstract class BaseRestSerializableObject {
+public abstract class BaseRestSerializableObject extends ETObject {
 
 	/** The id. */
 	@InternalRestField(jsonKey = "id")

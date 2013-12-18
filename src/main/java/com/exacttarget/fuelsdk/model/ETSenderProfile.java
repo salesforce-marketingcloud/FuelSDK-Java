@@ -10,14 +10,12 @@
 
 package com.exacttarget.fuelsdk.model;
 
-import com.exacttarget.fuelsdk.ETObject;
 import com.exacttarget.fuelsdk.annotations.InternalSoapField;
 import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.SenderProfile;
 
 @InternalSoapType(type = SenderProfile.class)
-public class ETSenderProfile extends ETSoapObject implements
-		ETObject {
+public class ETSenderProfile extends ETSoapObject {
 
 	@InternalSoapField(name = "name")
     protected String name;

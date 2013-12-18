@@ -13,13 +13,12 @@ package com.exacttarget.fuelsdk.model;
 import java.util.Date;
 import java.util.List;
 
-import com.exacttarget.fuelsdk.ETObject;
 import com.exacttarget.fuelsdk.annotations.InternalSoapField;
 import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.Subscriber;
 
 @InternalSoapType(type = Subscriber.class, ignoredFields = {"CustomerKey", "ModifiedDate", "Lists"})
-public class ETSubscriber extends ETSoapObject implements ETObject {
+public class ETSubscriber extends ETSoapObject {
 
 	@InternalSoapField(name="emailAddress")
 	private String emailAddress;

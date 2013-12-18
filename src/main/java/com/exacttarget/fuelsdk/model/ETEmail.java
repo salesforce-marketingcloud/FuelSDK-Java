@@ -10,13 +10,12 @@
 
 package com.exacttarget.fuelsdk.model;
 
-import com.exacttarget.fuelsdk.ETObject;
 import com.exacttarget.fuelsdk.annotations.InternalSoapField;
 import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.Email;
 
 @InternalSoapType(type = Email.class)
-public class ETEmail extends ETSoapObject implements ETObject {
+public class ETEmail extends ETSoapObject {
     @InternalSoapField(name="characterSet")
 	protected String characterSet;
     @InternalSoapField(name="contentCheckStatus")

@@ -15,7 +15,7 @@ import java.util.Date;
 import com.exacttarget.fuelsdk.ETObject;
 import com.exacttarget.fuelsdk.annotations.InternalSoapField;
 
-public abstract class ETSoapObject implements ETObject {
+public abstract class ETSoapObject extends ETObject {
     @InternalSoapField(name="id")
     protected Integer id = null;
     @InternalSoapField(name="customerKey")
@@ -26,7 +26,7 @@ public abstract class ETSoapObject implements ETObject {
     protected Date modifiedDate = null;
     @InternalSoapField(name="client")
     protected ETClientID clientId = null;
-    
+
     public Integer getId() {
         return id;
     }
@@ -66,6 +66,6 @@ public abstract class ETSoapObject implements ETObject {
 	public void setClientId(ETClientID clientId) {
 		this.clientId = clientId;
 	}
-    
-    
+
+
 }

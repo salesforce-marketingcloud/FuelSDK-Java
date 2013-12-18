@@ -10,13 +10,12 @@
 
 package com.exacttarget.fuelsdk.model;
 
-import com.exacttarget.fuelsdk.ETObject;
 import com.exacttarget.fuelsdk.annotations.InternalRestField;
 import com.exacttarget.fuelsdk.annotations.InternalRestType;
 
-@InternalRestType(type = "CampaignAsset", restPath="/hub/v1/campaigns/{campaignId}/assets/{id}", collectionKey="entities", primaryKey="campaignId", 
+@InternalRestType(type = "CampaignAsset", restPath="/hub/v1/campaigns/{campaignId}/assets/{id}", collectionKey="entities", primaryKey="campaignId",
 	urlProps={"campaignId", "id"})
-public class ETCampaignAsset extends BaseRestSerializableObject implements ETObject{
+public class ETCampaignAsset extends BaseRestSerializableObject {
 
 	/** The id of {@link ETCampaign} to which this Asset is associated. */
 	@InternalRestField(jsonKey = "campaignId")

@@ -10,15 +10,13 @@
 
 package com.exacttarget.fuelsdk.model;
 
-import com.exacttarget.fuelsdk.ETObject;
 import com.exacttarget.fuelsdk.annotations.InternalSoapField;
 import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.DeliveryProfile;
 import com.exacttarget.fuelsdk.internal.SendClassification;
 
 @InternalSoapType(type = SendClassification.class, ignoredFields = {"SenderProfile","DeliveryProfile","SendPriority","ID"})
-public class ETSendClassification extends ETSoapObject implements
-		ETObject {
+public class ETSendClassification extends ETSoapObject {
 
 	@InternalSoapField(name = "sendClassificationType")
     protected ETSendClassificationType sendClassificationType;

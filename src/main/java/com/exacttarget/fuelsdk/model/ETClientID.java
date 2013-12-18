@@ -1,11 +1,10 @@
 package com.exacttarget.fuelsdk.model;
 
-import com.exacttarget.fuelsdk.ETObject;
 import com.exacttarget.fuelsdk.annotations.InternalClientObject;
 import com.exacttarget.fuelsdk.annotations.InternalSoapField;
 
 @InternalClientObject
-public class ETClientID implements ETObject {
+public class ETClientID {
 
 	@InternalSoapField(name="clientID")
     protected Integer clientID;
@@ -25,7 +24,7 @@ public class ETClientID implements ETObject {
     protected Long enterpriseID;
 	@InternalSoapField(name="customerKey")
     protected String customerKey;
-	
+
 	public ETClientID(){}
 
 	public Integer getClientID() {
@@ -109,7 +108,7 @@ public class ETClientID implements ETObject {
 				+ ", enterpriseID=" + enterpriseID + ", customerKey="
 				+ customerKey + "]";
 	}
-	
-	
-	
+
+
+
 }
