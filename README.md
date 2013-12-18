@@ -8,7 +8,7 @@ Installation
 
 * Clone the project from GitHub:
 
-    git clone git@github.com:ExactTarget/FuelSDK-Java.git
+	git clone git@github.com:ExactTarget/FuelSDK-Java.git
 
 * Generate sources from the ExactTarget WSDL:
 
