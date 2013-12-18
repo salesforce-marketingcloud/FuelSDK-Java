@@ -16,6 +16,7 @@ import com.exacttarget.fuelsdk.ETListService;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.model.ETList;
 import com.exacttarget.fuelsdk.model.ETListType;
+import com.exacttarget.fuelsdk.soap.ETListServiceImpl;
 
 public class ListCreate {
     private static final String NAME = ListCreate.class.getSimpleName();
@@ -39,7 +40,7 @@ public class ListCreate {
 
         ETClient client = new ETClient(configuration);
 
-        ETListService service = client.getListService();
+        ETListService service = new ETListServiceImpl();
 
         ETList list = new ETList();
         list.setName(name);

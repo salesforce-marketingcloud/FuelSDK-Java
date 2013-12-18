@@ -16,6 +16,7 @@ import com.exacttarget.fuelsdk.ETListService;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.model.ETList;
 import com.exacttarget.fuelsdk.model.ETListType;
+import com.exacttarget.fuelsdk.soap.ETListServiceImpl;
 
 public class ListDelete {
     private static final String NAME = ListDelete.class.getSimpleName();
@@ -39,7 +40,7 @@ public class ListDelete {
 
         ETClient client = new ETClient(configuration);
 
-        ETListService service = client.getListService();
+        ETListService service = new ETListServiceImpl();
 
         ETList list = new ETList();
         list.setName(name);

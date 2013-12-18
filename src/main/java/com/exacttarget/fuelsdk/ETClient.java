@@ -18,7 +18,6 @@ import com.google.gson.JsonParser;
 import org.apache.log4j.Logger;
 
 import com.exacttarget.fuelsdk.rest.ETRestConnection;
-import com.exacttarget.fuelsdk.soap.ETListServiceImpl;
 import com.exacttarget.fuelsdk.soap.ETSoapConnection;
 
 public class ETClient {
@@ -47,29 +46,41 @@ public class ETClient {
     private ETRestConnection restConnection = null;
     private ETSoapConnection soapConnection = null;
 
+    public ETClient()
+        throws ETSdkException
+    {
+        this(new ETConfiguration());
+    }
+
     public ETClient(ETConfiguration configuration)
         throws ETSdkException
     {
-        if (configuration.getEndpoint() != null && !"".equals(configuration.getEndpoint())) {
+        if (configuration.getEndpoint() != null
+            && !configuration.getEndpoint().equals(""))
+        {
             endpoint = configuration.getEndpoint();
         }
-        if (configuration.getAuthEndpoint() != null && !"".equals(configuration.getAuthEndpoint())) {
+        if (configuration.getAuthEndpoint() != null
+            && !configuration.getAuthEndpoint().equals(""))
+        {
             authEndpoint = configuration.getAuthEndpoint();
         }
-        if (configuration.getSoapEndpoint() != null && !"".equals(configuration.getSoapEndpoint())) {
+        if (configuration.getSoapEndpoint() != null
+            && !configuration.getSoapEndpoint().equals(""))
+        {
             soapEndpoint = configuration.getSoapEndpoint();
         }
-        
+
         clientId = configuration.getClientId();
-        if (null == clientId || "".equals(clientId)) {
-        	throw new ETSdkException("Required clientId is missing from the SDK Configuration File");
+        if (clientId == null || clientId.equals("")) {
+            throw new ETSdkException("clientId not specified");
         }
-        
+
         clientSecret = configuration.getClientSecret();
-        if (null == clientSecret || "".equals(clientSecret)) {
-        	throw new ETSdkException("Required clientSecret is missing from the SDK Configuration File");
+        if (clientSecret == null || clientSecret.equals("")) {
+            throw new ETSdkException("clientSecret not specified");
         }
-        
+
         authConnection = new ETRestConnection(this, authEndpoint);
 
         refreshToken();
@@ -79,6 +90,9 @@ public class ETClient {
         //
         // If a SOAP endpoint isn't specified automatically determine it:
         //
+
+        // XXX use Endpoints object
+
         if (soapEndpoint == null) {
             String response = restConnection.get(PATH_ENDPOINTS_SOAP);
             JsonParser jsonParser = new JsonParser();
@@ -165,9 +179,5 @@ public class ETClient {
 
     public ETSoapConnection getSOAPConnection() {
         return soapConnection;
-    }
-
-    public ETListServiceImpl getListService() {
-        return new ETListServiceImpl();
     }
 }
