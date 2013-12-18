@@ -12,6 +12,7 @@ package com.exacttarget.fuelsdk.model;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
+import com.exacttarget.fuelsdk.ETObject;
 import com.exacttarget.fuelsdk.annotations.InternalSoapField;
 import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.List;

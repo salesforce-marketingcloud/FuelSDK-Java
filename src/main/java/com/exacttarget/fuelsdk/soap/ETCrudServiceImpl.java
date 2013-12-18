@@ -14,9 +14,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.exacttarget.fuelsdk.model.converter.ObjectConverter;
-
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETCrudService;
+import com.exacttarget.fuelsdk.ETObject;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.annotations.InternalSoapType;
@@ -34,7 +34,6 @@ import com.exacttarget.fuelsdk.internal.UpdateOptions;
 import com.exacttarget.fuelsdk.internal.UpdateRequest;
 import com.exacttarget.fuelsdk.internal.UpdateResponse;
 import com.exacttarget.fuelsdk.internal.UpdateResult;
-import com.exacttarget.fuelsdk.model.ETObject;
 
 public abstract class ETCrudServiceImpl<T extends ETObject> extends ETGetServiceImpl<T> implements ETCrudService {
 

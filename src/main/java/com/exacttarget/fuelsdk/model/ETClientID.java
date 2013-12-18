@@ -1,5 +1,6 @@
 package com.exacttarget.fuelsdk.model;
 
+import com.exacttarget.fuelsdk.ETObject;
 import com.exacttarget.fuelsdk.annotations.InternalClientObject;
 import com.exacttarget.fuelsdk.annotations.InternalSoapField;
 

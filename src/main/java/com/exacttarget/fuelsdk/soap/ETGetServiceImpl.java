@@ -20,6 +20,7 @@ import org.apache.log4j.Logger;
 
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETGetService;
+import com.exacttarget.fuelsdk.ETObject;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.annotations.InternalSoapType;
@@ -36,7 +37,6 @@ import com.exacttarget.fuelsdk.internal.RetrieveResponseMsg;
 import com.exacttarget.fuelsdk.internal.SimpleFilterPart;
 import com.exacttarget.fuelsdk.internal.SimpleOperators;
 import com.exacttarget.fuelsdk.internal.Soap;
-import com.exacttarget.fuelsdk.model.ETObject;
 import com.exacttarget.fuelsdk.model.converter.ObjectConverter;
 
 public abstract class ETGetServiceImpl<T extends ETObject> extends ETServiceImpl implements ETGetService {

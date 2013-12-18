@@ -16,6 +16,7 @@ import java.util.Map;
 
 import org.apache.commons.beanutils.Converter;
 
+import com.exacttarget.fuelsdk.ETObject;
 import com.exacttarget.fuelsdk.internal.APIProperty;
 import com.exacttarget.fuelsdk.internal.DataExtension;
 import com.exacttarget.fuelsdk.internal.DataExtension.Fields;
@@ -23,7 +24,6 @@ import com.exacttarget.fuelsdk.internal.DataExtensionField;
 import com.exacttarget.fuelsdk.internal.DataExtensionObject.Keys;
 import com.exacttarget.fuelsdk.internal.ObjectExtension;
 import com.exacttarget.fuelsdk.model.ETDataExtensionColumn;
-import com.exacttarget.fuelsdk.model.ETObject;
 
 public class ETObjectConverter implements Converter{
 

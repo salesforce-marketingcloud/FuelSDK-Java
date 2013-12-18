@@ -12,6 +12,7 @@ package com.exacttarget.fuelsdk.model;
 
 import java.util.Date;
 
+import com.exacttarget.fuelsdk.ETObject;
 import com.exacttarget.fuelsdk.annotations.InternalSoapField;
 
 public abstract class ETSoapObject implements ETObject {

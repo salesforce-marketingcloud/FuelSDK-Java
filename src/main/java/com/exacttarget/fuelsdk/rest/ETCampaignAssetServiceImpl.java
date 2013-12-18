@@ -12,11 +12,11 @@ package com.exacttarget.fuelsdk.rest;
 
 import com.exacttarget.fuelsdk.ETCampaignAssetService;
 import com.exacttarget.fuelsdk.ETClient;
+import com.exacttarget.fuelsdk.ETObject;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.model.ETCampaignAsset;
-import com.exacttarget.fuelsdk.model.ETObject;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;

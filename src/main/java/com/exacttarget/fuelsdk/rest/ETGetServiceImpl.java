@@ -22,6 +22,7 @@ import org.apache.log4j.Logger;
 
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETGetService;
+import com.exacttarget.fuelsdk.ETObject;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.annotations.InternalRestField;
@@ -29,7 +30,6 @@ import com.exacttarget.fuelsdk.annotations.InternalRestType;
 import com.exacttarget.fuelsdk.filter.ETComplexFilter;
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.filter.ETSimpleFilter;
-import com.exacttarget.fuelsdk.model.ETObject;
 import com.exacttarget.fuelsdk.soap.ETServiceResponseImpl;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;

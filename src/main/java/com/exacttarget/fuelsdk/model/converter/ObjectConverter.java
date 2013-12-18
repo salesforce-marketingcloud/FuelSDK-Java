@@ -31,6 +31,7 @@ import org.apache.commons.beanutils.Converter;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.commons.beanutils.converters.IntegerConverter;
 
+import com.exacttarget.fuelsdk.ETObject;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.annotations.InternalClientObject;
 import com.exacttarget.fuelsdk.annotations.InternalSoapField;
@@ -65,7 +66,6 @@ import com.exacttarget.fuelsdk.model.ETList;
 import com.exacttarget.fuelsdk.model.ETListClassification;
 import com.exacttarget.fuelsdk.model.ETListSubscriber;
 import com.exacttarget.fuelsdk.model.ETListType;
-import com.exacttarget.fuelsdk.model.ETObject;
 import com.exacttarget.fuelsdk.model.ETSalutationSource;
 import com.exacttarget.fuelsdk.model.ETSendClassification;
 import com.exacttarget.fuelsdk.model.ETSendClassificationType;

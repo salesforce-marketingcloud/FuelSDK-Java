@@ -10,6 +10,7 @@
 
 package com.exacttarget.fuelsdk.model;
 
+import com.exacttarget.fuelsdk.ETObject;
 import com.exacttarget.fuelsdk.annotations.InternalRestField;
 import com.exacttarget.fuelsdk.annotations.InternalRestType;
 

@@ -8,7 +8,7 @@
 // @COPYRIGHT@
 //
 
-package com.exacttarget.fuelsdk.model;
+package com.exacttarget.fuelsdk;
 
 public interface ETObject {
 }
