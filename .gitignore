@@ -1,11 +1,4 @@
 .idea/**
 *.iml
+log.out
 /target
-
-log.out
-
-log.out.1
-
-log.out
-
-.classpath
