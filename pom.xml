@@ -6,7 +6,7 @@
   <groupId>com.exacttarget</groupId>
   <artifactId>fuelsdk</artifactId>
   <packaging>jar</packaging>
-  <version>0.99</version>
+  <version>0.999</version>
   <name>Fuel Java SDK</name>
   <url>http://code.exacttarget.com</url>
   <properties>
@@ -57,6 +57,7 @@
               <wsdlOptions>
                 <wsdlOption>
                   <wsdl>${basedir}/src/main/resources/etframework.wsdl</wsdl>
+                  <wsdlLocation>classpath:/etframework.wsdl</wsdlLocation>
                   <extraargs>
                     <extraarg>-client</extraarg>
                     <extraarg>-p</extraarg>
