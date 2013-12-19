@@ -13,6 +13,7 @@ package com.exacttarget.fuelsdk.model;
 import java.util.Date;
 import java.util.List;
 
+import com.exacttarget.fuelsdk.ETSoapObject;
 import com.exacttarget.fuelsdk.annotations.InternalSoapField;
 import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.Subscriber;

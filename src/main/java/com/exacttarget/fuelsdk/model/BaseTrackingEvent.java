@@ -12,6 +12,7 @@ package com.exacttarget.fuelsdk.model;
 
 import java.util.Date;
 
+import com.exacttarget.fuelsdk.ETSoapObject;
 import com.exacttarget.fuelsdk.annotations.InternalSoapField;
 
 public abstract class BaseTrackingEvent extends ETSoapObject {

@@ -8,12 +8,12 @@
 // @COPYRIGHT@
 //
 
-package com.exacttarget.fuelsdk.model;
+package com.exacttarget.fuelsdk;
 
 import java.util.Date;
 
-import com.exacttarget.fuelsdk.ETObject;
 import com.exacttarget.fuelsdk.annotations.InternalSoapField;
+import com.exacttarget.fuelsdk.model.ETClientID;
 
 public abstract class ETSoapObject extends ETObject {
     @InternalSoapField(name="id")
@@ -59,13 +59,11 @@ public abstract class ETSoapObject extends ETObject {
         this.modifiedDate = modifiedDate;
     }
 
-	public ETClientID getClientId() {
-		return clientId;
-	}
+    public ETClientID getClientId() {
+        return clientId;
+    }
 
-	public void setClientId(ETClientID clientId) {
-		this.clientId = clientId;
-	}
-
-
+    public void setClientId(ETClientID clientId) {
+        this.clientId = clientId;
+    }
 }
