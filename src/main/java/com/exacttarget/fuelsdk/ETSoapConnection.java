@@ -8,7 +8,7 @@
 // @COPYRIGHT@
 //
 
-package com.exacttarget.fuelsdk.soap;
+package com.exacttarget.fuelsdk;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,9 +27,6 @@ import org.apache.cxf.interceptor.LoggingOutInterceptor;
 import org.apache.cxf.message.Message;
 
 import org.apache.log4j.Logger;
-
-import com.exacttarget.fuelsdk.ETClient;
-import com.exacttarget.fuelsdk.ETSdkException;
 
 import com.exacttarget.fuelsdk.internal.PartnerAPI;
 import com.exacttarget.fuelsdk.internal.Soap;
@@ -113,7 +110,8 @@ public class ETSoapConnection {
         }
     }
 
-    protected Soap getSoap() {
+    // XXX should be protected
+    public Soap getSoap() {
         return soap;
     }
 }

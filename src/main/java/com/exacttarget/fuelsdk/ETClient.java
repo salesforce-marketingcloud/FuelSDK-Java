@@ -17,9 +17,6 @@ import com.google.gson.JsonParser;
 
 import org.apache.log4j.Logger;
 
-import com.exacttarget.fuelsdk.rest.ETRestConnection;
-import com.exacttarget.fuelsdk.soap.ETSoapConnection;
-
 public class ETClient {
     private static final String PATH_REQUESTTOKEN =
             "/v1/requestToken?legacy=1";
