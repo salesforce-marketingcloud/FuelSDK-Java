@@ -6,7 +6,7 @@
   <groupId>com.exacttarget</groupId>
   <artifactId>fuelsdk</artifactId>
   <packaging>jar</packaging>
-  <version>0.999</version>
+  <version>0.9999</version>
   <name>Fuel Java SDK</name>
   <url>http://code.exacttarget.com</url>
   <properties>
@@ -41,7 +41,7 @@
     </dependency>
   </dependencies>
   <build>
-    <finalName>fuelsdk</finalName>
+    <finalName>fuelsdk-${project.version}</finalName>
     <plugins>
       <!-- generate Java source from WSDL -->
       <plugin>
