@@ -17,107 +17,125 @@ import com.exacttarget.fuelsdk.internal.Email;
 
 @InternalSoapType(type = Email.class)
 public class ETEmail extends ETSoapObject {
-    @InternalSoapField(name="characterSet")
-	protected String characterSet;
-    @InternalSoapField(name="contentCheckStatus")
-	protected String contentCheckStatus;
-    @InternalSoapField(name="emailType")
-	protected String emailType;
-    @InternalSoapField(name="hasDynamicSubjectLine")
-	protected Boolean hasDynamicSubjectline;
-    @InternalSoapField(name="htmlBody")
-	protected String htmlBody;
-    @InternalSoapField(name="isActive")
-	protected Boolean active;
-    @InternalSoapField(name="isHTMLPaste")
-	protected Boolean htmlPaste;
     @InternalSoapField(name="name")
-	protected String name;
-    @InternalSoapField(name="status")
-	protected String status;
-    @InternalSoapField(name="subject")
-	protected String subject;
+    protected String name = null;
+    @InternalSoapField(name="categoryID")
+    protected Integer categoryID = null;
+    @InternalSoapField(name="htmlBody")
+    protected String htmlBody = null;
     @InternalSoapField(name="textBody")
-	protected String textBody;
+    protected String textBody = null;
+    @InternalSoapField(name="subject")
+    protected String subject = null;
+    @InternalSoapField(name="isHTMLPaste")
+    protected Boolean htmlPaste = null;
+    @InternalSoapField(name="emailType")
+    protected String emailType = null;
+    @InternalSoapField(name="characterSet")
+    protected String characterSet = null;
 
-	public String getCharacterSet() {
-		return characterSet;
-	}
-	public void setCharacterSet(String characterSet) {
-		this.characterSet = characterSet;
-	}
-	public String getContentCheckStatus() {
-		return contentCheckStatus;
-	}
-	public void setContentCheckStatus(String contentCheckStatus) {
-		this.contentCheckStatus = contentCheckStatus;
-	}
-	public String getEmailType() {
-		return emailType;
-	}
-	public void setEmailType(String emailType) {
-		this.emailType = emailType;
-	}
-	public Boolean getHasDynamicSubjectline() {
-		return hasDynamicSubjectline;
-	}
-	public void setHasDynamicSubjectline(Boolean hasDynamicSubjectline) {
-		this.hasDynamicSubjectline = hasDynamicSubjectline;
-	}
-	public String getHtmlBody() {
-		return htmlBody;
-	}
-	public void setHtmlBody(String htmlBody) {
-		this.htmlBody = htmlBody;
-	}
-	public Boolean getActive() {
-		return active;
-	}
-	public void setActive(Boolean active) {
-		this.active = active;
-	}
-	public Boolean getHtmlPaste() {
-		return htmlPaste;
-	}
-	public void setHtmlPaste(Boolean htmlPaste) {
-		this.htmlPaste = htmlPaste;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getStatus() {
-		return status;
-	}
-	public void setStatus(String status) {
-		this.status = status;
-	}
-	public String getSubject() {
-		return subject;
-	}
-	public void setSubject(String subject) {
-		this.subject = subject;
-	}
-	public String getTextBody() {
-		return textBody;
-	}
-	public void setTextBody(String textBody) {
-		this.textBody = textBody;
-	}
+    @InternalSoapField(name="contentCheckStatus")
+    protected String contentCheckStatus = null;
+    @InternalSoapField(name="hasDynamicSubjectLine")
+    protected Boolean hasDynamicSubjectline = null;
+    @InternalSoapField(name="isActive")
+    protected Boolean active = null;
+    @InternalSoapField(name="status")
+    protected String status = null;
 
-	@Override
-	public String toString() {
-		return "ETEmail [id=" + id + ", characterSet=" + characterSet
-            + ", contentCheckStatus=" + contentCheckStatus
-            + ", createdDate=" + createdDate + ", customerKey="
-            + customerKey + ", emailType=" + emailType
-            + ", hasDynamicSubjectline=" + hasDynamicSubjectline
-            + ", htmlBody=" + htmlBody + ", active=" + active
-            + ", htmlPaste=" + htmlPaste + ", modifiedDate=" + modifiedDate
-            + ", name=" + name + ", status=" + status + ", subject="
-            + subject + ", textBody=" + textBody + "]";
-	}
+    public String getName() {
+        return name;
+    }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getCategoryID() {
+        return categoryID;
+    }
+
+    public void setCategoryID(Integer categoryID) {
+        this.categoryID = categoryID;
+    }
+
+    public String getHtmlBody() {
+        return htmlBody;
+    }
+
+    public void setHtmlBody(String htmlBody) {
+        this.htmlBody = htmlBody;
+    }
+
+    public String getTextBody() {
+        return textBody;
+    }
+
+    public void setTextBody(String textBody) {
+        this.textBody = textBody;
+    }
+
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public Boolean getHtmlPaste() {
+        return htmlPaste;
+    }
+
+    public void setHtmlPaste(Boolean htmlPaste) {
+        this.htmlPaste = htmlPaste;
+    }
+
+    public String getEmailType() {
+        return emailType;
+    }
+
+    public void setEmailType(String emailType) {
+        this.emailType = emailType;
+    }
+
+    public String getCharacterSet() {
+        return characterSet;
+    }
+
+    public void setCharacterSet(String characterSet) {
+        this.characterSet = characterSet;
+    }
+
+    public String getContentCheckStatus() {
+        return contentCheckStatus;
+    }
+
+    public void setContentCheckStatus(String contentCheckStatus) {
+        this.contentCheckStatus = contentCheckStatus;
+    }
+
+    public Boolean getHasDynamicSubjectline() {
+        return hasDynamicSubjectline;
+    }
+
+    public void setHasDynamicSubjectline(Boolean hasDynamicSubjectline) {
+        this.hasDynamicSubjectline = hasDynamicSubjectline;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }
