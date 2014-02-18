@@ -1,11 +1,28 @@
 //
-// ETDataExtensionRowServiceImpl.java -
+// This file is part of the Fuel Java SDK.
 //
-//      x
+// Copyright (C) 2013, 2014 ExactTarget, Inc.
+// All rights reserved.
 //
-// Copyright (C) 2013 ExactTarget
+// Permission is hereby granted, free of charge, to any person
+// obtaining a copy of this software and associated documentation
+// files (the "Software"), to deal in the Software without restriction,
+// including without limitation the rights to use, copy, modify,
+// merge, publish, distribute, sublicense, and/or sell copies
+// of the Software, and to permit persons to whom the Software
+// is furnished to do so, subject to the following conditions:
 //
-// @COPYRIGHT@
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY
+// KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+// WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+// PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS
+// OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+// OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+// OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH
+// THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
 package com.exacttarget.fuelsdk.soap;
@@ -32,60 +49,60 @@ public class ETDataExtensionRowServiceImpl extends ETCrudServiceImpl<ETDataExten
 
 	public ETResponse<ETDataExtensionRow> post(ETClient client,
 			ETDataExtensionRow row) throws ETSdkException {
-		
+
 		return super.post(client, row);
 	}
 
 	public ETResponse<ETDataExtensionRow> patch(ETClient client,
 			ETDataExtensionRow row) throws ETSdkException {
-		
+
 		return super.patch(client, row);
 	}
 
 	public ETResponse<ETDataExtensionRow> delete(ETClient client,
 			ETDataExtensionRow row) throws ETSdkException {
-		
+
 		return super.delete(client, row);
 	}
-	
+
 	public ETResponse<ETDataExtensionRow> post(ETClient client,
 			List<ETDataExtensionRow> rows) throws ETSdkException {
-		
+
 		return super.post(client, rows);
 	}
 
 	public ETResponse<ETDataExtensionRow> patch(ETClient client,
 			List<ETDataExtensionRow> rows) throws ETSdkException {
-		
+
 		return super.patch(client, rows);
 	}
 
 	public ETResponse<ETDataExtensionRow> delete(ETClient client,
 			List<ETDataExtensionRow> rows) throws ETSdkException {
-		
+
 		return super.delete(client, rows);
 	}
 
 	public ETResponse<ETDataExtensionRow> get(ETClient client, String dataExtensionName, List<String> columns)
 			throws ETSdkException {
-		
+
 		return this.get(client, dataExtensionName, columns, null);
 	}
-	
+
 	public ETResponse<ETDataExtensionRow> get(ETClient client, String dataExtensionName, List<String> columns, ETFilter filter)
 			throws ETSdkException {
-		
+
 		Soap soap = client.getSOAPConnection().getSoap();
-		
+
 		RetrieveRequest retrieveRequest = new RetrieveRequest();
         retrieveRequest.setObjectType("DataExtensionObject[" + dataExtensionName + "]");
         retrieveRequest.getProperties().addAll(columns);
-        
+
         if (filter != null) {
         	FilterPart filterPart = convertFilterPart(filter);
             retrieveRequest.setFilter(filterPart);
         }
-		
+
 		RetrieveRequestMsg retrieveRequestMsg = new RetrieveRequestMsg();
         retrieveRequestMsg.setRetrieveRequest(retrieveRequest);
 
@@ -93,7 +110,7 @@ public class ETDataExtensionRowServiceImpl extends ETCrudServiceImpl<ETDataExten
 
         ETResponse<ETDataExtensionRow> response = new ETServiceResponseImpl<ETDataExtensionRow>();
         response.setRequestId(retrieveResponseMsg.getRequestID());
-        
+
         try {
             for (APIObject apiObject : retrieveResponseMsg.getResults()) {
                 response.getResults().add(ObjectConverter.convertToEtObject(apiObject, ETDataExtensionRow.class, false));
@@ -104,7 +121,7 @@ public class ETDataExtensionRowServiceImpl extends ETCrudServiceImpl<ETDataExten
         }
 
         return response;
-		
+
 	}
 
 }

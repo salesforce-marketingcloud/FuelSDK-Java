@@ -1,11 +1,28 @@
 //
-// ETGetServiceImpl.java -
+// This file is part of the Fuel Java SDK.
 //
-//      x
+// Copyright (C) 2013, 2014 ExactTarget, Inc.
+// All rights reserved.
 //
-// Copyright (C) 2013 ExactTarget
+// Permission is hereby granted, free of charge, to any person
+// obtaining a copy of this software and associated documentation
+// files (the "Software"), to deal in the Software without restriction,
+// including without limitation the rights to use, copy, modify,
+// merge, publish, distribute, sublicense, and/or sell copies
+// of the Software, and to permit persons to whom the Software
+// is furnished to do so, subject to the following conditions:
 //
-// @COPYRIGHT@
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY
+// KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+// WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+// PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS
+// OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+// OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+// OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH
+// THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
 package com.exacttarget.fuelsdk.rest;
@@ -39,28 +56,28 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
 
 public class ETGetServiceImpl implements ETGetService {
-	
+
 	private static Logger logger = Logger.getLogger(ETGetServiceImpl.class);
-	
+
 	private static List<Integer> successfulResponses = Arrays.asList(200,201,202);
-	
+
 	public <T extends ETObject> ETResponse<T> get(ETClient client, Class<T> type) throws ETSdkException {
 		return this.get(client, type, null);
 	}
 
-	public <T extends ETObject> ETResponse<T> get(ETClient client, Class<T> type, ETFilter filter) throws ETSdkException 
+	public <T extends ETObject> ETResponse<T> get(ETClient client, Class<T> type, ETFilter filter) throws ETSdkException
 	{
 		logger.trace("get ");
 		ETRestConnection connection = client.getRESTConnection();
-		
+
 		InternalRestType typeAnnotation = type.getAnnotation(InternalRestType.class);
-		
+
 		if(typeAnnotation == null) {
             throw new ETSdkException("The type specified does not wrap an internal ET APIObject.");
-        }		
-		
+        }
+
 		String path = null;
-		
+
 		try {
 			path = buildPath(typeAnnotation.restPath(), client.getAccessToken(), typeAnnotation, filter);
 		} catch (Exception e1) {
@@ -68,26 +85,26 @@ public class ETGetServiceImpl implements ETGetService {
 		}
 
 		ETResponse<T> response = new ETServiceResponseImpl<T>();
-		
+
 		String json = connection.get(path);
-		
+
 		response.setStatus(successfulResponses.contains(connection.getResponseCode()));
-		
+
 		if( !response.getStatus() )
 			return getErrorResponse( json, response );
-		
+
 		return createResponseETObject(type, json, response);
 	}
 
 	protected <T extends ETObject> ETResponse<T> getErrorResponse( String json, ETResponse<T> response )
 	{
-		try 
+		try
 		{
 			if( json == null ) return response;
-			
+
 			JsonParser jsonParser = new JsonParser();
 			JsonObject jObject = jsonParser.parse(json).getAsJsonObject();
-			
+
 			if( jObject.get("message") != null )
 			{
 				if( jObject.get("errorcode") == null )
@@ -101,35 +118,35 @@ public class ETGetServiceImpl implements ETGetService {
 					response.setMessage(message + " - ErrorCode: " + errorcode);
 				}
 			}
-		} 
-		catch (JsonSyntaxException e) 
+		}
+		catch (JsonSyntaxException e)
 		{
 			logger.error("Error parsing Error Response: " + e);
 		}
-		
+
 		return response;
 	}
-	
-	protected <T extends ETObject> ETResponse<T> createResponseETObject(Class<T> type, String json, ETResponse<T> response)  throws ETSdkException 
+
+	protected <T extends ETObject> ETResponse<T> createResponseETObject(Class<T> type, String json, ETResponse<T> response)  throws ETSdkException
 	{
 		logger.debug("Returned Raw Json:" + json);
-		
+
 		JsonArray items;
 		try {
-			
+
 			if( "\"\"".equals(json) )
 			{
 				return response;
 			}
-			
+
 			JsonParser jsonParser = new JsonParser();
-			
+
 			JsonElement jsonElement = null;
 
 			InternalRestType typeAnnotation = type.getAnnotation(InternalRestType.class);
-			
+
 			items = null;
-			
+
 			if( json.startsWith("[") )
 			{
 				jsonElement = jsonParser.parse(json).getAsJsonArray();
@@ -140,17 +157,17 @@ public class ETGetServiceImpl implements ETGetService {
 			{
 				jsonElement = jsonParser.parse(json).getAsJsonObject();
 				JsonObject jobject = (JsonObject)jsonElement;
-				
+
 				if( jobject.get("page") != null && jobject.get("pageSize") != null && jobject.get("count") != null )
 				{
 					int page = jobject.get("page").getAsInt();
 					int pageSize = jobject.get("pageSize").getAsInt();
 					int count = jobject.get("count").getAsInt();
-					
+
 					response.setMoreResults( count > page*pageSize );
 					logger.debug("HAS MORE RESULTS: " + response.hasMoreResults());
 				}
-				
+
 				String collectionKey = typeAnnotation.collectionKey();
 				if(jobject.get(collectionKey) == null )
 				{
@@ -169,18 +186,18 @@ public class ETGetServiceImpl implements ETGetService {
 		return createETObject(type, items, response);
 	}
 
-	private <T extends ETObject> ETResponse<T> createETObject(Class<T> type, JsonArray items, ETResponse<T> response) throws ETSdkException 
-	{	
+	private <T extends ETObject> ETResponse<T> createETObject(Class<T> type, JsonArray items, ETResponse<T> response) throws ETSdkException
+	{
 		if( items == null ) return null;
-		
+
 		List<Field> fields = new ArrayList<Field>(Arrays.asList(type.getDeclaredFields()));
 
-		if (null != type.getSuperclass()) 
+		if (null != type.getSuperclass())
 		{
         	fields.addAll(Arrays.asList(type.getSuperclass().getDeclaredFields()));
         }
-		
-		try 
+
+		try
 		{
 			Iterator<JsonElement> iter = items.iterator();
 
@@ -207,18 +224,18 @@ public class ETGetServiceImpl implements ETGetService {
 		} catch (InvocationTargetException ex) {
 			throw new ETSdkException("Error instantiating object", ex);
 		}
-		
+
 		return response;
 	}
-	
-	protected String buildPath(String restPath, String accessToken, InternalRestType typeAnnotation, ETFilter filter) 
+
+	protected String buildPath(String restPath, String accessToken, InternalRestType typeAnnotation, ETFilter filter)
 	{
 		List<String> props = Arrays.asList(typeAnnotation.urlProps());
 		List<String> params = Arrays.asList(typeAnnotation.urlParameters());
-		
+
 		StringBuilder path = new StringBuilder(restPath);
 		path.append( "?" );
-		
+
 		if( filter != null )
 		{
 			if( filter instanceof ETSimpleFilter )
@@ -232,10 +249,10 @@ public class ETGetServiceImpl implements ETGetService {
 
 				filters.add(complexFilter.getLeftOperand());
 				filters.add(complexFilter.getRightOperand());
-				
+
 				if( !complexFilter.getAdditionalOperands().isEmpty() )
 					filters.addAll(complexFilter.getAdditionalOperands());
-				
+
 				for( ETFilter f: filters)
 				{
 					if( f instanceof ETSimpleFilter )
@@ -245,22 +262,22 @@ public class ETGetServiceImpl implements ETGetService {
 				}
 			}
 		}
-		
+
 		// Remove all remaining URL Props
 		for(String prop : props)
 			replaceURLPropWithValue(path, prop, "");
-		
+
 		path.append( "access_token=" );
 		path.append( accessToken );
-		
+
 		logger.debug("PATH: " + path.toString());
-		
+
 		return path.toString();
 	}
-	
+
 	protected void buildPathFromSimpletFilter( StringBuilder path, ETSimpleFilter simpleFilter, List<String> props, List<String> params )
 	{
-		if (props.contains(simpleFilter.getProperty()) && simpleFilter.getValues().size() > 0) 
+		if (props.contains(simpleFilter.getProperty()) && simpleFilter.getValues().size() > 0)
 		{
 			replaceURLPropWithValue(path, simpleFilter.getProperty(), simpleFilter.getValues().get(0));
 		}
@@ -273,18 +290,18 @@ public class ETGetServiceImpl implements ETGetService {
 			path.append("&");
 		}
 	}
-	
-	protected void replaceURLPropWithValue(StringBuilder sb, String prop, String value) 
+
+	protected void replaceURLPropWithValue(StringBuilder sb, String prop, String value)
 	{
-		if (sb.indexOf("{" + prop + "}") > -1) 
+		if (sb.indexOf("{" + prop + "}") > -1)
 		{
 			value = (value == null) ? "" : value;
-			
+
 			int startIndex = sb.indexOf("{" + prop + "}");
 			int endIndex = startIndex + new String("{" + prop + "}").length();
-			
+
 			if( "".equals(value) ) startIndex -= 1;
-			
+
 			sb.replace(startIndex, endIndex, value);
 		}
 	}

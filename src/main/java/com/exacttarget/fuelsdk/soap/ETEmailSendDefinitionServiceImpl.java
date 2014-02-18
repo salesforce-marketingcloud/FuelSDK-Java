@@ -1,11 +1,28 @@
 //
-// ETEmailSendDefinitionServiceImpl.java -
+// This file is part of the Fuel Java SDK.
 //
-//      x
+// Copyright (C) 2013, 2014 ExactTarget, Inc.
+// All rights reserved.
 //
-// Copyright (C) 2013 ExactTarget
+// Permission is hereby granted, free of charge, to any person
+// obtaining a copy of this software and associated documentation
+// files (the "Software"), to deal in the Software without restriction,
+// including without limitation the rights to use, copy, modify,
+// merge, publish, distribute, sublicense, and/or sell copies
+// of the Software, and to permit persons to whom the Software
+// is furnished to do so, subject to the following conditions:
 //
-// @COPYRIGHT@
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY
+// KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+// WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR
+// PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS
+// OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES
+// OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT
+// OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH
+// THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
 package com.exacttarget.fuelsdk.soap;
@@ -31,57 +48,57 @@ public class ETEmailSendDefinitionServiceImpl extends ETCrudServiceImpl<ETEmailS
 
 	public ETResponse<ETEmailSendDefinition> get(ETClient client)
 			throws ETSdkException {
-		
+
 		return super.get(client, ETEmailSendDefinition.class);
 	}
 
 	public ETResponse<ETEmailSendDefinition> get(ETClient client,
 			ETFilter filter) throws ETSdkException {
-		
+
 		return super.get(client, ETEmailSendDefinition.class, filter);
 	}
 
 	public ETResponse<ETEmailSendDefinition> post(ETClient client,
 			ETEmailSendDefinition emailSendDefinition) throws ETSdkException {
-		
+
 		return super.post(client, emailSendDefinition);
 	}
 
 	public ETResponse<ETEmailSendDefinition> patch(ETClient client,
 			ETEmailSendDefinition emailSendDefinition) throws ETSdkException {
-		
+
 		return super.patch(client, emailSendDefinition);
 	}
 
 	public ETResponse<ETEmailSendDefinition> delete(ETClient client,
 			ETEmailSendDefinition emailSendDefinition) throws ETSdkException {
-		
+
 		return super.delete(client, emailSendDefinition);
 	}
-	
+
 	public ETResponse<ETEmailSendDefinition> post(ETClient client,
 			List<ETEmailSendDefinition> emailSendDefinitions) throws ETSdkException {
-		
+
 		return super.post(client, emailSendDefinitions);
 	}
 
 	public ETResponse<ETEmailSendDefinition> patch(ETClient client,
 			List<ETEmailSendDefinition> emailSendDefinitions) throws ETSdkException {
-		
+
 		return super.patch(client, emailSendDefinitions);
 	}
 
 	public ETResponse<ETEmailSendDefinition> delete(ETClient client,
 			List<ETEmailSendDefinition> emailSendDefinitions) throws ETSdkException {
-		
+
 		return super.delete(client, emailSendDefinitions);
 	}
 
 	public ETResponse<ETEmailSendDefinition> send(ETClient client,
 			ETEmailSendDefinition emailSendDefinition) throws ETSdkException {
-		
+
 		Soap soap = client.getSOAPConnection().getSoap();
-		
+
 		InteractionBaseObject apiObject;
 		try {
             apiObject = ObjectConverter.convertFromEtObject(emailSendDefinition, EmailSendDefinition.class, false);
@@ -89,10 +106,10 @@ public class ETEmailSendDefinitionServiceImpl extends ETCrudServiceImpl<ETEmailS
         catch(Exception e) {
             throw new ETSdkException("Error instantiating object", e);
         }
-		
+
 		Definitions definitions = new Definitions();
 		definitions.getDefinition().add(apiObject);
-		
+
 		PerformRequestMsg performRequestMsg = new PerformRequestMsg();
 		performRequestMsg.setAction("start");
 		performRequestMsg.setDefinitions(definitions);
