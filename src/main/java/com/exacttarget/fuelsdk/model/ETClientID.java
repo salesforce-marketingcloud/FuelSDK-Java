@@ -32,110 +32,96 @@ import com.exacttarget.fuelsdk.annotations.InternalSoapField;
 
 @InternalClientObject
 public class ETClientID {
+    @InternalSoapField(name = "id")
+    private Integer id = null;
+    @InternalSoapField(name = "customerKey")
+    private String customerKey = null;
+    @InternalSoapField(name = "clientID")
+    private Integer clientID = null;
+    @InternalSoapField(name = "createdBy")
+    private Integer createdBy = null;
+    @InternalSoapField(name = "enterpriseID")
+    private Long enterpriseID = null;
+    @InternalSoapField(name = "modifiedBy")
+    private Integer modifiedBy = null;
+    @InternalSoapField(name = "partnerClientKey")
+    private String partnerClientKey = null;
+    @InternalSoapField(name = "partnerUserKey")
+    private String partnerUserKey = null;
+    @InternalSoapField(name = "userID")
+    private Integer userID = null;
 
-	@InternalSoapField(name="clientID")
-    protected Integer clientID;
-	@InternalSoapField(name="id")
-    protected Integer id;
-	@InternalSoapField(name="partnerClientKey")
-    protected String partnerClientKey;
-	@InternalSoapField(name="userID")
-    protected Integer userID;
-	@InternalSoapField(name="partnerUserKey")
-    protected String partnerUserKey;
-	@InternalSoapField(name="createdBy")
-    protected Integer createdBy;
-	@InternalSoapField(name="modifiedBy")
-    protected Integer modifiedBy;
-	@InternalSoapField(name="enterpriseID")
-    protected Long enterpriseID;
-	@InternalSoapField(name="customerKey")
-    protected String customerKey;
+    public ETClientID() {}
 
-	public ETClientID(){}
+    public Integer getId() {
+        return id;
+    }
 
-	public Integer getClientID() {
-		return clientID;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public void setClientID(Integer clientID) {
-		this.clientID = clientID;
-	}
+    public String getCustomerKey() {
+        return customerKey;
+    }
 
-	public Integer getId() {
-		return id;
-	}
+    public void setCustomerKey(String customerKey) {
+        this.customerKey = customerKey;
+    }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    public Integer getClientID() {
+        return clientID;
+    }
 
-	public String getPartnerClientKey() {
-		return partnerClientKey;
-	}
+    public void setClientID(Integer clientID) {
+        this.clientID = clientID;
+    }
 
-	public void setPartnerClientKey(String partnerClientKey) {
-		this.partnerClientKey = partnerClientKey;
-	}
+    public Integer getCreatedBy() {
+        return createdBy;
+    }
 
-	public Integer getUserID() {
-		return userID;
-	}
+    public void setCreatedBy(Integer createdBy) {
+        this.createdBy = createdBy;
+    }
 
-	public void setUserID(Integer userID) {
-		this.userID = userID;
-	}
+    public Long getEnterpriseID() {
+        return enterpriseID;
+    }
 
-	public String getPartnerUserKey() {
-		return partnerUserKey;
-	}
+    public void setEnterpriseID(Long enterpriseID) {
+        this.enterpriseID = enterpriseID;
+    }
 
-	public void setPartnerUserKey(String partnerUserKey) {
-		this.partnerUserKey = partnerUserKey;
-	}
+    public Integer getModifiedBy() {
+        return modifiedBy;
+    }
 
-	public Integer getCreatedBy() {
-		return createdBy;
-	}
+    public void setModifiedBy(Integer modifiedBy) {
+        this.modifiedBy = modifiedBy;
+    }
 
-	public void setCreatedBy(Integer createdBy) {
-		this.createdBy = createdBy;
-	}
+    public String getPartnerClientKey() {
+        return partnerClientKey;
+    }
 
-	public Integer getModifiedBy() {
-		return modifiedBy;
-	}
+    public void setPartnerClientKey(String partnerClientKey) {
+        this.partnerClientKey = partnerClientKey;
+    }
 
-	public void setModifiedBy(Integer modifiedBy) {
-		this.modifiedBy = modifiedBy;
-	}
+    public String getPartnerUserKey() {
+        return partnerUserKey;
+    }
 
-	public Long getEnterpriseID() {
-		return enterpriseID;
-	}
+    public void setPartnerUserKey(String partnerUserKey) {
+        this.partnerUserKey = partnerUserKey;
+    }
 
-	public void setEnterpriseID(Long enterpriseID) {
-		this.enterpriseID = enterpriseID;
-	}
+    public Integer getUserID() {
+        return userID;
+    }
 
-	public String getCustomerKey() {
-		return customerKey;
-	}
-
-	public void setCustomerKey(String customerKey) {
-		this.customerKey = customerKey;
-	}
-
-	@Override
-	public String toString() {
-		return "ETClientID [clientID=" + clientID + ", id=" + id
-				+ ", partnerClientKey=" + partnerClientKey + ", userID="
-				+ userID + ", partnerUserKey=" + partnerUserKey
-				+ ", createdBy=" + createdBy + ", modifiedBy=" + modifiedBy
-				+ ", enterpriseID=" + enterpriseID + ", customerKey="
-				+ customerKey + "]";
-	}
-
-
-
+    public void setUserID(Integer userID) {
+        this.userID = userID;
+    }
 }
