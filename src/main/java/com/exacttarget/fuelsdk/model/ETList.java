@@ -27,26 +27,25 @@
 
 package com.exacttarget.fuelsdk.model;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import com.exacttarget.fuelsdk.ETSoapObject;
 import com.exacttarget.fuelsdk.annotations.InternalSoapField;
 import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.List;
 
 @InternalSoapType(type = List.class)
-public class ETList extends ETSoapObject
-{
-    @InternalSoapField(name="listName")
-    protected String name = null;
-    @InternalSoapField(name="description")
-    protected String description = null;
-    @InternalSoapField(name="category")
-    protected Integer categoryId = null;
-    @InternalSoapField(name="listClassification")
-    protected ETListClassification listClassification = null;
-    @InternalSoapField(name="type")
-    protected ETListType listType = null;
+public class ETList extends ETSoapObject {
+    @InternalSoapField(name = "listName")
+    private String name = null;
+    @InternalSoapField(name = "description")
+    private String description = null;
+    @InternalSoapField(name = "category")
+    private Integer categoryId = null;
+    @InternalSoapField(name = "listClassification")
+    private ETListClassification listClassification = null;
+    @InternalSoapField(name = "type")
+    private ETListType listType = null;
+
+    public ETList() {}
 
     public String getName() {
         return name;
@@ -86,10 +85,5 @@ public class ETList extends ETSoapObject
 
     public void setListType(ETListType listType) {
         this.listType = listType;
-    }
-
-    @Override
-    public String toString() {
-        return ToStringBuilder.reflectionToString(this);
     }
 }
