@@ -27,30 +27,27 @@
 
 package com.exacttarget.fuelsdk.model;
 
-
 public enum ETSendDefinitionListType {
-
-	SOURCE_LIST("SourceList"),
-    EXCLUSION_LIST("ExclusionList"),
     DOMAIN_EXCLUSION("DomainExclusion"),
-    OPT_OUT_LIST("OptOutList");
+    EXCLUSION_LIST("ExclusionList"),
+    OPT_OUT_LIST("OptOutList"),
+    SOURCE_LIST("SourceList");
     private final String value;
 
-    ETSendDefinitionListType(String v) {
-        value = v;
+    ETSendDefinitionListType(String value) {
+        this.value = value;
     }
 
     public String value() {
         return value;
     }
 
-    public static ETSendDefinitionListType fromValue(String v) {
-        for (ETSendDefinitionListType c: ETSendDefinitionListType.values()) {
-            if (c.value.equals(v)) {
-                return c;
+    public static ETSendDefinitionListType fromValue(String value) {
+        for (ETSendDefinitionListType v : ETSendDefinitionListType.values()) {
+            if (v.value.equals(value)) {
+                return v;
             }
         }
-        throw new IllegalArgumentException(v);
+        throw new IllegalArgumentException(value);
     }
-
 }

@@ -27,34 +27,31 @@
 
 package com.exacttarget.fuelsdk.model;
 
-
 public enum ETDataExtensionFieldType {
+    BOOLEAN("Boolean"),
+    DATE("Date"),
+    DECIMAL("Decimal"),
+    EMAIL_ADDRESS("EmailAddress"),
+    LOCALE("Locale"),
+    NUMBER("Number"),
+    PHONE("Phone"),
+    TEXT("Text");
+    private final String value;
 
-	    TEXT("Text"),
-	    NUMBER("Number"),
-	    DATE("Date"),
-	    BOOLEAN("Boolean"),
-	    EMAIL_ADDRESS("EmailAddress"),
-	    PHONE("Phone"),
-	    DECIMAL("Decimal"),
-	    LOCALE("Locale");
-	    private final String value;
+    ETDataExtensionFieldType(String value) {
+        this.value = value;
+    }
 
-	    ETDataExtensionFieldType(String v) {
-	        value = v;
-	    }
+    public String value() {
+        return value;
+    }
 
-	    public String value() {
-	        return value;
-	    }
-
-	    public static ETDataExtensionFieldType fromValue(String v) {
-	        for (ETDataExtensionFieldType c: ETDataExtensionFieldType.values()) {
-	            if (c.value.equals(v)) {
-	                return c;
-	            }
-	        }
-	        throw new IllegalArgumentException(v);
-	    }
-
-	}
+    public static ETDataExtensionFieldType fromValue(String value) {
+        for (ETDataExtensionFieldType v : ETDataExtensionFieldType.values()) {
+            if (v.value.equals(value)) {
+                return v;
+            }
+        }
+        throw new IllegalArgumentException(value);
+    }
+}

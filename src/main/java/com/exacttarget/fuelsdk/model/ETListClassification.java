@@ -42,9 +42,9 @@ public enum ETListClassification {
     }
 
     public static ETListClassification fromValue(String value) {
-        for (ETListClassification c: ETListClassification.values()) {
-            if (c.value.equals(value)) {
-                return c;
+        for (ETListClassification v : ETListClassification.values()) {
+            if (v.value.equals(value)) {
+                return v;
             }
         }
         throw new IllegalArgumentException(value);

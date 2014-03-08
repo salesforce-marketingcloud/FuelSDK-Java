@@ -28,25 +28,23 @@
 package com.exacttarget.fuelsdk.model;
 
 public enum ETEmailType {
-    TEXT("Text"),
-    HTML("HTML");
+    TEXT("Text"), HTML("HTML");
     private final String value;
 
-    ETEmailType(String v) {
-        value = v;
+    ETEmailType(String value) {
+        this.value = value;
     }
 
     public String value() {
         return value;
     }
 
-    public static ETEmailType fromValue(String v) {
-        for (ETEmailType c: ETEmailType.values()) {
-            if (c.value.equals(v)) {
-                return c;
+    public static ETEmailType fromValue(String value) {
+        for (ETEmailType v : ETEmailType.values()) {
+            if (v.value.equals(value)) {
+                return v;
             }
         }
-        throw new IllegalArgumentException(v);
+        throw new IllegalArgumentException(value);
     }
-
 }

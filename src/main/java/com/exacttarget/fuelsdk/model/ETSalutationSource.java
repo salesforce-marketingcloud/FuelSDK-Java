@@ -27,29 +27,24 @@
 
 package com.exacttarget.fuelsdk.model;
 
-
 public enum ETSalutationSource {
-
-    DEFAULT("Default"),
-    CONTENT_LIBRARY("ContentLibrary"),
-    NONE("None");
+    CONTENT_LIBRARY("ContentLibrary"), DEFAULT("Default"), NONE("None");
     private final String value;
 
-    ETSalutationSource(String v) {
-        value = v;
+    ETSalutationSource(String value) {
+        this.value = value;
     }
 
     public String value() {
         return value;
     }
 
-    public static ETSalutationSource fromValue(String v) {
-        for (ETSalutationSource c: ETSalutationSource.values()) {
-            if (c.value.equals(v)) {
-                return c;
+    public static ETSalutationSource fromValue(String value) {
+        for (ETSalutationSource v : ETSalutationSource.values()) {
+            if (v.value.equals(value)) {
+                return v;
             }
         }
-        throw new IllegalArgumentException(v);
+        throw new IllegalArgumentException(value);
     }
-
 }

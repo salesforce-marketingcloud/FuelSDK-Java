@@ -27,29 +27,28 @@
 
 package com.exacttarget.fuelsdk.model;
 
-
 public enum ETSubscriberStatus {
     ACTIVE("Active"),
     BOUNCED("Bounced"),
+    DELETED("Deleted"),
     HELD("Held"),
-    UNSUBSCRIBED("Unsubscribed"),
-    DELETED("Deleted");
+    UNSUBSCRIBED("Unsubscribed");
     private final String value;
 
-    ETSubscriberStatus(String v) {
-        value = v;
+    ETSubscriberStatus(String value) {
+        this.value = value;
     }
 
     public String value() {
         return value;
     }
 
-    public static ETSubscriberStatus fromValue(String v) {
-        for (ETSubscriberStatus c: ETSubscriberStatus.values()) {
-            if (c.value.equals(v)) {
-                return c;
+    public static ETSubscriberStatus fromValue(String value) {
+        for (ETSubscriberStatus v : ETSubscriberStatus.values()) {
+            if (v.value.equals(value)) {
+                return v;
             }
         }
-        throw new IllegalArgumentException(v);
+        throw new IllegalArgumentException(value);
     }
 }

@@ -27,35 +27,33 @@
 
 package com.exacttarget.fuelsdk.model;
 
-
 public enum ETAccountType {
-	    NONE("None"),
-	    EXACTTARGET("EXACTTARGET"),
-	    PRO_CONNECT("PRO_CONNECT"),
-	    CHANNEL_CONNECT("CHANNEL_CONNECT"),
-	    CONNECT("CONNECT"),
-	    PRO_CONNECT_CLIENT("PRO_CONNECT_CLIENT"),
-	    LP_MEMBER("LP_MEMBER"),
-	    DOTO_MEMBER("DOTO_MEMBER"),
-	    ENTERPRISE_2("ENTERPRISE_2"),
-	    BUSINESS_UNIT("BUSINESS_UNIT");
-	    private final String value;
+    NONE("None"), // default response type for AsyncResponseType XXX
+    EXACTTARGET("EXACTTARGET"),               // Core
+    CONNECT("CONNECT"),                       // Advanced
+    CHANNEL_CONNECT("CHANNEL_CONNECT"),       // Enterprise 1
+    ENTERPRISE_2("ENTERPRISE_2"),             // Enterprise 2
+    BUSINESS_UNIT("BUSINESS_UNIT"),           // Enterprise 2 business unit
+    PRO_CONNECT("PRO_CONNECT"),               // Reseller
+    PRO_CONNECT_CLIENT("PRO_CONNECT_CLIENT"), // Reseller client
+    LP_MEMBER("LP_MEMBER"),                   // Lock & publish
+    DOTO_MEMBER("DOTO_MEMBER");               // On your behalf
+    private final String value;
 
-	    ETAccountType(String v) {
-	        value = v;
-	    }
+    ETAccountType(String value) {
+        this.value = value;
+    }
 
-	    public String value() {
-	        return value;
-	    }
+    public String value() {
+        return value;
+    }
 
-	    public static ETAccountType fromValue(String v) {
-	        for (ETAccountType c: ETAccountType.values()) {
-	            if (c.value.equals(v)) {
-	                return c;
-	            }
-	        }
-	        throw new IllegalArgumentException(v);
-	    }
-
-	}
+    public static ETAccountType fromValue(String value) {
+        for (ETAccountType v : ETAccountType.values()) {
+            if (v.value.equals(value)) {
+                return v;
+            }
+        }
+        throw new IllegalArgumentException(value);
+    }
+}

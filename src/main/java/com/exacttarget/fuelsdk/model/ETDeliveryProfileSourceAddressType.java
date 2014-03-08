@@ -27,28 +27,25 @@
 
 package com.exacttarget.fuelsdk.model;
 
-
 public enum ETDeliveryProfileSourceAddressType {
-
     DEFAULT_PRIVATE_IP_ADDRESS("DefaultPrivateIPAddress"),
     CUSTOM_PRIVATE_IP_ADDRESS("CustomPrivateIPAddress");
     private final String value;
 
-    ETDeliveryProfileSourceAddressType(String v) {
-        value = v;
+    ETDeliveryProfileSourceAddressType(String value) {
+        this.value = value;
     }
 
     public String value() {
         return value;
     }
 
-    public static ETDeliveryProfileSourceAddressType fromValue(String v) {
-        for (ETDeliveryProfileSourceAddressType c: ETDeliveryProfileSourceAddressType.values()) {
-            if (c.value.equals(v)) {
-                return c;
+    public static ETDeliveryProfileSourceAddressType fromValue(String value) {
+        for (ETDeliveryProfileSourceAddressType v : ETDeliveryProfileSourceAddressType.values()) {
+            if (v.value.equals(value)) {
+                return v;
             }
         }
-        throw new IllegalArgumentException(v);
+        throw new IllegalArgumentException(value);
     }
-
 }

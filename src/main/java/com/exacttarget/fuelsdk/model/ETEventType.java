@@ -27,38 +27,35 @@
 
 package com.exacttarget.fuelsdk.model;
 
-
 public enum ETEventType {
-
-	OPEN("Open"),
+    OPEN("Open"),
     CLICK("Click"),
     HARD_BOUNCE("HardBounce"),
     SOFT_BOUNCE("SoftBounce"),
     OTHER_BOUNCE("OtherBounce"),
     UNSUBSCRIBE("Unsubscribe"),
-    SENT("Sent"),
-    NOT_SENT("NotSent"),
-    SURVEY("Survey"),
+    DELIVERED_EVENT("DeliveredEvent"),
     FORWARDED_EMAIL("ForwardedEmail"),
     FORWARDED_EMAIL_OPT_IN("ForwardedEmailOptIn"),
-    DELIVERED_EVENT("DeliveredEvent");
+    SENT("Sent"),
+    NOT_SENT("NotSent"),
+    SURVEY("Survey");
     private final String value;
 
-    ETEventType(String v) {
-        value = v;
+    ETEventType(String value) {
+        this.value = value;
     }
 
     public String value() {
         return value;
     }
 
-    public static ETEventType fromValue(String v) {
-        for (ETEventType c: ETEventType.values()) {
-            if (c.value.equals(v)) {
-                return c;
+    public static ETEventType fromValue(String value) {
+        for (ETEventType v : ETEventType.values()) {
+            if (v.value.equals(value)) {
+                return v;
             }
         }
-        throw new IllegalArgumentException(v);
+        throw new IllegalArgumentException(value);
     }
-
 }

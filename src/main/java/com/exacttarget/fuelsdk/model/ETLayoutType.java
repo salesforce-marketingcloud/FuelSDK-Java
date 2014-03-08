@@ -27,28 +27,24 @@
 
 package com.exacttarget.fuelsdk.model;
 
-
 public enum ETLayoutType {
-    HTML_WRAPPED("HTMLWrapped"),
-    RAW_TEXT("RawText"),
-    SMS("SMS");
+    HTML_WRAPPED("HTMLWrapped"), RAW_TEXT("RawText"), SMS("SMS");
     private final String value;
 
-    ETLayoutType(String v) {
-        value = v;
+    ETLayoutType(String value) {
+        this.value = value;
     }
 
     public String value() {
         return value;
     }
 
-    public static ETLayoutType fromValue(String v) {
-        for (ETLayoutType c: ETLayoutType.values()) {
-            if (c.value.equals(v)) {
-                return c;
+    public static ETLayoutType fromValue(String value) {
+        for (ETLayoutType v : ETLayoutType.values()) {
+            if (v.value.equals(value)) {
+                return v;
             }
         }
-        throw new IllegalArgumentException(v);
+        throw new IllegalArgumentException(value);
     }
-
 }

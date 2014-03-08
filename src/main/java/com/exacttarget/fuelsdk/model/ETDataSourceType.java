@@ -27,33 +27,30 @@
 
 package com.exacttarget.fuelsdk.model;
 
-
 public enum ETDataSourceType {
-
     LIST("List"),
-    CUSTOM_OBJECT("CustomObject"),
+    CUSTOM_OBJECT("CustomObject"), // data extension
     DOMAIN_EXCLUSION("DomainExclusion"),
-    SALES_FORCE_REPORT("SalesForceReport"),
-    SALES_FORCE_CAMPAIGN("SalesForceCampaign"),
     FILTER_DEFINITION("FilterDefinition"),
-    OPT_OUT_LIST("OptOutList");
+    OPT_OUT_LIST("OptOutList"),
+    SALES_FORCE_CAMPAIGN("SalesForceCampaign"),
+    SALES_FORCE_REPORT("SalesForceReport");
     private final String value;
 
-    ETDataSourceType(String v) {
-        value = v;
+    ETDataSourceType(String value) {
+        this.value = value;
     }
 
     public String value() {
         return value;
     }
 
-    public static ETDataSourceType fromValue(String v) {
-        for (ETDataSourceType c: ETDataSourceType.values()) {
-            if (c.value.equals(v)) {
-                return c;
+    public static ETDataSourceType fromValue(String value) {
+        for (ETDataSourceType v : ETDataSourceType.values()) {
+            if (v.value.equals(value)) {
+                return v;
             }
         }
-        throw new IllegalArgumentException(v);
+        throw new IllegalArgumentException(value);
     }
-
 }

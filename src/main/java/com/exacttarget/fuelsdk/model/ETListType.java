@@ -44,9 +44,9 @@ public enum ETListType {
     }
 
     public static ETListType fromValue(String value) {
-        for (ETListType t: ETListType.values()) {
-            if (t.value.equals(value)) {
-                return t;
+        for (ETListType v : ETListType.values()) {
+            if (v.value.equals(value)) {
+                return v;
             }
         }
         throw new IllegalArgumentException(value);

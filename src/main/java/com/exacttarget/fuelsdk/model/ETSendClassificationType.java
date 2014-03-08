@@ -27,28 +27,24 @@
 
 package com.exacttarget.fuelsdk.model;
 
-
 public enum ETSendClassificationType {
-
-    OPERATIONAL("Operational"),
-    MARKETING("Marketing");
+    MARKETING("Marketing"), OPERATIONAL("Operational");
     private final String value;
 
-    ETSendClassificationType(String v) {
-        value = v;
+    ETSendClassificationType(String value) {
+        this.value = value;
     }
 
     public String value() {
         return value;
     }
 
-    public static ETSendClassificationType fromValue(String v) {
-        for (ETSendClassificationType c: ETSendClassificationType.values()) {
-            if (c.value.equals(v)) {
-                return c;
+    public static ETSendClassificationType fromValue(String value) {
+        for (ETSendClassificationType v : ETSendClassificationType.values()) {
+            if (v.value.equals(value)) {
+                return v;
             }
         }
-        throw new IllegalArgumentException(v);
+        throw new IllegalArgumentException(value);
     }
-
 }

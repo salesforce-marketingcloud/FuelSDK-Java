@@ -27,28 +27,25 @@
 
 package com.exacttarget.fuelsdk.model;
 
-
 public enum ETDeliveryProfileDomainType {
-
     DEFAULT_DOMAIN("DefaultDomain"),
     CUSTOM_DOMAIN("CustomDomain");
     private final String value;
 
-    ETDeliveryProfileDomainType(String v) {
-        value = v;
+    ETDeliveryProfileDomainType(String value) {
+        this.value = value;
     }
 
     public String value() {
         return value;
     }
 
-    public static ETDeliveryProfileDomainType fromValue(String v) {
-        for (ETDeliveryProfileDomainType c: ETDeliveryProfileDomainType.values()) {
-            if (c.value.equals(v)) {
-                return c;
+    public static ETDeliveryProfileDomainType fromValue(String value) {
+        for (ETDeliveryProfileDomainType v : ETDeliveryProfileDomainType.values()) {
+            if (v.value.equals(value)) {
+                return v;
             }
         }
-        throw new IllegalArgumentException(v);
+        throw new IllegalArgumentException(value);
     }
-
 }

@@ -27,29 +27,24 @@
 
 package com.exacttarget.fuelsdk.model;
 
-
 public enum ETSendPriority {
-
-    BURST("Burst"),
-    NORMAL("Normal"),
-    LOW("Low");
+    BURST("Burst"), LOW("Low"), NORMAL("Normal");
     private final String value;
 
-    ETSendPriority(String v) {
-        value = v;
+    ETSendPriority(String value) {
+        this.value = value;
     }
 
     public String value() {
         return value;
     }
 
-    public static ETSendPriority fromValue(String v) {
-        for (ETSendPriority c: ETSendPriority.values()) {
-            if (c.value.equals(v)) {
-                return c;
+    public static ETSendPriority fromValue(String value) {
+        for (ETSendPriority v : ETSendPriority.values()) {
+            if (v.value.equals(value)) {
+                return v;
             }
         }
-        throw new IllegalArgumentException(v);
+        throw new IllegalArgumentException(value);
     }
-
 }
