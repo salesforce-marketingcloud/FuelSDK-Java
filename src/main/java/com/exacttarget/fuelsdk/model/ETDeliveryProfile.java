@@ -49,8 +49,7 @@ public class ETDeliveryProfile extends ETSoapObject {
     @InternalSoapField(name = "sourceAddressType")
     private ETDeliveryProfileSourceAddressType sourceAddressType = null;
 
-    public ETDeliveryProfile() {
-    }
+    public ETDeliveryProfile() {}
 
     public String getName() {
         return name;

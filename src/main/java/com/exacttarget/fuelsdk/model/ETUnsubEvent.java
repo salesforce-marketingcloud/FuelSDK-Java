@@ -30,8 +30,7 @@ package com.exacttarget.fuelsdk.model;
 import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.UnsubEvent;
 
-@InternalSoapType(type=UnsubEvent.class)
-public class ETUnsubEvent extends BaseTrackingEvent {
-
-	public ETUnsubEvent(){}
+@InternalSoapType(type = UnsubEvent.class)
+public class ETUnsubEvent extends ETTrackingEvent {
+    public ETUnsubEvent() {}
 }

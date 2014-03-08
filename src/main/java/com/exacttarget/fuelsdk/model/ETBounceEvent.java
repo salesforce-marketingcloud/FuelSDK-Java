@@ -30,8 +30,7 @@ package com.exacttarget.fuelsdk.model;
 import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.BounceEvent;
 
-@InternalSoapType(type=BounceEvent.class)
-public class ETBounceEvent extends BaseTrackingEvent {
-
-	public ETBounceEvent(){}
+@InternalSoapType(type = BounceEvent.class)
+public class ETBounceEvent extends ETTrackingEvent {
+    public ETBounceEvent() {}
 }

@@ -43,8 +43,7 @@ public class ETSenderProfile extends ETSoapObject {
     @InternalSoapField(name = "name")
     private String fromAddress = null;
 
-    public ETSenderProfile() {
-    }
+    public ETSenderProfile() {}
 
     public String getName() {
         return name;
