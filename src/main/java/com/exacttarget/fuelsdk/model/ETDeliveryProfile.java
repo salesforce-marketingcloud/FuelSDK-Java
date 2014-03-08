@@ -34,99 +34,78 @@ import com.exacttarget.fuelsdk.internal.DeliveryProfile;
 
 @InternalSoapType(type = DeliveryProfile.class)
 public class ETDeliveryProfile extends ETSoapObject {
+    @InternalSoapField(name = "name")
+    private String name = null;
+    @InternalSoapField(name = "description")
+    private String description = null;
+    @InternalSoapField(name = "domainType")
+    private ETDeliveryProfileDomainType domainType = null;
+    @InternalSoapField(name = "footerSalutationSource")
+    private ETSalutationSource footerSalutationSource = null;
+    @InternalSoapField(name = "headerSalutationSource")
+    private ETSalutationSource headerSalutationSource = null;
+    @InternalSoapField(name = "privateIP")
+    private String privateIP = null;
+    @InternalSoapField(name = "sourceAddressType")
+    private ETDeliveryProfileSourceAddressType sourceAddressType = null;
 
-	@InternalSoapField(name = "name")
-    protected String name;
+    public ETDeliveryProfile() {
+    }
 
-	@InternalSoapField(name = "description")
-    protected String description;
+    public String getName() {
+        return name;
+    }
 
-	@InternalSoapField(name = "sourceAddressType")
-    protected ETDeliveryProfileSourceAddressType sourceAddressType;
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	@InternalSoapField(name = "privateIP")
-    protected String privateIP;
+    public String getDescription() {
+        return description;
+    }
 
-	@InternalSoapField(name = "domainType")
-    protected ETDeliveryProfileDomainType domainType;
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	@InternalSoapField(name = "headerSalutationSource")
-    protected ETSalutationSource headerSalutationSource;
+    public ETDeliveryProfileDomainType getDomainType() {
+        return domainType;
+    }
 
-	@InternalSoapField(name = "footerSalutationSource")
-    protected ETSalutationSource footerSalutationSource;
+    public void setDomainType(ETDeliveryProfileDomainType domainType) {
+        this.domainType = domainType;
+    }
 
-	public ETDeliveryProfile() {}
+    public ETSalutationSource getFooterSalutationSource() {
+        return footerSalutationSource;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setFooterSalutationSource(ETSalutationSource footerSalutationSource) {
+        this.footerSalutationSource = footerSalutationSource;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public ETSalutationSource getHeaderSalutationSource() {
+        return headerSalutationSource;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public void setHeaderSalutationSource(ETSalutationSource headerSalutationSource) {
+        this.headerSalutationSource = headerSalutationSource;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public String getPrivateIP() {
+        return privateIP;
+    }
 
-	public ETDeliveryProfileSourceAddressType getSourceAddressType() {
-		return sourceAddressType;
-	}
+    public void setPrivateIP(String privateIP) {
+        this.privateIP = privateIP;
+    }
 
-	public void setSourceAddressType(
-			ETDeliveryProfileSourceAddressType sourceAddressType) {
-		this.sourceAddressType = sourceAddressType;
-	}
+    public ETDeliveryProfileSourceAddressType getSourceAddressType() {
+        return sourceAddressType;
+    }
 
-	public String getPrivateIP() {
-		return privateIP;
-	}
-
-	public void setPrivateIP(String privateIP) {
-		this.privateIP = privateIP;
-	}
-
-	public ETDeliveryProfileDomainType getDomainType() {
-		return domainType;
-	}
-
-	public void setDomainType(ETDeliveryProfileDomainType domainType) {
-		this.domainType = domainType;
-	}
-
-	public ETSalutationSource getHeaderSalutationSource() {
-		return headerSalutationSource;
-	}
-
-	public void setHeaderSalutationSource(ETSalutationSource headerSalutationSource) {
-		this.headerSalutationSource = headerSalutationSource;
-	}
-
-	public ETSalutationSource getFooterSalutationSource() {
-		return footerSalutationSource;
-	}
-
-	public void setFooterSalutationSource(ETSalutationSource footerSalutationSource) {
-		this.footerSalutationSource = footerSalutationSource;
-	}
-
-	@Override
-	public String toString() {
-		return "ETDeliveryProfile [name=" + name + ", description="
-				+ description + ", sourceAddressType=" + sourceAddressType
-				+ ", privateIP=" + privateIP + ", domainType=" + domainType
-				+ ", headerSalutationSource=" + headerSalutationSource
-				+ ", footerSalutationSource=" + footerSalutationSource
-				+ ", id=" + id + ", createdDate=" + createdDate
-				+ ", modifiedDate=" + modifiedDate + ", customerKey="
-				+ customerKey + "]";
-	}
-
-
-
+    public void setSourceAddressType(
+            ETDeliveryProfileSourceAddressType sourceAddressType) {
+        this.sourceAddressType = sourceAddressType;
+    }
 }

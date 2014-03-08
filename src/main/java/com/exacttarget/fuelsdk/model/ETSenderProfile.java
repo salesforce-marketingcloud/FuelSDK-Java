@@ -34,61 +34,47 @@ import com.exacttarget.fuelsdk.internal.SenderProfile;
 
 @InternalSoapType(type = SenderProfile.class)
 public class ETSenderProfile extends ETSoapObject {
+    @InternalSoapField(name = "name")
+    private String name = null;
+    @InternalSoapField(name = "name")
+    private String description = null;
+    @InternalSoapField(name = "name")
+    private String fromName = null;
+    @InternalSoapField(name = "name")
+    private String fromAddress = null;
 
-	@InternalSoapField(name = "name")
-    protected String name;
+    public ETSenderProfile() {
+    }
 
-	@InternalSoapField(name = "name")
-	protected String description;
+    public String getName() {
+        return name;
+    }
 
-	@InternalSoapField(name = "name")
-    protected String fromName;
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	@InternalSoapField(name = "name")
-    protected String fromAddress;
+    public String getDescription() {
+        return description;
+    }
 
-	public ETSenderProfile() {}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public String getFromName() {
+        return fromName;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setFromName(String fromName) {
+        this.fromName = fromName;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public String getFromAddress() {
+        return fromAddress;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public String getFromName() {
-		return fromName;
-	}
-
-	public void setFromName(String fromName) {
-		this.fromName = fromName;
-	}
-
-	public String getFromAddress() {
-		return fromAddress;
-	}
-
-	public void setFromAddress(String fromAddress) {
-		this.fromAddress = fromAddress;
-	}
-
-	@Override
-	public String toString() {
-		return "ETSenderProfile [name=" + name + ", description=" + description
-				+ ", fromName=" + fromName + ", fromAddress=" + fromAddress
-				+ ", id=" + id + ", createdDate=" + createdDate
-				+ ", modifiedDate=" + modifiedDate + ", customerKey="
-				+ customerKey + "]";
-	}
-
-
+    public void setFromAddress(String fromAddress) {
+        this.fromAddress = fromAddress;
+    }
 }
