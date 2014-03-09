@@ -34,45 +34,46 @@ import com.exacttarget.fuelsdk.internal.ContentArea;
 
 @InternalSoapType(type = ContentArea.class)
 public class ETContentArea extends ETSoapObject {
-    @InternalSoapField(name="categoryID")
-	protected Integer categoryId;
-    @InternalSoapField(name="content")
-	protected String content;
-    @InternalSoapField(name="layout")
-	protected ETLayoutType layout;
-    @InternalSoapField(name="name")
-	protected String name;
+    @InternalSoapField(name = "name")
+    private String name = null;
+    @InternalSoapField(name = "categoryID")
+    private Integer categoryId = null;
+    @InternalSoapField(name = "content")
+    private String content = null;
+    @InternalSoapField(name = "layout")
+    private ETLayoutType layout = null;
 
-	public Integer getCategoryId() {
-		return categoryId;
-	}
-	public void setCategoryId(Integer categoryId) {
-		this.categoryId = categoryId;
-	}
-	public String getContent() {
-		return content;
-	}
-	public void setContent(String content) {
-		this.content = content;
-	}
-	public ETLayoutType getLayout() {
-		return layout;
-	}
-	public void setLayout(ETLayoutType layout) {
-		this.layout = layout;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
+    public ETContentArea() {}
 
-	@Override
-	public String toString() {
-        return "ETContentArea [id=" + id + ", categoryId=" + categoryId
-            + ", content=" + content + ", customerKey=" + customerKey
-            + ", createdDate=" + createdDate + ", layout=" + layout
-            + ", modifiedDate=" + modifiedDate + ", name=" + name + "]";
-	}
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public ETLayoutType getLayout() {
+        return layout;
+    }
+
+    public void setLayout(ETLayoutType layout) {
+        this.layout = layout;
+    }
 }
