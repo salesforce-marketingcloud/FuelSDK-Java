@@ -34,31 +34,33 @@ import com.exacttarget.fuelsdk.internal.Email;
 
 @InternalSoapType(type = Email.class)
 public class ETEmail extends ETSoapObject {
-    @InternalSoapField(name="name")
-    protected String name = null;
-    @InternalSoapField(name="categoryID")
-    protected Integer categoryID = null;
-    @InternalSoapField(name="htmlBody")
-    protected String htmlBody = null;
-    @InternalSoapField(name="textBody")
-    protected String textBody = null;
-    @InternalSoapField(name="subject")
-    protected String subject = null;
-    @InternalSoapField(name="isHTMLPaste")
-    protected Boolean htmlPaste = null;
-    @InternalSoapField(name="emailType")
-    protected String emailType = null;
-    @InternalSoapField(name="characterSet")
-    protected String characterSet = null;
+    @InternalSoapField(name = "name")
+    private String name = null;
+    @InternalSoapField(name = "categoryID")
+    private Integer categoryID = null;
+    @InternalSoapField(name = "htmlBody")
+    private String htmlBody = null;
+    @InternalSoapField(name = "textBody")
+    private String textBody = null;
+    @InternalSoapField(name = "subject")
+    private String subject = null;
+    @InternalSoapField(name = "isHTMLPaste")
+    private Boolean htmlPaste = null;
+    @InternalSoapField(name = "emailType")
+    private String emailType = null;
+    @InternalSoapField(name = "characterSet")
+    private String characterSet = null;
 
-    @InternalSoapField(name="contentCheckStatus")
-    protected String contentCheckStatus = null;
-    @InternalSoapField(name="hasDynamicSubjectLine")
-    protected Boolean hasDynamicSubjectline = null;
-    @InternalSoapField(name="isActive")
-    protected Boolean active = null;
-    @InternalSoapField(name="status")
-    protected String status = null;
+    @InternalSoapField(name = "contentCheckStatus")
+    private String contentCheckStatus = null;
+    @InternalSoapField(name = "hasDynamicSubjectLine")
+    private Boolean hasDynamicSubjectline = null;
+    @InternalSoapField(name = "isActive")
+    private Boolean active = null;
+    @InternalSoapField(name = "status")
+    private String status = null;
+
+    public ETEmail() {}
 
     public String getName() {
         return name;
