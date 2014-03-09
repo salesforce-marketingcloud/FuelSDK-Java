@@ -31,7 +31,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
+
 public class ETConfiguration {
+    private static Logger logger = Logger.getLogger(ETConfiguration.class);
+
     private static final String DEFAULT_FILE_NAME = "/fuelsdk.properties";
     private String endpoint = null;
     private String authEndpoint = null;
@@ -51,6 +55,7 @@ public class ETConfiguration {
         if (file == null) {
             file = DEFAULT_FILE_NAME;
         }
+        logger.trace("reading configuration from " + file);
         InputStream is = getClass().getResourceAsStream(file);
         if (is == null) {
             throw new ETSdkException("error opening " + file);
@@ -66,6 +71,13 @@ public class ETConfiguration {
         soapEndpoint = properties.getProperty("soapEndpoint");
         clientId = properties.getProperty("clientId");
         clientSecret = properties.getProperty("clientSecret");
+        if (logger.isTraceEnabled()) {
+            logger.trace("endpoint = " + endpoint);
+            logger.trace("authEndpoint = " + authEndpoint);
+            logger.trace("soapEndpoint = " + soapEndpoint);
+            logger.trace("clientId = " + clientId);
+            logger.trace("clientSecret = " + clientSecret);
+        }
     }
 
     public String getEndpoint() {
