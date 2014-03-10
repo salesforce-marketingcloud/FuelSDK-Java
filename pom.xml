@@ -58,6 +58,9 @@
                 <wsdlOption>
                   <wsdl>${basedir}/src/main/resources/etframework.wsdl</wsdl>
                   <wsdlLocation>classpath:/etframework.wsdl</wsdlLocation>
+                  <bindingFiles>
+                    <bindingFile>${basedir}/src/main/resources/etframework-bindings.xml</bindingFile>
+                  </bindingFiles>
                   <extraargs>
                     <extraarg>-client</extraarg>
                     <extraarg>-p</extraarg>

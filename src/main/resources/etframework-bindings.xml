@@ -1,0 +1,14 @@
+<jaxb:bindings xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+               xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+               xmlns:wsdl="http://schemas.xmlsoap.org/wsdl"
+               version="2.0">
+  <jaxb:bindings schemaLocation="etframework.wsdl#types1" node="/xsd:schema">
+    <!-- Don't generate JAXBElements. -->
+    <jaxb:globalBindings generateElementProperty="false" />
+    <!-- Rename HTMLBody property so getter method is getHtmlBody
+         not getHTMLBody; otherwise, reflection doesn't work. -->
+    <jaxb:bindings node="//xsd:complexType[@name='Email']//xsd:element[@name='HTMLBody']">
+      <jaxb:property name="htmlBody" />
+    </jaxb:bindings>
+  </jaxb:bindings>
+</jaxb:bindings>
