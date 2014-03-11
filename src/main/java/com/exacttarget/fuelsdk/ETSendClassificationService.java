@@ -33,28 +33,20 @@ import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.model.ETSendClassification;
 
 public interface ETSendClassificationService extends ETCrudService {
-
-	public ETResponse<ETSendClassification> get(ETClient client)
-	        throws ETSdkException;
-
-	public ETResponse<ETSendClassification> get(ETClient client, ETFilter filter)
-	        throws ETSdkException;
-
-	public ETResponse<ETSendClassification> post(ETClient client, ETSendClassification sendClassificiation)
-	    	throws ETSdkException;
-
-	public ETResponse<ETSendClassification> patch(ETClient client, ETSendClassification sendClassificiation)
-			throws ETSdkException;
-
-	public ETResponse<ETSendClassification> delete(ETClient client, ETSendClassification sendClassificiation)
-	    	throws ETSdkException;
-
-	public ETResponse<ETSendClassification> post(ETClient client, List<ETSendClassification> sendClassificiations)
-	    	throws ETSdkException;
-
-	public ETResponse<ETSendClassification> patch(ETClient client, List<ETSendClassification> sendClassificiations)
-			throws ETSdkException;
-
-	public ETResponse<ETSendClassification> delete(ETClient client, List<ETSendClassification> sendClassificiations)
-	    	throws ETSdkException;
+    public ETResponse<ETSendClassification> get(ETClient client)
+        throws ETSdkException;
+    public ETResponse<ETSendClassification> get(ETClient client, ETFilter filter)
+        throws ETSdkException;
+    public ETResponse<ETSendClassification> post(ETClient client, ETSendClassification sendClassification)
+        throws ETSdkException;
+    public ETResponse<ETSendClassification> post(ETClient client, List<ETSendClassification> sendClassifications)
+        throws ETSdkException;
+    public ETResponse<ETSendClassification> patch(ETClient client, ETSendClassification sendClassification)
+        throws ETSdkException;
+    public ETResponse<ETSendClassification> patch(ETClient client, List<ETSendClassification> sendClassifications)
+        throws ETSdkException;
+    public ETResponse<ETSendClassification> delete(ETClient client, ETSendClassification sendClassification)
+        throws ETSdkException;
+    public ETResponse<ETSendClassification> delete(ETClient client, List<ETSendClassification> sendClassifications)
+        throws ETSdkException;
 }

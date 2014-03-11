@@ -30,53 +30,60 @@ package com.exacttarget.fuelsdk.soap;
 import java.util.List;
 
 import com.exacttarget.fuelsdk.ETClient;
+import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.ETSendClassificationService;
-import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.model.ETSendClassification;
 
 public class ETSendClassificationServiceImpl extends ETCrudServiceImpl<ETSendClassification>
-		implements ETSendClassificationService {
+    implements ETSendClassificationService
+{
+    public ETResponse<ETSendClassification> get(ETClient client)
+        throws ETSdkException
+    {
+        return super.get(client, ETSendClassification.class);
+    }
 
-	public ETResponse<ETSendClassification> get(ETClient client)
-			throws ETSdkException {
-		return super.get(client, ETSendClassification.class);
-	}
+    public ETResponse<ETSendClassification> get(ETClient client, ETFilter filter)
+        throws ETSdkException
+    {
+        return super.get(client, ETSendClassification.class, filter);
+    }
 
-	public ETResponse<ETSendClassification> get(ETClient client,
-			ETFilter filter) throws ETSdkException {
-		return super.get(client, ETSendClassification.class, filter);
-	}
+    public ETResponse<ETSendClassification> post(ETClient client, ETSendClassification sendClassification)
+        throws ETSdkException
+    {
+        return super.post(client, sendClassification);
+    }
 
-	public ETResponse<ETSendClassification> post(ETClient client,
-			ETSendClassification sendClassificiation) throws ETSdkException {
-		return super.post(client, sendClassificiation);
-	}
+    public ETResponse<ETSendClassification> post(ETClient client, List<ETSendClassification> sendClassifications)
+        throws ETSdkException
+    {
+        return super.post(client, sendClassifications);
+    }
 
-	public ETResponse<ETSendClassification> patch(ETClient client,
-			ETSendClassification sendClassificiation) throws ETSdkException {
-		return super.patch(client, sendClassificiation);
-	}
+    public ETResponse<ETSendClassification> patch(ETClient client, ETSendClassification sendClassification)
+        throws ETSdkException
+    {
+        return super.patch(client, sendClassification);
+    }
 
-	public ETResponse<ETSendClassification> delete(ETClient client,
-			ETSendClassification sendClassificiation) throws ETSdkException {
-		return super.delete(client, sendClassificiation);
-	}
+    public ETResponse<ETSendClassification> patch(ETClient client, List<ETSendClassification> sendClassifications)
+        throws ETSdkException
+    {
+        return super.patch(client, sendClassifications);
+    }
 
-	public ETResponse<ETSendClassification> post(ETClient client,
-			List<ETSendClassification> sendClassificiations) throws ETSdkException {
-		return super.post(client, sendClassificiations);
-	}
+    public ETResponse<ETSendClassification> delete(ETClient client, ETSendClassification sendClassification)
+        throws ETSdkException
+    {
+        return super.delete(client, sendClassification);
+    }
 
-	public ETResponse<ETSendClassification> patch(ETClient client,
-			List<ETSendClassification> sendClassificiations) throws ETSdkException {
-		return super.patch(client, sendClassificiations);
-	}
-
-	public ETResponse<ETSendClassification> delete(ETClient client,
-			List<ETSendClassification> sendClassificiations) throws ETSdkException {
-		return super.delete(client, sendClassificiations);
-	}
-
+    public ETResponse<ETSendClassification> delete(ETClient client, List<ETSendClassification> sendClassifications)
+        throws ETSdkException
+    {
+        return super.delete(client, sendClassifications);
+    }
 }

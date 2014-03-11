@@ -30,91 +30,73 @@ package com.exacttarget.fuelsdk.model;
 import com.exacttarget.fuelsdk.ETSoapObject;
 import com.exacttarget.fuelsdk.annotations.InternalSoapField;
 import com.exacttarget.fuelsdk.annotations.InternalSoapType;
-import com.exacttarget.fuelsdk.internal.DeliveryProfile;
 import com.exacttarget.fuelsdk.internal.SendClassification;
 
-@InternalSoapType(type = SendClassification.class, ignoredFields = {"SenderProfile","DeliveryProfile","SendPriority","ID"})
+// XXX why can't you retrieve DeliveryProfile, SendPriority, and SenderProfile?
+@InternalSoapType(type = SendClassification.class, ignoredFields = {
+    "ID", "DeliveryProfile", "SendPriority", "SenderProfile"
+})
 public class ETSendClassification extends ETSoapObject {
+    @InternalSoapField(name = "name")
+    private String name = null;
+    @InternalSoapField(name = "description")
+    private String description = null;
+    @InternalSoapField(name = "deliveryProfile")
+    private ETDeliveryProfile deliveryProfile = null;
+    @InternalSoapField(name = "sendClassificationType")
+    private ETSendClassificationType sendClassificationType = null;
+    @InternalSoapField(name = "sendPriority")
+    private ETSendPriority sendPriority = null;
+    @InternalSoapField(name = "senderProfile")
+    private ETSenderProfile senderProfile = null;
 
-	@InternalSoapField(name = "sendClassificationType")
-    protected ETSendClassificationType sendClassificationType;
+    public ETSendClassification() {}
 
-	@InternalSoapField(name = "name")
-    protected String name;
+    public String getName() {
+        return name;
+    }
 
-	@InternalSoapField(name = "description")
-    protected String description;
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	@InternalSoapField(name = "senderProfile")
-    protected ETSenderProfile senderProfile;
+    public String getDescription() {
+        return description;
+    }
 
-	@InternalSoapField(name = "deliveryProfile")
-    protected DeliveryProfile deliveryProfile;
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	@InternalSoapField(name = "sendPriority")
-    protected ETSendPriority sendPriority;
+    public ETDeliveryProfile getDeliveryProfile() {
+        return deliveryProfile;
+    }
 
-	public ETSendClassification() {}
+    public void setDeliveryProfile(ETDeliveryProfile deliveryProfile) {
+        this.deliveryProfile = deliveryProfile;
+    }
 
-	public ETSendClassificationType getSendClassificationType() {
-		return sendClassificationType;
-	}
+    public ETSendClassificationType getSendClassificationType() {
+        return sendClassificationType;
+    }
 
-	public void setSendClassificationType(
-			ETSendClassificationType sendClassificationType) {
-		this.sendClassificationType = sendClassificationType;
-	}
+    public void setSendClassificationType(ETSendClassificationType sendClassificationType) {
+        this.sendClassificationType = sendClassificationType;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public ETSendPriority getSendPriority() {
+        return sendPriority;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setSendPriority(ETSendPriority sendPriority) {
+        this.sendPriority = sendPriority;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public ETSenderProfile getSenderProfile() {
+        return senderProfile;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public ETSenderProfile getSenderProfile() {
-		return senderProfile;
-	}
-
-	public void setSenderProfile(ETSenderProfile senderProfile) {
-		this.senderProfile = senderProfile;
-	}
-
-	public DeliveryProfile getDeliveryProfile() {
-		return deliveryProfile;
-	}
-
-	public void setDeliveryProfile(DeliveryProfile deliveryProfile) {
-		this.deliveryProfile = deliveryProfile;
-	}
-
-	public ETSendPriority getSendPriority() {
-		return sendPriority;
-	}
-
-	public void setSendPriority(ETSendPriority sendPriority) {
-		this.sendPriority = sendPriority;
-	}
-
-	@Override
-	public String toString() {
-		return "ETSendClassification [sendClassificationType="
-				+ sendClassificationType + ", name=" + name + ", description="
-				+ description + ", senderProfile=" + senderProfile
-				+ ", deliveryProfile=" + deliveryProfile
-				+ ", sendPriority=" + sendPriority + ", id=" + id + ", createdDate=" + createdDate
-				+ ", modifiedDate=" + modifiedDate + ", customerKey="
-				+ customerKey + "]";
-	}
-
-
+    public void setSenderProfile(ETSenderProfile senderProfile) {
+        this.senderProfile = senderProfile;
+    }
 }
