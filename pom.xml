@@ -5,8 +5,8 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.exacttarget</groupId>
   <artifactId>fuelsdk</artifactId>
-  <packaging>jar</packaging>
   <version>0.9999</version>
+  <packaging>jar</packaging>
   <name>Fuel Java SDK</name>
   <url>http://code.exacttarget.com</url>
   <properties>
@@ -17,6 +17,16 @@
       <groupId>org.apache.cxf</groupId>
       <artifactId>cxf-bundle-minimal</artifactId>
       <version>${cxf.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.cxf</groupId>
+      <artifactId>cxf-tools-common</artifactId>
+      <version>${cxf.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.cxf.xjc-utils</groupId>
+      <artifactId>cxf-xjc-runtime</artifactId>
+      <version>2.7.0</version>
     </dependency>
     <dependency>
       <groupId>com.google.code.gson</groupId>
@@ -68,6 +78,7 @@
                     <extraarg>-fe</extraarg>
                     <extraarg>jaxws21</extraarg>
                     <extraarg>-xjc-enableIntrospection</extraarg>
+                    <extraarg>-xjc-Xts</extraarg>
                   </extraargs>
                 </wsdlOption>
               </wsdlOptions>
@@ -77,6 +88,13 @@
             </goals>
           </execution>
         </executions>
+        <dependencies>
+          <dependency>
+            <groupId>org.apache.cxf.xjcplugins</groupId>
+            <artifactId>cxf-xjc-ts</artifactId>
+            <version>2.7.0</version>
+          </dependency>
+        </dependencies>
       </plugin>
     </plugins>
     <pluginManagement>

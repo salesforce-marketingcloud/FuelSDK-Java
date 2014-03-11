@@ -3,8 +3,18 @@
                xmlns:wsdl="http://schemas.xmlsoap.org/wsdl"
                version="2.0">
   <jaxb:bindings schemaLocation="etframework.wsdl#types1" node="/xsd:schema">
-    <!-- Don't generate JAXBElements. -->
-    <jaxb:globalBindings generateElementProperty="false" />
+    <!-- Don't generate JAXBElements: -->
+    <jaxb:globalBindings generateElementProperty="false">
+      <!-- Map xsd:dateTime to java.util.Date: -->
+      <jaxb:javaType name="java.util.Date" xmlType="xsd:dateTime"
+                     parseMethod="org.apache.cxf.tools.common.DataTypeAdapter.parseDateTime"
+                     printMethod="org.apache.cxf.tools.common.DataTypeAdapter.printDateTime"/>
+    </jaxb:globalBindings>
+    <!-- Rename HTMLBody property so getter method is getId
+         not getID; otherwise, reflection doesn't work. -->
+    <jaxb:bindings node="//xsd:complexType[@name='APIObject']//xsd:element[@name='ID']">
+      <jaxb:property name="id" />
+    </jaxb:bindings>
     <!-- Rename HTMLBody property so getter method is getHtmlBody
          not getHTMLBody; otherwise, reflection doesn't work. -->
     <jaxb:bindings node="//xsd:complexType[@name='Email']//xsd:element[@name='HTMLBody']">
