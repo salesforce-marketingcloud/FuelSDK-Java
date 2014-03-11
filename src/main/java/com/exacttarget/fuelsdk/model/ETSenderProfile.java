@@ -36,11 +36,11 @@ import com.exacttarget.fuelsdk.internal.SenderProfile;
 public class ETSenderProfile extends ETSoapObject {
     @InternalSoapField(name = "name")
     private String name = null;
-    @InternalSoapField(name = "name")
+    @InternalSoapField(name = "description")
     private String description = null;
-    @InternalSoapField(name = "name")
+    @InternalSoapField(name = "fromName")
     private String fromName = null;
-    @InternalSoapField(name = "name")
+    @InternalSoapField(name = "fromAddress")
     private String fromAddress = null;
 
     public ETSenderProfile() {}
