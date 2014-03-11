@@ -127,13 +127,13 @@ public abstract class ETSoapObject extends ETObject {
     private static Logger logger = Logger.getLogger(ETSoapObject.class);
 
     @InternalSoapField(name="id")
-    private Integer id = null;
+    protected Integer id = null;
     @InternalSoapField(name="customerKey")
-    private String customerKey = null;
+    protected String customerKey = null;
     @InternalSoapField(name="createdDate")
-    private Date createdDate = null;
+    protected Date createdDate = null;
     @InternalSoapField(name="modifiedDate")
-    private Date modifiedDate = null;
+    protected Date modifiedDate = null;
 
     @InternalSoapField(name="client")
     protected ETClientID clientId = null;
