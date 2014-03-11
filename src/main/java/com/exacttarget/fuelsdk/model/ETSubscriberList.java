@@ -34,61 +34,46 @@ import com.exacttarget.fuelsdk.internal.SubscriberList;
 
 @InternalSoapType(type = SubscriberList.class)
 public class ETSubscriberList extends ETSoapObject {
+    @InternalSoapField(name = "subscriber")
+    private ETSubscriber subscriber;
+    @InternalSoapField(name = "list")
+    private ETList list = null;
+    @InternalSoapField(name = "status")
+    private ETSubscriberStatus status = null;
+    @InternalSoapField(name = "action")
+    private String action = null;
 
-	@InternalSoapField(name = "status")
-    private ETSubscriberStatus status;
+    public ETSubscriberList() {}
 
-	@InternalSoapField(name = "list")
-	private ETList list;
+    public ETSubscriber getSubscriber() {
+        return subscriber;
+    }
 
-	@InternalSoapField(name = "action")
-	private String action;
+    public void setSubscriber(ETSubscriber subscriber) {
+        this.subscriber = subscriber;
+    }
 
-	@InternalSoapField(name = "subscriber")
-	private ETSubscriber subscriber;
+    public ETList getList() {
+        return list;
+    }
 
-	public ETSubscriberList() {}
+    public void setList(ETList list) {
+        this.list = list;
+    }
 
-	public ETSubscriberStatus getStatus() {
-		return status;
-	}
+    public ETSubscriberStatus getStatus() {
+        return status;
+    }
 
-	public void setStatus(ETSubscriberStatus status) {
-		this.status = status;
-	}
+    public void setStatus(ETSubscriberStatus status) {
+        this.status = status;
+    }
 
-	public ETList getList() {
-		return list;
-	}
+    public String getAction() {
+        return action;
+    }
 
-	public void setList(ETList list) {
-		this.list = list;
-	}
-
-	public String getAction() {
-		return action;
-	}
-
-	public void setAction(String action) {
-		this.action = action;
-	}
-
-	public ETSubscriber getSubscriber() {
-		return subscriber;
-	}
-
-	public void setSubscriber(ETSubscriber subscriber) {
-		this.subscriber = subscriber;
-	}
-
-	@Override
-	public String toString() {
-		return "ETSubscriberList [status=" + status + ", list=" + list
-				+ ", action=" + action + ", subscriber=" + subscriber + ", id="
-				+ id + ", createdDate=" + createdDate + ", modifiedDate="
-				+ modifiedDate + ", customerKey=" + customerKey + "]";
-	}
-
-
-
+    public void setAction(String action) {
+        this.action = action;
+    }
 }

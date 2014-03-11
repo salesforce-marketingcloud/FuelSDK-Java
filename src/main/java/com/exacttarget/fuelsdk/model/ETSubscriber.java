@@ -35,87 +35,70 @@ import com.exacttarget.fuelsdk.annotations.InternalSoapField;
 import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.Subscriber;
 
-@InternalSoapType(type = Subscriber.class, ignoredFields = {"CustomerKey", "ModifiedDate", "Lists"})
+@InternalSoapType(type = Subscriber.class, ignoredFields = {
+    "CustomerKey", "Lists", "ModifiedDate"
+})
 public class ETSubscriber extends ETSoapObject {
-
-	@InternalSoapField(name="emailAddress")
-	private String emailAddress;
-
-	@InternalSoapField(name="subscriberKey")
-	private String subscriberKey;
-
-    @InternalSoapField(name="unsubscribedDate")
-    private Date unsubscribedDate;
-
-    @InternalSoapField(name="status")
-    private ETSubscriberStatus status;
-
-    @InternalSoapField(name="emailTypePreference")
-    private ETEmailType emailTypePreference;
-
-    @InternalSoapField(name="lists")
-    private List<ETSubscriberList> lists;
+    @InternalSoapField(name = "emailAddress")
+    private String emailAddress = null;
+    @InternalSoapField(name = "subscriberKey")
+    private String subscriberKey = null;
+    @InternalSoapField(name = "lists")
+    private List<ETSubscriberList> lists = null;
+    @InternalSoapField(name = "status")
+    private ETSubscriberStatus status = null;
+    @InternalSoapField(name = "emailTypePreference")
+    private ETEmailType emailTypePreference = null;
+    @InternalSoapField(name = "unsubscribedDate")
+    private Date unsubscribedDate = null;
 
     public ETSubscriber() {}
 
-	public String getEmailAddress() {
-		return emailAddress;
-	}
+    public String getEmailAddress() {
+        return emailAddress;
+    }
 
-	public void setEmailAddress(String emailAddress) {
-		this.emailAddress = emailAddress;
-	}
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
+    }
 
-	public String getSubscriberKey() {
-		return subscriberKey;
-	}
+    public String getSubscriberKey() {
+        return subscriberKey;
+    }
 
-	public void setSubscriberKey(String subscriberKey) {
-		this.subscriberKey = subscriberKey;
-	}
+    public void setSubscriberKey(String subscriberKey) {
+        this.subscriberKey = subscriberKey;
+    }
 
-	public Date getUnsubscribedDate() {
-		return unsubscribedDate;
-	}
+    public List<ETSubscriberList> getLists() {
+        return lists;
+    }
 
-	public void setUnsubscribedDate(Date unsubscribedDate) {
-		this.unsubscribedDate = unsubscribedDate;
-	}
+    public void setLists(List<ETSubscriberList> lists) {
+        this.lists = lists;
+    }
 
-	public ETSubscriberStatus getStatus() {
-		return status;
-	}
+    public ETSubscriberStatus getStatus() {
+        return status;
+    }
 
-	public void setStatus(ETSubscriberStatus status) {
-		this.status = status;
-	}
+    public void setStatus(ETSubscriberStatus status) {
+        this.status = status;
+    }
 
-	public ETEmailType getEmailTypePreference() {
-		return emailTypePreference;
-	}
+    public ETEmailType getEmailTypePreference() {
+        return emailTypePreference;
+    }
 
-	public void setEmailTypePreference(ETEmailType emailTypePreference) {
-		this.emailTypePreference = emailTypePreference;
-	}
+    public void setEmailTypePreference(ETEmailType emailTypePreference) {
+        this.emailTypePreference = emailTypePreference;
+    }
 
-	public List<ETSubscriberList> getLists() {
-		return lists;
-	}
+    public Date getUnsubscribedDate() {
+        return unsubscribedDate;
+    }
 
-	public void setLists(List<ETSubscriberList> lists) {
-		this.lists = lists;
-	}
-
-	@Override
-	public String toString() {
-		return "ETSubscriber [emailAddress=" + emailAddress
-				+ ", subscriberKey=" + subscriberKey + ", unsubscribedDate="
-				+ unsubscribedDate + ", status=" + status
-				+ ", emailTypePreference=" + emailTypePreference + ", lists="
-				+ lists + ", id=" + id + ", createdDate=" + createdDate
-				+ ", modifiedDate=" + modifiedDate + ", customerKey="
-				+ customerKey + "]";
-	}
-
-
+    public void setUnsubscribedDate(Date unsubscribedDate) {
+        this.unsubscribedDate = unsubscribedDate;
+    }
 }
