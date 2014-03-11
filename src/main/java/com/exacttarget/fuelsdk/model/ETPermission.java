@@ -34,95 +34,76 @@ import com.exacttarget.fuelsdk.internal.Permission;
 
 @InternalSoapType(type = Permission.class)
 public class ETPermission extends ETSoapObject {
+    @InternalSoapField(name = "name")
+    private String name = null;
+    @InternalSoapField(name = "description")
+    private String description = null;
+    @InternalSoapField(name = "isAllowed")
+    private Boolean isAllowed = null;
+    @InternalSoapField(name = "isDenied")
+    private Boolean isDenied = null;
+    @InternalSoapField(name = "isShareable")
+    private Boolean isShareable = null;
+    @InternalSoapField(name = "objectType")
+    private String objectType = null;
+    @InternalSoapField(name = "operation")
+    private String operation = null;
 
-	@InternalSoapField(name="name")
-    protected String name;
+    public ETPermission() {}
 
-	@InternalSoapField(name="description")
-	protected String description;
+    public String getName() {
+        return name;
+    }
 
-	@InternalSoapField(name="objectType")
-    protected String objectType;
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	@InternalSoapField(name="operation")
-    protected String operation;
+    public String getDescription() {
+        return description;
+    }
 
-	@InternalSoapField(name="isShareable")
-    protected Boolean isShareable;
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	@InternalSoapField(name="isAllowed")
-    protected Boolean isAllowed;
+    public Boolean getIsAllowed() {
+        return isAllowed;
+    }
 
-	@InternalSoapField(name="isDenied")
-    protected Boolean isDenied;
+    public void setIsAllowed(Boolean isAllowed) {
+        this.isAllowed = isAllowed;
+    }
 
-	public ETPermission() {}
+    public Boolean getIsDenied() {
+        return isDenied;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setIsDenied(Boolean isDenied) {
+        this.isDenied = isDenied;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public Boolean getIsShareable() {
+        return isShareable;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public void setIsShareable(Boolean isShareable) {
+        this.isShareable = isShareable;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public String getObjectType() {
+        return objectType;
+    }
 
-	public String getObjectType() {
-		return objectType;
-	}
+    public void setObjectType(String objectType) {
+        this.objectType = objectType;
+    }
 
-	public void setObjectType(String objectType) {
-		this.objectType = objectType;
-	}
+    public String getOperation() {
+        return operation;
+    }
 
-	public String getOperation() {
-		return operation;
-	}
-
-	public void setOperation(String operation) {
-		this.operation = operation;
-	}
-
-	public Boolean getIsShareable() {
-		return isShareable;
-	}
-
-	public void setIsShareable(Boolean isShareable) {
-		this.isShareable = isShareable;
-	}
-
-	public Boolean getIsAllowed() {
-		return isAllowed;
-	}
-
-	public void setIsAllowed(Boolean isAllowed) {
-		this.isAllowed = isAllowed;
-	}
-
-	public Boolean getIsDenied() {
-		return isDenied;
-	}
-
-	public void setIsDenied(Boolean isDenied) {
-		this.isDenied = isDenied;
-	}
-
-	@Override
-	public String toString() {
-		return "ETPermission [name=" + name + ", description=" + description
-				+ ", objectType=" + objectType + ", operation=" + operation
-				+ ", isShareable=" + isShareable + ", isAllowed=" + isAllowed
-				+ ", isDenied=" + isDenied + ", id=" + id + ", createdDate="
-				+ createdDate + ", modifiedDate=" + modifiedDate
-				+ ", customerKey=" + customerKey + "]";
-	}
-
-
+    public void setOperation(String operation) {
+        this.operation = operation;
+    }
 }

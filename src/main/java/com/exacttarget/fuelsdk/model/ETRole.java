@@ -34,97 +34,78 @@ import com.exacttarget.fuelsdk.annotations.InternalSoapField;
 import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.Role;
 
-@InternalSoapType(type=Role.class)
+@InternalSoapType(type = Role.class)
 public class ETRole extends ETSoapObject {
+    @InternalSoapField(name = "name")
+    private String name = null;
+    @InternalSoapField(name = "description")
+    private String description = null;
+    @InternalSoapField(name = "forceInheritance")
+    private Boolean forceInheritance = null;
+    @InternalSoapField(name = "isPrivate")
+    private Boolean isPrivate = null;
+    @InternalSoapField(name = "isSystemDefined")
+    private Boolean isSystemDefined = null;
+    @InternalSoapField(name = "permissions")
+    private List<ETPermission> permissions = null;
+    @InternalSoapField(name = "permissionSets")
+    private List<ETPermissionSet> permissionSets = null;
 
-	@InternalSoapField(name="name")
-    protected String name;
+    public ETRole() {}
 
-	@InternalSoapField(name="description")
-    protected String description;
+    public String getName() {
+        return name;
+    }
 
-	@InternalSoapField(name="isPrivate")
-    protected Boolean isPrivate;
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	@InternalSoapField(name="isSystemDefined")
-    protected Boolean isSystemDefined;
+    public String getDescription() {
+        return description;
+    }
 
-	@InternalSoapField(name="forceInheritance")
-    protected Boolean forceInheritance;
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	@InternalSoapField(name="permissionSets")
-    protected boolean permissionSets;
+    public Boolean getForceInheritance() {
+        return forceInheritance;
+    }
 
-	@InternalSoapField(name="permissions")
-	protected List<ETPermission> permissions;
+    public void setForceInheritance(Boolean forceInheritance) {
+        this.forceInheritance = forceInheritance;
+    }
 
-	public ETRole() { }
+    public Boolean getIsPrivate() {
+        return isPrivate;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setIsPrivate(Boolean isPrivate) {
+        this.isPrivate = isPrivate;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public Boolean getIsSystemDefined() {
+        return isSystemDefined;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public void setIsSystemDefined(Boolean isSystemDefined) {
+        this.isSystemDefined = isSystemDefined;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public List<ETPermission> getPermissions() {
+        return permissions;
+    }
 
-	public Boolean getIsPrivate() {
-		return isPrivate;
-	}
+    public void setPermissions(List<ETPermission> permissions) {
+        this.permissions = permissions;
+    }
 
-	public void setIsPrivate(Boolean isPrivate) {
-		this.isPrivate = isPrivate;
-	}
+    public List<ETPermissionSet> getPermissionSets() {
+        return permissionSets;
+    }
 
-	public Boolean getIsSystemDefined() {
-		return isSystemDefined;
-	}
-
-	public void setIsSystemDefined(Boolean isSystemDefined) {
-		this.isSystemDefined = isSystemDefined;
-	}
-
-	public Boolean getForceInheritance() {
-		return forceInheritance;
-	}
-
-	public void setForceInheritance(Boolean forceInheritance) {
-		this.forceInheritance = forceInheritance;
-	}
-
-	public boolean isPermissionSets() {
-		return permissionSets;
-	}
-
-	public void setPermissionSets(boolean permissionSets) {
-		this.permissionSets = permissionSets;
-	}
-
-	public List<ETPermission> getPermissions() {
-		return permissions;
-	}
-
-	public void setPermissions(List<ETPermission> permissions) {
-		this.permissions = permissions;
-	}
-
-	@Override
-	public String toString() {
-		return "ETRole [name=" + name + ", description=" + description
-				+ ", isPrivate=" + isPrivate + ", isSystemDefined="
-				+ isSystemDefined + ", forceInheritance=" + forceInheritance
-				+ ", permissionSets=" + permissionSets + ", permissions="
-				+ permissions + ", id=" + id + ", createdDate=" + createdDate
-				+ ", modifiedDate=" + modifiedDate + ", customerKey="
-				+ customerKey + "]";
-	}
-
+    public void setPermissionSets(List<ETPermissionSet> permissionSets) {
+        this.permissionSets = permissionSets;
+    }
 }

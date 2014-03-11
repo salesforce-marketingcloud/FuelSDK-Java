@@ -34,85 +34,68 @@ import com.exacttarget.fuelsdk.annotations.InternalSoapField;
 import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.PermissionSet;
 
-@InternalSoapType(type=PermissionSet.class)
+@InternalSoapType(type = PermissionSet.class)
 public class ETPermissionSet extends ETSoapObject {
+    @InternalSoapField(name = "name")
+    private String name = null;
+    @InternalSoapField(name = "description")
+    private String description = null;
+    @InternalSoapField(name = "isAllowed")
+    private Boolean isAllowed = null;
+    @InternalSoapField(name = "isDenied")
+    private Boolean isDenied = null;
+    @InternalSoapField(name = "permissions")
+    private List<ETPermission> permissions = null;
+    @InternalSoapField(name = "permissionSets")
+    private List<ETPermissionSet> permissionSets = null;
 
-	@InternalSoapField(name="name")
-    protected String name;
+    public ETPermissionSet() {}
 
-	@InternalSoapField(name="description")
-    protected String description;
+    public String getName() {
+        return name;
+    }
 
-	@InternalSoapField(name="isAllowed")
-    protected Boolean isAllowed;
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	@InternalSoapField(name="isDenied")
-    protected Boolean isDenied;
+    public String getDescription() {
+        return description;
+    }
 
-	@InternalSoapField(name="permissionSets")
-    protected List<ETPermissionSet> permissionSets;
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	@InternalSoapField(name="permissions")
-    protected List<ETPermission> permissions;
+    public Boolean getIsAllowed() {
+        return isAllowed;
+    }
 
-	public ETPermissionSet() {}
+    public void setIsAllowed(Boolean isAllowed) {
+        this.isAllowed = isAllowed;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public Boolean getIsDenied() {
+        return isDenied;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setIsDenied(Boolean isDenied) {
+        this.isDenied = isDenied;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public List<ETPermission> getPermissions() {
+        return permissions;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setPermissions(List<ETPermission> permissions) {
+        this.permissions = permissions;
+    }
 
-	public Boolean getIsAllowed() {
-		return isAllowed;
-	}
+    public List<ETPermissionSet> getPermissionSets() {
+        return permissionSets;
+    }
 
-	public void setIsAllowed(Boolean isAllowed) {
-		this.isAllowed = isAllowed;
-	}
-
-	public Boolean getIsDenied() {
-		return isDenied;
-	}
-
-	public void setIsDenied(Boolean isDenied) {
-		this.isDenied = isDenied;
-	}
-
-	public List<ETPermissionSet> getPermissionSets() {
-		return permissionSets;
-	}
-
-	public void setPermissionSets(List<ETPermissionSet> permissionSets) {
-		this.permissionSets = permissionSets;
-	}
-
-	public List<ETPermission> getPermissions() {
-		return permissions;
-	}
-
-	public void setPermissions(List<ETPermission> permissions) {
-		this.permissions = permissions;
-	}
-
-	@Override
-	public String toString() {
-		return "ETPermissionSet [name=" + name + ", description=" + description
-				+ ", isAllowed=" + isAllowed + ", isDenied=" + isDenied
-				+ ", permissionSets=" + permissionSets + ", permissions="
-				+ permissions + ", id=" + id + ", createdDate=" + createdDate
-				+ ", modifiedDate=" + modifiedDate + ", customerKey="
-				+ customerKey + "]";
-	}
-
+    public void setPermissionSets(List<ETPermissionSet> permissionSets) {
+        this.permissionSets = permissionSets;
+    }
 }
