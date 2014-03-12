@@ -605,7 +605,7 @@ public abstract class ETSoapObject extends ETObject {
         //
 
         InternalSoapType internalClassAnnotation
-            = getClass().getAnnotation(InternalSoapType.class);
+            = externalClass.getAnnotation(InternalSoapType.class);
         assert internalClassAnnotation != null;
         Class<? extends APIObject> internalClass = internalClassAnnotation.type();
         assert internalClass != null;

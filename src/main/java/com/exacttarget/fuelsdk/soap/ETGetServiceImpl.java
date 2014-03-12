@@ -28,18 +28,14 @@
 package com.exacttarget.fuelsdk.soap;
 
 import java.util.Date;
-import java.util.GregorianCalendar;
-
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
 
 import org.apache.log4j.Logger;
 
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETGetService;
-import com.exacttarget.fuelsdk.ETObject;
-import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.ETResponse;
+import com.exacttarget.fuelsdk.ETSdkException;
+import com.exacttarget.fuelsdk.ETSoapObject;
 import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.filter.ETComplexFilter;
 import com.exacttarget.fuelsdk.filter.ETFilter;
@@ -54,94 +50,148 @@ import com.exacttarget.fuelsdk.internal.RetrieveResponseMsg;
 import com.exacttarget.fuelsdk.internal.SimpleFilterPart;
 import com.exacttarget.fuelsdk.internal.SimpleOperators;
 import com.exacttarget.fuelsdk.internal.Soap;
-import com.exacttarget.fuelsdk.model.converter.ObjectConverter;
 
-public abstract class ETGetServiceImpl<T extends ETObject> extends ETServiceImpl implements ETGetService {
+public abstract class ETGetServiceImpl<T extends ETSoapObject>
+    extends ETServiceImpl implements ETGetService
+{
+    private static Logger logger = Logger.getLogger(ETGetServiceImpl.class);
 
-	private static Logger logger = Logger.getLogger(ETGetServiceImpl.class);
-
-    protected ETResponse<T> get(ETClient client, Class<T> type) throws ETSdkException {
-        return this.get(client, type, null);
+    public ETResponse<T> get(ETClient client, Class<T> type)
+        throws ETSdkException
+    {
+        return get(client, type, null);
     }
 
-    protected ETResponse<T> get(ETClient client, Class<T> type, ETFilter filter) throws ETSdkException {
+    public ETResponse<T> get(ETClient client, Class<T> type, ETFilter filter)
+        throws ETSdkException
+    {
+        ETResponse<T> response = new ETResponseImpl<T>();
 
-		Soap soap = client.getSOAPConnection().getSoap();
+        Class<T> externalClass = type; // for code readability
 
-        InternalSoapType typeAnnotation = type.getAnnotation(InternalSoapType.class);
-        if(typeAnnotation == null) {
-        	logger.error("The type specified does not wrap an internal ET APIObject.");
-            throw new ETSdkException("The type specified does not wrap an internal ET APIObject.");
+        //
+        // Use the @InternalSoapType annotation to determine internalType:
+        //
+
+        InternalSoapType internalClassAnnotation
+            = externalClass.getAnnotation(InternalSoapType.class);
+        assert internalClassAnnotation != null;
+        Class<? extends APIObject> internalClass = internalClassAnnotation.type();
+        assert internalClass != null;
+
+        //
+        // Perform the SOAP retrieve:
+        //
+
+        Soap soap = client.getSOAPConnection().getSoap();
+
+        // XXX it would be nice to not have to instantiate
+        // an object just so we can call getProperties()..
+
+        T o = null;
+        try {
+            o = externalClass.newInstance();
+        } catch (Exception ex) {
+            throw new ETSdkException("could not instantiate "
+                    + externalClass.getName(), ex);
         }
 
         RetrieveRequest retrieveRequest = new RetrieveRequest();
-        try {
-            retrieveRequest.setObjectType(typeAnnotation.type().getSimpleName());
-            retrieveRequest.getProperties().addAll(ObjectConverter.findSerializablePropertyNames(type));
-        }
-        catch(Exception e) {
-        	logger.error("Error inspecting serialization properties of specified type", e);
-            throw new ETSdkException("Error inspecting serialization properties of specified type", e);
+        retrieveRequest.setObjectType(internalClass.getSimpleName());
+        retrieveRequest.getProperties().addAll(o.getProperties()); // XXX
+        if (filter != null) {
+            retrieveRequest.setFilter(convertFilterPart(filter));
         }
 
-        if (filter != null) {
-        	FilterPart filterPart = convertFilterPart(filter);
-            retrieveRequest.setFilter(filterPart);
+        if (logger.isTraceEnabled()) {
+            logger.trace("RetrieveRequest:");
+            logger.trace("  objectType = " + retrieveRequest.getObjectType());
+            String line = null;
+            for (String property : retrieveRequest.getProperties()) {
+                if (line == null) {
+                    line = "  properties = { " + property;
+                } else {
+                    line += ", " + property;
+                }
+            }
+            logger.trace(line + " }");
+            // XXX print filter too
         }
+
+        logger.trace("calling soap.retrieve...");
 
         RetrieveRequestMsg retrieveRequestMsg = new RetrieveRequestMsg();
         retrieveRequestMsg.setRetrieveRequest(retrieveRequest);
 
         RetrieveResponseMsg retrieveResponseMsg = soap.retrieve(retrieveRequestMsg);
 
-        ETResponse<T> response = new ETServiceResponseImpl<T>();
-        response.setRequestId(retrieveResponseMsg.getRequestID());
+        if (logger.isTraceEnabled()) {
+            logger.trace("RetrieveResponseMsg:");
+            logger.trace("  requestId = " + retrieveResponseMsg.getRequestID());
+            logger.trace("  overallStatus = " + retrieveResponseMsg.getOverallStatus());
+            logger.trace("  results = {");
+            for (APIObject result : retrieveResponseMsg.getResults()) {
+                logger.trace("    " + result);
+            }
+            logger.trace("  }");
+        }
 
+        response.setRequestId(retrieveResponseMsg.getRequestID());
         response.setStatus(retrieveResponseMsg.getOverallStatus().equals("OK"));
         response.setMessage(retrieveResponseMsg.getOverallStatus());
-
-        try {
-            for (APIObject apiObject : retrieveResponseMsg.getResults()) {
-                response.getResults().add(ObjectConverter.convertToEtObject(apiObject, type, false));
+        for (APIObject internalObject : retrieveResponseMsg.getResults()) {
+            T externalObject = null;
+            try {
+                externalObject = externalClass.newInstance();
+            } catch (Exception ex) {
+                throw new ETSdkException("could not instantiate "
+                        + externalClass.getName(), ex);
             }
-        }
-        catch (Exception ex) {
-        	logger.error("Error instantiating object", ex);
-            throw new ETSdkException("Error instantiating object", ex);
+            response.getResults().add((T) externalObject.fromInternal(internalObject));
         }
 
         return response;
-	}
+    }
 
-	protected FilterPart convertFilterPart(ETFilter filter) throws ETSdkException {
-		FilterPart filterPart = null;
-		if (filter instanceof ETSimpleFilter) {
-			filterPart = new SimpleFilterPart();
-			((SimpleFilterPart)filterPart).setProperty(((ETSimpleFilter) filter).getProperty());
-			((SimpleFilterPart)filterPart).setSimpleOperator(SimpleOperators.valueOf(((ETSimpleFilter) filter).getOperator().toString()));
-			((SimpleFilterPart)filterPart).getValue().addAll(((ETSimpleFilter) filter).getValues());
-			if (null != ((ETSimpleFilter) filter).getDateValues()) {
-				for(Date d : ((ETSimpleFilter) filter).getDateValues()) {
-					GregorianCalendar gregorian = new GregorianCalendar();
-					gregorian.setTime(d);
-					try {
-						((SimpleFilterPart)filterPart).getDateValue().add(DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorian));
-					} catch (DatatypeConfigurationException e) {
-						throw new ETSdkException("Error Converting FilterPart object", e);
-					}
-				}
-			}
-		} else if (filter instanceof ETComplexFilter) {
-			filterPart = new ComplexFilterPart();
-			((ComplexFilterPart)filterPart).setLeftOperand(convertFilterPart(((ETComplexFilter) filter).getLeftOperand()));
-			((ComplexFilterPart)filterPart).setRightOperand(convertFilterPart(((ETComplexFilter) filter).getRightOperand()));
-			if (null != ((ETComplexFilter)filter).getAdditionalOperands()) {
-				for(ETFilter additional : ((ETComplexFilter)filter).getAdditionalOperands()) {
-					((ComplexFilterPart)filterPart).getAdditionalOperands().getOperand().add(convertFilterPart(additional));
-				}
-			}
-			((ComplexFilterPart)filterPart).setLogicalOperator(LogicalOperators.valueOf(((ETComplexFilter) filter).getOperator().toString()));
-		}
-		return filterPart;
-	}
+    protected FilterPart convertFilterPart(ETFilter filter)
+        throws ETSdkException
+    {
+        FilterPart filterPart = null;
+        if (filter instanceof ETSimpleFilter) {
+            filterPart = new SimpleFilterPart();
+            ((SimpleFilterPart) filterPart)
+                    .setProperty(((ETSimpleFilter) filter).getProperty());
+            ((SimpleFilterPart) filterPart)
+                    .setSimpleOperator(SimpleOperators
+                            .valueOf(((ETSimpleFilter) filter).getOperator()
+                                    .toString()));
+            ((SimpleFilterPart) filterPart).getValue().addAll(
+                    ((ETSimpleFilter) filter).getValues());
+            if (null != ((ETSimpleFilter) filter).getDateValues()) {
+                for (Date d : ((ETSimpleFilter) filter).getDateValues()) {
+                    ((SimpleFilterPart) filterPart).getDateValue().add(d);
+                }
+            }
+        } else if (filter instanceof ETComplexFilter) {
+            filterPart = new ComplexFilterPart();
+            ((ComplexFilterPart) filterPart)
+                    .setLeftOperand(convertFilterPart(((ETComplexFilter) filter)
+                            .getLeftOperand()));
+            ((ComplexFilterPart) filterPart)
+                    .setRightOperand(convertFilterPart(((ETComplexFilter) filter)
+                            .getRightOperand()));
+            if (null != ((ETComplexFilter) filter).getAdditionalOperands()) {
+                for (ETFilter additional : ((ETComplexFilter) filter)
+                        .getAdditionalOperands()) {
+                    ((ComplexFilterPart) filterPart).getAdditionalOperands()
+                            .getOperand().add(convertFilterPart(additional));
+                }
+            }
+            ((ComplexFilterPart) filterPart)
+                    .setLogicalOperator(LogicalOperators
+                            .valueOf(((ETComplexFilter) filter).getOperator()
+                                    .toString()));
+        }
+        return filterPart;
+    }
 }

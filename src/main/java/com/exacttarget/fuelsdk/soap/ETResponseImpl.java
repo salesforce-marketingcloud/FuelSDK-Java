@@ -33,8 +33,7 @@ import java.util.List;
 import com.exacttarget.fuelsdk.ETObject;
 import com.exacttarget.fuelsdk.ETResponse;
 
-public class ETServiceResponseImpl<T extends ETObject> implements ETResponse<T>
-{
+public class ETResponseImpl<T extends ETObject> implements ETResponse<T> {
     private String requestId = null;
     private List<T> results = new ArrayList<T>();
     private boolean status = true;
@@ -53,27 +52,31 @@ public class ETServiceResponseImpl<T extends ETObject> implements ETResponse<T>
         return results;
     }
 
-	public boolean hasMoreResults() {
-		return moreResults;
-	}
+    public void setResults(List<T> results) {
+        this.results = results;
+    }
 
-	public void setMoreResults(boolean moreResults) {
-		this.moreResults = moreResults;
-	}
+    public boolean getStatus() {
+        return status;
+    }
 
-	public boolean getStatus() {
-		return status;
-	}
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
 
-	public void setStatus(boolean status) {
-		this.status = status;
-	}
+    public boolean hasMoreResults() {
+        return moreResults;
+    }
 
-	public String getMessage() {
-		return message;
-	}
+    public void setMoreResults(boolean moreResults) {
+        this.moreResults = moreResults;
+    }
 
-	public void setMessage(String message) {
-		this.message = message;
-	}
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 }

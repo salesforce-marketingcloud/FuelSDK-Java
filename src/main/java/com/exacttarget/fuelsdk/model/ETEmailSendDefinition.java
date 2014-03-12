@@ -34,262 +34,219 @@ import com.exacttarget.fuelsdk.annotations.InternalSoapField;
 import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.EmailSendDefinition;
 
-@InternalSoapType(type = EmailSendDefinition.class, ignoredFields = {"ID"})
+@InternalSoapType(type = EmailSendDefinition.class, ignoredFields = { "ID" })
 public class ETEmailSendDefinition extends ETSoapObject {
-
-	@InternalSoapField(name = "name")
-    protected String name;
-
-	@InternalSoapField(name = "description")
-    protected String description;
-
-	@InternalSoapField(name = "categoryID")
-    protected Integer categoryID;
-
-    @InternalSoapField(name = "sendClassification", serializedName = "SendClassification.CustomerKey")
-    protected ETSendClassification sendClassification;
-
-    @InternalSoapField(name = "senderProfile", serializedName = "SenderProfile.CustomerKey")
-    protected ETSenderProfile senderProfile;
-
-    @InternalSoapField(name = "deliveryProfile", serializedName = "DeliveryProfile.CustomerKey")
-    protected ETDeliveryProfile deliveryProfile;
-
+    @InternalSoapField(name = "name")
+    private String name = null;
+    @InternalSoapField(name = "description")
+    private String description = null;
+    @InternalSoapField(name = "categoryID")
+    private Integer categoryID = null;
+    @InternalSoapField(name = "email", serializedName = "Email.ID")
+    private ETEmail email = null;
     @InternalSoapField(name = "sendDefinitionList")
-    protected List<ETSendDefinitionList> sendDefinitionList;
-
-    @InternalSoapField(name = "suppressTracking")
-    protected Boolean suppressTracking;
-
-    @InternalSoapField(name = "isSendLogging")
-    protected Boolean isSendLogging;
-
-    @InternalSoapField(name="email", serializedName = "Email.ID")
-    protected ETEmail email;
-
-    @InternalSoapField(name = "bccEmail")
-    protected String bccEmail;
-
-    @InternalSoapField(name = "autoBccEmail")
-    protected String autoBccEmail;
-
-    @InternalSoapField(name = "testEmailAddr")
-    protected String testEmailAddr;
-
+    private List<ETSendDefinitionList> sendDefinitionList = null;
+    @InternalSoapField(name = "sendClassification", serializedName = "SendClassification.CustomerKey")
+    private ETSendClassification sendClassification = null;
+    @InternalSoapField(name = "deliveryProfile", serializedName = "DeliveryProfile.CustomerKey")
+    private ETDeliveryProfile deliveryProfile = null;
+    @InternalSoapField(name = "senderProfile", serializedName = "SenderProfile.CustomerKey")
+    private ETSenderProfile senderProfile = null;
     @InternalSoapField(name = "emailSubject")
-    protected String emailSubject;
-
+    private String emailSubject = null;
     @InternalSoapField(name = "dynamicEmailSubject")
-    protected String dynamicEmailSubject;
-
-    @InternalSoapField(name = "isMultipart")
-    protected Boolean isMultipart;
-
-    @InternalSoapField(name = "isWrapped")
-    protected Boolean isWrapped;
-
-    @InternalSoapField(name = "sendLimit")
-    protected Integer sendLimit;
-
-    @InternalSoapField(name = "deduplicateByEmail")
-    protected Boolean deduplicateByEmail;
-
-    @InternalSoapField(name = "exclusionFilter")
-    protected String exclusionFilter;
+    private String dynamicEmailSubject = null;
+    @InternalSoapField(name = "bccEmail")
+    private String bccEmail = null;
+    @InternalSoapField(name = "autoBccEmail")
+    private String autoBccEmail = null;
+    @InternalSoapField(name = "testEmailAddr")
+    private String testEmailAddr = null;
 
     @InternalSoapField(name = "additional")
-    protected String additional;
+    private String additional = null;
+    @InternalSoapField(name = "deduplicateByEmail")
+    private Boolean deduplicateByEmail = null;
+    @InternalSoapField(name = "exclusionFilter")
+    private String exclusionFilter = null;
+    @InternalSoapField(name = "isMultipart")
+    private Boolean isMultipart = null;
+    @InternalSoapField(name = "isSendLogging")
+    private Boolean isSendLogging = null;
+    @InternalSoapField(name = "isWrapped")
+    private Boolean isWrapped = null;
+    @InternalSoapField(name = "sendLimit")
+    private Integer sendLimit = null;
+    @InternalSoapField(name = "suppressTracking")
+    private Boolean suppressTracking = null;
 
     public ETEmailSendDefinition() {}
 
-	public String getName() {
-		return name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	public Integer getCategoryID() {
-		return categoryID;
-	}
+    public Integer getCategoryID() {
+        return categoryID;
+    }
 
-	public void setCategoryID(Integer categoryID) {
-		this.categoryID = categoryID;
-	}
+    public void setCategoryID(Integer categoryID) {
+        this.categoryID = categoryID;
+    }
 
-	public ETSendClassification getSendClassification() {
-		return sendClassification;
-	}
+    public ETEmail getEmail() {
+        return email;
+    }
 
-	public void setSendClassification(ETSendClassification sendClassification) {
-		this.sendClassification = sendClassification;
-	}
+    public void setEmail(ETEmail email) {
+        this.email = email;
+    }
 
-	public ETSenderProfile getSenderProfile() {
-		return senderProfile;
-	}
+    public List<ETSendDefinitionList> getSendDefinitionList() {
+        return sendDefinitionList;
+    }
 
-	public void setSenderProfile(ETSenderProfile senderProfile) {
-		this.senderProfile = senderProfile;
-	}
+    public void setSendDefinitionList(List<ETSendDefinitionList> sendDefinitionList) {
+        this.sendDefinitionList = sendDefinitionList;
+    }
 
-	public ETDeliveryProfile getDeliveryProfile() {
-		return deliveryProfile;
-	}
+    public ETSendClassification getSendClassification() {
+        return sendClassification;
+    }
 
-	public void setDeliveryProfile(ETDeliveryProfile deliveryProfile) {
-		this.deliveryProfile = deliveryProfile;
-	}
+    public void setSendClassification(ETSendClassification sendClassification) {
+        this.sendClassification = sendClassification;
+    }
 
-	public List<ETSendDefinitionList> getSendDefinitionList() {
-		return sendDefinitionList;
-	}
+    public ETDeliveryProfile getDeliveryProfile() {
+        return deliveryProfile;
+    }
 
-	public void setSendDefinitionList(List<ETSendDefinitionList> sendDefinitionList) {
-		this.sendDefinitionList = sendDefinitionList;
-	}
+    public void setDeliveryProfile(ETDeliveryProfile deliveryProfile) {
+        this.deliveryProfile = deliveryProfile;
+    }
 
-	public Boolean getSuppressTracking() {
-		return suppressTracking;
-	}
+    public ETSenderProfile getSenderProfile() {
+        return senderProfile;
+    }
 
-	public void setSuppressTracking(Boolean suppressTracking) {
-		this.suppressTracking = suppressTracking;
-	}
+    public void setSenderProfile(ETSenderProfile senderProfile) {
+        this.senderProfile = senderProfile;
+    }
 
-	public Boolean getIsSendLogging() {
-		return isSendLogging;
-	}
+    public String getEmailSubject() {
+        return emailSubject;
+    }
 
-	public void setIsSendLogging(Boolean isSendLogging) {
-		this.isSendLogging = isSendLogging;
-	}
+    public void setEmailSubject(String emailSubject) {
+        this.emailSubject = emailSubject;
+    }
 
-	public ETEmail getEmail() {
-		return email;
-	}
+    public String getDynamicEmailSubject() {
+        return dynamicEmailSubject;
+    }
 
-	public void setEmail(ETEmail email) {
-		this.email = email;
-	}
+    public void setDynamicEmailSubject(String dynamicEmailSubject) {
+        this.dynamicEmailSubject = dynamicEmailSubject;
+    }
 
-	public String getBccEmail() {
-		return bccEmail;
-	}
+    public String getBccEmail() {
+        return bccEmail;
+    }
 
-	public void setBccEmail(String bccEmail) {
-		this.bccEmail = bccEmail;
-	}
+    public void setBccEmail(String bccEmail) {
+        this.bccEmail = bccEmail;
+    }
 
-	public String getAutoBccEmail() {
-		return autoBccEmail;
-	}
+    public String getAutoBccEmail() {
+        return autoBccEmail;
+    }
 
-	public void setAutoBccEmail(String autoBccEmail) {
-		this.autoBccEmail = autoBccEmail;
-	}
+    public void setAutoBccEmail(String autoBccEmail) {
+        this.autoBccEmail = autoBccEmail;
+    }
 
-	public String getTestEmailAddr() {
-		return testEmailAddr;
-	}
+    public String getTestEmailAddr() {
+        return testEmailAddr;
+    }
 
-	public void setTestEmailAddr(String testEmailAddr) {
-		this.testEmailAddr = testEmailAddr;
-	}
+    public void setTestEmailAddr(String testEmailAddr) {
+        this.testEmailAddr = testEmailAddr;
+    }
 
-	public String getEmailSubject() {
-		return emailSubject;
-	}
+    public String getAdditional() {
+        return additional;
+    }
 
-	public void setEmailSubject(String emailSubject) {
-		this.emailSubject = emailSubject;
-	}
+    public void setAdditional(String additional) {
+        this.additional = additional;
+    }
 
-	public String getDynamicEmailSubject() {
-		return dynamicEmailSubject;
-	}
+    public Boolean getDeduplicateByEmail() {
+        return deduplicateByEmail;
+    }
 
-	public void setDynamicEmailSubject(String dynamicEmailSubject) {
-		this.dynamicEmailSubject = dynamicEmailSubject;
-	}
+    public void setDeduplicateByEmail(Boolean deduplicateByEmail) {
+        this.deduplicateByEmail = deduplicateByEmail;
+    }
 
-	public Boolean getIsMultipart() {
-		return isMultipart;
-	}
+    public String getExclusionFilter() {
+        return exclusionFilter;
+    }
 
-	public void setIsMultipart(Boolean isMultipart) {
-		this.isMultipart = isMultipart;
-	}
+    public void setExclusionFilter(String exclusionFilter) {
+        this.exclusionFilter = exclusionFilter;
+    }
 
-	public Boolean getIsWrapped() {
-		return isWrapped;
-	}
+    public Boolean getIsMultipart() {
+        return isMultipart;
+    }
 
-	public void setIsWrapped(Boolean isWrapped) {
-		this.isWrapped = isWrapped;
-	}
+    public void setIsMultipart(Boolean isMultipart) {
+        this.isMultipart = isMultipart;
+    }
 
-	public Integer getSendLimit() {
-		return sendLimit;
-	}
+    public Boolean getIsSendLogging() {
+        return isSendLogging;
+    }
 
-	public void setSendLimit(Integer sendLimit) {
-		this.sendLimit = sendLimit;
-	}
+    public void setIsSendLogging(Boolean isSendLogging) {
+        this.isSendLogging = isSendLogging;
+    }
 
-	public Boolean getDeduplicateByEmail() {
-		return deduplicateByEmail;
-	}
+    public Boolean getIsWrapped() {
+        return isWrapped;
+    }
 
-	public void setDeduplicateByEmail(Boolean deduplicateByEmail) {
-		this.deduplicateByEmail = deduplicateByEmail;
-	}
+    public void setIsWrapped(Boolean isWrapped) {
+        this.isWrapped = isWrapped;
+    }
 
-	public String getExclusionFilter() {
-		return exclusionFilter;
-	}
+    public Integer getSendLimit() {
+        return sendLimit;
+    }
 
-	public void setExclusionFilter(String exclusionFilter) {
-		this.exclusionFilter = exclusionFilter;
-	}
+    public void setSendLimit(Integer sendLimit) {
+        this.sendLimit = sendLimit;
+    }
 
-	public String getAdditional() {
-		return additional;
-	}
+    public Boolean getSuppressTracking() {
+        return suppressTracking;
+    }
 
-	public void setAdditional(String additional) {
-		this.additional = additional;
-	}
-
-	@Override
-	public String toString() {
-		return "ETEmailSendDefinition [name=" + name + ", description="
-				+ description + ", categoryID=" + categoryID
-				+ ", sendClassification=" + sendClassification
-				+ ", senderProfile=" + senderProfile + ", deliveryProfile="
-				+ deliveryProfile + ", sendDefinitionList="
-				+ sendDefinitionList + ", suppressTracking=" + suppressTracking
-				+ ", isSendLogging=" + isSendLogging + ", email=" + email
-				+ ", bccEmail=" + bccEmail + ", autoBccEmail=" + autoBccEmail
-				+ ", testEmailAddr=" + testEmailAddr + ", emailSubject="
-				+ emailSubject + ", dynamicEmailSubject=" + dynamicEmailSubject
-				+ ", isMultipart=" + isMultipart + ", isWrapped=" + isWrapped
-				+ ", sendLimit=" + sendLimit + ", deduplicateByEmail="
-				+ deduplicateByEmail + ", exclusionFilter=" + exclusionFilter
-				+ ", additional=" + additional + ", id=" + id
-				+ ", createdDate=" + createdDate + ", modifiedDate="
-				+ modifiedDate + ", customerKey=" + customerKey + "]";
-	}
-
-
-
+    public void setSuppressTracking(Boolean suppressTracking) {
+        this.suppressTracking = suppressTracking;
+    }
 }

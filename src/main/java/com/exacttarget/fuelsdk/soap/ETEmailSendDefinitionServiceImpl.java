@@ -29,97 +29,125 @@ package com.exacttarget.fuelsdk.soap;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETEmailSendDefinitionService;
-import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.ETResponse;
+import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.filter.ETFilter;
+import com.exacttarget.fuelsdk.internal.APIObject;
 import com.exacttarget.fuelsdk.internal.EmailSendDefinition;
 import com.exacttarget.fuelsdk.internal.InteractionBaseObject;
 import com.exacttarget.fuelsdk.internal.PerformRequestMsg;
 import com.exacttarget.fuelsdk.internal.PerformRequestMsg.Definitions;
 import com.exacttarget.fuelsdk.internal.PerformResponseMsg;
+import com.exacttarget.fuelsdk.internal.PerformResult;
 import com.exacttarget.fuelsdk.internal.Soap;
 import com.exacttarget.fuelsdk.model.ETEmailSendDefinition;
-import com.exacttarget.fuelsdk.model.converter.ObjectConverter;
 
 public class ETEmailSendDefinitionServiceImpl extends ETCrudServiceImpl<ETEmailSendDefinition>
-		implements ETEmailSendDefinitionService {
+    implements ETEmailSendDefinitionService
+{
+    private static Logger logger = Logger.getLogger(ETEmailSendDefinitionServiceImpl.class);
 
-	public ETResponse<ETEmailSendDefinition> get(ETClient client)
-			throws ETSdkException {
+    public ETResponse<ETEmailSendDefinition> get(ETClient client)
+        throws ETSdkException
+    {
+        return super.get(client, ETEmailSendDefinition.class);
+    }
 
-		return super.get(client, ETEmailSendDefinition.class);
-	}
+    public ETResponse<ETEmailSendDefinition> get(ETClient client, ETFilter filter)
+        throws ETSdkException
+    {
+        return super.get(client, ETEmailSendDefinition.class, filter);
+    }
 
-	public ETResponse<ETEmailSendDefinition> get(ETClient client,
-			ETFilter filter) throws ETSdkException {
+    public ETResponse<ETEmailSendDefinition> post(ETClient client, ETEmailSendDefinition emailSendDefinition)
+        throws ETSdkException
+    {
+        return super.post(client, emailSendDefinition);
+    }
 
-		return super.get(client, ETEmailSendDefinition.class, filter);
-	}
+    public ETResponse<ETEmailSendDefinition> post(ETClient client, List<ETEmailSendDefinition> emailSendDefinitions)
+        throws ETSdkException
+    {
+        return super.post(client, emailSendDefinitions);
+    }
 
-	public ETResponse<ETEmailSendDefinition> post(ETClient client,
-			ETEmailSendDefinition emailSendDefinition) throws ETSdkException {
+    public ETResponse<ETEmailSendDefinition> patch(ETClient client, ETEmailSendDefinition emailSendDefinition)
+        throws ETSdkException
+    {
+        return super.patch(client, emailSendDefinition);
+    }
 
-		return super.post(client, emailSendDefinition);
-	}
+    public ETResponse<ETEmailSendDefinition> patch(ETClient client, List<ETEmailSendDefinition> emailSendDefinitions)
+        throws ETSdkException
+    {
+        return super.patch(client, emailSendDefinitions);
+    }
 
-	public ETResponse<ETEmailSendDefinition> patch(ETClient client,
-			ETEmailSendDefinition emailSendDefinition) throws ETSdkException {
+    public ETResponse<ETEmailSendDefinition> delete(ETClient client, ETEmailSendDefinition emailSendDefinition)
+        throws ETSdkException
+    {
+        return super.delete(client, emailSendDefinition);
+    }
 
-		return super.patch(client, emailSendDefinition);
-	}
+    public ETResponse<ETEmailSendDefinition> delete(ETClient client, List<ETEmailSendDefinition> emailSendDefinitions)
+        throws ETSdkException
+    {
+        return super.delete(client, emailSendDefinitions);
+    }
 
-	public ETResponse<ETEmailSendDefinition> delete(ETClient client,
-			ETEmailSendDefinition emailSendDefinition) throws ETSdkException {
+    public ETResponse<ETEmailSendDefinition> send(ETClient client, ETEmailSendDefinition emailSendDefinition)
+        throws ETSdkException
+    {
+        ETResponse<ETEmailSendDefinition> response = new ETResponseImpl<ETEmailSendDefinition>();
 
-		return super.delete(client, emailSendDefinition);
-	}
+        //
+        // Perform the, uh, SOAP perform:
+        //
 
-	public ETResponse<ETEmailSendDefinition> post(ETClient client,
-			List<ETEmailSendDefinition> emailSendDefinitions) throws ETSdkException {
+        Soap soap = client.getSOAPConnection().getSoap();
 
-		return super.post(client, emailSendDefinitions);
-	}
+        PerformRequestMsg performRequestMsg = new PerformRequestMsg();
+        performRequestMsg.setAction("start");
+        Definitions definitions = new Definitions();
+        definitions.getDefinition().add(emailSendDefinition.toInternal());
+        performRequestMsg.setDefinitions(definitions);
 
-	public ETResponse<ETEmailSendDefinition> patch(ETClient client,
-			List<ETEmailSendDefinition> emailSendDefinitions) throws ETSdkException {
-
-		return super.patch(client, emailSendDefinitions);
-	}
-
-	public ETResponse<ETEmailSendDefinition> delete(ETClient client,
-			List<ETEmailSendDefinition> emailSendDefinitions) throws ETSdkException {
-
-		return super.delete(client, emailSendDefinitions);
-	}
-
-	public ETResponse<ETEmailSendDefinition> send(ETClient client,
-			ETEmailSendDefinition emailSendDefinition) throws ETSdkException {
-
-		Soap soap = client.getSOAPConnection().getSoap();
-
-		InteractionBaseObject apiObject;
-		try {
-            apiObject = ObjectConverter.convertFromEtObject(emailSendDefinition, EmailSendDefinition.class, false);
-		}
-        catch(Exception e) {
-            throw new ETSdkException("Error instantiating object", e);
+        if (logger.isTraceEnabled()) {
+            logger.trace("PerformRequestMsg:");
+            logger.trace("  action = " + performRequestMsg.getAction());
+            logger.trace("  definitions = {");
+            for (APIObject object : performRequestMsg.getDefinitions().getDefinition()) {
+                logger.trace("    " + object);
+            }
+            logger.trace("  }");
         }
 
-		Definitions definitions = new Definitions();
-		definitions.getDefinition().add(apiObject);
+        logger.trace("calling soap.perform...");
 
-		PerformRequestMsg performRequestMsg = new PerformRequestMsg();
-		performRequestMsg.setAction("start");
-		performRequestMsg.setDefinitions(definitions);
+        PerformResponseMsg performResponseMsg = soap.perform(performRequestMsg);
 
-		PerformResponseMsg performResponseMsg = soap.perform(performRequestMsg);
+        if (logger.isTraceEnabled()) {
+            logger.trace("PerformResponseMsg:");
+            logger.trace("  requestId = " + performResponseMsg.getRequestID());
+            logger.trace("  overallStatus = " + performResponseMsg.getOverallStatus());
+            logger.trace("  results = {");
+            for (PerformResult result : performResponseMsg.getResults().getResult()) {
+                logger.trace("    " + result);
+            }
+            logger.trace("  }");
+        }
 
-        ETResponse<ETEmailSendDefinition> response = new ETServiceResponseImpl<ETEmailSendDefinition>();
         response.setRequestId(performResponseMsg.getRequestID());
+        response.setStatus(performResponseMsg.getOverallStatus().equals("OK"));
+        response.setMessage(performResponseMsg.getOverallStatus());
+        for (PerformResult createResult : performResponseMsg.getResults().getResult()) {
+            // XXX
+        }
 
         return response;
-	}
-
+    }
 }

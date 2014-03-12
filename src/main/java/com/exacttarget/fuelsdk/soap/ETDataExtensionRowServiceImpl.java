@@ -79,8 +79,7 @@ public class ETDataExtensionRowServiceImpl extends ETCrudServiceImpl<ETDataExten
         for (APIObject internalObject : retrieveResponseMsg.getResults()) {
             // XXX test
             ETDataExtensionRow row = new ETDataExtensionRow();
-            row.fromInternal(internalObject);
-            response.getResults().add(row);
+            response.getResults().add((ETDataExtensionRow) row.fromInternal(internalObject));
         }
 
         return response;

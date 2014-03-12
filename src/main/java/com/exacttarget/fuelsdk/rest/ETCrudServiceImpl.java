@@ -44,7 +44,7 @@ import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.annotations.InternalRestField;
 import com.exacttarget.fuelsdk.annotations.InternalRestType;
-import com.exacttarget.fuelsdk.soap.ETServiceResponseImpl;
+import com.exacttarget.fuelsdk.soap.ETResponseImpl;
 import com.google.gson.JsonObject;
 
 public class ETCrudServiceImpl extends ETGetServiceImpl implements ETCrudService {
@@ -81,7 +81,7 @@ public class ETCrudServiceImpl extends ETGetServiceImpl implements ETCrudService
 		String path = buildPath(restPath, accessToken, object, typeAnnotation);
 		String json = connection.delete(path);
 
-		ETResponse<T> response = new ETServiceResponseImpl<T>();
+		ETResponse<T> response = new ETResponseImpl<T>();
 		response.setStatus( connection.getResponseCode() == 200 );
 
 		return createResponseETObject(type, json, response);
@@ -110,7 +110,7 @@ public class ETCrudServiceImpl extends ETGetServiceImpl implements ETCrudService
 
 		String json = connection.post(path, jsonObject);
 
-		ETResponse<T> response = new ETServiceResponseImpl<T>();
+		ETResponse<T> response = new ETResponseImpl<T>();
 
 		response.setStatus( connection.getResponseCode() == 200 );
 

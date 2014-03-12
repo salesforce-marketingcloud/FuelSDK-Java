@@ -48,7 +48,7 @@ import com.exacttarget.fuelsdk.annotations.InternalRestType;
 import com.exacttarget.fuelsdk.filter.ETComplexFilter;
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.filter.ETSimpleFilter;
-import com.exacttarget.fuelsdk.soap.ETServiceResponseImpl;
+import com.exacttarget.fuelsdk.soap.ETResponseImpl;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -84,7 +84,7 @@ public class ETGetServiceImpl implements ETGetService {
 			e1.printStackTrace();
 		}
 
-		ETResponse<T> response = new ETServiceResponseImpl<T>();
+		ETResponse<T> response = new ETResponseImpl<T>();
 
 		String json = connection.get(path);
 

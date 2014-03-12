@@ -35,110 +35,86 @@ import com.exacttarget.fuelsdk.internal.SendDefinitionList;
 
 @InternalSoapType(type = SendDefinitionList.class)
 public class ETSendDefinitionList extends ETSoapObject {
+    @InternalSoapField(name = "name")
+    private String name = null;
+    @InternalSoapField(name = "customObjectID")
+    private String customObjectID = null;
+    @InternalSoapField(name = "dataSourceTypeID")
+    private ETDataSourceType dataSourceTypeID = null;
+    @InternalSoapField(name = "filterDefinition")
+    private FilterDefinition filterDefinition = null;
+    @InternalSoapField(name = "isTestObject")
+    private Boolean isTestObject = null;
+    @InternalSoapField(name = "list")
+    private ETList list = null;
+    @InternalSoapField(name = "salesForceObjectID")
+    private String salesForceObjectID = null;
+    @InternalSoapField(name = "sendDefinitionListType")
+    private ETSendDefinitionListType sendDefinitionListType = null;
 
-	@InternalSoapField(name = "list")
-    private ETList list;
+    public ETSendDefinitionList() {}
 
-	@InternalSoapField(name = "sendDefinitionListType")
-	private ETSendDefinitionListType sendDefinitionListType;
+    public String getName() {
+        return name;
+    }
 
-	@InternalSoapField(name = "customObjectID")
-    private String customObjectID;
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	@InternalSoapField(name = "dataSourceTypeID")
-    private ETDataSourceType dataSourceTypeID;
+    public String getCustomObjectID() {
+        return customObjectID;
+    }
 
-	@InternalSoapField(name = "filterDefinition")
-    private FilterDefinition filterDefinition;
+    public void setCustomObjectID(String customObjectID) {
+        this.customObjectID = customObjectID;
+    }
 
-	@InternalSoapField(name = "isTestObject")
-    private Boolean isTestObject;
+    public ETDataSourceType getDataSourceTypeID() {
+        return dataSourceTypeID;
+    }
 
-	@InternalSoapField(name = "salesForceObjectID")
-    private String salesForceObjectID;
+    public void setDataSourceTypeID(ETDataSourceType dataSourceTypeID) {
+        this.dataSourceTypeID = dataSourceTypeID;
+    }
 
-	@InternalSoapField(name = "name")
-    private String name;
+    public FilterDefinition getFilterDefinition() {
+        return filterDefinition;
+    }
 
-	public ETSendDefinitionList() {}
+    public void setFilterDefinition(FilterDefinition filterDefinition) {
+        this.filterDefinition = filterDefinition;
+    }
 
-	public ETList getList() {
-		return list;
-	}
+    public Boolean getIsTestObject() {
+        return isTestObject;
+    }
 
-	public void setList(ETList list) {
-		this.list = list;
-	}
+    public void setIsTestObject(Boolean isTestObject) {
+        this.isTestObject = isTestObject;
+    }
 
-	public ETSendDefinitionListType getSendDefinitionListType() {
-		return sendDefinitionListType;
-	}
+    public ETList getList() {
+        return list;
+    }
 
-	public void setSendDefinitionListType(
-			ETSendDefinitionListType sendDefinitionListType) {
-		this.sendDefinitionListType = sendDefinitionListType;
-	}
+    public void setList(ETList list) {
+        this.list = list;
+    }
 
-	public String getCustomObjectID() {
-		return customObjectID;
-	}
+    public String getSalesForceObjectID() {
+        return salesForceObjectID;
+    }
 
-	public void setCustomObjectID(String customObjectID) {
-		this.customObjectID = customObjectID;
-	}
+    public void setSalesForceObjectID(String salesForceObjectID) {
+        this.salesForceObjectID = salesForceObjectID;
+    }
 
-	public ETDataSourceType getDataSourceTypeID() {
-		return dataSourceTypeID;
-	}
+    public ETSendDefinitionListType getSendDefinitionListType() {
+        return sendDefinitionListType;
+    }
 
-	public void setDataSourceTypeID(ETDataSourceType dataSourceTypeID) {
-		this.dataSourceTypeID = dataSourceTypeID;
-	}
-
-	public FilterDefinition getFilterDefinition() {
-		return filterDefinition;
-	}
-
-	public void setFilterDefinition(FilterDefinition filterDefinition) {
-		this.filterDefinition = filterDefinition;
-	}
-
-	public Boolean getIsTestObject() {
-		return isTestObject;
-	}
-
-	public void setIsTestObject(Boolean isTestObject) {
-		this.isTestObject = isTestObject;
-	}
-
-	public String getSalesForceObjectID() {
-		return salesForceObjectID;
-	}
-
-	public void setSalesForceObjectID(String salesForceObjectID) {
-		this.salesForceObjectID = salesForceObjectID;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	@Override
-	public String toString() {
-		return "ETSendDefinitionList [list=" + list
-				+ ", sendDefinitionListType=" + sendDefinitionListType
-				+ ", customObjectID=" + customObjectID + ", dataSourceTypeID="
-				+ dataSourceTypeID + ", filterDefinition=" + filterDefinition
-				+ ", isTestObject=" + isTestObject + ", salesForceObjectID="
-				+ salesForceObjectID + ", name=" + name + ", id=" + id
-				+ ", createdDate=" + createdDate + ", modifiedDate="
-				+ modifiedDate + ", customerKey=" + customerKey + "]";
-	}
-
-
-
+    public void setSendDefinitionListType(ETSendDefinitionListType sendDefinitionListType) {
+        this.sendDefinitionListType = sendDefinitionListType;
+    }
 }
