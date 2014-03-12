@@ -95,6 +95,14 @@ public class ETClient {
             throw new ETSdkException("clientSecret not specified");
         }
 
+        if (logger.isTraceEnabled()) {
+            logger.trace("endpoint = " + endpoint);
+            logger.trace("authEndpoint = " + authEndpoint);
+            logger.trace("soapEndpoint = " + soapEndpoint);
+            logger.trace("clientId = " + clientId);
+            logger.trace("clientSecret = " + clientSecret);
+        }
+
         authConnection = new ETRestConnection(this, authEndpoint);
 
         refreshToken();
@@ -138,6 +146,8 @@ public class ETClient {
         // we have one:
         //
 
+        // XXX pretty print the REST calls when on trace log level
+
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("clientId", clientId);
         jsonObject.addProperty("clientSecret", clientSecret);
@@ -150,6 +160,10 @@ public class ETClient {
         }
 
         String response = authConnection.post(PATH_REQUESTTOKEN, jsonObject);
+
+        if (response == null) {
+            throw new ETSdkException("failed to obtain access token");
+        }
 
         //
         // Parse the JSON response into the appropriate instance
