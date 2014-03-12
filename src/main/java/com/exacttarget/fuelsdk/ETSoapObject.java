@@ -28,10 +28,16 @@
 package com.exacttarget.fuelsdk;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementRef;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.BeanUtilsBean;
@@ -127,23 +133,28 @@ public abstract class ETSoapObject extends ETObject {
     private static Logger logger = Logger.getLogger(ETSoapObject.class);
 
     @InternalSoapField(name="id")
-    protected Integer id = null;
+    private Integer id = null;
     @InternalSoapField(name="customerKey")
-    protected String customerKey = null;
+    private String customerKey = null;
     @InternalSoapField(name="createdDate")
-    protected Date createdDate = null;
+    private Date createdDate = null;
     @InternalSoapField(name="modifiedDate")
-    protected Date modifiedDate = null;
+    private Date modifiedDate = null;
 
     @InternalSoapField(name="client")
-    protected ETClientID clientId = null;
+    private ETClientID clientId = null;
 
     public class ExternalObjectConverter implements Converter {
         @SuppressWarnings("rawtypes")
         public Object convert(Class type, Object value) {
-            ETObject externalObject = null;
+            ETSoapObject externalObject = null;
             try {
-                externalObject = ETSoapObject.fromInternal((APIObject) value);
+                externalObject = (ETSoapObject) type.newInstance();
+            } catch (Exception ex) {
+                throw new ConversionException("could not convert object", ex);
+            }
+            try {
+                externalObject.fromInternal((APIObject) value);
             } catch (ETSdkException ex) {
                 throw new ConversionException("could not convert object", ex);
             }
@@ -171,255 +182,247 @@ public abstract class ETSoapObject extends ETObject {
         }
     }
 
-//    public ETSoapObject() {
-//        //
-//        // Register object converters:
-//        //
-//
-//        ConvertUtilsBean convertUtils = BeanUtilsBean.getInstance().getConvertUtils();
-//
-//        // ETAccountType
-//        convertUtils.register(new EnumConverter(),
-//                ETAccountType.class);
-//        convertUtils.register(new EnumConverter(),
-//                AccountTypeEnum.class);
-//
-//        // ETBounceEvent
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETBounceEvent.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                BounceEvent.class);
-//
-//        // ETCampaign
-//
-//        // XXX
-//
-//        // ETCampaignAsset
-//
-//        // XXX
-//
-//        // ETClickEvent
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETClickEvent.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                ClickEvent.class);
-//
-//        // ETContentArea
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETContentArea.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                ContentArea.class);
-//
-//        // ETDataExtension
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETDataExtension.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                DataExtension.class);
-//
-//        // ETDataExtensionColumn
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETDataExtensionColumn.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                DataExtensionField.class);
-//
-//        // ETDataExtensionFieldType
-//        convertUtils.register(new EnumConverter(),
-//                ETDataExtensionFieldType.class);
-//        convertUtils.register(new EnumConverter(),
-//                DataExtensionFieldType.class);
-//
-//        // ETDataExtensionRow
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETDataExtensionRow.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                DataExtensionObject.class);
-//
-//        // ETDataSourceType
-//        convertUtils.register(new EnumConverter(),
-//                ETDataSourceType.class);
-//        convertUtils.register(new EnumConverter(),
-//                DataSourceTypeEnum.class);
-//
-//        // ETDeliveryProfile
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETDeliveryProfile.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                DeliveryProfile.class);
-//
-//        // ETDeliveryProfileDomainType
-//        convertUtils.register(new EnumConverter(),
-//                ETDeliveryProfileDomainType.class);
-//        convertUtils.register(new EnumConverter(),
-//                DeliveryProfileDomainTypeEnum.class);
-//
-//        // ETDeliveryProfileSourceAddressType
-//        convertUtils.register(new EnumConverter(),
-//                ETDeliveryProfileSourceAddressType.class);
-//        convertUtils.register(new EnumConverter(),
-//                DeliveryProfileSourceAddressTypeEnum.class);
-//
-//        // ETEmail
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETEmail.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                Email.class);
-//
-//        // ETEmailSendDefinition
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETEmailSendDefinition.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                EmailSendDefinition.class);
-//
-//        // ETEmailType
-//        convertUtils.register(new EnumConverter(),
-//                ETEmailType.class);
-//        convertUtils.register(new EnumConverter(),
-//                EmailType.class);
-//
-//        // ETEventType
-//        convertUtils.register(new EnumConverter(),
-//                ETEventType.class);
-//        convertUtils.register(new EnumConverter(),
-//                EventType.class);
-//
-//        // ETFolder
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETFolder.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                DataFolder.class);
-//
-//        // ETLayoutType
-//        convertUtils.register(new EnumConverter(),
-//                ETLayoutType.class);
-//        convertUtils.register(new EnumConverter(),
-//                LayoutType.class);
-//
-//        // ETList
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETList.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                com.exacttarget.fuelsdk.internal.List.class);
-//
-//        // ETListClassification
-//        convertUtils.register(new EnumConverter(),
-//                ETListClassification.class);
-//        convertUtils.register(new EnumConverter(),
-//                ListClassificationEnum.class);
-//
-//        // ETListSubscriber
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETListSubscriber.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                ListSubscriber.class);
-//
-//        // ETListType
-//        convertUtils.register(new EnumConverter(),
-//                ETListType.class);
-//        convertUtils.register(new EnumConverter(),
-//                ListTypeEnum.class);
-//
-//        // ETOpenEvent
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETOpenEvent.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                OpenEvent.class);
-//
-//        // ETOrganization
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETOrganization.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                Account.class);
-//
-//        // ETPermission
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETPermission.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                Permission.class);
-//
-//        // ETPermissionSet
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETPermissionSet.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                PermissionSet.class);
-//
-//        // ETRole
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETRole.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                Role.class);
-//
-//        // ETSalutationSource
-//        convertUtils.register(new EnumConverter(),
-//                ETSalutationSource.class);
-//        convertUtils.register(new EnumConverter(),
-//                SalutationSourceEnum.class);
-//
-//        // ETSendClassification
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETSendClassification.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                SendClassification.class);
-//
-//        // ETSendClassificationType
-//        convertUtils.register(new EnumConverter(),
-//                ETSendClassificationType.class);
-//        convertUtils.register(new EnumConverter(),
-//                SendClassificationTypeEnum.class);
-//
-//        // ETSendDefinitionList
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETSendDefinitionList.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                SendDefinitionList.class);
-//
-//        // ETSendDefinitionListType
-//        convertUtils.register(new EnumConverter(),
-//                ETSendDefinitionListType.class);
-//        convertUtils.register(new EnumConverter(),
-//                SendDefinitionListTypeEnum.class);
-//
-//        // ETSendPriority
-//        convertUtils.register(new EnumConverter(),
-//                ETSendPriority.class);
-//        convertUtils.register(new EnumConverter(),
-//                SendPriorityEnum.class);
-//
-//        // ETSenderProfile
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETSenderProfile.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                SenderProfile.class);
-//
-//        // ETSentEvent
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETSentEvent.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                SentEvent.class);
-//
-//        // ETSubscriber
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETSubscriber.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                Subscriber.class);
-//
-//        // ETSubscriberList
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETSubscriberList.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                SubscriberList.class);
-//
-//        // ETSubscriberStatus
-//        convertUtils.register(new EnumConverter(),
-//                ETSubscriberStatus.class);
-//        convertUtils.register(new EnumConverter(),
-//                SubscriberStatus.class);
-//
-//        // ETUnsubEvent
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETUnsubEvent.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                UnsubEvent.class);
-//    }
+    public ETSoapObject() {
+        //
+        // Register object converters:
+        //
+
+        ConvertUtilsBean convertUtils = BeanUtilsBean.getInstance().getConvertUtils();
+
+        // ETAccountType
+        convertUtils.register(new EnumConverter(),
+                ETAccountType.class);
+        convertUtils.register(new EnumConverter(),
+                AccountTypeEnum.class);
+
+        // ETBounceEvent
+        convertUtils.register(new ExternalObjectConverter(),
+                ETBounceEvent.class);
+        convertUtils.register(new InternalObjectConverter(),
+                BounceEvent.class);
+
+        // ETClickEvent
+        convertUtils.register(new ExternalObjectConverter(),
+                ETClickEvent.class);
+        convertUtils.register(new InternalObjectConverter(),
+                ClickEvent.class);
+
+        // ETContentArea
+        convertUtils.register(new ExternalObjectConverter(),
+                ETContentArea.class);
+        convertUtils.register(new InternalObjectConverter(),
+                ContentArea.class);
+
+        // ETDataExtension
+        convertUtils.register(new ExternalObjectConverter(),
+                ETDataExtension.class);
+        convertUtils.register(new InternalObjectConverter(),
+                DataExtension.class);
+
+        // ETDataExtensionColumn
+        convertUtils.register(new ExternalObjectConverter(),
+                ETDataExtensionColumn.class);
+        convertUtils.register(new InternalObjectConverter(),
+                DataExtensionField.class);
+
+        // ETDataExtensionFieldType
+        convertUtils.register(new EnumConverter(),
+                ETDataExtensionFieldType.class);
+        convertUtils.register(new EnumConverter(),
+                DataExtensionFieldType.class);
+
+        // ETDataExtensionRow
+        convertUtils.register(new ExternalObjectConverter(),
+                ETDataExtensionRow.class);
+        convertUtils.register(new InternalObjectConverter(),
+                DataExtensionObject.class);
+
+        // ETDataSourceType
+        convertUtils.register(new EnumConverter(),
+                ETDataSourceType.class);
+        convertUtils.register(new EnumConverter(),
+                DataSourceTypeEnum.class);
+
+        // ETDeliveryProfile
+        convertUtils.register(new ExternalObjectConverter(),
+                ETDeliveryProfile.class);
+        convertUtils.register(new InternalObjectConverter(),
+                DeliveryProfile.class);
+
+        // ETDeliveryProfileDomainType
+        convertUtils.register(new EnumConverter(),
+                ETDeliveryProfileDomainType.class);
+        convertUtils.register(new EnumConverter(),
+                DeliveryProfileDomainTypeEnum.class);
+
+        // ETDeliveryProfileSourceAddressType
+        convertUtils.register(new EnumConverter(),
+                ETDeliveryProfileSourceAddressType.class);
+        convertUtils.register(new EnumConverter(),
+                DeliveryProfileSourceAddressTypeEnum.class);
+
+        // ETEmail
+        convertUtils.register(new ExternalObjectConverter(),
+                ETEmail.class);
+        convertUtils.register(new InternalObjectConverter(),
+                Email.class);
+
+        // ETEmailSendDefinition
+        convertUtils.register(new ExternalObjectConverter(),
+                ETEmailSendDefinition.class);
+        convertUtils.register(new InternalObjectConverter(),
+                EmailSendDefinition.class);
+
+        // ETEmailType
+        convertUtils.register(new EnumConverter(),
+                ETEmailType.class);
+        convertUtils.register(new EnumConverter(),
+                EmailType.class);
+
+        // ETEventType
+        convertUtils.register(new EnumConverter(),
+                ETEventType.class);
+        convertUtils.register(new EnumConverter(),
+                EventType.class);
+
+        // ETFolder
+        convertUtils.register(new ExternalObjectConverter(),
+                ETFolder.class);
+        convertUtils.register(new InternalObjectConverter(),
+                DataFolder.class);
+
+        // ETLayoutType
+        convertUtils.register(new EnumConverter(),
+                ETLayoutType.class);
+        convertUtils.register(new EnumConverter(),
+                LayoutType.class);
+
+        // ETList
+        convertUtils.register(new ExternalObjectConverter(),
+                ETList.class);
+        convertUtils.register(new InternalObjectConverter(),
+                com.exacttarget.fuelsdk.internal.List.class);
+
+        // ETListClassification
+        convertUtils.register(new EnumConverter(),
+                ETListClassification.class);
+        convertUtils.register(new EnumConverter(),
+                ListClassificationEnum.class);
+
+        // ETListSubscriber
+        convertUtils.register(new ExternalObjectConverter(),
+                ETListSubscriber.class);
+        convertUtils.register(new InternalObjectConverter(),
+                ListSubscriber.class);
+
+        // ETListType
+        convertUtils.register(new EnumConverter(),
+                ETListType.class);
+        convertUtils.register(new EnumConverter(),
+                ListTypeEnum.class);
+
+        // ETOpenEvent
+        convertUtils.register(new ExternalObjectConverter(),
+                ETOpenEvent.class);
+        convertUtils.register(new InternalObjectConverter(),
+                OpenEvent.class);
+
+        // ETOrganization
+        convertUtils.register(new ExternalObjectConverter(),
+                ETOrganization.class);
+        convertUtils.register(new InternalObjectConverter(),
+                Account.class);
+
+        // ETPermission
+        convertUtils.register(new ExternalObjectConverter(),
+                ETPermission.class);
+        convertUtils.register(new InternalObjectConverter(),
+                Permission.class);
+
+        // ETPermissionSet
+        convertUtils.register(new ExternalObjectConverter(),
+                ETPermissionSet.class);
+        convertUtils.register(new InternalObjectConverter(),
+                PermissionSet.class);
+
+        // ETRole
+        convertUtils.register(new ExternalObjectConverter(),
+                ETRole.class);
+        convertUtils.register(new InternalObjectConverter(),
+                Role.class);
+
+        // ETSalutationSource
+        convertUtils.register(new EnumConverter(),
+                ETSalutationSource.class);
+        convertUtils.register(new EnumConverter(),
+                SalutationSourceEnum.class);
+
+        // ETSendClassification
+        convertUtils.register(new ExternalObjectConverter(),
+                ETSendClassification.class);
+        convertUtils.register(new InternalObjectConverter(),
+                SendClassification.class);
+
+        // ETSendClassificationType
+        convertUtils.register(new EnumConverter(),
+                ETSendClassificationType.class);
+        convertUtils.register(new EnumConverter(),
+                SendClassificationTypeEnum.class);
+
+        // ETSendDefinitionList
+        convertUtils.register(new ExternalObjectConverter(),
+                ETSendDefinitionList.class);
+        convertUtils.register(new InternalObjectConverter(),
+                SendDefinitionList.class);
+
+        // ETSendDefinitionListType
+        convertUtils.register(new EnumConverter(),
+                ETSendDefinitionListType.class);
+        convertUtils.register(new EnumConverter(),
+                SendDefinitionListTypeEnum.class);
+
+        // ETSendPriority
+        convertUtils.register(new EnumConverter(),
+                ETSendPriority.class);
+        convertUtils.register(new EnumConverter(),
+                SendPriorityEnum.class);
+
+        // ETSenderProfile
+        convertUtils.register(new ExternalObjectConverter(),
+                ETSenderProfile.class);
+        convertUtils.register(new InternalObjectConverter(),
+                SenderProfile.class);
+
+        // ETSentEvent
+        convertUtils.register(new ExternalObjectConverter(),
+                ETSentEvent.class);
+        convertUtils.register(new InternalObjectConverter(),
+                SentEvent.class);
+
+        // ETSubscriber
+        convertUtils.register(new ExternalObjectConverter(),
+                ETSubscriber.class);
+        convertUtils.register(new InternalObjectConverter(),
+                Subscriber.class);
+
+        // ETSubscriberList
+        convertUtils.register(new ExternalObjectConverter(),
+                ETSubscriberList.class);
+        convertUtils.register(new InternalObjectConverter(),
+                SubscriberList.class);
+
+        // ETSubscriberStatus
+        convertUtils.register(new EnumConverter(),
+                ETSubscriberStatus.class);
+        convertUtils.register(new EnumConverter(),
+                SubscriberStatus.class);
+
+        // ETUnsubEvent
+        convertUtils.register(new ExternalObjectConverter(),
+                ETUnsubEvent.class);
+        convertUtils.register(new InternalObjectConverter(),
+                UnsubEvent.class);
+    }
 
     public Integer getId() {
         return id;
@@ -461,10 +464,133 @@ public abstract class ETSoapObject extends ETObject {
         this.clientId = clientId;
     }
 
-    public static <T extends ETSoapObject> ETSoapObject fromInternal(APIObject internalObject)
+    public ETSoapObject fromInternal(APIObject internalObject)
         throws ETSdkException
     {
-        throw new ETSdkException("not implemented yet");
+        ETSoapObject externalObject = this;
+
+        Class<? extends ETSoapObject> externalClass = getClass();
+        String externalClassName = externalClass.getSimpleName();
+        Class<? extends APIObject> internalClass = internalObject.getClass();
+        String internalClassName = internalClass.getSimpleName();
+
+        logger.trace("converting object from internal class "
+                + internalClassName);
+        logger.trace("                    to external class "
+                + externalClassName);
+
+        for (Field externalField : getAllFields(externalClass)) {
+            String externalFieldName = externalField.getName();
+
+            InternalSoapField internalFieldAnnotation
+                = externalField.getAnnotation(InternalSoapField.class);
+            if (internalFieldAnnotation != null) {
+                String internalFieldName = internalFieldAnnotation.name();
+
+                Object internalFieldValue = null;
+                try {
+                    internalFieldValue =
+                            PropertyUtils.getProperty(internalObject,
+                                                      internalFieldName);
+                } catch (Exception ex) {
+                    // XXX test this
+                    throw new ETSdkException("could not get property \""
+                            + internalFieldName
+                            + "\" of object "
+                            + internalObject, ex);
+                }
+
+                if (internalFieldValue == null) {
+                    continue;
+                }
+
+                if (internalFieldValue instanceof List) {
+                    externalField.setAccessible(true);
+
+                    List<ETSoapObject> externalList = new ArrayList<ETSoapObject>();
+                    @SuppressWarnings("unchecked")
+                    List<APIObject> internalList
+                        = (List<APIObject>) internalFieldValue;
+
+                    Type fieldType = externalField.getGenericType();
+                    assert fieldType instanceof ParameterizedType;
+                    ParameterizedType parameterizedType
+                        = (ParameterizedType) fieldType;
+                    assert parameterizedType.getActualTypeArguments().length == 1;
+                    Class<?> externalItemClass
+                        = (Class<?>) parameterizedType.getActualTypeArguments()[0];
+
+                    for (APIObject internalItem : internalList) {
+                        ETSoapObject externalItem = null;
+                        try {
+                            externalItem = (ETSoapObject) externalItemClass.newInstance();
+                        } catch (Exception ex) {
+                            throw new ETSdkException("could not instantiate "
+                                    + externalItemClass.getName(), ex);
+                        }
+                        externalList.add(externalItem.fromInternal(internalItem));
+                    }
+
+                    try {
+                        externalField.set(externalObject, externalList);
+                    } catch (Exception ex) {
+                        throw new ETSdkException("could not set field \""
+                                + externalFieldName
+                                + "\" of object "
+                                + externalObject, ex);
+                    }
+
+                    continue;
+                }
+
+                try {
+                    BeanUtils.setProperty(externalObject,
+                                          externalFieldName,
+                                          internalFieldValue);
+                } catch (Exception ex) {
+                    // XXX test this
+                    throw new ETSdkException("could not set property \""
+                            + externalFieldName
+                            + "\" of object "
+                            + externalObject, ex);
+                }
+
+                if (logger.isTraceEnabled()) {
+                    Field internalField = getField(internalClass,
+                                                   internalFieldName);
+
+                    Object externalFieldValue = null;
+                    try {
+                        externalFieldValue =
+                                PropertyUtils.getProperty(externalObject,
+                                                          externalFieldName);
+                    } catch (Exception ex) {
+                        // XXX test this
+                        throw new ETSdkException("could not get property \""
+                                + externalFieldName
+                                + "\" of object "
+                                + externalObject, ex);
+                    }
+
+                    logger.trace("  converted field "
+                            + internalClassName + "." + internalFieldName
+                            + " (type="
+                            + internalField.getType().getSimpleName()
+                            + ", value="
+                            + internalFieldValue
+                            + ")");
+                    logger.trace("         to field "
+                            + externalClassName + "." + externalFieldName
+                            + " (type="
+                            + externalField.getType().getSimpleName()
+                            + ", value="
+                            + externalFieldValue
+                            + ")");
+                }
+            }
+        }
+
+        return externalObject;
     }
 
     public APIObject toInternal()
@@ -472,51 +598,42 @@ public abstract class ETSoapObject extends ETObject {
     {
         ETSoapObject externalObject = this;
 
-        Class<? extends ETSoapObject> externalObjectType = getClass();
+        Class<? extends ETSoapObject> externalClass = getClass();
 
         //
         // Use the @InternalSoapType annotation to determine internalType:
         //
 
-        InternalSoapType internalObjectTypeAnnotation
-            = externalObjectType.getAnnotation(InternalSoapType.class);
-        assert internalObjectTypeAnnotation != null;
-        Class<? extends APIObject> internalObjectType
-            = internalObjectTypeAnnotation.type();
-        assert internalObjectType != null;
+        InternalSoapType internalClassAnnotation
+            = getClass().getAnnotation(InternalSoapType.class);
+        assert internalClassAnnotation != null;
+        Class<? extends APIObject> internalClass = internalClassAnnotation.type();
+        assert internalClass != null;
 
-        if (logger.isTraceEnabled()) {
-            logger.trace("external object type is "
-                    + externalObjectType.getSimpleName());
-            logger.trace("internal object type is "
-                    + internalObjectType.getSimpleName());
-        }
+        String internalClassName = internalClass.getSimpleName();
+        String externalClassName = externalClass.getSimpleName();
 
-        if (logger.isTraceEnabled()) {
-            String s = "+-";
-            for (int i = 0; i < internalObjectType.getSimpleName().length(); i++) {
-                s += "-";
-            }
-            s += "-+";
-            logger.trace(s);
-            logger.trace("| " + internalObjectType.getSimpleName() + " |");
-            logger.trace(s);
-        }
+        logger.trace("converting object from external class "
+                + externalClassName);
+        logger.trace("                    to internal class "
+                + internalClassName);
 
         APIObject internalObject = null;
         try {
-            internalObject = internalObjectType.newInstance();
+            internalObject = internalClass.newInstance();
         } catch (Exception ex) {
             throw new ETSdkException("could not instantiate "
-                    + internalObjectType.getName(), ex);
+                    + internalClass.getName(), ex);
         }
 
-        for (Field externalField : getAllFields(externalObjectType)) {
+        for (Field externalField : getAllFields(externalClass)) {
             String externalFieldName = externalField.getName();
 
-            InternalSoapField internalFieldNameAnnotation
+            InternalSoapField internalFieldAnnotation
                 = externalField.getAnnotation(InternalSoapField.class);
-            if (internalFieldNameAnnotation != null) {
+            if (internalFieldAnnotation != null) {
+                String internalFieldName = internalFieldAnnotation.name();
+
                 Object externalFieldValue = null;
                 try {
                     externalFieldValue =
@@ -534,62 +651,78 @@ public abstract class ETSoapObject extends ETObject {
                     continue;
                 }
 
-                String internalFieldName = internalFieldNameAnnotation.name();
-
-                Field internalField = getField(internalObjectType,
-                                               internalFieldName);
-
-                if (logger.isTraceEnabled()) {
-                    logger.trace("  converting field " + externalFieldName + " "
-                            + "(type " + externalField.getType().getSimpleName() + ") "
-                            + "of external class " + externalObjectType.getSimpleName());
-                    logger.trace("          to field " + internalFieldName + " "
-                            + "(type " + internalField.getType().getSimpleName() + ") "
-                            + "of internal class " + internalObjectType.getSimpleName());
-                    logger.trace("    external value = " + externalFieldValue);
-                }
-
                 if (externalFieldValue instanceof List) {
+                    Field internalField = getField(internalClass,
+                                                   internalFieldName);
+
                     internalField.setAccessible(true);
-                    List<APIObject> l = new ArrayList<APIObject>();
-                    for (ETSoapObject o : (List<ETSoapObject>) externalFieldValue) {
-                        l.add(o.toInternal());
+
+                    List<APIObject> internalList = new ArrayList<APIObject>();
+                    @SuppressWarnings("unchecked")
+                    List<ETSoapObject> externalList
+                        = (List<ETSoapObject>) externalFieldValue;
+
+                    for (ETSoapObject externalItem : externalList) {
+                        internalList.add(externalItem.toInternal());
                     }
+
                     try {
-                        internalField.set(internalObject, l);
+                        internalField.set(internalObject, internalList);
                     } catch (Exception ex) {
-                        throw new ETSdkException(ex); // XXX
-                    }
-                } else {
-                    try {
-                        BeanUtils.setProperty(internalObject,
-                                              internalFieldName,
-                                              externalFieldValue);
-                        if (logger.isTraceEnabled()) {
-                            Object internalFieldValue =
-                                    PropertyUtils.getProperty(internalObject,
-                                                              internalFieldName);
-                            logger.trace("    internal value = " + internalFieldValue);
-                        }
-                    } catch (Exception ex) {
-                        throw new ETSdkException("could not set property \""
+                        throw new ETSdkException("could not set field \""
                                 + internalFieldName
                                 + "\" of object "
                                 + internalObject, ex);
                     }
+
+                    continue;
+                }
+
+                try {
+                    BeanUtils.setProperty(internalObject,
+                                          internalFieldName,
+                                          externalFieldValue);
+                } catch (Exception ex) {
+                    // XXX test this
+                    throw new ETSdkException("could not set property \""
+                            + internalFieldName
+                            + "\" of object "
+                            + internalObject, ex);
+                }
+
+                if (logger.isTraceEnabled()) {
+                    Field internalField = getField(internalClass,
+                                                   internalFieldName);
+
+                    Object internalFieldValue = null;
+                    try {
+                        internalFieldValue =
+                                PropertyUtils.getProperty(internalObject,
+                                                          internalFieldName);
+                    } catch (Exception ex) {
+                        // XXX test this
+                        throw new ETSdkException("could not get property \""
+                                + internalFieldName
+                                + "\" of object "
+                                + internalObject, ex);
+                    }
+
+                    logger.trace("  converted field "
+                            + externalClassName + "." + externalFieldName
+                            + " (type="
+                            + externalField.getType().getSimpleName()
+                            + ", value="
+                            + externalFieldValue
+                            + ")");
+                    logger.trace("         to field "
+                            + internalClassName + "." + internalFieldName
+                            + " (type="
+                            + internalField.getType().getSimpleName()
+                            + ", value="
+                            + internalFieldValue
+                            + ")");
                 }
             }
-        }
-
-        if (logger.isTraceEnabled()) {
-            String s = "+--";
-            for (int i = 0; i < internalObjectType.getSimpleName().length(); i++) {
-                s += "-";
-            }
-            s += "-+";
-            logger.trace(s);
-            logger.trace("| /" + internalObjectType.getSimpleName() + " |");
-            logger.trace(s);
         }
 
         return internalObject;
@@ -612,8 +745,10 @@ public abstract class ETSoapObject extends ETObject {
         }
 
         if (field == null) {
-            throw new ETSdkException("field " + name
-                    + " does not exist in class " + type.getName());
+            throw new ETSdkException("field \""
+                    + name
+                    + "\" does not exist in class "
+                    + type.getName());
         }
 
         return field;
@@ -635,5 +770,81 @@ public abstract class ETSoapObject extends ETObject {
         }
 
         return fields;
+    }
+
+    public List<String> getProperties()
+        throws ETSdkException
+    {
+        List<String> properties = new ArrayList<String>();
+
+        //
+        // Use the @InternalSoapType annotation to determine internalType:
+        //
+
+        InternalSoapType internalClassAnnotation
+            = getClass().getAnnotation(InternalSoapType.class);
+        assert internalClassAnnotation != null;
+        Class<? extends APIObject> internalClass = internalClassAnnotation.type();
+        assert internalClass != null;
+
+        //
+        // Build a list of fields from externalType and all superclasses:
+        //
+
+        List<Field> externalFields = getAllFields(getClass());
+
+        //
+        // Walk the list of external fields building a list of the
+        // corresponding property names using @InternalSoapField:
+        //
+
+        for (Field externalField : externalFields) {
+            InternalSoapField internalFieldAnnotation
+                = externalField.getAnnotation(InternalSoapField.class);
+            if (internalFieldAnnotation != null) {
+                String property = internalFieldAnnotation.serializedName();
+
+                if (property.isEmpty()) {
+                    //
+                    // There is no property name specified
+                    // in the annotation so look at the values of
+                    // @XmlElement or @XmlElementRef on the corresponding
+                    // internal field of the CXF generated class:
+                    //
+
+                    String internalFieldName = internalFieldAnnotation.name();
+
+                    Field internalField = getField(internalClass,
+                                                   internalFieldName);
+
+                    XmlElement element =
+                            internalField.getAnnotation(XmlElement.class);
+                    if (element != null) {
+                        property = element.name();
+                    } else {
+                        // optional dateTimes are annotated with XmlElementRef
+                        XmlElementRef elementRef =
+                                internalField.getAnnotation(XmlElementRef.class);
+                        if (elementRef != null) {
+                            property = elementRef.name();
+                        }
+                    }
+                }
+
+                assert property != null;
+
+                properties.add(property);
+            }
+        }
+
+        // XXX
+        if (properties.contains("Client")) {
+            properties.remove("Client");
+        }
+
+        // XXX
+        properties.removeAll(Arrays.asList(internalClassAnnotation.ignoredFields()));
+
+        return properties;
     }
 }
