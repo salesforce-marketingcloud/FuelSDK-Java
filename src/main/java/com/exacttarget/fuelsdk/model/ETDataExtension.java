@@ -34,172 +34,139 @@ import com.exacttarget.fuelsdk.annotations.InternalSoapField;
 import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.DataExtension;
 
-@InternalSoapType(type = DataExtension.class, ignoredFields={"ID", "Fields"})
+@InternalSoapType(type = DataExtension.class, ignoredFields = { "ID", "Fields" })
 public class ETDataExtension extends ETSoapObject {
+    @InternalSoapField(name = "name")
+    private String name = null;
+    @InternalSoapField(name = "description")
+    private String description = null;
+    @InternalSoapField(name = "categoryID")
+    private Long categoryID = null;
+    @InternalSoapField(name = "dataRetentionPeriodLength", ignoreOnPatch = true)
+    private Integer dataRetentionPeriodLength = null;
+    @InternalSoapField(name = "dataRetentionPeriodUnitOfMeasure", ignoreOnPatch = true)
+    private Integer dataRetentionPeriodUnitOfMeasure = null;
+    @InternalSoapField(name = "deleteAtEndOfRetentionPeriod", ignoreOnPatch = true)
+    private Boolean deleteAtEndOfRetentionPeriod = null;
+    @InternalSoapField(name = "fields")
+    private List<ETDataExtensionColumn> columns = null;
+    @InternalSoapField(name = "isSendable")
+    private Boolean isSendable = null;
+    @InternalSoapField(name = "isTestable")
+    private Boolean isTestable = null;
+    @InternalSoapField(name = "resetRetentionPeriodOnImport", ignoreOnPatch = true)
+    private Boolean resetRetentionPeriodOnImport = null;
+    @InternalSoapField(name = "retainUntil", ignoreOnPatch = true)
+    private String retainUntil = null;
+    @InternalSoapField(name = "rowBasedRetention", ignoreOnPatch = true)
+    private Boolean rowBasedRetention = null;
+    @InternalSoapField(name = "status")
+    private String status = null;
 
-	@InternalSoapField(name="name")
-	private String name;
+    public ETDataExtension() {}
 
-	@InternalSoapField(name="description")
-	private String description;
+    public String getName() {
+        return name;
+    }
 
-	@InternalSoapField(name="isSendable")
-	private Boolean isSendable;
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	@InternalSoapField(name="isTestable")
-	private Boolean isTestable;
+    public String getDescription() {
+        return description;
+    }
 
-	@InternalSoapField(name="dataRetentionPeriodLength", ignoreOnPatch=true)
-	private Integer dataRetentionPeriodLength;
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	@InternalSoapField(name="dataRetentionPeriodUnitOfMeasure", ignoreOnPatch=true)
-	private Integer dataRetentionPeriodUnitOfMeasure;
+    public Long getCategoryID() {
+        return categoryID;
+    }
 
-	@InternalSoapField(name="rowBasedRetention", ignoreOnPatch=true)
-	private Boolean rowBasedRetention;
+    public void setCategoryID(Long categoryID) {
+        this.categoryID = categoryID;
+    }
 
-	@InternalSoapField(name="resetRetentionPeriodOnImport", ignoreOnPatch=true)
-	private Boolean resetRetentionPeriodOnImport;
+    public Integer getDataRetentionPeriodLength() {
+        return dataRetentionPeriodLength;
+    }
 
-	@InternalSoapField(name="deleteAtEndOfRetentionPeriod", ignoreOnPatch=true)
-	private Boolean deleteAtEndOfRetentionPeriod;
+    public void setDataRetentionPeriodLength(Integer dataRetentionPeriodLength) {
+        this.dataRetentionPeriodLength = dataRetentionPeriodLength;
+    }
 
-	@InternalSoapField(name="retainUntil", ignoreOnPatch=true)
-	private String retainUntil;
+    public Integer getDataRetentionPeriodUnitOfMeasure() {
+        return dataRetentionPeriodUnitOfMeasure;
+    }
 
-	@InternalSoapField(name="fields")
-	private List<ETDataExtensionColumn> columns;
+    public void setDataRetentionPeriodUnitOfMeasure(
+            Integer dataRetentionPeriodUnitOfMeasure) {
+        this.dataRetentionPeriodUnitOfMeasure = dataRetentionPeriodUnitOfMeasure;
+    }
 
-	@InternalSoapField(name="categoryID")
-	private Long categoryID;
+    public Boolean getDeleteAtEndOfRetentionPeriod() {
+        return deleteAtEndOfRetentionPeriod;
+    }
 
-	@InternalSoapField(name="status")
-	private String status;
+    public void setDeleteAtEndOfRetentionPeriod(Boolean deleteAtEndOfRetentionPeriod) {
+        this.deleteAtEndOfRetentionPeriod = deleteAtEndOfRetentionPeriod;
+    }
 
-	public ETDataExtension() {}
+    public List<ETDataExtensionColumn> getColumns() {
+        return columns;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setColumns(List<ETDataExtensionColumn> columns) {
+        this.columns = columns;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public Boolean getIsSendable() {
+        return isSendable;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public void setIsSendable(Boolean isSendable) {
+        this.isSendable = isSendable;
+    }
 
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    public Boolean getIsTestable() {
+        return isTestable;
+    }
 
-	public Boolean getIsSendable() {
-		return isSendable;
-	}
+    public void setIsTestable(Boolean isTestable) {
+        this.isTestable = isTestable;
+    }
 
-	public void setIsSendable(Boolean isSendable) {
-		this.isSendable = isSendable;
-	}
+    public Boolean getResetRetentionPeriodOnImport() {
+        return resetRetentionPeriodOnImport;
+    }
 
-	public Boolean getIsTestable() {
-		return isTestable;
-	}
+    public void setResetRetentionPeriodOnImport(Boolean resetRetentionPeriodOnImport) {
+        this.resetRetentionPeriodOnImport = resetRetentionPeriodOnImport;
+    }
 
-	public void setIsTestable(Boolean isTestable) {
-		this.isTestable = isTestable;
-	}
+    public String getRetainUntil() {
+        return retainUntil;
+    }
 
-	public Integer getDataRetentionPeriodLength() {
-		return dataRetentionPeriodLength;
-	}
+    public void setRetainUntil(String retainUntil) {
+        this.retainUntil = retainUntil;
+    }
 
-	public void setDataRetentionPeriodLength(Integer dataRetentionPeriodLength) {
-		this.dataRetentionPeriodLength = dataRetentionPeriodLength;
-	}
+    public Boolean getRowBasedRetention() {
+        return rowBasedRetention;
+    }
 
-	public Integer getDataRetentionPeriodUnitOfMeasure() {
-		return dataRetentionPeriodUnitOfMeasure;
-	}
+    public void setRowBasedRetention(Boolean rowBasedRetention) {
+        this.rowBasedRetention = rowBasedRetention;
+    }
 
-	public void setDataRetentionPeriodUnitOfMeasure(
-			Integer dataRetentionPeriodUnitOfMeasure) {
-		this.dataRetentionPeriodUnitOfMeasure = dataRetentionPeriodUnitOfMeasure;
-	}
+    public String getStatus() {
+        return status;
+    }
 
-	public Boolean getRowBasedRetention() {
-		return rowBasedRetention;
-	}
-
-	public void setRowBasedRetention(Boolean rowBasedRetention) {
-		this.rowBasedRetention = rowBasedRetention;
-	}
-
-	public Boolean getResetRetentionPeriodOnImport() {
-		return resetRetentionPeriodOnImport;
-	}
-
-	public void setResetRetentionPeriodOnImport(Boolean resetRetentionPeriodOnImport) {
-		this.resetRetentionPeriodOnImport = resetRetentionPeriodOnImport;
-	}
-
-	public Boolean getDeleteAtEndOfRetentionPeriod() {
-		return deleteAtEndOfRetentionPeriod;
-	}
-
-	public void setDeleteAtEndOfRetentionPeriod(Boolean deleteAtEndOfRetentionPeriod) {
-		this.deleteAtEndOfRetentionPeriod = deleteAtEndOfRetentionPeriod;
-	}
-
-	public String getRetainUntil() {
-		return retainUntil;
-	}
-
-	public void setRetainUntil(String retainUntil) {
-		this.retainUntil = retainUntil;
-	}
-
-	public List<ETDataExtensionColumn> getColumns() {
-		return columns;
-	}
-
-	public void setColumns(List<ETDataExtensionColumn> columns) {
-		this.columns = columns;
-	}
-
-	public Long getCategoryID() {
-		return categoryID;
-	}
-
-	public void setCategoryID(Long categoryID) {
-		this.categoryID = categoryID;
-	}
-
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	@Override
-	public String toString() {
-		return "ETDataExtension [name=" + name + ", description=" + description
-				+ ", isSendable=" + isSendable + ", isTestable=" + isTestable
-				+ ", dataRetentionPeriodLength=" + dataRetentionPeriodLength
-				+ ", dataRetentionPeriodUnitOfMeasure="
-				+ dataRetentionPeriodUnitOfMeasure + ", rowBasedRetention="
-				+ rowBasedRetention + ", resetRetentionPeriodOnImport="
-				+ resetRetentionPeriodOnImport
-				+ ", deleteAtEndOfRetentionPeriod="
-				+ deleteAtEndOfRetentionPeriod + ", retainUntil=" + retainUntil
-				+ ", columns=" + columns + ", categoryID=" + categoryID
-				+ ", status=" + status + ", id=" + id + ", createdDate="
-				+ createdDate + ", modifiedDate=" + modifiedDate
-				+ ", customerKey=" + customerKey + "]";
-	}
-
-
-
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }

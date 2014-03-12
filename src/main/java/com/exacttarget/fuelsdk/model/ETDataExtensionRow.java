@@ -36,49 +36,36 @@ import com.exacttarget.fuelsdk.internal.DataExtensionObject;
 
 @InternalSoapType(type = DataExtensionObject.class)
 public class ETDataExtensionRow extends ETSoapObject {
+    @InternalSoapField(name = "name")
+    private String name = null;
+    @InternalSoapField(name = "keys")
+    private Map<String, String> keys = null;
+    @InternalSoapField(name = "properties")
+    protected Map<String, String> columns = null;
 
-	@InternalSoapField(name="name")
-    private String name;
+    public ETDataExtensionRow() {}
 
-	@InternalSoapField(name="keys")
-    private Map<String, String> keys;
+    public String getName() {
+        return name;
+    }
 
-	@InternalSoapField(name="properties")
-    protected Map<String, String> columns;
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public ETDataExtensionRow() {}
+    public Map<String, String> getKeys() {
+        return keys;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public void setKeys(Map<String, String> keys) {
+        this.keys = keys;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public Map<String, String> getColumns() {
+        return columns;
+    }
 
-	public Map<String, String> getKeys() {
-		return keys;
-	}
-
-	public void setKeys(Map<String, String> keys) {
-		this.keys = keys;
-	}
-
-	public Map<String, String> getColumns() {
-		return columns;
-	}
-
-	public void setColumns(Map<String, String> columns) {
-		this.columns = columns;
-	}
-
-	@Override
-	public String toString() {
-		return "ETDataExtensionRow [name=" + name + ", keys=" + keys
-				+ ", columns=" + columns + ", id=" + id + ", createdDate="
-				+ createdDate + ", modifiedDate=" + modifiedDate
-				+ ", customerKey=" + customerKey + "]";
-	}
-
-
+    public void setColumns(Map<String, String> columns) {
+        this.columns = columns;
+    }
 }

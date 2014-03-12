@@ -33,28 +33,22 @@ import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.model.ETDataExtensionRow;
 
 public interface ETDataExtensionRowService extends ETCrudService {
-
-	public ETResponse<ETDataExtensionRow> get(ETClient client, String dataExtensionCustomerKey, List<String> columns)
-			throws ETSdkException;
-
-	public ETResponse<ETDataExtensionRow> get(ETClient client, String dataExtensionCustomerKey, List<String> columns, ETFilter filter)
-	        throws ETSdkException;
-
-	public ETResponse<ETDataExtensionRow> post(ETClient client, ETDataExtensionRow row)
-	    	throws ETSdkException;
-
+    public ETResponse<ETDataExtensionRow> get(ETClient client,
+            String key, List<String> columns)
+        throws ETSdkException;
+    public ETResponse<ETDataExtensionRow> get(ETClient client,
+            String key, List<String> columns, ETFilter filter)
+        throws ETSdkException;
+    public ETResponse<ETDataExtensionRow> post(ETClient client, ETDataExtensionRow row)
+        throws ETSdkException;
+    public ETResponse<ETDataExtensionRow> post(ETClient client, List<ETDataExtensionRow> rows)
+        throws ETSdkException;
     public ETResponse<ETDataExtensionRow> patch(ETClient client, ETDataExtensionRow row)
-    		throws ETSdkException;
-
-    public ETResponse<ETDataExtensionRow> delete(ETClient client, ETDataExtensionRow row)
-	    	throws ETSdkException;
-
-	public ETResponse<ETDataExtensionRow> post(ETClient client, List<ETDataExtensionRow> rows)
-	    	throws ETSdkException;
-
+        throws ETSdkException;
     public ETResponse<ETDataExtensionRow> patch(ETClient client, List<ETDataExtensionRow> rows)
-    		throws ETSdkException;
-
+        throws ETSdkException;
+    public ETResponse<ETDataExtensionRow> delete(ETClient client, ETDataExtensionRow row)
+        throws ETSdkException;
     public ETResponse<ETDataExtensionRow> delete(ETClient client, List<ETDataExtensionRow> rows)
-	    	throws ETSdkException;
+        throws ETSdkException;
 }
