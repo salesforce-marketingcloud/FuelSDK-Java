@@ -34,10 +34,10 @@ import com.exacttarget.fuelsdk.model.ETDataExtensionRow;
 
 public interface ETDataExtensionRowService extends ETCrudService {
     public ETResponse<ETDataExtensionRow> get(ETClient client,
-            String key, List<String> columns)
+            String name, List<String> columns)
         throws ETSdkException;
     public ETResponse<ETDataExtensionRow> get(ETClient client,
-            String key, List<String> columns, ETFilter filter)
+            String name, List<String> columns, ETFilter filter)
         throws ETSdkException;
     public ETResponse<ETDataExtensionRow> post(ETClient client, ETDataExtensionRow row)
         throws ETSdkException;

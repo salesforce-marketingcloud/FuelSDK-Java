@@ -33,8 +33,10 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementRef;
@@ -50,6 +52,7 @@ import org.apache.log4j.Logger;
 import com.exacttarget.fuelsdk.annotations.InternalSoapField;
 import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.APIObject;
+import com.exacttarget.fuelsdk.internal.APIProperty;
 import com.exacttarget.fuelsdk.internal.Account;
 import com.exacttarget.fuelsdk.internal.AccountTypeEnum;
 import com.exacttarget.fuelsdk.internal.BounceEvent;
@@ -72,6 +75,7 @@ import com.exacttarget.fuelsdk.internal.LayoutType;
 import com.exacttarget.fuelsdk.internal.ListClassificationEnum;
 import com.exacttarget.fuelsdk.internal.ListSubscriber;
 import com.exacttarget.fuelsdk.internal.ListTypeEnum;
+import com.exacttarget.fuelsdk.internal.ObjectExtension;
 import com.exacttarget.fuelsdk.internal.OpenEvent;
 import com.exacttarget.fuelsdk.internal.Permission;
 import com.exacttarget.fuelsdk.internal.PermissionSet;
@@ -175,6 +179,56 @@ public abstract class ETSoapObject extends ETObject {
         }
     }
 
+    public class DataExtensionRowConverter implements Converter {
+        @SuppressWarnings({ "rawtypes", "unchecked" })
+        public Object convert(Class type, Object value) {
+            if (type == Map.class) {
+                // we're converting from internal to external
+                ObjectExtension.Properties properties
+                    = (ObjectExtension.Properties) value;
+                Map<String, String> columns = new HashMap<String, String>();
+                for (APIProperty property : properties.getProperty()) {
+                    columns.put(property.getName(), property.getValue());
+                }
+                return columns;
+            } else if (type == ObjectExtension.Properties.class) {
+                // we're converting from external to internal
+                Map<String, String> columns = (Map<String, String>) value;
+                ObjectExtension.Properties properties
+                    = new ObjectExtension.Properties();
+                for (String key : columns.keySet()) {
+                    APIProperty property = new APIProperty();
+                    property.setName(key); property.setValue(columns.get(key));
+                    properties.getProperty().add(property);
+                }
+                return properties;
+            }
+            return value;
+        }
+    }
+
+    public class DataExtensionColumnConverter implements Converter {
+        @SuppressWarnings({ "rawtypes", "unchecked" })
+        public Object convert(Class type, Object value) {
+            // XXX I think we need more here..
+            if (type == DataExtension.Fields.class) {
+                // we're converting from internal to external
+                List<ETDataExtensionColumn> columns
+                    = (List<ETDataExtensionColumn>) value;
+                DataExtension.Fields fields = new DataExtension.Fields();
+                for (ETDataExtensionColumn column : columns) {
+                    try {
+                        fields.getField().add((DataExtensionField) column.toInternal());
+                    } catch (ETSdkException ex) {
+                        throw new ConversionException("could not convert object", ex);
+                    }
+                }
+                return fields;
+            }
+            return value;
+        }
+    }
+
     public class EnumConverter implements Converter {
         @SuppressWarnings({ "rawtypes", "unchecked" })
         public Object convert(Class type, Object value) {
@@ -224,6 +278,9 @@ public abstract class ETSoapObject extends ETObject {
                 ETDataExtensionColumn.class);
         convertUtils.register(new InternalObjectConverter(),
                 DataExtensionField.class);
+        // data extension column: internal to external
+        convertUtils.register(new DataExtensionColumnConverter(),
+                ETDataExtensionColumn[].class);
 
         // ETDataExtensionFieldType
         convertUtils.register(new EnumConverter(),
@@ -236,6 +293,12 @@ public abstract class ETSoapObject extends ETObject {
                 ETDataExtensionRow.class);
         convertUtils.register(new InternalObjectConverter(),
                 DataExtensionObject.class);
+        // data extension row: internal to external
+        convertUtils.register(new DataExtensionRowConverter(),
+                Map.class);
+        // data extension row: external to internal
+        convertUtils.register(new DataExtensionRowConverter(),
+                ObjectExtension.Properties.class);
 
         // ETDataSourceType
         convertUtils.register(new EnumConverter(),

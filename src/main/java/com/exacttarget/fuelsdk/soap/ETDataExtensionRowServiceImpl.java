@@ -45,14 +45,14 @@ public class ETDataExtensionRowServiceImpl extends ETCrudServiceImpl<ETDataExten
     implements ETDataExtensionRowService
 {
     public ETResponse<ETDataExtensionRow> get(ETClient client,
-            String dataExtensionName, List<String> columns)
+            String name, List<String> columns)
         throws ETSdkException
     {
-        return get(client, dataExtensionName, columns, null);
+        return get(client, name, columns, null);
     }
 
     public ETResponse<ETDataExtensionRow> get(ETClient client,
-            String dataExtensionName, List<String> columns, ETFilter filter)
+            String name, List<String> columns, ETFilter filter)
         throws ETSdkException
     {
         // XXX cleanup
@@ -62,7 +62,7 @@ public class ETDataExtensionRowServiceImpl extends ETCrudServiceImpl<ETDataExten
         Soap soap = client.getSOAPConnection().getSoap();
 
         RetrieveRequest retrieveRequest = new RetrieveRequest();
-        retrieveRequest.setObjectType("DataExtensionObject[" + dataExtensionName + "]");
+        retrieveRequest.setObjectType("DataExtensionObject[" + name + "]");
         retrieveRequest.getProperties().addAll(columns);
         if (filter != null) {
             retrieveRequest.setFilter(convertFilterPart(filter));

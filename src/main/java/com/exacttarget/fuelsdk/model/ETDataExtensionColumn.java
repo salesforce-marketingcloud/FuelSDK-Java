@@ -33,10 +33,24 @@ import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.DataExtensionField;
 
 @InternalSoapType(type = DataExtensionField.class, ignoredFields = {
-    "DataExtension", "Description", "DisplayOrder", "IsCreatable",
-    "IsEditable", "IsRestrictedPicklist", "IsRetrievable", "IsSendTime",
-    "IsUpdatable", "IsViewable", "Label", "MaxValue", "MinLength",
-    "MinValue", "PartnerMap", "Precision", "Status"
+    "DataExtension",
+    "Description",
+    "DisplayOrder",
+    "ID",
+    "IsCreatable",
+    "IsEditable",
+    "IsRestrictedPicklist",
+    "IsRetrievable",
+    "IsSendTime",
+    "IsUpdatable",
+    "IsViewable",
+    "Label",
+    "MaxValue",
+    "MinLength",
+    "MinValue",
+    "PartnerMap",
+    "Precision",
+    "Status"
 })
 public class ETDataExtensionColumn extends ETSoapObject {
     @InternalSoapField(name = "name")
