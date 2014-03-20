@@ -1,13 +1,19 @@
+2014-03-20  Ian Murdock  <imurdock@exacttarget.com>
+
+    * src/main/java/com/exacttarget/fuelsdk/ETSoapObject.java: Removed
+    legacy ClientID property.
+    * src/main/java/com/exacttarget/fuelsdk/model/ETClientID.java: Deleted.
+
 2014-03-14  Ian Murdock  <imurdock@exacttarget.com>
 
-	* src/main/java/com/exacttarget/fuelsdk/ETSoapObject.java: Fixed
-	bug related to object conversion of data extension rows.
+    * src/main/java/com/exacttarget/fuelsdk/ETSoapObject.java: Fixed
+    bug related to object conversion of data extension rows.
 
-	* src/main/java/com/exacttarget/fuelsdk/model/ETDataExtensionColumn.java:
-	Add "ID" to ignoredFields. The presence of this field was causing
-	retrieves to return an error.
+    * src/main/java/com/exacttarget/fuelsdk/model/ETDataExtensionColumn.java:
+    Add "ID" to ignoredFields. The presence of this field was causing
+    retrieves to return an error.
 
-	* src/main/java/com/exacttarget/fuelsdk/model/converter/ObjectConverter.java:
-	Added (deprecated) ObjectConverter class that wraps toInternal()
-	and fromInternal() ETSoapObject methods for backward compatibility
-	with old convertFromEtObject() and convertToEtObject() methods.
+    * src/main/java/com/exacttarget/fuelsdk/model/converter/ObjectConverter.java:
+    Added (deprecated) ObjectConverter class that wraps toInternal()
+    and fromInternal() ETSoapObject methods for backward compatibility
+    with old convertFromEtObject() and convertToEtObject() methods.

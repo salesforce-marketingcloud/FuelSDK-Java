@@ -95,7 +95,6 @@ import com.exacttarget.fuelsdk.internal.UnsubEvent;
 import com.exacttarget.fuelsdk.model.ETAccountType;
 import com.exacttarget.fuelsdk.model.ETBounceEvent;
 import com.exacttarget.fuelsdk.model.ETClickEvent;
-import com.exacttarget.fuelsdk.model.ETClientID;
 import com.exacttarget.fuelsdk.model.ETContentArea;
 import com.exacttarget.fuelsdk.model.ETDataExtension;
 import com.exacttarget.fuelsdk.model.ETDataExtensionColumn;
@@ -144,9 +143,6 @@ public abstract class ETSoapObject extends ETObject {
     private Date createdDate = null;
     @InternalSoapField(name="modifiedDate")
     private Date modifiedDate = null;
-
-    @InternalSoapField(name="client")
-    private ETClientID clientId = null;
 
     public class ExternalObjectConverter implements Converter {
         @SuppressWarnings("rawtypes")
@@ -517,14 +513,6 @@ public abstract class ETSoapObject extends ETObject {
 
     public void setModifiedDate(Date modifiedDate) {
         this.modifiedDate = modifiedDate;
-    }
-
-    public ETClientID getClientId() {
-        return clientId;
-    }
-
-    public void setClientId(ETClientID clientId) {
-        this.clientId = clientId;
     }
 
     public ETSoapObject fromInternal(APIObject internalObject)
@@ -900,12 +888,6 @@ public abstract class ETSoapObject extends ETObject {
             }
         }
 
-        // XXX
-        if (properties.contains("Client")) {
-            properties.remove("Client");
-        }
-
-        // XXX
         properties.removeAll(Arrays.asList(internalClassAnnotation.ignoredFields()));
 
         return properties;
