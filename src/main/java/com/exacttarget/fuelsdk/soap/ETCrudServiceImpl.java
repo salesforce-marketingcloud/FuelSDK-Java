@@ -73,6 +73,9 @@ public abstract class ETCrudServiceImpl<T extends ETSoapObject>
             return response;
         }
 
+        // automatically refresh the token if necessary
+        client.refreshToken();
+
         //
         // Perform the SOAP create:
         //
@@ -135,6 +138,9 @@ public abstract class ETCrudServiceImpl<T extends ETSoapObject>
             return response;
         }
 
+        // automatically refresh the token if necessary
+        client.refreshToken();
+
         //
         // Perform the SOAP update:
         //
@@ -196,6 +202,9 @@ public abstract class ETCrudServiceImpl<T extends ETSoapObject>
         if (objects == null || objects.size() == 0) {
             return response;
         }
+
+        // automatically refresh the token if necessary
+        client.refreshToken();
 
         //
         // Perform the SOAP delete:

@@ -1,5 +1,10 @@
 2014-03-20  Ian Murdock  <imurdock@exacttarget.com>
 
+    * src/main/java/com/exacttarget/fuelsdk/soap/ETGetServiceImpl.java
+    (get): Automatically refresh the OAuth token if necessary.
+    * src/main/java/com/exacttarget/fuelsdk/soap/ETCrudServiceImpl.java
+    (post, patch, delete): Likewise.
+	
     * src/main/java/com/exacttarget/fuelsdk/ETSoapObject.java: Removed
     legacy ClientID property.
     * src/main/java/com/exacttarget/fuelsdk/model/ETClientID.java: Deleted.

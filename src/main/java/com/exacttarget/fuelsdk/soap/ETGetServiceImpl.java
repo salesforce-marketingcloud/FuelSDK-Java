@@ -67,6 +67,9 @@ public abstract class ETGetServiceImpl<T extends ETSoapObject>
     {
         ETResponse<T> response = new ETResponseImpl<T>();
 
+        // automatically refresh the token if necessary
+        client.refreshToken();
+
         Class<T> externalClass = type; // for code readability
 
         //

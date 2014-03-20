@@ -137,6 +137,7 @@ public class ETClient {
         //
 
         if (tokenExpirationTime - System.currentTimeMillis() > 5*60*1000) {
+            logger.debug("not refreshing access token");
             return;
         }
 
