@@ -103,9 +103,7 @@ public class ETClient {
             logger.trace("clientSecret = " + clientSecret);
         }
 
-        authConnection = new ETRestConnection(this, authEndpoint);
-
-        refreshToken();
+        authConnection = new ETRestConnection(this, authEndpoint, true);
 
         restConnection = new ETRestConnection(this, endpoint);
 
@@ -126,19 +124,30 @@ public class ETClient {
         soapConnection = new ETSoapConnection(this, soapEndpoint);
     }
 
-    public void refreshToken()
+    public String refreshToken()
         throws ETSdkException
     {
-        //
-        // If the current token expires more than five
-        // minutes from now, we don't need to refresh
-        // (tokenExpirationTime and System.currentTimeMills()
-        // are in milliseconds so we multiply by 1000):
-        //
+        if (tokenExpirationTime == 0) {
+            logger.debug("requesting new access token...");
+        } else {
+            logger.debug("access token expires at "
+                    + new Date(tokenExpirationTime));
 
-        if (tokenExpirationTime - System.currentTimeMillis() > 5*60*1000) {
-            logger.debug("not refreshing access token");
-            return;
+            //
+            // If the current token expires more than five
+            // minutes from now, we don't need to refresh
+            // (tokenExpirationTime and System.currentTimeMills()
+            // are in milliseconds so we multiply by 1000):
+            //
+
+            if (tokenExpirationTime - System.currentTimeMillis() > 5*60*1000) {
+                logger.debug("not refreshing access token");
+                return accessToken;
+            }
+
+            logger.debug("refreshing access token...");
+
+            assert refreshToken != null;
         }
 
         //
@@ -147,17 +156,12 @@ public class ETClient {
         // we have one:
         //
 
-        // XXX pretty print the REST calls when on trace log level
-
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("clientId", clientId);
         jsonObject.addProperty("clientSecret", clientSecret);
         jsonObject.addProperty("accessType", "offline");
         if (refreshToken != null) {
-            logger.debug("refreshing access token...");
             jsonObject.addProperty("refreshToken", refreshToken);
-        } else {
-            logger.debug("requesting new access token...");
         }
 
         String response = authConnection.post(PATH_REQUESTTOKEN, jsonObject);
@@ -191,7 +195,15 @@ public class ETClient {
 
         tokenExpirationTime = System.currentTimeMillis() + (expiresIn * 1000);
 
-        logger.debug("token expires at " + new Date(tokenExpirationTime));
+        logger.debug("new access token expires at "
+                + new Date(tokenExpirationTime));
+
+        // XXX not sure i like this
+        if (soapConnection != null) {
+            soapConnection.updateHeaders();
+        }
+
+        return accessToken;
     }
 
     public String getAccessToken() {

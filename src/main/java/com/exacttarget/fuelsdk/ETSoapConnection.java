@@ -56,6 +56,8 @@ public class ETSoapConnection {
     private String endpoint = null;
 
     private Soap soap = null;
+    private Client soapClient = null;
+    private SOAPFactory soapFactory = null;
 
     public ETSoapConnection(ETClient client, String endpoint)
         throws ETSdkException
@@ -70,13 +72,39 @@ public class ETSoapConnection {
 
         PartnerAPI service = new PartnerAPI();
         soap = service.getSoap();
-        Client soapClient = ClientProxy.getClient(soap);
+        soapClient = ClientProxy.getClient(soap);
         Endpoint soapEndpoint = soapClient.getEndpoint();
 
         try {
-            List<Header> headers = new ArrayList<Header>();
+            soapFactory = SOAPFactory.newInstance();
 
-            SOAPFactory soapFactory = SOAPFactory.newInstance();
+            updateHeaders();
+
+            soapClient.getRequestContext().put(Message.ENDPOINT_ADDRESS,
+                    endpoint);
+            soapClient.getRequestContext().put(Message.ENCODING, "UTF-8");
+
+            LoggingInInterceptor loggingInInterceptor =
+                    new LoggingInInterceptor();
+            loggingInInterceptor.setPrettyLogging(true);
+            LoggingOutInterceptor loggingOutInterceptor =
+                    new LoggingOutInterceptor();
+            loggingOutInterceptor.setPrettyLogging(true);
+            soapEndpoint.getInInterceptors().add(loggingInInterceptor);
+            soapEndpoint.getOutInterceptors().add(loggingOutInterceptor);
+        } catch (SOAPException ex) {
+            throw new ETSdkException("could not initialize SOAP proxy", ex);
+        }
+    }
+
+    // XXX this is kind of a hack.. ideally just
+    // the oAuthToken element would be updated..
+
+    public void updateHeaders()
+        throws ETSdkException
+    {
+        try {
+            List<Header> headers = new ArrayList<Header>();
 
             SOAPElement oAuthTokenElement =
                     soapFactory.createElement(new QName(null, "oAuthToken"));
@@ -110,25 +138,18 @@ public class ETSoapConnection {
             headers.add(securityHeader);
 
             soapClient.getRequestContext().put(Header.HEADER_LIST, headers);
-            soapClient.getRequestContext().put(Message.ENDPOINT_ADDRESS,
-                    endpoint);
-            soapClient.getRequestContext().put(Message.ENCODING, "UTF-8");
 
-            LoggingInInterceptor loggingInInterceptor =
-                    new LoggingInInterceptor();
-            loggingInInterceptor.setPrettyLogging(true);
-            LoggingOutInterceptor loggingOutInterceptor =
-                    new LoggingOutInterceptor();
-            loggingOutInterceptor.setPrettyLogging(true);
-            soapEndpoint.getInInterceptors().add(loggingInInterceptor);
-            soapEndpoint.getOutInterceptors().add(loggingOutInterceptor);
+            logger.debug("updated SOAP header with new legacy token " + client.getLegacyToken());
         } catch (SOAPException ex) {
-            throw new ETSdkException("could not initialize SOAP proxy", ex);
+            throw new ETSdkException("could not update SOAP headers", ex);
         }
     }
 
-    // XXX should be protected
     public Soap getSoap() {
         return soap;
+    }
+
+    public String getEndpoint() {
+        return endpoint;
     }
 }

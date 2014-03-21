@@ -1,3 +1,14 @@
+2014-03-21  Ian Murdock  <imurdock@exacttarget.com>
+
+    * src/main/java/com/exacttarget/fuelsdk/ETClient.java (refreshToken): Return
+    the new access token. Update the SOAP header with the new legacy token.
+    * src/main/java/com/exacttarget/fuelsdk/ETRestConnection.java: Keep track
+    of whether the connection is an auth connection (to avoid infinite loops).
+    (sendRequest): Refresh the access token if necessary, but only if this isn't
+    an auth connection.
+    * src/main/java/com/exacttarget/fuelsdk/ETSoapConnection.java (updateHeaders):
+    New method.
+
 2014-03-20  Ian Murdock  <imurdock@exacttarget.com>
 
     * src/main/java/com/exacttarget/fuelsdk/soap/ETGetServiceImpl.java

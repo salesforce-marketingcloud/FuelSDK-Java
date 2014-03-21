@@ -51,20 +51,30 @@ public class ETRestConnection {
 
     private String endpoint = null;
 
+    private boolean isAuthConnection = false;
+
+    private int responseCode = -1;
+
     private Gson gson = null;
 
     private enum Method {
         GET, POST, DELETE
     }
 
-    private int responseCode = -1;
-
     public ETRestConnection(ETClient client, String endpoint)
+        throws ETSdkException
+    {
+        this(client, endpoint, false);
+    }
+
+    public ETRestConnection(ETClient client, String endpoint, boolean isAuthConnection)
         throws ETSdkException
     {
         this.client = client;
 
         this.endpoint = endpoint;
+
+        this.isAuthConnection = isAuthConnection;
 
         //
         // If log level is set to TRACE, configure Gson to do pretty printing:
@@ -126,6 +136,14 @@ public class ETRestConnection {
         return post(path, jsonObject.toString());
     }
 
+    public String getEndpoint() {
+        return endpoint;
+    }
+
+    public boolean isAuthConnection() {
+        return isAuthConnection;
+    }
+
     public int getResponseCode() {
         return responseCode;
     }
@@ -177,10 +195,8 @@ public class ETRestConnection {
             throw new ETSdkException("unsupported request method: " + method.toString());
         }
 
-        String accessToken = client.getAccessToken();
-
-        if (accessToken != null) {
-            connection.setRequestProperty("Authorization", "Bearer " + accessToken);
+        if (!isAuthConnection) {
+            connection.setRequestProperty("Authorization", "Bearer " + client.refreshToken());
         }
 
         if (logger.isTraceEnabled()) {
