@@ -33,9 +33,9 @@ import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.model.ETSendClassification;
 
 public interface ETSendClassificationService extends ETCrudService {
-    public ETResponse<ETSendClassification> get(ETClient client)
+    public ETResponse<ETSendClassification> get(ETClient client, String... properties)
         throws ETSdkException;
-    public ETResponse<ETSendClassification> get(ETClient client, ETFilter filter)
+    public ETResponse<ETSendClassification> get(ETClient client, ETFilter filter, String... properties)
         throws ETSdkException;
     public ETResponse<ETSendClassification> post(ETClient client, ETSendClassification sendClassification)
         throws ETSdkException;

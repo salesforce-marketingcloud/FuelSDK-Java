@@ -39,16 +39,16 @@ import com.exacttarget.fuelsdk.model.ETEmail;
 public class ETEmailServiceImpl extends ETCrudServiceImpl<ETEmail>
     implements ETEmailService
 {
-    public ETResponse<ETEmail> get(ETClient client)
+    public ETResponse<ETEmail> get(ETClient client, String... properties)
         throws ETSdkException
     {
-        return super.get(client, ETEmail.class);
+        return super.get(client, ETEmail.class, properties);
     }
 
-    public ETResponse<ETEmail> get(ETClient client, ETFilter filter)
+    public ETResponse<ETEmail> get(ETClient client, ETFilter filter, String... properties)
         throws ETSdkException
     {
-        return super.get(client, ETEmail.class, filter);
+        return super.get(client, ETEmail.class, filter, properties);
     }
 
     public ETResponse<ETEmail> post(ETClient client, ETEmail email)

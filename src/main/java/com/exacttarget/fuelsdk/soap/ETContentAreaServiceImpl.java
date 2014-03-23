@@ -39,16 +39,16 @@ import com.exacttarget.fuelsdk.model.ETContentArea;
 public class ETContentAreaServiceImpl extends ETCrudServiceImpl<ETContentArea>
     implements ETContentAreaService
 {
-    public ETResponse<ETContentArea> get(ETClient client)
+    public ETResponse<ETContentArea> get(ETClient client, String... properties)
         throws ETSdkException
     {
-        return super.get(client, ETContentArea.class);
+        return super.get(client, ETContentArea.class, properties);
     }
 
-    public ETResponse<ETContentArea> get(ETClient client, ETFilter filter)
+    public ETResponse<ETContentArea> get(ETClient client, ETFilter filter, String... properties)
         throws ETSdkException
     {
-        return super.get(client, ETContentArea.class, filter);
+        return super.get(client, ETContentArea.class, filter, properties);
     }
 
     public ETResponse<ETContentArea> post(ETClient client, ETContentArea contentArea)

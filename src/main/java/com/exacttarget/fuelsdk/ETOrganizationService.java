@@ -33,9 +33,9 @@ import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.model.ETOrganization;
 
 public interface ETOrganizationService extends ETCrudService {
-    public ETResponse<ETOrganization> get(ETClient client)
+    public ETResponse<ETOrganization> get(ETClient client, String... properties)
         throws ETSdkException;
-    public ETResponse<ETOrganization> get(ETClient client, ETFilter filter)
+    public ETResponse<ETOrganization> get(ETClient client, ETFilter filter, String... properties)
         throws ETSdkException;
     public ETResponse<ETOrganization> post(ETClient client, ETOrganization organization)
         throws ETSdkException;

@@ -37,15 +37,15 @@ import com.exacttarget.fuelsdk.model.ETListSubscriber;
 public class ETListSubscriberServiceImpl extends ETGetServiceImpl<ETListSubscriber>
     implements ETListSubscriberService
 {
-    public ETResponse<ETListSubscriber> get(ETClient client)
+    public ETResponse<ETListSubscriber> get(ETClient client, String... properties)
         throws ETSdkException
     {
-        return super.get(client, ETListSubscriber.class);
+        return super.get(client, ETListSubscriber.class, properties);
     }
 
-    public ETResponse<ETListSubscriber> get(ETClient client, ETFilter filter)
+    public ETResponse<ETListSubscriber> get(ETClient client, ETFilter filter, String... properties)
         throws ETSdkException
     {
-        return super.get(client, ETListSubscriber.class, filter);
+        return super.get(client, ETListSubscriber.class, filter, properties);
     }
 }

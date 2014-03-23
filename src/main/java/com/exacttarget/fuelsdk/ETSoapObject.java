@@ -779,7 +779,8 @@ public abstract class ETSoapObject extends ETObject {
         return internalObject;
     }
 
-    private Field getField(Class<?> type, String name)
+    // XXX public?
+    public Field getField(Class<?> type, String name)
         throws ETSdkException
     {
         // make sure superclass fields are first to enhance readability
@@ -805,7 +806,8 @@ public abstract class ETSoapObject extends ETObject {
         return field;
     }
 
-    private List<Field> getAllFields(Class<?> type) {
+    // XXX public?
+    public List<Field> getAllFields(Class<?> type) {
         List<Field> fields = new ArrayList<Field>();
 
         List<Class<?>> types = new ArrayList<Class<?>>();
@@ -823,6 +825,7 @@ public abstract class ETSoapObject extends ETObject {
         return fields;
     }
 
+    // XXX public?
     public List<String> getProperties()
         throws ETSdkException
     {

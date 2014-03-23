@@ -39,16 +39,16 @@ import com.exacttarget.fuelsdk.model.ETOrganization;
 public class ETOrganizationServiceImpl extends ETCrudServiceImpl<ETOrganization>
     implements ETOrganizationService
 {
-    public ETResponse<ETOrganization> get(ETClient client)
+    public ETResponse<ETOrganization> get(ETClient client, String... properties)
         throws ETSdkException
     {
-        return super.get(client, ETOrganization.class);
+        return super.get(client, ETOrganization.class, properties);
     }
 
-    public ETResponse<ETOrganization> get(ETClient client, ETFilter filter)
+    public ETResponse<ETOrganization> get(ETClient client, ETFilter filter, String... properties)
         throws ETSdkException
     {
-        return super.get(client, ETOrganization.class, filter);
+        return super.get(client, ETOrganization.class, filter, properties);
     }
 
     public ETResponse<ETOrganization> post(ETClient client, ETOrganization organization)

@@ -33,9 +33,9 @@ import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.model.ETContentArea;
 
 public interface ETContentAreaService extends ETCrudService {
-    public ETResponse<ETContentArea> get(ETClient client)
+    public ETResponse<ETContentArea> get(ETClient client, String... properties)
         throws ETSdkException;
-    public ETResponse<ETContentArea> get(ETClient client, ETFilter filter)
+    public ETResponse<ETContentArea> get(ETClient client, ETFilter filter, String... properties)
         throws ETSdkException;
     public ETResponse<ETContentArea> post(ETClient client, ETContentArea contentArea)
         throws ETSdkException;

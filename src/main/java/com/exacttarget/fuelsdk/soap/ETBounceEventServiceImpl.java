@@ -37,15 +37,15 @@ import com.exacttarget.fuelsdk.model.ETBounceEvent;
 public class ETBounceEventServiceImpl extends ETGetServiceImpl<ETBounceEvent>
     implements ETBounceEventService
 {
-    public ETResponse<ETBounceEvent> get(ETClient client)
+    public ETResponse<ETBounceEvent> get(ETClient client, String... properties)
         throws ETSdkException
     {
-        return super.get(client, ETBounceEvent.class);
+        return super.get(client, ETBounceEvent.class, properties);
     }
 
-    public ETResponse<ETBounceEvent> get(ETClient client, ETFilter filter)
+    public ETResponse<ETBounceEvent> get(ETClient client, ETFilter filter, String... properties)
         throws ETSdkException
     {
-        return super.get(client, ETBounceEvent.class, filter);
+        return super.get(client, ETBounceEvent.class, filter, properties);
     }
 }

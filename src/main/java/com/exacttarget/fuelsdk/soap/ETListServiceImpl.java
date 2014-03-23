@@ -39,16 +39,16 @@ import com.exacttarget.fuelsdk.model.ETList;
 public class ETListServiceImpl extends ETCrudServiceImpl<ETList>
     implements ETListService
 {
-    public ETResponse<ETList> get(ETClient client)
+    public ETResponse<ETList> get(ETClient client, String... properties)
         throws ETSdkException
     {
-        return super.get(client, ETList.class);
+        return super.get(client, ETList.class, properties);
     }
 
-    public ETResponse<ETList> get(ETClient client, ETFilter filter)
+    public ETResponse<ETList> get(ETClient client, ETFilter filter, String... properties)
         throws ETSdkException
     {
-        return super.get(client, ETList.class, filter);
+        return super.get(client, ETList.class, filter, properties);
     }
 
     public ETResponse<ETList> post(ETClient client, ETList list)

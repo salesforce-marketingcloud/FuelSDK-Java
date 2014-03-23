@@ -39,16 +39,16 @@ import com.exacttarget.fuelsdk.model.ETFolder;
 public class ETFolderServiceImpl extends ETCrudServiceImpl<ETFolder>
     implements ETFolderService
 {
-    public ETResponse<ETFolder> get(ETClient client)
+    public ETResponse<ETFolder> get(ETClient client, String... properties)
         throws ETSdkException
     {
-        return super.get(client, ETFolder.class);
+        return super.get(client, ETFolder.class, properties);
     }
 
-    public ETResponse<ETFolder> get(ETClient client, ETFilter filter)
+    public ETResponse<ETFolder> get(ETClient client, ETFilter filter, String... properties)
         throws ETSdkException
     {
-        return super.get(client, ETFolder.class, filter);
+        return super.get(client, ETFolder.class, filter, properties);
     }
 
     public ETResponse<ETFolder> post(ETClient client, ETFolder folder)

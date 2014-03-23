@@ -31,8 +31,8 @@ import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.model.ETUnsubEvent;
 
 public interface ETUnsubEventService extends ETGetService {
-    public ETResponse<ETUnsubEvent> get(ETClient client)
+    public ETResponse<ETUnsubEvent> get(ETClient client, String... properties)
         throws ETSdkException;
-    public ETResponse<ETUnsubEvent> get(ETClient client, ETFilter filter)
+    public ETResponse<ETUnsubEvent> get(ETClient client, ETFilter filter, String... properties)
         throws ETSdkException;
 }

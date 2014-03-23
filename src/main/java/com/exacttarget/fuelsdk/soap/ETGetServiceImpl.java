@@ -27,7 +27,13 @@
 
 package com.exacttarget.fuelsdk.soap;
 
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementRef;
 
 import org.apache.log4j.Logger;
 
@@ -36,6 +42,7 @@ import com.exacttarget.fuelsdk.ETGetService;
 import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.ETSoapObject;
+import com.exacttarget.fuelsdk.annotations.InternalSoapField;
 import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.filter.ETComplexFilter;
 import com.exacttarget.fuelsdk.filter.ETFilter;
@@ -56,19 +63,16 @@ public abstract class ETGetServiceImpl<T extends ETSoapObject>
 {
     private static Logger logger = Logger.getLogger(ETGetServiceImpl.class);
 
-    public ETResponse<T> get(ETClient client, Class<T> type)
+    public ETResponse<T> get(ETClient client, Class<T> type, String...properties)
         throws ETSdkException
     {
-        return get(client, type, null);
+        return get(client, type, null, properties);
     }
 
-    public ETResponse<T> get(ETClient client, Class<T> type, ETFilter filter)
+    public ETResponse<T> get(ETClient client, Class<T> type, ETFilter filter, String... properties)
         throws ETSdkException
     {
         ETResponse<T> response = new ETResponseImpl<T>();
-
-        // automatically refresh the token if necessary
-        client.refreshToken();
 
         Class<T> externalClass = type; // for code readability
 
@@ -83,25 +87,102 @@ public abstract class ETGetServiceImpl<T extends ETSoapObject>
         assert internalClass != null;
 
         //
-        // Perform the SOAP retrieve:
+        // Convert external property names to internal property names:
         //
 
-        Soap soap = client.getSOAPConnection().getSoap();
+        List<String> internalProperties = null;
 
         // XXX it would be nice to not have to instantiate
         // an object just so we can call getProperties()..
 
         T o = null;
         try {
-            o = externalClass.newInstance();
+            o = type.newInstance();
         } catch (Exception ex) {
             throw new ETSdkException("could not instantiate "
-                    + externalClass.getName(), ex);
+                    + type.getName(), ex);
         }
+
+        if (properties.length > 0) {
+            //
+            // Only request those properties specified:
+            //
+
+            internalProperties = new ArrayList<String>();
+
+            String[] externalProperties = properties; // for code readability
+
+            for (String externalProperty : externalProperties) {
+                Field externalField = null;
+                try {
+                    externalField = o.getField(type, externalProperty);
+                } catch (ETSdkException ex) {
+                    throw new ETSdkException("invalid property: " + externalProperty, ex);
+                }
+                InternalSoapField internalFieldAnnotation
+                    = externalField.getAnnotation(InternalSoapField.class);
+                if (internalFieldAnnotation == null) {
+                    throw new ETSdkException("invalid property: " + externalProperty);
+                }
+
+                // XXX duplicate code.. put into method
+
+                String internalProperty = internalFieldAnnotation.serializedName();
+
+                if (internalProperty.isEmpty()) {
+                    //
+                    // There is no property name specified
+                    // in the annotation so look at the values of
+                    // @XmlElement or @XmlElementRef on the corresponding
+                    // internal field of the CXF generated class:
+                    //
+
+                    String internalFieldName = internalFieldAnnotation.name();
+
+                    Field internalField = o.getField(internalClass,
+                                                     internalFieldName);
+
+                    XmlElement element =
+                            internalField.getAnnotation(XmlElement.class);
+                    if (element != null) {
+                        internalProperty = element.name();
+                    } else {
+                        // optional dateTimes are annotated with XmlElementRef
+                        XmlElementRef elementRef =
+                                internalField.getAnnotation(XmlElementRef.class);
+                        if (elementRef != null) {
+                            internalProperty = elementRef.name();
+                        }
+                    }
+                }
+
+                assert internalProperty != null;
+
+                internalProperties.add(internalProperty);
+            }
+        } else {
+            //
+            // No properties were explicitly requested:
+            //
+
+            internalProperties = o.getProperties();
+        }
+
+        //
+        // Automatically refresh the token if necessary:
+        //
+
+        client.refreshToken();
+
+        //
+        // Perform the SOAP retrieve:
+        //
+
+        Soap soap = client.getSOAPConnection().getSoap();
 
         RetrieveRequest retrieveRequest = new RetrieveRequest();
         retrieveRequest.setObjectType(internalClass.getSimpleName());
-        retrieveRequest.getProperties().addAll(o.getProperties()); // XXX
+        retrieveRequest.getProperties().addAll(internalProperties);
         if (filter != null) {
             retrieveRequest.setFilter(convertFilterPart(filter));
         }

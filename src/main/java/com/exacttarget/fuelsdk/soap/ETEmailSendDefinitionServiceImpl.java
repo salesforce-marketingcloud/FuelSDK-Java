@@ -37,8 +37,6 @@ import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.internal.APIObject;
-import com.exacttarget.fuelsdk.internal.EmailSendDefinition;
-import com.exacttarget.fuelsdk.internal.InteractionBaseObject;
 import com.exacttarget.fuelsdk.internal.PerformRequestMsg;
 import com.exacttarget.fuelsdk.internal.PerformRequestMsg.Definitions;
 import com.exacttarget.fuelsdk.internal.PerformResponseMsg;
@@ -51,16 +49,16 @@ public class ETEmailSendDefinitionServiceImpl extends ETCrudServiceImpl<ETEmailS
 {
     private static Logger logger = Logger.getLogger(ETEmailSendDefinitionServiceImpl.class);
 
-    public ETResponse<ETEmailSendDefinition> get(ETClient client)
+    public ETResponse<ETEmailSendDefinition> get(ETClient client, String... properties)
         throws ETSdkException
     {
-        return super.get(client, ETEmailSendDefinition.class);
+        return super.get(client, ETEmailSendDefinition.class, properties);
     }
 
-    public ETResponse<ETEmailSendDefinition> get(ETClient client, ETFilter filter)
+    public ETResponse<ETEmailSendDefinition> get(ETClient client, ETFilter filter, String... properties)
         throws ETSdkException
     {
-        return super.get(client, ETEmailSendDefinition.class, filter);
+        return super.get(client, ETEmailSendDefinition.class, filter, properties);
     }
 
     public ETResponse<ETEmailSendDefinition> post(ETClient client, ETEmailSendDefinition emailSendDefinition)

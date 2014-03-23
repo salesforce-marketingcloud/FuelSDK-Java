@@ -37,15 +37,15 @@ import com.exacttarget.fuelsdk.model.ETDataExtensionColumn;
 public class ETDataExtensionColumnServiceImpl extends ETGetServiceImpl<ETDataExtensionColumn>
     implements ETDataExtensionColumnService
 {
-    public ETResponse<ETDataExtensionColumn> get(ETClient client)
+    public ETResponse<ETDataExtensionColumn> get(ETClient client, String... properties)
         throws ETSdkException
     {
-        return super.get(client, ETDataExtensionColumn.class);
+        return super.get(client, ETDataExtensionColumn.class, properties);
     }
 
-    public ETResponse<ETDataExtensionColumn> get(ETClient client, ETFilter filter)
+    public ETResponse<ETDataExtensionColumn> get(ETClient client, ETFilter filter, String... properties)
         throws ETSdkException
     {
-        return super.get(client, ETDataExtensionColumn.class, filter);
+        return super.get(client, ETDataExtensionColumn.class, filter, properties);
     }
 }

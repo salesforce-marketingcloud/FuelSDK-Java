@@ -31,8 +31,8 @@ import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.model.ETDataExtensionColumn;
 
 public interface ETDataExtensionColumnService extends ETGetService {
-    public ETResponse<ETDataExtensionColumn> get(ETClient client)
+    public ETResponse<ETDataExtensionColumn> get(ETClient client, String... properties)
         throws ETSdkException;
-    public ETResponse<ETDataExtensionColumn> get(ETClient client, ETFilter filter)
+    public ETResponse<ETDataExtensionColumn> get(ETClient client, ETFilter filter, String... properties)
         throws ETSdkException;
 }

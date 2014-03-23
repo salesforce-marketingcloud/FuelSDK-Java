@@ -39,16 +39,16 @@ import com.exacttarget.fuelsdk.model.ETSendClassification;
 public class ETSendClassificationServiceImpl extends ETCrudServiceImpl<ETSendClassification>
     implements ETSendClassificationService
 {
-    public ETResponse<ETSendClassification> get(ETClient client)
+    public ETResponse<ETSendClassification> get(ETClient client, String... properties)
         throws ETSdkException
     {
-        return super.get(client, ETSendClassification.class);
+        return super.get(client, ETSendClassification.class, properties);
     }
 
-    public ETResponse<ETSendClassification> get(ETClient client, ETFilter filter)
+    public ETResponse<ETSendClassification> get(ETClient client, ETFilter filter, String... properties)
         throws ETSdkException
     {
-        return super.get(client, ETSendClassification.class, filter);
+        return super.get(client, ETSendClassification.class, filter, properties);
     }
 
     public ETResponse<ETSendClassification> post(ETClient client, ETSendClassification sendClassification)

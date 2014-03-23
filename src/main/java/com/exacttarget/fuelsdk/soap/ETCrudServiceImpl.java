@@ -73,7 +73,10 @@ public abstract class ETCrudServiceImpl<T extends ETSoapObject>
             return response;
         }
 
-        // automatically refresh the token if necessary
+        //
+        // Automatically refresh the token if necessary:
+        //
+
         client.refreshToken();
 
         //
@@ -138,7 +141,10 @@ public abstract class ETCrudServiceImpl<T extends ETSoapObject>
             return response;
         }
 
-        // automatically refresh the token if necessary
+        //
+        // Automatically refresh the token if necessary:
+        //
+
         client.refreshToken();
 
         //
@@ -203,7 +209,10 @@ public abstract class ETCrudServiceImpl<T extends ETSoapObject>
             return response;
         }
 
-        // automatically refresh the token if necessary
+        //
+        // Automatically refresh the token if necessary:
+        //
+
         client.refreshToken();
 
         //

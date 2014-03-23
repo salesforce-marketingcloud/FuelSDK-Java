@@ -37,15 +37,15 @@ import com.exacttarget.fuelsdk.model.ETOpenEvent;
 public class ETOpenEventServiceImpl extends ETGetServiceImpl<ETOpenEvent>
     implements ETOpenEventService
 {
-    public ETResponse<ETOpenEvent> get(ETClient client)
+    public ETResponse<ETOpenEvent> get(ETClient client, String... properties)
         throws ETSdkException
     {
-        return super.get(client, ETOpenEvent.class);
+        return super.get(client, ETOpenEvent.class, properties);
     }
 
-    public ETResponse<ETOpenEvent> get(ETClient client, ETFilter filter)
+    public ETResponse<ETOpenEvent> get(ETClient client, ETFilter filter, String... properties)
         throws ETSdkException
     {
-        return super.get(client, ETOpenEvent.class, filter);
+        return super.get(client, ETOpenEvent.class, filter, properties);
     }
 }

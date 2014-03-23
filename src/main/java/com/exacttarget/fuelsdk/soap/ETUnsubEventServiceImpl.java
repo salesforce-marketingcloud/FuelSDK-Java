@@ -37,15 +37,15 @@ import com.exacttarget.fuelsdk.model.ETUnsubEvent;
 public class ETUnsubEventServiceImpl extends ETGetServiceImpl<ETUnsubEvent>
     implements ETUnsubEventService
 {
-    public ETResponse<ETUnsubEvent> get(ETClient client)
+    public ETResponse<ETUnsubEvent> get(ETClient client, String... properties)
         throws ETSdkException
     {
-        return super.get(client, ETUnsubEvent.class);
+        return super.get(client, ETUnsubEvent.class, properties);
     }
 
-    public ETResponse<ETUnsubEvent> get(ETClient client, ETFilter filter)
+    public ETResponse<ETUnsubEvent> get(ETClient client, ETFilter filter, String... properties)
         throws ETSdkException
     {
-        return super.get(client, ETUnsubEvent.class, filter);
+        return super.get(client, ETUnsubEvent.class, filter, properties);
     }
 }

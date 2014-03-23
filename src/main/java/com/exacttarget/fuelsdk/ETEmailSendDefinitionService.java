@@ -33,9 +33,9 @@ import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.model.ETEmailSendDefinition;
 
 public interface ETEmailSendDefinitionService extends ETCrudService {
-    public ETResponse<ETEmailSendDefinition> get(ETClient client)
+    public ETResponse<ETEmailSendDefinition> get(ETClient client, String... properties)
         throws ETSdkException;
-    public ETResponse<ETEmailSendDefinition> get(ETClient client, ETFilter filter)
+    public ETResponse<ETEmailSendDefinition> get(ETClient client, ETFilter filter, String... properties)
         throws ETSdkException;
     public ETResponse<ETEmailSendDefinition> post(ETClient client, ETEmailSendDefinition emailSendDefinition)
         throws ETSdkException;

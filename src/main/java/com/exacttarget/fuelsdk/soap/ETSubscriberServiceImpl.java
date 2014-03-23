@@ -39,16 +39,16 @@ import com.exacttarget.fuelsdk.model.ETSubscriber;
 public class ETSubscriberServiceImpl extends ETCrudServiceImpl<ETSubscriber>
     implements ETSubscriberService
 {
-    public ETResponse<ETSubscriber> get(ETClient client)
+    public ETResponse<ETSubscriber> get(ETClient client, String... properties)
         throws ETSdkException
     {
-        return super.get(client, ETSubscriber.class);
+        return super.get(client, ETSubscriber.class, properties);
     }
 
-    public ETResponse<ETSubscriber> get(ETClient client, ETFilter filter)
+    public ETResponse<ETSubscriber> get(ETClient client, ETFilter filter, String... properties)
         throws ETSdkException
     {
-        return super.get(client, ETSubscriber.class, filter);
+        return super.get(client, ETSubscriber.class, filter, properties);
     }
 
     public ETResponse<ETSubscriber> post(ETClient client, ETSubscriber subscriber)
