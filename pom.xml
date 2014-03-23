@@ -53,6 +53,17 @@
   <build>
     <finalName>fuelsdk-${project.version}</finalName>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>2.4</version>
+        <configuration>
+          <excludes>
+            <exclude>.gitignore</exclude>
+            <exclude>*.properties</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
       <!-- generate Java source from WSDL -->
       <plugin>
         <groupId>org.apache.cxf</groupId>
