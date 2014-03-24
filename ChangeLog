@@ -1,5 +1,15 @@
 2014-03-23  Ian Murdock  <imurdock@exacttarget.com>
 
+    * src/main/java/com/exacttarget/fuelsdk/ETSoapObject.java
+    (getInternalProperty): New function.
+    (getInternalProperties): Renamed from getProperties() and made static.
+    (getField): Made private.
+    (getAllFields): Made private.
+    * src/main/java/com/exacttarget/fuelsdk/soap/ETGetServiceImpl.java (get): Use
+    new getInternalProperty() and getInternalProperties() methods in ETSoapObject.
+
+2014-03-23  Ian Murdock  <imurdock@exacttarget.com>
+
     * Added support for partial object loading. Now, if you want to include
     only specific properties of the object(s) in the response, you can do
     that by specifying the property names as arguments to the get call, e.g.:

@@ -27,13 +27,9 @@
 
 package com.exacttarget.fuelsdk.soap;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementRef;
 
 import org.apache.log4j.Logger;
 
@@ -42,7 +38,6 @@ import com.exacttarget.fuelsdk.ETGetService;
 import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.ETSoapObject;
-import com.exacttarget.fuelsdk.annotations.InternalSoapField;
 import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.filter.ETComplexFilter;
 import com.exacttarget.fuelsdk.filter.ETFilter;
@@ -92,17 +87,6 @@ public abstract class ETGetServiceImpl<T extends ETSoapObject>
 
         List<String> internalProperties = null;
 
-        // XXX it would be nice to not have to instantiate
-        // an object just so we can call getProperties()..
-
-        T o = null;
-        try {
-            o = type.newInstance();
-        } catch (Exception ex) {
-            throw new ETSdkException("could not instantiate "
-                    + type.getName(), ex);
-        }
-
         if (properties.length > 0) {
             //
             // Only request those properties specified:
@@ -113,51 +97,9 @@ public abstract class ETGetServiceImpl<T extends ETSoapObject>
             String[] externalProperties = properties; // for code readability
 
             for (String externalProperty : externalProperties) {
-                Field externalField = null;
-                try {
-                    externalField = o.getField(type, externalProperty);
-                } catch (ETSdkException ex) {
-                    throw new ETSdkException("invalid property: " + externalProperty, ex);
-                }
-                InternalSoapField internalFieldAnnotation
-                    = externalField.getAnnotation(InternalSoapField.class);
-                if (internalFieldAnnotation == null) {
-                    throw new ETSdkException("invalid property: " + externalProperty);
-                }
-
-                // XXX duplicate code.. put into method
-
-                String internalProperty = internalFieldAnnotation.serializedName();
-
-                if (internalProperty.isEmpty()) {
-                    //
-                    // There is no property name specified
-                    // in the annotation so look at the values of
-                    // @XmlElement or @XmlElementRef on the corresponding
-                    // internal field of the CXF generated class:
-                    //
-
-                    String internalFieldName = internalFieldAnnotation.name();
-
-                    Field internalField = o.getField(internalClass,
-                                                     internalFieldName);
-
-                    XmlElement element =
-                            internalField.getAnnotation(XmlElement.class);
-                    if (element != null) {
-                        internalProperty = element.name();
-                    } else {
-                        // optional dateTimes are annotated with XmlElementRef
-                        XmlElementRef elementRef =
-                                internalField.getAnnotation(XmlElementRef.class);
-                        if (elementRef != null) {
-                            internalProperty = elementRef.name();
-                        }
-                    }
-                }
-
+                String internalProperty =
+                        ETSoapObject.getInternalProperty(externalClass, externalProperty);
                 assert internalProperty != null;
-
                 internalProperties.add(internalProperty);
             }
         } else {
@@ -165,7 +107,7 @@ public abstract class ETGetServiceImpl<T extends ETSoapObject>
             // No properties were explicitly requested:
             //
 
-            internalProperties = o.getProperties();
+            internalProperties = ETSoapObject.getInternalProperties(externalClass);
         }
 
         //

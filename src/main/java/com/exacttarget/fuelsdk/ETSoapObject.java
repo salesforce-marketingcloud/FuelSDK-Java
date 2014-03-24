@@ -779,12 +779,121 @@ public abstract class ETSoapObject extends ETObject {
         return internalObject;
     }
 
-    // XXX public?
-    public Field getField(Class<?> type, String name)
+    public static String getInternalProperty(Class<? extends ETSoapObject> type,
+                                             String externalProperty)
         throws ETSdkException
     {
-        // make sure superclass fields are first to enhance readability
-        // of the SOAP message
+        Class<? extends ETSoapObject> externalClass = type; // for code readability
+
+        //
+        // Use the @InternalSoapType annotation to determine internalType:
+        //
+
+        InternalSoapType internalClassAnnotation
+            = externalClass.getAnnotation(InternalSoapType.class);
+        assert internalClassAnnotation != null;
+        Class<? extends APIObject> internalClass = internalClassAnnotation.type();
+        assert internalClass != null;
+
+        Field externalField = null;
+        try {
+            externalField = getField(externalClass, externalProperty);
+        } catch (ETSdkException ex) {
+            throw new ETSdkException(externalProperty + ": invalid property", ex);
+        }
+
+        return getInternalProperty(internalClass, externalField);
+    }
+
+    public static List<String> getInternalProperties(Class<? extends ETSoapObject> type)
+        throws ETSdkException
+    {
+        List<String> internalProperties = new ArrayList<String>();
+
+        Class<? extends ETSoapObject> externalClass = type; // for code readability
+
+        //
+        // Use the @InternalSoapType annotation to determine internalType:
+        //
+
+        InternalSoapType internalClassAnnotation
+            = externalClass.getAnnotation(InternalSoapType.class);
+        assert internalClassAnnotation != null;
+        Class<? extends APIObject> internalClass = internalClassAnnotation.type();
+        assert internalClass != null;
+
+        //
+        // Build a list of fields from externalType and all superclasses:
+        //
+
+        List<Field> externalFields = getAllFields(externalClass);
+
+        //
+        // Walk the list of external fields building a list of the
+        // corresponding property names using @InternalSoapField:
+        //
+
+        for (Field externalField : externalFields) {
+            String internalProperty = getInternalProperty(internalClass,
+                                                          externalField);
+            assert internalProperty != null;
+            internalProperties.add(internalProperty);
+        }
+
+        internalProperties.removeAll(Arrays.asList(internalClassAnnotation.ignoredFields()));
+
+        return internalProperties;
+    }
+
+    private static String getInternalProperty(Class<? extends APIObject> type,
+                                              Field externalField)
+        throws ETSdkException
+    {
+        String internalProperty = null;
+
+        Class<? extends APIObject> internalClass = type; // for code readability
+
+        InternalSoapField internalFieldAnnotation
+            = externalField.getAnnotation(InternalSoapField.class);
+        if (internalFieldAnnotation != null) {
+            internalProperty = internalFieldAnnotation.serializedName();
+
+            if (internalProperty.isEmpty()) {
+                //
+                // There is no property name specified
+                // in the annotation so look at the values of
+                // @XmlElement or @XmlElementRef on the corresponding
+                // internal field of the CXF generated class:
+                //
+
+                String internalFieldName = internalFieldAnnotation.name();
+
+                Field internalField = getField(internalClass,
+                                               internalFieldName);
+
+                XmlElement element =
+                        internalField.getAnnotation(XmlElement.class);
+                if (element != null) {
+                    internalProperty = element.name();
+                } else {
+                    // optional dateTimes are annotated with XmlElementRef
+                    XmlElementRef elementRef =
+                            internalField.getAnnotation(XmlElementRef.class);
+                    if (elementRef != null) {
+                        internalProperty = elementRef.name();
+                    }
+                }
+            }
+        }
+
+        return internalProperty;
+    }
+
+    private static Field getField(Class<?> type, String name)
+        throws ETSdkException
+    {
+        // make sure superclass fields are first, to
+        // enhance readability of the SOAP envelopes
 
         Field field = null;
         for (Class<?> t = type; t != null; t = t.getSuperclass()) {
@@ -806,8 +915,7 @@ public abstract class ETSoapObject extends ETObject {
         return field;
     }
 
-    // XXX public?
-    public List<Field> getAllFields(Class<?> type) {
+    private static List<Field> getAllFields(Class<?> type) {
         List<Field> fields = new ArrayList<Field>();
 
         List<Class<?>> types = new ArrayList<Class<?>>();
@@ -823,76 +931,5 @@ public abstract class ETSoapObject extends ETObject {
         }
 
         return fields;
-    }
-
-    // XXX public?
-    public List<String> getProperties()
-        throws ETSdkException
-    {
-        List<String> properties = new ArrayList<String>();
-
-        //
-        // Use the @InternalSoapType annotation to determine internalType:
-        //
-
-        InternalSoapType internalClassAnnotation
-            = getClass().getAnnotation(InternalSoapType.class);
-        assert internalClassAnnotation != null;
-        Class<? extends APIObject> internalClass = internalClassAnnotation.type();
-        assert internalClass != null;
-
-        //
-        // Build a list of fields from externalType and all superclasses:
-        //
-
-        List<Field> externalFields = getAllFields(getClass());
-
-        //
-        // Walk the list of external fields building a list of the
-        // corresponding property names using @InternalSoapField:
-        //
-
-        for (Field externalField : externalFields) {
-            InternalSoapField internalFieldAnnotation
-                = externalField.getAnnotation(InternalSoapField.class);
-            if (internalFieldAnnotation != null) {
-                String property = internalFieldAnnotation.serializedName();
-
-                if (property.isEmpty()) {
-                    //
-                    // There is no property name specified
-                    // in the annotation so look at the values of
-                    // @XmlElement or @XmlElementRef on the corresponding
-                    // internal field of the CXF generated class:
-                    //
-
-                    String internalFieldName = internalFieldAnnotation.name();
-
-                    Field internalField = getField(internalClass,
-                                                   internalFieldName);
-
-                    XmlElement element =
-                            internalField.getAnnotation(XmlElement.class);
-                    if (element != null) {
-                        property = element.name();
-                    } else {
-                        // optional dateTimes are annotated with XmlElementRef
-                        XmlElementRef elementRef =
-                                internalField.getAnnotation(XmlElementRef.class);
-                        if (elementRef != null) {
-                            property = elementRef.name();
-                        }
-                    }
-                }
-
-                assert property != null;
-
-                properties.add(property);
-            }
-        }
-
-        properties.removeAll(Arrays.asList(internalClassAnnotation.ignoredFields()));
-
-        return properties;
     }
 }
