@@ -77,10 +77,10 @@ public class ETRestConnection {
         this.isAuthConnection = isAuthConnection;
 
         //
-        // If log level is set to TRACE, configure Gson to do pretty printing:
+        // If log level is set to DEBUG, configure Gson to do pretty printing:
         //
 
-        if (logger.isTraceEnabled()) {
+        if (logger.isDebugEnabled()) {
             gson = new GsonBuilder().setPrettyPrinting().create();
         }
     }
@@ -199,19 +199,19 @@ public class ETRestConnection {
             connection.setRequestProperty("Authorization", "Bearer " + client.refreshToken());
         }
 
-        if (logger.isTraceEnabled()) {
+        if (logger.isDebugEnabled()) {
             for (String key : connection.getRequestProperties().keySet()) {
-                logger.trace(key + ": " + connection.getRequestProperty(key));
+                logger.debug(key + ": " + connection.getRequestProperty(key));
             }
         }
 
         if (payload != null) {
-            if (logger.isTraceEnabled()) {
+            if (logger.isDebugEnabled()) {
                 JsonParser jsonParser = new JsonParser();
                 String payloadPrettyPrinted =
                         gson.toJson(jsonParser.parse(payload));
                 for (String line : payloadPrettyPrinted.split("\\n")) {
-                    logger.trace(line);
+                    logger.debug(line);
                 }
             }
             try {
@@ -265,11 +265,11 @@ public class ETRestConnection {
 
         String response = stringBuilder.toString();
 
-        if (logger.isTraceEnabled()) {
+        if (logger.isDebugEnabled()) {
             JsonParser jsonParser = new JsonParser();
             String responsePrettyPrinted = gson.toJson(jsonParser.parse(response));
             for (String line : responsePrettyPrinted.split("\\n")) {
-                logger.trace(line);
+                logger.debug(line);
             }
         }
 
