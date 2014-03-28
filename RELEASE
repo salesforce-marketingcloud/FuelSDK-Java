@@ -1,0 +1,24 @@
+Version 0.999999
+----------------
+
+The primary new feature is the addition of partial object loading.
+Now, if you want to include only specific properties of the object(s)
+in the response, you can do that by specifying the property names
+as arguments to the get call, e.g.:
+
+    ETResponse<ETList> response = service.get(client, "name", "description");
+
+You can also use partial object loading when using filters:
+
+    ETResponse<ETList> response = service.get(client, filter, "name", "description");
+
+As before, if no properties are specified, all properties are loaded, e.g.:
+
+    ETResponse<ETList> response = service.get(client);
+
+or
+
+    ETResponse<ETList> response = service.get(client);
+
+There were also numerous bug fixes and smaller feature enhancements.
+For more information, please see the ChangeLog file.
