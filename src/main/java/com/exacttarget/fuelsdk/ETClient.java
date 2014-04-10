@@ -66,6 +66,12 @@ public class ETClient {
         this(new ETConfiguration());
     }
 
+    public ETClient(String file)
+        throws ETSdkException
+    {
+        this(new ETConfiguration(file));
+    }
+
     public ETClient(ETConfiguration configuration)
         throws ETSdkException
     {

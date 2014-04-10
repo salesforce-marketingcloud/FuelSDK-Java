@@ -1,3 +1,8 @@
+2014-03-29  Ian Murdock  <imurdock@exacttarget.com>
+
+    * src/main/java/com/exacttarget/fuelsdk/ETClient.java: Added new constructor
+    that takes properties file.
+
 2014-03-28  Ian Murdock  <imurdock@exacttarget.com>
 
     * Released version 0.999999.
