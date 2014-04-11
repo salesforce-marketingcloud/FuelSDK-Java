@@ -58,7 +58,7 @@ public abstract class ETGetServiceImpl<T extends ETSoapObject>
 {
     private static Logger logger = Logger.getLogger(ETGetServiceImpl.class);
 
-    public ETResponse<T> get(ETClient client, Class<T> type, String...properties)
+    public ETResponse<T> get(ETClient client, Class<T> type, String... properties)
         throws ETSdkException
     {
         return get(client, type, null, properties);

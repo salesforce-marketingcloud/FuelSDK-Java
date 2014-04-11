@@ -27,6 +27,7 @@
 
 package com.exacttarget.fuelsdk.model;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import com.exacttarget.fuelsdk.ETSoapObject;
@@ -41,7 +42,7 @@ public class ETDataExtensionRow extends ETSoapObject {
     @InternalSoapField(name = "keys")
     private Map<String, String> keys = null;
     @InternalSoapField(name = "properties")
-    protected Map<String, String> columns = null;
+    private Map<String, String> columns = new HashMap<String, String>();
 
     public ETDataExtensionRow() {}
 
@@ -67,5 +68,9 @@ public class ETDataExtensionRow extends ETSoapObject {
 
     public void setColumns(Map<String, String> columns) {
         this.columns = columns;
+    }
+
+    public void setColumn(String name, String value) {
+        columns.put(name, value);
     }
 }

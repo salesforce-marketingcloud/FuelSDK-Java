@@ -28,7 +28,11 @@
 package com.exacttarget.fuelsdk;
 
 import java.util.Date;
+import java.util.List;
 
+import com.exacttarget.fuelsdk.filter.ETFilter;
+import com.exacttarget.fuelsdk.model.ETDataExtension;
+import com.exacttarget.fuelsdk.soap.ETDataExtensionServiceImpl;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -226,5 +230,23 @@ public class ETClient {
 
     public ETSoapConnection getSOAPConnection() {
         return soapConnection;
+    }
+
+    public List<ETDataExtension> retrieveDataExtensions()
+        throws ETSdkException
+    {
+        return retrieveDataExtensions(null);
+    }
+
+    public List<ETDataExtension> retrieveDataExtensions(ETFilter filter)
+        throws ETSdkException
+    {
+        ETDataExtensionService service = new ETDataExtensionServiceImpl();
+        ETResponse<ETDataExtension> response = service.get(this, filter);
+        // XXX check for errors and throw the appropriate exception
+        for (ETDataExtension dataExtension : response.getResults()) {
+            dataExtension.setClient(this); // XXX hack
+        }
+        return response.getResults();
     }
 }
