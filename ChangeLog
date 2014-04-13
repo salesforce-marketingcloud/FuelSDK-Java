@@ -1,3 +1,11 @@
+2014-04-13  Ian Murdock  <imurdock@exacttarget.com>
+
+    * src/main-deprecated/java/com/exacttarget/fuelsdk: New directory for
+    deprecated sources.
+    * src/main-deprecated/java/com/exacttarget/fuelsdk/model/converter/ObjectConverter.java:
+    Moved from src/main/java/com/exacttarget/fuelsdk/model/converter/ObjectConverter.java to
+    new directory.
+
 2014-03-29  Ian Murdock  <imurdock@exacttarget.com>
 
     * src/main/java/com/exacttarget/fuelsdk/ETClient.java: Added new constructor
