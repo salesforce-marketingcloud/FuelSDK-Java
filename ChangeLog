@@ -4,6 +4,13 @@
     (so we can return integers as the result of create requests).
     * soap/ETResponseImpl.java: Likewise.
 
+    * model/ETFolder.java: Change serializedName of the parentFolder
+    field to ParentFolder.ID (from ParentFolder.ObjectID).
+    (getParentFolderId): New method. Replaces getParentFolder().
+    (getParentFolder): Deprecated.
+    (setParentFolderId): New method. Replaces setParentFolder().
+    (setParentFolder): Deprecated.
+
     * soap/ETCrudServiceImpl.java (post): Return the ID of the newly
     created object(s) in response.getResults(). For example, you can
     now get the IDs of newly created folders with the following code

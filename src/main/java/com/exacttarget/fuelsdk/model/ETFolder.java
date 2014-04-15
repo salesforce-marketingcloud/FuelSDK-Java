@@ -40,8 +40,9 @@ public class ETFolder extends ETSoapObject {
     private String description = null;
     @InternalSoapField(name = "contentType")
     private String contentType = null;
-    @InternalSoapField(name = "parentFolder", serializedName = "ParentFolder.ObjectID")
+    @InternalSoapField(name = "parentFolder", serializedName = "ParentFolder.ID")
     private ETFolder parentFolder;
+
     @InternalSoapField(name = "allowChildren")
     private Boolean allowChildren = null;
     @InternalSoapField(name = "isActive")
@@ -75,10 +76,34 @@ public class ETFolder extends ETSoapObject {
         this.contentType = contentType;
     }
 
+    public Integer getParentFolderId() {
+        if (parentFolder == null) {
+            return null;
+        }
+        return parentFolder.getId();
+    }
+
+    public void setParentFolderId(Integer parentFolderId) {
+        if (parentFolder == null) {
+            parentFolder = new ETFolder();
+        }
+        parentFolder.setId(parentFolderId);
+    }
+
+    /**
+     * @deprecated
+     * Use <code>getParentFolderId()</code>.
+     */
+    @Deprecated
     public ETFolder getParentFolder() {
         return parentFolder;
     }
 
+    /**
+     * @deprecated
+     * Use <code>setParentFolderId()</code>.
+     */
+    @Deprecated
     public void setParentFolder(ETFolder parentFolder) {
         this.parentFolder = parentFolder;
     }
