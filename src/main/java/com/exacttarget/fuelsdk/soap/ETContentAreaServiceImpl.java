@@ -51,13 +51,13 @@ public class ETContentAreaServiceImpl extends ETCrudServiceImpl<ETContentArea>
         return super.get(client, ETContentArea.class, filter, properties);
     }
 
-    public ETResponse<ETContentArea> post(ETClient client, ETContentArea contentArea)
+    public ETResponse<Integer> post(ETClient client, ETContentArea contentArea)
         throws ETSdkException
     {
         return super.post(client, contentArea);
     }
 
-    public ETResponse<ETContentArea> post(ETClient client, List<ETContentArea> contentAreas)
+    public ETResponse<Integer> post(ETClient client, List<ETContentArea> contentAreas)
         throws ETSdkException
     {
         return super.post(client, contentAreas);

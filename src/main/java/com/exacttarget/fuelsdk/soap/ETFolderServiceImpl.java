@@ -51,13 +51,13 @@ public class ETFolderServiceImpl extends ETCrudServiceImpl<ETFolder>
         return super.get(client, ETFolder.class, filter, properties);
     }
 
-    public ETResponse<ETFolder> post(ETClient client, ETFolder folder)
+    public ETResponse<Integer> post(ETClient client, ETFolder folder)
         throws ETSdkException
     {
         return super.post(client, folder);
     }
 
-    public ETResponse<ETFolder> post(ETClient client, List<ETFolder> folders)
+    public ETResponse<Integer> post(ETClient client, List<ETFolder> folders)
         throws ETSdkException
     {
         return super.post(client, folders);

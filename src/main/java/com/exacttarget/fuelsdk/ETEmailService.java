@@ -37,9 +37,9 @@ public interface ETEmailService extends ETCrudService {
         throws ETSdkException;
     public ETResponse<ETEmail> get(ETClient client, ETFilter filter, String... properties)
         throws ETSdkException;
-    public ETResponse<ETEmail> post(ETClient client, ETEmail email)
+    public ETResponse<Integer> post(ETClient client, ETEmail email)
         throws ETSdkException;
-    public ETResponse<ETEmail> post(ETClient client, List<ETEmail> emails)
+    public ETResponse<Integer> post(ETClient client, List<ETEmail> emails)
         throws ETSdkException;
     public ETResponse<ETEmail> patch(ETClient client, ETEmail email)
         throws ETSdkException;

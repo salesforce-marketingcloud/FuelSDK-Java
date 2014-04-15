@@ -37,9 +37,9 @@ public interface ETEmailSendDefinitionService extends ETCrudService {
         throws ETSdkException;
     public ETResponse<ETEmailSendDefinition> get(ETClient client, ETFilter filter, String... properties)
         throws ETSdkException;
-    public ETResponse<ETEmailSendDefinition> post(ETClient client, ETEmailSendDefinition emailSendDefinition)
+    public ETResponse<Integer> post(ETClient client, ETEmailSendDefinition emailSendDefinition)
         throws ETSdkException;
-    public ETResponse<ETEmailSendDefinition> post(ETClient client, List<ETEmailSendDefinition> emailSendDefinitions)
+    public ETResponse<Integer> post(ETClient client, List<ETEmailSendDefinition> emailSendDefinitions)
         throws ETSdkException;
     public ETResponse<ETEmailSendDefinition> patch(ETClient client, ETEmailSendDefinition emailSendDefinition)
         throws ETSdkException;

@@ -51,13 +51,13 @@ public class ETEmailServiceImpl extends ETCrudServiceImpl<ETEmail>
         return super.get(client, ETEmail.class, filter, properties);
     }
 
-    public ETResponse<ETEmail> post(ETClient client, ETEmail email)
+    public ETResponse<Integer> post(ETClient client, ETEmail email)
         throws ETSdkException
     {
         return super.post(client, email);
     }
 
-    public ETResponse<ETEmail> post(ETClient client, List<ETEmail> emails)
+    public ETResponse<Integer> post(ETClient client, List<ETEmail> emails)
         throws ETSdkException
     {
         return super.post(client, emails);

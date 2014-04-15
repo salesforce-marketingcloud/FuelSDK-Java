@@ -37,9 +37,9 @@ public interface ETOrganizationService extends ETCrudService {
         throws ETSdkException;
     public ETResponse<ETOrganization> get(ETClient client, ETFilter filter, String... properties)
         throws ETSdkException;
-    public ETResponse<ETOrganization> post(ETClient client, ETOrganization organization)
+    public ETResponse<Integer> post(ETClient client, ETOrganization organization)
         throws ETSdkException;
-    public ETResponse<ETOrganization> post(ETClient client, List<ETOrganization> organizations)
+    public ETResponse<Integer> post(ETClient client, List<ETOrganization> organizations)
         throws ETSdkException;
     public ETResponse<ETOrganization> patch(ETClient client, ETOrganization organization)
         throws ETSdkException;

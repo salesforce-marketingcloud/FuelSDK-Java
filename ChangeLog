@@ -4,6 +4,16 @@
     (so we can return integers as the result of create requests).
     * soap/ETResponseImpl.java: Likewise.
 
+    * soap/ETCrudServiceImpl.java (post): Return the ID of the newly
+    created object(s) in response.getResults(). For example, you can
+    now get the IDs of newly created folders with the following code
+    snippet:
+
+        ETResponse<Integer> response = service.post(client, folders);
+        for (int id : response.getResults()) {
+            System.out.println(id);
+        }
+
 2014-04-13  Ian Murdock  <imurdock@exacttarget.com>
 
     * model/converter/ObjectConverter.java: Moved into new directory for

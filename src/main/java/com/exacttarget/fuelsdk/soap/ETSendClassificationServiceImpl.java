@@ -51,13 +51,13 @@ public class ETSendClassificationServiceImpl extends ETCrudServiceImpl<ETSendCla
         return super.get(client, ETSendClassification.class, filter, properties);
     }
 
-    public ETResponse<ETSendClassification> post(ETClient client, ETSendClassification sendClassification)
+    public ETResponse<Integer> post(ETClient client, ETSendClassification sendClassification)
         throws ETSdkException
     {
         return super.post(client, sendClassification);
     }
 
-    public ETResponse<ETSendClassification> post(ETClient client, List<ETSendClassification> sendClassifications)
+    public ETResponse<Integer> post(ETClient client, List<ETSendClassification> sendClassifications)
         throws ETSdkException
     {
         return super.post(client, sendClassifications);

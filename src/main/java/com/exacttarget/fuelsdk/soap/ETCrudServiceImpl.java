@@ -58,16 +58,16 @@ public abstract class ETCrudServiceImpl<T extends ETSoapObject>
     private static Logger logger = Logger.getLogger(ETCrudServiceImpl.class);
 
     @SuppressWarnings("unchecked")
-    public ETResponse<T> post(ETClient client, T object)
+    public ETResponse<Integer> post(ETClient client, T object)
         throws ETSdkException
     {
         return post(client, Arrays.asList(object));
     }
 
-    public ETResponse<T> post(ETClient client, List<T> objects)
+    public ETResponse<Integer> post(ETClient client, List<T> objects)
         throws ETSdkException
     {
-        ETResponse<T> response = new ETResponseImpl<T>();
+        ETResponse<Integer> response = new ETResponseImpl<Integer>();
 
         if (objects == null || objects.size() == 0) {
             return response;
@@ -119,7 +119,7 @@ public abstract class ETCrudServiceImpl<T extends ETSoapObject>
         response.setStatus(createResponse.getOverallStatus().equals("OK"));
         response.setMessage(createResponse.getOverallStatus());
         for (CreateResult createResult : createResponse.getResults()) {
-            // XXX
+            response.getResults().add(createResult.getNewID());
         }
 
         return response;
