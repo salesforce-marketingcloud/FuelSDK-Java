@@ -39,7 +39,7 @@ public abstract class ETTrackingEvent extends ETSoapObject {
     private Date eventDate = null;
     @InternalSoapField(name = "eventType")
     private ETEventType eventType = null;
-    //@InternalSoapField(name="partnerKey")
+    //@InternalSoapField(name = "partnerKey")
     private String partnerKey = null;
     @InternalSoapField(name = "sendID")
     private Integer sendId = null;
