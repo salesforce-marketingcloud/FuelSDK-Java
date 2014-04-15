@@ -1,15 +1,17 @@
+2014-04-15  Ian Murdock  <imurdock@exacttarget.com>
+
+    * ETResponse.java: Don't constrain T to subtypes of ETObject
+    (so we can return integers as the result of create requests).
+    * soap/ETResponseImpl.java: Likewise.
+
 2014-04-13  Ian Murdock  <imurdock@exacttarget.com>
 
-    * src/main-deprecated/java/com/exacttarget/fuelsdk: New directory for
-    deprecated sources.
-    * src/main-deprecated/java/com/exacttarget/fuelsdk/model/converter/ObjectConverter.java:
-    Moved from src/main/java/com/exacttarget/fuelsdk/model/converter/ObjectConverter.java to
-    new directory.
+    * model/converter/ObjectConverter.java: Moved into new directory for
+    deprecated sources (src/main-deprecated/java/com/exacttarget/fuelsdk).
 
 2014-03-29  Ian Murdock  <imurdock@exacttarget.com>
 
-    * src/main/java/com/exacttarget/fuelsdk/ETClient.java: Added new constructor
-    that takes properties file.
+    * ETClient.java: Added new constructor that takes properties file.
 
 2014-03-28  Ian Murdock  <imurdock@exacttarget.com>
 
@@ -17,13 +19,12 @@
 
 2014-03-23  Ian Murdock  <imurdock@exacttarget.com>
 
-    * src/main/java/com/exacttarget/fuelsdk/ETSoapObject.java
-    (getInternalProperty): New function.
+    * ETSoapObject.java (getInternalProperty): New function.
     (getInternalProperties): Renamed from getProperties() and made static.
     (getField): Made private.
     (getAllFields): Made private.
-    * src/main/java/com/exacttarget/fuelsdk/soap/ETGetServiceImpl.java (get): Use
-    new getInternalProperty() and getInternalProperties() methods in ETSoapObject.
+    * soap/ETGetServiceImpl.java (get): Use new getInternalProperty()
+    and getInternalProperties() methods.
 
 2014-03-23  Ian Murdock  <imurdock@exacttarget.com>
 
@@ -31,13 +32,16 @@
     only specific properties of the object(s) in the response, you can do
     that by specifying the property names as arguments to the get call, e.g.:
 
-        ETResponse<ETList> response = service.get(client, "name", "description");
+        ETResponse<ETList> response = service.get(client, "name",
+                                                  "description");
 
     You can also use partial object loading when using filters:
 
-        ETResponse<ETList> response = service.get(client, filter, "name", "description");
+        ETResponse<ETList> response = service.get(client, filter, "name",
+                                                  "description");
 
-    As before, if no properties are specified, all properties are loaded, e.g.:
+    As before, if no properties are specified, all properties are
+    loaded, e.g.:
 
         ETResponse<ETList> response = service.get(client);
 
@@ -47,36 +51,35 @@
 
 2014-03-21  Ian Murdock  <imurdock@exacttarget.com>
 
-    * src/main/java/com/exacttarget/fuelsdk/ETClient.java (refreshToken): Return
-    the new access token. Update the SOAP header with the new legacy token.
-    * src/main/java/com/exacttarget/fuelsdk/ETRestConnection.java: Keep track
-    of whether the connection is an auth connection (to avoid infinite loops).
-    (sendRequest): Refresh the access token if necessary, but only if this isn't
-    an auth connection.
-    * src/main/java/com/exacttarget/fuelsdk/ETSoapConnection.java (updateHeaders):
-    New method.
+    * ETClient.java (refreshToken): Return the new access token.
+    Update the SOAP header with the new legacy token.
+
+    * ETRestConnection.java: Keep track of whether the connection is
+    an auth connection (to avoid infinite loops).
+    (sendRequest): Refresh the access token if necessary but only if
+    this isn't an auth connection.
+
+    * ETSoapConnection.java (updateHeaders): New method.
 
 2014-03-20  Ian Murdock  <imurdock@exacttarget.com>
 
-    * src/main/java/com/exacttarget/fuelsdk/soap/ETGetServiceImpl.java
-    (get): Automatically refresh the OAuth token if necessary.
-    * src/main/java/com/exacttarget/fuelsdk/soap/ETCrudServiceImpl.java
-    (post, patch, delete): Likewise.
+    * ETSoapObject.java: Removed legacy ClientID property.
 
-    * src/main/java/com/exacttarget/fuelsdk/ETSoapObject.java: Removed
-    legacy ClientID property.
-    * src/main/java/com/exacttarget/fuelsdk/model/ETClientID.java: Deleted.
+    * model/ETClientID.java: Deleted.
+
+    * soap/ETGetServiceImpl.java (get): Automatically refresh the
+    OAuth token if necessary.
+    * soap/ETCrudServiceImpl.java (post, patch, delete): Likewise.
 
 2014-03-14  Ian Murdock  <imurdock@exacttarget.com>
 
-    * src/main/java/com/exacttarget/fuelsdk/ETSoapObject.java: Fixed
-    bug related to object conversion of data extension rows.
+    * ETSoapObject.java: Fixed bug related to object conversion of
+    data extension rows.
 
-    * src/main/java/com/exacttarget/fuelsdk/model/ETDataExtensionColumn.java:
-    Add "ID" to ignoredFields. The presence of this field was causing
-    retrieves to return an error.
+    * model/ETDataExtensionColumn.java: Add "ID" to ignoredFields. The
+    presence of this field was causing retrieves to return an error.
 
-    * src/main/java/com/exacttarget/fuelsdk/model/converter/ObjectConverter.java:
+    * model/converter/ObjectConverter.java:
     Added (deprecated) ObjectConverter class that wraps toInternal()
     and fromInternal() ETSoapObject methods for backward compatibility
     with old convertFromEtObject() and convertToEtObject() methods.

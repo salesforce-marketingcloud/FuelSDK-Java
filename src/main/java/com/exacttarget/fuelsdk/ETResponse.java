@@ -29,7 +29,7 @@ package com.exacttarget.fuelsdk;
 
 import java.util.List;
 
-public interface ETResponse<T extends ETObject> {
+public interface ETResponse<T> {
     public String getRequestId();
     public void setRequestId(String requestId);
     public List<T> getResults();
