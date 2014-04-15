@@ -30,6 +30,7 @@ package com.exacttarget.fuelsdk.soap;
 import java.util.List;
 
 import com.exacttarget.fuelsdk.ETClient;
+import com.exacttarget.fuelsdk.ETDataExtensionRow;
 import com.exacttarget.fuelsdk.ETDataExtensionRowService;
 import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.ETSdkException;
@@ -39,20 +40,23 @@ import com.exacttarget.fuelsdk.internal.RetrieveRequest;
 import com.exacttarget.fuelsdk.internal.RetrieveRequestMsg;
 import com.exacttarget.fuelsdk.internal.RetrieveResponseMsg;
 import com.exacttarget.fuelsdk.internal.Soap;
-import com.exacttarget.fuelsdk.model.ETDataExtensionRow;
 
+/**
+ * @deprecated
+ * For information on how to interact with data extensions, please see
+ * {@link com.exacttarget.fuelsdk.ETDataExtension}.
+ */
+@Deprecated
 public class ETDataExtensionRowServiceImpl extends ETCrudServiceImpl<ETDataExtensionRow>
     implements ETDataExtensionRowService
 {
-    public ETResponse<ETDataExtensionRow> get(ETClient client,
-            String name, List<String> columns)
+    public ETResponse<ETDataExtensionRow> get(ETClient client, String name, List<String> columns)
         throws ETSdkException
     {
         return get(client, name, columns, null);
     }
 
-    public ETResponse<ETDataExtensionRow> get(ETClient client,
-            String name, List<String> columns, ETFilter filter)
+    public ETResponse<ETDataExtensionRow> get(ETClient client, String name, List<String> columns, ETFilter filter)
         throws ETSdkException
     {
         // XXX cleanup
@@ -85,13 +89,13 @@ public class ETDataExtensionRowServiceImpl extends ETCrudServiceImpl<ETDataExten
         return response;
     }
 
-    public ETResponse<ETDataExtensionRow> post(ETClient client, ETDataExtensionRow row)
+    public ETResponse<Integer> post(ETClient client, ETDataExtensionRow row)
         throws ETSdkException
     {
         return super.post(client, row);
     }
 
-    public ETResponse<ETDataExtensionRow> post(ETClient client, List<ETDataExtensionRow> rows)
+    public ETResponse<Integer> post(ETClient client, List<ETDataExtensionRow> rows)
         throws ETSdkException
     {
         return super.post(client, rows);

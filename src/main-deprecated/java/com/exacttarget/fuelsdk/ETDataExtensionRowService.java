@@ -27,12 +27,31 @@
 
 package com.exacttarget.fuelsdk;
 
-import com.exacttarget.fuelsdk.filter.ETFilter;
-import com.exacttarget.fuelsdk.model.ETDataExtensionColumn;
+import java.util.List;
 
-public interface ETDataExtensionColumnService extends ETGetService {
-    public ETResponse<ETDataExtensionColumn> get(ETClient client, String... properties)
+import com.exacttarget.fuelsdk.filter.ETFilter;
+
+/**
+ * @deprecated
+ * For information on how to interact with data extensions, please see
+ * {@link com.exacttarget.fuelsdk.ETDataExtension}.
+ */
+@Deprecated
+public interface ETDataExtensionRowService extends ETCrudService {
+    public ETResponse<ETDataExtensionRow> get(ETClient client, String name, List<String> columns)
         throws ETSdkException;
-    public ETResponse<ETDataExtensionColumn> get(ETClient client, ETFilter filter, String... properties)
+    public ETResponse<ETDataExtensionRow> get(ETClient client, String name, List<String> columns, ETFilter filter)
+        throws ETSdkException;
+    public ETResponse<Integer> post(ETClient client, ETDataExtensionRow row)
+        throws ETSdkException;
+    public ETResponse<Integer> post(ETClient client, List<ETDataExtensionRow> rows)
+        throws ETSdkException;
+    public ETResponse<ETDataExtensionRow> patch(ETClient client, ETDataExtensionRow row)
+        throws ETSdkException;
+    public ETResponse<ETDataExtensionRow> patch(ETClient client, List<ETDataExtensionRow> rows)
+        throws ETSdkException;
+    public ETResponse<ETDataExtensionRow> delete(ETClient client, ETDataExtensionRow row)
+        throws ETSdkException;
+    public ETResponse<ETDataExtensionRow> delete(ETClient client, List<ETDataExtensionRow> rows)
         throws ETSdkException;
 }

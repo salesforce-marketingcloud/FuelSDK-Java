@@ -30,12 +30,18 @@ package com.exacttarget.fuelsdk.soap;
 import java.util.List;
 
 import com.exacttarget.fuelsdk.ETClient;
+import com.exacttarget.fuelsdk.ETDataExtension;
 import com.exacttarget.fuelsdk.ETDataExtensionService;
 import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.filter.ETFilter;
-import com.exacttarget.fuelsdk.model.ETDataExtension;
 
+/**
+ * @deprecated
+ * For information on how to interact with data extensions, please see
+ * {@link com.exacttarget.fuelsdk.ETDataExtension}.
+ */
+@Deprecated
 public class ETDataExtensionServiceImpl extends ETCrudServiceImpl<ETDataExtension>
     implements ETDataExtensionService
 {
@@ -51,13 +57,13 @@ public class ETDataExtensionServiceImpl extends ETCrudServiceImpl<ETDataExtensio
         return super.get(client, ETDataExtension.class, filter, properties);
     }
 
-    public ETResponse<ETDataExtension> post(ETClient client, ETDataExtension dataExtension)
+    public ETResponse<Integer> post(ETClient client, ETDataExtension dataExtension)
         throws ETSdkException
     {
         return super.post(client, dataExtension);
     }
 
-    public ETResponse<ETDataExtension> post(ETClient client, List<ETDataExtension> dataExtensions)
+    public ETResponse<Integer> post(ETClient client, List<ETDataExtension> dataExtensions)
         throws ETSdkException
     {
         return super.post(client, dataExtensions);

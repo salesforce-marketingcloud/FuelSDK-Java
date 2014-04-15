@@ -25,28 +25,33 @@
 // THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-package com.exacttarget.fuelsdk;
+package com.exacttarget.fuelsdk.soap;
 
-import java.util.List;
-
+import com.exacttarget.fuelsdk.ETClient;
+import com.exacttarget.fuelsdk.ETDataExtensionColumn;
+import com.exacttarget.fuelsdk.ETDataExtensionColumnService;
+import com.exacttarget.fuelsdk.ETResponse;
+import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.filter.ETFilter;
-import com.exacttarget.fuelsdk.model.ETDataExtension;
 
-public interface ETDataExtensionService extends ETCrudService {
-    public ETResponse<ETDataExtension> get(ETClient client, String... properties)
-        throws ETSdkException;
-    public ETResponse<ETDataExtension> get(ETClient client, ETFilter filter, String... properties)
-        throws ETSdkException;
-    public ETResponse<ETDataExtension> post(ETClient client, ETDataExtension dataExtension)
-        throws ETSdkException;
-    public ETResponse<ETDataExtension> post(ETClient client, List<ETDataExtension> dataExtensions)
-        throws ETSdkException;
-    public ETResponse<ETDataExtension> patch(ETClient client, ETDataExtension dataExtension)
-        throws ETSdkException;
-    public ETResponse<ETDataExtension> patch(ETClient client, List<ETDataExtension> dataExtensions)
-        throws ETSdkException;
-    public ETResponse<ETDataExtension> delete(ETClient client, ETDataExtension dataExtension)
-        throws ETSdkException;
-    public ETResponse<ETDataExtension> delete(ETClient client, List<ETDataExtension> dataExtensions)
-        throws ETSdkException;
+/**
+ * @deprecated
+ * For information on how to interact with data extensions, please see
+ * {@link com.exacttarget.fuelsdk.ETDataExtension}.
+ */
+@Deprecated
+public class ETDataExtensionColumnServiceImpl extends ETGetServiceImpl<ETDataExtensionColumn>
+    implements ETDataExtensionColumnService
+{
+    public ETResponse<ETDataExtensionColumn> get(ETClient client, String... properties)
+        throws ETSdkException
+    {
+        return super.get(client, ETDataExtensionColumn.class, properties);
+    }
+
+    public ETResponse<ETDataExtensionColumn> get(ETClient client, ETFilter filter, String... properties)
+        throws ETSdkException
+    {
+        return super.get(client, ETDataExtensionColumn.class, filter, properties);
+    }
 }

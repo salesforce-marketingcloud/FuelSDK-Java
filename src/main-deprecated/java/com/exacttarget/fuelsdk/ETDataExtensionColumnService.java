@@ -25,27 +25,19 @@
 // THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-package com.exacttarget.fuelsdk.soap;
+package com.exacttarget.fuelsdk;
 
-import com.exacttarget.fuelsdk.ETClient;
-import com.exacttarget.fuelsdk.ETDataExtensionColumnService;
-import com.exacttarget.fuelsdk.ETResponse;
-import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.filter.ETFilter;
-import com.exacttarget.fuelsdk.model.ETDataExtensionColumn;
 
-public class ETDataExtensionColumnServiceImpl extends ETGetServiceImpl<ETDataExtensionColumn>
-    implements ETDataExtensionColumnService
-{
+/**
+ * @deprecated
+ * For information on how to interact with data extensions, please see
+ * {@link com.exacttarget.fuelsdk.ETDataExtension}.
+ */
+@Deprecated
+public interface ETDataExtensionColumnService extends ETGetService {
     public ETResponse<ETDataExtensionColumn> get(ETClient client, String... properties)
-        throws ETSdkException
-    {
-        return super.get(client, ETDataExtensionColumn.class, properties);
-    }
-
+        throws ETSdkException;
     public ETResponse<ETDataExtensionColumn> get(ETClient client, ETFilter filter, String... properties)
-        throws ETSdkException
-    {
-        return super.get(client, ETDataExtensionColumn.class, filter, properties);
-    }
+        throws ETSdkException;
 }

@@ -1,8 +1,12 @@
 2014-04-15  Ian Murdock  <imurdock@exacttarget.com>
 
-    * ETResponse.java: Don't constrain T to subtypes of ETObject
-    (so we can return integers as the result of create requests).
-    * soap/ETResponseImpl.java: Likewise.
+    * ETDataExtensionService.java: Deprecated in favor of new way of
+    interacting with data extensions.
+    * ETDataExtensionServiceImpl.java: Likewise.
+    * ETDataExtensionColumnService.java: Likewise.
+    * ETDataExtensionColumnServiceImpl.java: Likewise.
+    * ETDataExtensionRowService.java: Likewise.
+    * ETDataExtensionRowServiceImpl.java: Likewise.
 
     * model/ETFolder.java: Change serializedName of the parentFolder
     field to ParentFolder.ID (from ParentFolder.ObjectID).
@@ -10,6 +14,10 @@
     (getParentFolder): Deprecated.
     (setParentFolderId): New method. Replaces setParentFolder().
     (setParentFolder): Deprecated.
+
+    * ETResponse.java: Don't constrain T to subtypes of ETObject
+    (so we can return integers as the result of create requests).
+    * soap/ETResponseImpl.java: Likewise.
 
     * soap/ETCrudServiceImpl.java (post): Return the ID of the newly
     created object(s) in response.getResults(). For example, you can

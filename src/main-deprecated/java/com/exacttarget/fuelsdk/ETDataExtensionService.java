@@ -30,25 +30,28 @@ package com.exacttarget.fuelsdk;
 import java.util.List;
 
 import com.exacttarget.fuelsdk.filter.ETFilter;
-import com.exacttarget.fuelsdk.model.ETDataExtensionRow;
 
-public interface ETDataExtensionRowService extends ETCrudService {
-    public ETResponse<ETDataExtensionRow> get(ETClient client,
-            String name, List<String> columns)
+/**
+ * @deprecated
+ * For information on how to interact with data extensions, please see
+ * {@link com.exacttarget.fuelsdk.ETDataExtension}.
+ */
+@Deprecated
+public interface ETDataExtensionService extends ETCrudService {
+    public ETResponse<ETDataExtension> get(ETClient client, String... properties)
         throws ETSdkException;
-    public ETResponse<ETDataExtensionRow> get(ETClient client,
-            String name, List<String> columns, ETFilter filter)
+    public ETResponse<ETDataExtension> get(ETClient client, ETFilter filter, String... properties)
         throws ETSdkException;
-    public ETResponse<ETDataExtensionRow> post(ETClient client, ETDataExtensionRow row)
+    public ETResponse<Integer> post(ETClient client, ETDataExtension dataExtension)
         throws ETSdkException;
-    public ETResponse<ETDataExtensionRow> post(ETClient client, List<ETDataExtensionRow> rows)
+    public ETResponse<Integer> post(ETClient client, List<ETDataExtension> dataExtensions)
         throws ETSdkException;
-    public ETResponse<ETDataExtensionRow> patch(ETClient client, ETDataExtensionRow row)
+    public ETResponse<ETDataExtension> patch(ETClient client, ETDataExtension dataExtension)
         throws ETSdkException;
-    public ETResponse<ETDataExtensionRow> patch(ETClient client, List<ETDataExtensionRow> rows)
+    public ETResponse<ETDataExtension> patch(ETClient client, List<ETDataExtension> dataExtensions)
         throws ETSdkException;
-    public ETResponse<ETDataExtensionRow> delete(ETClient client, ETDataExtensionRow row)
+    public ETResponse<ETDataExtension> delete(ETClient client, ETDataExtension dataExtension)
         throws ETSdkException;
-    public ETResponse<ETDataExtensionRow> delete(ETClient client, List<ETDataExtensionRow> rows)
+    public ETResponse<ETDataExtension> delete(ETClient client, List<ETDataExtension> dataExtensions)
         throws ETSdkException;
 }
