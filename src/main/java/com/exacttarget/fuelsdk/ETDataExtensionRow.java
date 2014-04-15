@@ -25,12 +25,11 @@
 // THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-package com.exacttarget.fuelsdk.model;
+package com.exacttarget.fuelsdk;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import com.exacttarget.fuelsdk.ETSoapObject;
 import com.exacttarget.fuelsdk.annotations.InternalSoapField;
 import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.DataExtensionObject;
@@ -39,6 +38,7 @@ import com.exacttarget.fuelsdk.internal.DataExtensionObject;
 public class ETDataExtensionRow extends ETSoapObject {
     @InternalSoapField(name = "name")
     private String name = null;
+    // XXX do we even need this?
     @InternalSoapField(name = "keys")
     private Map<String, String> keys = null;
     @InternalSoapField(name = "properties")
@@ -54,23 +54,43 @@ public class ETDataExtensionRow extends ETSoapObject {
         this.name = name;
     }
 
-    public Map<String, String> getKeys() {
-        return keys;
-    }
-
-    public void setKeys(Map<String, String> keys) {
-        this.keys = keys;
-    }
-
-    public Map<String, String> getColumns() {
-        return columns;
-    }
-
-    public void setColumns(Map<String, String> columns) {
-        this.columns = columns;
+    public String getColumn(String name) {
+        return columns.get(name);
     }
 
     public void setColumn(String name, String value) {
         columns.put(name, value);
+    }
+
+    /**
+     * Use <code>getColumn</code> and <code>setColumn</code>.
+     */
+    @Deprecated
+    public Map<String, String> getKeys() {
+        return keys;
+    }
+
+    /**
+     * Use <code>getColumn</code> and <code>setColumn</code>.
+     */
+    @Deprecated
+    public void setKeys(Map<String, String> keys) {
+        this.keys = keys;
+    }
+
+    /**
+     * Use <code>getColumn</code> and <code>setColumn</code>.
+     */
+    @Deprecated
+    public Map<String, String> getColumns() {
+        return columns;
+    }
+
+    /**
+     * Use <code>getColumn</code> and <code>setColumn</code>.
+     */
+    @Deprecated
+    public void setColumns(Map<String, String> columns) {
+        this.columns = columns;
     }
 }

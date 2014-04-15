@@ -1,5 +1,13 @@
 2014-04-15  Ian Murdock  <imurdock@exacttarget.com>
 
+    * ETDataExtensionRow.java: Moved to top level directory.
+    (getColumn): New method.
+    (setColumn): New method.
+    (getKeys): Deprecated in favor of getColumn() and setColumn().
+    (getColumns): Likewise.
+    (setKeys): Likewise.
+    (setColumns): Likewise.
+
     * ETDataExtensionService.java: Deprecated in favor of new way of
     interacting with data extensions.
     * ETDataExtensionServiceImpl.java: Likewise.
