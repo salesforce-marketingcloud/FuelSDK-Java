@@ -8,6 +8,13 @@
     (setKeys): Likewise.
     (setColumns): Likewise.
 
+    * ETDataExtensionColumn.java: Moved to top level directory.
+    * ETDataExtensionColumnType.java: Renamed from
+    ETDataExtensionFieldType.java.
+    (getColumnType): Replaces getFieldType().
+    (setColumnType): Replaces setFieldType().
+    * ETDataExtensionColumnType.java: Moved to top level directory.
+
     * ETDataExtensionService.java: Deprecated in favor of new way of
     interacting with data extensions.
     * ETDataExtensionServiceImpl.java: Likewise.

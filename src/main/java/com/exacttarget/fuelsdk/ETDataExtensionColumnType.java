@@ -25,9 +25,9 @@
 // THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-package com.exacttarget.fuelsdk.model;
+package com.exacttarget.fuelsdk;
 
-public enum ETDataExtensionFieldType {
+public enum ETDataExtensionColumnType {
     BOOLEAN("Boolean"),
     DATE("Date"),
     DECIMAL("Decimal"),
@@ -38,7 +38,7 @@ public enum ETDataExtensionFieldType {
     TEXT("Text");
     private final String value;
 
-    ETDataExtensionFieldType(String value) {
+    ETDataExtensionColumnType(String value) {
         this.value = value;
     }
 
@@ -46,8 +46,8 @@ public enum ETDataExtensionFieldType {
         return value;
     }
 
-    public static ETDataExtensionFieldType fromValue(String value) {
-        for (ETDataExtensionFieldType v : ETDataExtensionFieldType.values()) {
+    public static ETDataExtensionColumnType fromValue(String value) {
+        for (ETDataExtensionColumnType v : ETDataExtensionColumnType.values()) {
             if (v.value.equals(value)) {
                 return v;
             }

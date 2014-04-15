@@ -25,9 +25,8 @@
 // THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-package com.exacttarget.fuelsdk.model;
+package com.exacttarget.fuelsdk;
 
-import com.exacttarget.fuelsdk.ETSoapObject;
 import com.exacttarget.fuelsdk.annotations.InternalSoapField;
 import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.internal.DataExtensionField;
@@ -64,7 +63,7 @@ public class ETDataExtensionColumn extends ETSoapObject {
     @InternalSoapField(name = "displayOrder")
     private Integer displayOrder = null;
     @InternalSoapField(name = "fieldType")
-    private ETDataExtensionFieldType fieldType = null;
+    private ETDataExtensionColumnType columnType = null;
     @InternalSoapField(name = "isCreatable")
     private Boolean isCreatable = null;
     @InternalSoapField(name = "isEditable")
@@ -146,12 +145,12 @@ public class ETDataExtensionColumn extends ETSoapObject {
         this.displayOrder = displayOrder;
     }
 
-    public ETDataExtensionFieldType getFieldType() {
-        return fieldType;
+    public ETDataExtensionColumnType getColumnType() {
+        return columnType;
     }
 
-    public void setFieldType(ETDataExtensionFieldType fieldType) {
-        this.fieldType = fieldType;
+    public void setColumnType(ETDataExtensionColumnType columnType) {
+        this.columnType = columnType;
     }
 
     public Boolean getIsCreatable() {
