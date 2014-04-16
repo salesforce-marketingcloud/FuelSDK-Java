@@ -1,3 +1,10 @@
+2014-04-16  Ian Murdock  <imurdock@exacttarget.com>
+
+    * ETResponse.java: Changed from an interface to a class and
+    moved implemention out of soap/ETResponseImpl.java and into
+    ETResponse.java.
+    * soap/ETResponseImpl.java: Deprecated.
+
 2014-04-15  Ian Murdock  <imurdock@exacttarget.com>
 
     * ETClient.java (retrieveDataExtension): New method.

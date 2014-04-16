@@ -67,7 +67,7 @@ public abstract class ETGetServiceImpl<T extends ETSoapObject>
     public ETResponse<T> get(ETClient client, Class<T> type, ETFilter filter, String... properties)
         throws ETSdkException
     {
-        ETResponse<T> response = new ETResponseImpl<T>();
+        ETResponse<T> response = new ETResponse<T>();
 
         Class<T> externalClass = type; // for code readability
 

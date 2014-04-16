@@ -27,55 +27,12 @@
 
 package com.exacttarget.fuelsdk.soap;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.exacttarget.fuelsdk.ETResponse;
 
-public class ETResponseImpl<T> implements ETResponse<T> {
-    private String requestId = null;
-    private List<T> results = new ArrayList<T>();
-    private boolean status = true;
-    private boolean moreResults = false;
-    private String message = null;
-
-    public String getRequestId() {
-        return requestId;
-    }
-
-    public void setRequestId(String requestId) {
-        this.requestId = requestId;
-    }
-
-    public List<T> getResults() {
-        return results;
-    }
-
-    public void setResults(List<T> results) {
-        this.results = results;
-    }
-
-    public boolean getStatus() {
-        return status;
-    }
-
-    public void setStatus(boolean status) {
-        this.status = status;
-    }
-
-    public boolean hasMoreResults() {
-        return moreResults;
-    }
-
-    public void setMoreResults(boolean moreResults) {
-        this.moreResults = moreResults;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
+/**
+ * @deprecated
+ * Use {@link com.exacttarget.fuelsdk.ETResponse}.
+ */
+@Deprecated
+public class ETResponseImpl<T> extends ETResponse<T> {
 }

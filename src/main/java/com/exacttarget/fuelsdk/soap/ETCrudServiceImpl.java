@@ -67,7 +67,7 @@ public abstract class ETCrudServiceImpl<T extends ETSoapObject>
     public ETResponse<Integer> post(ETClient client, List<T> objects)
         throws ETSdkException
     {
-        ETResponse<Integer> response = new ETResponseImpl<Integer>();
+        ETResponse<Integer> response = new ETResponse<Integer>();
 
         if (objects == null || objects.size() == 0) {
             return response;
@@ -135,7 +135,7 @@ public abstract class ETCrudServiceImpl<T extends ETSoapObject>
     public ETResponse<T> patch(ETClient client, List<T> objects)
         throws ETSdkException
     {
-        ETResponse<T> response = new ETResponseImpl<T>();
+        ETResponse<T> response = new ETResponse<T>();
 
         if (objects == null || objects.size() == 0) {
             return response;
@@ -203,7 +203,7 @@ public abstract class ETCrudServiceImpl<T extends ETSoapObject>
     public ETResponse<T> delete(ETClient client, List<T> objects)
         throws ETSdkException
     {
-        ETResponse<T> response = new ETResponseImpl<T>();
+        ETResponse<T> response = new ETResponse<T>();
 
         if (objects == null || objects.size() == 0) {
             return response;
