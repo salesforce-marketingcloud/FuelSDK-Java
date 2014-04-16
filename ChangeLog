@@ -1,5 +1,8 @@
 2014-04-15  Ian Murdock  <imurdock@exacttarget.com>
 
+    * ETClient.java (retrieveDataExtension): New method.
+    (retrieveDataExtensions): New method.
+
     * ETDataExtension.java: Moved to top level directory.
     (getColumns): Renamed from getFields().
     (setColumns): Renamed from setFields().
