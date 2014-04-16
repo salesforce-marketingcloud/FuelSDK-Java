@@ -25,19 +25,12 @@
 // THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-package com.exacttarget.fuelsdk.model;
+package com.exacttarget.fuelsdk;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.exacttarget.fuelsdk.ETClient;
-import com.exacttarget.fuelsdk.ETDataExtensionColumnService;
-import com.exacttarget.fuelsdk.ETDataExtensionRowService;
-import com.exacttarget.fuelsdk.ETDataExtensionService;
-import com.exacttarget.fuelsdk.ETResponse;
-import com.exacttarget.fuelsdk.ETSdkException;
-import com.exacttarget.fuelsdk.ETSoapObject;
 import com.exacttarget.fuelsdk.annotations.InternalSoapField;
 import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.filter.ETFilter;
@@ -48,6 +41,10 @@ import com.exacttarget.fuelsdk.soap.ETDataExtensionColumnServiceImpl;
 import com.exacttarget.fuelsdk.soap.ETDataExtensionRowServiceImpl;
 import com.exacttarget.fuelsdk.soap.ETDataExtensionServiceImpl;
 
+/**
+ * The <code>ETDataExtension</code> class represents an ExactTarget
+ * data extension.
+ */
 @InternalSoapType(type = DataExtension.class, ignoredFields = { "ID", "Fields" })
 public class ETDataExtension extends ETSoapObject {
     private ETClient client = null;
@@ -58,14 +55,14 @@ public class ETDataExtension extends ETSoapObject {
     private String description = null;
     @InternalSoapField(name = "categoryID")
     private Long categoryID = null;
+    @InternalSoapField(name = "fields")
+    private List<ETDataExtensionColumn> columns = new ArrayList<ETDataExtensionColumn>();
     @InternalSoapField(name = "dataRetentionPeriodLength", ignoreOnPatch = true)
     private Integer dataRetentionPeriodLength = null;
     @InternalSoapField(name = "dataRetentionPeriodUnitOfMeasure", ignoreOnPatch = true)
     private Integer dataRetentionPeriodUnitOfMeasure = null;
     @InternalSoapField(name = "deleteAtEndOfRetentionPeriod", ignoreOnPatch = true)
     private Boolean deleteAtEndOfRetentionPeriod = null;
-    @InternalSoapField(name = "fields")
-    private List<ETDataExtensionColumn> columns = new ArrayList<ETDataExtensionColumn>();
     @InternalSoapField(name = "isSendable")
     private Boolean isSendable = null;
     @InternalSoapField(name = "isTestable")
@@ -113,6 +110,18 @@ public class ETDataExtension extends ETSoapObject {
         this.categoryID = categoryID;
     }
 
+    public List<ETDataExtensionColumn> getColumns() {
+        return columns;
+    }
+
+    public void setColumns(List<ETDataExtensionColumn> columns) {
+        this.columns = columns;
+    }
+
+    public void addColumn(ETDataExtensionColumn column) {
+        this.columns.add(column);
+    }
+
     public Integer getDataRetentionPeriodLength() {
         return dataRetentionPeriodLength;
     }
@@ -136,14 +145,6 @@ public class ETDataExtension extends ETSoapObject {
 
     public void setDeleteAtEndOfRetentionPeriod(Boolean deleteAtEndOfRetentionPeriod) {
         this.deleteAtEndOfRetentionPeriod = deleteAtEndOfRetentionPeriod;
-    }
-
-    public List<ETDataExtensionColumn> getColumns() {
-        return columns;
-    }
-
-    public void setColumns(List<ETDataExtensionColumn> columns) {
-        this.columns = columns;
     }
 
     public Boolean getIsSendable() {
@@ -194,34 +195,54 @@ public class ETDataExtension extends ETSoapObject {
         this.status = status;
     }
 
-//    public void delete(ETFilter filter)
-//        throws ETSdkException
-//    {
-//        ETDataExtensionRowService service = new ETDataExtensionRowServiceImpl();
-//        // XXX we need a get all columns function
-//        List<ETDataExtensionRow> rows = select(filter, "id"); // XXX
-//        for (ETDataExtensionRow row : rows) {
-//            if (row.getName() == null) {
-//                row.setName(name);
-//            }
-//            assert row.getName() == name;
-//        }
-//        ETResponse<ETDataExtensionRow> response = service.delete(client, rows);
-//        // XXX check for errors and throw the appropriate exception
-//    }
-
-    public void insert(ETDataExtensionRow... rows)
+    public List<ETDataExtensionRow> delete(ETFilter filter)
         throws ETSdkException
     {
         ETDataExtensionRowService service = new ETDataExtensionRowServiceImpl();
+
+        List<ETDataExtensionRow> rows = select(filter);
+
         for (ETDataExtensionRow row : rows) {
+            //
+            // Set the data extension name if it isn't already set:
+            //
+
             if (row.getName() == null) {
                 row.setName(name);
             }
-            assert row.getName() == name;
+
+            assert row.getName() == name; // something's wrong...
         }
-        ETResponse<ETDataExtensionRow> response = service.post(client, Arrays.asList(rows));
+
+        ETResponse<ETDataExtensionRow> response = service.delete(client, rows);
+
         // XXX check for errors and throw the appropriate exception
+
+        return response.getResults();
+    }
+
+    public List<Integer> insert(ETDataExtensionRow... rows)
+        throws ETSdkException
+    {
+        ETDataExtensionRowService service = new ETDataExtensionRowServiceImpl();
+
+        for (ETDataExtensionRow row : rows) {
+            //
+            // Set the data extension name if it isn't already set:
+            //
+
+            if (row.getName() == null) {
+                row.setName(name);
+            }
+
+            assert row.getName() == name; // something's wrong...
+        }
+
+        ETResponse<Integer> response = service.post(client, Arrays.asList(rows));
+
+        // XXX check for errors and throw the appropriate exception
+
+        return response.getResults();
     }
 
     public List<ETDataExtensionRow> select(String... columns)
@@ -234,31 +255,61 @@ public class ETDataExtension extends ETSoapObject {
         throws ETSdkException
     {
         ETDataExtensionRowService service = new ETDataExtensionRowServiceImpl();
+
+        if (columns.length == 0) {
+            //
+            // If columns aren't specified retrieve all columns:
+            //
+
+            // XXX this adds another API call.. is there a native way?
+
+            List<ETDataExtensionColumn> dataExtensionColumns = retrieveColumns();
+            columns = new String[dataExtensionColumns.size()];
+            int i = 0;
+            for (ETDataExtensionColumn column : dataExtensionColumns) {
+                columns[i++] = column.getName();
+            }
+        }
+
         ETResponse<ETDataExtensionRow> response
             = service.get(client, name, Arrays.asList(columns), filter);
+
         // XXX check for errors and throw the appropriate exception
+
         return response.getResults();
     }
 
-    public void update(ETDataExtensionRow... rows)
+    public List<ETDataExtensionRow> update(ETDataExtensionRow... rows)
         throws ETSdkException
     {
         ETDataExtensionRowService service = new ETDataExtensionRowServiceImpl();
+
         for (ETDataExtensionRow row : rows) {
+            //
+            // Set the data extension name if it isn't already set:
+            //
+
             if (row.getName() == null) {
                 row.setName(name);
             }
-            assert row.getName() == name;
+
+            assert row.getName() == name; // something's wrong...
         }
+
         ETResponse<ETDataExtensionRow> response = service.patch(client, Arrays.asList(rows));
+
         // XXX check for errors and throw the appropriate exception
+
+        return response.getResults();
     }
 
     public List<ETDataExtensionColumn> retrieveColumns()
         throws ETSdkException
     {
          ETDataExtensionColumnService service = new ETDataExtensionColumnServiceImpl();
-         ETFilter filter = new ETSimpleFilter("DataExtension.CustomerKey", ETFilterOperators.EQUALS, getCustomerKey());
+         ETFilter filter = new ETSimpleFilter("DataExtension.CustomerKey",
+                                              ETFilterOperators.EQUALS,
+                                              getCustomerKey());
          ETResponse<ETDataExtensionColumn> response = service.get(client, filter);
          // XXX check for errors and throw the appropriate exception
          return response.getResults();

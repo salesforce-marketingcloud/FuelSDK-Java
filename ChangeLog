@@ -1,5 +1,15 @@
 2014-04-15  Ian Murdock  <imurdock@exacttarget.com>
 
+    * ETDataExtension.java: Moved to top level directory.
+    (getColumns): Renamed from getFields().
+    (setColumns): Renamed from setFields().
+    (addColumn): New method.
+    (insert): New method.
+    (select): New method.
+    (update): New method.
+    (delete): New method.
+    (retrieveColumns): New method.
+
     * ETDataExtensionRow.java: Moved to top level directory.
     (getColumn): New method.
     (setColumn): New method.
