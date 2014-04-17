@@ -96,10 +96,6 @@ import com.exacttarget.fuelsdk.model.ETAccountType;
 import com.exacttarget.fuelsdk.model.ETBounceEvent;
 import com.exacttarget.fuelsdk.model.ETClickEvent;
 import com.exacttarget.fuelsdk.model.ETContentArea;
-import com.exacttarget.fuelsdk.model.ETDataExtension;
-import com.exacttarget.fuelsdk.model.ETDataExtensionColumn;
-import com.exacttarget.fuelsdk.model.ETDataExtensionFieldType;
-import com.exacttarget.fuelsdk.model.ETDataExtensionRow;
 import com.exacttarget.fuelsdk.model.ETDataSourceType;
 import com.exacttarget.fuelsdk.model.ETDeliveryProfile;
 import com.exacttarget.fuelsdk.model.ETDeliveryProfileDomainType;
@@ -135,13 +131,13 @@ import com.exacttarget.fuelsdk.model.ETUnsubEvent;
 public abstract class ETSoapObject extends ETObject {
     private static Logger logger = Logger.getLogger(ETSoapObject.class);
 
-    @InternalSoapField(name="id")
+    @InternalSoapField(name = "id")
     private Integer id = null;
-    @InternalSoapField(name="customerKey")
+    @InternalSoapField(name = "customerKey")
     private String customerKey = null;
-    @InternalSoapField(name="createdDate")
+    @InternalSoapField(name = "createdDate")
     private Date createdDate = null;
-    @InternalSoapField(name="modifiedDate")
+    @InternalSoapField(name = "modifiedDate")
     private Date modifiedDate = null;
 
     public class ExternalObjectConverter implements Converter {
@@ -208,7 +204,7 @@ public abstract class ETSoapObject extends ETObject {
         public Object convert(Class type, Object value) {
             // XXX I think we need more here..
             if (type == DataExtension.Fields.class) {
-                // we're converting from internal to external
+                // we're converting from external to internal
                 List<ETDataExtensionColumn> columns
                     = (List<ETDataExtensionColumn>) value;
                 DataExtension.Fields fields = new DataExtension.Fields();
@@ -278,9 +274,9 @@ public abstract class ETSoapObject extends ETObject {
         convertUtils.register(new DataExtensionColumnConverter(),
                 ETDataExtensionColumn[].class);
 
-        // ETDataExtensionFieldType
+        // ETDataExtensionColumnType
         convertUtils.register(new EnumConverter(),
-                ETDataExtensionFieldType.class);
+                ETDataExtensionColumnType.class);
         convertUtils.register(new EnumConverter(),
                 DataExtensionFieldType.class);
 
