@@ -39,7 +39,7 @@ import org.apache.log4j.Logger;
 
 public class ETClient {
     private static final String PATH_REQUESTTOKEN =
-            "/v1/requestToken?legacy=1";
+            "/v1/requestToken";
     private static final String PATH_ENDPOINTS_SOAP =
             "/platform/v1/endpoints/soap";
 
@@ -189,8 +189,6 @@ public class ETClient {
         logger.debug("received token:");
         accessToken = jsonObject.get("accessToken").getAsString();
         logger.debug("  accessToken: " + accessToken);
-        legacyToken = jsonObject.get("legacyToken").getAsString();
-        logger.debug("  legacyToken: " + legacyToken);
         expiresIn = jsonObject.get("expiresIn").getAsInt();
         logger.debug("  expiresIn: " + expiresIn);
         refreshToken = jsonObject.get("refreshToken").getAsString();
@@ -219,6 +217,11 @@ public class ETClient {
         return accessToken;
     }
 
+    /**
+     * @deprecated
+     * Legacy tokens are no longer supported.
+     */
+    @Deprecated
     public String getLegacyToken() {
         return legacyToken;
     }

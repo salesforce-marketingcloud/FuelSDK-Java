@@ -1,3 +1,9 @@
+2014-04-17  Ian Murdock  <imurdock@exacttarget.com>
+
+    * ETClient.java, ETConnection.java: Use the access token rather
+    than the legacy token to authenticate with the SOAP API.
+    * ETClient.java (getLegacyToken): Deprecated.
+
 2014-04-16  Ian Murdock  <imurdock@exacttarget.com>
 
     * ETResponse.java: Changed from an interface to a class and

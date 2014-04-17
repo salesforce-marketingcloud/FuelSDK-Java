@@ -97,8 +97,8 @@ public class ETSoapConnection {
         }
     }
 
-    // XXX this is kind of a hack.. ideally just
-    // the oAuthToken element would be updated..
+    // XXX this is kind of a hack--ideally just
+    // the fueloauth element would be updated..
 
     public void updateHeaders()
         throws ETSdkException
@@ -106,40 +106,18 @@ public class ETSoapConnection {
         try {
             List<Header> headers = new ArrayList<Header>();
 
-            SOAPElement oAuthTokenElement =
-                    soapFactory.createElement(new QName(null, "oAuthToken"));
-            oAuthTokenElement.addTextNode(client.getLegacyToken());
-            SOAPElement oAuthElement =
-                    soapFactory.createElement(new QName("http://exacttarget.com", "oAuth"));
-            oAuthElement.addChildElement(oAuthTokenElement);
-            Header oAuthHeader =
-                    new Header(new QName("http://exacttarget.com", "oAuth"),
-                            oAuthElement);
-            headers.add(oAuthHeader);
-
-            String XSD_URL = "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd";
-
-            SOAPElement securityElement =
-                    soapFactory.createElement(new QName(XSD_URL, "Security"));
-            SOAPElement usernameTokenElement =
-                    soapFactory.createElement(new QName(XSD_URL, "UsernameToken"));
-            SOAPElement usernameElement =
-                    soapFactory.createElement(new QName(XSD_URL, "Username"));
-            usernameElement.addTextNode("*");
-            SOAPElement passwordElement =
-                    soapFactory.createElement(new QName(XSD_URL, "Password"));
-            passwordElement.addTextNode("*");
-            usernameTokenElement.addChildElement(usernameElement);
-            usernameTokenElement.addChildElement(passwordElement);
-            securityElement.addChildElement(usernameTokenElement);
-            Header securityHeader =
-                    new Header(new QName("http://exacttarget.com", "Security"),
-                            securityElement);
-            headers.add(securityHeader);
+            SOAPElement oauthElement =
+                    soapFactory.createElement(new QName(null, "fueloauth"));
+            oauthElement.addTextNode(client.getAccessToken());
+            Header oauthHeader =
+                    new Header(new QName("http://exacttarget.com", "fueloauth"),
+                               oauthElement);
+            headers.add(oauthHeader);
 
             soapClient.getRequestContext().put(Header.HEADER_LIST, headers);
 
-            logger.debug("updated SOAP header with new legacy token " + client.getLegacyToken());
+            logger.debug("updated SOAP header with new access token "
+                    + client.getAccessToken());
         } catch (SOAPException ex) {
             throw new ETSdkException("could not update SOAP headers", ex);
         }
