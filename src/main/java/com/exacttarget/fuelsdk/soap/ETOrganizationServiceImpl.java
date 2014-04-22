@@ -51,13 +51,13 @@ public class ETOrganizationServiceImpl extends ETCrudServiceImpl<ETOrganization>
         return super.get(client, ETOrganization.class, filter, properties);
     }
 
-    public ETResponse<Integer> post(ETClient client, ETOrganization organization)
+    public ETResponse<ETOrganization> post(ETClient client, ETOrganization organization)
         throws ETSdkException
     {
         return super.post(client, organization);
     }
 
-    public ETResponse<Integer> post(ETClient client, List<ETOrganization> organizations)
+    public ETResponse<ETOrganization> post(ETClient client, List<ETOrganization> organizations)
         throws ETSdkException
     {
         return super.post(client, organizations);

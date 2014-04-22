@@ -57,13 +57,13 @@ public class ETDataExtensionServiceImpl extends ETCrudServiceImpl<ETDataExtensio
         return super.get(client, ETDataExtension.class, filter, properties);
     }
 
-    public ETResponse<Integer> post(ETClient client, ETDataExtension dataExtension)
+    public ETResponse<ETDataExtension> post(ETClient client, ETDataExtension dataExtension)
         throws ETSdkException
     {
         return super.post(client, dataExtension);
     }
 
-    public ETResponse<Integer> post(ETClient client, List<ETDataExtension> dataExtensions)
+    public ETResponse<ETDataExtension> post(ETClient client, List<ETDataExtension> dataExtensions)
         throws ETSdkException
     {
         return super.post(client, dataExtensions);

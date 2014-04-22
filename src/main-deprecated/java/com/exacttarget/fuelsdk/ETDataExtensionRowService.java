@@ -42,9 +42,9 @@ public interface ETDataExtensionRowService extends ETCrudService {
         throws ETSdkException;
     public ETResponse<ETDataExtensionRow> get(ETClient client, String name, List<String> columns, ETFilter filter)
         throws ETSdkException;
-    public ETResponse<Integer> post(ETClient client, ETDataExtensionRow row)
+    public ETResponse<ETDataExtensionRow> post(ETClient client, ETDataExtensionRow row)
         throws ETSdkException;
-    public ETResponse<Integer> post(ETClient client, List<ETDataExtensionRow> rows)
+    public ETResponse<ETDataExtensionRow> post(ETClient client, List<ETDataExtensionRow> rows)
         throws ETSdkException;
     public ETResponse<ETDataExtensionRow> patch(ETClient client, ETDataExtensionRow row)
         throws ETSdkException;

@@ -37,9 +37,9 @@ public interface ETListService extends ETCrudService {
         throws ETSdkException;
     public ETResponse<ETList> get(ETClient client, ETFilter filter, String... properties)
         throws ETSdkException;
-    public ETResponse<Integer> post(ETClient client, ETList list)
+    public ETResponse<ETList> post(ETClient client, ETList list)
         throws ETSdkException;
-    public ETResponse<Integer> post(ETClient client, List<ETList> lists)
+    public ETResponse<ETList> post(ETClient client, List<ETList> lists)
         throws ETSdkException;
     public ETResponse<ETList> patch(ETClient client, ETList list)
         throws ETSdkException;

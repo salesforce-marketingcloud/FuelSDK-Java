@@ -42,9 +42,9 @@ public interface ETDataExtensionService extends ETCrudService {
         throws ETSdkException;
     public ETResponse<ETDataExtension> get(ETClient client, ETFilter filter, String... properties)
         throws ETSdkException;
-    public ETResponse<Integer> post(ETClient client, ETDataExtension dataExtension)
+    public ETResponse<ETDataExtension> post(ETClient client, ETDataExtension dataExtension)
         throws ETSdkException;
-    public ETResponse<Integer> post(ETClient client, List<ETDataExtension> dataExtensions)
+    public ETResponse<ETDataExtension> post(ETClient client, List<ETDataExtension> dataExtensions)
         throws ETSdkException;
     public ETResponse<ETDataExtension> patch(ETClient client, ETDataExtension dataExtension)
         throws ETSdkException;

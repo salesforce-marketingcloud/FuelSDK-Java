@@ -37,9 +37,9 @@ public interface ETFolderService extends ETCrudService {
         throws ETSdkException;
     public ETResponse<ETFolder> get(ETClient client, ETFilter filter, String... properties)
         throws ETSdkException;
-    public ETResponse<Integer> post(ETClient client, ETFolder folder)
+    public ETResponse<ETFolder> post(ETClient client, ETFolder folder)
         throws ETSdkException;
-    public ETResponse<Integer> post(ETClient client, List<ETFolder> folders)
+    public ETResponse<ETFolder> post(ETClient client, List<ETFolder> folders)
         throws ETSdkException;
     public ETResponse<ETFolder> patch(ETClient client, ETFolder folder)
         throws ETSdkException;

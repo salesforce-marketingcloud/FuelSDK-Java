@@ -58,16 +58,16 @@ public abstract class ETCrudServiceImpl<T extends ETSoapObject>
     private static Logger logger = Logger.getLogger(ETCrudServiceImpl.class);
 
     @SuppressWarnings("unchecked")
-    public ETResponse<Integer> post(ETClient client, T object)
+    public ETResponse<T> post(ETClient client, T object)
         throws ETSdkException
     {
         return post(client, Arrays.asList(object));
     }
 
-    public ETResponse<Integer> post(ETClient client, List<T> objects)
+    public ETResponse<T> post(ETClient client, List<T> objects)
         throws ETSdkException
     {
-        ETResponse<Integer> response = new ETResponse<Integer>();
+        ETResponse<T> response = new ETResponse<T>();
 
         if (objects == null || objects.size() == 0) {
             return response;
@@ -116,10 +116,14 @@ public abstract class ETCrudServiceImpl<T extends ETSoapObject>
         }
 
         response.setRequestId(createResponse.getRequestID());
-        response.setStatus(createResponse.getOverallStatus().equals("OK"));
-        response.setMessage(createResponse.getOverallStatus());
+        response.setStatusMessage(createResponse.getOverallStatus());
         for (CreateResult createResult : createResponse.getResults()) {
-            response.getResults().add(createResult.getNewID());
+            ETResponse<T>.Result result = response.new Result();
+            result.setStatusCode(createResult.getStatusCode());
+            result.setStatusMessage(createResult.getStatusMessage());
+            result.setErrorCode(createResult.getErrorCode());
+            result.setId(createResult.getNewID());
+            response.addResult(result);
         }
 
         return response;
@@ -184,10 +188,13 @@ public abstract class ETCrudServiceImpl<T extends ETSoapObject>
         }
 
         response.setRequestId(updateResponse.getRequestID());
-        response.setStatus(updateResponse.getOverallStatus().equals("OK"));
-        response.setMessage(updateResponse.getOverallStatus());
-        for (UpdateResult createResult : updateResponse.getResults()) {
-            // XXX
+        response.setStatusMessage(updateResponse.getOverallStatus());
+        for (UpdateResult updateResult : updateResponse.getResults()) {
+            ETResponse<T>.Result result = response.new Result();
+            result.setStatusCode(updateResult.getStatusCode());
+            result.setStatusMessage(updateResult.getStatusMessage());
+            result.setErrorCode(updateResult.getErrorCode());
+            response.addResult(result);
         }
 
         return response;
@@ -252,10 +259,13 @@ public abstract class ETCrudServiceImpl<T extends ETSoapObject>
         }
 
         response.setRequestId(deleteResponse.getRequestID());
-        response.setStatus(deleteResponse.getOverallStatus().equals("OK"));
-        response.setMessage(deleteResponse.getOverallStatus());
+        response.setStatusMessage(deleteResponse.getOverallStatus());
         for (DeleteResult deleteResult : deleteResponse.getResults()) {
-            // XXX
+            ETResponse<T>.Result result = response.new Result();
+            result.setStatusCode(deleteResult.getStatusCode());
+            result.setStatusMessage(deleteResult.getStatusMessage());
+            result.setErrorCode(deleteResult.getErrorCode());
+            response.addResult(result);
         }
 
         return response;

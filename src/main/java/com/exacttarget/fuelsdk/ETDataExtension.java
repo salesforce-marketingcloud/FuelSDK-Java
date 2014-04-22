@@ -221,7 +221,7 @@ public class ETDataExtension extends ETSoapObject {
         return response.getResults();
     }
 
-    public List<Integer> insert(ETDataExtensionRow... rows)
+    public List<ETDataExtensionRow> insert(ETDataExtensionRow... rows)
         throws ETSdkException
     {
         ETDataExtensionRowService service = new ETDataExtensionRowServiceImpl();
@@ -238,7 +238,7 @@ public class ETDataExtension extends ETSoapObject {
             assert row.getName() == name; // something's wrong...
         }
 
-        ETResponse<Integer> response = service.post(client, Arrays.asList(rows));
+        ETResponse<ETDataExtensionRow> response = service.post(client, Arrays.asList(rows));
 
         // XXX check for errors and throw the appropriate exception
 

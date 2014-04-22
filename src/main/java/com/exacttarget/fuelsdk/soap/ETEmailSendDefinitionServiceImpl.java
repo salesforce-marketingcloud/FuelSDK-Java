@@ -61,13 +61,13 @@ public class ETEmailSendDefinitionServiceImpl extends ETCrudServiceImpl<ETEmailS
         return super.get(client, ETEmailSendDefinition.class, filter, properties);
     }
 
-    public ETResponse<Integer> post(ETClient client, ETEmailSendDefinition emailSendDefinition)
+    public ETResponse<ETEmailSendDefinition> post(ETClient client, ETEmailSendDefinition emailSendDefinition)
         throws ETSdkException
     {
         return super.post(client, emailSendDefinition);
     }
 
-    public ETResponse<Integer> post(ETClient client, List<ETEmailSendDefinition> emailSendDefinitions)
+    public ETResponse<ETEmailSendDefinition> post(ETClient client, List<ETEmailSendDefinition> emailSendDefinitions)
         throws ETSdkException
     {
         return super.post(client, emailSendDefinitions);
@@ -140,9 +140,8 @@ public class ETEmailSendDefinitionServiceImpl extends ETCrudServiceImpl<ETEmailS
         }
 
         response.setRequestId(performResponseMsg.getRequestID());
-        response.setStatus(performResponseMsg.getOverallStatus().equals("OK"));
-        response.setMessage(performResponseMsg.getOverallStatus());
-        for (PerformResult createResult : performResponseMsg.getResults().getResult()) {
+        response.setStatusMessage(performResponseMsg.getOverallStatus());
+        for (PerformResult performResult : performResponseMsg.getResults().getResult()) {
             // XXX
         }
 

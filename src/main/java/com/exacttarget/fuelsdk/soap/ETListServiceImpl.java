@@ -51,13 +51,13 @@ public class ETListServiceImpl extends ETCrudServiceImpl<ETList>
         return super.get(client, ETList.class, filter, properties);
     }
 
-    public ETResponse<Integer> post(ETClient client, ETList list)
+    public ETResponse<ETList> post(ETClient client, ETList list)
         throws ETSdkException
     {
         return super.post(client, list);
     }
 
-    public ETResponse<Integer> post(ETClient client, List<ETList> lists)
+    public ETResponse<ETList> post(ETClient client, List<ETList> lists)
         throws ETSdkException
     {
         return super.post(client, lists);

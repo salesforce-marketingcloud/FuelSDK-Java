@@ -78,24 +78,25 @@ public class ETDataExtensionRowServiceImpl extends ETCrudServiceImpl<ETDataExten
         RetrieveResponseMsg retrieveResponseMsg = soap.retrieve(retrieveRequestMsg);
 
         response.setRequestId(retrieveResponseMsg.getRequestID());
-        response.setStatus(retrieveResponseMsg.getOverallStatus().equals("OK"));
-        response.setMessage(retrieveResponseMsg.getOverallStatus());
+        response.setStatusMessage(retrieveResponseMsg.getOverallStatus());
         for (APIObject internalObject : retrieveResponseMsg.getResults()) {
-            // XXX test
+            ETResponse<ETDataExtensionRow>.Result result = response.new Result();
             ETDataExtensionRow row = new ETDataExtensionRow();
-            response.getResults().add((ETDataExtensionRow) row.fromInternal(internalObject));
+            row.fromInternal(internalObject);
+            result.setObject(row);
+            response.addResult(result);
         }
 
         return response;
     }
 
-    public ETResponse<Integer> post(ETClient client, ETDataExtensionRow row)
+    public ETResponse<ETDataExtensionRow> post(ETClient client, ETDataExtensionRow row)
         throws ETSdkException
     {
         return super.post(client, row);
     }
 
-    public ETResponse<Integer> post(ETClient client, List<ETDataExtensionRow> rows)
+    public ETResponse<ETDataExtensionRow> post(ETClient client, List<ETDataExtensionRow> rows)
         throws ETSdkException
     {
         return super.post(client, rows);

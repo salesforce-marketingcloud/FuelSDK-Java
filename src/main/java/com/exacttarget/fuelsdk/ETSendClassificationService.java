@@ -37,9 +37,9 @@ public interface ETSendClassificationService extends ETCrudService {
         throws ETSdkException;
     public ETResponse<ETSendClassification> get(ETClient client, ETFilter filter, String... properties)
         throws ETSdkException;
-    public ETResponse<Integer> post(ETClient client, ETSendClassification sendClassification)
+    public ETResponse<ETSendClassification> post(ETClient client, ETSendClassification sendClassification)
         throws ETSdkException;
-    public ETResponse<Integer> post(ETClient client, List<ETSendClassification> sendClassifications)
+    public ETResponse<ETSendClassification> post(ETClient client, List<ETSendClassification> sendClassifications)
         throws ETSdkException;
     public ETResponse<ETSendClassification> patch(ETClient client, ETSendClassification sendClassification)
         throws ETSdkException;

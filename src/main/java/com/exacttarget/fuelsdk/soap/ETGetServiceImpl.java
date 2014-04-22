@@ -163,9 +163,14 @@ public abstract class ETGetServiceImpl<T extends ETSoapObject>
         }
 
         response.setRequestId(retrieveResponseMsg.getRequestID());
-        response.setStatus(retrieveResponseMsg.getOverallStatus().equals("OK"));
-        response.setMessage(retrieveResponseMsg.getOverallStatus());
+        response.setStatusMessage(retrieveResponseMsg.getOverallStatus());
         for (APIObject internalObject : retrieveResponseMsg.getResults()) {
+            ETResponse<T>.Result result = response.new Result();
+
+            //
+            // Allocate a new object:
+            //
+
             T externalObject = null;
             try {
                 externalObject = externalClass.newInstance();
@@ -173,7 +178,16 @@ public abstract class ETGetServiceImpl<T extends ETSoapObject>
                 throw new ETSdkException("could not instantiate "
                         + externalClass.getName(), ex);
             }
-            response.getResults().add((T) externalObject.fromInternal(internalObject));
+
+            //
+            // Convert from internal representation:
+            //
+
+            externalObject.fromInternal(internalObject);
+
+            result.setObject(externalObject);
+
+            response.addResult(result);
         }
 
         return response;
