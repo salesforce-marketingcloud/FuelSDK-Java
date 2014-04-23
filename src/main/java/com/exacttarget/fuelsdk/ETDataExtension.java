@@ -251,6 +251,10 @@ public class ETDataExtension extends ETSoapObject {
         return select(null, columns);
     }
 
+    // XXX hack
+    private String requestId = null;
+    private boolean moreResults = false;
+
     public List<ETDataExtensionRow> select(ETFilter filter, String... columns)
         throws ETSdkException
     {
@@ -274,9 +278,44 @@ public class ETDataExtension extends ETSoapObject {
         ETResponse<ETDataExtensionRow> response
             = service.get(client, name, Arrays.asList(columns), filter);
 
+        // XXX hack
+        if (response.hasMoreResults()) {
+            requestId = response.getRequestId();
+            moreResults = true;
+        } else {
+            requestId = null;
+            moreResults = false;
+        }
+
         // XXX check for errors and throw the appropriate exception
 
         return response.getResults();
+    }
+
+    // XXX hack
+    public List<ETDataExtensionRow> selectContinueRequest()
+        throws ETSdkException
+    {
+        ETDataExtensionRowService service = new ETDataExtensionRowServiceImpl();
+        ETResponse<ETDataExtensionRow> response
+            = service.get(client, requestId);
+
+        // XXX hack
+        if (response.hasMoreResults()) {
+            requestId = response.getRequestId();
+            moreResults = true;
+        } else {
+            requestId = null;
+            moreResults = false;
+        }
+
+        // XXX check for errors and throw the appropriate exception
+
+        return response.getResults();
+    }
+
+    public boolean selectHasMoreResults() {
+        return moreResults;
     }
 
     public List<ETDataExtensionRow> update(ETDataExtensionRow... rows)

@@ -53,23 +53,41 @@ public class ETDataExtensionRowServiceImpl extends ETCrudServiceImpl<ETDataExten
     public ETResponse<ETDataExtensionRow> get(ETClient client, String name, List<String> columns)
         throws ETSdkException
     {
-        return get(client, name, columns, null);
+        return get(client, name, columns, null, null);
     }
 
     public ETResponse<ETDataExtensionRow> get(ETClient client, String name, List<String> columns, ETFilter filter)
         throws ETSdkException
     {
-        // XXX cleanup
+        return get(client, name, columns, filter, null);
+    }
 
+    public ETResponse<ETDataExtensionRow> get(ETClient client, String continueRequestId)
+        throws ETSdkException
+    {
+        return get(client, null, null, null, continueRequestId);
+
+    }
+
+    private ETResponse<ETDataExtensionRow> get(ETClient client, String name, List<String> columns, ETFilter filter, String continueRequestId)
+        throws ETSdkException
+    {
         ETResponse<ETDataExtensionRow> response = new ETResponseImpl<ETDataExtensionRow>();
 
         Soap soap = client.getSOAPConnection().getSoap();
 
         RetrieveRequest retrieveRequest = new RetrieveRequest();
-        retrieveRequest.setObjectType("DataExtensionObject[" + name + "]");
-        retrieveRequest.getProperties().addAll(columns);
+        if (name != null) {
+            retrieveRequest.setObjectType("DataExtensionObject[" + name + "]");
+        }
+        if (columns != null) {
+            retrieveRequest.getProperties().addAll(columns);
+        }
         if (filter != null) {
             retrieveRequest.setFilter(convertFilterPart(filter));
+        }
+        if (continueRequestId != null) {
+            retrieveRequest.setContinueRequest(continueRequestId);
         }
 
         RetrieveRequestMsg retrieveRequestMsg = new RetrieveRequestMsg();
@@ -85,6 +103,10 @@ public class ETDataExtensionRowServiceImpl extends ETCrudServiceImpl<ETDataExten
             row.fromInternal(internalObject);
             result.setObject(row);
             response.addResult(result);
+        }
+
+        if (retrieveResponseMsg.getOverallStatus().equals("MoreDataAvailable")) {
+            response.setMoreResults(true);
         }
 
         return response;

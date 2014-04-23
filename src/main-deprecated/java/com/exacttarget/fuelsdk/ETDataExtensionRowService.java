@@ -42,6 +42,8 @@ public interface ETDataExtensionRowService extends ETCrudService {
         throws ETSdkException;
     public ETResponse<ETDataExtensionRow> get(ETClient client, String name, List<String> columns, ETFilter filter)
         throws ETSdkException;
+    public ETResponse<ETDataExtensionRow> get(ETClient client, String continueRequestId)
+        throws ETSdkException;
     public ETResponse<ETDataExtensionRow> post(ETClient client, ETDataExtensionRow row)
         throws ETSdkException;
     public ETResponse<ETDataExtensionRow> post(ETClient client, List<ETDataExtensionRow> rows)
