@@ -166,7 +166,7 @@ public abstract class ETGetServiceImpl<T extends ETSoapObject>
         response.setStatusMessage(retrieveResponseMsg.getOverallStatus());
         for (APIObject internalObject : retrieveResponseMsg.getResults()) {
             //
-            // Allocate a new object:
+            // Allocate a new (external) object:
             //
 
             T externalObject = null;
@@ -184,7 +184,7 @@ public abstract class ETGetServiceImpl<T extends ETSoapObject>
             externalObject.fromInternal(internalObject);
 
             //
-            // Add to the list of results:
+            // Add result to the list of results:
             //
 
             response.getResults().add(externalObject);

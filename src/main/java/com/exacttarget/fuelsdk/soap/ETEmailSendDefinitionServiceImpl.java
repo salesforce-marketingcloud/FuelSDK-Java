@@ -101,7 +101,13 @@ public class ETEmailSendDefinitionServiceImpl extends ETCrudServiceImpl<ETEmailS
     public ETResponse<ETResponseStatus> send(ETClient client, ETEmailSendDefinition emailSendDefinition)
         throws ETSdkException
     {
-        ETResponse<ETResponseStatus> response = new ETResponseImpl<ETEmailSendDefinition>();
+        ETResponse<ETResponseStatus> response = new ETResponse<ETResponseStatus>();
+
+        //
+        // Automatically refresh the token if necessary:
+        //
+
+        client.refreshToken();
 
         //
         // Perform the, uh, SOAP perform:

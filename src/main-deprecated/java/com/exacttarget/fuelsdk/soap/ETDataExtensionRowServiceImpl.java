@@ -29,6 +29,8 @@ package com.exacttarget.fuelsdk.soap;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETDataExtensionRow;
 import com.exacttarget.fuelsdk.ETDataExtensionRowService;
@@ -51,6 +53,8 @@ import com.exacttarget.fuelsdk.internal.Soap;
 public class ETDataExtensionRowServiceImpl extends ETCrudServiceImpl<ETDataExtensionRow>
     implements ETDataExtensionRowService
 {
+    private static Logger logger = Logger.getLogger(ETDataExtensionRowServiceImpl.class);
+
     public ETResponse<ETDataExtensionRow> get(ETClient client, String name, List<String> columns)
         throws ETSdkException
     {
@@ -73,7 +77,17 @@ public class ETDataExtensionRowServiceImpl extends ETCrudServiceImpl<ETDataExten
     private ETResponse<ETDataExtensionRow> get(ETClient client, String name, List<String> columns, ETFilter filter, String continueRequestId)
         throws ETSdkException
     {
-        ETResponse<ETDataExtensionRow> response = new ETResponseImpl<ETDataExtensionRow>();
+        ETResponse<ETDataExtensionRow> response = new ETResponse<ETDataExtensionRow>();
+
+        //
+        // Automatically refresh the token if necessary:
+        //
+
+        client.refreshToken();
+
+        //
+        // Perform the SOAP retrieve:
+        //
 
         Soap soap = client.getSOAPConnection().getSoap();
 
@@ -91,19 +105,59 @@ public class ETDataExtensionRowServiceImpl extends ETCrudServiceImpl<ETDataExten
             retrieveRequest.setContinueRequest(continueRequestId);
         }
 
+        if (logger.isTraceEnabled()) {
+            logger.trace("RetrieveRequest:");
+            logger.trace("  objectType = " + retrieveRequest.getObjectType());
+            String line = null;
+            for (String property : retrieveRequest.getProperties()) {
+                if (line == null) {
+                    line = "  properties = { " + property;
+                } else {
+                    line += ", " + property;
+                }
+            }
+            logger.trace(line + " }");
+            // XXX print filter too
+        }
+
+        logger.trace("calling soap.retrieve...");
+
         RetrieveRequestMsg retrieveRequestMsg = new RetrieveRequestMsg();
         retrieveRequestMsg.setRetrieveRequest(retrieveRequest);
 
         RetrieveResponseMsg retrieveResponseMsg = soap.retrieve(retrieveRequestMsg);
 
+        if (logger.isTraceEnabled()) {
+            logger.trace("RetrieveResponseMsg:");
+            logger.trace("  requestId = " + retrieveResponseMsg.getRequestID());
+            logger.trace("  overallStatus = " + retrieveResponseMsg.getOverallStatus());
+            logger.trace("  results = {");
+            for (APIObject result : retrieveResponseMsg.getResults()) {
+                logger.trace("    " + result);
+            }
+            logger.trace("  }");
+        }
+
         response.setRequestId(retrieveResponseMsg.getRequestID());
         response.setStatusMessage(retrieveResponseMsg.getOverallStatus());
         for (APIObject internalObject : retrieveResponseMsg.getResults()) {
-            ETResponse<ETDataExtensionRow>.Result result = response.new Result();
+            //
+            // Allocate a new (external) object:
+            //
+
             ETDataExtensionRow row = new ETDataExtensionRow();
+
+            //
+            // Convert from internal representation:
+            //
+
             row.fromInternal(internalObject);
-            result.setObject(row);
-            response.addResult(result);
+
+            //
+            // Add result to the list of results:
+            //
+
+            response.getResults().add(row);
         }
 
         if (retrieveResponseMsg.getOverallStatus().equals("MoreDataAvailable")) {
