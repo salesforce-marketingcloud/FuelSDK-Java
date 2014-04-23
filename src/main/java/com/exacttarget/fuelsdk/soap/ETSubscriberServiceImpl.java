@@ -31,6 +31,7 @@ import java.util.List;
 
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETResponse;
+import com.exacttarget.fuelsdk.ETResponseStatus;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.ETSubscriberService;
 import com.exacttarget.fuelsdk.filter.ETFilter;
@@ -51,37 +52,37 @@ public class ETSubscriberServiceImpl extends ETCrudServiceImpl<ETSubscriber>
         return super.get(client, ETSubscriber.class, filter, properties);
     }
 
-    public ETResponse<ETSubscriber> post(ETClient client, ETSubscriber subscriber)
+    public ETResponse<ETResponseStatus> post(ETClient client, ETSubscriber subscriber)
         throws ETSdkException
     {
         return super.post(client, subscriber);
     }
 
-    public ETResponse<ETSubscriber> post(ETClient client, List<ETSubscriber> subscribers)
+    public ETResponse<ETResponseStatus> post(ETClient client, List<ETSubscriber> subscribers)
         throws ETSdkException
     {
         return super.post(client, subscribers);
     }
 
-    public ETResponse<ETSubscriber> patch(ETClient client, ETSubscriber subscriber)
+    public ETResponse<ETResponseStatus> patch(ETClient client, ETSubscriber subscriber)
         throws ETSdkException
     {
         return super.patch(client, subscriber);
     }
 
-    public ETResponse<ETSubscriber> patch(ETClient client, List<ETSubscriber> subscribers)
+    public ETResponse<ETResponseStatus> patch(ETClient client, List<ETSubscriber> subscribers)
         throws ETSdkException
     {
         return super.patch(client, subscribers);
     }
 
-    public ETResponse<ETSubscriber> delete(ETClient client, ETSubscriber subscriber)
+    public ETResponse<ETResponseStatus> delete(ETClient client, ETSubscriber subscriber)
         throws ETSdkException
     {
         return super.delete(client, subscriber);
     }
 
-    public ETResponse<ETSubscriber> delete(ETClient client, List<ETSubscriber> subscribers)
+    public ETResponse<ETResponseStatus> delete(ETClient client, List<ETSubscriber> subscribers)
         throws ETSdkException
     {
         return super.delete(client, subscribers);

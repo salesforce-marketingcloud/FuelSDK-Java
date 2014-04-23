@@ -195,7 +195,7 @@ public class ETDataExtension extends ETSoapObject {
         this.status = status;
     }
 
-    public List<ETDataExtensionRow> delete(ETFilter filter)
+    public List<ETResponseStatus> delete(ETFilter filter)
         throws ETSdkException
     {
         ETDataExtensionRowService service = new ETDataExtensionRowServiceImpl();
@@ -214,14 +214,14 @@ public class ETDataExtension extends ETSoapObject {
             assert row.getName() == name; // something's wrong...
         }
 
-        ETResponse<ETDataExtensionRow> response = service.delete(client, rows);
+        ETResponse<ETResponseStatus> response = service.delete(client, rows);
 
         // XXX check for errors and throw the appropriate exception
 
         return response.getResults();
     }
 
-    public List<ETDataExtensionRow> insert(ETDataExtensionRow... rows)
+    public List<ETResponseStatus> insert(ETDataExtensionRow... rows)
         throws ETSdkException
     {
         ETDataExtensionRowService service = new ETDataExtensionRowServiceImpl();
@@ -238,7 +238,7 @@ public class ETDataExtension extends ETSoapObject {
             assert row.getName() == name; // something's wrong...
         }
 
-        ETResponse<ETDataExtensionRow> response = service.post(client, Arrays.asList(rows));
+        ETResponse<ETResponseStatus> response = service.post(client, Arrays.asList(rows));
 
         // XXX check for errors and throw the appropriate exception
 
@@ -318,7 +318,7 @@ public class ETDataExtension extends ETSoapObject {
         return moreResults;
     }
 
-    public List<ETDataExtensionRow> update(ETDataExtensionRow... rows)
+    public List<ETResponseStatus> update(ETDataExtensionRow... rows)
         throws ETSdkException
     {
         ETDataExtensionRowService service = new ETDataExtensionRowServiceImpl();
@@ -335,7 +335,7 @@ public class ETDataExtension extends ETSoapObject {
             assert row.getName() == name; // something's wrong...
         }
 
-        ETResponse<ETDataExtensionRow> response = service.patch(client, Arrays.asList(rows));
+        ETResponse<ETResponseStatus> response = service.patch(client, Arrays.asList(rows));
 
         // XXX check for errors and throw the appropriate exception
 

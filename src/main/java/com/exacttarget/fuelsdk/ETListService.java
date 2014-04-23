@@ -37,16 +37,16 @@ public interface ETListService extends ETCrudService {
         throws ETSdkException;
     public ETResponse<ETList> get(ETClient client, ETFilter filter, String... properties)
         throws ETSdkException;
-    public ETResponse<ETList> post(ETClient client, ETList list)
+    public ETResponse<ETResponseStatus> post(ETClient client, ETList list)
         throws ETSdkException;
-    public ETResponse<ETList> post(ETClient client, List<ETList> lists)
+    public ETResponse<ETResponseStatus> post(ETClient client, List<ETList> lists)
         throws ETSdkException;
-    public ETResponse<ETList> patch(ETClient client, ETList list)
+    public ETResponse<ETResponseStatus> patch(ETClient client, ETList list)
         throws ETSdkException;
-    public ETResponse<ETList> patch(ETClient client, List<ETList> lists)
+    public ETResponse<ETResponseStatus> patch(ETClient client, List<ETList> lists)
         throws ETSdkException;
-    public ETResponse<ETList> delete(ETClient client, ETList list)
+    public ETResponse<ETResponseStatus> delete(ETClient client, ETList list)
         throws ETSdkException;
-    public ETResponse<ETList> delete(ETClient client, List<ETList> lists)
+    public ETResponse<ETResponseStatus> delete(ETClient client, List<ETList> lists)
         throws ETSdkException;
 }

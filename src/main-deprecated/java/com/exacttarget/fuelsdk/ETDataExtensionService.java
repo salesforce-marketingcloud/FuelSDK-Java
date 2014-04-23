@@ -42,16 +42,16 @@ public interface ETDataExtensionService extends ETCrudService {
         throws ETSdkException;
     public ETResponse<ETDataExtension> get(ETClient client, ETFilter filter, String... properties)
         throws ETSdkException;
-    public ETResponse<ETDataExtension> post(ETClient client, ETDataExtension dataExtension)
+    public ETResponse<ETResponseStatus> post(ETClient client, ETDataExtension dataExtension)
         throws ETSdkException;
-    public ETResponse<ETDataExtension> post(ETClient client, List<ETDataExtension> dataExtensions)
+    public ETResponse<ETResponseStatus> post(ETClient client, List<ETDataExtension> dataExtensions)
         throws ETSdkException;
-    public ETResponse<ETDataExtension> patch(ETClient client, ETDataExtension dataExtension)
+    public ETResponse<ETResponseStatus> patch(ETClient client, ETDataExtension dataExtension)
         throws ETSdkException;
-    public ETResponse<ETDataExtension> patch(ETClient client, List<ETDataExtension> dataExtensions)
+    public ETResponse<ETResponseStatus> patch(ETClient client, List<ETDataExtension> dataExtensions)
         throws ETSdkException;
-    public ETResponse<ETDataExtension> delete(ETClient client, ETDataExtension dataExtension)
+    public ETResponse<ETResponseStatus> delete(ETClient client, ETDataExtension dataExtension)
         throws ETSdkException;
-    public ETResponse<ETDataExtension> delete(ETClient client, List<ETDataExtension> dataExtensions)
+    public ETResponse<ETResponseStatus> delete(ETClient client, List<ETDataExtension> dataExtensions)
         throws ETSdkException;
 }

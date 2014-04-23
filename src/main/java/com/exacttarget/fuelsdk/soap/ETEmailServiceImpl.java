@@ -32,6 +32,7 @@ import java.util.List;
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETEmailService;
 import com.exacttarget.fuelsdk.ETResponse;
+import com.exacttarget.fuelsdk.ETResponseStatus;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.model.ETEmail;
@@ -51,37 +52,37 @@ public class ETEmailServiceImpl extends ETCrudServiceImpl<ETEmail>
         return super.get(client, ETEmail.class, filter, properties);
     }
 
-    public ETResponse<ETEmail> post(ETClient client, ETEmail email)
+    public ETResponse<ETResponseStatus> post(ETClient client, ETEmail email)
         throws ETSdkException
     {
         return super.post(client, email);
     }
 
-    public ETResponse<ETEmail> post(ETClient client, List<ETEmail> emails)
+    public ETResponse<ETResponseStatus> post(ETClient client, List<ETEmail> emails)
         throws ETSdkException
     {
         return super.post(client, emails);
     }
 
-    public ETResponse<ETEmail> patch(ETClient client, ETEmail email)
+    public ETResponse<ETResponseStatus> patch(ETClient client, ETEmail email)
         throws ETSdkException
     {
         return super.patch(client, email);
     }
 
-    public ETResponse<ETEmail> patch(ETClient client, List<ETEmail> emails)
+    public ETResponse<ETResponseStatus> patch(ETClient client, List<ETEmail> emails)
         throws ETSdkException
     {
         return super.patch(client, emails);
     }
 
-    public ETResponse<ETEmail> delete(ETClient client, ETEmail email)
+    public ETResponse<ETResponseStatus> delete(ETClient client, ETEmail email)
         throws ETSdkException
     {
         return super.delete(client, email);
     }
 
-    public ETResponse<ETEmail> delete(ETClient client, List<ETEmail> emails)
+    public ETResponse<ETResponseStatus> delete(ETClient client, List<ETEmail> emails)
         throws ETSdkException
     {
         return super.delete(client, emails);

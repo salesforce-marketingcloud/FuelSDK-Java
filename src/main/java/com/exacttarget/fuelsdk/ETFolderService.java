@@ -37,16 +37,16 @@ public interface ETFolderService extends ETCrudService {
         throws ETSdkException;
     public ETResponse<ETFolder> get(ETClient client, ETFilter filter, String... properties)
         throws ETSdkException;
-    public ETResponse<ETFolder> post(ETClient client, ETFolder folder)
+    public ETResponse<ETResponseStatus> post(ETClient client, ETFolder folder)
         throws ETSdkException;
-    public ETResponse<ETFolder> post(ETClient client, List<ETFolder> folders)
+    public ETResponse<ETResponseStatus> post(ETClient client, List<ETFolder> folders)
         throws ETSdkException;
-    public ETResponse<ETFolder> patch(ETClient client, ETFolder folder)
+    public ETResponse<ETResponseStatus> patch(ETClient client, ETFolder folder)
         throws ETSdkException;
-    public ETResponse<ETFolder> patch(ETClient client, List<ETFolder> folders)
+    public ETResponse<ETResponseStatus> patch(ETClient client, List<ETFolder> folders)
         throws ETSdkException;
-    public ETResponse<ETFolder> delete(ETClient client, ETFolder folder)
+    public ETResponse<ETResponseStatus> delete(ETClient client, ETFolder folder)
         throws ETSdkException;
-    public ETResponse<ETFolder> delete(ETClient client, List<ETFolder> folders)
+    public ETResponse<ETResponseStatus> delete(ETClient client, List<ETFolder> folders)
         throws ETSdkException;
 }

@@ -37,16 +37,16 @@ public interface ETSubscriberService extends ETCrudService {
         throws ETSdkException;
     public ETResponse<ETSubscriber> get(ETClient client, ETFilter filter, String... properties)
         throws ETSdkException;
-    public ETResponse<ETSubscriber> post(ETClient client, ETSubscriber subscriber)
+    public ETResponse<ETResponseStatus> post(ETClient client, ETSubscriber subscriber)
         throws ETSdkException;
-    public ETResponse<ETSubscriber> post(ETClient client, List<ETSubscriber> subscribers)
+    public ETResponse<ETResponseStatus> post(ETClient client, List<ETSubscriber> subscribers)
         throws ETSdkException;
-    public ETResponse<ETSubscriber> patch(ETClient client, ETSubscriber subscriber)
+    public ETResponse<ETResponseStatus> patch(ETClient client, ETSubscriber subscriber)
         throws ETSdkException;
-    public ETResponse<ETSubscriber> patch(ETClient client, List<ETSubscriber> subscribers)
+    public ETResponse<ETResponseStatus> patch(ETClient client, List<ETSubscriber> subscribers)
         throws ETSdkException;
-    public ETResponse<ETSubscriber> delete(ETClient client, ETSubscriber subscriber)
+    public ETResponse<ETResponseStatus> delete(ETClient client, ETSubscriber subscriber)
         throws ETSdkException;
-    public ETResponse<ETSubscriber> delete(ETClient client, List<ETSubscriber> subscribers)
+    public ETResponse<ETResponseStatus> delete(ETClient client, List<ETSubscriber> subscribers)
         throws ETSdkException;
 }

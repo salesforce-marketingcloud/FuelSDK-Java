@@ -28,77 +28,13 @@
 package com.exacttarget.fuelsdk;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-public class ETResponse<T> implements Iterable<ETResponse<T>.Result> {
+public class ETResponse<T> {
     private String requestId = null;
-    private StatusCode statusCode = null;
-    private String statusMessage = null;
-    private Integer errorCode = null;
-    private List<Result> results = new ArrayList<Result>();
+    private ETResponseStatus overallResult = new ETResponseStatus();
+    private List<T> results = new ArrayList<T>();
     private boolean moreResults = false;
-
-    public enum StatusCode {
-        OK, ERROR, UNKNOWN;
-    }
-
-    public class Result {
-        private StatusCode statusCode = null;
-        private String statusMessage = null;
-        private Integer errorCode = null;
-        private T object = null;
-        private Integer id = null;
-
-        public StatusCode getStatusCode() {
-            return statusCode;
-        }
-
-        public void setStatusCode(String statusCode) {
-            if (statusCode == null) {
-                return;
-            }
-            if (statusCode.equals("OK")) {
-                this.statusCode = ETResponse.StatusCode.OK;
-            } else if (statusCode.equals("Error")) {
-                this.statusCode = ETResponse.StatusCode.ERROR;
-            } else {
-                this.statusCode = ETResponse.StatusCode.UNKNOWN;
-            }
-        }
-
-        public String getStatusMessage() {
-            return statusMessage;
-        }
-
-        public void setStatusMessage(String statusMessage) {
-            this.statusMessage = statusMessage;
-        }
-
-        public Integer getErrorCode() {
-            return errorCode;
-        }
-
-        public void setErrorCode(Integer errorCode) {
-            this.errorCode = errorCode;
-        }
-
-        public T getObject() {
-            return object;
-        }
-
-        public void setObject(T object) {
-            this.object = object;
-        }
-
-        public Integer getId() {
-            return id;
-        }
-
-        public void setId(Integer id) {
-            this.id = id;
-        }
-    }
 
     public String getRequestId() {
         return requestId;
@@ -108,31 +44,38 @@ public class ETResponse<T> implements Iterable<ETResponse<T>.Result> {
         this.requestId = requestId;
     }
 
-    public StatusCode getStatusCode() {
-        return statusCode;
+    public ETResponseStatusCode getStatusCode() {
+        return overallResult.getStatusCode();
+    }
+
+    public void setStatusCode(String statusCode) {
+        overallResult.setStatusCode(statusCode);
     }
 
     public String getStatusMessage() {
-        return statusMessage;
+        return overallResult.getStatusMessage();
     }
 
     public void setStatusMessage(String statusMessage) {
-        this.statusMessage = statusMessage;
-        if (statusMessage.equals("OK")) {
-            statusCode = ETResponse.StatusCode.OK;
-        } else if (statusMessage.equals("Error")) {
-            statusCode = ETResponse.StatusCode.ERROR;
-        } else {
-            statusCode = ETResponse.StatusCode.UNKNOWN;
-        }
+        overallResult.setStatusMessage(statusMessage);
     }
 
     public Integer getErrorCode() {
-        return errorCode;
+        return overallResult.getErrorCode();
     }
 
     public void setErrorCode(Integer errorCode) {
-        this.errorCode = errorCode;
+        overallResult.setErrorCode(errorCode);
+    }
+
+    public List<T> getResults() {
+        return results;
+    }
+
+    // XXX
+    //public void addResult(T result) {
+    public void addResult(Object result) {
+        results.add((T) result);
     }
 
     public boolean hasMoreResults() {
@@ -143,32 +86,13 @@ public class ETResponse<T> implements Iterable<ETResponse<T>.Result> {
         this.moreResults = moreResults;
     }
 
-    public List<T> getObjects() {
-        List<T> objects = new ArrayList<T>();
-        for (Result result : results) {
-            objects.add(result.getObject());
-        }
-        return objects;
-    }
-
-    @Override
-    public Iterator<ETResponse<T>.Result> iterator() {
-        // XXX is it OK that callers can change the list returned?
-        return results.iterator();
-    }
-
-    // XXX should be protected
-    public void addResult(Result result) {
-        results.add(result);
-    }
-
     /**
      * @deprecated
      * Use <code>getStatusCode</code>.
      */
     @Deprecated
     public boolean getStatus() {
-        if (statusCode == StatusCode.OK) {
+        if (getStatusCode() == ETResponseStatusCode.OK) {
             return true;
         }
         return false;
@@ -180,15 +104,6 @@ public class ETResponse<T> implements Iterable<ETResponse<T>.Result> {
      */
     @Deprecated
     public String getMessage() {
-        return statusMessage;
-    }
-
-    /**
-     * @deprecated
-     * Use <code>getObjects</code>.
-     */
-    @Deprecated
-    public List<T> getResults() {
-        return getObjects();
+        return getStatusMessage();
     }
 }

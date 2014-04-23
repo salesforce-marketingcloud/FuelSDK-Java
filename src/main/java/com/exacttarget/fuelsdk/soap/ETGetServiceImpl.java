@@ -165,8 +165,6 @@ public abstract class ETGetServiceImpl<T extends ETSoapObject>
         response.setRequestId(retrieveResponseMsg.getRequestID());
         response.setStatusMessage(retrieveResponseMsg.getOverallStatus());
         for (APIObject internalObject : retrieveResponseMsg.getResults()) {
-            ETResponse<T>.Result result = response.new Result();
-
             //
             // Allocate a new object:
             //
@@ -185,9 +183,15 @@ public abstract class ETGetServiceImpl<T extends ETSoapObject>
 
             externalObject.fromInternal(internalObject);
 
-            result.setObject(externalObject);
+            //
+            // Add to the list of results:
+            //
 
-            response.addResult(result);
+            response.getResults().add(externalObject);
+        }
+
+        if (retrieveResponseMsg.getOverallStatus().equals("MoreDataAvailable")) {
+            response.setMoreResults(true);
         }
 
         return response;

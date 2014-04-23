@@ -31,6 +31,7 @@ import java.util.List;
 
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETResponse;
+import com.exacttarget.fuelsdk.ETResponseStatus;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.ETSendClassificationService;
 import com.exacttarget.fuelsdk.filter.ETFilter;
@@ -51,37 +52,37 @@ public class ETSendClassificationServiceImpl extends ETCrudServiceImpl<ETSendCla
         return super.get(client, ETSendClassification.class, filter, properties);
     }
 
-    public ETResponse<ETSendClassification> post(ETClient client, ETSendClassification sendClassification)
+    public ETResponse<ETResponseStatus> post(ETClient client, ETSendClassification sendClassification)
         throws ETSdkException
     {
         return super.post(client, sendClassification);
     }
 
-    public ETResponse<ETSendClassification> post(ETClient client, List<ETSendClassification> sendClassifications)
+    public ETResponse<ETResponseStatus> post(ETClient client, List<ETSendClassification> sendClassifications)
         throws ETSdkException
     {
         return super.post(client, sendClassifications);
     }
 
-    public ETResponse<ETSendClassification> patch(ETClient client, ETSendClassification sendClassification)
+    public ETResponse<ETResponseStatus> patch(ETClient client, ETSendClassification sendClassification)
         throws ETSdkException
     {
         return super.patch(client, sendClassification);
     }
 
-    public ETResponse<ETSendClassification> patch(ETClient client, List<ETSendClassification> sendClassifications)
+    public ETResponse<ETResponseStatus> patch(ETClient client, List<ETSendClassification> sendClassifications)
         throws ETSdkException
     {
         return super.patch(client, sendClassifications);
     }
 
-    public ETResponse<ETSendClassification> delete(ETClient client, ETSendClassification sendClassification)
+    public ETResponse<ETResponseStatus> delete(ETClient client, ETSendClassification sendClassification)
         throws ETSdkException
     {
         return super.delete(client, sendClassification);
     }
 
-    public ETResponse<ETSendClassification> delete(ETClient client, List<ETSendClassification> sendClassifications)
+    public ETResponse<ETResponseStatus> delete(ETClient client, List<ETSendClassification> sendClassifications)
         throws ETSdkException
     {
         return super.delete(client, sendClassifications);

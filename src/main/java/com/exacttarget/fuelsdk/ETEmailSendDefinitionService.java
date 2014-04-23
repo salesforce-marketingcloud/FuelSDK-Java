@@ -37,18 +37,18 @@ public interface ETEmailSendDefinitionService extends ETCrudService {
         throws ETSdkException;
     public ETResponse<ETEmailSendDefinition> get(ETClient client, ETFilter filter, String... properties)
         throws ETSdkException;
-    public ETResponse<ETEmailSendDefinition> post(ETClient client, ETEmailSendDefinition emailSendDefinition)
+    public ETResponse<ETResponseStatus> post(ETClient client, ETEmailSendDefinition emailSendDefinition)
         throws ETSdkException;
-    public ETResponse<ETEmailSendDefinition> post(ETClient client, List<ETEmailSendDefinition> emailSendDefinitions)
+    public ETResponse<ETResponseStatus> post(ETClient client, List<ETEmailSendDefinition> emailSendDefinitions)
         throws ETSdkException;
-    public ETResponse<ETEmailSendDefinition> patch(ETClient client, ETEmailSendDefinition emailSendDefinition)
+    public ETResponse<ETResponseStatus> patch(ETClient client, ETEmailSendDefinition emailSendDefinition)
         throws ETSdkException;
-    public ETResponse<ETEmailSendDefinition> patch(ETClient client, List<ETEmailSendDefinition> emailSendDefinitions)
+    public ETResponse<ETResponseStatus> patch(ETClient client, List<ETEmailSendDefinition> emailSendDefinitions)
         throws ETSdkException;
-    public ETResponse<ETEmailSendDefinition> delete(ETClient client, ETEmailSendDefinition emailSendDefinition)
+    public ETResponse<ETResponseStatus> delete(ETClient client, ETEmailSendDefinition emailSendDefinition)
         throws ETSdkException;
-    public ETResponse<ETEmailSendDefinition> delete(ETClient client, List<ETEmailSendDefinition> emailSendDefinitions)
+    public ETResponse<ETResponseStatus> delete(ETClient client, List<ETEmailSendDefinition> emailSendDefinitions)
         throws ETSdkException;
-    public ETResponse<ETEmailSendDefinition> send(ETClient client, ETEmailSendDefinition emailSendDefinition)
+    public ETResponse<ETResponseStatus> send(ETClient client, ETEmailSendDefinition emailSendDefinition)
         throws ETSdkException;
 }

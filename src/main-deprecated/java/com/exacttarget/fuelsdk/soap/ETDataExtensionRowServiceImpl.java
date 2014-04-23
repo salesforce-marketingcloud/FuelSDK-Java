@@ -33,6 +33,7 @@ import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETDataExtensionRow;
 import com.exacttarget.fuelsdk.ETDataExtensionRowService;
 import com.exacttarget.fuelsdk.ETResponse;
+import com.exacttarget.fuelsdk.ETResponseStatus;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.internal.APIObject;
@@ -112,37 +113,37 @@ public class ETDataExtensionRowServiceImpl extends ETCrudServiceImpl<ETDataExten
         return response;
     }
 
-    public ETResponse<ETDataExtensionRow> post(ETClient client, ETDataExtensionRow row)
+    public ETResponse<ETResponseStatus> post(ETClient client, ETDataExtensionRow row)
         throws ETSdkException
     {
         return super.post(client, row);
     }
 
-    public ETResponse<ETDataExtensionRow> post(ETClient client, List<ETDataExtensionRow> rows)
+    public ETResponse<ETResponseStatus> post(ETClient client, List<ETDataExtensionRow> rows)
         throws ETSdkException
     {
         return super.post(client, rows);
     }
 
-    public ETResponse<ETDataExtensionRow> patch(ETClient client, ETDataExtensionRow row)
+    public ETResponse<ETResponseStatus> patch(ETClient client, ETDataExtensionRow row)
         throws ETSdkException
     {
         return super.patch(client, row);
     }
 
-    public ETResponse<ETDataExtensionRow> patch(ETClient client, List<ETDataExtensionRow> rows)
+    public ETResponse<ETResponseStatus> patch(ETClient client, List<ETDataExtensionRow> rows)
         throws ETSdkException
     {
         return super.patch(client, rows);
     }
 
-    public ETResponse<ETDataExtensionRow> delete(ETClient client, ETDataExtensionRow row)
+    public ETResponse<ETResponseStatus> delete(ETClient client, ETDataExtensionRow row)
         throws ETSdkException
     {
         return super.delete(client, row);
     }
 
-    public ETResponse<ETDataExtensionRow> delete(ETClient client, List<ETDataExtensionRow> rows)
+    public ETResponse<ETResponseStatus> delete(ETClient client, List<ETDataExtensionRow> rows)
         throws ETSdkException
     {
         return super.delete(client, rows);
