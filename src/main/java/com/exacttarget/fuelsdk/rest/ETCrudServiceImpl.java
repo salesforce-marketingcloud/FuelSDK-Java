@@ -82,7 +82,11 @@ public class ETCrudServiceImpl extends ETGetServiceImpl implements ETCrudService
 		String json = connection.delete(path);
 
 		ETResponse<T> response = new ETResponseImpl<T>();
-		response.setStatus( connection.getResponseCode() == 200 );
+		if (connection.getResponseCode() == 200) {
+		    response.setStatusCode("OK");
+		} else {
+		    response.setStatusCode("Error");
+		}
 
 		return createResponseETObject(type, json, response);
 	}
@@ -111,8 +115,11 @@ public class ETCrudServiceImpl extends ETGetServiceImpl implements ETCrudService
 		String json = connection.post(path, jsonObject);
 
 		ETResponse<T> response = new ETResponseImpl<T>();
-
-		response.setStatus( connection.getResponseCode() == 200 );
+		if (connection.getResponseCode() == 200) {
+		    response.setStatusCode("OK");
+		} else {
+		    response.setStatusCode("Error");
+		}
 
 		return createResponseETObject(type, json, response);
 	}

@@ -40,6 +40,7 @@ import org.apache.log4j.Logger;
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETGetService;
 import com.exacttarget.fuelsdk.ETObject;
+import com.exacttarget.fuelsdk.ETResponseStatusCode;
 import com.exacttarget.fuelsdk.ETRestConnection;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.ETResponse;
@@ -88,7 +89,11 @@ public class ETGetServiceImpl implements ETGetService {
 
 		String json = connection.get(path);
 
-		response.setStatus(successfulResponses.contains(connection.getResponseCode()));
+		if (successfulResponses.contains(connection.getResponseCode())) {
+		    response.setStatusCode("OK"); // XXX
+		} else {
+		    response.setStatusCode("Error"); // XXX
+		}
 
 		if( !response.getStatus() )
 			return getErrorResponse( json, response );
@@ -109,13 +114,13 @@ public class ETGetServiceImpl implements ETGetService {
 			{
 				if( jObject.get("errorcode") == null )
 				{
-					response.setMessage(jObject.get("message").getAsString());
+					response.setStatusMessage(jObject.get("message").getAsString());
 				}
 				else
 				{
 					String message = jObject.get("message").getAsString();
 					String errorcode = jObject.get("errorcode").getAsString();
-					response.setMessage(message + " - ErrorCode: " + errorcode);
+					response.setStatusMessage(message + " - ErrorCode: " + errorcode);
 				}
 			}
 		}
