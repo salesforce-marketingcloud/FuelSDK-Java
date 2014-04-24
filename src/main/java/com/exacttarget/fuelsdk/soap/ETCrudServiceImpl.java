@@ -117,6 +117,7 @@ public abstract class ETCrudServiceImpl<T extends ETSoapObject>
         }
 
         response.setRequestId(createResponse.getRequestID());
+        response.setStatusCode(createResponse.getOverallStatus());
         response.setStatusMessage(createResponse.getOverallStatus());
         for (CreateResult createResult : createResponse.getResults()) {
             ETResponseStatus status = new ETResponseStatus();
@@ -190,6 +191,7 @@ public abstract class ETCrudServiceImpl<T extends ETSoapObject>
         }
 
         response.setRequestId(updateResponse.getRequestID());
+        response.setStatusCode(updateResponse.getOverallStatus());
         response.setStatusMessage(updateResponse.getOverallStatus());
         for (UpdateResult updateResult : updateResponse.getResults()) {
             ETResponseStatus status = new ETResponseStatus();
@@ -261,6 +263,7 @@ public abstract class ETCrudServiceImpl<T extends ETSoapObject>
         }
 
         response.setRequestId(deleteResponse.getRequestID());
+        response.setStatusCode(deleteResponse.getOverallStatus());
         response.setStatusMessage(deleteResponse.getOverallStatus());
         for (DeleteResult deleteResult : deleteResponse.getResults()) {
             ETResponseStatus status = new ETResponseStatus();

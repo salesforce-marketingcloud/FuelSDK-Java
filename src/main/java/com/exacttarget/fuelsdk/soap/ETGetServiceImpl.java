@@ -163,6 +163,7 @@ public abstract class ETGetServiceImpl<T extends ETSoapObject>
         }
 
         response.setRequestId(retrieveResponseMsg.getRequestID());
+        response.setStatusCode(retrieveResponseMsg.getOverallStatus());
         response.setStatusMessage(retrieveResponseMsg.getOverallStatus());
         for (APIObject internalObject : retrieveResponseMsg.getResults()) {
             //
