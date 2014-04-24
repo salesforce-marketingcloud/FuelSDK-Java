@@ -37,16 +37,16 @@ public interface ETEmailService extends ETCrudService {
         throws ETSdkException;
     public ETResponse<ETEmail> get(ETClient client, ETFilter filter, String... properties)
         throws ETSdkException;
-    public ETResponse<ETResponseStatus> post(ETClient client, ETEmail email)
+    public ETResponse<ETResult> post(ETClient client, ETEmail email)
         throws ETSdkException;
-    public ETResponse<ETResponseStatus> post(ETClient client, List<ETEmail> emails)
+    public ETResponse<ETResult> post(ETClient client, List<ETEmail> emails)
         throws ETSdkException;
-    public ETResponse<ETResponseStatus> patch(ETClient client, ETEmail email)
+    public ETResponse<ETResult> patch(ETClient client, ETEmail email)
         throws ETSdkException;
-    public ETResponse<ETResponseStatus> patch(ETClient client, List<ETEmail> emails)
+    public ETResponse<ETResult> patch(ETClient client, List<ETEmail> emails)
         throws ETSdkException;
-    public ETResponse<ETResponseStatus> delete(ETClient client, ETEmail email)
+    public ETResponse<ETResult> delete(ETClient client, ETEmail email)
         throws ETSdkException;
-    public ETResponse<ETResponseStatus> delete(ETClient client, List<ETEmail> emails)
+    public ETResponse<ETResult> delete(ETClient client, List<ETEmail> emails)
         throws ETSdkException;
 }

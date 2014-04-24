@@ -32,7 +32,7 @@ import java.util.List;
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETContentAreaService;
 import com.exacttarget.fuelsdk.ETResponse;
-import com.exacttarget.fuelsdk.ETResponseStatus;
+import com.exacttarget.fuelsdk.ETResult;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.model.ETContentArea;
@@ -52,37 +52,37 @@ public class ETContentAreaServiceImpl extends ETCrudServiceImpl<ETContentArea>
         return super.get(client, ETContentArea.class, filter, properties);
     }
 
-    public ETResponse<ETResponseStatus> post(ETClient client, ETContentArea contentArea)
+    public ETResponse<ETResult> post(ETClient client, ETContentArea contentArea)
         throws ETSdkException
     {
         return super.post(client, contentArea);
     }
 
-    public ETResponse<ETResponseStatus> post(ETClient client, List<ETContentArea> contentAreas)
+    public ETResponse<ETResult> post(ETClient client, List<ETContentArea> contentAreas)
         throws ETSdkException
     {
         return super.post(client, contentAreas);
     }
 
-    public ETResponse<ETResponseStatus> patch(ETClient client, ETContentArea contentArea)
+    public ETResponse<ETResult> patch(ETClient client, ETContentArea contentArea)
         throws ETSdkException
     {
         return super.patch(client, contentArea);
     }
 
-    public ETResponse<ETResponseStatus> patch(ETClient client, List<ETContentArea> contentAreas)
+    public ETResponse<ETResult> patch(ETClient client, List<ETContentArea> contentAreas)
         throws ETSdkException
     {
         return super.patch(client, contentAreas);
     }
 
-    public ETResponse<ETResponseStatus> delete(ETClient client, ETContentArea contentArea)
+    public ETResponse<ETResult> delete(ETClient client, ETContentArea contentArea)
         throws ETSdkException
     {
         return super.delete(client, contentArea);
     }
 
-    public ETResponse<ETResponseStatus> delete(ETClient client, List<ETContentArea> contentAreas)
+    public ETResponse<ETResult> delete(ETClient client, List<ETContentArea> contentAreas)
         throws ETSdkException
     {
         return super.delete(client, contentAreas);

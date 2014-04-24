@@ -44,16 +44,16 @@ public interface ETDataExtensionRowService extends ETCrudService {
         throws ETSdkException;
     public ETResponse<ETDataExtensionRow> get(ETClient client, String continueRequestId)
         throws ETSdkException;
-    public ETResponse<ETResponseStatus> post(ETClient client, ETDataExtensionRow row)
+    public ETResponse<ETResult> post(ETClient client, ETDataExtensionRow row)
         throws ETSdkException;
-    public ETResponse<ETResponseStatus> post(ETClient client, List<ETDataExtensionRow> rows)
+    public ETResponse<ETResult> post(ETClient client, List<ETDataExtensionRow> rows)
         throws ETSdkException;
-    public ETResponse<ETResponseStatus> patch(ETClient client, ETDataExtensionRow row)
+    public ETResponse<ETResult> patch(ETClient client, ETDataExtensionRow row)
         throws ETSdkException;
-    public ETResponse<ETResponseStatus> patch(ETClient client, List<ETDataExtensionRow> rows)
+    public ETResponse<ETResult> patch(ETClient client, List<ETDataExtensionRow> rows)
         throws ETSdkException;
-    public ETResponse<ETResponseStatus> delete(ETClient client, ETDataExtensionRow row)
+    public ETResponse<ETResult> delete(ETClient client, ETDataExtensionRow row)
         throws ETSdkException;
-    public ETResponse<ETResponseStatus> delete(ETClient client, List<ETDataExtensionRow> rows)
+    public ETResponse<ETResult> delete(ETClient client, List<ETDataExtensionRow> rows)
         throws ETSdkException;
 }

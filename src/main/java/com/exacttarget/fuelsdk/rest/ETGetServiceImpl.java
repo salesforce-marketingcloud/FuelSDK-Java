@@ -40,7 +40,7 @@ import org.apache.log4j.Logger;
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETGetService;
 import com.exacttarget.fuelsdk.ETObject;
-import com.exacttarget.fuelsdk.ETResponseStatusCode;
+import com.exacttarget.fuelsdk.ETResultStatusCode;
 import com.exacttarget.fuelsdk.ETRestConnection;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.ETResponse;

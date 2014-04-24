@@ -27,26 +27,26 @@
 
 package com.exacttarget.fuelsdk;
 
-import java.util.List;
+public enum ETResultStatusCode {
+    OK("OK"),
+    ERROR("Error"),
+    UNKNOWN(null);
+    private final String value;
 
-import com.exacttarget.fuelsdk.filter.ETFilter;
-import com.exacttarget.fuelsdk.model.ETFolder;
+    ETResultStatusCode(String value) {
+        this.value = value;
+    }
 
-public interface ETFolderService extends ETCrudService {
-    public ETResponse<ETFolder> get(ETClient client, String... properties)
-        throws ETSdkException;
-    public ETResponse<ETFolder> get(ETClient client, ETFilter filter, String... properties)
-        throws ETSdkException;
-    public ETResponse<ETResult> post(ETClient client, ETFolder folder)
-        throws ETSdkException;
-    public ETResponse<ETResult> post(ETClient client, List<ETFolder> folders)
-        throws ETSdkException;
-    public ETResponse<ETResult> patch(ETClient client, ETFolder folder)
-        throws ETSdkException;
-    public ETResponse<ETResult> patch(ETClient client, List<ETFolder> folders)
-        throws ETSdkException;
-    public ETResponse<ETResult> delete(ETClient client, ETFolder folder)
-        throws ETSdkException;
-    public ETResponse<ETResult> delete(ETClient client, List<ETFolder> folders)
-        throws ETSdkException;
+    public String value() {
+        return value;
+    }
+
+    public static ETResultStatusCode fromValue(String value) {
+        for (ETResultStatusCode v : ETResultStatusCode.values()) {
+            if (v.value.equals(value)) {
+                return v;
+            }
+        }
+        throw new IllegalArgumentException(value);
+    }
 }

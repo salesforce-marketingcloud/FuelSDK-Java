@@ -37,16 +37,16 @@ public interface ETContentAreaService extends ETCrudService {
         throws ETSdkException;
     public ETResponse<ETContentArea> get(ETClient client, ETFilter filter, String... properties)
         throws ETSdkException;
-    public ETResponse<ETResponseStatus> post(ETClient client, ETContentArea contentArea)
+    public ETResponse<ETResult> post(ETClient client, ETContentArea contentArea)
         throws ETSdkException;
-    public ETResponse<ETResponseStatus> post(ETClient client, List<ETContentArea> contentAreas)
+    public ETResponse<ETResult> post(ETClient client, List<ETContentArea> contentAreas)
         throws ETSdkException;
-    public ETResponse<ETResponseStatus> patch(ETClient client, ETContentArea contentArea)
+    public ETResponse<ETResult> patch(ETClient client, ETContentArea contentArea)
         throws ETSdkException;
-    public ETResponse<ETResponseStatus> patch(ETClient client, List<ETContentArea> contentAreas)
+    public ETResponse<ETResult> patch(ETClient client, List<ETContentArea> contentAreas)
         throws ETSdkException;
-    public ETResponse<ETResponseStatus> delete(ETClient client, ETContentArea contentArea)
+    public ETResponse<ETResult> delete(ETClient client, ETContentArea contentArea)
         throws ETSdkException;
-    public ETResponse<ETResponseStatus> delete(ETClient client, List<ETContentArea> contentAreas)
+    public ETResponse<ETResult> delete(ETClient client, List<ETContentArea> contentAreas)
         throws ETSdkException;
 }

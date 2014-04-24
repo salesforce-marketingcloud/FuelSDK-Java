@@ -34,7 +34,7 @@ import org.apache.log4j.Logger;
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETEmailSendDefinitionService;
 import com.exacttarget.fuelsdk.ETResponse;
-import com.exacttarget.fuelsdk.ETResponseStatus;
+import com.exacttarget.fuelsdk.ETResult;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.internal.APIObject;
@@ -62,46 +62,46 @@ public class ETEmailSendDefinitionServiceImpl extends ETCrudServiceImpl<ETEmailS
         return super.get(client, ETEmailSendDefinition.class, filter, properties);
     }
 
-    public ETResponse<ETResponseStatus> post(ETClient client, ETEmailSendDefinition emailSendDefinition)
+    public ETResponse<ETResult> post(ETClient client, ETEmailSendDefinition emailSendDefinition)
         throws ETSdkException
     {
         return super.post(client, emailSendDefinition);
     }
 
-    public ETResponse<ETResponseStatus> post(ETClient client, List<ETEmailSendDefinition> emailSendDefinitions)
+    public ETResponse<ETResult> post(ETClient client, List<ETEmailSendDefinition> emailSendDefinitions)
         throws ETSdkException
     {
         return super.post(client, emailSendDefinitions);
     }
 
-    public ETResponse<ETResponseStatus> patch(ETClient client, ETEmailSendDefinition emailSendDefinition)
+    public ETResponse<ETResult> patch(ETClient client, ETEmailSendDefinition emailSendDefinition)
         throws ETSdkException
     {
         return super.patch(client, emailSendDefinition);
     }
 
-    public ETResponse<ETResponseStatus> patch(ETClient client, List<ETEmailSendDefinition> emailSendDefinitions)
+    public ETResponse<ETResult> patch(ETClient client, List<ETEmailSendDefinition> emailSendDefinitions)
         throws ETSdkException
     {
         return super.patch(client, emailSendDefinitions);
     }
 
-    public ETResponse<ETResponseStatus> delete(ETClient client, ETEmailSendDefinition emailSendDefinition)
+    public ETResponse<ETResult> delete(ETClient client, ETEmailSendDefinition emailSendDefinition)
         throws ETSdkException
     {
         return super.delete(client, emailSendDefinition);
     }
 
-    public ETResponse<ETResponseStatus> delete(ETClient client, List<ETEmailSendDefinition> emailSendDefinitions)
+    public ETResponse<ETResult> delete(ETClient client, List<ETEmailSendDefinition> emailSendDefinitions)
         throws ETSdkException
     {
         return super.delete(client, emailSendDefinitions);
     }
 
-    public ETResponse<ETResponseStatus> send(ETClient client, ETEmailSendDefinition emailSendDefinition)
+    public ETResponse<ETResult> send(ETClient client, ETEmailSendDefinition emailSendDefinition)
         throws ETSdkException
     {
-        ETResponse<ETResponseStatus> response = new ETResponse<ETResponseStatus>();
+        ETResponse<ETResult> response = new ETResponse<ETResult>();
 
         //
         // Automatically refresh the token if necessary:

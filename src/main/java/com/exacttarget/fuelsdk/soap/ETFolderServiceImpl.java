@@ -32,7 +32,7 @@ import java.util.List;
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETFolderService;
 import com.exacttarget.fuelsdk.ETResponse;
-import com.exacttarget.fuelsdk.ETResponseStatus;
+import com.exacttarget.fuelsdk.ETResult;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.model.ETFolder;
@@ -52,37 +52,37 @@ public class ETFolderServiceImpl extends ETCrudServiceImpl<ETFolder>
         return super.get(client, ETFolder.class, filter, properties);
     }
 
-    public ETResponse<ETResponseStatus> post(ETClient client, ETFolder folder)
+    public ETResponse<ETResult> post(ETClient client, ETFolder folder)
         throws ETSdkException
     {
         return super.post(client, folder);
     }
 
-    public ETResponse<ETResponseStatus> post(ETClient client, List<ETFolder> folders)
+    public ETResponse<ETResult> post(ETClient client, List<ETFolder> folders)
         throws ETSdkException
     {
         return super.post(client, folders);
     }
 
-    public ETResponse<ETResponseStatus> patch(ETClient client, ETFolder folder)
+    public ETResponse<ETResult> patch(ETClient client, ETFolder folder)
         throws ETSdkException
     {
         return super.patch(client, folder);
     }
 
-    public ETResponse<ETResponseStatus> patch(ETClient client, List<ETFolder> folders)
+    public ETResponse<ETResult> patch(ETClient client, List<ETFolder> folders)
         throws ETSdkException
     {
         return super.patch(client, folders);
     }
 
-    public ETResponse<ETResponseStatus> delete(ETClient client, ETFolder folder)
+    public ETResponse<ETResult> delete(ETClient client, ETFolder folder)
         throws ETSdkException
     {
         return super.delete(client, folder);
     }
 
-    public ETResponse<ETResponseStatus> delete(ETClient client, List<ETFolder> folders)
+    public ETResponse<ETResult> delete(ETClient client, List<ETFolder> folders)
         throws ETSdkException
     {
         return super.delete(client, folders);

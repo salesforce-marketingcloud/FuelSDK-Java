@@ -35,7 +35,7 @@ import org.apache.log4j.Logger;
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETCrudService;
 import com.exacttarget.fuelsdk.ETResponse;
-import com.exacttarget.fuelsdk.ETResponseStatus;
+import com.exacttarget.fuelsdk.ETResult;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.ETSoapObject;
 import com.exacttarget.fuelsdk.internal.APIObject;
@@ -59,16 +59,16 @@ public abstract class ETCrudServiceImpl<T extends ETSoapObject>
     private static Logger logger = Logger.getLogger(ETCrudServiceImpl.class);
 
     @SuppressWarnings("unchecked")
-    public ETResponse<ETResponseStatus> post(ETClient client, T object)
+    public ETResponse<ETResult> post(ETClient client, T object)
         throws ETSdkException
     {
         return post(client, Arrays.asList(object));
     }
 
-    public ETResponse<ETResponseStatus> post(ETClient client, List<T> objects)
+    public ETResponse<ETResult> post(ETClient client, List<T> objects)
         throws ETSdkException
     {
-        ETResponse<ETResponseStatus> response = new ETResponse<ETResponseStatus>();
+        ETResponse<ETResult> response = new ETResponse<ETResult>();
 
         if (objects == null || objects.size() == 0) {
             return response;
@@ -120,7 +120,7 @@ public abstract class ETCrudServiceImpl<T extends ETSoapObject>
         response.setStatusCode(createResponse.getOverallStatus());
         response.setStatusMessage(createResponse.getOverallStatus());
         for (CreateResult createResult : createResponse.getResults()) {
-            ETResponseStatus status = new ETResponseStatus();
+            ETResult status = new ETResult();
             status.setStatusCode(createResult.getStatusCode());
             status.setStatusMessage(createResult.getStatusMessage());
             status.setErrorCode(createResult.getErrorCode());
@@ -133,16 +133,16 @@ public abstract class ETCrudServiceImpl<T extends ETSoapObject>
     }
 
     @SuppressWarnings("unchecked")
-    public ETResponse<ETResponseStatus> patch(ETClient client, T object)
+    public ETResponse<ETResult> patch(ETClient client, T object)
         throws ETSdkException
     {
         return patch(client, Arrays.asList(object));
     }
 
-    public ETResponse<ETResponseStatus> patch(ETClient client, List<T> objects)
+    public ETResponse<ETResult> patch(ETClient client, List<T> objects)
         throws ETSdkException
     {
-        ETResponse<ETResponseStatus> response = new ETResponse<ETResponseStatus>();
+        ETResponse<ETResult> response = new ETResponse<ETResult>();
 
         if (objects == null || objects.size() == 0) {
             return response;
@@ -194,7 +194,7 @@ public abstract class ETCrudServiceImpl<T extends ETSoapObject>
         response.setStatusCode(updateResponse.getOverallStatus());
         response.setStatusMessage(updateResponse.getOverallStatus());
         for (UpdateResult updateResult : updateResponse.getResults()) {
-            ETResponseStatus status = new ETResponseStatus();
+            ETResult status = new ETResult();
             status.setStatusCode(updateResult.getStatusCode());
             status.setStatusMessage(updateResult.getStatusMessage());
             status.setErrorCode(updateResult.getErrorCode());
@@ -205,16 +205,16 @@ public abstract class ETCrudServiceImpl<T extends ETSoapObject>
     }
 
     @SuppressWarnings("unchecked")
-    public ETResponse<ETResponseStatus> delete(ETClient client, T object)
+    public ETResponse<ETResult> delete(ETClient client, T object)
         throws ETSdkException
     {
         return delete(client, Arrays.asList(object));
     }
 
-    public ETResponse<ETResponseStatus> delete(ETClient client, List<T> objects)
+    public ETResponse<ETResult> delete(ETClient client, List<T> objects)
         throws ETSdkException
     {
-        ETResponse<ETResponseStatus> response = new ETResponse<ETResponseStatus>();
+        ETResponse<ETResult> response = new ETResponse<ETResult>();
 
         if (objects == null || objects.size() == 0) {
             return response;
@@ -266,7 +266,7 @@ public abstract class ETCrudServiceImpl<T extends ETSoapObject>
         response.setStatusCode(deleteResponse.getOverallStatus());
         response.setStatusMessage(deleteResponse.getOverallStatus());
         for (DeleteResult deleteResult : deleteResponse.getResults()) {
-            ETResponseStatus status = new ETResponseStatus();
+            ETResult status = new ETResult();
             status.setStatusCode(deleteResult.getStatusCode());
             status.setStatusMessage(deleteResult.getStatusMessage());
             status.setErrorCode(deleteResult.getErrorCode());

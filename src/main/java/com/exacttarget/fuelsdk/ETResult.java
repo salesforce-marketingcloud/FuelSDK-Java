@@ -27,83 +27,59 @@
 
 package com.exacttarget.fuelsdk;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class ETResponse<T> {
-    private String requestId = null;
-    private ETResult overallResult = new ETResult();
-    private List<T> results = new ArrayList<T>();
-    private boolean moreResults = false;
-
-    public String getRequestId() {
-        return requestId;
-    }
-
-    public void setRequestId(String requestId) {
-        this.requestId = requestId;
-    }
+public class ETResult {
+    private ETResultStatusCode statusCode = null;
+    private String statusMessage = null;
+    private Integer errorCode = null;
+    private Integer id = null;
+    private String guid = null;
 
     public ETResultStatusCode getStatusCode() {
-        return overallResult.getStatusCode();
+        return statusCode;
     }
 
     public void setStatusCode(String statusCode) {
-        overallResult.setStatusCode(statusCode);
+        if (statusCode == null) {
+            return;
+        }
+        if (statusCode.equals("OK")) {
+            this.statusCode = ETResultStatusCode.OK;
+        } else if (statusCode.equals("Error")) {
+            this.statusCode = ETResultStatusCode.ERROR;
+        } else {
+            this.statusCode = ETResultStatusCode.UNKNOWN;
+        }
     }
 
     public String getStatusMessage() {
-        return overallResult.getStatusMessage();
+        return statusMessage;
     }
 
     public void setStatusMessage(String statusMessage) {
-        overallResult.setStatusMessage(statusMessage);
+        this.statusMessage = statusMessage;
     }
 
     public Integer getErrorCode() {
-        return overallResult.getErrorCode();
+        return errorCode;
     }
 
     public void setErrorCode(Integer errorCode) {
-        overallResult.setErrorCode(errorCode);
+        this.errorCode = errorCode;
     }
 
-    public List<T> getResults() {
-        return results;
+    public Integer getId() {
+        return id;
     }
 
-    // XXX
-    //public void addResult(T result) {
-    public void addResult(Object result) {
-        results.add((T) result);
+    public void setId(Integer id) {
+        this.id = id;
     }
 
-    public boolean hasMoreResults() {
-        return moreResults;
+    public String getGuid() {
+        return guid;
     }
 
-    public void setMoreResults(boolean moreResults) {
-        this.moreResults = moreResults;
-    }
-
-    /**
-     * @deprecated
-     * Use <code>getStatusCode</code>.
-     */
-    @Deprecated
-    public boolean getStatus() {
-        if (getStatusCode() == ETResultStatusCode.OK) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * @deprecated
-     * Use <code>getStatusMessage</code>.
-     */
-    @Deprecated
-    public String getMessage() {
-        return getStatusMessage();
+    public void setGuid(String guid) {
+        this.guid = guid;
     }
 }

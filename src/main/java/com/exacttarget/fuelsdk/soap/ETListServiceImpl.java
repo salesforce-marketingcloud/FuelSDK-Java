@@ -32,7 +32,7 @@ import java.util.List;
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETListService;
 import com.exacttarget.fuelsdk.ETResponse;
-import com.exacttarget.fuelsdk.ETResponseStatus;
+import com.exacttarget.fuelsdk.ETResult;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.model.ETList;
@@ -52,37 +52,37 @@ public class ETListServiceImpl extends ETCrudServiceImpl<ETList>
         return super.get(client, ETList.class, filter, properties);
     }
 
-    public ETResponse<ETResponseStatus> post(ETClient client, ETList list)
+    public ETResponse<ETResult> post(ETClient client, ETList list)
         throws ETSdkException
     {
         return super.post(client, list);
     }
 
-    public ETResponse<ETResponseStatus> post(ETClient client, List<ETList> lists)
+    public ETResponse<ETResult> post(ETClient client, List<ETList> lists)
         throws ETSdkException
     {
         return super.post(client, lists);
     }
 
-    public ETResponse<ETResponseStatus> patch(ETClient client, ETList list)
+    public ETResponse<ETResult> patch(ETClient client, ETList list)
         throws ETSdkException
     {
         return super.patch(client, list);
     }
 
-    public ETResponse<ETResponseStatus> patch(ETClient client, List<ETList> lists)
+    public ETResponse<ETResult> patch(ETClient client, List<ETList> lists)
         throws ETSdkException
     {
         return super.patch(client, lists);
     }
 
-    public ETResponse<ETResponseStatus> delete(ETClient client, ETList list)
+    public ETResponse<ETResult> delete(ETClient client, ETList list)
         throws ETSdkException
     {
         return super.delete(client, list);
     }
 
-    public ETResponse<ETResponseStatus> delete(ETClient client, List<ETList> lists)
+    public ETResponse<ETResult> delete(ETClient client, List<ETList> lists)
         throws ETSdkException
     {
         return super.delete(client, lists);

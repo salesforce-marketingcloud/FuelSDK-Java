@@ -37,16 +37,16 @@ public interface ETOrganizationService extends ETCrudService {
         throws ETSdkException;
     public ETResponse<ETOrganization> get(ETClient client, ETFilter filter, String... properties)
         throws ETSdkException;
-    public ETResponse<ETResponseStatus> post(ETClient client, ETOrganization organization)
+    public ETResponse<ETResult> post(ETClient client, ETOrganization organization)
         throws ETSdkException;
-    public ETResponse<ETResponseStatus> post(ETClient client, List<ETOrganization> organizations)
+    public ETResponse<ETResult> post(ETClient client, List<ETOrganization> organizations)
         throws ETSdkException;
-    public ETResponse<ETResponseStatus> patch(ETClient client, ETOrganization organization)
+    public ETResponse<ETResult> patch(ETClient client, ETOrganization organization)
         throws ETSdkException;
-    public ETResponse<ETResponseStatus> patch(ETClient client, List<ETOrganization> organizations)
+    public ETResponse<ETResult> patch(ETClient client, List<ETOrganization> organizations)
         throws ETSdkException;
-    public ETResponse<ETResponseStatus> delete(ETClient client, ETOrganization organization)
+    public ETResponse<ETResult> delete(ETClient client, ETOrganization organization)
         throws ETSdkException;
-    public ETResponse<ETResponseStatus> delete(ETClient client, List<ETOrganization> organizations)
+    public ETResponse<ETResult> delete(ETClient client, List<ETOrganization> organizations)
         throws ETSdkException;
 }

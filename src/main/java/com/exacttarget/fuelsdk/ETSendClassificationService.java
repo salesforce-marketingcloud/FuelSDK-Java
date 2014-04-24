@@ -37,16 +37,16 @@ public interface ETSendClassificationService extends ETCrudService {
         throws ETSdkException;
     public ETResponse<ETSendClassification> get(ETClient client, ETFilter filter, String... properties)
         throws ETSdkException;
-    public ETResponse<ETResponseStatus> post(ETClient client, ETSendClassification sendClassification)
+    public ETResponse<ETResult> post(ETClient client, ETSendClassification sendClassification)
         throws ETSdkException;
-    public ETResponse<ETResponseStatus> post(ETClient client, List<ETSendClassification> sendClassifications)
+    public ETResponse<ETResult> post(ETClient client, List<ETSendClassification> sendClassifications)
         throws ETSdkException;
-    public ETResponse<ETResponseStatus> patch(ETClient client, ETSendClassification sendClassification)
+    public ETResponse<ETResult> patch(ETClient client, ETSendClassification sendClassification)
         throws ETSdkException;
-    public ETResponse<ETResponseStatus> patch(ETClient client, List<ETSendClassification> sendClassifications)
+    public ETResponse<ETResult> patch(ETClient client, List<ETSendClassification> sendClassifications)
         throws ETSdkException;
-    public ETResponse<ETResponseStatus> delete(ETClient client, ETSendClassification sendClassification)
+    public ETResponse<ETResult> delete(ETClient client, ETSendClassification sendClassification)
         throws ETSdkException;
-    public ETResponse<ETResponseStatus> delete(ETClient client, List<ETSendClassification> sendClassifications)
+    public ETResponse<ETResult> delete(ETClient client, List<ETSendClassification> sendClassifications)
         throws ETSdkException;
 }
