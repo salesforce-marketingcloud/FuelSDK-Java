@@ -199,28 +199,6 @@ public abstract class ETSoapObject extends ETObject {
         }
     }
 
-    public class DataExtensionColumnConverter implements Converter {
-        @SuppressWarnings({ "rawtypes", "unchecked" })
-        public Object convert(Class type, Object value) {
-            // XXX I think we need more here..
-            if (type == DataExtension.Fields.class) {
-                // we're converting from external to internal
-                List<ETDataExtensionColumn> columns
-                    = (List<ETDataExtensionColumn>) value;
-                DataExtension.Fields fields = new DataExtension.Fields();
-                for (ETDataExtensionColumn column : columns) {
-                    try {
-                        fields.getField().add((DataExtensionField) column.toInternal());
-                    } catch (ETSdkException ex) {
-                        throw new ConversionException("could not convert object", ex);
-                    }
-                }
-                return fields;
-            }
-            return value;
-        }
-    }
-
     public class EnumConverter implements Converter {
         @SuppressWarnings({ "rawtypes", "unchecked" })
         public Object convert(Class type, Object value) {
@@ -270,9 +248,6 @@ public abstract class ETSoapObject extends ETObject {
                 ETDataExtensionColumn.class);
         convertUtils.register(new InternalObjectConverter(),
                 DataExtensionField.class);
-        // data extension column: internal to external
-        convertUtils.register(new DataExtensionColumnConverter(),
-                ETDataExtensionColumn[].class);
 
         // ETDataExtensionColumnType
         convertUtils.register(new EnumConverter(),
@@ -713,13 +688,33 @@ public abstract class ETSoapObject extends ETObject {
                         internalList.add(externalItem.toInternal());
                     }
 
-                    try {
-                        internalField.set(internalObject, internalList);
-                    } catch (Exception ex) {
-                        throw new ETSdkException("could not set field \""
-                                + internalFieldName
-                                + "\" of object "
-                                + internalObject, ex);
+                    // XXX cleanup
+                    if (internalFieldName.equals("fields")) {
+                        //
+                        // This list contains data extension columns:
+                        //
+
+                        DataExtension.Fields fields = new DataExtension.Fields();
+                        for (APIObject field : internalList) {
+                            fields.getField().add((DataExtensionField) field);
+                        }
+                        try {
+                            internalField.set(internalObject, fields);
+                        } catch (Exception ex) {
+                            throw new ETSdkException("could not set field \""
+                                    + internalFieldName
+                                    + "\" of object "
+                                    + internalObject, ex);
+                        }
+                    } else {
+                        try {
+                            internalField.set(internalObject, internalList);
+                        } catch (Exception ex) {
+                            throw new ETSdkException("could not set field \""
+                                    + internalFieldName
+                                    + "\" of object "
+                                    + internalObject, ex);
+                        }
                     }
 
                     continue;

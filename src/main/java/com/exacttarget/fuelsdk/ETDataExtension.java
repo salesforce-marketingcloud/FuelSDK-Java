@@ -37,6 +37,10 @@ import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.filter.ETFilterOperators;
 import com.exacttarget.fuelsdk.filter.ETSimpleFilter;
 import com.exacttarget.fuelsdk.internal.DataExtension;
+import com.exacttarget.fuelsdk.internal.DataExtensionField;
+import com.exacttarget.fuelsdk.internal.Soap;
+import com.exacttarget.fuelsdk.internal.UpdateOptions;
+import com.exacttarget.fuelsdk.internal.UpdateRequest;
 import com.exacttarget.fuelsdk.soap.ETDataExtensionColumnServiceImpl;
 import com.exacttarget.fuelsdk.soap.ETDataExtensionRowServiceImpl;
 import com.exacttarget.fuelsdk.soap.ETDataExtensionServiceImpl;
@@ -116,10 +120,6 @@ public class ETDataExtension extends ETSoapObject {
 
     public void setColumns(List<ETDataExtensionColumn> columns) {
         this.columns = columns;
-    }
-
-    public void addColumn(ETDataExtensionColumn column) {
-        this.columns.add(column);
     }
 
     public Integer getDataRetentionPeriodLength() {
@@ -340,6 +340,25 @@ public class ETDataExtension extends ETSoapObject {
         // XXX check for errors and throw the appropriate exception
 
         return response.getResults();
+    }
+
+    public void addColumn(ETDataExtensionColumn column)
+        throws ETSdkException
+    {
+        // XXX cleanup
+        client.refreshToken();
+        Soap soap = client.getSOAPConnection().getSoap();
+        DataExtension dataExtension = new DataExtension();
+        dataExtension.setId(getId());
+        dataExtension.setCustomerKey(getCustomerKey());
+        dataExtension.setName(getName());
+        DataExtension.Fields fields = new DataExtension.Fields();
+        fields.getField().add((DataExtensionField) column.toInternal());
+        dataExtension.setFields(fields);
+        UpdateRequest updateRequest = new UpdateRequest();
+        updateRequest.setOptions(new UpdateOptions());
+        updateRequest.getObjects().add(dataExtension);
+        soap.update(updateRequest);
     }
 
     public List<ETDataExtensionColumn> retrieveColumns()
