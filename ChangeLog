@@ -1,3 +1,7 @@
+2014-08-29  Ian Murdock  <imurdock@exacttarget.com>
+
+    * Released version 0.999999-pre1.0-1.
+
 2014-04-17  Ian Murdock  <imurdock@exacttarget.com>
 
     * ETClient.java, ETConnection.java: Use the access token rather
