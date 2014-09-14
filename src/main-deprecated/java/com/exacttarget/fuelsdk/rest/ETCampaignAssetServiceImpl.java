@@ -82,7 +82,7 @@ public class ETCampaignAssetServiceImpl extends ETCrudServiceImpl
 
         JsonArray ids = new JsonArray();
 
-        ids.add(new JsonPrimitive(asset.getItemID()));
+        ids.add(new JsonPrimitive(asset.getObjectId()));
 
         root.add("ids", ids);
 
