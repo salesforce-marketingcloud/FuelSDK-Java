@@ -38,6 +38,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface InternalSoapType {
     Class<? extends APIObject> type();
-
-	String[] ignoredFields() default {};
+    String[] ignoredFields() default {};
 }

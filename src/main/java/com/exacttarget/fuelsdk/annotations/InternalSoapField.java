@@ -37,5 +37,5 @@ import java.lang.annotation.Target;
 public @interface InternalSoapField {
     String name();
     String serializedName() default "";
-	boolean ignoreOnPatch() default false;
+    boolean ignoreOnPatch() default false;
 }
