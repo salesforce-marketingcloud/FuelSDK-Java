@@ -30,8 +30,65 @@ package com.exacttarget.fuelsdk;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 public abstract class ETObject {
+    private StringBuilder stringBuilder = new StringBuilder();
+    private boolean toStringMultiLine = false;
+    private int toStringMultiLineIndentAmount = 4;
+    // default to true if toStringMultiLine is true
+    private boolean toStringSpaceAroundEquals = toStringMultiLine;
+
+    private boolean first = true;
+
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
+    }
+
+    protected String getToString() {
+        return stringBuilder.toString();
+    }
+
+    protected void toStringAppend(String string) {
+        toStringAppend(string, true);
+    }
+
+    protected void toStringAppend(String string, boolean newline) {
+        if (string != null) {
+            stringBuilder.append(string);
+            if (toStringMultiLine && newline) {
+                stringBuilder.append(System.getProperty("line.separator"));
+            }
+        }
+    }
+
+    protected void toStringAppend(String property, Object value) {
+        if (value != null) {
+            if (toStringMultiLine) {
+                for (int i = 0; i < toStringMultiLineIndentAmount; i++) {
+                    stringBuilder.append(" ");
+                }
+            } else {
+                if (first) {
+                    first = false;
+                } else {
+                    stringBuilder.append(",");
+                }
+            }
+            String v = null;
+            if (value.getClass().equals(String.class)) {
+                v = "\"" + value + "\"";
+            }
+            if (toStringSpaceAroundEquals) {
+                stringBuilder.append(property + " = " + v);
+            } else {
+                stringBuilder.append(property + "=" + v);
+            }
+            if (toStringMultiLine) {
+                stringBuilder.append(System.getProperty("line.separator"));
+            }
+        }
+    }
+
+    protected void toStringReset() {
+        stringBuilder.setLength(0); first = true;
     }
 }
