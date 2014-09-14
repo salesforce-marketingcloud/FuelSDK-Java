@@ -34,6 +34,9 @@ public class ETResponse<T> {
     private String requestId = null;
     private ETResult overallResult = new ETResult();
     private List<T> results = new ArrayList<T>();
+    private Integer page = null;
+    private Integer pageSize = null;
+    private Integer totalCount = null;
     private boolean moreResults = false;
 
     public String getRequestId() {
@@ -76,6 +79,30 @@ public class ETResponse<T> {
     //public void addResult(T result) {
     public void addResult(Object result) {
         results.add((T) result);
+    }
+
+    public Integer getPage() {
+        return page;
+    }
+
+    public void setPage(Integer page) {
+        this.page = page;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public Integer getTotalCount() {
+        return totalCount;
+    }
+
+    public void setTotalCount(Integer totalCount) {
+        this.totalCount = totalCount;
     }
 
     public boolean hasMoreResults() {
