@@ -32,9 +32,14 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target({ElementType.FIELD})
+@Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface InternalRestField {
-	String jsonKey();
-	boolean isPrimaryKey() default false;
+public @interface InternalRestType {
+    String type();
+    String collectionKey();
+    String[] ignoredFields() default {};
+    String restPath();
+    String primaryKey();
+    String[] urlProps() default {};
+    String[] urlParameters() default {};
 }
