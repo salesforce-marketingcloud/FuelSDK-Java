@@ -77,10 +77,10 @@ public class ETRestConnection {
         this.isAuthConnection = isAuthConnection;
 
         //
-        // If log level is set to DEBUG, configure Gson to do pretty printing:
+        // If log level is set to TRACE, configure Gson to do pretty printing:
         //
 
-        if (logger.isDebugEnabled()) {
+        if (logger.isTraceEnabled()) {
             gson = new GsonBuilder().setPrettyPrinting().create();
         }
     }
@@ -169,7 +169,7 @@ public class ETRestConnection {
     private HttpURLConnection sendRequest(URL url, Method method, String payload)
         throws ETSdkException
     {
-        logger.debug(method + " " + url);
+        logger.trace(method + " " + url);
 
         HttpURLConnection connection = null;
         try {
@@ -199,19 +199,19 @@ public class ETRestConnection {
             connection.setRequestProperty("Authorization", "Bearer " + client.refreshToken());
         }
 
-        if (logger.isDebugEnabled()) {
+        if (logger.isTraceEnabled()) {
             for (String key : connection.getRequestProperties().keySet()) {
-                logger.debug(key + ": " + connection.getRequestProperty(key));
+                logger.trace(key + ": " + connection.getRequestProperty(key));
             }
         }
 
         if (payload != null) {
-            if (logger.isDebugEnabled()) {
+            if (logger.isTraceEnabled()) {
                 JsonParser jsonParser = new JsonParser();
                 String payloadPrettyPrinted =
                         gson.toJson(jsonParser.parse(payload));
                 for (String line : payloadPrettyPrinted.split("\\n")) {
-                    logger.debug(line);
+                    logger.trace(line);
                 }
             }
             try {
@@ -224,7 +224,7 @@ public class ETRestConnection {
         }
 
         try {
-            logger.debug(connection.getResponseCode() + " " + connection.getResponseMessage());
+            logger.trace(connection.getResponseCode() + " " + connection.getResponseMessage());
         } catch (IOException ex) {
             throw new ETSdkException("error getting response code / message", ex);
         }
@@ -265,11 +265,11 @@ public class ETRestConnection {
 
         String response = stringBuilder.toString();
 
-        if (logger.isDebugEnabled()) {
+        if (logger.isTraceEnabled()) {
             JsonParser jsonParser = new JsonParser();
             String responsePrettyPrinted = gson.toJson(jsonParser.parse(response));
             for (String line : responsePrettyPrinted.split("\\n")) {
-                logger.debug(line);
+                logger.trace(line);
             }
         }
 
