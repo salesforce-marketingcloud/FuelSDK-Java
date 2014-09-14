@@ -27,60 +27,67 @@
 
 package com.exacttarget.fuelsdk.rest;
 
+import com.exacttarget.fuelsdk.ETCampaignAsset;
 import com.exacttarget.fuelsdk.ETCampaignAssetService;
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETObject;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.filter.ETFilter;
-import com.exacttarget.fuelsdk.model.ETCampaignAsset;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
-public class ETCampaignAssetServiceImpl extends ETCrudServiceImpl implements ETCampaignAssetService {
+@Deprecated
+public class ETCampaignAssetServiceImpl extends ETCrudServiceImpl
+    implements ETCampaignAssetService
+{
+    public ETResponse<ETCampaignAsset> get(ETClient client)
+        throws ETSdkException
+    {
+        return super.get(client, ETCampaignAsset.class);
+    }
 
-	public ETResponse<ETCampaignAsset> get(ETClient client)
-			throws ETSdkException {
-		return super.get(client, ETCampaignAsset.class);
-	}
+    public ETResponse<ETCampaignAsset> get(ETClient client, ETFilter filter)
+        throws ETSdkException
+    {
+        return super.get(client, ETCampaignAsset.class, filter);
+    }
 
-	public ETResponse<ETCampaignAsset> get(ETClient client, ETFilter filter)
-			throws ETSdkException {
-		return super.get(client, ETCampaignAsset.class, filter);
-	}
+    public ETResponse<ETCampaignAsset> post(ETClient client, ETCampaignAsset asset)
+        throws ETSdkException
+    {
+        return super.post(client, asset);
+    }
 
-	public ETResponse<ETCampaignAsset> post(ETClient client, ETCampaignAsset asset)
-		throws ETSdkException {
-		return super.post(client, asset);
-	}
+    public ETResponse<ETCampaignAsset> patch(ETClient client, ETCampaignAsset asset)
+        throws ETSdkException
+    {
+        return super.patch(client, asset);
+    }
 
-	public ETResponse<ETCampaignAsset> patch(ETClient client, ETCampaignAsset asset)
-		throws ETSdkException {
-		return super.patch(client, asset);
-	}
+    public ETResponse<ETCampaignAsset> delete(ETClient client, ETCampaignAsset asset)
+        throws ETSdkException
+    {
+        return super.delete(client, asset);
+    }
 
-	public ETResponse<ETCampaignAsset> delete(ETClient client, ETCampaignAsset asset)
-		throws ETSdkException
-	{
-		return super.delete(client, asset);
-	}
+    @Override
+    protected <T extends ETObject> JsonObject createRequest(T object, Class<T> type)
+        throws ETSdkException
+    {
+        ETCampaignAsset asset = (ETCampaignAsset)object;
 
-	@Override
-	protected <T extends ETObject> JsonObject createRequest(T object, Class<T> type) throws ETSdkException {
+        JsonObject root = new JsonObject();
 
-		ETCampaignAsset asset = (ETCampaignAsset)object;
+        JsonArray ids = new JsonArray();
 
-		JsonObject root = new JsonObject();
+        ids.add(new JsonPrimitive(asset.getItemID()));
 
-		JsonArray ids = new JsonArray();
+        root.add("ids", ids);
 
-		ids.add(new JsonPrimitive(asset.getItemID()));
+        root.addProperty("type", asset.getType());
 
-		root.add("ids", ids);
-
-		root.addProperty("type", asset.getType());
-
-		return root;
-	}
+        return root;
+    }
 }
