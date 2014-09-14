@@ -27,37 +27,228 @@
 
 package com.exacttarget.fuelsdk;
 
-import com.exacttarget.fuelsdk.annotations.InternalRestField;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
-public abstract class ETRestObject extends ETObject {
-    @InternalRestField(jsonKey = "id")
-    protected String id;
-    @InternalRestField(jsonKey = "createdDate")
-    protected String createdDate;
-    @InternalRestField(jsonKey = "modifiedDate")
-    protected String modifiedDate;
+import org.apache.log4j.Logger;
 
-    public String getId() {
-        return id;
+import com.exacttarget.fuelsdk.annotations.RestAnnotations;
+
+public abstract class ETRestObject extends ETRestObjectImmutable {
+    private static Logger logger = Logger.getLogger(ETRestObject.class);
+
+    public static <T extends ETRestObject> ETResponse<T> create(ETClient client,
+                                                                T object)
+        throws ETSdkException
+    {
+        ETResponse<T> response = new ETResponse<T>();
+
+        ETRestConnection connection = client.getRESTConnection();
+
+        GsonBuilder gsonBuilder = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        Gson gson = null;
+        if (logger.isTraceEnabled()) {
+            gson = gsonBuilder.setPrettyPrinting().create();
+        } else {
+            gson = gsonBuilder.create();
+        }
+        JsonParser jsonParser = new JsonParser();
+
+        RestAnnotations annotations = object.getClass().getAnnotation(RestAnnotations.class);
+
+        assert annotations != null;
+
+        String path = annotations.path();
+        logger.trace("path: " + path);
+        String primaryKey = annotations.primaryKey();
+        logger.trace("primaryKey: " + primaryKey);
+        String collectionKey = annotations.collectionKey();
+        logger.trace("collectionKey: " + collectionKey);
+
+        //
+        // Remove the primary key from the end of the path:
+        //
+
+        path = removePrimaryKeyFromEnd(path, primaryKey);
+
+        logger.trace("POST " + path);
+
+        String json = gson.toJson(object);
+
+        if (logger.isTraceEnabled()) {
+            JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
+            String jsonPrettyPrinted = gson.toJson(jsonObject);
+            for (String line : jsonPrettyPrinted.split("\\n")) {
+                logger.trace(line);
+            }
+        }
+
+        json = connection.post(path, json);
+
+        JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
+
+        if (logger.isTraceEnabled()) {
+            String jsonPrettyPrinted = gson.toJson(jsonObject);
+            for (String line : jsonPrettyPrinted.split("\\n")) {
+                logger.trace(line);
+            }
+        }
+
+        response.addResult(gson.fromJson(json, object.getClass()));
+
+        // XXX set requestId, statusCode, and statusMessage
+
+        return response;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public <T extends ETRestObject> ETResponse<T> update(ETClient client)
+        throws ETSdkException
+    {
+        ETResponse<T> response = new ETResponse<T>();
+
+        ETRestConnection connection = client.getRESTConnection();
+
+        GsonBuilder gsonBuilder = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        Gson gson = null;
+        if (logger.isTraceEnabled()) {
+            gson = gsonBuilder.setPrettyPrinting().create();
+        } else {
+            gson = gsonBuilder.create();
+        }
+        JsonParser jsonParser = new JsonParser();
+
+        RestAnnotations annotations = getClass().getAnnotation(RestAnnotations.class);
+
+        assert annotations != null;
+
+        String path = annotations.path();
+        logger.trace("path: " + path);
+        String primaryKey = annotations.primaryKey();
+        logger.trace("primaryKey: " + primaryKey);
+        String collectionKey = annotations.collectionKey();
+        logger.trace("collectionKey: " + collectionKey);
+
+        //
+        // Construct the path to the object:
+        //
+
+        // XXX substitute primaryKey here w/ reflection to get getter
+        path = replaceVariable(path, "id", getId());
+
+        logger.trace("PATCH " + path);
+
+        String json = gson.toJson(this);
+
+        if (logger.isTraceEnabled()) {
+            JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
+            String jsonPrettyPrinted = gson.toJson(jsonObject);
+            for (String line : jsonPrettyPrinted.split("\\n")) {
+                logger.trace(line);
+            }
+        }
+
+        // XXX patch
+        json = connection.post(path, json);
+
+        JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
+
+        if (logger.isTraceEnabled()) {
+            String jsonPrettyPrinted = gson.toJson(jsonObject);
+            for (String line : jsonPrettyPrinted.split("\\n")) {
+                logger.trace(line);
+            }
+        }
+
+        response.addResult(gson.fromJson(json, getClass()));
+
+        // XXX set requestId, statusCode, and statusMessage
+
+        return response;
     }
 
-    public String getCreatedDate() {
-        return createdDate;
+    public <T extends ETRestObject> ETResponse<T> delete(ETClient client)
+        throws ETSdkException
+    {
+        // XXX substitute primaryKey here w/ reflection to get getter
+        return (ETResponse<T>) ETRestObject.delete(client, "id = " + getId(), getClass());
     }
 
-    public void setCreatedDate(String createdDate) {
-        this.createdDate = createdDate;
-    }
+    public static <T extends ETRestObject> ETResponse<T> delete(ETClient client,
+                                                                String filter,
+                                                                Class<T> type)
+        throws ETSdkException
+    {
+        ETResponse<T> response = new ETResponse<T>();
 
-    public String getModifiedDate() {
-        return modifiedDate;
-    }
+        ETRestConnection connection = client.getRESTConnection();
 
-    public void setModifiedDate(String modifiedDate) {
-        this.modifiedDate = modifiedDate;
+//        GsonBuilder gsonBuilder = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+//        Gson gson = null;
+//        if (logger.isTraceEnabled()) {
+//            gson = gsonBuilder.setPrettyPrinting().create();
+//        } else {
+//            gson = gsonBuilder.create();
+//        }
+//        JsonParser jsonParser = new JsonParser();
+
+        RestAnnotations annotations = type.getAnnotation(RestAnnotations.class);
+
+        assert annotations != null;
+
+        String path = annotations.path();
+        logger.trace("path: " + path);
+        String primaryKey = annotations.primaryKey();
+        logger.trace("primaryKey: " + primaryKey);
+        String collectionKey = annotations.collectionKey();
+        logger.trace("collectionKey: " + collectionKey);
+
+        //
+        // Replace all variables in the path per the filter:
+        //
+
+        logger.trace("filter: " + filter);
+
+        // XXX should throw an exception for complex expressions
+
+        ETFilterExpression parsedFilter = new ETFilterExpression(filter);
+
+        // XXX doesn't support multiple variables yet
+
+        path = replaceVariable(path,
+                               parsedFilter.getColumn(),
+                               parsedFilter.getValues().get(0));
+
+        // XXX should throw an exception if not all are specified
+
+//        //
+//        // Construct the path to the object:
+//        //
+//
+//        // XXX substitute primaryKey here w/ reflection to get getter
+//        path = replaceVariable(path, "id", getId());
+
+        logger.trace("DELETE " + path);
+
+        connection.delete(path);
+
+        // doesn't return any data.. are all like this?
+//        String json = connection.delete(path);
+//
+//        JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
+//
+//        if (logger.isTraceEnabled()) {
+//            String jsonPrettyPrinted = gson.toJson(jsonObject);
+//            for (String line : jsonPrettyPrinted.split("\\n")) {
+//                logger.trace(line);
+//            }
+//        }
+//
+//        response.addResult(gson.fromJson(json, type));
+
+        // XXX set requestId, statusCode, and statusMessage
+
+        return response;
     }
 }
