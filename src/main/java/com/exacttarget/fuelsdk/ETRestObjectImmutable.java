@@ -30,7 +30,6 @@ package com.exacttarget.fuelsdk;
 import java.util.Date;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -129,13 +128,8 @@ public abstract class ETRestObjectImmutable extends ETObject {
 
         ETRestConnection connection = client.getRestConnection();
 
-        GsonBuilder gsonBuilder = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        Gson gson = null;
-        if (logger.isTraceEnabled()) {
-            gson = gsonBuilder.setPrettyPrinting().create();
-        } else {
-            gson = gsonBuilder.create();
-        }
+        Gson gson = connection.getGson();
+
         JsonParser jsonParser = new JsonParser();
 
         RestAnnotations annotations = type.getAnnotation(RestAnnotations.class);

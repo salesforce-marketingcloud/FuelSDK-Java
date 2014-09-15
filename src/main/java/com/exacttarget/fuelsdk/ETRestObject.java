@@ -28,7 +28,6 @@
 package com.exacttarget.fuelsdk;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -47,13 +46,8 @@ public abstract class ETRestObject extends ETRestObjectImmutable {
 
         ETRestConnection connection = client.getRestConnection();
 
-        GsonBuilder gsonBuilder = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        Gson gson = null;
-        if (logger.isTraceEnabled()) {
-            gson = gsonBuilder.setPrettyPrinting().create();
-        } else {
-            gson = gsonBuilder.create();
-        }
+        Gson gson = connection.getGson();
+
         JsonParser jsonParser = new JsonParser();
 
         RestAnnotations annotations = object.getClass().getAnnotation(RestAnnotations.class);
@@ -110,13 +104,8 @@ public abstract class ETRestObject extends ETRestObjectImmutable {
 
         ETRestConnection connection = client.getRestConnection();
 
-        GsonBuilder gsonBuilder = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        Gson gson = null;
-        if (logger.isTraceEnabled()) {
-            gson = gsonBuilder.setPrettyPrinting().create();
-        } else {
-            gson = gsonBuilder.create();
-        }
+        Gson gson = connection.getGson();
+
         JsonParser jsonParser = new JsonParser();
 
         RestAnnotations annotations = getClass().getAnnotation(RestAnnotations.class);
@@ -184,13 +173,8 @@ public abstract class ETRestObject extends ETRestObjectImmutable {
 
         ETRestConnection connection = client.getRestConnection();
 
-//        GsonBuilder gsonBuilder = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-//        Gson gson = null;
-//        if (logger.isTraceEnabled()) {
-//            gson = gsonBuilder.setPrettyPrinting().create();
-//        } else {
-//            gson = gsonBuilder.create();
-//        }
+//        Gson gson = connection.getGson();
+//
 //        JsonParser jsonParser = new JsonParser();
 
         RestAnnotations annotations = type.getAnnotation(RestAnnotations.class);

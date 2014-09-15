@@ -76,9 +76,13 @@ public class ETRestConnection {
 
         this.isAuthConnection = isAuthConnection;
 
-        //
-        // If log level is set to TRACE, configure Gson to do pretty printing:
-        //
+        GsonBuilder gsonBuilder = new GsonBuilder()
+            .setDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        if (logger.isTraceEnabled()) {
+            gson = gsonBuilder.setPrettyPrinting().create();
+        } else {
+            gson = gsonBuilder.create();
+        }
 
         if (logger.isTraceEnabled()) {
             gson = new GsonBuilder().setPrettyPrinting().create();
@@ -146,6 +150,10 @@ public class ETRestConnection {
 
     public int getResponseCode() {
         return responseCode;
+    }
+
+    public Gson getGson() {
+        return gson;
     }
 
     private HttpURLConnection sendRequest(String path, Method method)
