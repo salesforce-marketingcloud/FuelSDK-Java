@@ -226,12 +226,30 @@ public class ETClient {
         return legacyToken;
     }
 
-    public ETRestConnection getRESTConnection() {
+    public ETRestConnection getRestConnection() {
         return restConnection;
     }
 
-    public ETSoapConnection getSOAPConnection() {
+    public ETSoapConnection getSoapConnection() {
         return soapConnection;
+    }
+
+    /**
+     * @deprecated
+     * Use getRestConnection().
+     */
+    @Deprecated
+    public ETRestConnection getRESTConnection() {
+        return getRestConnection();
+    }
+
+    /**
+     * @deprecated
+     * Use getSoapConnection().
+     */
+    @Deprecated
+    public ETSoapConnection getSOAPConnection() {
+        return getSoapConnection();
     }
 
     public ETDataExtension retrieveDataExtension(ETFilter filter)

@@ -45,7 +45,7 @@ public abstract class ETRestObject extends ETRestObjectImmutable {
     {
         ETResponse<T> response = new ETResponse<T>();
 
-        ETRestConnection connection = client.getRESTConnection();
+        ETRestConnection connection = client.getRestConnection();
 
         GsonBuilder gsonBuilder = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         Gson gson = null;
@@ -108,7 +108,7 @@ public abstract class ETRestObject extends ETRestObjectImmutable {
     {
         ETResponse<T> response = new ETResponse<T>();
 
-        ETRestConnection connection = client.getRESTConnection();
+        ETRestConnection connection = client.getRestConnection();
 
         GsonBuilder gsonBuilder = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         Gson gson = null;
@@ -182,7 +182,7 @@ public abstract class ETRestObject extends ETRestObjectImmutable {
     {
         ETResponse<T> response = new ETResponse<T>();
 
-        ETRestConnection connection = client.getRESTConnection();
+        ETRestConnection connection = client.getRestConnection();
 
 //        GsonBuilder gsonBuilder = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 //        Gson gson = null;

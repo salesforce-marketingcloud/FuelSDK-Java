@@ -120,7 +120,7 @@ public abstract class ETGetServiceImpl<T extends ETSoapObject>
         // Perform the SOAP retrieve:
         //
 
-        Soap soap = client.getSOAPConnection().getSoap();
+        Soap soap = client.getSoapConnection().getSoap();
 
         RetrieveRequest retrieveRequest = new RetrieveRequest();
         retrieveRequest.setObjectType(internalClass.getSimpleName());

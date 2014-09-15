@@ -84,7 +84,7 @@ public abstract class ETCrudServiceImpl<T extends ETSoapObject>
         // Perform the SOAP create:
         //
 
-        Soap soap = client.getSOAPConnection().getSoap();
+        Soap soap = client.getSoapConnection().getSoap();
 
         CreateRequest createRequest = new CreateRequest();
         createRequest.setOptions(new CreateOptions());
@@ -158,7 +158,7 @@ public abstract class ETCrudServiceImpl<T extends ETSoapObject>
         // Perform the SOAP update:
         //
 
-        Soap soap = client.getSOAPConnection().getSoap();
+        Soap soap = client.getSoapConnection().getSoap();
 
         UpdateRequest updateRequest = new UpdateRequest();
         updateRequest.setOptions(new UpdateOptions());
@@ -230,7 +230,7 @@ public abstract class ETCrudServiceImpl<T extends ETSoapObject>
         // Perform the SOAP delete:
         //
 
-        Soap soap = client.getSOAPConnection().getSoap();
+        Soap soap = client.getSoapConnection().getSoap();
 
         DeleteRequest deleteRequest = new DeleteRequest();
         deleteRequest.setOptions(new DeleteOptions());

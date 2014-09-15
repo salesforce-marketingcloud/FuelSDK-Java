@@ -134,8 +134,7 @@ public class ETDataExtension extends ETSoapObject {
         return dataRetentionPeriodUnitOfMeasure;
     }
 
-    public void setDataRetentionPeriodUnitOfMeasure(
-            Integer dataRetentionPeriodUnitOfMeasure) {
+    public void setDataRetentionPeriodUnitOfMeasure(Integer dataRetentionPeriodUnitOfMeasure) {
         this.dataRetentionPeriodUnitOfMeasure = dataRetentionPeriodUnitOfMeasure;
     }
 
@@ -347,7 +346,7 @@ public class ETDataExtension extends ETSoapObject {
     {
         // XXX cleanup
         client.refreshToken();
-        Soap soap = client.getSOAPConnection().getSoap();
+        Soap soap = client.getSoapConnection().getSoap();
         DataExtension dataExtension = new DataExtension();
         dataExtension.setId(getId());
         dataExtension.setCustomerKey(getCustomerKey());

@@ -113,7 +113,7 @@ public class ETEmailSendDefinitionServiceImpl extends ETCrudServiceImpl<ETEmailS
         // Perform the, uh, SOAP perform:
         //
 
-        Soap soap = client.getSOAPConnection().getSoap();
+        Soap soap = client.getSoapConnection().getSoap();
 
         PerformRequestMsg performRequestMsg = new PerformRequestMsg();
         performRequestMsg.setAction("start");
