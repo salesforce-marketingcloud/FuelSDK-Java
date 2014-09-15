@@ -77,6 +77,7 @@ public class ETRestConnection {
         this.isAuthConnection = isAuthConnection;
 
         GsonBuilder gsonBuilder = new GsonBuilder()
+            .excludeFieldsWithoutExposeAnnotation()
             .setDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         if (logger.isTraceEnabled()) {
             gson = gsonBuilder.setPrettyPrinting().create();

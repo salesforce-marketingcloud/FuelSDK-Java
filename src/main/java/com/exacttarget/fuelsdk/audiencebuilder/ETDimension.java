@@ -29,6 +29,7 @@ package com.exacttarget.fuelsdk.audiencebuilder;
 
 import java.util.List;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETResponse;
@@ -42,8 +43,11 @@ import com.exacttarget.fuelsdk.annotations.RestAnnotations;
 public class ETDimension extends ETRestObjectImmutable {
     public class Value {
         @SerializedName("pK")
+        @Expose
         private String key = null;
+        @Expose
         private String name = null;
+        @Expose
         private Integer count = null;
 
         public String getKey() {
@@ -72,25 +76,40 @@ public class ETDimension extends ETRestObjectImmutable {
     }
 
     @SerializedName("dimensionID")
+    @Expose
     private String id = null;
+    @Expose
     private String name = null;
     @SerializedName("attrCustomObjectID")
+    @Expose
     private String attrCustomObjectId = null;
     @SerializedName("attrCustomObjectFieldID")
+    @Expose
     private String attrCustomObjectFieldId = null;
+    @Expose
     private Integer attrCustomObjectFieldType = null;
     @SerializedName("customObjectID")
+    @Expose
     private String customObjectId = null;
+    @Expose
     private String customObjectName = null;
     @SerializedName("customObjectFieldID")
+    @Expose
     private String customObjectFieldId = null;
+    @Expose
     private String customObjectFieldName = null;
+    @Expose
     private Integer dataType = null;
+    @Expose
     private String displayName = null;
     @SerializedName("fkDataProfileAttribID")
+    @Expose
     private Integer fkDataProfileAttribID = null;
+    @Expose
     private Integer recordCount = null;
+    @Expose
     private Integer type = null;
+    @Expose
     private List<Value> values = null;
 
     public String getId() {

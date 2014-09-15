@@ -30,31 +30,51 @@ package com.exacttarget.fuelsdk.audiencebuilder;
 import java.util.Date;
 
 import com.exacttarget.fuelsdk.ETRestObjectImmutable;
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class ETSegment extends ETRestObjectImmutable {
     @SerializedName("audienceSegmentDefinitionID")
+    @Expose
     private String id = null;
     @SerializedName("audienceDefinitionID")
+    @Expose
     private String audienceId = null;
+    @Expose
     private String name = null;
+    @Expose
     private Integer capNum = null;
+    @Expose
     private Integer capPercent = null;
+    @Expose
     private Integer count = null;
+    @Expose
     private Date countDate = null;
+    @Expose
     private String criteria = null;
+    @Expose
     private Integer criteriaCount = null;
+    @Expose
     private Date criteriaCountDate = null;
+    @Expose
     private Boolean exclude = null;
     @SerializedName("filterDefinitionID")
+    @Expose
     private String filterDefinitionId = null;
+    @Expose
     private Boolean isActive = null;
+    @Expose
     private Boolean isCriteriaCountStale = null;
+    @Expose
     private Boolean isIncludedInPublish = null;
+    @Expose
     private Integer priority = null;
+    @Expose
     private String segmentCode = null;
     @SerializedName("segmentDefinitionID")
+    @Expose
     private String segmentDefinitionId = null;
+    @Expose
     private String status = null;
 
     public String getId() {

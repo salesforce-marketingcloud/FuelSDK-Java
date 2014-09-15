@@ -29,15 +29,19 @@ package com.exacttarget.fuelsdk.audiencebuilder;
 
 import java.util.List;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class ETFilterDefinition {
     public class Condition {
         @SerializedName("ID")
+        @Expose
         private String id = null;
         @SerializedName("Operator")
+        @Expose
         private String operator = null;
         @SerializedName("ConditionValue")
+        @Expose
         private String conditionValue = null;
 
         public String getId() {
@@ -67,10 +71,13 @@ public class ETFilterDefinition {
 
     public class ConditionSet {
         @SerializedName("Operator")
+        @Expose
         private String operator = null;
         @SerializedName("ConditionSetName")
+        @Expose
         private String conditionSetName = null;
         @SerializedName("Condition")
+        @Expose
         private List<Condition> condition = null;
 
         public String getOperator() {
@@ -99,14 +106,19 @@ public class ETFilterDefinition {
     }
 
     @SerializedName("PersistenceID")
+    @Expose
     private String persistenceId = null;
     @SerializedName("UseEnterprise")
+    @Expose
     private Boolean useEnterprise = null;
     @SerializedName("UseAlsoEngine")
+    @Expose
     private Boolean useAlsoEngine = true;
     @SerializedName("Source")
+    @Expose
     private String source = "AudienceBuilder";
     @SerializedName("ConditionSet")
+    @Expose
     private ConditionSet conditionSet = null;
 
     public String getPersistenceId() {

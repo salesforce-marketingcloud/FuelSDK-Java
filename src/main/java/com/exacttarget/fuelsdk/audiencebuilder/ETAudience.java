@@ -30,6 +30,7 @@ package com.exacttarget.fuelsdk.audiencebuilder;
 import java.util.Date;
 import java.util.List;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETResponse;
@@ -42,24 +43,41 @@ import com.exacttarget.fuelsdk.annotations.RestAnnotations;
                  collectionKey = "entities")
 public class ETAudience extends ETRestObject {
     @SerializedName("audienceDefinitionID")
+    @Expose
     private String id = null;
+    @Expose
     private String name = null;
+    @Expose
     private String description = null;
+    @Expose
     private String audienceCode = null;
+    @Expose
     private Integer count = null;
+    @Expose
     private Date countDate = null;
+    @Expose
     private String criteria = null;
     @SerializedName("filterDefinitionID")
+    @Expose
     private String filterDefinitionId = null;
+    @Expose
     private Boolean isCountStale = null;
+    @Expose
     private Boolean isCriteriaCountStale = null;
     @SerializedName("ownerID")
+    @Expose
     private String ownerId = null;
+    @Expose
     private Integer publishCount = null;
+    @Expose
     private Date publishCountDate = null;
+    @Expose
     private String status = null;
+    @Expose
     private ETFilter filter = null;
+    @Expose
     private List<ETAudienceBuild> audienceBuilds = null;
+    @Expose
     private List<ETSegment> segments = null;
 
     public String getId() {

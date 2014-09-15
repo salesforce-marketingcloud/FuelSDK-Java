@@ -28,13 +28,17 @@
 package com.exacttarget.fuelsdk;
 
 import com.exacttarget.fuelsdk.annotations.RestAnnotations;
+import com.google.gson.annotations.Expose;
 
 @RestAnnotations(path = "/hub/v1/campaigns/{campaignId}/assets/{id}",
                  primaryKey = "id",
                  collectionKey = "entities")
 public class ETCampaignAsset extends ETRestObject {
+    @Expose
     private String campaignId = null;
+    @Expose
     private String type = null;
+    @Expose
     private String objectId = null;
 
     public String getCampaignId() {

@@ -27,24 +27,34 @@
 
 package com.exacttarget.fuelsdk.audiencebuilder;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class ETFilter {
     @SerializedName("filterDefinitionID")
+    @Expose
     private String id = null;
+    @Expose
     private String name = null;
+    @Expose
     private String description = null;
     @SerializedName("categoryID")
+    @Expose
     private String folderId = null;
     @SerializedName("clientID")
+    @Expose
     private String clientId = null;
     @SerializedName("derivedFromObjectID")
+    @Expose
     private String derivedFromObjectId = null;
     @SerializedName("ownerID")
+    @Expose
     private String ownerId = null;
     @SerializedName("statusID")
+    @Expose
     private String statusId = null;
     @SerializedName("filterDefinitionJson")
+    @Expose
     private ETFilterDefinition filterDefinition = null;
 
     public String getId() {

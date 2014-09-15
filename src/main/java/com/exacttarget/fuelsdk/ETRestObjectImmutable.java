@@ -34,6 +34,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.annotations.Expose;
 
 import org.apache.log4j.Logger;
 
@@ -42,9 +43,13 @@ import com.exacttarget.fuelsdk.annotations.RestAnnotations;
 public abstract class ETRestObjectImmutable extends ETObject {
     private static Logger logger = Logger.getLogger(ETRestObjectImmutable.class);
 
+    @Expose
     private String id = null;
+    @Expose
     private String key = null;
+    @Expose
     private Date createdDate = null;
+    @Expose
     private Date modifiedDate = null;
 
     public String getId() {
