@@ -25,66 +25,33 @@
 // THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-package com.exacttarget.fuelsdk.soap;
+package com.exacttarget.fuelsdk;
 
 import java.util.List;
 
-import com.exacttarget.fuelsdk.ETClient;
-import com.exacttarget.fuelsdk.ETFolderService;
-import com.exacttarget.fuelsdk.ETResponse;
-import com.exacttarget.fuelsdk.ETResult;
-import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.filter.ETFilter;
-import com.exacttarget.fuelsdk.model.ETFolder;
 
-public class ETFolderServiceImpl extends ETCrudServiceImpl<ETFolder>
-    implements ETFolderService
-{
+/**
+ * @deprecated
+ * For information on how to interact with folders, please see
+ * {@link com.exacttarget.fuelsdk.ETFolder}.
+ */
+@Deprecated
+public interface ETFolderService extends ETCrudService {
     public ETResponse<ETFolder> get(ETClient client, String... properties)
-        throws ETSdkException
-    {
-        return super.get(client, ETFolder.class, properties);
-    }
-
+        throws ETSdkException;
     public ETResponse<ETFolder> get(ETClient client, ETFilter filter, String... properties)
-        throws ETSdkException
-    {
-        return super.get(client, ETFolder.class, filter, properties);
-    }
-
+        throws ETSdkException;
     public ETResponse<ETResult> post(ETClient client, ETFolder folder)
-        throws ETSdkException
-    {
-        return super.post(client, folder);
-    }
-
+        throws ETSdkException;
     public ETResponse<ETResult> post(ETClient client, List<ETFolder> folders)
-        throws ETSdkException
-    {
-        return super.post(client, folders);
-    }
-
+        throws ETSdkException;
     public ETResponse<ETResult> patch(ETClient client, ETFolder folder)
-        throws ETSdkException
-    {
-        return super.patch(client, folder);
-    }
-
+        throws ETSdkException;
     public ETResponse<ETResult> patch(ETClient client, List<ETFolder> folders)
-        throws ETSdkException
-    {
-        return super.patch(client, folders);
-    }
-
+        throws ETSdkException;
     public ETResponse<ETResult> delete(ETClient client, ETFolder folder)
-        throws ETSdkException
-    {
-        return super.delete(client, folder);
-    }
-
+        throws ETSdkException;
     public ETResponse<ETResult> delete(ETClient client, List<ETFolder> folders)
-        throws ETSdkException
-    {
-        return super.delete(client, folders);
-    }
+        throws ETSdkException;
 }

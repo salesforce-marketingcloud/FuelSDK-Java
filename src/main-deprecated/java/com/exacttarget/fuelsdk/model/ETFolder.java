@@ -25,28 +25,12 @@
 // THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-package com.exacttarget.fuelsdk;
+package com.exacttarget.fuelsdk.model;
 
-import java.util.List;
-
-import com.exacttarget.fuelsdk.filter.ETFilter;
-import com.exacttarget.fuelsdk.model.ETFolder;
-
-public interface ETFolderService extends ETCrudService {
-    public ETResponse<ETFolder> get(ETClient client, String... properties)
-        throws ETSdkException;
-    public ETResponse<ETFolder> get(ETClient client, ETFilter filter, String... properties)
-        throws ETSdkException;
-    public ETResponse<ETResult> post(ETClient client, ETFolder folder)
-        throws ETSdkException;
-    public ETResponse<ETResult> post(ETClient client, List<ETFolder> folders)
-        throws ETSdkException;
-    public ETResponse<ETResult> patch(ETClient client, ETFolder folder)
-        throws ETSdkException;
-    public ETResponse<ETResult> patch(ETClient client, List<ETFolder> folders)
-        throws ETSdkException;
-    public ETResponse<ETResult> delete(ETClient client, ETFolder folder)
-        throws ETSdkException;
-    public ETResponse<ETResult> delete(ETClient client, List<ETFolder> folders)
-        throws ETSdkException;
+/**
+ * @deprecated
+ * Replaced by {@link com.exacttarget.fuelsdk.ETFolder}.
+ */
+@Deprecated
+public class ETFolder extends com.exacttarget.fuelsdk.ETFolder {
 }
