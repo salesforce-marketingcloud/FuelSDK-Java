@@ -99,36 +99,42 @@ public abstract class ETRestObjectImmutable extends ETObject {
     }
 
     public static <T extends ETRestObjectImmutable> ETResponse<T> retrieve(ETClient client,
-                                                                  Class<T> type)
+                                                                           Class<T> type)
         throws ETSdkException
     {
         return retrieve(client, null, null, null, type);
     }
 
     public static <T extends ETRestObjectImmutable> ETResponse<T> retrieve(ETClient client,
-                                                                  Integer page,
-                                                                  Integer pageSize,
-                                                                  Class<T> type)
+                                                                           Integer page,
+                                                                           Integer pageSize,
+                                                                           Class<T> type)
         throws ETSdkException
     {
         return retrieve(client, null, page, pageSize, type);
     }
 
     public static <T extends ETRestObjectImmutable> ETResponse<T> retrieve(ETClient client,
-                                                                  String filter,
-                                                                  Class<T> type)
+                                                                           String filter,
+                                                                           Class<T> type)
         throws ETSdkException
     {
         return retrieve(client, filter, null, null, type);
     }
 
     public static <T extends ETRestObjectImmutable> ETResponse<T> retrieve(ETClient client,
-                                                                  String filter,
-                                                                  Integer page,
-                                                                  Integer pageSize,
-                                                                  Class<T> type)
+                                                                           String filter,
+                                                                           Integer page,
+                                                                           Integer pageSize,
+                                                                           Class<T> type,
+                                                                           String... properties)
         throws ETSdkException
     {
+        if (properties != null) {
+            // XXX true?
+            throw new ETSdkException("REST objects do not support partial retrieves");
+        }
+
         ETResponse<T> response = new ETResponse<T>();
 
         ETRestConnection connection = client.getRestConnection();
