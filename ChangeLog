@@ -1,3 +1,43 @@
+2014-10-03  Ian Murdock  <imurdock@exacttarget.com>
+
+    * ETClient.java: Added support for creating, retrieving, updating,
+    and deleting objects via the ETClient object vs. the "Service"
+    objects (e.g., ETFolderService, which contained the CRUD methods).
+    (create): New methods.
+    (retrieve): New methods.
+    (update): New methods.
+    (delete): New methods.
+    (getMethod): New method.
+    (invokeMethod): New method.
+    * ETSoapObjectImmutable.java (retrieve): New method (same code as
+    soap/ETGetServiceImpl.java (get)).
+    (toStringOpen): New method.
+    (toStringClose): New method.
+    * ETSoapObject.java (create): New method (same code as
+    soap/ETCrudServiceImpl (post)).
+    (update): New method (same code as soap/ETCrudServiceImpl.java (patch)).
+    (delete): New method (same code as soap/ETCrudServiceImpl.java (delete)).
+    * ETFolder.java: Moved to top level directory and serialize parentFolder
+    to ParentFolder.CustomerKey, not ParentFolder.ID.
+    (getParentFolderKey): New method.
+    (setParentFolderKey): New method.
+    (toString): New method.
+    * ETFolderService.java: Deprecated in favor of ETClient based methods.
+    * soap/ETFolderServiceImpl.java: Deprecated in favor of ETClient based
+    methods.
+
+2014-09-15  Ian Murdock  <imurdock@exacttarget.com>
+
+    * ETClient.java (getRestConnection): Renamed from getRESTConnection.
+    * ETClient.java (getSoapConnection): Renamed from getSOAPConnection.
+    * ETRestConnection.java: Require fields to be explicitly included in
+    JSON via Gson's @Expose annotation.
+    * ETRestConnection.java (getGson): New method.
+    * ETRestObject.java (create): Get the Gson handle from ETRestConnection
+    vs. initializing a new one.
+    * ETRestObjectImmutable.java (retrieve): Likewise.
+    * ETRestObject.java (update): Likewise.
+
 2014-08-29  Ian Murdock  <imurdock@exacttarget.com>
 
     * Released version 0.999999-pre1.0-1.

@@ -27,15 +27,18 @@
 
 package com.exacttarget.fuelsdk;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import com.exacttarget.fuelsdk.filter.ETFilter;
-import com.exacttarget.fuelsdk.soap.ETDataExtensionServiceImpl;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import org.apache.log4j.Logger;
+
+import com.exacttarget.fuelsdk.filter.ETFilter;
 
 public class ETClient {
     private static final String PATH_REQUESTTOKEN =
@@ -230,10 +233,6 @@ public class ETClient {
         return restConnection;
     }
 
-    public ETSoapConnection getSoapConnection() {
-        return soapConnection;
-    }
-
     /**
      * @deprecated
      * Use getRestConnection().
@@ -241,6 +240,10 @@ public class ETClient {
     @Deprecated
     public ETRestConnection getRESTConnection() {
         return getRestConnection();
+    }
+
+    public ETSoapConnection getSoapConnection() {
+        return soapConnection;
     }
 
     /**
@@ -252,32 +255,260 @@ public class ETClient {
         return getSoapConnection();
     }
 
+    @SuppressWarnings("unchecked")
+    public <T extends ETObject> ETResponse<ETResult> create(T object)
+        throws ETSdkException
+    {
+        return create(Arrays.asList(object));
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends ETObject> ETResponse<ETResult> create(List<T> objects)
+        throws ETSdkException
+    {
+        ETResponse<ETResult> response = new ETResponse<ETResult>();
+
+        if (objects == null || objects.size() == 0) {
+            return response;
+        }
+
+        //
+        // Get the create method from the superclass of
+        // T (all methods are found in the superclass):
+        //
+
+        Class<T> superClass = (Class<T>) objects.get(0).getClass().getSuperclass();
+
+        Method create = getMethod(superClass, "create", ETClient.class, List.class);
+
+        return response = (ETResponse<ETResult>) invokeMethod(create, objects);
+    }
+
+    public <T extends ETObject> ETResponse<T> retrieve(Class<T> type)
+        throws ETSdkException
+    {
+        // new String[0] = empty properties
+        return retrieve(type, (ETFilterExpression) null, null, null, new String[0]);
+    }
+
+    public <T extends ETObject> ETResponse<T> retrieve(Class<T> type,
+                                                       String filter,
+                                                       String... properties)
+        throws ETSdkException
+    {
+        ETFilterExpression f = null;
+        String[] p = properties;
+        try {
+            f = new ETFilterExpression(filter);
+        } catch (ETSdkException ex) {
+            //
+            // The filter argument is actually a property. This is a bit
+            // of a hack, but this method needs to handle the case of
+            // both a filtered and a filterless retrieve with properties,
+            // as having one method for each results in ambiguous methods.
+            //
+
+            p = new String[properties.length + 1];
+            p[0] = filter;
+            int i = 1;
+            for (String property : properties) {
+                p[i++] = property;
+            }
+        }
+        return retrieve(type, f, null, null, p);
+    }
+
+    public <T extends ETObject> ETResponse<T> retrieve(Class<T> type,
+                                                       Integer page,
+                                                       Integer pageSize,
+                                                       String... properties)
+        throws ETSdkException
+    {
+        return retrieve(type, (ETFilterExpression) null, page, pageSize, properties);
+    }
+
+    public <T extends ETObject> ETResponse<T> retrieve(Class<T> type,
+                                                       String filter,
+                                                       Integer page,
+                                                       Integer pageSize,
+                                                       String... properties)
+        throws ETSdkException
+    {
+        return retrieve(type, new ETFilterExpression(filter), page, pageSize, properties);
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T extends ETObject> ETResponse<T> retrieve(Class<T> type,
+                                                        ETFilterExpression filter,
+                                                        Integer page,
+                                                        Integer pageSize,
+                                                        String... properties)
+        throws ETSdkException
+    {
+        //
+        // Get the retrieve method from the superclass of
+        // the superclass of T (unlike create, update, and
+        // delete, which are implemented in the ETRestObject
+        // or ETSoapObject class, retrieve is implemented
+        // in ETRestObjectImmutable or ETSoapObjectImmutable):
+        //
+
+        Class<T> superClass = (Class<T>) type.getSuperclass();
+        Class<T> superSuperClass = (Class<T>) superClass.getSuperclass();
+
+        Method retrieve = getMethod(superSuperClass,
+                                    "retrieve",
+                                    ETClient.class,  // client
+                                    ETFilterExpression.class, // filter
+                                    Integer.class,   // page
+                                    Integer.class,   // pageSize
+                                    Class.class,     // type
+                                    String[].class); // properties
+
+        ETResponse<T> response = null;
+        try {
+            // first argument of null means method is static
+            response = (ETResponse<T>) retrieve.invoke(null,
+                                                       this,
+                                                       filter,
+                                                       page,
+                                                       pageSize,
+                                                       type,
+                                                       properties);
+        } catch (InvocationTargetException ex) {
+            // throw ex.getCause() since this exception
+            // type means the caller threw an exception
+            throw (ETSdkException) ex.getCause();
+        } catch (Exception ex) {
+            throw new ETSdkException("could not invoke retrieve method on class " + type, ex);
+        }
+
+        return response;
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends ETObject> ETResponse<ETResult> update(T object)
+        throws ETSdkException
+    {
+        return update(Arrays.asList(object));
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends ETObject> ETResponse<ETResult> update(List<T> objects)
+        throws ETSdkException
+    {
+        ETResponse<ETResult> response = new ETResponse<ETResult>();
+
+        if (objects == null || objects.size() == 0) {
+            return response;
+        }
+
+        //
+        // Get the update method from the superclass of
+        // T (all methods are found in the superclass):
+        //
+
+        Class<T> superClass = (Class<T>) objects.get(0).getClass().getSuperclass();
+
+        Method update = getMethod(superClass, "update", ETClient.class, List.class);
+
+        return response = (ETResponse<ETResult>) invokeMethod(update, objects);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends ETObject> ETResponse<ETResult> delete(T object)
+        throws ETSdkException
+    {
+        return delete(Arrays.asList(object));
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends ETObject> ETResponse<ETResult> delete(List<T> objects)
+        throws ETSdkException
+    {
+        ETResponse<ETResult> response = new ETResponse<ETResult>();
+
+        if (objects == null || objects.size() == 0) {
+            return response;
+        }
+
+        //
+        // Get the delete method from the superclass of
+        // T (all methods are found in the superclass):
+        //
+
+        Class<T> superClass = (Class<T>) objects.get(0).getClass().getSuperclass();
+
+        Method delete = getMethod(superClass, "delete", ETClient.class, List.class);
+
+        return response = (ETResponse<ETResult>) invokeMethod(delete, objects);
+    }
+
+    /**
+     * @deprecated
+     * Use XXX
+     */
     public ETDataExtension retrieveDataExtension(ETFilter filter)
         throws ETSdkException
     {
-        List<ETDataExtension> dataExtensions = retrieveDataExtensions(filter);
-        if (dataExtensions == null) {
-            return null;
-        }
-        // XXX check if more than one row is returned
-        return dataExtensions.get(0);
+        // XXX
+        return null;
     }
 
+    /**
+     * @deprecated
+     * Use XXX
+     */
     public List<ETDataExtension> retrieveDataExtensions()
         throws ETSdkException
     {
-        return retrieveDataExtensions(null);
+        // XXX
+        return null;
     }
 
+    /**
+     * @deprecated
+     * Use XXX
+     */
     public List<ETDataExtension> retrieveDataExtensions(ETFilter filter)
         throws ETSdkException
     {
-        ETDataExtensionService service = new ETDataExtensionServiceImpl();
-        ETResponse<ETDataExtension> response = service.get(this, filter);
-        // XXX check for errors and throw the appropriate exception
-        for (ETDataExtension dataExtension : response.getResults()) {
-            dataExtension.setClient(this); // XXX hack
+        // XXX
+        return null;
+    }
+
+    private <T extends ETObject> Method getMethod(Class<T> type, String name, Class<?>... arguments)
+        throws ETSdkException
+    {
+        Method method = null;
+
+        try {
+            method = type.getDeclaredMethod(name, arguments);
+        } catch (Exception ex) {
+            throw new ETSdkException("could not get "
+                                     + name
+                                     + " method of "
+                                     + type, ex);
         }
-        return response.getResults();
+
+        return method;
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T extends ETObject> ETResponse<?> invokeMethod(Method method, List<T> arguments)
+        throws ETSdkException
+    {
+        ETResponse<?> response = null;
+
+        try {
+            response = (ETResponse<ETResult>) method.invoke(null, this, arguments);
+        } catch (Exception ex) {
+            throw new ETSdkException("could not invoke "
+                                     + method.getName()
+                                     + " method on object "
+                                     + arguments, ex);
+        }
+
+        return response;
     }
 }
