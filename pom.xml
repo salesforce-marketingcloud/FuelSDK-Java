@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.exacttarget</groupId>
   <artifactId>fuelsdk</artifactId>
-  <version>0.999999-pre1.0-1</version>
+  <version>0.999999-pre1.0-2</version>
   <packaging>jar</packaging>
   <name>Fuel Java SDK</name>
   <url>http://code.exacttarget.com</url>
@@ -39,6 +39,11 @@
       <version>2.2.4</version>
     </dependency>
     <dependency>
+      <groupId>org.codehaus.mojo</groupId>
+      <artifactId>javacc-maven-plugin</artifactId>
+      <version>2.6</version>
+    </dependency>
+    <dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
       <version>1.2.17</version>
@@ -63,7 +68,7 @@
             <id>generate-sources</id>
             <phase>generate-sources</phase>
             <configuration>
-              <sourceRoot>${project.build.directory}/generated/cxf</sourceRoot>
+              <sourceRoot>${project.build.directory}/generated-sources/cxf</sourceRoot>
               <wsdlOptions>
                 <wsdlOption>
                   <wsdl>${basedir}/src/main/resources/etframework.wsdl</wsdl>
@@ -134,6 +139,19 @@
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>javacc-maven-plugin</artifactId>
+        <version>2.6</version>
+        <executions>
+          <execution>
+            <id>javacc</id>
+            <goals>
+              <goal>javacc</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
     <pluginManagement>
       <plugins>
@@ -158,6 +176,19 @@
                     </versionRange>
                     <goals>
                       <goal>wsdl2java</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore></ignore>
+                  </action>
+                </pluginExecution>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>javacc-maven-plugin</artifactId>
+                    <versionRange>[2.6,)</versionRange>
+                    <goals>
+                      <goal>javacc</goal>
                     </goals>
                   </pluginExecutionFilter>
                   <action>

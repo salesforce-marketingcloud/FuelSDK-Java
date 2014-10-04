@@ -27,6 +27,7 @@
 
 package com.exacttarget.fuelsdk;
 
+import java.io.ByteArrayInputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -39,6 +40,7 @@ import com.google.gson.JsonParser;
 import org.apache.log4j.Logger;
 
 import com.exacttarget.fuelsdk.filter.ETFilter;
+import com.exacttarget.fuelsdk.internal.FilterPart;
 
 public class ETClient {
     private static final String PATH_REQUESTTOKEN =
@@ -288,7 +290,7 @@ public class ETClient {
         throws ETSdkException
     {
         // new String[0] = empty properties
-        return retrieve(type, (ETFilterExpression) null, null, null, new String[0]);
+        return retrieve(type, (FilterPart) null, null, null, new String[0]);
     }
 
     public <T extends ETObject> ETResponse<T> retrieve(Class<T> type,
@@ -296,10 +298,10 @@ public class ETClient {
                                                        String... properties)
         throws ETSdkException
     {
-        ETFilterExpression f = null;
+        FilterPart f = null;
         String[] p = properties;
         try {
-            f = new ETFilterExpression(filter);
+            f = parseFilter(filter);
         } catch (ETSdkException ex) {
             //
             // The filter argument is actually a property. This is a bit
@@ -324,7 +326,7 @@ public class ETClient {
                                                        String... properties)
         throws ETSdkException
     {
-        return retrieve(type, (ETFilterExpression) null, page, pageSize, properties);
+        return retrieve(type, (FilterPart) null, page, pageSize, properties);
     }
 
     public <T extends ETObject> ETResponse<T> retrieve(Class<T> type,
@@ -334,12 +336,12 @@ public class ETClient {
                                                        String... properties)
         throws ETSdkException
     {
-        return retrieve(type, new ETFilterExpression(filter), page, pageSize, properties);
+        return retrieve(type, parseFilter(filter), page, pageSize, properties);
     }
 
     @SuppressWarnings("unchecked")
     private <T extends ETObject> ETResponse<T> retrieve(Class<T> type,
-                                                        ETFilterExpression filter,
+                                                        FilterPart filter,
                                                         Integer page,
                                                         Integer pageSize,
                                                         String... properties)
@@ -358,12 +360,12 @@ public class ETClient {
 
         Method retrieve = getMethod(superSuperClass,
                                     "retrieve",
-                                    ETClient.class,  // client
-                                    ETFilterExpression.class, // filter
-                                    Integer.class,   // page
-                                    Integer.class,   // pageSize
-                                    Class.class,     // type
-                                    String[].class); // properties
+                                    ETClient.class,   // client
+                                    FilterPart.class, // filter
+                                    Integer.class,    // page
+                                    Integer.class,    // pageSize
+                                    Class.class,      // type
+                                    String[].class);  // properties
 
         ETResponse<T> response = null;
         try {
@@ -510,5 +512,18 @@ public class ETClient {
         }
 
         return response;
+    }
+
+    private FilterPart parseFilter(String filter)
+        throws ETSdkException
+    {
+        ETFilterParser parser = new ETFilterParser(new ByteArrayInputStream(filter.getBytes()));
+        FilterPart filterPart = null;
+        try {
+            filterPart = parser.parse();
+        } catch (ParseException ex) {
+            throw new ETSdkException("could not parse filter: " + filter, ex);
+        }
+        return filterPart;
     }
 }

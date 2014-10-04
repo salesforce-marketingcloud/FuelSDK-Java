@@ -1,3 +1,9 @@
+2014-10-04  Ian Murdock  <imurdock@exacttarget.com>
+
+    * ETClient.java (parseFilter): New method.
+    * ETFilterExpression.java: Deleted.
+    * ETFilterParser.jj: New file.
+
 2014-10-03  Ian Murdock  <imurdock@exacttarget.com>
 
     * ETClient.java: Added support for creating, retrieving, updating,

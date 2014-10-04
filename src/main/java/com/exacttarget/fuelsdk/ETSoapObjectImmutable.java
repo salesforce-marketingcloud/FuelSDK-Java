@@ -71,6 +71,7 @@ import com.exacttarget.fuelsdk.internal.Email;
 import com.exacttarget.fuelsdk.internal.EmailSendDefinition;
 import com.exacttarget.fuelsdk.internal.EmailType;
 import com.exacttarget.fuelsdk.internal.EventType;
+import com.exacttarget.fuelsdk.internal.FilterPart;
 import com.exacttarget.fuelsdk.internal.LayoutType;
 import com.exacttarget.fuelsdk.internal.ListClassificationEnum;
 import com.exacttarget.fuelsdk.internal.ListSubscriber;
@@ -490,7 +491,7 @@ public abstract class ETSoapObjectImmutable extends ETObject {
     }
 
     protected static <T extends ETSoapObjectImmutable> ETResponse<T> retrieve(ETClient client,
-                                                                              ETFilterExpression filter,
+                                                                              FilterPart filter,
                                                                               Integer page,
                                                                               Integer pageSize,
                                                                               Class<T> type,
@@ -560,7 +561,7 @@ public abstract class ETSoapObjectImmutable extends ETObject {
         retrieveRequest.setObjectType(internalClass.getSimpleName());
         retrieveRequest.getProperties().addAll(internalProperties);
         if (filter != null) {
-            retrieveRequest.setFilter(filter.toFilterPart());
+            retrieveRequest.setFilter(filter);
         }
 
         if (logger.isTraceEnabled()) {
