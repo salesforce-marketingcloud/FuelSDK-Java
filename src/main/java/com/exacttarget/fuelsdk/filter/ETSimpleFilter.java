@@ -32,76 +32,78 @@ import java.util.Date;
 import java.util.List;
 
 public class ETSimpleFilter implements ETFilter {
+    private String property = null;
+    private ETFilterOperators operator = null;
+    private List<String> values = null;
+    private List<Date> dateValues = null;
 
+    public ETSimpleFilter() {}
 
-	protected String property;
-	protected ETFilterOperators operator;
-	protected List<String> values;
-	protected List<Date> dateValues;
+    @SuppressWarnings("unchecked")
+    public ETSimpleFilter(String property,
+                          ETFilterOperators operator,
+                          @SuppressWarnings("rawtypes") List values)
+    {
+        this.property = property;
+        this.operator = operator;
 
-	public ETSimpleFilter(){
+        if (values.size() > 0) {
+            Object o = values.get(0);
+            if (o instanceof String) {
+                this.values = (List<String>) values;
+            } else if (o instanceof Date) {
+                this.dateValues = (List<Date>) values;
+            }
+        }
+    }
 
-	}
+    public ETSimpleFilter(String property,
+                          ETFilterOperators operator,
+                          String value)
+    {
+        this.property = property;
+        this.operator = operator;
+        this.values = Arrays.asList(value);
+    }
 
-	@SuppressWarnings("unchecked")
-	public ETSimpleFilter(String property, ETFilterOperators operator, @SuppressWarnings("rawtypes") List values) {
-		this.property = property;
-		this.operator = operator;
+    public ETSimpleFilter(String property,
+                          ETFilterOperators operator,
+                          Date value)
+    {
+        this.property = property;
+        this.operator = operator;
+        this.dateValues = Arrays.asList(value);
+    }
 
-		if (values.size() > 0) {
-			Object o = values.get(0);
-			if (o instanceof String) {
-				this.values = (List<String>)values;
-			} else if (o instanceof Date) {
-				this.dateValues = (List<Date>)values;
-			}
-		}
+    public String getProperty() {
+        return property;
+    }
 
-	}
+    public void setProperty(String property) {
+        this.property = property;
+    }
 
-	public ETSimpleFilter(String property, ETFilterOperators operator, String value) {
-		this.property = property;
-		this.operator = operator;
-		this.values = Arrays.asList(value);
-	}
+    public ETFilterOperators getOperator() {
+        return operator;
+    }
 
-	public ETSimpleFilter(String property, ETFilterOperators operator, Date value) {
-		this.property = property;
-		this.operator = operator;
-		this.dateValues = Arrays.asList(value);
-	}
+    public void setOperator(ETFilterOperators operator) {
+        this.operator = operator;
+    }
 
-	public String getProperty() {
-		return property;
-	}
+    public List<String> getValues() {
+        return values;
+    }
 
-	public void setProperty(String property) {
-		this.property = property;
-	}
+    public void setValues(List<String> values) {
+        this.values = values;
+    }
 
-	public ETFilterOperators getOperator() {
-		return operator;
-	}
+    public List<Date> getDateValues() {
+        return dateValues;
+    }
 
-	public void setOperator(ETFilterOperators operator) {
-		this.operator = operator;
-	}
-
-	public List<String> getValues() {
-		return values;
-	}
-
-	public void setValues(List<String> values) {
-		this.values = values;
-	}
-
-	public List<Date> getDateValues() {
-		return dateValues;
-	}
-
-	public void setDateValues(List<Date> dateValues) {
-		this.dateValues = dateValues;
-	}
-
-
+    public void setDateValues(List<Date> dateValues) {
+        this.dateValues = dateValues;
+    }
 }

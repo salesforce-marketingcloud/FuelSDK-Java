@@ -28,45 +28,44 @@
 package com.exacttarget.fuelsdk.filter;
 
 public enum ETFilterOperators {
-
     EQUALS("equals"),
     NOT_EQUALS("notEquals"),
-    GREATER_THAN("greaterThan"),
     LESS_THAN("lessThan"),
+    LESS_THAN_OR_EQUAL("lessThanOrEqual"),
+    GREATER_THAN("greaterThan"),
+    GREATER_THAN_OR_EQUAL("greaterThanOrEqual"),
     IS_NULL("isNull"),
     IS_NOT_NULL("isNotNull"),
-    GREATER_THAN_OR_EQUAL("greaterThanOrEqual"),
-    LESS_THAN_OR_EQUAL("lessThanOrEqual"),
     BETWEEN("between"),
     IN("IN"),
     LIKE("like"),
+    BEGINS_WITH("beginsWith"),
+    CONTAINS("contains"),
+    ENDS_WITH("endsWith"),
     EXISTS_IN_STRING("existsInString"),
     EXISTS_IN_STRING_AS_A_WORD("existsInStringAsAWord"),
-    NOT_EXISTS_IN_STRING("notExistsInString"),
-    BEGINS_WITH("beginsWith"),
-    ENDS_WITH("endsWith"),
-    CONTAINS("contains"),
-    NOT_CONTAINS("notContains"),
+    GREATER_THAN_ANNIVERSARY("greaterThanAnniversary"),
     IS_ANNIVERSARY("isAnniversary"),
     IS_NOT_ANNIVERSARY("isNotAnniversary"),
-    GREATER_THAN_ANNIVERSARY("greaterThanAnniversary"),
-    LESS_THAN_ANNIVERSARY("lessThanAnniversary");
+    LESS_THAN_ANNIVERSARY("lessThanAnniversary"),
+    NOT_CONTAINS("notContains"),
+    NOT_EXISTS_IN_STRING("notExistsInString");
     private final String value;
 
-    ETFilterOperators(String v) {
-        value = v;
+    ETFilterOperators(String value) {
+        this.value = value;
     }
 
     public String value() {
         return value;
     }
 
-    public static ETFilterOperators fromValue(String v) {
-        for (ETFilterOperators c: ETFilterOperators.values()) {
-            if (c.value.equals(v)) {
-                return c;
+    public static ETFilterOperators fromValue(String value) {
+        for (ETFilterOperators v : ETFilterOperators.values()) {
+            if (v.value.equals(value)) {
+                return v;
             }
         }
-        throw new IllegalArgumentException(v);
+        throw new IllegalArgumentException(value);
     }
 }

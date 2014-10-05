@@ -27,19 +27,25 @@
 
 package com.exacttarget.fuelsdk.filter;
 
-
 public enum ETLogicalOperators {
+    AND("AND"),
+    OR("OR");
+    private final String value;
 
-
-    OR,
-    AND;
+    ETLogicalOperators(String value) {
+        this.value = value;
+    }
 
     public String value() {
-        return name();
+        return value;
     }
 
-    public static ETLogicalOperators fromValue(String v) {
-        return valueOf(v);
+    public static ETLogicalOperators fromValue(String value) {
+        for (ETLogicalOperators v : ETLogicalOperators.values()) {
+            if (v.value.equals(value)) {
+                return v;
+            }
+        }
+        throw new IllegalArgumentException(value);
     }
-
 }
