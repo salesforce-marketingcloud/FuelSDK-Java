@@ -3,6 +3,8 @@
     * ETClient.java (parseFilter): New method.
     * ETFilterExpression.java: Deleted.
     * ETFilterParser.jj: New file.
+    * ETSoapObject.java: Combined ETSoapObject.java and
+    ETSoapObjectImmutable.java.
 
 2014-10-03  Ian Murdock  <imurdock@exacttarget.com>
 

@@ -76,6 +76,8 @@ public abstract class ETObject {
             String v = null;
             if (value.getClass().equals(String.class)) {
                 v = "\"" + value + "\"";
+            } else {
+                v = value.toString();
             }
             if (toStringSpaceAroundEquals) {
                 stringBuilder.append(property + " = " + v);

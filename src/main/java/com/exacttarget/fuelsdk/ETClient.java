@@ -349,16 +349,12 @@ public class ETClient {
     {
         //
         // Get the retrieve method from the superclass of
-        // the superclass of T (unlike create, update, and
-        // delete, which are implemented in the ETRestObject
-        // or ETSoapObject class, retrieve is implemented
-        // in ETRestObjectImmutable or ETSoapObjectImmutable):
+        // T (all methods are found in the superclass):
         //
 
         Class<T> superClass = (Class<T>) type.getSuperclass();
-        Class<T> superSuperClass = (Class<T>) superClass.getSuperclass();
 
-        Method retrieve = getMethod(superSuperClass,
+        Method retrieve = getMethod(superClass,
                                     "retrieve",
                                     ETClient.class,   // client
                                     FilterPart.class, // filter

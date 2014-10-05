@@ -37,7 +37,7 @@ import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETGetService;
 import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.ETSdkException;
-import com.exacttarget.fuelsdk.ETSoapObjectImmutable;
+import com.exacttarget.fuelsdk.ETSoapObject;
 import com.exacttarget.fuelsdk.annotations.InternalSoapType;
 import com.exacttarget.fuelsdk.filter.ETComplexFilter;
 import com.exacttarget.fuelsdk.filter.ETFilter;
@@ -53,7 +53,7 @@ import com.exacttarget.fuelsdk.internal.SimpleFilterPart;
 import com.exacttarget.fuelsdk.internal.SimpleOperators;
 import com.exacttarget.fuelsdk.internal.Soap;
 
-public abstract class ETGetServiceImpl<T extends ETSoapObjectImmutable>
+public abstract class ETGetServiceImpl<T extends ETSoapObject>
     extends ETServiceImpl implements ETGetService
 {
     private static Logger logger = Logger.getLogger(ETGetServiceImpl.class);
@@ -98,7 +98,7 @@ public abstract class ETGetServiceImpl<T extends ETSoapObjectImmutable>
 
             for (String externalProperty : externalProperties) {
                 String internalProperty =
-                        ETSoapObjectImmutable.getInternalProperty(externalClass, externalProperty);
+                        ETSoapObject.getInternalProperty(externalClass, externalProperty);
                 assert internalProperty != null;
                 internalProperties.add(internalProperty);
             }
@@ -107,7 +107,7 @@ public abstract class ETGetServiceImpl<T extends ETSoapObjectImmutable>
             // No properties were explicitly requested:
             //
 
-            internalProperties = ETSoapObjectImmutable.getInternalProperties(externalClass);
+            internalProperties = ETSoapObject.getInternalProperties(externalClass);
         }
 
         //
