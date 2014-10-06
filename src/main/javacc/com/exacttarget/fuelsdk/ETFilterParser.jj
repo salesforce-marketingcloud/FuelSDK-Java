@@ -33,10 +33,6 @@ options
 PARSER_BEGIN(ETFilterParser)
 package com.exacttarget.fuelsdk;
 
-import com.exacttarget.fuelsdk.internal.FilterPart;
-import com.exacttarget.fuelsdk.internal.SimpleFilterPart;
-import com.exacttarget.fuelsdk.internal.SimpleOperators;
-
 public class ETFilterParser {
     public static void main(String[] args)
         throws ParseException, TokenMgrError
@@ -66,9 +62,9 @@ TOKEN:
     < VALUE : (["A"-"Z"] | ["a"-"z"] | ["0"-"9"] | "_")+ >
 }
 
-FilterPart parse():
+ETFilter parse():
 {
-    FilterPart filter = null;
+    ETFilter filter = null;
 }
 {
     (
@@ -78,119 +74,116 @@ FilterPart parse():
         | filter = ComparisonExpression()
     )
     {
-        System.out.println(filter);
-    }
-    {
         return filter;
     }
 }
 
-SimpleFilterPart BetweenExpression():
+ETFilter BetweenExpression():
 {
-    SimpleFilterPart filterPart = new SimpleFilterPart();
+    ETFilter filter = new ETFilter();
     Token token = null;
 }
 {
     token = < VALUE >
     {
-        filterPart.setProperty(token.image);
+        filter.setProperty(token.image);
     }
 
     < BETWEEN >
     {
-        filterPart.setSimpleOperator(SimpleOperators.BETWEEN);
+        filter.setOperator("between");
     }
 
     token = < VALUE >
     {
-        filterPart.getValue().add(token.image);
+        filter.addValue(token.image);
     }
 
     < AND >
 
     token = < VALUE >
     {
-        filterPart.getValue().add(token.image);
+        filter.addValue(token.image);
     }
 
     {
-        return filterPart;
+        return filter;
     }
 }
 
-SimpleFilterPart ComparisonExpression():
+ETFilter ComparisonExpression():
 {
-    SimpleFilterPart filterPart = new SimpleFilterPart();
+    ETFilter filter = new ETFilter();
     Token token = null;
 }
 {
     token = < VALUE >
     {
-        filterPart.setProperty(token.image);
+        filter.setProperty(token.image);
     }
 
     (
         "="
         {
-            filterPart.setSimpleOperator(SimpleOperators.EQUALS);
+            filter.setOperator("=");
         }
         | "!="
         {
-            filterPart.setSimpleOperator(SimpleOperators.NOT_EQUALS);
+            filter.setOperator("!=");
         }
         | "<"
         {
-            filterPart.setSimpleOperator(SimpleOperators.LESS_THAN);
+            filter.setOperator("<");
         }
         | "<="
         {
-            filterPart.setSimpleOperator(SimpleOperators.LESS_THAN_OR_EQUAL);
+            filter.setOperator("<=");
         }
         | ">"
         {
-            filterPart.setSimpleOperator(SimpleOperators.GREATER_THAN);
+            filter.setOperator(">");
         }
         | ">="
         {
-            filterPart.setSimpleOperator(SimpleOperators.GREATER_THAN_OR_EQUAL);
+            filter.setOperator(">=");
         }
         | < LIKE >
         {
-            filterPart.setSimpleOperator(SimpleOperators.LIKE);
+            filter.setOperator("like");
         }
     )
 
     token = < VALUE >
     {
-        filterPart.getValue().add(token.image);
+        filter.addValue(token.image);
     }
 
     {
-        return filterPart;
+        return filter;
     }
 }
 
-SimpleFilterPart InExpression():
+ETFilter InExpression():
 {
-    SimpleFilterPart filterPart = new SimpleFilterPart();
+    ETFilter filter = new ETFilter();
     Token token = null;
 }
 {
     token = < VALUE >
     {
-        filterPart.setProperty(token.image);
+        filter.setProperty(token.image);
     }
 
     < IN >
     {
-        filterPart.setSimpleOperator(SimpleOperators.IN);
+        filter.setOperator("in");
     }
 
     "("
 
     token = < VALUE >
     {
-        filterPart.getValue().add(token.image);
+        filter.addValue(token.image);
     }
 
     (
@@ -198,26 +191,26 @@ SimpleFilterPart InExpression():
 
         token = < VALUE >
         {
-            filterPart.getValue().add(token.image);
+            filter.addValue(token.image);
         }
     )+
 
     ")"
 
     {
-        return filterPart;
+        return filter;
     }
 }
 
-SimpleFilterPart NullCheckExpression():
+ETFilter NullCheckExpression():
 {
-    SimpleFilterPart filterPart = new SimpleFilterPart();
+    ETFilter filter = new ETFilter();
     Token token = null;
 }
 {
     token = < VALUE >
     {
-        filterPart.setProperty(token.image);
+        filter.setProperty(token.image);
     }
 
     < IS >
@@ -225,15 +218,15 @@ SimpleFilterPart NullCheckExpression():
     (
         < NULL >
         {
-            filterPart.setSimpleOperator(SimpleOperators.IS_NULL);
+            filter.setOperator("is null");
         }
         | < NOT > < NULL >
         {
-            filterPart.setSimpleOperator(SimpleOperators.IS_NOT_NULL);
+            filter.setOperator("is not null");
         }
     )
 
     {
-        return filterPart;
+        return filter;
     }
 }

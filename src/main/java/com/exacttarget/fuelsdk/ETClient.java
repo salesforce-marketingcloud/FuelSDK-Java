@@ -39,9 +39,6 @@ import com.google.gson.JsonParser;
 
 import org.apache.log4j.Logger;
 
-import com.exacttarget.fuelsdk.filter.ETFilter;
-import com.exacttarget.fuelsdk.internal.FilterPart;
-
 public class ETClient {
     private static final String PATH_REQUESTTOKEN =
             "/v1/requestToken";
@@ -290,7 +287,7 @@ public class ETClient {
         throws ETSdkException
     {
         // new String[0] = empty properties
-        return retrieve(type, (FilterPart) null, null, null, new String[0]);
+        return retrieve(type, (ETFilter) null, null, null, new String[0]);
     }
 
     public <T extends ETObject> ETResponse<T> retrieve(Class<T> type,
@@ -298,7 +295,7 @@ public class ETClient {
                                                        String... properties)
         throws ETSdkException
     {
-        FilterPart f = null;
+        ETFilter f = null;
         String[] p = properties;
         try {
             f = parseFilter(filter);
@@ -326,7 +323,7 @@ public class ETClient {
                                                        String... properties)
         throws ETSdkException
     {
-        return retrieve(type, (FilterPart) null, page, pageSize, properties);
+        return retrieve(type, (ETFilter) null, page, pageSize, properties);
     }
 
     public <T extends ETObject> ETResponse<T> retrieve(Class<T> type,
@@ -341,7 +338,7 @@ public class ETClient {
 
     @SuppressWarnings("unchecked")
     private <T extends ETObject> ETResponse<T> retrieve(Class<T> type,
-                                                        FilterPart filter,
+                                                        ETFilter filter,
                                                         Integer page,
                                                         Integer pageSize,
                                                         String... properties)
@@ -356,12 +353,12 @@ public class ETClient {
 
         Method retrieve = getMethod(superClass,
                                     "retrieve",
-                                    ETClient.class,   // client
-                                    FilterPart.class, // filter
-                                    Integer.class,    // page
-                                    Integer.class,    // pageSize
-                                    Class.class,      // type
-                                    String[].class);  // properties
+                                    ETClient.class,  // client
+                                    ETFilter.class,  // filter
+                                    Integer.class,   // page
+                                    Integer.class,   // pageSize
+                                    Class.class,     // type
+                                    String[].class); // properties
 
         ETResponse<T> response = null;
         try {
@@ -510,16 +507,16 @@ public class ETClient {
         return response;
     }
 
-    private FilterPart parseFilter(String filter)
+    private ETFilter parseFilter(String filter)
         throws ETSdkException
     {
         ETFilterParser parser = new ETFilterParser(new ByteArrayInputStream(filter.getBytes()));
-        FilterPart filterPart = null;
+        ETFilter parsedFilter = null;
         try {
-            filterPart = parser.parse();
+            parsedFilter = parser.parse();
         } catch (ParseException ex) {
             throw new ETSdkException("could not parse filter: " + filter, ex);
         }
-        return filterPart;
+        return parsedFilter;
     }
 }
