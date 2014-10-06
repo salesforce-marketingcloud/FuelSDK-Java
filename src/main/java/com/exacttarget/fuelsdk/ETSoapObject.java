@@ -31,7 +31,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -49,8 +48,9 @@ import org.apache.commons.beanutils.Converter;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.apache.log4j.Logger;
 
-import com.exacttarget.fuelsdk.annotations.InternalSoapField;
-import com.exacttarget.fuelsdk.annotations.InternalSoapType;
+import com.exacttarget.fuelsdk.annotations.ExternalName;
+import com.exacttarget.fuelsdk.annotations.InternalName;
+import com.exacttarget.fuelsdk.annotations.SoapObject;
 import com.exacttarget.fuelsdk.internal.APIObject;
 import com.exacttarget.fuelsdk.internal.APIProperty;
 import com.exacttarget.fuelsdk.internal.Account;
@@ -79,7 +79,6 @@ import com.exacttarget.fuelsdk.internal.Email;
 import com.exacttarget.fuelsdk.internal.EmailSendDefinition;
 import com.exacttarget.fuelsdk.internal.EmailType;
 import com.exacttarget.fuelsdk.internal.EventType;
-import com.exacttarget.fuelsdk.internal.FilterPart;
 import com.exacttarget.fuelsdk.internal.LayoutType;
 import com.exacttarget.fuelsdk.internal.ListClassificationEnum;
 import com.exacttarget.fuelsdk.internal.ListSubscriber;
@@ -147,80 +146,14 @@ import com.exacttarget.fuelsdk.model.ETUnsubEvent;
 public abstract class ETSoapObject extends ETObject {
     private static Logger logger = Logger.getLogger(ETSoapObject.class);
 
-    @InternalSoapField(name = "id")
+    @ExternalName("id")
     private Integer id = null;
-    @InternalSoapField(name = "customerKey")
+    @ExternalName("key")
     private String customerKey = null;
-    @InternalSoapField(name = "createdDate")
+    @ExternalName("dateCreated")
     private Date createdDate = null;
-    @InternalSoapField(name = "modifiedDate")
+    @ExternalName("dateLastModified")
     private Date modifiedDate = null;
-
-    public class ExternalObjectConverter implements Converter {
-        @SuppressWarnings("rawtypes")
-        public Object convert(Class type, Object value) {
-            ETSoapObject externalObject = null;
-            try {
-                externalObject = (ETSoapObject) type.newInstance();
-            } catch (Exception ex) {
-                throw new ConversionException("could not convert object", ex);
-            }
-            try {
-                externalObject.fromInternal((APIObject) value);
-            } catch (ETSdkException ex) {
-                throw new ConversionException("could not convert object", ex);
-            }
-            return externalObject;
-        }
-    }
-
-    public class InternalObjectConverter implements Converter {
-        @SuppressWarnings("rawtypes")
-        public Object convert(Class type, Object value) {
-            APIObject internalObject = null;
-            try {
-                internalObject = ((ETSoapObject) value).toInternal();
-            } catch (ETSdkException ex) {
-                throw new ConversionException("could not convert object", ex);
-            }
-            return internalObject;
-        }
-    }
-
-    public class DataExtensionRowConverter implements Converter {
-        @SuppressWarnings({ "rawtypes", "unchecked" })
-        public Object convert(Class type, Object value) {
-            if (type == Map.class) {
-                // we're converting from internal to external
-                ObjectExtension.Properties properties
-                    = (ObjectExtension.Properties) value;
-                Map<String, String> columns = new HashMap<String, String>();
-                for (APIProperty property : properties.getProperty()) {
-                    columns.put(property.getName(), property.getValue());
-                }
-                return columns;
-            } else if (type == ObjectExtension.Properties.class) {
-                // we're converting from external to internal
-                Map<String, String> columns = (Map<String, String>) value;
-                ObjectExtension.Properties properties
-                    = new ObjectExtension.Properties();
-                for (String key : columns.keySet()) {
-                    APIProperty property = new APIProperty();
-                    property.setName(key); property.setValue(columns.get(key));
-                    properties.getProperty().add(property);
-                }
-                return properties;
-            }
-            return value;
-        }
-    }
-
-    public class EnumConverter implements Converter {
-        @SuppressWarnings({ "rawtypes", "unchecked" })
-        public Object convert(Class type, Object value) {
-            return Enum.valueOf(type, value.toString());
-        }
-    }
 
     public ETSoapObject() {
         //
@@ -513,6 +446,12 @@ public abstract class ETSoapObject extends ETObject {
         }
 
         //
+        // Get handle to the SOAP connection:
+        //
+
+        ETSoapConnection connection = client.getSoapConnection();
+
+        //
         // Automatically refresh the token if necessary:
         //
 
@@ -522,7 +461,7 @@ public abstract class ETSoapObject extends ETObject {
         // Perform the SOAP create:
         //
 
-        Soap soap = client.getSoapConnection().getSoap();
+        Soap soap = connection.getSoap();
 
         CreateRequest createRequest = new CreateRequest();
         createRequest.setOptions(new CreateOptions());
@@ -571,7 +510,7 @@ public abstract class ETSoapObject extends ETObject {
     }
 
     protected static <T extends ETSoapObject> ETResponse<T> retrieve(ETClient client,
-                                                                     FilterPart filter,
+                                                                     ETFilter filter,
                                                                      Integer page,
                                                                      Integer pageSize,
                                                                      Class<T> type,
@@ -584,20 +523,32 @@ public abstract class ETSoapObject extends ETObject {
 
         ETResponse<T> response = new ETResponse<T>();
 
-        Class<T> externalClass = type; // for code readability
-
         //
-        // Use the @InternalSoapType annotation to determine internalType:
+        // Get handle to the SOAP connection:
         //
 
-        InternalSoapType internalClassAnnotation
-            = externalClass.getAnnotation(InternalSoapType.class);
-        assert internalClassAnnotation != null;
-        Class<? extends APIObject> internalClass = internalClassAnnotation.type();
-        assert internalClass != null;
+        ETSoapConnection connection = client.getSoapConnection();
 
         //
-        // Convert external property names to internal property names:
+        // Automatically refresh the token if necessary:
+        //
+
+        client.refreshToken();
+
+        //
+        // Read internal type from the SoapObject annotation:
+        //
+
+        Class<T> externalType = type; // for code readability
+
+        SoapObject internalTypeAnnotation
+            = externalType.getAnnotation(SoapObject.class);
+        assert internalTypeAnnotation != null;
+        Class<? extends APIObject> internalType = internalTypeAnnotation.internalType();
+        assert internalType != null;
+
+        //
+        // Determine properties to retrieve:
         //
 
         List<String> internalProperties = null;
@@ -613,7 +564,7 @@ public abstract class ETSoapObject extends ETObject {
 
             for (String externalProperty : externalProperties) {
                 String internalProperty =
-                        ETSoapObject.getInternalProperty(externalClass, externalProperty);
+                        getInternalProperty(externalType, externalProperty);
                 assert internalProperty != null;
                 internalProperties.add(internalProperty);
             }
@@ -622,26 +573,20 @@ public abstract class ETSoapObject extends ETObject {
             // No properties were explicitly requested:
             //
 
-            internalProperties = ETSoapObject.getInternalProperties(externalClass);
+            internalProperties = getInternalProperties(externalType);
         }
-
-        //
-        // Automatically refresh the token if necessary:
-        //
-
-        client.refreshToken();
 
         //
         // Perform the SOAP retrieve:
         //
 
-        Soap soap = client.getSoapConnection().getSoap();
+        Soap soap = connection.getSoap();
 
         RetrieveRequest retrieveRequest = new RetrieveRequest();
-        retrieveRequest.setObjectType(internalClass.getSimpleName());
+        retrieveRequest.setObjectType(internalType.getSimpleName());
         retrieveRequest.getProperties().addAll(internalProperties);
         if (filter != null) {
-            retrieveRequest.setFilter(filter);
+            retrieveRequest.setFilter(filter.getSoapFilter());
         }
 
         if (logger.isTraceEnabled()) {
@@ -687,10 +632,10 @@ public abstract class ETSoapObject extends ETObject {
 
             T externalObject = null;
             try {
-                externalObject = externalClass.newInstance();
+                externalObject = externalType.newInstance();
             } catch (Exception ex) {
                 throw new ETSdkException("could not instantiate "
-                        + externalClass.getName(), ex);
+                        + externalType.getName(), ex);
             }
 
             //
@@ -724,6 +669,12 @@ public abstract class ETSoapObject extends ETObject {
         }
 
         //
+        // Get handle to the SOAP connection:
+        //
+
+        ETSoapConnection connection = client.getSoapConnection();
+
+        //
         // Automatically refresh the token if necessary:
         //
 
@@ -733,7 +684,7 @@ public abstract class ETSoapObject extends ETObject {
         // Perform the SOAP update:
         //
 
-        Soap soap = client.getSoapConnection().getSoap();
+        Soap soap = connection.getSoap();
 
         UpdateRequest updateRequest = new UpdateRequest();
         updateRequest.setOptions(new UpdateOptions());
@@ -790,6 +741,12 @@ public abstract class ETSoapObject extends ETObject {
         }
 
         //
+        // Get handle to the SOAP connection:
+        //
+
+        ETSoapConnection connection = client.getSoapConnection();
+
+        //
         // Automatically refresh the token if necessary:
         //
 
@@ -799,7 +756,7 @@ public abstract class ETSoapObject extends ETObject {
         // Perform the SOAP delete:
         //
 
-        Soap soap = client.getSoapConnection().getSoap();
+        Soap soap = connection.getSoap();
 
         DeleteRequest deleteRequest = new DeleteRequest();
         deleteRequest.setOptions(new DeleteOptions());
@@ -845,129 +802,229 @@ public abstract class ETSoapObject extends ETObject {
         return response;
     }
 
+    public class ExternalObjectConverter implements Converter {
+        @SuppressWarnings("rawtypes")
+        public Object convert(Class type, Object value) {
+            ETSoapObject externalObject = null;
+            try {
+                externalObject = (ETSoapObject) type.newInstance();
+            } catch (Exception ex) {
+                throw new ConversionException("could not convert object", ex);
+            }
+            try {
+                externalObject.fromInternal((APIObject) value);
+            } catch (ETSdkException ex) {
+                throw new ConversionException("could not convert object", ex);
+            }
+            return externalObject;
+        }
+    }
+
+    public class InternalObjectConverter implements Converter {
+        @SuppressWarnings("rawtypes")
+        public Object convert(Class type, Object value) {
+            APIObject internalObject = null;
+            try {
+                internalObject = ((ETSoapObject) value).toInternal();
+            } catch (ETSdkException ex) {
+                throw new ConversionException("could not convert object", ex);
+            }
+            return internalObject;
+        }
+    }
+
+    public class DataExtensionRowConverter implements Converter {
+        @SuppressWarnings({ "rawtypes", "unchecked" })
+        public Object convert(Class type, Object value) {
+            if (type == Map.class) {
+                // we're converting from internal to external
+                ObjectExtension.Properties properties
+                    = (ObjectExtension.Properties) value;
+                Map<String, String> columns = new HashMap<String, String>();
+                for (APIProperty property : properties.getProperty()) {
+                    columns.put(property.getName(), property.getValue());
+                }
+                return columns;
+            } else if (type == ObjectExtension.Properties.class) {
+                // we're converting from external to internal
+                Map<String, String> columns = (Map<String, String>) value;
+                ObjectExtension.Properties properties
+                    = new ObjectExtension.Properties();
+                for (String key : columns.keySet()) {
+                    APIProperty property = new APIProperty();
+                    property.setName(key); property.setValue(columns.get(key));
+                    properties.getProperty().add(property);
+                }
+                return properties;
+            }
+            return value;
+        }
+    }
+
+    public class EnumConverter implements Converter {
+        @SuppressWarnings({ "rawtypes", "unchecked" })
+        public Object convert(Class type, Object value) {
+            return Enum.valueOf(type, value.toString());
+        }
+    }
+
     public ETSoapObject fromInternal(APIObject internalObject)
         throws ETSdkException
     {
-        ETSoapObject externalObject = this;
+        ETSoapObject externalObject = this; // for code readability
 
-        Class<? extends ETSoapObject> externalClass = getClass();
-        String externalClassName = externalClass.getSimpleName();
-        Class<? extends APIObject> internalClass = internalObject.getClass();
-        String internalClassName = internalClass.getSimpleName();
+        Class<? extends ETSoapObject> externalType = externalObject.getClass();
+        String externalTypeName = externalType.getSimpleName();
+        Class<? extends APIObject> internalType = internalObject.getClass();
+        String internalTypeName = internalType.getSimpleName();
 
-        logger.trace("converting object from internal class "
-                + internalClassName);
-        logger.trace("                    to external class "
-                + externalClassName);
+        logger.trace("converting object from internal type "
+                + internalTypeName);
+        logger.trace("                    to external type "
+                + externalTypeName);
 
-        for (Field externalField : getAllFields(externalClass)) {
+        for (Field externalField : getAllFields(externalType)) {
+            //
+            // Skip this field if it doesn't have the @ExternalName
+            // annotation (it's an internal field):
+            //
+
+            ExternalName externalName =
+                    externalField.getAnnotation(ExternalName.class);
+            if (externalName == null) {
+                continue;
+            }
+
             String externalFieldName = externalField.getName();
+            String internalFieldName = null;
 
-            InternalSoapField internalFieldAnnotation
-                = externalField.getAnnotation(InternalSoapField.class);
-            if (internalFieldAnnotation != null) {
-                String internalFieldName = internalFieldAnnotation.name();
+            InternalName internalName =
+                    externalField.getAnnotation(InternalName.class);
 
-                Object internalFieldValue = null;
-                try {
-                    internalFieldValue =
-                            PropertyUtils.getProperty(internalObject,
-                                                      internalFieldName);
-                } catch (Exception ex) {
-                    // XXX test this
-                    throw new ETSdkException("could not get property \""
-                            + internalFieldName
-                            + "\" of object "
-                            + internalObject, ex);
+            if (internalName != null) {
+                //
+                // An internal field name was specified in
+                // the @InternalName annotation:
+                //
+
+                if (!internalName.field().equals("")) {
+                    internalFieldName = internalName.field();
+                } else {
+                    // "" is the default value for field(),
+                    // included so field() is optional (see
+                    // InternalName.java)
+                    internalFieldName = externalFieldName;
                 }
+            } else {
+                //
+                // An internal field name was not specified
+                // in the @InternalName annotation, so assume
+                // it's the same as the external field name:
+                //
 
-                if (internalFieldValue == null) {
-                    continue;
-                }
+                internalFieldName = externalFieldName;
+            }
 
-                if (internalFieldValue instanceof List) {
-                    externalField.setAccessible(true);
+            Object internalFieldValue = null;
+            try {
+                internalFieldValue =
+                        PropertyUtils.getProperty(internalObject,
+                                                  internalFieldName);
+            } catch (Exception ex) {
+                throw new ETSdkException("could not get property \""
+                        + internalFieldName
+                        + "\" of object "
+                        + internalObject,
+                        ex);
+            }
 
-                    List<ETSoapObject> externalList = new ArrayList<ETSoapObject>();
-                    @SuppressWarnings("unchecked")
-                    List<APIObject> internalList
-                        = (List<APIObject>) internalFieldValue;
+            if (internalFieldValue == null) {
+                continue;
+            }
 
-                    Type fieldType = externalField.getGenericType();
-                    assert fieldType instanceof ParameterizedType;
-                    ParameterizedType parameterizedType
-                        = (ParameterizedType) fieldType;
-                    assert parameterizedType.getActualTypeArguments().length == 1;
-                    Class<?> externalItemClass
-                        = (Class<?>) parameterizedType.getActualTypeArguments()[0];
+            if (internalFieldValue instanceof List) {
+                externalField.setAccessible(true);
 
-                    for (APIObject internalItem : internalList) {
-                        ETSoapObject externalItem = null;
-                        try {
-                            externalItem = (ETSoapObject) externalItemClass.newInstance();
-                        } catch (Exception ex) {
-                            throw new ETSdkException("could not instantiate "
-                                    + externalItemClass.getName(), ex);
-                        }
-                        externalList.add(externalItem.fromInternal(internalItem));
-                    }
+                List<ETSoapObject> externalList = new ArrayList<ETSoapObject>();
+                @SuppressWarnings("unchecked")
+                List<APIObject> internalList
+                    = (List<APIObject>) internalFieldValue;
 
+                Type fieldType = externalField.getGenericType();
+                assert fieldType instanceof ParameterizedType;
+                ParameterizedType parameterizedType
+                    = (ParameterizedType) fieldType;
+                assert parameterizedType.getActualTypeArguments().length == 1;
+                Class<?> externalItemType
+                    = (Class<?>) parameterizedType.getActualTypeArguments()[0];
+
+                for (APIObject internalItem : internalList) {
+                    ETSoapObject externalItem = null;
                     try {
-                        externalField.set(externalObject, externalList);
+                        externalItem = (ETSoapObject) externalItemType.newInstance();
                     } catch (Exception ex) {
-                        throw new ETSdkException("could not set field \""
-                                + externalFieldName
-                                + "\" of object "
-                                + externalObject, ex);
+                        throw new ETSdkException("could not instantiate "
+                                + externalItemType.getName(), ex);
                     }
-
-                    continue;
+                    externalList.add(externalItem.fromInternal(internalItem));
                 }
 
                 try {
-                    BeanUtils.setProperty(externalObject,
-                                          externalFieldName,
-                                          internalFieldValue);
+                    externalField.set(externalObject, externalList);
                 } catch (Exception ex) {
-                    // XXX test this
-                    throw new ETSdkException("could not set property \""
+                    throw new ETSdkException("could not set field \""
                             + externalFieldName
                             + "\" of object "
-                            + externalObject, ex);
+                            + externalObject,
+                            ex);
                 }
 
-                if (logger.isTraceEnabled()) {
-                    Field internalField = getField(internalClass,
-                                                   internalFieldName);
+                continue;
+            }
 
-                    Object externalFieldValue = null;
-                    try {
-                        externalFieldValue =
-                                PropertyUtils.getProperty(externalObject,
-                                                          externalFieldName);
-                    } catch (Exception ex) {
-                        // XXX test this
-                        throw new ETSdkException("could not get property \""
-                                + externalFieldName
-                                + "\" of object "
-                                + externalObject, ex);
-                    }
+            try {
+                BeanUtils.setProperty(externalObject,
+                                      externalFieldName,
+                                      internalFieldValue);
+            } catch (Exception ex) {
+                throw new ETSdkException("could not set property \""
+                        + externalFieldName
+                        + "\" of object "
+                        + externalObject,
+                        ex);
+            }
 
-                    logger.trace("  converted field "
-                            + internalClassName + "." + internalFieldName
-                            + " (type="
-                            + internalField.getType().getSimpleName()
-                            + ", value="
-                            + internalFieldValue
-                            + ")");
-                    logger.trace("         to field "
-                            + externalClassName + "." + externalFieldName
-                            + " (type="
-                            + externalField.getType().getSimpleName()
-                            + ", value="
-                            + externalFieldValue
-                            + ")");
+            if (logger.isTraceEnabled()) {
+                Field internalField = getField(internalType,
+                                               internalFieldName);
+
+                Object externalFieldValue = null;
+                try {
+                    externalFieldValue =
+                            PropertyUtils.getProperty(externalObject,
+                                                      externalFieldName);
+                } catch (Exception ex) {
+                    throw new ETSdkException("could not get property \""
+                            + externalFieldName
+                            + "\" of object "
+                            + externalObject,
+                            ex);
                 }
+
+                logger.trace("  converted field "
+                        + internalTypeName + "." + internalFieldName
+                        + " (type="
+                        + internalField.getType().getSimpleName()
+                        + ", value="
+                        + internalFieldValue
+                        + ")");
+                logger.trace("         to field "
+                        + externalTypeName + "." + externalFieldName
+                        + " (type="
+                        + externalField.getType().getSimpleName()
+                        + ", value="
+                        + externalFieldValue
+                        + ")");
             }
         }
 
@@ -977,77 +1034,112 @@ public abstract class ETSoapObject extends ETObject {
     public APIObject toInternal()
         throws ETSdkException
     {
-        ETSoapObject externalObject = this;
+        ETSoapObject externalObject = this; // for code readability
 
-        Class<? extends ETSoapObject> externalClass = getClass();
+        Class<? extends ETSoapObject> externalType = externalObject.getClass();
 
         //
-        // Use the @InternalSoapType annotation to determine internalType:
+        // Use the @SoapObject annotation to determine internalType:
         //
 
-        InternalSoapType internalClassAnnotation
-            = externalClass.getAnnotation(InternalSoapType.class);
-        assert internalClassAnnotation != null;
-        Class<? extends APIObject> internalClass = internalClassAnnotation.type();
-        assert internalClass != null;
+        SoapObject internalTypeAnnotation
+            = externalType.getAnnotation(SoapObject.class);
+        assert internalTypeAnnotation != null;
+        Class<? extends APIObject> internalType = internalTypeAnnotation.internalType();
+        assert internalType != null;
 
-        String internalClassName = internalClass.getSimpleName();
-        String externalClassName = externalClass.getSimpleName();
+        String externalTypeName = externalType.getSimpleName();
+        String internalTypeName = internalType.getSimpleName();
 
-        logger.trace("converting object from external class "
-                + externalClassName);
-        logger.trace("                    to internal class "
-                + internalClassName);
+        logger.trace("converting object from external type "
+                + externalTypeName);
+        logger.trace("                    to internal type "
+                + internalTypeName);
 
         APIObject internalObject = null;
         try {
-            internalObject = internalClass.newInstance();
+            internalObject = internalType.newInstance();
         } catch (Exception ex) {
             throw new ETSdkException("could not instantiate "
-                    + internalClass.getName(), ex);
+                    + internalType.getName(), ex);
         }
 
-        for (Field externalField : getAllFields(externalClass)) {
+        for (Field externalField : getAllFields(externalType)) {
+            //
+            // Skip this field if it doesn't have the @ExternalName
+            // annotation (it's an internal field):
+            //
+
+            ExternalName externalName =
+                    externalField.getAnnotation(ExternalName.class);
+            if (externalName == null) {
+                continue;
+            }
+
             String externalFieldName = externalField.getName();
+            String internalFieldName = null;
 
-            InternalSoapField internalFieldAnnotation
-                = externalField.getAnnotation(InternalSoapField.class);
-            if (internalFieldAnnotation != null) {
-                String internalFieldName = internalFieldAnnotation.name();
+            InternalName internalName =
+                    externalField.getAnnotation(InternalName.class);
 
-                Object externalFieldValue = null;
-                try {
-                    externalFieldValue =
-                            PropertyUtils.getProperty(externalObject,
-                                                      externalFieldName);
-                } catch (Exception ex) {
-                    // XXX test this
-                    throw new ETSdkException("could not get property \""
-                            + externalFieldName
-                            + "\" of object "
-                            + externalObject, ex);
+            if (internalName != null) {
+                //
+                // An internal field name was specified in
+                // the @InternalName annotation:
+                //
+
+                if (!internalName.field().equals("")) {
+                    internalFieldName = internalName.field();
+                } else {
+                    // "" is the default value for field(),
+                    // included so field() is optional (see
+                    // InternalName.java)
+                    internalFieldName = externalFieldName;
+                }
+            } else {
+                //
+                // An internal field name was not specified
+                // in the @InternalName annotation, so assume
+                // it's the same as the external field name:
+                //
+
+                internalFieldName = externalFieldName;
+            }
+
+            Object externalFieldValue = null;
+            try {
+                externalFieldValue =
+                        PropertyUtils.getProperty(externalObject,
+                                                  externalFieldName);
+            } catch (Exception ex) {
+                throw new ETSdkException("could not get property \""
+                        + externalFieldName
+                        + "\" of object "
+                        + externalObject,
+                        ex);
+            }
+
+            if (externalFieldValue == null) {
+                continue;
+            }
+
+            if (externalFieldValue instanceof List) {
+                Field internalField = getField(internalType,
+                                               internalFieldName);
+
+                internalField.setAccessible(true);
+
+                List<APIObject> internalList = new ArrayList<APIObject>();
+                @SuppressWarnings("unchecked")
+                List<ETSoapObject> externalList
+                    = (List<ETSoapObject>) externalFieldValue;
+
+                for (ETSoapObject externalItem : externalList) {
+                    internalList.add(externalItem.toInternal());
                 }
 
-                if (externalFieldValue == null) {
-                    continue;
-                }
+                // XXX needed?
 
-                if (externalFieldValue instanceof List) {
-                    Field internalField = getField(internalClass,
-                                                   internalFieldName);
-
-                    internalField.setAccessible(true);
-
-                    List<APIObject> internalList = new ArrayList<APIObject>();
-                    @SuppressWarnings("unchecked")
-                    List<ETSoapObject> externalList
-                        = (List<ETSoapObject>) externalFieldValue;
-
-                    for (ETSoapObject externalItem : externalList) {
-                        internalList.add(externalItem.toInternal());
-                    }
-
-//                    // XXX cleanup
 //                    if (internalFieldName.equals("fields")) {
 //                        //
 //                        // This list contains data extension columns:
@@ -1065,173 +1157,121 @@ public abstract class ETSoapObject extends ETObject {
 //                                    + "\" of object "
 //                                    + internalObject, ex);
 //                        }
-//                    } else {
-                        try {
-                            internalField.set(internalObject, internalList);
-                        } catch (Exception ex) {
-                            throw new ETSdkException("could not set field \""
-                                    + internalFieldName
-                                    + "\" of object "
-                                    + internalObject, ex);
-                        }
-//                    }
-
-                    continue;
-                }
 
                 try {
-                    BeanUtils.setProperty(internalObject,
-                                          internalFieldName,
-                                          externalFieldValue);
+                    internalField.set(internalObject, internalList);
                 } catch (Exception ex) {
-                    // XXX test this
-                    throw new ETSdkException("could not set property \""
+                    throw new ETSdkException("could not set field \""
                             + internalFieldName
                             + "\" of object "
-                            + internalObject, ex);
+                            + internalObject,
+                            ex);
                 }
 
-                if (logger.isTraceEnabled()) {
-                    Field internalField = getField(internalClass,
-                                                   internalFieldName);
+                continue;
+            }
 
-                    Object internalFieldValue = null;
-                    try {
-                        internalFieldValue =
-                                PropertyUtils.getProperty(internalObject,
-                                                          internalFieldName);
-                    } catch (Exception ex) {
-                        // XXX test this
-                        throw new ETSdkException("could not get property \""
-                                + internalFieldName
-                                + "\" of object "
-                                + internalObject, ex);
-                    }
+            try {
+                BeanUtils.setProperty(internalObject,
+                                      internalFieldName,
+                                      externalFieldValue);
+            } catch (Exception ex) {
+                throw new ETSdkException("could not set property \""
+                        + internalFieldName
+                        + "\" of object "
+                        + internalObject,
+                        ex);
+            }
 
-                    logger.trace("  converted field "
-                            + externalClassName + "." + externalFieldName
-                            + " (type="
-                            + externalField.getType().getSimpleName()
-                            + ", value="
-                            + externalFieldValue
-                            + ")");
-                    logger.trace("         to field "
-                            + internalClassName + "." + internalFieldName
-                            + " (type="
-                            + internalField.getType().getSimpleName()
-                            + ", value="
-                            + internalFieldValue
-                            + ")");
+            if (logger.isTraceEnabled()) {
+                Field internalField = getField(internalType,
+                                               internalFieldName);
+
+                Object internalFieldValue = null;
+                try {
+                    internalFieldValue =
+                            PropertyUtils.getProperty(internalObject,
+                                                      internalFieldName);
+                } catch (Exception ex) {
+                    throw new ETSdkException("could not get property \""
+                            + internalFieldName
+                            + "\" of object "
+                            + internalObject,
+                            ex);
                 }
+
+                logger.trace("  converted field "
+                        + externalTypeName + "." + externalFieldName
+                        + " (type="
+                        + externalField.getType().getSimpleName()
+                        + ", value="
+                        + externalFieldValue
+                        + ")");
+                logger.trace("         to field "
+                        + internalTypeName + "." + internalFieldName
+                        + " (type="
+                        + internalField.getType().getSimpleName()
+                        + ", value="
+                        + internalFieldValue
+                        + ")");
             }
         }
 
         return internalObject;
     }
 
-    public static String getInternalProperty(Class<? extends ETSoapObject> type,
-                                             String externalProperty)
-        throws ETSdkException
-    {
-        Class<? extends ETSoapObject> externalClass = type; // for code readability
-
-        //
-        // Use the @InternalSoapType annotation to determine internalType:
-        //
-
-        InternalSoapType internalClassAnnotation
-            = externalClass.getAnnotation(InternalSoapType.class);
-        assert internalClassAnnotation != null;
-        Class<? extends APIObject> internalClass = internalClassAnnotation.type();
-        assert internalClass != null;
-
-        Field externalField = null;
-        try {
-            externalField = getField(externalClass, externalProperty);
-        } catch (ETSdkException ex) {
-            throw new ETSdkException(externalProperty + ": invalid property", ex);
-        }
-
-        return getInternalProperty(internalClass, externalField);
-    }
-
-    public static List<String> getInternalProperties(Class<? extends ETSoapObject> type)
-        throws ETSdkException
-    {
-        List<String> internalProperties = new ArrayList<String>();
-
-        Class<? extends ETSoapObject> externalClass = type; // for code readability
-
-        //
-        // Use the @InternalSoapType annotation to determine internalType:
-        //
-
-        InternalSoapType internalClassAnnotation
-            = externalClass.getAnnotation(InternalSoapType.class);
-        assert internalClassAnnotation != null;
-        Class<? extends APIObject> internalClass = internalClassAnnotation.type();
-        assert internalClass != null;
-
-        //
-        // Build a list of fields from externalType and all superclasses:
-        //
-
-        List<Field> externalFields = getAllFields(externalClass);
-
-        //
-        // Walk the list of external fields building a list of the
-        // corresponding property names using @InternalSoapField:
-        //
-
-        for (Field externalField : externalFields) {
-            String internalProperty = getInternalProperty(internalClass,
-                                                          externalField);
-            assert internalProperty != null;
-            internalProperties.add(internalProperty);
-        }
-
-        internalProperties.removeAll(Arrays.asList(internalClassAnnotation.ignoredFields()));
-
-        return internalProperties;
-    }
-
-    private static String getInternalProperty(Class<? extends APIObject> type,
-                                              Field externalField)
+    private static String getInternalProperty(Class<? extends ETSoapObject> type,
+                                              String name)
         throws ETSdkException
     {
         String internalProperty = null;
 
-        Class<? extends APIObject> internalClass = type; // for code readability
+        Class<? extends ETSoapObject> externalType = type; // for code readability
 
-        InternalSoapField internalFieldAnnotation
-            = externalField.getAnnotation(InternalSoapField.class);
-        if (internalFieldAnnotation != null) {
-            internalProperty = internalFieldAnnotation.serializedName();
+        Field externalField = getField(externalType, name);
 
-            if (internalProperty.isEmpty()) {
+        InternalName internalNameAnnotation =
+                externalField.getAnnotation(InternalName.class);
+
+        if (internalNameAnnotation != null) {
+            //
+            // The internal property name was specified via the
+            // @InternalName annotation:
+            //
+
+            internalProperty = internalNameAnnotation.property();
+        } else {
+            //
+            // The internal property name can be found in the
+            // @XmlElement (or @XmlElementRef) annotation on the
+            // NAME internal field of the CXF generated class:
+            //
+
+            //
+            // Use the @SoapObject annotation to determine internalType:
+            //
+
+            SoapObject internalTypeAnnotation
+                = externalType.getAnnotation(SoapObject.class);
+            assert internalTypeAnnotation != null;
+            Class<? extends APIObject> internalType = internalTypeAnnotation.internalType();
+            assert internalType != null;
+
+            Field internalField = getField(internalType, name);
+
+            XmlElement element =
+                    internalField.getAnnotation(XmlElement.class);
+            if (element != null) {
+                internalProperty = element.name();
+            } else {
                 //
-                // There is no property name specified
-                // in the annotation so look at the values of
-                // @XmlElement or @XmlElementRef on the corresponding
-                // internal field of the CXF generated class:
+                // Optional dateTimes are annotated with @XmlElementRef:
                 //
 
-                String internalFieldName = internalFieldAnnotation.name();
-
-                Field internalField = getField(internalClass,
-                                               internalFieldName);
-
-                XmlElement element =
-                        internalField.getAnnotation(XmlElement.class);
-                if (element != null) {
-                    internalProperty = element.name();
-                } else {
-                    // optional dateTimes are annotated with XmlElementRef
-                    XmlElementRef elementRef =
-                            internalField.getAnnotation(XmlElementRef.class);
-                    if (elementRef != null) {
-                        internalProperty = elementRef.name();
-                    }
+                XmlElementRef elementRef =
+                        internalField.getAnnotation(XmlElementRef.class);
+                if (elementRef != null) {
+                    internalProperty = elementRef.name();
                 }
             }
         }
@@ -1239,13 +1279,60 @@ public abstract class ETSoapObject extends ETObject {
         return internalProperty;
     }
 
+    private static List<String> getInternalProperties(Class<? extends ETSoapObject> type)
+        throws ETSdkException
+    {
+        List<String> internalProperties = new ArrayList<String>();
+
+        Class<? extends ETSoapObject> externalType = type; // for code readability
+
+        //
+        // Use the @SoapObject annotation to determine internalType:
+        //
+
+        SoapObject internalTypeAnnotation
+            = externalType.getAnnotation(SoapObject.class);
+        assert internalTypeAnnotation != null;
+        Class<? extends APIObject> internalType = internalTypeAnnotation.internalType();
+        assert internalType != null;
+
+        //
+        // Build a list of fields from externalType and all superclasses:
+        //
+
+        List<Field> externalFields = getAllFields(externalType);
+
+        //
+        // Walk the list of external fields, building a list of the
+        // corresponding property names:
+        //
+
+        for (Field externalField : externalFields) {
+            //
+            // Skip this field if it doesn't have the @ExternalName
+            // annotation (it's an internal field):
+            //
+
+            ExternalName externalName =
+                    externalField.getAnnotation(ExternalName.class);
+            if (externalName == null) {
+                continue;
+            }
+
+            String internalProperty = getInternalProperty(externalType,
+                                                          externalField.getName());
+            assert internalProperty != null;
+            internalProperties.add(internalProperty);
+        }
+
+        return internalProperties;
+    }
+
     private static Field getField(Class<?> type, String name)
         throws ETSdkException
     {
-        // make sure superclass fields are first, to
-        // enhance readability of the SOAP envelopes
-
         Field field = null;
+
         for (Class<?> t = type; t != null; t = t.getSuperclass()) {
             try {
                 field = t.getDeclaredField(name);
@@ -1268,10 +1355,16 @@ public abstract class ETSoapObject extends ETObject {
     private static List<Field> getAllFields(Class<?> type) {
         List<Field> fields = new ArrayList<Field>();
 
+        // account for fields of superclasses too
+
         List<Class<?>> types = new ArrayList<Class<?>>();
         for (Class<?> t = type; t != null; t = t.getSuperclass()) {
             types.add(t);
         }
+
+        // make sure superclass fields are first, to
+        // enhance readability of the SOAP envelopes
+
         ListIterator<Class<?>> li = types.listIterator(types.size());
         while (li.hasPrevious()) {
             Class<?> t = li.previous();

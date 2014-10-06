@@ -63,8 +63,8 @@ public class ETFolderTest {
             assertNotNull(folder.getModifiedDate());
             assertNotNull(folder.getContentType());
             // parentFolder can be null if there's no parent
-            assertNotNull(folder.getActive());
-            assertNotNull(folder.getEditable());
+            assertNotNull(folder.getIsActive());
+            assertNotNull(folder.getIsEditable());
             assertNotNull(folder.getAllowChildren());
         }
     }
@@ -87,8 +87,8 @@ public class ETFolderTest {
             assertNull(folder.getModifiedDate());
             assertNull(folder.getContentType());
             assertNull(folder.getParentFolderKey());
-            assertNull(folder.getActive());
-            assertNull(folder.getEditable());
+            assertNull(folder.getIsActive());
+            assertNull(folder.getIsEditable());
             assertNull(folder.getAllowChildren());
         }
     }
@@ -114,8 +114,8 @@ public class ETFolderTest {
         assertNotNull(folder.getModifiedDate());
         assertEquals("dataextension", folder.getContentType());
         assertNull(folder.getParentFolderKey());
-        assertTrue(folder.getActive());
-        assertFalse(folder.getEditable());
+        assertTrue(folder.getIsActive());
+        assertFalse(folder.getIsEditable());
         assertTrue(folder.getAllowChildren());
     }
 
@@ -142,8 +142,8 @@ public class ETFolderTest {
         assertNull(folder.getModifiedDate());
         assertNull(folder.getContentType());
         assertNull(folder.getParentFolderKey());
-        assertNull(folder.getActive());
-        assertNull(folder.getEditable());
+        assertNull(folder.getIsActive());
+        assertNull(folder.getIsEditable());
         assertNull(folder.getAllowChildren());
     }
 
@@ -198,8 +198,8 @@ public class ETFolderTest {
         assertNotNull(createdFolder.getModifiedDate());
         assertEquals("dataextension", createdFolder.getContentType());
         assertEquals("dataextension_default", createdFolder.getParentFolderKey());
-        assertTrue(createdFolder.getActive());
-        assertFalse(createdFolder.getEditable());
+        assertTrue(createdFolder.getIsActive());
+        assertFalse(createdFolder.getIsEditable());
         assertFalse(createdFolder.getAllowChildren());
     }
 
@@ -242,8 +242,8 @@ public class ETFolderTest {
         assertNotNull(folder.getModifiedDate());
         assertEquals("dataextension", folder.getContentType());
         assertEquals("dataextension_default", folder.getParentFolderKey());
-        assertTrue(folder.getActive());
-        assertFalse(folder.getEditable());
+        assertTrue(folder.getIsActive());
+        assertFalse(folder.getIsEditable());
         assertFalse(folder.getAllowChildren());
     }
 

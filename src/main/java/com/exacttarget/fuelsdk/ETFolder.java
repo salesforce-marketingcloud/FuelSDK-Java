@@ -27,25 +27,27 @@
 
 package com.exacttarget.fuelsdk;
 
-import com.exacttarget.fuelsdk.annotations.InternalSoapField;
-import com.exacttarget.fuelsdk.annotations.InternalSoapType;
+import com.exacttarget.fuelsdk.annotations.ExternalName;
+import com.exacttarget.fuelsdk.annotations.InternalName;
+import com.exacttarget.fuelsdk.annotations.SoapObject;
 import com.exacttarget.fuelsdk.internal.DataFolder;
 
-@InternalSoapType(type = DataFolder.class)
+@SoapObject(internalType = DataFolder.class)
 public class ETFolder extends ETSoapObject {
-    @InternalSoapField(name = "name")
+    @ExternalName("name")
     private String name = null;
-    @InternalSoapField(name = "description")
+    @ExternalName("description")
     private String description = null;
-    @InternalSoapField(name = "contentType")
+    @ExternalName("contentType")
     private String contentType = null;
-    @InternalSoapField(name = "parentFolder", serializedName = "ParentFolder.CustomerKey")
+    @ExternalName("parentFolder")
+    @InternalName(property = "ParentFolder.CustomerKey")
     private ETFolder parentFolder = null;
-    @InternalSoapField(name = "isActive")
-    private Boolean active = null;
-    @InternalSoapField(name = "isEditable")
-    private Boolean editable = null;
-    @InternalSoapField(name = "allowChildren")
+    @ExternalName("isActive")
+    private Boolean isActive = null;
+    @ExternalName("isEditable")
+    private Boolean isEditable = null;
+    @ExternalName("allowChildren")
     private Boolean allowChildren = null;
 
     public ETFolder() {}
@@ -106,20 +108,20 @@ public class ETFolder extends ETSoapObject {
         this.parentFolder = parentFolder;
     }
 
-    public Boolean getActive() {
-        return active;
+    public Boolean getIsActive() {
+        return isActive;
     }
 
-    public void setActive(Boolean active) {
-        this.active = active;
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
     }
 
-    public Boolean getEditable() {
-        return editable;
+    public Boolean getIsEditable() {
+        return isEditable;
     }
 
-    public void setEditable(Boolean editable) {
-        this.editable = editable;
+    public void setIsEditable(Boolean isEditable) {
+        this.isEditable = isEditable;
     }
 
     public Boolean getAllowChildren() {
@@ -136,9 +138,9 @@ public class ETFolder extends ETSoapObject {
         toStringAppend("name", getName());
         toStringAppend("description", getDescription());
         toStringAppend("contentType", getContentType());
-        toStringAppend("parentFolder", getParentFolderKey());
-        toStringAppend("active", getActive());
-        toStringAppend("editable", getEditable());
+        toStringAppend("parentFolder", getParentFolder());
+        toStringAppend("isActive", getIsActive());
+        toStringAppend("isEditable", getIsEditable());
         toStringAppend("allowChildren", getAllowChildren());
         toStringClose();
         return getToString();

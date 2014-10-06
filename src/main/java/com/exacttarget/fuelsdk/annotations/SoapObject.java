@@ -27,15 +27,15 @@
 
 package com.exacttarget.fuelsdk.annotations;
 
+import com.exacttarget.fuelsdk.internal.APIObject;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target({ElementType.FIELD})
+@Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface InternalSoapField {
-    String name();
-    String serializedName() default "";
-    boolean ignoreOnPatch() default false;
+public @interface SoapObject {
+    Class<? extends APIObject> internalType();
 }
