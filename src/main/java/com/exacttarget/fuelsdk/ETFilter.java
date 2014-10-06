@@ -29,6 +29,7 @@ package com.exacttarget.fuelsdk;
 
 import java.util.List;
 
+import com.exacttarget.fuelsdk.internal.FilterPart;
 import com.exacttarget.fuelsdk.internal.SimpleFilterPart;
 import com.exacttarget.fuelsdk.internal.SimpleOperators;
 
@@ -131,6 +132,11 @@ public class ETFilter {
         }
     }
 
+    public String getValue() {
+        assert filter.getValue().size() == 1;
+        return filter.getValue().get(0);
+    }
+
     public List<String> getValues() {
         return filter.getValue();
     }
@@ -139,11 +145,11 @@ public class ETFilter {
         filter.getValue().add(value);
     }
 
-    public SimpleFilterPart getSoapFilter() {
+    public FilterPart getSoapFilter() {
         return filter;
     }
 
-    public void setSoapFilter(SimpleFilterPart filter) {
-        this.filter = filter;
+    public void setSoapFilter(FilterPart filter) {
+        this.filter = (SimpleFilterPart) filter;
     }
 }
