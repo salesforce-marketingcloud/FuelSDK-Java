@@ -37,7 +37,7 @@ import com.exacttarget.fuelsdk.filter.ETFilter;
  * {@link com.exacttarget.fuelsdk.ETFolder}.
  */
 @Deprecated
-public interface ETFolderService extends ETCrudService {
+public interface ETFolderService {
     public ETResponse<ETFolder> get(ETClient client, String... properties)
         throws ETSdkException;
     public ETResponse<ETFolder> get(ETClient client, ETFilter filter, String... properties)
