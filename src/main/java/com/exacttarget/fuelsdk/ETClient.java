@@ -28,7 +28,6 @@
 package com.exacttarget.fuelsdk;
 
 import java.io.ByteArrayInputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Date;
@@ -370,10 +369,6 @@ public class ETClient {
                                                        pageSize,
                                                        type,
                                                        properties);
-        } catch (InvocationTargetException ex) {
-            // throw ex.getCause() since this exception
-            // type means the caller threw an exception
-            throw (ETSdkException) ex.getCause();
         } catch (Exception ex) {
             throw new ETSdkException("could not invoke retrieve method on class " + type, ex);
         }
