@@ -900,27 +900,18 @@ public abstract class ETSoapObject extends ETObject {
             InternalName internalName =
                     externalField.getAnnotation(InternalName.class);
 
-            if (internalName != null) {
-                //
-                // An internal field name was specified in
-                // the @InternalName annotation:
-                //
+            //
+            // If internalName is null or internalName.field() is ""
+            // (the default value for field(), included so field()
+            // can be optional) we assume the internal field name
+            // is the same as the external field name:
+            //
 
-                if (!internalName.field().equals("")) {
-                    internalFieldName = internalName.field();
-                } else {
-                    // "" is the default value for field(),
-                    // included so field() is optional (see
-                    // InternalName.java)
-                    internalFieldName = externalFieldName;
-                }
+            if (internalName != null &&
+                !internalName.field().equals(""))
+            {
+                internalFieldName = internalName.field();
             } else {
-                //
-                // An internal field name was not specified
-                // in the @InternalName annotation, so assume
-                // it's the same as the external field name:
-                //
-
                 internalFieldName = externalFieldName;
             }
 
@@ -1081,27 +1072,18 @@ public abstract class ETSoapObject extends ETObject {
             InternalName internalName =
                     externalField.getAnnotation(InternalName.class);
 
-            if (internalName != null) {
-                //
-                // An internal field name was specified in
-                // the @InternalName annotation:
-                //
+            //
+            // If internalName is null or internalName.field() is ""
+            // (the default value for field(), included so field()
+            // can be optional) we assume the internal field name
+            // is the same as the external field name:
+            //
 
-                if (!internalName.field().equals("")) {
-                    internalFieldName = internalName.field();
-                } else {
-                    // "" is the default value for field(),
-                    // included so field() is optional (see
-                    // InternalName.java)
-                    internalFieldName = externalFieldName;
-                }
+            if (internalName != null &&
+                !internalName.field().equals(""))
+            {
+                internalFieldName = internalName.field();
             } else {
-                //
-                // An internal field name was not specified
-                // in the @InternalName annotation, so assume
-                // it's the same as the external field name:
-                //
-
                 internalFieldName = externalFieldName;
             }
 
@@ -1229,18 +1211,21 @@ public abstract class ETSoapObject extends ETObject {
 
         Field externalField = getField(externalType, name);
 
-        InternalName internalNameAnnotation =
+        InternalName internalName =
                 externalField.getAnnotation(InternalName.class);
 
-        if (internalNameAnnotation != null &&
-            !internalNameAnnotation.property().equals(""))
-        {
-            //
-            // The internal property name was specified via the
-            // @InternalName annotation:
-            //
+        //
+        // If internalName is null or internalName.property() is ""
+        // (the default value for property(), included so property()
+        // can be optional), we get the internal property name
+        // from the @XmlElement (or @XmlElementRef) annotation on
+        // the NAME internal field of the CXF generated class:
+        //
 
-            internalProperty = internalNameAnnotation.property();
+        if (internalName != null &&
+            !internalName.property().equals(""))
+        {
+            internalProperty = internalName.property();
         } else {
             //
             // The internal property name can be found in the
@@ -1259,12 +1244,12 @@ public abstract class ETSoapObject extends ETObject {
             assert internalType != null;
 
             String internalFieldName = null;
-            if (internalNameAnnotation == null ||
-                internalNameAnnotation.field().equals(""))
+            if (internalName == null ||
+                internalName.field().equals(""))
             {
                 internalFieldName = name;
             } else {
-                internalFieldName = internalNameAnnotation.field();
+                internalFieldName = internalName.field();
             }
 
             Field internalField = getField(internalType, internalFieldName);
