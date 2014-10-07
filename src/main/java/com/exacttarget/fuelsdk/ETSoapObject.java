@@ -599,7 +599,7 @@ public abstract class ETSoapObject extends ETObject {
             }
             logger.trace(line + " }");
             if (filter != null) {
-                logger.trace("  filter = " + filter);
+                logger.trace("  filter = " + filter.getSoapFilter());
             }
         }
 
