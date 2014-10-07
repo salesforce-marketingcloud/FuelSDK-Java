@@ -27,41 +27,37 @@
 
 package com.exacttarget.fuelsdk;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
+
+import com.exacttarget.fuelsdk.annotations.ExternalName;
 
 public abstract class ETObject {
-    private StringBuilder stringBuilder = new StringBuilder();
-    private boolean toStringMultiLine = false;
-    private int toStringMultiLineIndentAmount = 4;
+    private Boolean toStringMultiLine = false;
+    private Integer toStringMultiLineIndentAmount = 4;
     // default to true if toStringMultiLine is true
-    private boolean toStringSpaceAroundEquals = toStringMultiLine;
-
-    private boolean first = true;
+    private Boolean toStringSpaceAroundEquals = toStringMultiLine;
 
     @Override
     public String toString() {
-        return ToStringBuilder.reflectionToString(this);
-    }
+        StringBuilder stringBuilder = new StringBuilder();
 
-    protected String getToString() {
-        return stringBuilder.toString();
-    }
-
-    protected void toStringAppend(String string) {
-        toStringAppend(string, true);
-    }
-
-    protected void toStringAppend(String string, boolean newline) {
-        if (string != null) {
-            stringBuilder.append(string);
-            if (toStringMultiLine && newline) {
-                stringBuilder.append(System.getProperty("line.separator"));
-            }
+        stringBuilder.append(getClass().getName());
+        stringBuilder.append("[");
+        if (toStringMultiLine) {
+            stringBuilder.append(System.getProperty("line.separator"));
         }
-    }
 
-    protected void toStringAppend(String property, Object value) {
-        if (value != null) {
+        boolean first = true;
+        for (Field field : getAllFields()) {
+            ExternalName externalNameAnnotation =
+                    field.getAnnotation(ExternalName.class);
+            if (externalNameAnnotation == null) {
+                continue;
+            }
+
             if (toStringMultiLine) {
                 for (int i = 0; i < toStringMultiLineIndentAmount; i++) {
                     stringBuilder.append(" ");
@@ -74,23 +70,53 @@ public abstract class ETObject {
                 }
             }
             String v = null;
-            if (value.getClass().equals(String.class)) {
-                v = "\"" + value + "\"";
-            } else {
-                v = value.toString();
+            try {
+                // briefly change accessibility so we can get value
+                boolean isAccessible = field.isAccessible();
+                if (!isAccessible) {
+                    field.setAccessible(true);
+                }
+                v = field.get(this).toString();
+                field.setAccessible(isAccessible);
+            } catch (IllegalAccessException ex) {
+                throw new AssertionError("should never ever get here");
             }
             if (toStringSpaceAroundEquals) {
-                stringBuilder.append(property + " = " + v);
+                stringBuilder.append(externalNameAnnotation.value() + " = " + v);
             } else {
-                stringBuilder.append(property + "=" + v);
+                stringBuilder.append(externalNameAnnotation.value() + "=" + v);
             }
             if (toStringMultiLine) {
                 stringBuilder.append(System.getProperty("line.separator"));
             }
         }
+
+        stringBuilder.append("]");
+
+        return stringBuilder.toString();
     }
 
-    protected void toStringReset() {
-        stringBuilder.setLength(0); first = true;
+    protected List<Field> getAllFields() {
+        List<Field> fields = new ArrayList<Field>();
+
+        // account for fields of superclasses too
+
+        List<Class<?>> types = new ArrayList<Class<?>>();
+        for (Class<?> t = getClass(); t != null; t = t.getSuperclass()) {
+            types.add(t);
+        }
+
+        // make sure superclass fields are first, to
+        // enhance readability of the SOAP envelopes
+
+        ListIterator<Class<?>> li = types.listIterator(types.size());
+        while (li.hasPrevious()) {
+            Class<?> t = li.previous();
+            for (Field field : t.getDeclaredFields()) {
+                fields.add(field);
+            }
+        }
+
+        return fields;
     }
 }

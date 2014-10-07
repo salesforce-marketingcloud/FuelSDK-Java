@@ -121,10 +121,7 @@ import com.exacttarget.fuelsdk.model.ETEmailSendDefinition;
 import com.exacttarget.fuelsdk.model.ETEmailType;
 import com.exacttarget.fuelsdk.model.ETEventType;
 import com.exacttarget.fuelsdk.model.ETLayoutType;
-import com.exacttarget.fuelsdk.model.ETList;
-import com.exacttarget.fuelsdk.model.ETListClassification;
 import com.exacttarget.fuelsdk.model.ETListSubscriber;
-import com.exacttarget.fuelsdk.model.ETListType;
 import com.exacttarget.fuelsdk.model.ETOpenEvent;
 import com.exacttarget.fuelsdk.model.ETOrganization;
 import com.exacttarget.fuelsdk.model.ETPermission;
@@ -601,7 +598,9 @@ public abstract class ETSoapObject extends ETObject {
                 }
             }
             logger.trace(line + " }");
-            // XXX print filter too
+            if (filter != null) {
+                logger.trace("  filter = " + filter);
+            }
         }
 
         logger.trace("calling soap.retrieve...");
@@ -1233,7 +1232,9 @@ public abstract class ETSoapObject extends ETObject {
         InternalName internalNameAnnotation =
                 externalField.getAnnotation(InternalName.class);
 
-        if (internalNameAnnotation != null) {
+        if (internalNameAnnotation != null &&
+            !internalNameAnnotation.property().equals(""))
+        {
             //
             // The internal property name was specified via the
             // @InternalName annotation:
@@ -1257,7 +1258,16 @@ public abstract class ETSoapObject extends ETObject {
             Class<? extends APIObject> internalType = internalTypeAnnotation.internalType();
             assert internalType != null;
 
-            Field internalField = getField(internalType, name);
+            String internalFieldName = null;
+            if (internalNameAnnotation == null ||
+                internalNameAnnotation.field().equals(""))
+            {
+                internalFieldName = name;
+            } else {
+                internalFieldName = internalNameAnnotation.field();
+            }
+
+            Field internalField = getField(internalType, internalFieldName);
 
             XmlElement element =
                     internalField.getAnnotation(XmlElement.class);
@@ -1374,19 +1384,5 @@ public abstract class ETSoapObject extends ETObject {
         }
 
         return fields;
-    }
-
-    protected void toStringOpen() {
-        toStringReset();
-        toStringAppend(getClass().getName());
-        toStringAppend("[");
-        toStringAppend("id", getId());
-        toStringAppend("key", getCustomerKey());
-        toStringAppend("createdDate", getCreatedDate());
-        toStringAppend("modifiedDate", getModifiedDate());
-    }
-
-    protected void toStringClose() {
-        toStringAppend("]", false); // don't want a new line here
     }
 }

@@ -131,18 +131,4 @@ public class ETFolder extends ETSoapObject {
     public void setAllowChildren(Boolean allowChildren) {
         this.allowChildren = allowChildren;
     }
-
-    @Override
-    public String toString() {
-        toStringOpen();
-        toStringAppend("name", getName());
-        toStringAppend("description", getDescription());
-        toStringAppend("contentType", getContentType());
-        toStringAppend("parentFolder", getParentFolder());
-        toStringAppend("isActive", getIsActive());
-        toStringAppend("isEditable", getIsEditable());
-        toStringAppend("allowChildren", getAllowChildren());
-        toStringClose();
-        return getToString();
-    }
 }
