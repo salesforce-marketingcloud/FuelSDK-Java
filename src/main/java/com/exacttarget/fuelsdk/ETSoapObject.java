@@ -146,10 +146,11 @@ public abstract class ETSoapObject extends ETObject {
     @ExternalName("id")
     private Integer id = null;
     @ExternalName("key")
-    private String customerKey = null;
-    @ExternalName("dateCreated")
+    @InternalName(field = "customerKey")
+    private String key = null;
+    @ExternalName("createdDate")
     private Date createdDate = null;
-    @ExternalName("dateLastModified")
+    @ExternalName("modifiedDate")
     private Date modifiedDate = null;
 
     public ETSoapObject() {
@@ -408,12 +409,29 @@ public abstract class ETSoapObject extends ETObject {
         this.id = id;
     }
 
-    public String getCustomerKey() {
-        return customerKey;
+    public String getKey() {
+        return key;
     }
 
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    /**
+     * @deprecated
+     * Use <code>getKey()</code>.
+     */
+    public String getCustomerKey() {
+        return getKey();
+    }
+
+    /**
+     * @deprecated
+     * Use <code>setKey()</code>.
+     */
+    @Deprecated
     public void setCustomerKey(String customerKey) {
-        this.customerKey = customerKey;
+        setKey(customerKey);
     }
 
     public Date getCreatedDate() {
