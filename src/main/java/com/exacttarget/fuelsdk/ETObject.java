@@ -76,7 +76,9 @@ public abstract class ETObject {
                 if (!isAccessible) {
                     field.setAccessible(true);
                 }
-                v = field.get(this).toString();
+                if (field.get(this) != null) {
+                    v = field.get(this).toString();
+                }
                 field.setAccessible(isAccessible);
             } catch (IllegalAccessException ex) {
                 throw new AssertionError("should never ever get here");
