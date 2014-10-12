@@ -4,6 +4,7 @@
     filter parser (so we can convert from external name to internal name).
     * ETFilterParser.jj: Add support for converting from external name to
     internal name.
+    * ETFilterParser.jj: Add support for quoted strings.
     * ETSoapObject.java (key): Renamed from "customerKey".
     (getKey): Renamed from "getCustomerKey".
     (setKey): Renamed from "setCustomerKey".

@@ -56,7 +56,10 @@ TOKEN [IGNORE_CASE]:
 
 TOKEN:
 {
-    < VALUE : (["A"-"Z"] | ["a"-"z"] | ["0"-"9"] | "_")+ >
+    < ID : ["A"-"Z", "a"-"z", "_"] (["A"-"Z", "a"-"z", "_", "0"-"9"])* >
+    | < NUMBER : (["0"-"9"])+ >
+    | < SINGLE_QUOTED_STRING : "'" (~["\n", "\r", "'"])* "'" >
+    | < DOUBLE_QUOTED_STRING : "\"" (~["\n", "\r", "\""])* "\"" >
 }
 
 ETFilter parse(Class<? extends ETSoapObject> type) throws ETSdkException:
@@ -67,7 +70,7 @@ ETFilter parse(Class<? extends ETSoapObject> type) throws ETSdkException:
     (
         LOOKAHEAD(BetweenExpression(type)) filter = BetweenExpression(type)
         | LOOKAHEAD(InExpression(type)) filter = InExpression(type)
-        | LOOKAHEAD(NullCheckExpression(type)) filter = NullCheckExpression(type)
+        | LOOKAHEAD(IsNullExpression(type)) filter = IsNullExpression(type)
         | filter = ComparisonExpression(type)
     )
     {
@@ -78,10 +81,11 @@ ETFilter parse(Class<? extends ETSoapObject> type) throws ETSdkException:
 ETFilter BetweenExpression(Class<? extends ETSoapObject> type) throws ETSdkException:
 {
     ETFilter filter = new ETFilter();
+    String value = null;
     Token token = null;
 }
 {
-    token = < VALUE >
+    token = < ID >
     {
         filter.setProperty(ETSoapObject.getInternalProperty(type, token.image));
     }
@@ -91,16 +95,16 @@ ETFilter BetweenExpression(Class<? extends ETSoapObject> type) throws ETSdkExcep
         filter.setOperator("between");
     }
 
-    token = < VALUE >
+    value = Value()
     {
-        filter.addValue(token.image);
+        filter.addValue(value);
     }
 
     < AND >
 
-    token = < VALUE >
+    value = Value()
     {
-        filter.addValue(token.image);
+        filter.addValue(value);
     }
 
     {
@@ -111,10 +115,11 @@ ETFilter BetweenExpression(Class<? extends ETSoapObject> type) throws ETSdkExcep
 ETFilter ComparisonExpression(Class<? extends ETSoapObject> type) throws ETSdkException:
 {
     ETFilter filter = new ETFilter();
+    String value = null;
     Token token = null;
 }
 {
-    token = < VALUE >
+    token = < ID >
     {
         filter.setProperty(ETSoapObject.getInternalProperty(type, token.image));
     }
@@ -150,9 +155,9 @@ ETFilter ComparisonExpression(Class<? extends ETSoapObject> type) throws ETSdkEx
         }
     )
 
-    token = < VALUE >
+    value = Value()
     {
-        filter.addValue(token.image);
+        filter.addValue(value);
     }
 
     {
@@ -163,10 +168,11 @@ ETFilter ComparisonExpression(Class<? extends ETSoapObject> type) throws ETSdkEx
 ETFilter InExpression(Class<? extends ETSoapObject> type) throws ETSdkException:
 {
     ETFilter filter = new ETFilter();
+    String value = null;
     Token token = null;
 }
 {
-    token = < VALUE >
+    token = < ID >
     {
         filter.setProperty(ETSoapObject.getInternalProperty(type, token.image));
     }
@@ -178,17 +184,17 @@ ETFilter InExpression(Class<? extends ETSoapObject> type) throws ETSdkException:
 
     "("
 
-    token = < VALUE >
+    value = Value()
     {
-        filter.addValue(token.image);
+        filter.addValue(value);
     }
 
     (
         ","
 
-        token = < VALUE >
+        value = Value()
         {
-            filter.addValue(token.image);
+            filter.addValue(value);
         }
     )+
 
@@ -199,13 +205,13 @@ ETFilter InExpression(Class<? extends ETSoapObject> type) throws ETSdkException:
     }
 }
 
-ETFilter NullCheckExpression(Class<? extends ETSoapObject> type) throws ETSdkException:
+ETFilter IsNullExpression(Class<? extends ETSoapObject> type) throws ETSdkException:
 {
     ETFilter filter = new ETFilter();
     Token token = null;
 }
 {
-    token = < VALUE >
+    token = < ID >
     {
         filter.setProperty(ETSoapObject.getInternalProperty(type, token.image));
     }
@@ -226,4 +232,25 @@ ETFilter NullCheckExpression(Class<? extends ETSoapObject> type) throws ETSdkExc
     {
         return filter;
     }
+}
+
+String Value():
+{
+    Token token = null;
+}
+{
+    (
+        token = < NUMBER >
+        {
+            return token.image;
+        }
+        | token = < SINGLE_QUOTED_STRING >
+        {
+            return token.image.substring(1, token.image.length() - 1);
+        }
+        | token = < DOUBLE_QUOTED_STRING >
+        {
+            return token.image.substring(1, token.image.length() - 1);
+        }
+    )
 }
