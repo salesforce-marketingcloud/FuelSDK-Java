@@ -35,19 +35,25 @@ import com.exacttarget.fuelsdk.internal.DataFolder;
 @SoapObject(internalType = DataFolder.class)
 public class ETFolder extends ETSoapObject {
     @ExternalName("name")
+    @InternalName("name")
     private String name = null;
     @ExternalName("description")
+    @InternalName("description")
     private String description = null;
     @ExternalName("contentType")
+    @InternalName("contentType")
     private String contentType = null;
     @ExternalName("parentFolder")
-    @InternalName(property = "ParentFolder.CustomerKey")
+    @InternalName(value = "parentFolder", property = "ParentFolder.CustomerKey")
     private ETFolder parentFolder = null;
     @ExternalName("isActive")
+    @InternalName("isActive")
     private Boolean isActive = null;
     @ExternalName("isEditable")
+    @InternalName("isEditable")
     private Boolean isEditable = null;
     @ExternalName("allowChildren")
+    @InternalName("allowChildren")
     private Boolean allowChildren = null;
 
     public ETFolder() {}
@@ -80,14 +86,14 @@ public class ETFolder extends ETSoapObject {
         if (parentFolder == null) {
             return null;
         }
-        return parentFolder.getCustomerKey();
+        return parentFolder.getKey();
     }
 
     public void setParentFolderKey(String parentFolderKey) {
         if (parentFolder == null) {
             parentFolder = new ETFolder();
         }
-        parentFolder.setCustomerKey(parentFolderKey);
+        parentFolder.setKey(parentFolderKey);
     }
 
     /**

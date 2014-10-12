@@ -56,7 +56,7 @@ public class ETFolderTest {
         for (ETFolder folder : response.getResults()) {
             // ensure all properties were retrieved
             assertNotNull(folder.getId());
-            assertNotNull(folder.getCustomerKey());
+            assertNotNull(folder.getKey());
             assertNotNull(folder.getName());
             assertNotNull(folder.getDescription());
             assertNotNull(folder.getCreatedDate());
@@ -74,13 +74,13 @@ public class ETFolderTest {
         throws ETSdkException
     {
         ETResponse<ETFolder> response = client.retrieve(ETFolder.class,
-                                                        "customerKey",
+                                                        "key",
                                                         "name",
                                                         "description");
         for (ETFolder folder : response.getResults()) {
             // ensure only the specified properties were retrieved
             assertNull(folder.getId());
-            assertNotNull(folder.getCustomerKey());
+            assertNotNull(folder.getKey());
             assertNotNull(folder.getName());
             assertNotNull(folder.getDescription());
             assertNull(folder.getCreatedDate());
@@ -100,14 +100,14 @@ public class ETFolderTest {
         // retrieve the Data Extension folder, which
         // has customer key of dataextension_default
         ETResponse<ETFolder> response = client.retrieve(ETFolder.class,
-                                                        "CustomerKey=dataextension_default");
+                                                        "key='dataextension_default'");
         // ensure we only received 1
         assertEquals(1, response.getResults().size());
         ETFolder folder = response.getResults().get(0);
         // ensure it's the Data Extensions folder
         // and that all properties were retrieved
         assertNotNull(folder.getId());
-        assertEquals("dataextension_default", folder.getCustomerKey());
+        assertEquals("dataextension_default", folder.getKey());
         assertEquals("Data Extensions", folder.getName());
         assertEquals("", folder.getDescription());
         assertNotNull(folder.getCreatedDate());
@@ -124,8 +124,8 @@ public class ETFolderTest {
         throws ETSdkException
     {
         ETResponse<ETFolder> response = client.retrieve(ETFolder.class,
-                                                        "CustomerKey=dataextension_default",
-                                                        "customerKey",
+                                                        "key='dataextension_default'",
+                                                        "key",
                                                         "name",
                                                         "description");
         // ensure we only received 1
@@ -135,7 +135,7 @@ public class ETFolderTest {
         // and that only the specified properties
         // were retrieved
         assertNull(folder.getId());
-        assertEquals("dataextension_default", folder.getCustomerKey());
+        assertEquals("dataextension_default", folder.getKey());
         assertEquals("Data Extensions", folder.getName());
         assertEquals("", folder.getDescription());
         assertNull(folder.getCreatedDate());
@@ -154,7 +154,7 @@ public class ETFolderTest {
         throws ETSdkException
     {
         ETFolder folder = new ETFolder();
-        folder.setCustomerKey("test1");
+        folder.setKey("test1");
         folder.setName("test1");
         folder.setDescription("test1");
         folder.setContentType("dataextension");
@@ -191,7 +191,7 @@ public class ETFolderTest {
         createdFolder = response.getResults().get(0);
         // ensure it's the folder we just created
         assertEquals(id, createdFolder.getId());
-        assertEquals("test1", createdFolder.getCustomerKey());
+        assertEquals("test1", createdFolder.getKey());
         assertEquals("test1", createdFolder.getName());
         assertEquals("test1", createdFolder.getDescription());
         assertNotNull(createdFolder.getCreatedDate());
@@ -235,7 +235,7 @@ public class ETFolderTest {
         assertEquals(1, response.getResults().size());
         ETFolder folder = response.getResults().get(0);
         assertEquals(id, folder.getId());
-        assertEquals("test1", folder.getCustomerKey());
+        assertEquals("test1", folder.getKey());
         assertEquals("TEST1", folder.getName());
         assertEquals("test1", folder.getDescription());
         assertNotNull(folder.getCreatedDate());
@@ -252,7 +252,7 @@ public class ETFolderTest {
         throws ETSdkException
     {
         ETFolder folder = new ETFolder();
-        folder.setCustomerKey("test1");
+        folder.setKey("test1");
         ETResponse<ETResult> response = client.delete(folder);
         assertNotNull(response.getRequestId());
         assertEquals(ETResultStatusCode.OK, response.getStatusCode());
@@ -279,13 +279,13 @@ public class ETFolderTest {
         throws ETSdkException
     {
         ETFolder folder1 = new ETFolder();
-        folder1.setCustomerKey("test1");
+        folder1.setKey("test1");
         folder1.setName("test1");
         folder1.setDescription("test1");
         folder1.setContentType("dataextension");
         folder1.setParentFolderKey("dataextension_default");
         ETFolder folder2 = new ETFolder();
-        folder2.setCustomerKey("test2");
+        folder2.setKey("test2");
         folder2.setName("test2");
         folder2.setDescription("test2");
         folder2.setContentType("dataextension");
@@ -347,9 +347,9 @@ public class ETFolderTest {
         throws ETSdkException
     {
         ETFolder folder1 = new ETFolder();
-        folder1.setCustomerKey("test1");
+        folder1.setKey("test1");
         ETFolder folder2 = new ETFolder();
-        folder2.setCustomerKey("test2");
+        folder2.setKey("test2");
         List<ETFolder> folders = new ArrayList<ETFolder>();
         folders.add(folder1);
         folders.add(folder2);
