@@ -25,7 +25,7 @@
 // THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-package com.exacttarget.fuelsdk.model;
+package com.exacttarget.fuelsdk;
 
 public enum ETListClassification {
     EXACT_TARGET_LIST("ExactTargetList"),

@@ -11,6 +11,8 @@
     (getCustomerKey): New deprecated method that calls getKey().
     (setCustomerKey): New deprecated method that calls setKey().
     * annotations/InternalName.java (value): Renamed from "field" and made required.
+    * ETList.java: Migrated to the new model.
+    * ETListService.java, model/ETList.java, soap/ETListServiceImpl.java: Deprecated.
 
 2014-10-04  Ian Murdock  <imurdock@exacttarget.com>
 

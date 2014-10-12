@@ -30,9 +30,14 @@ package com.exacttarget.fuelsdk;
 import java.util.List;
 
 import com.exacttarget.fuelsdk.filter.ETFilter;
-import com.exacttarget.fuelsdk.model.ETList;
 
-public interface ETListService extends ETCrudService {
+/**
+ * @deprecated
+ * For information on how to interact with lists, please see
+ * {@link com.exacttarget.fuelsdk.ETList}.
+ */
+@Deprecated
+public interface ETListService {
     public ETResponse<ETList> get(ETClient client, String... properties)
         throws ETSdkException;
     public ETResponse<ETList> get(ETClient client, ETFilter filter, String... properties)

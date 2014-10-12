@@ -25,25 +25,30 @@
 // THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-package com.exacttarget.fuelsdk.model;
+package com.exacttarget.fuelsdk;
 
-import com.exacttarget.fuelsdk.ETSoapObject;
-import com.exacttarget.fuelsdk.annotations.InternalSoapField;
-import com.exacttarget.fuelsdk.annotations.InternalSoapType;
+import com.exacttarget.fuelsdk.annotations.ExternalName;
+import com.exacttarget.fuelsdk.annotations.InternalName;
+import com.exacttarget.fuelsdk.annotations.SoapObject;
 import com.exacttarget.fuelsdk.internal.List;
 
-@InternalSoapType(type = List.class)
+@SoapObject(internalType = List.class)
 public class ETList extends ETSoapObject {
-    @InternalSoapField(name = "listName")
+    @ExternalName("name")
+    @InternalName("listName")
     private String name = null;
-    @InternalSoapField(name = "description")
+    @ExternalName("description")
+    @InternalName("description")
     private String description = null;
-    @InternalSoapField(name = "category")
-    private Integer categoryId = null;
-    @InternalSoapField(name = "listClassification")
-    private ETListClassification listClassification = null;
-    @InternalSoapField(name = "type")
-    private ETListType listType = null;
+    @ExternalName("folderId")
+    @InternalName("category")
+    private Integer folderId = null;
+    @ExternalName("classification")
+    @InternalName("listClassification")
+    private ETListClassification classification = null;
+    @ExternalName("type")
+    @InternalName("type")
+    private ETListType type = null;
 
     public ETList() {}
 
@@ -63,27 +68,80 @@ public class ETList extends ETSoapObject {
         this.description = description;
     }
 
+    public Integer getFolderId() {
+        return folderId;
+    }
+
+    public void setFolderId(Integer folderId) {
+        this.folderId = folderId;
+    }
+
+    /**
+     * @deprecated
+     * Use <code>getFolderId()</code>.
+     */
     public Integer getCategoryId() {
-        return categoryId;
+        return getFolderId();
     }
 
+    /**
+     * @deprecated
+     * Use <code>setFolderId()</code>.
+     */
+    @Deprecated
     public void setCategoryId(Integer categoryId) {
-        this.categoryId = categoryId;
+        setFolderId(categoryId);
     }
 
+    public ETListClassification getClassification() {
+        return classification;
+    }
+
+    public void setClassification(ETListClassification classification) {
+        this.classification = classification;
+    }
+
+    /**
+     * @deprecated
+     * Use <code>getClassification()</code>.
+     */
+    @Deprecated
     public ETListClassification getListClassification() {
-        return listClassification;
+        return getClassification();
     }
 
+    /**
+     * @deprecated
+     * Use <code>setClassification()</code>.
+     */
+    @Deprecated
     public void setListClassification(ETListClassification listClassification) {
-        this.listClassification = listClassification;
+        setClassification(listClassification);
     }
 
+    public ETListType getType() {
+        return type;
+    }
+
+    public void setType(ETListType type) {
+        this.type = type;
+    }
+
+    /**
+     * @deprecated
+     * Use <code>getType()</code>.
+     */
+    @Deprecated
     public ETListType getListType() {
-        return listType;
+        return getType();
     }
 
+    /**
+     * @deprecated
+     * Use <code>setType()</code>.
+     */
+    @Deprecated
     public void setListType(ETListType listType) {
-        this.listType = listType;
+        setType(listType);
     }
 }

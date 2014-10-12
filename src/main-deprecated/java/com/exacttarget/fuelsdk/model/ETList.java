@@ -27,28 +27,10 @@
 
 package com.exacttarget.fuelsdk.model;
 
-public enum ETListType {
-    GLOBAL_UNSUBSCRIBE("GlobalUnsubscribe"),
-    MASTER("Master"),
-    PRIVATE("Private"),
-    PUBLIC("Public"),
-    SALES_FORCE("SalesForce");
-    private final String value;
-
-    ETListType(String value) {
-        this.value = value;
-    }
-
-    public String value() {
-        return value;
-    }
-
-    public static ETListType fromValue(String value) {
-        for (ETListType v : ETListType.values()) {
-            if (v.value.equals(value)) {
-                return v;
-            }
-        }
-        throw new IllegalArgumentException(value);
-    }
+/**
+ * @deprecated
+ * Replaced by {@link com.exacttarget.fuelsdk.ETList}.
+ */
+@Deprecated
+public class ETList extends com.exacttarget.fuelsdk.ETList {
 }

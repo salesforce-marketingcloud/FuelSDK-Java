@@ -27,64 +27,77 @@
 
 package com.exacttarget.fuelsdk.soap;
 
+import java.util.Arrays;
 import java.util.List;
 
 import com.exacttarget.fuelsdk.ETClient;
+import com.exacttarget.fuelsdk.ETList;
 import com.exacttarget.fuelsdk.ETListService;
 import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.ETResult;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.filter.ETFilter;
-import com.exacttarget.fuelsdk.model.ETList;
 
-public class ETListServiceImpl extends ETCrudServiceImpl<ETList>
+/**
+ * @deprecated
+ * For information on how to interact with lists, please see
+ * {@link com.exacttarget.fuelsdk.ETList}.
+ */
+@Deprecated
+public class ETListServiceImpl extends ETSoapServiceImpl<ETList>
     implements ETListService
 {
+    public ETListServiceImpl()
+        throws ETSdkException
+    {
+        super();
+    }
+
     public ETResponse<ETList> get(ETClient client, String... properties)
         throws ETSdkException
     {
-        return super.get(client, ETList.class, properties);
+        return retrieve(client, ETList.class, null, properties);
     }
 
     public ETResponse<ETList> get(ETClient client, ETFilter filter, String... properties)
         throws ETSdkException
     {
-        return super.get(client, ETList.class, filter, properties);
+        return retrieve(client, ETList.class, filter, properties);
     }
 
     public ETResponse<ETResult> post(ETClient client, ETList list)
         throws ETSdkException
     {
-        return super.post(client, list);
+        return create(client, ETList.class, Arrays.asList(list));
     }
 
     public ETResponse<ETResult> post(ETClient client, List<ETList> lists)
         throws ETSdkException
     {
-        return super.post(client, lists);
+        return create(client, ETList.class, lists);
     }
 
     public ETResponse<ETResult> patch(ETClient client, ETList list)
         throws ETSdkException
     {
-        return super.patch(client, list);
+        return update(client, ETList.class, Arrays.asList(list));
     }
 
     public ETResponse<ETResult> patch(ETClient client, List<ETList> lists)
         throws ETSdkException
     {
-        return super.patch(client, lists);
+        return update(client, ETList.class, lists);
     }
 
     public ETResponse<ETResult> delete(ETClient client, ETList list)
         throws ETSdkException
     {
-        return super.delete(client, list);
+        return delete(client, ETList.class, Arrays.asList(list));
     }
 
     public ETResponse<ETResult> delete(ETClient client, List<ETList> lists)
         throws ETSdkException
     {
-        return super.delete(client, lists);
+        return delete(client, ETList.class, lists);
     }
 }
