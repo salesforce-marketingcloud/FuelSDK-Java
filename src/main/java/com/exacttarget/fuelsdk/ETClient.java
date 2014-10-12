@@ -297,7 +297,7 @@ public class ETClient {
         ETFilter f = null;
         String[] p = properties;
         try {
-            f = parseFilter(filter);
+            f = parseFilter(type, filter);
         } catch (ETSdkException ex) {
             //
             // The filter argument is actually a property. This is a bit
@@ -332,7 +332,7 @@ public class ETClient {
                                                        String... properties)
         throws ETSdkException
     {
-        return retrieve(type, parseFilter(filter), page, pageSize, properties);
+        return retrieve(type, parseFilter(type, filter), page, pageSize, properties);
     }
 
     @SuppressWarnings("unchecked")
@@ -502,13 +502,14 @@ public class ETClient {
         return response;
     }
 
-    private ETFilter parseFilter(String filter)
+    private <T extends ETObject> ETFilter parseFilter(Class<T> type, String filter)
         throws ETSdkException
     {
         ETFilterParser parser = new ETFilterParser(new ByteArrayInputStream(filter.getBytes()));
         ETFilter parsedFilter = null;
         try {
-            parsedFilter = parser.parse();
+            // XXX not quite right
+            parsedFilter = parser.parse((Class<? extends ETSoapObject>) type);
         } catch (ParseException ex) {
             throw new ETSdkException("could not parse filter: " + filter, ex);
         }

@@ -1,11 +1,15 @@
 2014-10-12  Ian Murdock  <imurdock@exacttarget.com>
 
+    * ETClient.java (parseFilter): Add new type argument and pass type to
+    filter parser (so we can convert from external name to internal name).
+    * ETFilterParser.jj: Add support for converting from external name to
+    internal name.
     * ETSoapObject.java (key): Renamed from "customerKey".
     (getKey): Renamed from "getCustomerKey".
     (setKey): Renamed from "setCustomerKey".
     (getCustomerKey): New deprecated method that calls getKey().
     (setCustomerKey): New deprecated method that calls setKey().
-    * ETSoapObject.java (value): Renamed from "field" and made required.
+    * annotations/InternalName.java (value): Renamed from "field" and made required.
 
 2014-10-04  Ian Murdock  <imurdock@exacttarget.com>
 
