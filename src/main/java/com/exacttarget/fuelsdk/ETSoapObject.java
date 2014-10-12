@@ -144,13 +144,16 @@ public abstract class ETSoapObject extends ETObject {
     private static Logger logger = Logger.getLogger(ETSoapObject.class);
 
     @ExternalName("id")
+    @InternalName("id")
     private Integer id = null;
     @ExternalName("key")
-    @InternalName(field = "customerKey")
+    @InternalName("customerKey")
     private String key = null;
     @ExternalName("createdDate")
+    @InternalName("createdDate")
     private Date createdDate = null;
     @ExternalName("modifiedDate")
+    @InternalName("modifiedDate")
     private Date modifiedDate = null;
 
     public ETSoapObject() {
@@ -918,20 +921,7 @@ public abstract class ETSoapObject extends ETObject {
             InternalName internalName =
                     externalField.getAnnotation(InternalName.class);
 
-            //
-            // If internalName is null or internalName.field() is ""
-            // (the default value for field(), included so field()
-            // can be optional) we assume the internal field name
-            // is the same as the external field name:
-            //
-
-            if (internalName != null &&
-                !internalName.field().equals(""))
-            {
-                internalFieldName = internalName.field();
-            } else {
-                internalFieldName = externalFieldName;
-            }
+            internalFieldName = internalName.value();
 
             Object internalFieldValue = null;
             try {
@@ -1090,20 +1080,7 @@ public abstract class ETSoapObject extends ETObject {
             InternalName internalName =
                     externalField.getAnnotation(InternalName.class);
 
-            //
-            // If internalName is null or internalName.field() is ""
-            // (the default value for field(), included so field()
-            // can be optional) we assume the internal field name
-            // is the same as the external field name:
-            //
-
-            if (internalName != null &&
-                !internalName.field().equals(""))
-            {
-                internalFieldName = internalName.field();
-            } else {
-                internalFieldName = externalFieldName;
-            }
+            internalFieldName = internalName.value();
 
             Object externalFieldValue = null;
             try {
@@ -1219,8 +1196,8 @@ public abstract class ETSoapObject extends ETObject {
         return internalObject;
     }
 
-    private static String getInternalProperty(Class<? extends ETSoapObject> type,
-                                              String name)
+    protected static String getInternalProperty(Class<? extends ETSoapObject> type,
+                                                String name)
         throws ETSdkException
     {
         String internalProperty = null;
@@ -1261,14 +1238,7 @@ public abstract class ETSoapObject extends ETObject {
             Class<? extends APIObject> internalType = internalTypeAnnotation.internalType();
             assert internalType != null;
 
-            String internalFieldName = null;
-            if (internalName == null ||
-                internalName.field().equals(""))
-            {
-                internalFieldName = name;
-            } else {
-                internalFieldName = internalName.field();
-            }
+            String internalFieldName = internalName.value();
 
             Field internalField = getField(internalType, internalFieldName);
 
@@ -1292,7 +1262,7 @@ public abstract class ETSoapObject extends ETObject {
         return internalProperty;
     }
 
-    private static List<String> getInternalProperties(Class<? extends ETSoapObject> type)
+    protected static List<String> getInternalProperties(Class<? extends ETSoapObject> type)
         throws ETSdkException
     {
         List<String> internalProperties = new ArrayList<String>();
