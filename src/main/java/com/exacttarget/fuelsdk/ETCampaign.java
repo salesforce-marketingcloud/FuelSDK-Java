@@ -27,10 +27,10 @@
 
 package com.exacttarget.fuelsdk;
 
-import com.exacttarget.fuelsdk.annotations.RestAnnotations;
+import com.exacttarget.fuelsdk.annotations.RestObject;
 import com.google.gson.annotations.Expose;
 
-@RestAnnotations(path = "/hub/v1/campaigns/{id}",
+@RestObject(path = "/hub/v1/campaigns/{id}",
                  primaryKey = "id",
                  collectionKey = "items")
 public class ETCampaign extends ETRestObject {
@@ -83,62 +83,6 @@ public class ETCampaign extends ETRestObject {
 
     public void setFavorite(Boolean favorite) {
         this.favorite = favorite;
-    }
-
-    public static ETResponse<ETCampaign> create(ETClient client,
-                                                ETCampaign campaign)
-        throws ETSdkException
-    {
-        return ETRestObject.create(client, campaign);
-    }
-
-    public static ETResponse<ETCampaign> retrieve(ETClient client)
-        throws ETSdkException
-    {
-        return ETRestObject.retrieve(client, ETCampaign.class);
-    }
-
-    public static ETResponse<ETCampaign> retrieve(ETClient client,
-                                                  Integer page,
-                                                  Integer pageSize)
-        throws ETSdkException
-    {
-        return ETRestObject.retrieve(client, page, pageSize, ETCampaign.class);
-    }
-
-    public static ETResponse<ETCampaign> retrieve(ETClient client,
-                                                  String filter)
-        throws ETSdkException
-    {
-        return ETRestObject.retrieve(client, filter, ETCampaign.class);
-    }
-
-    public static ETResponse<ETCampaign> retrieve(ETClient client,
-                                                  String filter,
-                                                  Integer page,
-                                                  Integer pageSize)
-        throws ETSdkException
-    {
-        return ETRestObject.retrieve(client, filter, page, pageSize, ETCampaign.class);
-    }
-
-    public ETResponse<ETCampaign> update(ETClient client)
-        throws ETSdkException
-    {
-        return super.update(client);
-    }
-
-    public ETResponse<ETCampaign> delete(ETClient client)
-        throws ETSdkException
-    {
-        return super.delete(client);
-    }
-
-    public static ETResponse<ETCampaign> delete(ETClient client,
-                                                String filter)
-        throws ETSdkException
-    {
-        return ETRestObject.delete(client, filter, ETCampaign.class);
     }
 
     @Override
