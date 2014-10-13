@@ -87,7 +87,11 @@ ETFilter BetweenExpression(Class<? extends ETSoapObject> type) throws ETSdkExcep
 {
     token = < ID >
     {
-        filter.setProperty(ETSoapObject.getInternalProperty(type, token.image));
+        if (type != null) {
+            filter.setProperty(ETSoapObject.getInternalProperty(type, token.image));
+        } else {
+            filter.setProperty(token.image);
+        }
     }
 
     < BETWEEN >
@@ -121,7 +125,11 @@ ETFilter ComparisonExpression(Class<? extends ETSoapObject> type) throws ETSdkEx
 {
     token = < ID >
     {
-        filter.setProperty(ETSoapObject.getInternalProperty(type, token.image));
+        if (type != null) {
+            filter.setProperty(ETSoapObject.getInternalProperty(type, token.image));
+        } else {
+            filter.setProperty(token.image);
+        }
     }
 
     (
@@ -174,7 +182,11 @@ ETFilter InExpression(Class<? extends ETSoapObject> type) throws ETSdkException:
 {
     token = < ID >
     {
-        filter.setProperty(ETSoapObject.getInternalProperty(type, token.image));
+        if (type != null) {
+            filter.setProperty(ETSoapObject.getInternalProperty(type, token.image));
+        } else {
+            filter.setProperty(token.image);
+        }
     }
 
     < IN >
@@ -213,7 +225,11 @@ ETFilter IsNullExpression(Class<? extends ETSoapObject> type) throws ETSdkExcept
 {
     token = < ID >
     {
-        filter.setProperty(ETSoapObject.getInternalProperty(type, token.image));
+        if (type != null) {
+            filter.setProperty(ETSoapObject.getInternalProperty(type, token.image));
+        } else {
+            filter.setProperty(token.image);
+        }
     }
 
     < IS >

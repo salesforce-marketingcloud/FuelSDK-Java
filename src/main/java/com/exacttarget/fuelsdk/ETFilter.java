@@ -27,6 +27,7 @@
 
 package com.exacttarget.fuelsdk;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 
 import com.exacttarget.fuelsdk.internal.FilterPart;
@@ -151,5 +152,24 @@ public class ETFilter {
 
     public void setSoapFilter(FilterPart filter) {
         this.filter = (SimpleFilterPart) filter;
+    }
+
+    public static ETFilter parse(String filter)
+        throws ETSdkException
+    {
+        return parse(filter, null);
+    }
+
+    public static ETFilter parse(String filter, Class<? extends ETSoapObject> type)
+        throws ETSdkException
+    {
+        ETFilterParser parser = new ETFilterParser(new ByteArrayInputStream(filter.getBytes()));
+        ETFilter parsedFilter = null;
+        try {
+            parsedFilter = parser.parse(type);
+        } catch (ParseException ex) {
+            throw new ETSdkException("could not parse filter: " + filter, ex);
+        }
+        return parsedFilter;
     }
 }

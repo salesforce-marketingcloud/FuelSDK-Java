@@ -1,5 +1,8 @@
-2014-10-13  Ian Murdock  <imurdock@progeny.com>
+2014-10-13  Ian Murdock  <imurdock@exacttarget.com>
 
+    * ETFilter.java (parse): Replaces ETClient.parseFilter().
+    * ETFilterParser.jj: Allow type to be null for direct conversion of
+    external name to internal name.
     * ETSoapObject.java (toInternal): Properly handle lists that are data
     extension fields.
 

@@ -27,7 +27,6 @@
 
 package com.exacttarget.fuelsdk;
 
-import java.io.ByteArrayInputStream;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Date;
@@ -297,8 +296,11 @@ public class ETClient {
         ETFilter f = null;
         String[] p = properties;
         try {
-            f = parseFilter(type, filter);
+            // XXX
+            f = ETFilter.parse(filter, (Class<? extends ETSoapObject>) type);
         } catch (ETSdkException ex) {
+            // XXX check against ex.getCause();
+
             //
             // The filter argument is actually a property. This is a bit
             // of a hack, but this method needs to handle the case of
@@ -332,7 +334,8 @@ public class ETClient {
                                                        String... properties)
         throws ETSdkException
     {
-        return retrieve(type, parseFilter(type, filter), page, pageSize, properties);
+        // XXX
+        return retrieve(type, ETFilter.parse(filter, (Class<? extends ETSoapObject>) type), page, pageSize, properties);
     }
 
     @SuppressWarnings("unchecked")
@@ -500,19 +503,5 @@ public class ETClient {
         }
 
         return response;
-    }
-
-    private <T extends ETObject> ETFilter parseFilter(Class<T> type, String filter)
-        throws ETSdkException
-    {
-        ETFilterParser parser = new ETFilterParser(new ByteArrayInputStream(filter.getBytes()));
-        ETFilter parsedFilter = null;
-        try {
-            // XXX not quite right
-            parsedFilter = parser.parse((Class<? extends ETSoapObject>) type);
-        } catch (ParseException ex) {
-            throw new ETSdkException("could not parse filter: " + filter, ex);
-        }
-        return parsedFilter;
     }
 }
