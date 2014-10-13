@@ -559,6 +559,14 @@ public abstract class ETSoapObject extends ETObject {
             //
 
             internalProperties = getInternalProperties(externalType);
+
+            //
+            // Remove properties that are unretrievable:
+            //
+
+            for (String property : internalTypeAnnotation.unretrievable()) {
+                internalProperties.remove(property);
+            }
         }
 
         //
