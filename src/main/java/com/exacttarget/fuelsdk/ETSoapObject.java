@@ -1111,34 +1111,34 @@ public abstract class ETSoapObject extends ETObject {
                     internalList.add(externalItem.toInternal());
                 }
 
-                // XXX needed?
+                if (internalFieldName.equals("fields")) {
+                    //
+                    // This list contains data extension columns:
+                    //
 
-//                    if (internalFieldName.equals("fields")) {
-//                        //
-//                        // This list contains data extension columns:
-//                        //
-//
-//                        DataExtension.Fields fields = new DataExtension.Fields();
-//                        for (APIObject field : internalList) {
-//                            fields.getField().add((DataExtensionField) field);
-//                        }
-//                        try {
-//                            internalField.set(internalObject, fields);
-//                        } catch (Exception ex) {
-//                            throw new ETSdkException("could not set field \""
-//                                    + internalFieldName
-//                                    + "\" of object "
-//                                    + internalObject, ex);
-//                        }
-
-                try {
-                    internalField.set(internalObject, internalList);
-                } catch (Exception ex) {
-                    throw new ETSdkException("could not set field \""
-                            + internalFieldName
-                            + "\" of object "
-                            + internalObject,
-                            ex);
+                    DataExtension.Fields fields = new DataExtension.Fields();
+                    for (APIObject field : internalList) {
+                        fields.getField().add((DataExtensionField) field);
+                    }
+                    try {
+                        internalField.set(internalObject, fields);
+                    } catch (Exception ex) {
+                        throw new ETSdkException("could not set field \""
+                                + internalFieldName
+                                + "\" of object "
+                                + internalObject,
+                                ex);
+                    }
+                } else {
+                    try {
+                        internalField.set(internalObject, internalList);
+                    } catch (Exception ex) {
+                        throw new ETSdkException("could not set field \""
+                                + internalFieldName
+                                + "\" of object "
+                                + internalObject,
+                                ex);
+                    }
                 }
 
                 continue;
