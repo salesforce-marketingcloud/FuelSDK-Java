@@ -28,32 +28,26 @@
 package com.exacttarget.fuelsdk;
 
 import com.exacttarget.fuelsdk.annotations.ExternalName;
-import com.exacttarget.fuelsdk.annotations.InternalName;
+import com.exacttarget.fuelsdk.annotations.InternalProperty;
 import com.exacttarget.fuelsdk.annotations.SoapObject;
 import com.exacttarget.fuelsdk.internal.DataFolder;
 
 @SoapObject(internalType = DataFolder.class)
 public class ETFolder extends ETSoapObject {
     @ExternalName("name")
-    @InternalName("name")
     private String name = null;
     @ExternalName("description")
-    @InternalName("description")
     private String description = null;
     @ExternalName("contentType")
-    @InternalName("contentType")
     private String contentType = null;
     @ExternalName("parentFolder")
-    @InternalName(value = "parentFolder", property = "ParentFolder.CustomerKey")
+    @InternalProperty("ParentFolder.CustomerKey")
     private ETFolder parentFolder = null;
     @ExternalName("isActive")
-    @InternalName("isActive")
     private Boolean isActive = null;
     @ExternalName("isEditable")
-    @InternalName("isEditable")
     private Boolean isEditable = null;
     @ExternalName("allowChildren")
-    @InternalName("allowChildren")
     private Boolean allowChildren = null;
 
     public ETFolder() {}

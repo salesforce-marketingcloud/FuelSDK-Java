@@ -38,7 +38,6 @@ public class ETList extends ETSoapObject {
     @InternalName("listName")
     private String name = null;
     @ExternalName("description")
-    @InternalName("description")
     private String description = null;
     @ExternalName("folderId")
     @InternalName("category")
@@ -47,7 +46,6 @@ public class ETList extends ETSoapObject {
     @InternalName("listClassification")
     private ETListClassification classification = null;
     @ExternalName("type")
-    @InternalName("type")
     private ETListType type = null;
 
     public ETList() {}
