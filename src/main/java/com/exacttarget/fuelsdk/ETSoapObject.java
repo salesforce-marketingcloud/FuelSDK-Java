@@ -113,6 +113,8 @@ import com.exacttarget.fuelsdk.internal.UpdateResult;
 public abstract class ETSoapObject extends ETObject {
     private static Logger logger = Logger.getLogger(ETSoapObject.class);
 
+    private ETClient client = null;
+
     @ExternalName("id")
     private Integer id = null;
     @ExternalName("key")
@@ -369,6 +371,14 @@ public abstract class ETSoapObject extends ETObject {
 //                ETUnsubEvent.class);
 //        convertUtils.register(new InternalObjectConverter(),
 //                UnsubEvent.class);
+    }
+
+    protected ETClient getClient() {
+        return client;
+    }
+
+    protected void setClient(ETClient client) {
+        this.client = client;
     }
 
     public Integer getId() {
@@ -632,6 +642,8 @@ public abstract class ETSoapObject extends ETObject {
                 throw new ETSdkException("could not instantiate "
                         + externalType.getName(), ex);
             }
+
+            externalObject.setClient(client);
 
             //
             // Convert from internal representation:
