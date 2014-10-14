@@ -496,7 +496,7 @@ public abstract class ETSoapObject extends ETObject {
             status.setStatusCode(createResult.getStatusCode());
             status.setStatusMessage(createResult.getStatusMessage());
             status.setErrorCode(createResult.getErrorCode());
-            status.setId(createResult.getNewID());
+            status.setId(Integer.toString(createResult.getNewID()));
             status.setGuid(createResult.getNewObjectID());
             response.addResult(status);
         }
