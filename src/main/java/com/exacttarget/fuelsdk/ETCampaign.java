@@ -84,16 +84,4 @@ public class ETCampaign extends ETRestObject {
     public void setFavorite(Boolean favorite) {
         this.favorite = favorite;
     }
-
-    @Override
-    public String toString() {
-        toStringOpen();
-        toStringAppend("name", getName());
-        toStringAppend("description", getDescription());
-        toStringAppend("campaignCode", getCampaignCode());
-        toStringAppend("color", getColor());
-        toStringAppend("favorite", getFavorite());
-        toStringClose();
-        return getToString();
-    }
 }

@@ -27,10 +27,10 @@
 
 package com.exacttarget.fuelsdk;
 
-import com.exacttarget.fuelsdk.annotations.RestAnnotations;
+import com.exacttarget.fuelsdk.annotations.RestObject;
 import com.google.gson.annotations.Expose;
 
-@RestAnnotations(path = "/hub/v1/campaigns/{campaignId}/assets/{id}",
+@RestObject(path = "/hub/v1/campaigns/{campaignId}/assets/{id}",
                  primaryKey = "id",
                  collectionKey = "entities")
 public class ETCampaignAsset extends ETRestObject {
@@ -63,64 +63,5 @@ public class ETCampaignAsset extends ETRestObject {
 
     public void setObjectId(String objectId) {
         this.objectId = objectId;
-    }
-
-    public static ETResponse<ETCampaignAsset> create(ETClient client,
-                                                     ETCampaignAsset campaignAsset)
-        throws ETSdkException
-    {
-        return ETRestObject.create(client, campaignAsset);
-    }
-
-    public static ETResponse<ETCampaignAsset> retrieve(ETClient client)
-        throws ETSdkException
-    {
-        return ETRestObject.retrieve(client, ETCampaignAsset.class);
-    }
-
-    public static ETResponse<ETCampaignAsset> retrieve(ETClient client,
-                                                       Integer page,
-                                                       Integer pageSize)
-        throws ETSdkException
-    {
-        return ETRestObject.retrieve(client, page, pageSize, ETCampaignAsset.class);
-    }
-
-    public static ETResponse<ETCampaignAsset> retrieve(ETClient client,
-                                                       String filter)
-        throws ETSdkException
-    {
-        return ETRestObject.retrieve(client, filter, ETCampaignAsset.class);
-    }
-
-    public static ETResponse<ETCampaignAsset> retrieve(ETClient client,
-                                                       String filter,
-                                                       Integer page,
-                                                       Integer pageSize)
-        throws ETSdkException
-    {
-        return ETRestObject.retrieve(client, filter, page, pageSize, ETCampaignAsset.class);
-    }
-
-    public ETResponse<ETCampaignAsset> update(ETClient client)
-        throws ETSdkException
-    {
-        return super.update(client);
-    }
-
-    public ETResponse<ETCampaignAsset> delete(ETClient client)
-        throws ETSdkException
-    {
-        return super.delete(client);
-    }
-
-    @Override
-    public String toString() {
-        toStringOpen();
-        toStringAppend("campaignId", getCampaignId());
-        toStringAppend("type", getType());
-        toStringAppend("objectId", getObjectId());
-        toStringClose();
-        return getToString();
     }
 }
