@@ -84,10 +84,6 @@ public class ETRestConnection {
         } else {
             gson = gsonBuilder.create();
         }
-
-        if (logger.isTraceEnabled()) {
-            gson = new GsonBuilder().setPrettyPrinting().create();
-        }
     }
 
     public String get(String path)
