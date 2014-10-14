@@ -160,7 +160,7 @@ public class ETFolderTestDeprecatedMethods {
         assertNull(folder.getAllowChildren());
     }
 
-    private static Integer id = null;
+    private static String id = null;
 
     @Test
     public void _05_TestCreateSingle()
@@ -290,8 +290,8 @@ public class ETFolderTestDeprecatedMethods {
         assertNull(result.getGuid());
     }
 
-    private static Integer id1 = null;
-    private static Integer id2 = null;
+    private static String id1 = null;
+    private static String id2 = null;
 
     @Test
     public void _10_TestCreateMultiple()

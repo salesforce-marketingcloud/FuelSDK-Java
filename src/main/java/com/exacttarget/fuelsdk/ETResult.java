@@ -27,11 +27,11 @@
 
 package com.exacttarget.fuelsdk;
 
-public class ETResult {
+public class ETResult extends ETObject {
     private ETResultStatusCode statusCode = null;
     private String statusMessage = null;
     private Integer errorCode = null;
-    private Integer id = null;
+    private String id = null;
     private String guid = null;
 
     public ETResultStatusCode getStatusCode() {
@@ -67,11 +67,11 @@ public class ETResult {
         this.errorCode = errorCode;
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 

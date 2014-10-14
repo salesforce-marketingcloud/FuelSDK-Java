@@ -116,7 +116,7 @@ public abstract class ETSoapObject extends ETObject {
     private ETClient client = null;
 
     @ExternalName("id")
-    private Integer id = null;
+    private String id = null;
     @ExternalName("key")
     @InternalName("customerKey")
     private String key = null;
@@ -381,11 +381,11 @@ public abstract class ETSoapObject extends ETObject {
         this.client = client;
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
