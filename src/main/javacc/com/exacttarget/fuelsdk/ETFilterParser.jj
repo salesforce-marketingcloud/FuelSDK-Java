@@ -56,8 +56,7 @@ TOKEN [IGNORE_CASE]:
 
 TOKEN:
 {
-    < ID : ["A"-"Z", "a"-"z", "_"] (["A"-"Z", "a"-"z", "_", "0"-"9"])* >
-    | < NUMBER : (["0"-"9"])+ >
+    < UNQUOTED_STRING : (~["\n", "\r", "'", "\"", "="])+ >
     | < SINGLE_QUOTED_STRING : "'" (~["\n", "\r", "'"])* "'" >
     | < DOUBLE_QUOTED_STRING : "\"" (~["\n", "\r", "\""])* "\"" >
 }
@@ -82,15 +81,14 @@ ETFilter BetweenExpression(Class<? extends ETSoapObject> type) throws ETSdkExcep
 {
     ETFilter filter = new ETFilter();
     String value = null;
-    Token token = null;
 }
 {
-    token = < ID >
+    value = Value()
     {
         if (type != null) {
-            filter.setProperty(ETSoapObject.getInternalProperty(type, token.image));
+            filter.setProperty(ETSoapObject.getInternalProperty(type, value));
         } else {
-            filter.setProperty(token.image);
+            filter.setProperty(value);
         }
     }
 
@@ -120,15 +118,14 @@ ETFilter ComparisonExpression(Class<? extends ETSoapObject> type) throws ETSdkEx
 {
     ETFilter filter = new ETFilter();
     String value = null;
-    Token token = null;
 }
 {
-    token = < ID >
+    value = Value()
     {
         if (type != null) {
-            filter.setProperty(ETSoapObject.getInternalProperty(type, token.image));
+            filter.setProperty(ETSoapObject.getInternalProperty(type, value));
         } else {
-            filter.setProperty(token.image);
+            filter.setProperty(value);
         }
     }
 
@@ -177,15 +174,14 @@ ETFilter InExpression(Class<? extends ETSoapObject> type) throws ETSdkException:
 {
     ETFilter filter = new ETFilter();
     String value = null;
-    Token token = null;
 }
 {
-    token = < ID >
+    value = Value()
     {
         if (type != null) {
-            filter.setProperty(ETSoapObject.getInternalProperty(type, token.image));
+            filter.setProperty(ETSoapObject.getInternalProperty(type, value));
         } else {
-            filter.setProperty(token.image);
+            filter.setProperty(value);
         }
     }
 
@@ -220,15 +216,15 @@ ETFilter InExpression(Class<? extends ETSoapObject> type) throws ETSdkException:
 ETFilter IsNullExpression(Class<? extends ETSoapObject> type) throws ETSdkException:
 {
     ETFilter filter = new ETFilter();
-    Token token = null;
+    String value = null;
 }
 {
-    token = < ID >
+    value = Value()
     {
         if (type != null) {
-            filter.setProperty(ETSoapObject.getInternalProperty(type, token.image));
+            filter.setProperty(ETSoapObject.getInternalProperty(type, value));
         } else {
-            filter.setProperty(token.image);
+            filter.setProperty(value);
         }
     }
 
@@ -256,7 +252,7 @@ String Value():
 }
 {
     (
-        token = < NUMBER >
+        token = < UNQUOTED_STRING >
         {
             return token.image;
         }
