@@ -27,6 +27,7 @@
 
 package com.exacttarget.fuelsdk;
 
+import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.RestObject;
 import com.google.gson.annotations.Expose;
 
@@ -34,15 +35,15 @@ import com.google.gson.annotations.Expose;
                  primaryKey = "id",
                  collectionKey = "items")
 public class ETCampaign extends ETRestObject {
-    @Expose
+    @ExternalName("name") @Expose
     private String name = null;
-    @Expose
+    @ExternalName("description") @Expose
     private String description = null;
-    @Expose
+    @ExternalName("campaignCode") @Expose
     private String campaignCode = null;
-    @Expose
+    @ExternalName("color") @Expose
     private String color = null;
-    @Expose
+    @ExternalName("favorite") @Expose
     private Boolean favorite = null;
 
     public String getName() {

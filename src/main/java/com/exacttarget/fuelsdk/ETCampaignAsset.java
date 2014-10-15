@@ -27,6 +27,7 @@
 
 package com.exacttarget.fuelsdk;
 
+import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.RestObject;
 import com.google.gson.annotations.Expose;
 
@@ -34,12 +35,34 @@ import com.google.gson.annotations.Expose;
                  primaryKey = "id",
                  collectionKey = "entities")
 public class ETCampaignAsset extends ETRestObject {
-    @Expose
+    @ExternalName("campaignId") @Expose
     private String campaignId = null;
-    @Expose
+    @ExternalName("type") @Expose
     private String type = null;
-    @Expose
+    @ExternalName("objectId") @Expose
     private String objectId = null;
+
+    @Override
+    public String getName() {
+        // not implemented for object
+        return null;
+    }
+
+    @Override
+    public void setName(String name) {
+        // not implemented for object
+    }
+
+    @Override
+    public String getDescription() {
+        // not implemented for object
+        return null;
+    }
+
+    @Override
+    public void setDescription(String description) {
+        // not implemented for object
+    }
 
     public String getCampaignId() {
         return campaignId;
