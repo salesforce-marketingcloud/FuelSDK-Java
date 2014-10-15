@@ -33,9 +33,6 @@ options
 PARSER_BEGIN(ETFilterParser)
 package com.exacttarget.fuelsdk;
 
-import com.exacttarget.fuelsdk.ETSdkException;
-import com.exacttarget.fuelsdk.ETSoapObject;
-
 public class ETFilterParser {
 }
 PARSER_END(ETFilterParser)
@@ -61,7 +58,7 @@ TOKEN:
     | < DOUBLE_QUOTED_STRING : "\"" (~["\n", "\r", "\""])* "\"" >
 }
 
-ETFilter parse(Class<? extends ETSoapObject> type) throws ETSdkException:
+ETFilter parse(Class<? extends ETObject> type) throws ETSdkException:
 {
     ETFilter filter = null;
 }
@@ -77,7 +74,7 @@ ETFilter parse(Class<? extends ETSoapObject> type) throws ETSdkException:
     }
 }
 
-ETFilter BetweenExpression(Class<? extends ETSoapObject> type) throws ETSdkException:
+ETFilter BetweenExpression(Class<? extends ETObject> type) throws ETSdkException:
 {
     ETFilter filter = new ETFilter();
     String value = null;
@@ -86,7 +83,7 @@ ETFilter BetweenExpression(Class<? extends ETSoapObject> type) throws ETSdkExcep
     value = Value()
     {
         if (type != null) {
-            filter.setProperty(ETSoapObject.getInternalProperty(type, value));
+            filter.setProperty(ETObject.getInternalProperty(type, value));
         } else {
             filter.setProperty(value);
         }
@@ -114,7 +111,7 @@ ETFilter BetweenExpression(Class<? extends ETSoapObject> type) throws ETSdkExcep
     }
 }
 
-ETFilter ComparisonExpression(Class<? extends ETSoapObject> type) throws ETSdkException:
+ETFilter ComparisonExpression(Class<? extends ETObject> type) throws ETSdkException:
 {
     ETFilter filter = new ETFilter();
     String value = null;
@@ -123,7 +120,7 @@ ETFilter ComparisonExpression(Class<? extends ETSoapObject> type) throws ETSdkEx
     value = Value()
     {
         if (type != null) {
-            filter.setProperty(ETSoapObject.getInternalProperty(type, value));
+            filter.setProperty(ETObject.getInternalProperty(type, value));
         } else {
             filter.setProperty(value);
         }
@@ -170,7 +167,7 @@ ETFilter ComparisonExpression(Class<? extends ETSoapObject> type) throws ETSdkEx
     }
 }
 
-ETFilter InExpression(Class<? extends ETSoapObject> type) throws ETSdkException:
+ETFilter InExpression(Class<? extends ETObject> type) throws ETSdkException:
 {
     ETFilter filter = new ETFilter();
     String value = null;
@@ -179,7 +176,7 @@ ETFilter InExpression(Class<? extends ETSoapObject> type) throws ETSdkException:
     value = Value()
     {
         if (type != null) {
-            filter.setProperty(ETSoapObject.getInternalProperty(type, value));
+            filter.setProperty(ETObject.getInternalProperty(type, value));
         } else {
             filter.setProperty(value);
         }
@@ -213,7 +210,7 @@ ETFilter InExpression(Class<? extends ETSoapObject> type) throws ETSdkException:
     }
 }
 
-ETFilter IsNullExpression(Class<? extends ETSoapObject> type) throws ETSdkException:
+ETFilter IsNullExpression(Class<? extends ETObject> type) throws ETSdkException:
 {
     ETFilter filter = new ETFilter();
     String value = null;
@@ -222,7 +219,7 @@ ETFilter IsNullExpression(Class<? extends ETSoapObject> type) throws ETSdkExcept
     value = Value()
     {
         if (type != null) {
-            filter.setProperty(ETSoapObject.getInternalProperty(type, value));
+            filter.setProperty(ETObject.getInternalProperty(type, value));
         } else {
             filter.setProperty(value);
         }

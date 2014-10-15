@@ -27,6 +27,7 @@
 
 package com.exacttarget.fuelsdk;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Date;
@@ -278,7 +279,9 @@ public class ETClient {
 
         Method create = getMethod(superClass, "create", ETClient.class, List.class);
 
-        return response = (ETResponse<ETResult>) invokeMethod(create, objects);
+        response = (ETResponse<ETResult>) invokeMethod(create, objects);
+
+        return response;
     }
 
     public <T extends ETObject> ETResponse<T> retrieve(Class<T> type)
@@ -405,7 +408,48 @@ public class ETClient {
 
         Method update = getMethod(superClass, "update", ETClient.class, List.class);
 
-        return response = (ETResponse<ETResult>) invokeMethod(update, objects);
+        response = (ETResponse<ETResult>) invokeMethod(update, objects);
+
+        return response;
+    }
+
+    public <T extends ETObject> ETResponse<ETResult> update(Class<T> type,
+                                                            String filter,
+                                                            String... values)
+        throws ETSdkException
+    {
+        // XXX optimize
+
+        ETResponse<T> response = retrieve(type, filter);
+
+        // XXX assert operators is "="?
+
+        List<T> objects = response.getResults();
+        for (T object : objects) {
+            for (String value : values) {
+                ETFilter parsedFilter = ETFilter.parse(value);
+                Field field = object.getField(parsedFilter.getProperty());
+                try {
+                    // briefly change accessibility so we can set value
+                    boolean isAccessible = field.isAccessible();
+                    if (!isAccessible) {
+                        field.setAccessible(true);
+                    }
+                    field.set(object, parsedFilter.getValue());
+                    field.setAccessible(isAccessible);
+                } catch (Exception ex) {
+                    throw new ETSdkException("could not update property \""
+                            + parsedFilter.getProperty()
+                            + "\" to value \""
+                            + value
+                            + "\" on object "
+                            + object,
+                            ex);
+                }
+            }
+        }
+
+        return update(objects);
     }
 
     @SuppressWarnings("unchecked")
@@ -434,14 +478,25 @@ public class ETClient {
 
         Method delete = getMethod(superClass, "delete", ETClient.class, List.class);
 
-        return response = (ETResponse<ETResult>) invokeMethod(delete, objects);
+        response = (ETResponse<ETResult>) invokeMethod(delete, objects);
+
+        return response;
+    }
+
+    public <T extends ETObject> ETResponse<ETResult> delete(Class<T> type,
+                                                            String filter)
+        throws ETSdkException
+    {
+        // XXX optimize
+        ETResponse<T> response = retrieve(type, filter);
+        return delete(response.getResults());
     }
 
     /**
      * @deprecated
      * Use XXX
      */
-    public ETDataExtension retrieveDataExtension(ETFilter filter)
+    public ETDataExtension retrieveDataExtension(com.exacttarget.fuelsdk.filter.ETFilter filter)
         throws ETSdkException
     {
         // XXX
@@ -478,7 +533,7 @@ public class ETClient {
         try {
             method = type.getDeclaredMethod(name, arguments);
         } catch (Exception ex) {
-            throw new ETSdkException("could not get "
+            throw new ETSdkException("error getting "
                                      + name
                                      + " method of "
                                      + type, ex);
@@ -496,7 +551,7 @@ public class ETClient {
         try {
             response = (ETResponse<ETResult>) method.invoke(null, this, arguments);
         } catch (Exception ex) {
-            throw new ETSdkException("could not invoke "
+            throw new ETSdkException("error invoking "
                                      + method.getName()
                                      + " method on object "
                                      + arguments, ex);

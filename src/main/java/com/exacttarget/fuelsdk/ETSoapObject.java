@@ -34,7 +34,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -126,251 +125,7 @@ public abstract class ETSoapObject extends ETObject {
     private Date modifiedDate = null;
 
     public ETSoapObject() {
-        //
-        // Register object converters:
-        //
-
-        ConvertUtilsBean convertUtils = BeanUtilsBean.getInstance().getConvertUtils();
-
-//        // ETAccountType
-//        convertUtils.register(new EnumConverter(),
-//                ETAccountType.class);
-//        convertUtils.register(new EnumConverter(),
-//                AccountTypeEnum.class);
-//
-//        // ETBounceEvent
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETBounceEvent.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                BounceEvent.class);
-//
-//        // ETClickEvent
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETClickEvent.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                ClickEvent.class);
-//
-//        // ETContentArea
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETContentArea.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                ContentArea.class);
-
-        // ETDataExtension
-        convertUtils.register(new ExternalObjectConverter(),
-                ETDataExtension.class);
-        convertUtils.register(new InternalObjectConverter(),
-                DataExtension.class);
-
-        // ETDataExtensionColumn
-        convertUtils.register(new ExternalObjectConverter(),
-                ETDataExtensionColumn.class);
-        convertUtils.register(new InternalObjectConverter(),
-                DataExtensionField.class);
-
-        // ETDataExtensionColumnType
-        convertUtils.register(new EnumConverter(),
-                ETDataExtensionColumnType.class);
-        convertUtils.register(new EnumConverter(),
-                DataExtensionFieldType.class);
-
-        // ETDataExtensionRow
-        convertUtils.register(new ExternalObjectConverter(),
-                ETDataExtensionRow.class);
-        convertUtils.register(new InternalObjectConverter(),
-                DataExtensionObject.class);
-        // data extension row: internal to external
-        convertUtils.register(new DataExtensionRowConverter(),
-                Map.class);
-        // data extension row: external to internal
-        convertUtils.register(new DataExtensionRowConverter(),
-                ObjectExtension.Properties.class);
-
-//        // ETDataSourceType
-//        convertUtils.register(new EnumConverter(),
-//                ETDataSourceType.class);
-//        convertUtils.register(new EnumConverter(),
-//                DataSourceTypeEnum.class);
-//
-//        // ETDeliveryProfile
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETDeliveryProfile.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                DeliveryProfile.class);
-//
-//        // ETDeliveryProfileDomainType
-//        convertUtils.register(new EnumConverter(),
-//                ETDeliveryProfileDomainType.class);
-//        convertUtils.register(new EnumConverter(),
-//                DeliveryProfileDomainTypeEnum.class);
-//
-//        // ETDeliveryProfileSourceAddressType
-//        convertUtils.register(new EnumConverter(),
-//                ETDeliveryProfileSourceAddressType.class);
-//        convertUtils.register(new EnumConverter(),
-//                DeliveryProfileSourceAddressTypeEnum.class);
-//
-//        // ETEmail
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETEmail.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                Email.class);
-//
-//        // ETEmailSendDefinition
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETEmailSendDefinition.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                EmailSendDefinition.class);
-//
-//        // ETEmailType
-//        convertUtils.register(new EnumConverter(),
-//                ETEmailType.class);
-//        convertUtils.register(new EnumConverter(),
-//                EmailType.class);
-//
-//        // ETEventType
-//        convertUtils.register(new EnumConverter(),
-//                ETEventType.class);
-//        convertUtils.register(new EnumConverter(),
-//                EventType.class);
-
-        // ETFolder
-        convertUtils.register(new ExternalObjectConverter(),
-                ETFolder.class);
-        convertUtils.register(new InternalObjectConverter(),
-                DataFolder.class);
-
-//        // ETLayoutType
-//        convertUtils.register(new EnumConverter(),
-//                ETLayoutType.class);
-//        convertUtils.register(new EnumConverter(),
-//                LayoutType.class);
-
-        // ETList
-        convertUtils.register(new ExternalObjectConverter(),
-                ETList.class);
-        convertUtils.register(new InternalObjectConverter(),
-                com.exacttarget.fuelsdk.internal.List.class);
-
-        // ETListClassification
-        convertUtils.register(new EnumConverter(),
-                ETListClassification.class);
-        convertUtils.register(new EnumConverter(),
-                ListClassificationEnum.class);
-
-//        // ETListSubscriber
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETListSubscriber.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                ListSubscriber.class);
-
-        // ETListType
-        convertUtils.register(new EnumConverter(),
-                ETListType.class);
-        convertUtils.register(new EnumConverter(),
-                ListTypeEnum.class);
-
-//        // ETOpenEvent
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETOpenEvent.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                OpenEvent.class);
-//
-//        // ETOrganization
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETOrganization.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                Account.class);
-//
-//        // ETPermission
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETPermission.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                Permission.class);
-//
-//        // ETPermissionSet
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETPermissionSet.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                PermissionSet.class);
-//
-//        // ETRole
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETRole.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                Role.class);
-//
-//        // ETSalutationSource
-//        convertUtils.register(new EnumConverter(),
-//                ETSalutationSource.class);
-//        convertUtils.register(new EnumConverter(),
-//                SalutationSourceEnum.class);
-//
-//        // ETSendClassification
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETSendClassification.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                SendClassification.class);
-//
-//        // ETSendClassificationType
-//        convertUtils.register(new EnumConverter(),
-//                ETSendClassificationType.class);
-//        convertUtils.register(new EnumConverter(),
-//                SendClassificationTypeEnum.class);
-//
-//        // ETSendDefinitionList
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETSendDefinitionList.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                SendDefinitionList.class);
-//
-//        // ETSendDefinitionListType
-//        convertUtils.register(new EnumConverter(),
-//                ETSendDefinitionListType.class);
-//        convertUtils.register(new EnumConverter(),
-//                SendDefinitionListTypeEnum.class);
-//
-//        // ETSendPriority
-//        convertUtils.register(new EnumConverter(),
-//                ETSendPriority.class);
-//        convertUtils.register(new EnumConverter(),
-//                SendPriorityEnum.class);
-//
-//        // ETSenderProfile
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETSenderProfile.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                SenderProfile.class);
-//
-//        // ETSentEvent
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETSentEvent.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                SentEvent.class);
-//
-//        // ETSubscriber
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETSubscriber.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                Subscriber.class);
-//
-//        // ETSubscriberList
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETSubscriberList.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                SubscriberList.class);
-//
-//        // ETSubscriberStatus
-//        convertUtils.register(new EnumConverter(),
-//                ETSubscriberStatus.class);
-//        convertUtils.register(new EnumConverter(),
-//                SubscriberStatus.class);
-//
-//        // ETUnsubEvent
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETUnsubEvent.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                UnsubEvent.class);
+        registerConverters();
     }
 
     protected ETClient getClient() {
@@ -809,6 +564,254 @@ public abstract class ETSoapObject extends ETObject {
         return response;
     }
 
+    private void registerConverters() {
+        //
+        // Register converters:
+        //
+
+        ConvertUtilsBean convertUtils = BeanUtilsBean.getInstance().getConvertUtils();
+
+//        // ETAccountType
+//        convertUtils.register(new EnumConverter(),
+//                ETAccountType.class);
+//        convertUtils.register(new EnumConverter(),
+//                AccountTypeEnum.class);
+//
+//        // ETBounceEvent
+//        convertUtils.register(new ExternalObjectConverter(),
+//                ETBounceEvent.class);
+//        convertUtils.register(new InternalObjectConverter(),
+//                BounceEvent.class);
+//
+//        // ETClickEvent
+//        convertUtils.register(new ExternalObjectConverter(),
+//                ETClickEvent.class);
+//        convertUtils.register(new InternalObjectConverter(),
+//                ClickEvent.class);
+//
+//        // ETContentArea
+//        convertUtils.register(new ExternalObjectConverter(),
+//                ETContentArea.class);
+//        convertUtils.register(new InternalObjectConverter(),
+//                ContentArea.class);
+
+        // ETDataExtension
+        convertUtils.register(new ExternalObjectConverter(),
+                ETDataExtension.class);
+        convertUtils.register(new InternalObjectConverter(),
+                DataExtension.class);
+
+        // ETDataExtensionColumn
+        convertUtils.register(new ExternalObjectConverter(),
+                ETDataExtensionColumn.class);
+        convertUtils.register(new InternalObjectConverter(),
+                DataExtensionField.class);
+
+        // ETDataExtensionColumnType
+        convertUtils.register(new EnumConverter(),
+                ETDataExtensionColumnType.class);
+        convertUtils.register(new EnumConverter(),
+                DataExtensionFieldType.class);
+
+        // ETDataExtensionRow
+        convertUtils.register(new ExternalObjectConverter(),
+                ETDataExtensionRow.class);
+        convertUtils.register(new InternalObjectConverter(),
+                DataExtensionObject.class);
+        // data extension row: internal to external
+        convertUtils.register(new DataExtensionRowConverter(),
+                Map.class);
+        // data extension row: external to internal
+        convertUtils.register(new DataExtensionRowConverter(),
+                ObjectExtension.Properties.class);
+
+//        // ETDataSourceType
+//        convertUtils.register(new EnumConverter(),
+//                ETDataSourceType.class);
+//        convertUtils.register(new EnumConverter(),
+//                DataSourceTypeEnum.class);
+//
+//        // ETDeliveryProfile
+//        convertUtils.register(new ExternalObjectConverter(),
+//                ETDeliveryProfile.class);
+//        convertUtils.register(new InternalObjectConverter(),
+//                DeliveryProfile.class);
+//
+//        // ETDeliveryProfileDomainType
+//        convertUtils.register(new EnumConverter(),
+//                ETDeliveryProfileDomainType.class);
+//        convertUtils.register(new EnumConverter(),
+//                DeliveryProfileDomainTypeEnum.class);
+//
+//        // ETDeliveryProfileSourceAddressType
+//        convertUtils.register(new EnumConverter(),
+//                ETDeliveryProfileSourceAddressType.class);
+//        convertUtils.register(new EnumConverter(),
+//                DeliveryProfileSourceAddressTypeEnum.class);
+//
+//        // ETEmail
+//        convertUtils.register(new ExternalObjectConverter(),
+//                ETEmail.class);
+//        convertUtils.register(new InternalObjectConverter(),
+//                Email.class);
+//
+//        // ETEmailSendDefinition
+//        convertUtils.register(new ExternalObjectConverter(),
+//                ETEmailSendDefinition.class);
+//        convertUtils.register(new InternalObjectConverter(),
+//                EmailSendDefinition.class);
+//
+//        // ETEmailType
+//        convertUtils.register(new EnumConverter(),
+//                ETEmailType.class);
+//        convertUtils.register(new EnumConverter(),
+//                EmailType.class);
+//
+//        // ETEventType
+//        convertUtils.register(new EnumConverter(),
+//                ETEventType.class);
+//        convertUtils.register(new EnumConverter(),
+//                EventType.class);
+
+        // ETFolder
+        convertUtils.register(new ExternalObjectConverter(),
+                ETFolder.class);
+        convertUtils.register(new InternalObjectConverter(),
+                DataFolder.class);
+
+//        // ETLayoutType
+//        convertUtils.register(new EnumConverter(),
+//                ETLayoutType.class);
+//        convertUtils.register(new EnumConverter(),
+//                LayoutType.class);
+
+        // ETList
+        convertUtils.register(new ExternalObjectConverter(),
+                ETList.class);
+        convertUtils.register(new InternalObjectConverter(),
+                com.exacttarget.fuelsdk.internal.List.class);
+
+        // ETListClassification
+        convertUtils.register(new EnumConverter(),
+                ETListClassification.class);
+        convertUtils.register(new EnumConverter(),
+                ListClassificationEnum.class);
+
+//        // ETListSubscriber
+//        convertUtils.register(new ExternalObjectConverter(),
+//                ETListSubscriber.class);
+//        convertUtils.register(new InternalObjectConverter(),
+//                ListSubscriber.class);
+
+        // ETListType
+        convertUtils.register(new EnumConverter(),
+                ETListType.class);
+        convertUtils.register(new EnumConverter(),
+                ListTypeEnum.class);
+
+//        // ETOpenEvent
+//        convertUtils.register(new ExternalObjectConverter(),
+//                ETOpenEvent.class);
+//        convertUtils.register(new InternalObjectConverter(),
+//                OpenEvent.class);
+//
+//        // ETOrganization
+//        convertUtils.register(new ExternalObjectConverter(),
+//                ETOrganization.class);
+//        convertUtils.register(new InternalObjectConverter(),
+//                Account.class);
+//
+//        // ETPermission
+//        convertUtils.register(new ExternalObjectConverter(),
+//                ETPermission.class);
+//        convertUtils.register(new InternalObjectConverter(),
+//                Permission.class);
+//
+//        // ETPermissionSet
+//        convertUtils.register(new ExternalObjectConverter(),
+//                ETPermissionSet.class);
+//        convertUtils.register(new InternalObjectConverter(),
+//                PermissionSet.class);
+//
+//        // ETRole
+//        convertUtils.register(new ExternalObjectConverter(),
+//                ETRole.class);
+//        convertUtils.register(new InternalObjectConverter(),
+//                Role.class);
+//
+//        // ETSalutationSource
+//        convertUtils.register(new EnumConverter(),
+//                ETSalutationSource.class);
+//        convertUtils.register(new EnumConverter(),
+//                SalutationSourceEnum.class);
+//
+//        // ETSendClassification
+//        convertUtils.register(new ExternalObjectConverter(),
+//                ETSendClassification.class);
+//        convertUtils.register(new InternalObjectConverter(),
+//                SendClassification.class);
+//
+//        // ETSendClassificationType
+//        convertUtils.register(new EnumConverter(),
+//                ETSendClassificationType.class);
+//        convertUtils.register(new EnumConverter(),
+//                SendClassificationTypeEnum.class);
+//
+//        // ETSendDefinitionList
+//        convertUtils.register(new ExternalObjectConverter(),
+//                ETSendDefinitionList.class);
+//        convertUtils.register(new InternalObjectConverter(),
+//                SendDefinitionList.class);
+//
+//        // ETSendDefinitionListType
+//        convertUtils.register(new EnumConverter(),
+//                ETSendDefinitionListType.class);
+//        convertUtils.register(new EnumConverter(),
+//                SendDefinitionListTypeEnum.class);
+//
+//        // ETSendPriority
+//        convertUtils.register(new EnumConverter(),
+//                ETSendPriority.class);
+//        convertUtils.register(new EnumConverter(),
+//                SendPriorityEnum.class);
+//
+//        // ETSenderProfile
+//        convertUtils.register(new ExternalObjectConverter(),
+//                ETSenderProfile.class);
+//        convertUtils.register(new InternalObjectConverter(),
+//                SenderProfile.class);
+//
+//        // ETSentEvent
+//        convertUtils.register(new ExternalObjectConverter(),
+//                ETSentEvent.class);
+//        convertUtils.register(new InternalObjectConverter(),
+//                SentEvent.class);
+//
+//        // ETSubscriber
+//        convertUtils.register(new ExternalObjectConverter(),
+//                ETSubscriber.class);
+//        convertUtils.register(new InternalObjectConverter(),
+//                Subscriber.class);
+//
+//        // ETSubscriberList
+//        convertUtils.register(new ExternalObjectConverter(),
+//                ETSubscriberList.class);
+//        convertUtils.register(new InternalObjectConverter(),
+//                SubscriberList.class);
+//
+//        // ETSubscriberStatus
+//        convertUtils.register(new EnumConverter(),
+//                ETSubscriberStatus.class);
+//        convertUtils.register(new EnumConverter(),
+//                SubscriberStatus.class);
+//
+//        // ETUnsubEvent
+//        convertUtils.register(new ExternalObjectConverter(),
+//                ETUnsubEvent.class);
+//        convertUtils.register(new InternalObjectConverter(),
+//                UnsubEvent.class);
+    }
+
     public class ExternalObjectConverter implements Converter {
         @SuppressWarnings("rawtypes")
         public Object convert(Class type, Object value) {
@@ -1228,15 +1231,15 @@ public abstract class ETSoapObject extends ETObject {
             InternalName internalNameAnnotation =
                     externalField.getAnnotation(InternalName.class);
 
-            String internalFieldName = null;
+            String internalName = null;
             if (internalNameAnnotation != null) {
-                internalFieldName = internalNameAnnotation.value();
+                internalName = internalNameAnnotation.value();
             } else {
                 // internal name is the same as external name
-                internalFieldName = externalField.getName();
+                internalName = externalField.getName();
             }
 
-            Field internalField = getField(internalType, internalFieldName);
+            Field internalField = getField(internalType, internalName);
 
             XmlElement element =
                     internalField.getAnnotation(XmlElement.class);
@@ -1258,6 +1261,7 @@ public abstract class ETSoapObject extends ETObject {
         return internalProperty;
     }
 
+    // XXX private?
     protected static List<String> getInternalProperties(Class<? extends ETSoapObject> type)
         throws ETSdkException
     {
@@ -1305,53 +1309,5 @@ public abstract class ETSoapObject extends ETObject {
         }
 
         return internalProperties;
-    }
-
-    private static Field getField(Class<?> type, String name)
-        throws ETSdkException
-    {
-        Field field = null;
-
-        for (Class<?> t = type; t != null; t = t.getSuperclass()) {
-            try {
-                field = t.getDeclaredField(name);
-                break;
-            } catch (NoSuchFieldException ex) {
-                continue;
-            }
-        }
-
-        if (field == null) {
-            throw new ETSdkException("field \""
-                    + name
-                    + "\" does not exist in class "
-                    + type.getName());
-        }
-
-        return field;
-    }
-
-    private static List<Field> getAllFields(Class<?> type) {
-        List<Field> fields = new ArrayList<Field>();
-
-        // account for fields of superclasses too
-
-        List<Class<?>> types = new ArrayList<Class<?>>();
-        for (Class<?> t = type; t != null; t = t.getSuperclass()) {
-            types.add(t);
-        }
-
-        // make sure superclass fields are first, to
-        // enhance readability of the SOAP envelopes
-
-        ListIterator<Class<?>> li = types.listIterator(types.size());
-        while (li.hasPrevious()) {
-            Class<?> t = li.previous();
-            for (Field field : t.getDeclaredFields()) {
-                fields.add(field);
-            }
-        }
-
-        return fields;
     }
 }
