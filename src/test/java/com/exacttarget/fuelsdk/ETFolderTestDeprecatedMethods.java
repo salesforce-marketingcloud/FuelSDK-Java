@@ -174,7 +174,7 @@ public class ETFolderTestDeprecatedMethods {
         folder.setParentFolderKey("dataextension_default");
         ETResponse<ETResult> response = service.post(client, folder);
         assertNotNull(response.getRequestId());
-        assertEquals(ETResultStatusCode.OK, response.getStatusCode());
+        assertEquals("OK", response.getStatusCode());
         assertEquals("OK", response.getStatusMessage());
         assertNull(response.getErrorCode());
         assertNull(response.getPage());
@@ -183,7 +183,7 @@ public class ETFolderTestDeprecatedMethods {
         assertFalse(response.hasMoreResults());
         assertEquals(1, response.getResults().size());
         ETResult result = response.getResults().get(0);
-        assertEquals(ETResultStatusCode.OK, result.getStatusCode());
+        assertEquals("OK", result.getStatusCode());
         assertEquals("Folder created successfully.", result.getStatusMessage());
         assertNull(result.getErrorCode());
         assertNotNull(result.getId());
@@ -226,7 +226,7 @@ public class ETFolderTestDeprecatedMethods {
         createdFolder.setName("TEST1");
         ETResponse<ETResult> response = service.patch(client, createdFolder);
         assertNotNull(response.getRequestId());
-        assertEquals(ETResultStatusCode.OK, response.getStatusCode());
+        assertEquals("OK", response.getStatusCode());
         assertEquals("OK", response.getStatusMessage());
         assertNull(response.getErrorCode());
         assertNull(response.getPage());
@@ -235,7 +235,7 @@ public class ETFolderTestDeprecatedMethods {
         assertFalse(response.hasMoreResults());
         assertEquals(1, response.getResults().size());
         ETResult result = response.getResults().get(0);
-        assertEquals(ETResultStatusCode.OK, result.getStatusCode());
+        assertEquals("OK", result.getStatusCode());
         assertEquals("Folder updated successfully.", result.getStatusMessage());
         assertNull(result.getErrorCode());
         assertNull(result.getId());
@@ -274,7 +274,7 @@ public class ETFolderTestDeprecatedMethods {
         folder.setCustomerKey("test1");
         ETResponse<ETResult> response = service.delete(client, folder);
         assertNotNull(response.getRequestId());
-        assertEquals(ETResultStatusCode.OK, response.getStatusCode());
+        assertEquals("OK", response.getStatusCode());
         assertEquals("OK", response.getStatusMessage());
         assertNull(response.getErrorCode());
         assertNull(response.getPage());
@@ -283,7 +283,7 @@ public class ETFolderTestDeprecatedMethods {
         assertFalse(response.hasMoreResults());
         assertEquals(1, response.getResults().size());
         ETResult result = response.getResults().get(0);
-        assertEquals(ETResultStatusCode.OK, result.getStatusCode());
+        assertEquals("OK", result.getStatusCode());
         assertEquals("Folder deleted successfully.", result.getStatusMessage());
         assertNull(result.getErrorCode());
         assertNull(result.getId());
@@ -314,7 +314,7 @@ public class ETFolderTestDeprecatedMethods {
         folders.add(folder2);
         ETResponse<ETResult> response = service.post(client, folders);
         assertNotNull(response.getRequestId());
-        assertEquals(ETResultStatusCode.OK, response.getStatusCode());
+        assertEquals("OK", response.getStatusCode());
         assertEquals("OK", response.getStatusMessage());
         assertNull(response.getErrorCode());
         assertNull(response.getPage());
@@ -323,7 +323,7 @@ public class ETFolderTestDeprecatedMethods {
         assertFalse(response.hasMoreResults());
         assertEquals(2, response.getResults().size());
         ETResult result1 = response.getResults().get(0);
-        assertEquals(ETResultStatusCode.OK, result1.getStatusCode());
+        assertEquals("OK", result1.getStatusCode());
         assertEquals("Folder created successfully.", result1.getStatusMessage());
         assertNull(result1.getErrorCode());
         assertNotNull(result1.getId());
@@ -331,7 +331,7 @@ public class ETFolderTestDeprecatedMethods {
         // save the ID for use in the next test
         id1 = result1.getId();
         ETResult result2 = response.getResults().get(0);
-        assertEquals(ETResultStatusCode.OK, result2.getStatusCode());
+        assertEquals("OK", result2.getStatusCode());
         assertEquals("Folder created successfully.", result2.getStatusMessage());
         assertNull(result2.getErrorCode());
         assertNotNull(result2.getId());
@@ -374,7 +374,7 @@ public class ETFolderTestDeprecatedMethods {
         folders.add(folder2);
         ETResponse<ETResult> response = service.delete(client, folders);
         assertNotNull(response.getRequestId());
-        assertEquals(ETResultStatusCode.OK, response.getStatusCode());
+        assertEquals("OK", response.getStatusCode());
         assertEquals("OK", response.getStatusMessage());
         assertNull(response.getErrorCode());
         assertNull(response.getPage());
@@ -383,13 +383,13 @@ public class ETFolderTestDeprecatedMethods {
         assertFalse(response.hasMoreResults());
         assertEquals(2, response.getResults().size());
         ETResult result1 = response.getResults().get(0);
-        assertEquals(ETResultStatusCode.OK, result1.getStatusCode());
+        assertEquals("OK", result1.getStatusCode());
         assertEquals("Folder deleted successfully.", result1.getStatusMessage());
         assertNull(result1.getErrorCode());
         assertNull(result1.getId());
         assertNull(result1.getGuid());
         ETResult result2 = response.getResults().get(0);
-        assertEquals(ETResultStatusCode.OK, result2.getStatusCode());
+        assertEquals("OK", result2.getStatusCode());
         assertEquals("Folder deleted successfully.", result2.getStatusMessage());
         assertNull(result2.getErrorCode());
         assertNull(result2.getId());
