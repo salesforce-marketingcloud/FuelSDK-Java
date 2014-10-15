@@ -47,18 +47,17 @@ import org.apache.log4j.Logger;
 public class ETRestConnection {
     private static Logger logger = Logger.getLogger(ETRestConnection.class);
 
+    private Gson gson = null;
+
     private ETClient client = null;
+    private ETResult result = new ETResult();
 
     private String endpoint = null;
 
     private boolean isAuthConnection = false;
 
-    private int responseCode = -1;
-
-    private Gson gson = null;
-
     private enum Method {
-        GET, POST, DELETE
+        GET, POST, PATCH, DELETE
     }
 
     public ETRestConnection(ETClient client, String endpoint)
@@ -89,11 +88,12 @@ public class ETRestConnection {
     public String get(String path)
         throws ETSdkException
     {
-        responseCode = -1;
         HttpURLConnection connection = sendRequest(path, Method.GET);
         String response = receiveResponse(connection);
+        result.setRequestId(connection.getHeaderField("X-Mashery-Message-ID"));
         try {
-            responseCode = connection.getResponseCode();
+            result.setStatusCode(Integer.toString(connection.getResponseCode()));
+            result.setStatusMessage(connection.getResponseMessage());
         } catch (IOException e) {
             throw new ETSdkException(e);
         }
@@ -104,11 +104,28 @@ public class ETRestConnection {
     public String post(String path, String payload)
         throws ETSdkException
     {
-        responseCode = -1;
         HttpURLConnection connection = sendRequest(path, Method.POST, payload);
         String response = receiveResponse(connection);
+        result.setRequestId(connection.getHeaderField("X-Mashery-Message-ID"));
         try {
-            responseCode = connection.getResponseCode();
+            result.setStatusCode(Integer.toString(connection.getResponseCode()));
+            result.setStatusMessage(connection.getResponseMessage());
+        } catch (IOException e) {
+            throw new ETSdkException(e);
+        }
+        connection.disconnect();
+        return response;
+    }
+
+    public String patch(String path, String payload)
+        throws ETSdkException
+    {
+        HttpURLConnection connection = sendRequest(path, Method.PATCH, payload);
+        String response = receiveResponse(connection);
+        result.setRequestId(connection.getHeaderField("X-Mashery-Message-ID"));
+        try {
+            result.setStatusCode(Integer.toString(connection.getResponseCode()));
+            result.setStatusMessage(connection.getResponseMessage());
         } catch (IOException e) {
             throw new ETSdkException(e);
         }
@@ -119,11 +136,12 @@ public class ETRestConnection {
     public String delete(String path)
         throws ETSdkException
     {
-        responseCode = -1;
         HttpURLConnection connection = sendRequest(path, Method.DELETE);
         String response = receiveResponse(connection);
+        result.setRequestId(connection.getHeaderField("X-Mashery-Message-ID"));
         try {
-            responseCode = connection.getResponseCode();
+            result.setStatusCode(Integer.toString(connection.getResponseCode()));
+            result.setStatusMessage(connection.getResponseMessage());
         } catch (IOException e) {
             throw new ETSdkException(e);
         }
@@ -137,20 +155,26 @@ public class ETRestConnection {
         return post(path, jsonObject.toString());
     }
 
+    public String patch(String path, JsonObject jsonObject)
+        throws ETSdkException
+    {
+        return patch(path, jsonObject.toString());
+    }
+
+    protected Gson getGson() {
+        return gson;
+    }
+
+    public ETResult getResult() {
+        return result;
+    }
+
     public String getEndpoint() {
         return endpoint;
     }
 
     public boolean isAuthConnection() {
         return isAuthConnection;
-    }
-
-    public int getResponseCode() {
-        return responseCode;
-    }
-
-    public Gson getGson() {
-        return gson;
     }
 
     private HttpURLConnection sendRequest(String path, Method method)
@@ -192,6 +216,7 @@ public class ETRestConnection {
             connection.setRequestProperty("Accept", "application/json");
             break;
         case POST:
+        case PATCH:
         case DELETE:
             connection.setDoOutput(true);
             connection.setRequestProperty("Content-Type", "application/json");

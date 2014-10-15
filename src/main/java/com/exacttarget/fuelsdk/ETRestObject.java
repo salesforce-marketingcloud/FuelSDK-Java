@@ -27,30 +27,93 @@
 
 package com.exacttarget.fuelsdk;
 
+import java.util.Date;
+import java.util.List;
+
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.annotations.Expose;
 
 import org.apache.log4j.Logger;
 
-import com.exacttarget.fuelsdk.annotations.RestAnnotations;
+import com.exacttarget.fuelsdk.annotations.ExternalName;
+import com.exacttarget.fuelsdk.annotations.RestObject;
+import com.exacttarget.fuelsdk.ETFilter;
 
-public abstract class ETRestObject extends ETRestObjectImmutable {
+public abstract class ETRestObject extends ETObject {
     private static Logger logger = Logger.getLogger(ETRestObject.class);
 
-    public static <T extends ETRestObject> ETResponse<T> create(ETClient client,
-                                                                T object)
+    @ExternalName("id") @Expose
+    private String id = null;
+    @ExternalName("key") @Expose
+    private String key = null;
+    @ExternalName("createdDate") @Expose
+    private Date createdDate = null;
+    @ExternalName("modifiedDate") @Expose
+    private Date modifiedDate = null;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public Date getModifiedDate() {
+        return modifiedDate;
+    }
+
+    public void setModifiedDate(Date modifiedDate) {
+        this.modifiedDate = modifiedDate;
+    }
+
+    protected static <T extends ETRestObject> ETResponse<ETResult> create(ETClient client,
+                                                                          List<T> objects)
         throws ETSdkException
     {
-        ETResponse<T> response = new ETResponse<T>();
+        ETResponse<ETResult> response = new ETResponse<ETResult>();
+
+        if (objects == null || objects.size() == 0) {
+            return response;
+        }
+
+        //
+        // Get handle to the REST connection:
+        //
 
         ETRestConnection connection = client.getRestConnection();
 
-        Gson gson = connection.getGson();
+        //
+        // Automatically refresh the token if necessary:
+        //
 
-        JsonParser jsonParser = new JsonParser();
+        client.refreshToken();
 
-        RestAnnotations annotations = object.getClass().getAnnotation(RestAnnotations.class);
+        //
+        // Read call details from the RestObject annotation:
+        //
+
+        RestObject annotations = objects.get(0).getClass().getAnnotation(RestObject.class);
 
         assert annotations != null;
 
@@ -67,80 +130,122 @@ public abstract class ETRestObject extends ETRestObjectImmutable {
 
         path = removePrimaryKeyFromEnd(path, primaryKey);
 
-        logger.trace("POST " + path);
-
-        String json = gson.toJson(object);
-
-        if (logger.isTraceEnabled()) {
-            JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
-            String jsonPrettyPrinted = gson.toJson(jsonObject);
-            for (String line : jsonPrettyPrinted.split("\\n")) {
-                logger.trace(line);
-            }
-        }
-
-        json = connection.post(path, json);
-
-        JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
-
-        if (logger.isTraceEnabled()) {
-            String jsonPrettyPrinted = gson.toJson(jsonObject);
-            for (String line : jsonPrettyPrinted.split("\\n")) {
-                logger.trace(line);
-            }
-        }
-
-        response.addResult(gson.fromJson(json, object.getClass()));
-
-        // XXX set requestId, statusCode, and statusMessage
-
-        return response;
-    }
-
-    public <T extends ETRestObject> ETResponse<T> update(ETClient client)
-        throws ETSdkException
-    {
-        ETResponse<T> response = new ETResponse<T>();
-
-        ETRestConnection connection = client.getRestConnection();
-
         Gson gson = connection.getGson();
-
         JsonParser jsonParser = new JsonParser();
 
-        RestAnnotations annotations = getClass().getAnnotation(RestAnnotations.class);
+        // XXX is there a way to do this in bulk
+        for (T object : objects) {
+            String json = gson.toJson(object);
 
-        assert annotations != null;
+            logger.trace("POST " + path);
 
-        String path = annotations.path();
-        logger.trace("path: " + path);
-        String primaryKey = annotations.primaryKey();
-        logger.trace("primaryKey: " + primaryKey);
-        String collectionKey = annotations.collectionKey();
-        logger.trace("collectionKey: " + collectionKey);
-
-        //
-        // Construct the path to the object:
-        //
-
-        // XXX substitute primaryKey here w/ reflection to get getter
-        path = replaceVariable(path, "id", getId());
-
-        logger.trace("PATCH " + path);
-
-        String json = gson.toJson(this);
-
-        if (logger.isTraceEnabled()) {
-            JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
-            String jsonPrettyPrinted = gson.toJson(jsonObject);
-            for (String line : jsonPrettyPrinted.split("\\n")) {
-                logger.trace(line);
+            if (logger.isTraceEnabled()) {
+                JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
+                String jsonPrettyPrinted = gson.toJson(jsonObject);
+                for (String line : jsonPrettyPrinted.split("\\n")) {
+                    logger.trace(line);
+                }
             }
+
+            json = connection.post(path, json);
+
+            JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
+
+            if (logger.isTraceEnabled()) {
+                String jsonPrettyPrinted = gson.toJson(jsonObject);
+                for (String line : jsonPrettyPrinted.split("\\n")) {
+                    logger.trace(line);
+                }
+            }
+
+            //gson.fromJson(json, object.getClass()));
+
+            response.addResult(connection.getResult());
         }
 
-        // XXX patch
-        json = connection.post(path, json);
+        // XXX set overall requestId, statusCode, and statusMessage
 
+        return response;
+    }
+
+    protected static <T extends ETRestObject> ETResponse<T> retrieve(ETClient client,
+                                                                     ETFilter filter,
+                                                                     Integer page,
+                                                                     Integer pageSize,
+                                                                     Class<T> type,
+                                                                     String... properties)
+        throws ETSdkException
+    {
+        if (properties.length != 0) {
+            throw new ETSdkException("REST objects do not support partial retrieves");
+        }
+
+        ETResponse<T> response = new ETResponse<T>();
+
+        //
+        // Get handle to the REST connection:
+        //
+
+        ETRestConnection connection = client.getRestConnection();
+
+        //
+        // Automatically refresh the token if necessary:
+        //
+
+        client.refreshToken();
+
+        //
+        // Read call details from the RestObject annotation:
+        //
+
+        RestObject annotation = type.getAnnotation(RestObject.class);
+
+        assert annotation != null;
+
+        String path = annotation.path();
+        logger.trace("path: " + path);
+        String primaryKey = annotation.primaryKey();
+        logger.trace("primaryKey: " + primaryKey);
+        String collectionKey = annotation.collectionKey();
+        logger.trace("collectionKey: " + collectionKey);
+
+        if (filter != null) {
+            //
+            // Replace all variables in the path per the filter:
+            //
+
+            logger.trace("filter: " + filter);
+
+            path = replaceVariable(path, filter.getProperty(), filter.getValue());
+
+            // XXX should throw an exception if not all are specified
+        } else {
+            //
+            // Remove the primary key from the end of the path:
+            //
+
+            path = removePrimaryKeyFromEnd(path, primaryKey);
+        }
+
+        StringBuilder stringBuilder = new StringBuilder(path);
+
+        if (page != null && pageSize != null) {
+            stringBuilder.append("?");
+            stringBuilder.append("$page=");
+            stringBuilder.append(page);
+            stringBuilder.append("&");
+            stringBuilder.append("$pagesize=");
+            stringBuilder.append(pageSize);
+        }
+
+        path = stringBuilder.toString();
+
+        logger.trace("GET " + path);
+
+        String json = connection.get(path);
+
+        Gson gson = connection.getGson();
+        JsonParser jsonParser = new JsonParser();
         JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
 
         if (logger.isTraceEnabled()) {
@@ -150,34 +255,64 @@ public abstract class ETRestObject extends ETRestObjectImmutable {
             }
         }
 
-        response.addResult(gson.fromJson(json, getClass()));
+        if (jsonObject.get("page") != null) {
+            response.setPage(jsonObject.get("page").getAsInt());
+            logger.trace("page = " + response.getPage());
+            response.setPageSize(jsonObject.get("pageSize").getAsInt());
+            logger.trace("pageSize = " + response.getPageSize());
+            JsonElement totalCount = jsonObject.get("totalCount");
+            if (totalCount == null) {
+                // XXX this should be standardized
+                totalCount = jsonObject.get("count");
+            }
+            response.setTotalCount(totalCount.getAsInt());
+            logger.trace("totalCount = " + response.getTotalCount());
 
-        // XXX set requestId, statusCode, and statusMessage
+            if (response.getPage() * response.getPageSize() < response.getTotalCount()) {
+                response.setMoreResults(true);
+            }
+
+            JsonArray collection = jsonObject.get(collectionKey).getAsJsonArray();
+
+            for (JsonElement element : collection) {
+                response.addResult(gson.fromJson(element, type));
+            }
+        } else {
+            response.addResult(gson.fromJson(json, type));
+        }
+
+        // XXX set overall requestId, statusCode, and statusMessage
 
         return response;
     }
 
-    public <T extends ETRestObject> ETResponse<T> delete(ETClient client)
+    protected static <T extends ETRestObject> ETResponse<ETResult> update(ETClient client,
+                                                                          List<T> objects)
         throws ETSdkException
     {
-        // XXX substitute primaryKey here w/ reflection to get getter
-        return (ETResponse<T>) ETRestObject.delete(client, "id = " + getId(), getClass());
-    }
+        ETResponse<ETResult> response = new ETResponse<ETResult>();
 
-    public static <T extends ETRestObject> ETResponse<T> delete(ETClient client,
-                                                                String filter,
-                                                                Class<T> type)
-        throws ETSdkException
-    {
-        ETResponse<T> response = new ETResponse<T>();
+        if (objects == null || objects.size() == 0) {
+            return response;
+        }
+
+        //
+        // Get handle to the REST connection:
+        //
 
         ETRestConnection connection = client.getRestConnection();
 
-//        Gson gson = connection.getGson();
-//
-//        JsonParser jsonParser = new JsonParser();
+        //
+        // Automatically refresh the token if necessary:
+        //
 
-        RestAnnotations annotations = type.getAnnotation(RestAnnotations.class);
+        client.refreshToken();
+
+        //
+        // Read call details from the RestObject annotation:
+        //
+
+        RestObject annotations = objects.get(0).getClass().getAnnotation(RestObject.class);
 
         assert annotations != null;
 
@@ -188,51 +323,172 @@ public abstract class ETRestObject extends ETRestObjectImmutable {
         String collectionKey = annotations.collectionKey();
         logger.trace("collectionKey: " + collectionKey);
 
-        //
-        // Replace all variables in the path per the filter:
-        //
+        Gson gson = connection.getGson();
+        JsonParser jsonParser = new JsonParser();
 
-        logger.trace("filter: " + filter);
+        // XXX is there a way to do this in bulk
+        for (T object : objects) {
+            //
+            // Construct the path to the object:
+            //
 
-        // XXX should throw an exception for complex expressions
+            // XXX should throw an exception for complex expressions
 
-        ETFilterExpression parsedFilter = new ETFilterExpression(filter);
+            // XXX substitute primaryKey here w/ reflection to get getter
+            String p = replaceVariable(path, "id", object.getId());
 
-        // XXX doesn't support multiple variables yet
+            String json = gson.toJson(object);
 
-        path = replaceVariable(path,
-                               parsedFilter.getColumn(),
-                               parsedFilter.getValues().get(0));
+            logger.trace("PATCH " + p);
 
-        // XXX should throw an exception if not all are specified
+            if (logger.isTraceEnabled()) {
+                JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
+                String jsonPrettyPrinted = gson.toJson(jsonObject);
+                for (String line : jsonPrettyPrinted.split("\\n")) {
+                    logger.trace(line);
+                }
+            }
 
-//        //
-//        // Construct the path to the object:
-//        //
-//
-//        // XXX substitute primaryKey here w/ reflection to get getter
-//        path = replaceVariable(path, "id", getId());
+            json = connection.patch(p, json);
 
-        logger.trace("DELETE " + path);
+            JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
 
-        connection.delete(path);
+            if (logger.isTraceEnabled()) {
+                String jsonPrettyPrinted = gson.toJson(jsonObject);
+                for (String line : jsonPrettyPrinted.split("\\n")) {
+                    logger.trace(line);
+                }
+            }
 
-        // doesn't return any data.. are all like this?
-//        String json = connection.delete(path);
-//
-//        JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
-//
-//        if (logger.isTraceEnabled()) {
-//            String jsonPrettyPrinted = gson.toJson(jsonObject);
-//            for (String line : jsonPrettyPrinted.split("\\n")) {
-//                logger.trace(line);
-//            }
-//        }
-//
-//        response.addResult(gson.fromJson(json, type));
+            //gson.fromJson(json, object.getClass()));
 
-        // XXX set requestId, statusCode, and statusMessage
+            response.addResult(connection.getResult());
+        }
+
+        // XXX set overall requestId, statusCode, and statusMessage
 
         return response;
+    }
+
+    protected static <T extends ETRestObject> ETResponse<ETResult> delete(ETClient client,
+                                                                          List<T> objects)
+        throws ETSdkException
+    {
+        ETResponse<ETResult> response = new ETResponse<ETResult>();
+
+        if (objects == null || objects.size() == 0) {
+            return response;
+        }
+
+        //
+        // Get handle to the REST connection:
+        //
+
+        ETRestConnection connection = client.getRestConnection();
+
+        //
+        // Automatically refresh the token if necessary:
+        //
+
+        client.refreshToken();
+
+        //
+        // Read call details from the RestObject annotation:
+        //
+
+        RestObject annotations = objects.get(0).getClass().getAnnotation(RestObject.class);
+
+        assert annotations != null;
+
+        String path = annotations.path();
+        logger.trace("path: " + path);
+        String primaryKey = annotations.primaryKey();
+        logger.trace("primaryKey: " + primaryKey);
+        String collectionKey = annotations.collectionKey();
+        logger.trace("collectionKey: " + collectionKey);
+
+        Gson gson = connection.getGson();
+        JsonParser jsonParser = new JsonParser();
+
+        // XXX is there a way to do this in bulk
+        for (T object : objects) {
+            //
+            // Construct the path to the object:
+            //
+
+            // XXX should throw an exception for complex expressions
+
+            // XXX substitute primaryKey here w/ reflection to get getter
+            String p = replaceVariable(path, "id", object.getId());
+
+            String json = gson.toJson(object);
+
+            logger.trace("DELETE " + p);
+
+            if (logger.isTraceEnabled()) {
+                JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
+                String jsonPrettyPrinted = gson.toJson(jsonObject);
+                for (String line : jsonPrettyPrinted.split("\\n")) {
+                    logger.trace(line);
+                }
+            }
+
+            json = connection.delete(p);
+
+            // doesn't return any data.. are all like this?
+//            JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
+//
+//            if (logger.isTraceEnabled()) {
+//                String jsonPrettyPrinted = gson.toJson(jsonObject);
+//                for (String line : jsonPrettyPrinted.split("\\n")) {
+//                    logger.trace(line);
+//                }
+//            }
+//
+//            //gson.fromJson(json, object.getClass()));
+//
+//            response.addResult(connection.getResult());
+        }
+
+        // XXX set overall requestId, statusCode, and statusMessage
+
+        return response;
+    }
+
+    // XXX private?
+    protected static String removePrimaryKeyFromEnd(String path, String primaryKey)
+        throws ETSdkException
+    {
+        StringBuilder stringBuilder = new StringBuilder(path);
+        int index = stringBuilder.lastIndexOf("/");
+        if (!stringBuilder.substring(index + 1).equals("{" + primaryKey + "}")) {
+            throw new ETSdkException("path \""
+                                     + path
+                                     + "\" does not end with variable \"{"
+                                     + primaryKey
+                                     + "}\"");
+        }
+        stringBuilder.delete(index, stringBuilder.length());
+        return stringBuilder.toString();
+    }
+
+    // XXX private?
+    protected static String replaceVariable(String path,
+                                            String key,
+                                            String value)
+        throws ETSdkException
+    {
+        StringBuilder stringBuilder = new StringBuilder(path);
+        String variable = "{" + key + "}";
+        int index = stringBuilder.indexOf(variable);
+        if (index == -1) {
+            throw new ETSdkException("path \""
+                                     + path
+                                     + "\" does not contain variable \"{"
+                                     + key
+                                     + "}\"");
+        }
+        stringBuilder.replace(index, index + variable.length(), value);
+        return stringBuilder.toString();
     }
 }

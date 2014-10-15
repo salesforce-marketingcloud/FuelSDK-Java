@@ -26,6 +26,8 @@
     (getAllFields): Moved to ETObject from ETSoapObject.
     * ETPrettyPrintable.java: Separated pretty printing out of ETObject
     so other objects can easily be pretty printed too (e.g., ETResult).
+    * ETRestConnection.java: New and improved REST support.
+    * ETRestObject.java: New and improved REST support.
     * ETSoapObject.java (toInternal): Properly handle lists that are data
     extension fields.
     * annotations/ETPrettyPrint.java: New file.
