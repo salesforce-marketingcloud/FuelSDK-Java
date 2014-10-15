@@ -31,64 +31,40 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.exacttarget.fuelsdk.annotations.InternalSoapField;
-import com.exacttarget.fuelsdk.annotations.InternalSoapType;
-import com.exacttarget.fuelsdk.filter.ETFilter;
-import com.exacttarget.fuelsdk.filter.ETFilterOperators;
-import com.exacttarget.fuelsdk.filter.ETSimpleFilter;
+import com.exacttarget.fuelsdk.annotations.ExternalName;
+import com.exacttarget.fuelsdk.annotations.InternalName;
+import com.exacttarget.fuelsdk.annotations.SoapObject;
+import com.exacttarget.fuelsdk.internal.APIObject;
 import com.exacttarget.fuelsdk.internal.DataExtension;
-import com.exacttarget.fuelsdk.internal.DataExtensionField;
+import com.exacttarget.fuelsdk.internal.RetrieveRequest;
+import com.exacttarget.fuelsdk.internal.RetrieveRequestMsg;
+import com.exacttarget.fuelsdk.internal.RetrieveResponseMsg;
 import com.exacttarget.fuelsdk.internal.Soap;
-import com.exacttarget.fuelsdk.internal.UpdateOptions;
-import com.exacttarget.fuelsdk.internal.UpdateRequest;
-import com.exacttarget.fuelsdk.soap.ETDataExtensionColumnServiceImpl;
-import com.exacttarget.fuelsdk.soap.ETDataExtensionRowServiceImpl;
-import com.exacttarget.fuelsdk.soap.ETDataExtensionServiceImpl;
 
 /**
  * The <code>ETDataExtension</code> class represents an ExactTarget
  * data extension.
  */
-@InternalSoapType(type = DataExtension.class, ignoredFields = { "ID", "Fields" })
+@SoapObject(internalType = DataExtension.class, unretrievable = {
+    "ID", "Fields"
+})
 public class ETDataExtension extends ETSoapObject {
-    private ETClient client = null;
-
-    @InternalSoapField(name = "name")
+    @ExternalName("name")
     private String name = null;
-    @InternalSoapField(name = "description")
+    @ExternalName("description")
     private String description = null;
-    @InternalSoapField(name = "categoryID")
-    private Long categoryID = null;
-    @InternalSoapField(name = "fields")
+    @ExternalName("folderId")
+    @InternalName("categoryID")
+    private Integer folderId = null;
+    @ExternalName("columns")
+    @InternalName("fields")
     private List<ETDataExtensionColumn> columns = new ArrayList<ETDataExtensionColumn>();
-    @InternalSoapField(name = "dataRetentionPeriodLength", ignoreOnPatch = true)
-    private Integer dataRetentionPeriodLength = null;
-    @InternalSoapField(name = "dataRetentionPeriodUnitOfMeasure", ignoreOnPatch = true)
-    private Integer dataRetentionPeriodUnitOfMeasure = null;
-    @InternalSoapField(name = "deleteAtEndOfRetentionPeriod", ignoreOnPatch = true)
-    private Boolean deleteAtEndOfRetentionPeriod = null;
-    @InternalSoapField(name = "isSendable")
+    @ExternalName("isSendable")
     private Boolean isSendable = null;
-    @InternalSoapField(name = "isTestable")
+    @ExternalName("isTestable")
     private Boolean isTestable = null;
-    @InternalSoapField(name = "resetRetentionPeriodOnImport", ignoreOnPatch = true)
-    private Boolean resetRetentionPeriodOnImport = null;
-    @InternalSoapField(name = "retainUntil", ignoreOnPatch = true)
-    private String retainUntil = null;
-    @InternalSoapField(name = "rowBasedRetention", ignoreOnPatch = true)
-    private Boolean rowBasedRetention = null;
-    @InternalSoapField(name = "status")
-    private String status = null;
 
     public ETDataExtension() {}
-
-    public ETClient getClient() {
-        return client;
-    }
-
-    public void setClient(ETClient client) {
-        this.client = client;
-    }
 
     public String getName() {
         return name;
@@ -106,44 +82,43 @@ public class ETDataExtension extends ETSoapObject {
         this.description = description;
     }
 
-    public Long getCategoryID() {
-        return categoryID;
+    public Integer getFolderId() {
+        return folderId;
     }
 
-    public void setCategoryID(Long categoryID) {
-        this.categoryID = categoryID;
+    public void setFolderId(Integer folderId) {
+        this.folderId = folderId;
+    }
+
+    /**
+     * @deprecated
+     * Use <code>getFolderId()</code>.
+     */
+    public Integer getCategoryId() {
+        return getFolderId();
+    }
+
+    /**
+     * @deprecated
+     * Use <code>setFolderId()</code>.
+     */
+    @Deprecated
+    public void setCategoryId(Integer categoryId) {
+        setFolderId(categoryId);
     }
 
     public List<ETDataExtensionColumn> getColumns() {
         return columns;
     }
 
-    public void setColumns(List<ETDataExtensionColumn> columns) {
-        this.columns = columns;
+    public void addColumn(String name) {
+        ETDataExtensionColumn column = new ETDataExtensionColumn();
+        column.setName(name);
+        addColumn(column);
     }
 
-    public Integer getDataRetentionPeriodLength() {
-        return dataRetentionPeriodLength;
-    }
-
-    public void setDataRetentionPeriodLength(Integer dataRetentionPeriodLength) {
-        this.dataRetentionPeriodLength = dataRetentionPeriodLength;
-    }
-
-    public Integer getDataRetentionPeriodUnitOfMeasure() {
-        return dataRetentionPeriodUnitOfMeasure;
-    }
-
-    public void setDataRetentionPeriodUnitOfMeasure(Integer dataRetentionPeriodUnitOfMeasure) {
-        this.dataRetentionPeriodUnitOfMeasure = dataRetentionPeriodUnitOfMeasure;
-    }
-
-    public Boolean getDeleteAtEndOfRetentionPeriod() {
-        return deleteAtEndOfRetentionPeriod;
-    }
-
-    public void setDeleteAtEndOfRetentionPeriod(Boolean deleteAtEndOfRetentionPeriod) {
-        this.deleteAtEndOfRetentionPeriod = deleteAtEndOfRetentionPeriod;
+    public void addColumn(ETDataExtensionColumn column) {
+        columns.add(column);
     }
 
     public Boolean getIsSendable() {
@@ -162,68 +137,10 @@ public class ETDataExtension extends ETSoapObject {
         this.isTestable = isTestable;
     }
 
-    public Boolean getResetRetentionPeriodOnImport() {
-        return resetRetentionPeriodOnImport;
-    }
-
-    public void setResetRetentionPeriodOnImport(Boolean resetRetentionPeriodOnImport) {
-        this.resetRetentionPeriodOnImport = resetRetentionPeriodOnImport;
-    }
-
-    public String getRetainUntil() {
-        return retainUntil;
-    }
-
-    public void setRetainUntil(String retainUntil) {
-        this.retainUntil = retainUntil;
-    }
-
-    public Boolean getRowBasedRetention() {
-        return rowBasedRetention;
-    }
-
-    public void setRowBasedRetention(Boolean rowBasedRetention) {
-        this.rowBasedRetention = rowBasedRetention;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public List<ETResult> delete(ETFilter filter)
-        throws ETSdkException
-    {
-        ETDataExtensionRowService service = new ETDataExtensionRowServiceImpl();
-
-        List<ETDataExtensionRow> rows = select(filter);
-
-        for (ETDataExtensionRow row : rows) {
-            //
-            // Set the data extension name if it isn't already set:
-            //
-
-            if (row.getName() == null) {
-                row.setName(name);
-            }
-
-            assert row.getName() == name; // something's wrong...
-        }
-
-        ETResponse<ETResult> response = service.delete(client, rows);
-
-        // XXX check for errors and throw the appropriate exception
-
-        return response.getResults();
-    }
-
     public List<ETResult> insert(ETDataExtensionRow... rows)
         throws ETSdkException
     {
-        ETDataExtensionRowService service = new ETDataExtensionRowServiceImpl();
+        ETClient client = getClient();
 
         for (ETDataExtensionRow row : rows) {
             //
@@ -233,33 +150,42 @@ public class ETDataExtension extends ETSoapObject {
             if (row.getName() == null) {
                 row.setName(name);
             }
-
-            assert row.getName() == name; // something's wrong...
         }
 
-        ETResponse<ETResult> response = service.post(client, Arrays.asList(rows));
+        ETResponse<ETResult> response = client.create(Arrays.asList(rows));
 
         // XXX check for errors and throw the appropriate exception
 
         return response.getResults();
     }
 
-    public List<ETDataExtensionRow> select(String... columns)
+    public List<ETDataExtensionRow> select(String filter, String... columns)
         throws ETSdkException
     {
-        return select(null, columns);
-    }
+        // XXX copied and pasted from ETClient.retrieve(filter, properties)
+        ETFilter f = null;
+        String[] c = columns;
+        try {
+            f = ETFilter.parse(filter);
+        } catch (ETSdkException ex) {
+            // XXX check against ex.getCause();
 
-    // XXX hack
-    private String requestId = null;
-    private boolean moreResults = false;
+            //
+            // The filter argument is actually a column. This is a bit
+            // of a hack, but this method needs to handle the case of
+            // both a filtered and a filterless retrieve with columns,
+            // as having one method for each results in ambiguous methods.
+            //
 
-    public List<ETDataExtensionRow> select(ETFilter filter, String... columns)
-        throws ETSdkException
-    {
-        ETDataExtensionRowService service = new ETDataExtensionRowServiceImpl();
+            c = new String[columns.length + 1];
+            c[0] = filter;
+            int i = 1;
+            for (String column : columns) {
+                c[i++] = column;
+            }
+        }
 
-        if (columns.length == 0) {
+        if (c.length == 0) {
             //
             // If columns aren't specified retrieve all columns:
             //
@@ -267,60 +193,77 @@ public class ETDataExtension extends ETSoapObject {
             // XXX this adds another API call.. is there a native way?
 
             List<ETDataExtensionColumn> dataExtensionColumns = retrieveColumns();
-            columns = new String[dataExtensionColumns.size()];
+            c = new String[dataExtensionColumns.size()];
             int i = 0;
             for (ETDataExtensionColumn column : dataExtensionColumns) {
-                columns[i++] = column.getName();
+                c[i++] = column.getName();
             }
         }
 
-        ETResponse<ETDataExtensionRow> response
-            = service.get(client, name, Arrays.asList(columns), filter);
+        ETClient client = getClient();
 
-        // XXX hack
-        if (response.hasMoreResults()) {
-            requestId = response.getRequestId();
-            moreResults = true;
-        } else {
-            requestId = null;
-            moreResults = false;
+        //
+        // Get handle to the SOAP connection:
+        //
+
+        ETSoapConnection connection = client.getSoapConnection();
+
+        //
+        // Automatically refresh the token if necessary:
+        //
+
+        client.refreshToken();
+
+        Soap soap = connection.getSoap();
+
+        RetrieveRequest retrieveRequest = new RetrieveRequest();
+        retrieveRequest.setObjectType("DataExtensionObject[" + name + "]");
+        retrieveRequest.getProperties().addAll(Arrays.asList(c));
+        if (f != null) {
+            retrieveRequest.setFilter(f.getSoapFilter());
         }
+//        if (continueRequestId != null) {
+//            retrieveRequest.setContinueRequest(continueRequestId);
+//        }
+
+        RetrieveRequestMsg retrieveRequestMsg = new RetrieveRequestMsg();
+        retrieveRequestMsg.setRetrieveRequest(retrieveRequest);
+
+        RetrieveResponseMsg retrieveResponseMsg = soap.retrieve(retrieveRequestMsg);
 
         // XXX check for errors and throw the appropriate exception
 
-        return response.getResults();
-    }
+        List<ETDataExtensionRow> rows = new ArrayList<ETDataExtensionRow>();
 
-    // XXX hack
-    public List<ETDataExtensionRow> selectContinueRequest()
-        throws ETSdkException
-    {
-        ETDataExtensionRowService service = new ETDataExtensionRowServiceImpl();
-        ETResponse<ETDataExtensionRow> response
-            = service.get(client, requestId);
+        for (APIObject internalObject : retrieveResponseMsg.getResults()) {
+            //
+            // Allocate a new (external) object:
+            //
 
-        // XXX hack
-        if (response.hasMoreResults()) {
-            requestId = response.getRequestId();
-            moreResults = true;
-        } else {
-            requestId = null;
-            moreResults = false;
+            ETDataExtensionRow row = new ETDataExtensionRow();
+
+            row.setClient(client);
+
+            //
+            // Convert from internal representation:
+            //
+
+            row.fromInternal(internalObject);
+
+            //
+            // Add result to the list of results:
+            //
+
+            rows.add(row);
         }
 
-        // XXX check for errors and throw the appropriate exception
-
-        return response.getResults();
-    }
-
-    public boolean selectHasMoreResults() {
-        return moreResults;
+        return rows;
     }
 
     public List<ETResult> update(ETDataExtensionRow... rows)
         throws ETSdkException
     {
-        ETDataExtensionRowService service = new ETDataExtensionRowServiceImpl();
+        ETClient client = getClient();
 
         for (ETDataExtensionRow row : rows) {
             //
@@ -330,45 +273,106 @@ public class ETDataExtension extends ETSoapObject {
             if (row.getName() == null) {
                 row.setName(name);
             }
-
-            assert row.getName() == name; // something's wrong...
         }
 
-        ETResponse<ETResult> response = service.patch(client, Arrays.asList(rows));
+        ETResponse<ETResult> response = client.update(Arrays.asList(rows));
 
         // XXX check for errors and throw the appropriate exception
 
         return response.getResults();
     }
 
-    public void addColumn(ETDataExtensionColumn column)
+    public List<ETResult> delete(ETDataExtensionRow... rows)
         throws ETSdkException
     {
-        // XXX cleanup
-        client.refreshToken();
-        Soap soap = client.getSoapConnection().getSoap();
-        DataExtension dataExtension = new DataExtension();
-        dataExtension.setId(getId());
-        dataExtension.setCustomerKey(getCustomerKey());
-        dataExtension.setName(getName());
-        DataExtension.Fields fields = new DataExtension.Fields();
-        fields.getField().add((DataExtensionField) column.toInternal());
-        dataExtension.setFields(fields);
-        UpdateRequest updateRequest = new UpdateRequest();
-        updateRequest.setOptions(new UpdateOptions());
-        updateRequest.getObjects().add(dataExtension);
-        soap.update(updateRequest);
+        ETClient client = getClient();
+
+        for (ETDataExtensionRow row : rows) {
+            //
+            // Set the data extension name if it isn't already set:
+            //
+
+            if (row.getName() == null) {
+                row.setName(name);
+            }
+        }
+
+        ETResponse<ETResult> response = client.delete(Arrays.asList(rows));
+
+        // XXX check for errors and throw the appropriate exception
+
+        return response.getResults();
     }
+
+//    public void addColumn(ETDataExtensionColumn column)
+//        throws ETSdkException
+//    {
+//        ETClient client = getClient();
+//
+//        //
+//        // Get handle to the SOAP connection:
+//        //
+//
+//        ETSoapConnection connection = client.getSoapConnection();
+//
+//        //
+//        // Automatically refresh the token if necessary:
+//        //
+//
+//        client.refreshToken();
+//
+//        //
+//        // Add the column to the data extension:
+//        //
+//
+//        Soap soap = connection.getSoap();
+//
+//        DataExtension dataExtension = new DataExtension();
+//        dataExtension.setCustomerKey(getKey());
+//
+//        DataExtension.Fields fields = new DataExtension.Fields();
+//        fields.getField().add((DataExtensionField) column.toInternal());
+//        dataExtension.setFields(fields);
+//
+//        UpdateRequest updateRequest = new UpdateRequest();
+//        updateRequest.setOptions(new UpdateOptions());
+//        updateRequest.getObjects().add(dataExtension);
+//
+//        soap.update(updateRequest);
+//
+//        // XXX check for errors and throw the appropriate exception
+//    }
 
     public List<ETDataExtensionColumn> retrieveColumns()
         throws ETSdkException
     {
-         ETDataExtensionColumnService service = new ETDataExtensionColumnServiceImpl();
-         ETFilter filter = new ETSimpleFilter("DataExtension.CustomerKey",
-                                              ETFilterOperators.EQUALS,
-                                              getCustomerKey());
-         ETResponse<ETDataExtensionColumn> response = service.get(client, filter);
-         // XXX check for errors and throw the appropriate exception
-         return response.getResults();
+        ETClient client = getClient();
+
+        //
+        // Automatically refresh the token if necessary:
+        //
+
+        client.refreshToken();
+
+        //
+        // Retrieve all columns with CustomerKey = this data extension:
+        //
+
+        ETFilter filter = new ETFilter();
+        filter.setProperty("DataExtension.CustomerKey");
+        filter.setOperator("=");
+        filter.addValue(getKey());
+
+        ETResponse<ETDataExtensionColumn> response =
+                ETDataExtensionColumn.retrieve(client,
+                                               filter,
+                                               null, // page
+                                               null, // pageSize
+                                               ETDataExtensionColumn.class,
+                                               new String[0]); // properties
+
+        // XXX check for errors and throw the appropriate exception
+
+        return response.getResults();
     }
 }

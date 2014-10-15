@@ -3,6 +3,9 @@
     * ETClient.java (update(Class<T> type, String filter, String... values)):
     New method.
     * ETClient.java (delete(Class<T> type, String filter)): New method.
+    * ETDataExtension.java: New and improved data extension support.
+    * ETDataExtensionColumn.java: New and improved data extension support.
+    * ETDataExtensionRow.java: New and improved data extension support.
     * ETFilter.java (parse): Replaces ETClient.parseFilter().
     * ETFilterParser.jj: Allow type to be null for direct conversion of
     external name to internal name.

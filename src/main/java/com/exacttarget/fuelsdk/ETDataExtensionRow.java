@@ -30,28 +30,42 @@ package com.exacttarget.fuelsdk;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.exacttarget.fuelsdk.annotations.InternalSoapField;
-import com.exacttarget.fuelsdk.annotations.InternalSoapType;
+import com.exacttarget.fuelsdk.annotations.ExternalName;
+import com.exacttarget.fuelsdk.annotations.InternalName;
+import com.exacttarget.fuelsdk.annotations.SoapObject;
 import com.exacttarget.fuelsdk.internal.DataExtensionObject;
 
-@InternalSoapType(type = DataExtensionObject.class)
+@SoapObject(internalType = DataExtensionObject.class)
 public class ETDataExtensionRow extends ETSoapObject {
-    @InternalSoapField(name = "name")
+    @ExternalName("name")
     private String name = null;
-    // XXX do we even need this?
-    @InternalSoapField(name = "keys")
+    @ExternalName("keys")
     private Map<String, String> keys = null;
-    @InternalSoapField(name = "properties")
+    @ExternalName("columns")
+    @InternalName("properties")
     private Map<String, String> columns = new HashMap<String, String>();
 
     public ETDataExtensionRow() {}
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String getDescription() {
+        // not implemented for object
+        return null;
+    }
+
+    @Override
+    public void setDescription(String description) {
+        // not implemented for object
     }
 
     public String getColumn(String name) {

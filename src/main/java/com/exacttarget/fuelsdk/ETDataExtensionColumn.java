@@ -27,81 +27,37 @@
 
 package com.exacttarget.fuelsdk;
 
-import com.exacttarget.fuelsdk.annotations.InternalSoapField;
-import com.exacttarget.fuelsdk.annotations.InternalSoapType;
+import com.exacttarget.fuelsdk.annotations.ExternalName;
+import com.exacttarget.fuelsdk.annotations.InternalName;
+import com.exacttarget.fuelsdk.annotations.SoapObject;
 import com.exacttarget.fuelsdk.internal.DataExtensionField;
 
-@InternalSoapType(type = DataExtensionField.class, ignoredFields = {
-    "DataExtension",
-    "Description",
-    "DisplayOrder",
-    "ID",
-    "IsCreatable",
-    "IsEditable",
-    "IsRestrictedPicklist",
-    "IsRetrievable",
-    "IsSendTime",
-    "IsUpdatable",
-    "IsViewable",
-    "Label",
-    "MaxValue",
-    "MinLength",
-    "MinValue",
-    "PartnerMap",
-    "Precision",
-    "Status"
+@SoapObject(internalType = DataExtensionField.class, unretrievable = {
+    "ID", "Description", "DataExtension", "Precision"
 })
 public class ETDataExtensionColumn extends ETSoapObject {
-    @InternalSoapField(name = "name")
+    @ExternalName("name")
     private String name = null;
-    @InternalSoapField(name = "dataExtension")
-    private ETDataExtension dataExtension = null;
-    @InternalSoapField(name = "defaultValue")
-    private String defaultValue = null;
-    @InternalSoapField(name = "description")
+    @ExternalName("description")
     private String description = null;
-    @InternalSoapField(name = "displayOrder")
-    private Integer displayOrder = null;
-    @InternalSoapField(name = "fieldType")
-    private ETDataExtensionColumnType columnType = null;
-    @InternalSoapField(name = "isCreatable")
-    private Boolean isCreatable = null;
-    @InternalSoapField(name = "isEditable")
-    private Boolean isEditable = null;
-    @InternalSoapField(name = "isPrimaryKey")
+    @ExternalName("dataExtension")
+    private ETDataExtension dataExtension = null;
+    @ExternalName("type")
+    @InternalName("fieldType")
+    private ETDataExtensionColumnType type = null;
+    @ExternalName("defaultValue")
+    private String defaultValue = null;
+    @ExternalName("isPrimaryKey")
     private Boolean isPrimaryKey = null;
-    @InternalSoapField(name = "isRequired")
+    @ExternalName("isRequired")
     private Boolean isRequired = null;
-    @InternalSoapField(name = "isRestrictedPicklist")
-    private Boolean isRestrictedPicklist = null;
-    @InternalSoapField(name = "isRetrievable")
-    private Boolean isRetrievable = null;
-    @InternalSoapField(name = "isSendTime")
-    private Boolean isSendTime = null;
-    @InternalSoapField(name = "isUpdatable")
-    private Boolean isUpdatable = null;
-    @InternalSoapField(name = "isViewable")
-    private Boolean isViewable = null;
-    @InternalSoapField(name = "label")
-    private String label = null;
-    @InternalSoapField(name = "maxLength")
-    private Integer maxLength = null;
-    @InternalSoapField(name = "maxValue")
-    private String maxValue = null;
-    @InternalSoapField(name = "minLength")
-    private Integer minLength = null;
-    @InternalSoapField(name = "minValue")
-    private String minValue = null;
-    @InternalSoapField(name = "ordinal")
-    private Integer ordinal = null;
-    @InternalSoapField(name = "partnerMap")
-    private String partnerMap = null;
-    @InternalSoapField(name = "precision")
+    @ExternalName("length")
+    @InternalName("maxLength")
+    private Integer length = null;
+    @ExternalName("precision")
     private Integer precision = null;
-    @InternalSoapField(name = "scale")
+    @ExternalName("scale")
     private Integer scale = null;
-    @InternalSoapField(name = "status")
-    private String status = null;
 
     public ETDataExtensionColumn() {}
 
@@ -113,22 +69,6 @@ public class ETDataExtensionColumn extends ETSoapObject {
         this.name = name;
     }
 
-    public ETDataExtension getDataExtension() {
-        return dataExtension;
-    }
-
-    public void setDataExtension(ETDataExtension dataExtension) {
-        this.dataExtension = dataExtension;
-    }
-
-    public String getDefaultValue() {
-        return defaultValue;
-    }
-
-    public void setDefaultValue(String defaultValue) {
-        this.defaultValue = defaultValue;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -137,36 +77,46 @@ public class ETDataExtensionColumn extends ETSoapObject {
         this.description = description;
     }
 
-    public Integer getDisplayOrder() {
-        return displayOrder;
+    public ETDataExtension getDataExtension() {
+        return dataExtension;
     }
 
-    public void setDisplayOrder(Integer displayOrder) {
-        this.displayOrder = displayOrder;
+    public void setDataExtension(ETDataExtension dataExtension) {
+        this.dataExtension = dataExtension;
     }
 
+    public ETDataExtensionColumnType getType() {
+        return type;
+    }
+
+    public void setType(ETDataExtensionColumnType type) {
+        this.type = type;
+    }
+
+    /**
+     * @deprecated
+     * Use <code>getType()</code>.
+     */
+    @Deprecated
     public ETDataExtensionColumnType getColumnType() {
-        return columnType;
+        return getType();
     }
 
+    /**
+     * @deprecated
+     * Use <code>setType()</code>.
+     */
+    @Deprecated
     public void setColumnType(ETDataExtensionColumnType columnType) {
-        this.columnType = columnType;
+        setType(columnType);
     }
 
-    public Boolean getIsCreatable() {
-        return isCreatable;
+    public String getDefaultValue() {
+        return defaultValue;
     }
 
-    public void setIsCreatable(Boolean isCreatable) {
-        this.isCreatable = isCreatable;
-    }
-
-    public Boolean getIsEditable() {
-        return isEditable;
-    }
-
-    public void setIsEditable(Boolean isEditable) {
-        this.isEditable = isEditable;
+    public void setDefaultValue(String defaultValue) {
+        this.defaultValue = defaultValue;
     }
 
     public Boolean getIsPrimaryKey() {
@@ -185,100 +135,30 @@ public class ETDataExtensionColumn extends ETSoapObject {
         this.isRequired = isRequired;
     }
 
-    public Boolean getIsRestrictedPicklist() {
-        return isRestrictedPicklist;
+    public Integer getLength() {
+        return length;
     }
 
-    public void setIsRestrictedPicklist(Boolean isRestrictedPicklist) {
-        this.isRestrictedPicklist = isRestrictedPicklist;
+    public void setLength(Integer length) {
+        this.length = length;
     }
 
-    public Boolean getIsRetrievable() {
-        return isRetrievable;
-    }
-
-    public void setIsRetrievable(Boolean isRetrievable) {
-        this.isRetrievable = isRetrievable;
-    }
-
-    public Boolean getIsSendTime() {
-        return isSendTime;
-    }
-
-    public void setIsSendTime(Boolean isSendTime) {
-        this.isSendTime = isSendTime;
-    }
-
-    public Boolean getIsUpdatable() {
-        return isUpdatable;
-    }
-
-    public void setIsUpdatable(Boolean isUpdatable) {
-        this.isUpdatable = isUpdatable;
-    }
-
-    public Boolean getIsViewable() {
-        return isViewable;
-    }
-
-    public void setIsViewable(Boolean isViewable) {
-        this.isViewable = isViewable;
-    }
-
-    public String getLabel() {
-        return label;
-    }
-
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
+    /**
+     * @deprecated
+     * Use <code>getMaxLength()</code>.
+     */
+    @Deprecated
     public Integer getMaxLength() {
-        return maxLength;
+        return getLength();
     }
 
+    /**
+     * @deprecated
+     * Use <code>setMaxLength()</code>.
+     */
+    @Deprecated
     public void setMaxLength(Integer maxLength) {
-        this.maxLength = maxLength;
-    }
-
-    public String getMaxValue() {
-        return maxValue;
-    }
-
-    public void setMaxValue(String maxValue) {
-        this.maxValue = maxValue;
-    }
-
-    public Integer getMinLength() {
-        return minLength;
-    }
-
-    public void setMinLength(Integer minLength) {
-        this.minLength = minLength;
-    }
-
-    public String getMinValue() {
-        return minValue;
-    }
-
-    public void setMinValue(String minValue) {
-        this.minValue = minValue;
-    }
-
-    public Integer getOrdinal() {
-        return ordinal;
-    }
-
-    public void setOrdinal(Integer ordinal) {
-        this.ordinal = ordinal;
-    }
-
-    public String getPartnerMap() {
-        return partnerMap;
-    }
-
-    public void setPartnerMap(String partnerMap) {
-        this.partnerMap = partnerMap;
+        setLength(maxLength);
     }
 
     public Integer getPrecision() {
@@ -295,13 +175,5 @@ public class ETDataExtensionColumn extends ETSoapObject {
 
     public void setScale(Integer scale) {
         this.scale = scale;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 }
