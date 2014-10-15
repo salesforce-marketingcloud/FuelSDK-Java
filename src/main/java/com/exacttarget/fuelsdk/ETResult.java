@@ -27,7 +27,7 @@
 
 package com.exacttarget.fuelsdk;
 
-public class ETResult extends ETObject {
+public class ETResult {
     private ETResultStatusCode statusCode = null;
     private String statusMessage = null;
     private Integer errorCode = null;
