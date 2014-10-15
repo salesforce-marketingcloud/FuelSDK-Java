@@ -30,13 +30,22 @@ package com.exacttarget.fuelsdk;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ETResponse<T> {
+import com.exacttarget.fuelsdk.annotations.PrettyPrint;
+
+public class ETResponse<T> extends ETPrettyPrintable {
+    @PrettyPrint
     private String requestId = null;
+    @PrettyPrint
     private ETResult overallResult = new ETResult();
+    @PrettyPrint
     private List<T> results = new ArrayList<T>();
+    @PrettyPrint
     private Integer page = null;
+    @PrettyPrint
     private Integer pageSize = null;
+    @PrettyPrint
     private Integer totalCount = null;
+    @PrettyPrint
     private boolean moreResults = false;
 
     public String getRequestId() {

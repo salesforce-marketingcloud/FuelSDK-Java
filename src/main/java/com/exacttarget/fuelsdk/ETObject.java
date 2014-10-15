@@ -28,20 +28,11 @@
 package com.exacttarget.fuelsdk;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.ListIterator;
 
-import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.InternalName;
 
-public abstract class ETObject {
-    private Boolean toStringMultiLine = false;
-    private Integer toStringMultiLineIndentAmount = 4;
-    // default to true if toStringMultiLine is true
-    private Boolean toStringSpaceAroundEquals = toStringMultiLine;
-
+public abstract class ETObject extends ETPrettyPrintable {
     //
     // All objects must have the following properties: id, key, name,
     // description, createdDate, and modifiedDate:
@@ -59,64 +50,6 @@ public abstract class ETObject {
     public abstract void setCreatedDate(Date createdDate);
     public abstract Date getModifiedDate();
     public abstract void setModifiedDate(Date createdDate);
-
-    @Override
-    public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        stringBuilder.append(getClass().getName());
-        stringBuilder.append("[");
-        if (toStringMultiLine) {
-            stringBuilder.append(System.getProperty("line.separator"));
-        }
-
-        boolean first = true;
-        for (Field field : getAllFields()) {
-            ExternalName externalNameAnnotation =
-                    field.getAnnotation(ExternalName.class);
-            if (externalNameAnnotation == null) {
-                continue;
-            }
-
-            if (toStringMultiLine) {
-                for (int i = 0; i < toStringMultiLineIndentAmount; i++) {
-                    stringBuilder.append(" ");
-                }
-            } else {
-                if (first) {
-                    first = false;
-                } else {
-                    stringBuilder.append(",");
-                }
-            }
-            String v = null;
-            try {
-                // briefly change accessibility so we can get value
-                boolean isAccessible = field.isAccessible();
-                if (!isAccessible) {
-                    field.setAccessible(true);
-                }
-                if (field.get(this) != null) {
-                    v = field.get(this).toString();
-                }
-                field.setAccessible(isAccessible);
-            } catch (IllegalAccessException ex) {
-                throw new AssertionError("should never ever get here");
-            }
-            if (toStringSpaceAroundEquals) {
-                stringBuilder.append(externalNameAnnotation.value() + " = " + v);
-            } else {
-                stringBuilder.append(externalNameAnnotation.value() + "=" + v);
-            }
-            if (toStringMultiLine) {
-                stringBuilder.append(System.getProperty("line.separator"));
-            }
-        }
-
-        stringBuilder.append("]");
-
-        return stringBuilder.toString();
-    }
 
     protected static String getInternalProperty(Class<? extends ETObject> type,
                                                 String name)
@@ -139,67 +72,5 @@ public abstract class ETObject {
         }
 
         return internalProperty;
-    }
-
-    protected Field getField(String property) {
-        for (Field field : getAllFields()) {
-            ExternalName externalName =
-                    field.getAnnotation(ExternalName.class);
-            if (externalName != null && externalName.value().equals(property)) {
-                return field;
-            }
-        }
-        return null;
-    }
-
-    protected static Field getField(Class<?> type, String name)
-        throws ETSdkException
-    {
-        Field field = null;
-
-        for (Class<?> t = type; t != null; t = t.getSuperclass()) {
-            try {
-                field = t.getDeclaredField(name);
-                break;
-            } catch (NoSuchFieldException ex) {
-                continue;
-            }
-        }
-
-        if (field == null) {
-            throw new ETSdkException("field \""
-                    + name
-                    + "\" does not exist in class "
-                    + type.getName());
-        }
-
-        return field;
-    }
-
-    protected List<Field> getAllFields() {
-        return getAllFields(getClass());
-    }
-
-    protected static List<Field> getAllFields(Class<?> type) {
-        List<Field> fields = new ArrayList<Field>();
-
-        // account for fields of superclasses too
-
-        List<Class<?>> types = new ArrayList<Class<?>>();
-        for (Class<?> t = type; t != null; t = t.getSuperclass()) {
-            types.add(t);
-        }
-
-        // make sure superclass fields are first for readability
-
-        ListIterator<Class<?>> li = types.listIterator(types.size());
-        while (li.hasPrevious()) {
-            Class<?> t = li.previous();
-            for (Field field : t.getDeclaredFields()) {
-                fields.add(field);
-            }
-        }
-
-        return fields;
     }
 }

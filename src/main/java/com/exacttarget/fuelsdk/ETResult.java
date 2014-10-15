@@ -27,11 +27,18 @@
 
 package com.exacttarget.fuelsdk;
 
-public class ETResult {
+import com.exacttarget.fuelsdk.annotations.PrettyPrint;
+
+public class ETResult extends ETPrettyPrintable {
+    @PrettyPrint
     private ETResultStatusCode statusCode = null;
+    @PrettyPrint
     private String statusMessage = null;
+    @PrettyPrint
     private Integer errorCode = null;
+    @PrettyPrint
     private String id = null;
+    @PrettyPrint
     private String guid = null;
 
     public ETResultStatusCode getStatusCode() {

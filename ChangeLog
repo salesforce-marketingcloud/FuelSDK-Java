@@ -24,8 +24,11 @@
     (getInternalProperty): Moved to ETObject from ETSoapObject.
     (getField): Moved to ETObject from ETSoapObject.
     (getAllFields): Moved to ETObject from ETSoapObject.
+    * ETPrettyPrintable.java: Separated pretty printing out of ETObject
+    so other objects can easily be pretty printed too (e.g., ETResult).
     * ETSoapObject.java (toInternal): Properly handle lists that are data
     extension fields.
+    * annotations/ETPrettyPrint.java: New file.
 
 2014-10-12  Ian Murdock  <imurdock@exacttarget.com>
 
