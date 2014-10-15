@@ -31,7 +31,9 @@ import com.exacttarget.fuelsdk.annotations.PrettyPrint;
 
 public class ETResult extends ETPrettyPrintable {
     @PrettyPrint
-    private ETResultStatusCode statusCode = null;
+    private String requestId = null;
+    @PrettyPrint
+    private String statusCode = null;
     @PrettyPrint
     private String statusMessage = null;
     @PrettyPrint
@@ -41,21 +43,20 @@ public class ETResult extends ETPrettyPrintable {
     @PrettyPrint
     private String guid = null;
 
-    public ETResultStatusCode getStatusCode() {
+    public String getRequestId() {
+        return requestId;
+    }
+
+    public void setRequestId(String requestId) {
+        this.requestId = requestId;
+    }
+
+    public String getStatusCode() {
         return statusCode;
     }
 
     public void setStatusCode(String statusCode) {
-        if (statusCode == null) {
-            return;
-        }
-        if (statusCode.equals("OK")) {
-            this.statusCode = ETResultStatusCode.OK;
-        } else if (statusCode.equals("Error")) {
-            this.statusCode = ETResultStatusCode.ERROR;
-        } else {
-            this.statusCode = ETResultStatusCode.UNKNOWN;
-        }
+        this.statusCode = statusCode;
     }
 
     public String getStatusMessage() {

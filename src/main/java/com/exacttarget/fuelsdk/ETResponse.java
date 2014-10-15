@@ -56,7 +56,7 @@ public class ETResponse<T> extends ETPrettyPrintable {
         this.requestId = requestId;
     }
 
-    public ETResultStatusCode getStatusCode() {
+    public String getStatusCode() {
         return overallResult.getStatusCode();
     }
 
@@ -128,7 +128,7 @@ public class ETResponse<T> extends ETPrettyPrintable {
      */
     @Deprecated
     public boolean getStatus() {
-        if (getStatusCode() == ETResultStatusCode.OK) {
+        if (getStatusCode().equals("OK")) {
             return true;
         }
         return false;
