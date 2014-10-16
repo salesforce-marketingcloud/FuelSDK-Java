@@ -30,9 +30,12 @@ package com.exacttarget.fuelsdk;
 import java.io.ByteArrayInputStream;
 import java.util.List;
 
+import com.exacttarget.fuelsdk.audiencebuilder.ETFilterDefinition;
 import com.exacttarget.fuelsdk.internal.FilterPart;
 import com.exacttarget.fuelsdk.internal.SimpleFilterPart;
 import com.exacttarget.fuelsdk.internal.SimpleOperators;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class ETFilter {
     public enum Operator {
@@ -152,6 +155,25 @@ public class ETFilter {
 
     public void setSoapFilter(FilterPart filter) {
         this.filter = (SimpleFilterPart) filter;
+    }
+
+    public String toFilterDefinition() {
+        ETFilterDefinition filterDefinition = new ETFilterDefinition();
+        ETFilterDefinition.Condition condition = filterDefinition.new Condition();
+        condition.setId(getProperty());
+        // XXX others?
+        String operator = getOperator();
+        if (operator.equals("=")) {
+            condition.setOperator("Equals");
+        } else {
+            condition.setOperator(operator);
+        }
+        condition.setConditionValue(getValue());
+        filterDefinition.addCondition(condition);
+
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+        return gson.toJson(filterDefinition);
     }
 
     public static ETFilter parse(String filter)
