@@ -28,29 +28,10 @@
 package com.exacttarget.fuelsdk;
 
 import java.lang.reflect.Field;
-import java.util.Date;
 
 import com.exacttarget.fuelsdk.annotations.InternalName;
 
 public abstract class ETObject extends ETPrettyPrintable {
-    //
-    // All objects must have the following properties: id, key, name,
-    // description, createdDate, and modifiedDate:
-    //
-
-    public abstract String getId();
-    public abstract void setId(String id);
-    public abstract String getKey();
-    public abstract void setKey(String key);
-    public abstract String getName();
-    public abstract void setName(String name);
-    public abstract String getDescription();
-    public abstract void setDescription(String description);
-    public abstract Date getCreatedDate();
-    public abstract void setCreatedDate(Date createdDate);
-    public abstract Date getModifiedDate();
-    public abstract void setModifiedDate(Date createdDate);
-
     protected static String getInternalProperty(Class<? extends ETObject> type,
                                                 String name)
         throws ETSdkException

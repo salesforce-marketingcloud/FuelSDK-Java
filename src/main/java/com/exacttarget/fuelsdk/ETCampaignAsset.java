@@ -42,28 +42,6 @@ public class ETCampaignAsset extends ETRestObject {
     @ExternalName("objectId") @Expose
     private String objectId = null;
 
-    @Override
-    public String getName() {
-        // not implemented for object
-        return null;
-    }
-
-    @Override
-    public void setName(String name) {
-        // not implemented for object
-    }
-
-    @Override
-    public String getDescription() {
-        // not implemented for object
-        return null;
-    }
-
-    @Override
-    public void setDescription(String description) {
-        // not implemented for object
-    }
-
     public String getCampaignId() {
         return campaignId;
     }

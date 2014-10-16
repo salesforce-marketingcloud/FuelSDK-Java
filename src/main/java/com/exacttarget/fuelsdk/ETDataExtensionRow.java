@@ -47,27 +47,6 @@ public class ETDataExtensionRow extends ETSoapObject {
 
     public ETDataExtensionRow() {}
 
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String getDescription() {
-        // not implemented for object
-        return null;
-    }
-
-    @Override
-    public void setDescription(String description) {
-        // not implemented for object
-    }
-
     public String getColumn(String name) {
         return columns.get(name);
     }
