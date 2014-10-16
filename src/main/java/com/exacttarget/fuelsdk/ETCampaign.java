@@ -32,8 +32,8 @@ import com.exacttarget.fuelsdk.annotations.RestObject;
 import com.google.gson.annotations.Expose;
 
 @RestObject(path = "/hub/v1/campaigns/{id}",
-                 primaryKey = "id",
-                 collectionKey = "items")
+            primaryKey = "id",
+            collectionKey = "items")
 public class ETCampaign extends ETRestObject {
     @ExternalName("name") @Expose
     private String name = null;
