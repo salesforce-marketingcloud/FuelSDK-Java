@@ -53,7 +53,7 @@ TOKEN [IGNORE_CASE]:
 
 TOKEN:
 {
-    < UNQUOTED_STRING : (~["\n", "\r", "'", "\"", "="])+ >
+    < UNQUOTED_STRING : (~[" ", "\n", "\r", "\t", "'", "\"", "=", "!", "<", ">", "(", ")", ","])+ >
     | < SINGLE_QUOTED_STRING : "'" (~["\n", "\r", "'"])* "'" >
     | < DOUBLE_QUOTED_STRING : "\"" (~["\n", "\r", "\""])* "\"" >
 }
