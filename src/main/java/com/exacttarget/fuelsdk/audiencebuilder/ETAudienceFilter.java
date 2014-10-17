@@ -27,26 +27,37 @@
 
 package com.exacttarget.fuelsdk.audiencebuilder;
 
-import com.exacttarget.fuelsdk.ETRestObject;
-import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ETDimensionValue extends ETRestObject {
+public class ETAudienceFilter {
     @Expose
-    @SerializedName("pK")
-    private String key = null;
+    @SerializedName("filterDefinitionID")
+    private String id = null;
     @Expose
     private String name = null;
     @Expose
-    private Integer count = null;
+    @SerializedName("categoryID")
+    private Integer folderId = null;
+    @Expose
+    @SerializedName("derivedFromObjectID")
+    private String derivedFromObjectId = null;
+    @Expose
+    @SerializedName("ownerID")
+    private Integer ownerId = null;
+    @Expose
+    @SerializedName("statusID")
+    private Integer statusId = null;
+    @Expose
+    @SerializedName("filterDefinitionXML")
+    private String filterDefinitionXml = null;
 
-    public String getKey() {
-        return key;
+    public String getId() {
+        return id;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -57,11 +68,43 @@ public class ETDimensionValue extends ETRestObject {
         this.name = name;
     }
 
-    public Integer getCount() {
-        return count;
+    public Integer getFolderId() {
+        return folderId;
     }
 
-    public void setCount(Integer count) {
-        this.count = count;
+    public void setFolderId(Integer folderId) {
+        this.folderId = folderId;
+    }
+
+    public String getDerivedFromObjectId() {
+        return derivedFromObjectId;
+    }
+
+    public void setDerivedFromObjectId(String derivedFromObjectId) {
+        this.derivedFromObjectId = derivedFromObjectId;
+    }
+
+    public Integer getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(Integer ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public Integer getStatusId() {
+        return statusId;
+    }
+
+    public void setStatusId(Integer statusId) {
+        this.statusId = statusId;
+    }
+
+    public String getFilterDefinitionXml() {
+        return filterDefinitionXml;
+    }
+
+    public void setFilterDefinitionXml(String filterDefinitionXml) {
+        this.filterDefinitionXml = filterDefinitionXml;
     }
 }

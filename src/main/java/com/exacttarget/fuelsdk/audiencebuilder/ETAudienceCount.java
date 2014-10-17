@@ -27,35 +27,15 @@
 
 package com.exacttarget.fuelsdk.audiencebuilder;
 
-import com.exacttarget.fuelsdk.ETRestObject;
-import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ETDimensionValue extends ETRestObject {
-    @Expose
-    @SerializedName("pK")
-    private String key = null;
-    @Expose
-    private String name = null;
+public class ETAudienceCount {
     @Expose
     private Integer count = null;
-
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+    @Expose
+    @SerializedName("persistenceID")
+    private String persistenceId = null;
 
     public Integer getCount() {
         return count;
@@ -63,5 +43,13 @@ public class ETDimensionValue extends ETRestObject {
 
     public void setCount(Integer count) {
         this.count = count;
+    }
+
+    public String getPersistenceId() {
+        return persistenceId;
+    }
+
+    public void setPersistenceId(String persistenceId) {
+        this.persistenceId = persistenceId;
     }
 }

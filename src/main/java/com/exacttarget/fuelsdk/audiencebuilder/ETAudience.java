@@ -28,10 +28,16 @@
 package com.exacttarget.fuelsdk.audiencebuilder;
 
 import java.util.Date;
+import java.util.List;
 
+import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.exacttarget.fuelsdk.ETClient;
+import com.exacttarget.fuelsdk.ETFilter;
+import com.exacttarget.fuelsdk.ETRestConnection;
 import com.exacttarget.fuelsdk.ETRestObject;
+import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.annotations.RestObject;
 
 @RestObject(path = "/internal/v1/AudienceBuilder/Audience/{id}",
@@ -59,6 +65,10 @@ public class ETAudience extends ETRestObject {
     private Date publishCountDate = null;
     @Expose
     private String status = null;
+    @Expose
+    private List<ETAudienceBuild> audienceBuilds = null;
+    @Expose
+    private ETAudienceFilter filter = null;
 
     public String getId() {
         return id;
@@ -130,5 +140,48 @@ public class ETAudience extends ETRestObject {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public List<ETAudienceBuild> getAudienceBuilds() {
+        return audienceBuilds;
+    }
+
+    public void setAudienceBuilds(List<ETAudienceBuild> audienceBuilds) {
+        this.audienceBuilds = audienceBuilds;
+    }
+
+    public ETAudienceFilter getFilter() {
+        return filter;
+    }
+
+    public void setFilter(ETAudienceFilter filter) {
+        this.filter = filter;
+    }
+
+    public ETAudiencePublish publish()
+        throws ETSdkException
+    {
+        ETAudiencePublishRequest request = new ETAudiencePublishRequest();
+        request.setAudienceDefinitionId(id);
+        ETRestConnection connection = getClient().getRestConnection();
+        Gson gson = new Gson();
+        String json = connection.post("/internal/v1/AudienceBuilder/Publish",
+                                      gson.toJson(request));
+        ETAudiencePublish response = gson.fromJson(json, ETAudiencePublish.class);
+        return response;
+    }
+
+    public static ETAudienceCount retrieveAudienceCount(ETClient client, String filter)
+        throws ETSdkException
+    {
+        ETAudienceCountRequest request = new ETAudienceCountRequest();
+        ETFilter parsedFilter = ETFilter.parse(filter);
+        request.addFilterDefinition(parsedFilter.toFilterDefinition());
+        ETRestConnection connection = client.getRestConnection();
+        Gson gson = new Gson();
+        String json = connection.post("/internal/v1/AudienceBuilder/AudienceCounts",
+                                      gson.toJson(request));
+        ETAudienceCount response = gson.fromJson(json, ETAudienceCount.class);
+        return response;
     }
 }

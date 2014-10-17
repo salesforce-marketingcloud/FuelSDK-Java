@@ -27,41 +27,38 @@
 
 package com.exacttarget.fuelsdk.audiencebuilder;
 
-import com.exacttarget.fuelsdk.ETRestObject;
-import com.exacttarget.fuelsdk.annotations.ExternalName;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ETDimensionValue extends ETRestObject {
+public class ETAudienceCountRequest {
     @Expose
-    @SerializedName("pK")
-    private String key = null;
+    @SerializedName("FilterDefinitions")
+    private List<ETAudienceFilterDefinition> filterDefinitions = new ArrayList<ETAudienceFilterDefinition>();
     @Expose
-    private String name = null;
-    @Expose
-    private Integer count = null;
+    @SerializedName("DerivedFromObjectID")
+    private String derivedFromObjectId = null;
 
-    public String getKey() {
-        return key;
+    public void setFilterDefinitions(
+            List<ETAudienceFilterDefinition> filterDefinitions) {
+        this.filterDefinitions = filterDefinitions;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public List<ETAudienceFilterDefinition> getFilterDefinitions() {
+        return filterDefinitions;
     }
 
-    public String getName() {
-        return name;
+    public void addFilterDefinition(ETAudienceFilterDefinition filterDefinition) {
+        filterDefinitions.add(filterDefinition);
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getDerivedFromObjectId() {
+        return derivedFromObjectId;
     }
 
-    public Integer getCount() {
-        return count;
-    }
-
-    public void setCount(Integer count) {
-        this.count = count;
+    public void setDerivedFromObjectId(String derivedFromObjectId) {
+        this.derivedFromObjectId = derivedFromObjectId;
     }
 }

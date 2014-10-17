@@ -39,29 +39,37 @@ import com.exacttarget.fuelsdk.annotations.RestObject;
             primaryKey = "id",
             collectionKey = "entities")
 public class ETDimension extends ETRestObject {
-    @ExternalName("id") @Expose
+    @Expose
     @SerializedName("dimensionID")
     String id = null;
-    @ExternalName("name") @Expose
+    @Expose
     private String name = null;
-    @ExternalName("displayName") @Expose
+    @Expose
     String displayName = null;
-    @ExternalName("type") @Expose
+    @Expose
     private Integer type = null;
-    @ExternalName("customObjectId") @Expose
+    @Expose
     @SerializedName("customObjectID")
     private String customObjectId = null;
-    @ExternalName("customObjectName") @Expose
+    @Expose
     private String customObjectName = null;
-    @ExternalName("customObjectFieldId") @Expose
+    @Expose
     @SerializedName("customObjectFieldID")
     private String customObjectFieldId = null;
-    @ExternalName("customObjectFieldName") @Expose
+    @Expose
     private String customObjectFieldName = null;
-    @ExternalName("customObjectFieldType") @Expose
+    @Expose
     @SerializedName("dataType")
     private Integer customObjectFieldType = null;
-    @ExternalName("values") @Expose
+    @Expose
+    @SerializedName("attrCustomObjectID")
+    private String attrCustomObjectId = null;
+    @Expose
+    @SerializedName("attrCustomObjectFieldID")
+    private String attrCustomObjectFieldId = null;
+    @Expose
+    private Integer attrCustomObjectFieldType = null;
+    @Expose
     private List<ETDimensionValue> values = null;
 
     public String getId() {
@@ -134,6 +142,31 @@ public class ETDimension extends ETRestObject {
 
     public void setCustomObjectFieldType(Integer customObjectFieldType) {
         this.customObjectFieldType = customObjectFieldType;
+    }
+
+
+    public String getAttrCustomObjectId() {
+        return attrCustomObjectId;
+    }
+
+    public void setAttrCustomObjectId(String attrCustomObjectId) {
+        this.attrCustomObjectId = attrCustomObjectId;
+    }
+
+    public String getAttrCustomObjectFieldId() {
+        return attrCustomObjectFieldId;
+    }
+
+    public void setAttrCustomObjectFieldId(String attrCustomObjectFieldId) {
+        this.attrCustomObjectFieldId = attrCustomObjectFieldId;
+    }
+
+    public Integer getAttrCustomObjectFieldType() {
+        return attrCustomObjectFieldType;
+    }
+
+    public void setAttrCustomObjectFieldType(Integer attrCustomObjectFieldType) {
+        this.attrCustomObjectFieldType = attrCustomObjectFieldType;
     }
 
     public List<ETDimensionValue> getValues() {
