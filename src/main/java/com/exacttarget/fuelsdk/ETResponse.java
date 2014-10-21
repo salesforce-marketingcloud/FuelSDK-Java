@@ -80,6 +80,11 @@ public class ETResponse<T> extends ETPrettyPrintable {
         overallResult.setErrorCode(errorCode);
     }
 
+    public T getResult() {
+        assert results != null && results.size() == 1;
+        return results.get(0);
+    }
+
     public List<T> getResults() {
         return results;
     }
