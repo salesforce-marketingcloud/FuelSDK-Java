@@ -64,17 +64,6 @@ public abstract class ETPrettyPrintable {
                 continue;
             }
 
-            if (toStringMultiLine) {
-                for (int i = 0; i < toStringMultiLineIndentAmount; i++) {
-                    stringBuilder.append(" ");
-                }
-            } else {
-                if (first) {
-                    first = false;
-                } else {
-                    stringBuilder.append(",");
-                }
-            }
             String name = null;
             if (externalNameAnnotation != null) {
                 name = externalNameAnnotation.value();
@@ -94,6 +83,20 @@ public abstract class ETPrettyPrintable {
                 field.setAccessible(isAccessible);
             } catch (IllegalAccessException ex) {
                 throw new AssertionError("should never ever get here");
+            }
+            if (value == null) {
+                continue;
+            }
+            if (toStringMultiLine) {
+                for (int i = 0; i < toStringMultiLineIndentAmount; i++) {
+                    stringBuilder.append(" ");
+                }
+            } else {
+                if (first) {
+                    first = false;
+                } else {
+                    stringBuilder.append(",");
+                }
             }
             if (toStringSpaceAroundEquals) {
                 stringBuilder.append(name + " = " + value);
@@ -151,6 +154,8 @@ public abstract class ETPrettyPrintable {
 
     protected static List<Field> getAllFields(Class<?> type) {
         List<Field> fields = new ArrayList<Field>();
+
+        // XXX this needs to account for overrides
 
         // account for fields of superclasses too
 
