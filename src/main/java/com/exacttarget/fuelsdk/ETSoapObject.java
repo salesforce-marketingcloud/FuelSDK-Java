@@ -156,6 +156,7 @@ public abstract class ETSoapObject extends ETObject {
      * @deprecated
      * Use <code>getKey()</code>.
      */
+    @Deprecated
     public String getCustomerKey() {
         return getKey();
     }
@@ -216,6 +217,7 @@ public abstract class ETSoapObject extends ETObject {
         CreateRequest createRequest = new CreateRequest();
         createRequest.setOptions(new CreateOptions());
         for (T object : objects) {
+            object.setClient(client);
             createRequest.getObjects().add(object.toInternal());
         }
 
@@ -451,6 +453,7 @@ public abstract class ETSoapObject extends ETObject {
         UpdateRequest updateRequest = new UpdateRequest();
         updateRequest.setOptions(new UpdateOptions());
         for (T object : objects) {
+            object.setClient(client);
             updateRequest.getObjects().add(object.toInternal());
         }
 
@@ -523,6 +526,7 @@ public abstract class ETSoapObject extends ETObject {
         DeleteRequest deleteRequest = new DeleteRequest();
         deleteRequest.setOptions(new DeleteOptions());
         for (T object : objects) {
+            object.setClient(client);
             deleteRequest.getObjects().add(object.toInternal());
         }
 

@@ -1,3 +1,14 @@
+2014-10-21  Ian Murdock  <imurdock@exacttarget.com>
+
+    * ETRestObject.java (create): Save reference to client in the
+    object for future use.
+    (retrieve): Likewise.
+    (update): Likewise.
+    * ETSoapObject.java (create): Save reference to client in the
+    object for future use.
+    (update): Likewise.
+    (delete): Likewise.
+
 2014-10-13  Ian Murdock  <imurdock@exacttarget.com>
 
     * ETClient.java (update(Class<T> type, String filter, String... values)):

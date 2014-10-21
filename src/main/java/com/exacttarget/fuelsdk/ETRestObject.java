@@ -41,10 +41,11 @@ import org.apache.log4j.Logger;
 
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.RestObject;
-import com.exacttarget.fuelsdk.ETFilter;
 
 public abstract class ETRestObject extends ETObject {
     private static Logger logger = Logger.getLogger(ETRestObject.class);
+
+    private ETClient client = null;
 
     @ExternalName("id") @Expose
     private String id = null;
@@ -54,6 +55,14 @@ public abstract class ETRestObject extends ETObject {
     private Date createdDate = null;
     @ExternalName("modifiedDate") @Expose
     private Date modifiedDate = null;
+
+    protected ETClient getClient() {
+        return client;
+    }
+
+    protected void setClient(ETClient client) {
+        this.client = client;
+    }
 
     public String getId() {
         return id;
@@ -135,6 +144,8 @@ public abstract class ETRestObject extends ETObject {
 
         // XXX is there a way to do this in bulk
         for (T object : objects) {
+            object.setClient(client);
+
             String json = gson.toJson(object);
 
             logger.trace("POST " + path);
@@ -278,7 +289,9 @@ public abstract class ETRestObject extends ETObject {
                 response.addResult(gson.fromJson(element, type));
             }
         } else {
-            response.addResult(gson.fromJson(json, type));
+            ETRestObject object = gson.fromJson(json, type);
+            object.setClient(client);
+            response.addResult(object);
         }
 
         // XXX set overall requestId, statusCode, and statusMessage
@@ -328,6 +341,8 @@ public abstract class ETRestObject extends ETObject {
 
         // XXX is there a way to do this in bulk
         for (T object : objects) {
+            object.setClient(client);
+
             //
             // Construct the path to the object:
             //
@@ -412,6 +427,8 @@ public abstract class ETRestObject extends ETObject {
 
         // XXX is there a way to do this in bulk
         for (T object : objects) {
+            object.setClient(client);
+
             //
             // Construct the path to the object:
             //
