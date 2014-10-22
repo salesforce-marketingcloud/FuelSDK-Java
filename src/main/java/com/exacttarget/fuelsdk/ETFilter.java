@@ -28,9 +28,12 @@
 package com.exacttarget.fuelsdk;
 
 import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
 import java.util.List;
 
-import com.exacttarget.fuelsdk.audiencebuilder.ETAudienceFilterDefinition;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import com.exacttarget.fuelsdk.internal.FilterPart;
 import com.exacttarget.fuelsdk.internal.SimpleFilterPart;
 import com.exacttarget.fuelsdk.internal.SimpleOperators;
@@ -155,23 +158,6 @@ public class ETFilter {
         this.filter = (SimpleFilterPart) filter;
     }
 
-    public ETAudienceFilterDefinition toFilterDefinition() {
-        ETAudienceFilterDefinition filterDefinition = new ETAudienceFilterDefinition();
-        ETAudienceFilterDefinition.Condition condition = filterDefinition.new Condition();
-        condition.setId(getProperty());
-        // XXX others?
-        String operator = getOperator();
-        if (operator.equals("=")) {
-            condition.setOperator("Equals");
-        } else {
-            condition.setOperator(operator);
-        }
-        condition.setConditionValue(getValue());
-        filterDefinition.addCondition(condition);
-
-        return filterDefinition;
-    }
-
     public static ETFilter parse(String filter)
         throws ETSdkException
     {
@@ -189,5 +175,122 @@ public class ETFilter {
             throw new ETSdkException("could not parse filter: " + filter, ex);
         }
         return parsedFilter;
+    }
+
+    public AudienceBuilderFilter toAudienceBuilderFilter() {
+        AudienceBuilderFilter filter = new AudienceBuilderFilter();
+        AudienceBuilderFilter.Condition condition = filter.new Condition();
+        condition.setId(getProperty());
+        // XXX others?
+        String operator = getOperator();
+        if (operator.equals("=")) {
+            condition.setOperator("Equals");
+        } else {
+            condition.setOperator(operator);
+        }
+        condition.setConditionValue(getValue());
+        filter.addCondition(condition);
+
+        return filter;
+    }
+
+    public class AudienceBuilderFilter {
+        @Expose
+        @SerializedName("UseEnterprise")
+        private Boolean useEnterprise = false;
+        @Expose
+        @SerializedName("UseAlsoEngine")
+        private Boolean useAlsoEngine = true;
+        @Expose
+        @SerializedName("Source")
+        private String source = "AudienceBuilder";
+        @Expose
+        @SerializedName("ConditionSet")
+        private ConditionSet conditionSet = new ConditionSet();
+
+        public AudienceBuilderFilter() {
+            conditionSet.setOperator("INC"); // XXX?
+            conditionSet.setConditionSetName("");
+        }
+
+        public ConditionSet getConditionSet() {
+            return conditionSet;
+        }
+
+        public void addCondition(Condition condition) {
+            conditionSet.addCondition(condition);
+        }
+
+        public class Condition {
+            @Expose
+            @SerializedName("ID")
+            private String id = null;
+            @Expose
+            @SerializedName("Operator")
+            private String operator = null;
+            @Expose
+            @SerializedName("ConditionValue")
+            private String conditionValue = null;
+
+            public String getId() {
+                return id;
+            }
+
+            public void setId(String id) {
+                this.id = id;
+            }
+
+            public String getOperator() {
+                return operator;
+            }
+
+            public void setOperator(String operator) {
+                this.operator = operator;
+            }
+
+            public String getConditionValue() {
+                return conditionValue;
+            }
+
+            public void setConditionValue(String conditionValue) {
+                this.conditionValue = conditionValue;
+            }
+        }
+
+        public class ConditionSet {
+            @Expose
+            @SerializedName("Operator")
+            private String operator = null;
+            @Expose
+            @SerializedName("ConditionSetName")
+            private String conditionSetName = null;
+            @Expose
+            @SerializedName("Condition")
+            private List<Condition> conditions = new ArrayList<Condition>();
+
+            public String getOperator() {
+                return operator;
+            }
+
+            public void setOperator(String operator) {
+                this.operator = operator;
+            }
+
+            public String getConditionSetName() {
+                return conditionSetName;
+            }
+
+            public void setConditionSetName(String conditionSetName) {
+                this.conditionSetName = conditionSetName;
+            }
+
+            public List<Condition> getConditions() {
+                return conditions;
+            }
+
+            public void addCondition(Condition condition) {
+                conditions.add(condition);
+            }
+        }
     }
 }
