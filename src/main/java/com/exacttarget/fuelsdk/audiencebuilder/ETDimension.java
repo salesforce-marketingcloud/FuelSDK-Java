@@ -39,141 +39,62 @@ import com.exacttarget.fuelsdk.annotations.RestObject;
             primaryKey = "id",
             collectionKey = "entities")
 public class ETDimension extends ETRestObject {
-    @Expose
-    @SerializedName("dimensionID")
+    @Expose @SerializedName("dimensionID")
+    @ExternalName("id")
     String id = null;
     @Expose
+    @ExternalName("name")
     private String name = null;
     @Expose
-    String displayName = null;
-    @Expose
+    @ExternalName("type")
     private Integer type = null;
-    @Expose
-    @SerializedName("customObjectID")
-    private String customObjectId = null;
-    @Expose
-    private String customObjectName = null;
-    @Expose
-    @SerializedName("customObjectFieldID")
+    // XXX better name for customObjectField?
+    @Expose @SerializedName("customObjectFieldID")
+    @ExternalName("customObjectFieldId")
     private String customObjectFieldId = null;
     @Expose
+    @ExternalName("customObjectFieldName")
     private String customObjectFieldName = null;
-    @Expose
-    @SerializedName("dataType")
+    @Expose @SerializedName("dataType")
+    @ExternalName("customObjectFieldType")
     private Integer customObjectFieldType = null;
     @Expose
-    @SerializedName("attrCustomObjectID")
-    private String attrCustomObjectId = null;
+    @ExternalName("count")
+    private Integer count = null;
     @Expose
-    @SerializedName("attrCustomObjectFieldID")
-    private String attrCustomObjectFieldId = null;
-    @Expose
-    private Integer attrCustomObjectFieldType = null;
-    @Expose
+    @ExternalName("values")
     private List<ETDimensionValue> values = null;
 
+    @Override
     public String getId() {
         return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public void setDisplayName(String displayName) {
-        this.displayName = displayName;
-    }
-
     public Integer getType() {
         return type;
-    }
-
-    public void setType(Integer type) {
-        this.type = type;
-    }
-
-    public String getCustomObjectId() {
-        return customObjectId;
-    }
-
-    public void setCustomObjectId(String customObjectId) {
-        this.customObjectId = customObjectId;
-    }
-
-    public String getCustomObjectName() {
-        return customObjectName;
-    }
-
-    public void setCustomObjectName(String customObjectName) {
-        this.customObjectName = customObjectName;
     }
 
     public String getCustomObjectFieldId() {
         return customObjectFieldId;
     }
 
-    public void setCustomObjectFieldId(String customObjectFieldId) {
-        this.customObjectFieldId = customObjectFieldId;
-    }
-
     public String getCustomObjectFieldName() {
         return customObjectFieldName;
-    }
-
-    public void setCustomObjectFieldName(String customObjectFieldName) {
-        this.customObjectFieldName = customObjectFieldName;
     }
 
     public Integer getCustomObjectFieldType() {
         return customObjectFieldType;
     }
 
-    public void setCustomObjectFieldType(Integer customObjectFieldType) {
-        this.customObjectFieldType = customObjectFieldType;
-    }
-
-
-    public String getAttrCustomObjectId() {
-        return attrCustomObjectId;
-    }
-
-    public void setAttrCustomObjectId(String attrCustomObjectId) {
-        this.attrCustomObjectId = attrCustomObjectId;
-    }
-
-    public String getAttrCustomObjectFieldId() {
-        return attrCustomObjectFieldId;
-    }
-
-    public void setAttrCustomObjectFieldId(String attrCustomObjectFieldId) {
-        this.attrCustomObjectFieldId = attrCustomObjectFieldId;
-    }
-
-    public Integer getAttrCustomObjectFieldType() {
-        return attrCustomObjectFieldType;
-    }
-
-    public void setAttrCustomObjectFieldType(Integer attrCustomObjectFieldType) {
-        this.attrCustomObjectFieldType = attrCustomObjectFieldType;
+    public Integer getCount() {
+        return count;
     }
 
     public List<ETDimensionValue> getValues() {
         return values;
-    }
-
-    public void setValues(List<ETDimensionValue> values) {
-        this.values = values;
     }
 }

@@ -27,41 +27,32 @@
 
 package com.exacttarget.fuelsdk.audiencebuilder;
 
-import com.exacttarget.fuelsdk.ETRestObject;
-import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.exacttarget.fuelsdk.ETRestObject;
+import com.exacttarget.fuelsdk.annotations.ExternalName;
 
 public class ETDimensionValue extends ETRestObject {
-    @Expose
-    @SerializedName("pK")
+    @Expose @SerializedName("pK")
+    @ExternalName("key")
     private String key = null;
     @Expose
+    @ExternalName("name")
     private String name = null;
     @Expose
+    @ExternalName("count")
     private Integer count = null;
 
+    @Override
     public String getKey() {
         return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public Integer getCount() {
         return count;
-    }
-
-    public void setCount(Integer count) {
-        this.count = count;
     }
 }

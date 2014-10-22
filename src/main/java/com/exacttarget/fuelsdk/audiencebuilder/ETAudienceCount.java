@@ -27,29 +27,16 @@
 
 package com.exacttarget.fuelsdk.audiencebuilder;
 
+import com.exacttarget.fuelsdk.ETPrettyPrintable;
+import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 
-public class ETAudienceCount {
+public class ETAudienceCount extends ETPrettyPrintable {
     @Expose
+    @ExternalName("count")
     private Integer count = null;
-    @Expose
-    @SerializedName("persistenceID")
-    private String persistenceId = null;
 
     public Integer getCount() {
         return count;
-    }
-
-    public void setCount(Integer count) {
-        this.count = count;
-    }
-
-    public String getPersistenceId() {
-        return persistenceId;
-    }
-
-    public void setPersistenceId(String persistenceId) {
-        this.persistenceId = persistenceId;
     }
 }
