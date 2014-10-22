@@ -94,6 +94,7 @@ public class ETDataExtension extends ETSoapObject {
      * @deprecated
      * Use <code>getFolderId()</code>.
      */
+    @Deprecated
     public Integer getCategoryId() {
         return getFolderId();
     }
@@ -159,29 +160,37 @@ public class ETDataExtension extends ETSoapObject {
         return response.getResults();
     }
 
+    public List<ETDataExtensionRow> select()
+        throws ETSdkException
+    {
+        return select(null);
+    }
+
     public List<ETDataExtensionRow> select(String filter, String... columns)
         throws ETSdkException
     {
         // XXX copied and pasted from ETClient.retrieve(filter, properties)
         ETFilter f = null;
         String[] c = columns;
-        try {
-            f = ETFilter.parse(filter);
-        } catch (ETSdkException ex) {
-            // XXX check against ex.getCause();
+        if (filter != null) {
+            try {
+                f = ETFilter.parse(filter);
+            } catch (ETSdkException ex) {
+                // XXX check against ex.getCause();
 
-            //
-            // The filter argument is actually a column. This is a bit
-            // of a hack, but this method needs to handle the case of
-            // both a filtered and a filterless retrieve with columns,
-            // as having one method for each results in ambiguous methods.
-            //
+                //
+                // The filter argument is actually a column. This is a bit
+                // of a hack, but this method needs to handle the case of
+                // both a filtered and a filterless retrieve with columns,
+                // as having one method for each results in ambiguous methods.
+                //
 
-            c = new String[columns.length + 1];
-            c[0] = filter;
-            int i = 1;
-            for (String column : columns) {
-                c[i++] = column;
+                c = new String[columns.length + 1];
+                c[0] = filter;
+                int i = 1;
+                for (String column : columns) {
+                    c[i++] = column;
+                }
             }
         }
 

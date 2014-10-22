@@ -1,5 +1,6 @@
 2014-10-21  Ian Murdock  <imurdock@exacttarget.com>
 
+    * ETDataExtension.java (select()): New method.
     * ETResponse.java (getResult): New method.
     * ETRestObject.java (create): Save reference to client in the
     object for future use.
