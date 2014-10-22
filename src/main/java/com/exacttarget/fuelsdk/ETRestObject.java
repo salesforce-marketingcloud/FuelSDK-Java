@@ -47,13 +47,17 @@ public abstract class ETRestObject extends ETObject {
 
     private ETClient client = null;
 
-    @ExternalName("id") @Expose
+    @Expose
+    @ExternalName("id")
     private String id = null;
-    @ExternalName("key") @Expose
+    @Expose
+    @ExternalName("key")
     private String key = null;
-    @ExternalName("createdDate") @Expose
+    @Expose
+    @ExternalName("createdDate")
     private Date createdDate = null;
-    @ExternalName("modifiedDate") @Expose
+    @Expose
+    @ExternalName("modifiedDate")
     private Date modifiedDate = null;
 
     protected ETClient getClient() {
@@ -142,10 +146,13 @@ public abstract class ETRestObject extends ETObject {
         Gson gson = connection.getGson();
         JsonParser jsonParser = new JsonParser();
 
-        // XXX is there a way to do this in bulk
-        for (T object : objects) {
-            object.setClient(client);
+        //
+        // There's currently no way to do this in bulk so
+        // we walk through the list of objects and create
+        // them one at a time:
+        //
 
+        for (T object : objects) {
             String json = gson.toJson(object);
 
             logger.trace("POST " + path);
@@ -169,12 +176,19 @@ public abstract class ETRestObject extends ETObject {
                 }
             }
 
-            //gson.fromJson(json, object.getClass()));
+            @SuppressWarnings("unchecked")
+            T createdObject = (T) gson.fromJson(json, object.getClass());
 
-            response.addResult(connection.getResult());
+            ETResult result = new ETResult();
+            result.setRequestId(connection.getLastCallRequestId());
+            result.setStatusCode(connection.getLastCallResponseCode());
+            result.setStatusMessage(connection.getLastCallResponseMessage());
+            result.setId(createdObject.getId());
+
+            response.addResult(result);
+
+            object.setClient(client);
         }
-
-        // XXX set overall requestId, statusCode, and statusMessage
 
         return response;
     }
@@ -209,15 +223,15 @@ public abstract class ETRestObject extends ETObject {
         // Read call details from the RestObject annotation:
         //
 
-        RestObject annotation = type.getAnnotation(RestObject.class);
+        RestObject annotations = type.getAnnotation(RestObject.class);
 
-        assert annotation != null;
+        assert annotations != null;
 
-        String path = annotation.path();
+        String path = annotations.path();
         logger.trace("path: " + path);
-        String primaryKey = annotation.primaryKey();
+        String primaryKey = annotations.primaryKey();
         logger.trace("primaryKey: " + primaryKey);
-        String collectionKey = annotation.collectionKey();
+        String collectionKey = annotations.collectionKey();
         logger.trace("collectionKey: " + collectionKey);
 
         if (filter != null) {
@@ -255,6 +269,10 @@ public abstract class ETRestObject extends ETObject {
 
         String json = connection.get(path);
 
+        response.setRequestId(connection.getLastCallRequestId());
+        response.setStatusCode(connection.getLastCallResponseCode());
+        response.setStatusMessage(connection.getLastCallResponseMessage());
+
         Gson gson = connection.getGson();
         JsonParser jsonParser = new JsonParser();
         JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
@@ -286,15 +304,15 @@ public abstract class ETRestObject extends ETObject {
             JsonArray collection = jsonObject.get(collectionKey).getAsJsonArray();
 
             for (JsonElement element : collection) {
-                response.addResult(gson.fromJson(element, type));
+                ETRestObject object = gson.fromJson(element, type);
+                object.setClient(client);
+                response.addResult(object);
             }
         } else {
             ETRestObject object = gson.fromJson(json, type);
             object.setClient(client);
             response.addResult(object);
         }
-
-        // XXX set overall requestId, statusCode, and statusMessage
 
         return response;
     }
@@ -339,10 +357,13 @@ public abstract class ETRestObject extends ETObject {
         Gson gson = connection.getGson();
         JsonParser jsonParser = new JsonParser();
 
-        // XXX is there a way to do this in bulk
-        for (T object : objects) {
-            object.setClient(client);
+        //
+        // There's currently no way to do this in bulk so
+        // we walk through the list of objects and update
+        // them one at a time:
+        //
 
+        for (T object : objects) {
             //
             // Construct the path to the object:
             //
@@ -375,12 +396,15 @@ public abstract class ETRestObject extends ETObject {
                 }
             }
 
-            //gson.fromJson(json, object.getClass()));
+            ETResult result = new ETResult();
+            result.setRequestId(connection.getLastCallRequestId());
+            result.setStatusCode(connection.getLastCallResponseCode());
+            result.setStatusMessage(connection.getLastCallResponseMessage());
 
-            response.addResult(connection.getResult());
+            response.addResult(result);
+
+            object.setClient(client);
         }
-
-        // XXX set overall requestId, statusCode, and statusMessage
 
         return response;
     }
@@ -425,10 +449,13 @@ public abstract class ETRestObject extends ETObject {
         Gson gson = connection.getGson();
         JsonParser jsonParser = new JsonParser();
 
-        // XXX is there a way to do this in bulk
-        for (T object : objects) {
-            object.setClient(client);
+        //
+        // There's currently no way to do this in bulk so
+        // we walk through the list of objects and delete
+        // them one at a time:
+        //
 
+        for (T object : objects) {
             //
             // Construct the path to the object:
             //
@@ -461,13 +488,16 @@ public abstract class ETRestObject extends ETObject {
 //                    logger.trace(line);
 //                }
 //            }
-//
-//            //gson.fromJson(json, object.getClass()));
-//
-//            response.addResult(connection.getResult());
-        }
 
-        // XXX set overall requestId, statusCode, and statusMessage
+            ETResult result = new ETResult();
+            result.setRequestId(connection.getLastCallRequestId());
+            result.setStatusCode(connection.getLastCallResponseCode());
+            result.setStatusMessage(connection.getLastCallResponseMessage());
+
+            response.addResult(result);
+
+            object.setClient(client);
+        }
 
         return response;
     }

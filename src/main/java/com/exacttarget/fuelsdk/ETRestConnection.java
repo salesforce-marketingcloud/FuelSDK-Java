@@ -50,11 +50,14 @@ public class ETRestConnection {
     private Gson gson = null;
 
     private ETClient client = null;
-    private ETResult result = new ETResult();
 
     private String endpoint = null;
 
     private boolean isAuthConnection = false;
+
+    private String lastCallRequestId = null;
+    private String lastCallResponseCode = null;
+    private String lastCallResponseMessage = null;
 
     private enum Method {
         GET, POST, PATCH, DELETE
@@ -90,12 +93,12 @@ public class ETRestConnection {
     {
         HttpURLConnection connection = sendRequest(path, Method.GET);
         String response = receiveResponse(connection);
-        result.setRequestId(connection.getHeaderField("X-Mashery-Message-ID"));
+        lastCallRequestId = connection.getHeaderField("X-Mashery-Message-ID");
         try {
-            result.setStatusCode(Integer.toString(connection.getResponseCode()));
-            result.setStatusMessage(connection.getResponseMessage());
-        } catch (IOException e) {
-            throw new ETSdkException(e);
+            lastCallResponseCode = Integer.toString(connection.getResponseCode());
+            lastCallResponseMessage = connection.getResponseMessage();
+        } catch (IOException ex) {
+            throw new ETSdkException(ex);
         }
         connection.disconnect();
         return response;
@@ -106,12 +109,12 @@ public class ETRestConnection {
     {
         HttpURLConnection connection = sendRequest(path, Method.POST, payload);
         String response = receiveResponse(connection);
-        result.setRequestId(connection.getHeaderField("X-Mashery-Message-ID"));
+        lastCallRequestId = connection.getHeaderField("X-Mashery-Message-ID");
         try {
-            result.setStatusCode(Integer.toString(connection.getResponseCode()));
-            result.setStatusMessage(connection.getResponseMessage());
-        } catch (IOException e) {
-            throw new ETSdkException(e);
+            lastCallResponseCode = Integer.toString(connection.getResponseCode());
+            lastCallResponseMessage = connection.getResponseMessage();
+        } catch (IOException ex) {
+            throw new ETSdkException(ex);
         }
         connection.disconnect();
         return response;
@@ -122,12 +125,12 @@ public class ETRestConnection {
     {
         HttpURLConnection connection = sendRequest(path, Method.PATCH, payload);
         String response = receiveResponse(connection);
-        result.setRequestId(connection.getHeaderField("X-Mashery-Message-ID"));
+        lastCallRequestId = connection.getHeaderField("X-Mashery-Message-ID");
         try {
-            result.setStatusCode(Integer.toString(connection.getResponseCode()));
-            result.setStatusMessage(connection.getResponseMessage());
-        } catch (IOException e) {
-            throw new ETSdkException(e);
+            lastCallResponseCode = Integer.toString(connection.getResponseCode());
+            lastCallResponseMessage = connection.getResponseMessage();
+        } catch (IOException ex) {
+            throw new ETSdkException(ex);
         }
         connection.disconnect();
         return response;
@@ -138,12 +141,12 @@ public class ETRestConnection {
     {
         HttpURLConnection connection = sendRequest(path, Method.DELETE);
         String response = receiveResponse(connection);
-        result.setRequestId(connection.getHeaderField("X-Mashery-Message-ID"));
+        lastCallRequestId = connection.getHeaderField("X-Mashery-Message-ID");
         try {
-            result.setStatusCode(Integer.toString(connection.getResponseCode()));
-            result.setStatusMessage(connection.getResponseMessage());
-        } catch (IOException e) {
-            throw new ETSdkException(e);
+            lastCallResponseCode = Integer.toString(connection.getResponseCode());
+            lastCallResponseMessage = connection.getResponseMessage();
+        } catch (IOException ex) {
+            throw new ETSdkException(ex);
         }
         connection.disconnect();
         return response;
@@ -161,20 +164,28 @@ public class ETRestConnection {
         return patch(path, jsonObject.toString());
     }
 
-    protected Gson getGson() {
-        return gson;
-    }
-
-    public ETResult getResult() {
-        return result;
-    }
-
     public String getEndpoint() {
         return endpoint;
     }
 
     public boolean isAuthConnection() {
         return isAuthConnection;
+    }
+
+    public String getLastCallRequestId() {
+        return lastCallRequestId;
+    }
+
+    public String getLastCallResponseCode() {
+        return lastCallResponseCode;
+    }
+
+    public String getLastCallResponseMessage() {
+        return lastCallResponseMessage;
+    }
+
+    protected Gson getGson() {
+        return gson;
     }
 
     private HttpURLConnection sendRequest(String path, Method method)
@@ -211,17 +222,17 @@ public class ETRestConnection {
         }
 
         switch(method) {
-        case GET:
+          case GET:
             connection.setDoInput(true);
             connection.setRequestProperty("Accept", "application/json");
             break;
-        case POST:
-        case PATCH:
-        case DELETE:
+          case POST:
+          case PATCH:
+          case DELETE:
             connection.setDoOutput(true);
             connection.setRequestProperty("Content-Type", "application/json");
             break;
-        default:
+          default:
             throw new ETSdkException("unsupported request method: " + method.toString());
         }
 
