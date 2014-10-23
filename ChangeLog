@@ -1,3 +1,12 @@
+2014-10-23  Ian Murdock  <imurdock@exacttarget.com>
+
+    * ETDataExtension.java (update(String filter, String... values)):
+    New method.
+    * ETDataExtension.java (delete(String filter): New method.
+    * ETFilter.java: Added support for complex filters (AND, OR).
+    * ETFilterParser.jj: Likewise.
+    * ETFilter.java (toSoapFilter): Renamed from getSoapFilter().
+
 2014-10-21  Ian Murdock  <imurdock@exacttarget.com>
 
     * ETDataExtension.java (select()): New method.

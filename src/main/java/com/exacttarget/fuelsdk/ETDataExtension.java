@@ -291,6 +291,15 @@ public class ETDataExtension extends ETSoapObject {
         return response.getResults();
     }
 
+    public List<ETResult> update(String filter, String... values)
+        throws ETSdkException
+    {
+        ETClient client = getClient();
+        ETResponse<ETResult> response = client.update(ETDataExtensionRow.class, filter, values);
+        // XXX check for errors and throw the appropriate exception
+        return response.getResults();
+    }
+
     public List<ETResult> delete(ETDataExtensionRow... rows)
         throws ETSdkException
     {
@@ -310,6 +319,15 @@ public class ETDataExtension extends ETSoapObject {
 
         // XXX check for errors and throw the appropriate exception
 
+        return response.getResults();
+    }
+
+    public List<ETResult> delete(String filter)
+        throws ETSdkException
+    {
+        ETClient client = getClient();
+        ETResponse<ETResult> response = client.delete(ETDataExtensionRow.class, filter);
+        // XXX check for errors and throw the appropriate exception
         return response.getResults();
     }
 
