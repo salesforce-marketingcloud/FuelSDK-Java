@@ -34,7 +34,9 @@ import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import com.exacttarget.fuelsdk.internal.ComplexFilterPart;
 import com.exacttarget.fuelsdk.internal.FilterPart;
+import com.exacttarget.fuelsdk.internal.LogicalOperators;
 import com.exacttarget.fuelsdk.internal.SimpleFilterPart;
 import com.exacttarget.fuelsdk.internal.SimpleOperators;
 
@@ -50,7 +52,10 @@ public class ETFilter {
         IS_NOT_NULL("is not null"),
         IN("in"),
         BETWEEN("between"),
-        LIKE("like");
+        LIKE("like"),
+        AND("and"),
+        OR("or"),
+        NOT("not");
         private final String value;
 
         Operator(String value) {
@@ -71,18 +76,20 @@ public class ETFilter {
         }
     }
 
-    private SimpleFilterPart filter = new SimpleFilterPart();
+    private String property = null;
+    private Operator operator = null;
+    private List<String> values = new ArrayList<String>();
+    private List<ETFilter> filters = new ArrayList<ETFilter>();
 
     public String getProperty() {
-        return filter.getProperty();
+        return property;
     }
 
     public void setProperty(String property) {
-        filter.setProperty(property);
+        this.property = property;
     }
 
     public String getOperator() {
-        SimpleOperators operator = filter.getSimpleOperator();
         switch (operator) {
           case EQUALS:
             return "=";
@@ -106,56 +113,40 @@ public class ETFilter {
             return "in";
           case LIKE:
             return "like";
+          case AND:
+            return "and";
+          case OR:
+            return "or";
+          case NOT:
+            return "not";
           default:
             return null;
         }
     }
 
     public void setOperator(String operator) {
-        if (operator.equals("=")) {
-            filter.setSimpleOperator(SimpleOperators.EQUALS);
-        } else if (operator.equals("!=")) {
-            filter.setSimpleOperator(SimpleOperators.NOT_EQUALS);
-        } else if (operator.equals("<")) {
-            filter.setSimpleOperator(SimpleOperators.LESS_THAN);
-        } else if (operator.equals("<=")) {
-            filter.setSimpleOperator(SimpleOperators.LESS_THAN_OR_EQUAL);
-        } else if (operator.equals(">")) {
-            filter.setSimpleOperator(SimpleOperators.GREATER_THAN);
-        } else if (operator.equals(">=")) {
-            filter.setSimpleOperator(SimpleOperators.GREATER_THAN_OR_EQUAL);
-        } else if (operator.equals("is null")) {
-            filter.setSimpleOperator(SimpleOperators.IS_NULL);
-        } else if (operator.equals("is not null")) {
-            filter.setSimpleOperator(SimpleOperators.IS_NOT_NULL);
-        } else if (operator.equals("between")) {
-            filter.setSimpleOperator(SimpleOperators.BETWEEN);
-        } else if (operator.equals("in")) {
-            filter.setSimpleOperator(SimpleOperators.IN);
-        } else if (operator.equals("like")) {
-            filter.setSimpleOperator(SimpleOperators.LIKE);
-        }
+        this.operator = Operator.fromValue(operator);
     }
 
     public String getValue() {
-        assert filter.getValue().size() == 1;
-        return filter.getValue().get(0);
+        assert values.size() == 1;
+        return values.get(0);
     }
 
     public List<String> getValues() {
-        return filter.getValue();
+        return values;
     }
 
     public void addValue(String value) {
-        filter.getValue().add(value);
+        values.add(value);
     }
 
-    public FilterPart getSoapFilter() {
-        return filter;
+    public List<ETFilter> getFilters() {
+        return filters;
     }
 
-    public void setSoapFilter(FilterPart filter) {
-        this.filter = (SimpleFilterPart) filter;
+    public void addFilter(ETFilter filter) {
+        filters.add(filter);
     }
 
     public static ETFilter parse(String filter)
@@ -175,6 +166,64 @@ public class ETFilter {
             throw new ETSdkException("could not parse filter: " + filter, ex);
         }
         return parsedFilter;
+    }
+
+    public FilterPart toSoapFilter() {
+        if (operator == Operator.AND || operator == Operator.OR) {
+            ComplexFilterPart complexFilterPart = new ComplexFilterPart();
+            complexFilterPart.setLeftOperand(filters.get(0).toSoapFilter());
+            if (operator == Operator.AND) {
+                complexFilterPart.setLogicalOperator(LogicalOperators.AND);
+            } else if (operator == Operator.OR) {
+                complexFilterPart.setLogicalOperator(LogicalOperators.OR);
+            }
+            complexFilterPart.setRightOperand(filters.get(1).toSoapFilter());
+            return complexFilterPart;
+        } else {
+            SimpleFilterPart simpleFilterPart = new SimpleFilterPart();
+            simpleFilterPart.setProperty(property);
+            switch (operator) {
+              case EQUALS:
+                simpleFilterPart.setSimpleOperator(SimpleOperators.EQUALS);
+                break;
+              case NOT_EQUALS:
+                simpleFilterPart.setSimpleOperator(SimpleOperators.NOT_EQUALS);
+                break;
+              case LESS_THAN:
+                simpleFilterPart.setSimpleOperator(SimpleOperators.LESS_THAN);
+                break;
+              case LESS_THAN_OR_EQUAL:
+                simpleFilterPart.setSimpleOperator(SimpleOperators.LESS_THAN_OR_EQUAL);
+                break;
+              case GREATER_THAN:
+                simpleFilterPart.setSimpleOperator(SimpleOperators.GREATER_THAN);
+                break;
+              case GREATER_THAN_OR_EQUAL:
+                simpleFilterPart.setSimpleOperator(SimpleOperators.GREATER_THAN_OR_EQUAL);
+                break;
+              case IS_NULL:
+                simpleFilterPart.setSimpleOperator(SimpleOperators.IS_NULL);
+                break;
+              case IS_NOT_NULL:
+                simpleFilterPart.setSimpleOperator(SimpleOperators.IS_NOT_NULL);
+                break;
+              case BETWEEN:
+                simpleFilterPart.setSimpleOperator(SimpleOperators.BETWEEN);
+                break;
+              case IN:
+                simpleFilterPart.setSimpleOperator(SimpleOperators.IN);
+                break;
+              case LIKE:
+                simpleFilterPart.setSimpleOperator(SimpleOperators.LIKE);
+                break;
+              default:
+                break;
+            }
+            for (String value : values) {
+                simpleFilterPart.getValue().add(value);
+            }
+            return simpleFilterPart;
+        }
     }
 
     public AudienceBuilderFilter toAudienceBuilderFilter() {

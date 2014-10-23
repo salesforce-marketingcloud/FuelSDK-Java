@@ -63,6 +63,73 @@ ETFilter parse(Class<? extends ETObject> type) throws ETSdkException:
     ETFilter filter = null;
 }
 {
+    filter = OrExpression(type)
+
+    {
+        return filter;
+    }
+}
+
+ETFilter OrExpression(Class<? extends ETObject> type) throws ETSdkException:
+{
+    ETFilter filter = null;
+    ETFilter filter1 = null;
+    ETFilter filter2 = null;
+}
+{
+    filter1 = AndExpression(type)
+    {
+        filter = filter1;
+    }
+    (
+        LOOKAHEAD(<OR>) <OR>
+        filter2 = AndExpression(type)
+        {
+            filter = new ETFilter();
+            filter.setOperator("or");
+            filter.addFilter(filter1);
+            filter.addFilter(filter2);
+        }
+    )*
+
+    {
+        return filter;
+    }
+}
+
+ETFilter AndExpression(Class<? extends ETObject> type) throws ETSdkException:
+{
+    ETFilter filter = null;
+    ETFilter filter1 = null;
+    ETFilter filter2 = null;
+}
+{
+    filter1 = Expression(type)
+    {
+        filter = filter1;
+    }
+    (
+        LOOKAHEAD(<AND>) <AND>
+        filter2 = Expression(type)
+        {
+            filter = new ETFilter();
+            filter.setOperator("and");
+            filter.addFilter(filter1);
+            filter.addFilter(filter2);
+        }
+    )*
+
+    {
+        return filter;
+    }
+}
+
+ETFilter Expression(Class<? extends ETObject> type) throws ETSdkException:
+{
+    ETFilter filter = new ETFilter();
+    String value = null;
+}
+{
     (
         LOOKAHEAD(BetweenExpression(type)) filter = BetweenExpression(type)
         | LOOKAHEAD(InExpression(type)) filter = InExpression(type)

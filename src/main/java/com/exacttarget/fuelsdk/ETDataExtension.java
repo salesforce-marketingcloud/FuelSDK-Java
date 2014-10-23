@@ -229,7 +229,7 @@ public class ETDataExtension extends ETSoapObject {
         retrieveRequest.setObjectType("DataExtensionObject[" + name + "]");
         retrieveRequest.getProperties().addAll(Arrays.asList(c));
         if (f != null) {
-            retrieveRequest.setFilter(f.getSoapFilter());
+            retrieveRequest.setFilter(f.toSoapFilter());
         }
 //        if (continueRequestId != null) {
 //            retrieveRequest.setContinueRequest(continueRequestId);

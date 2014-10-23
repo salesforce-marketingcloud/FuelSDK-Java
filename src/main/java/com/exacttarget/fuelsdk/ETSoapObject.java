@@ -346,7 +346,7 @@ public abstract class ETSoapObject extends ETObject {
         retrieveRequest.setObjectType(internalType.getSimpleName());
         retrieveRequest.getProperties().addAll(internalProperties);
         if (filter != null) {
-            retrieveRequest.setFilter(filter.getSoapFilter());
+            retrieveRequest.setFilter(filter.toSoapFilter());
         }
 
         if (logger.isTraceEnabled()) {
@@ -362,7 +362,7 @@ public abstract class ETSoapObject extends ETObject {
             }
             logger.trace(line + " }");
             if (filter != null) {
-                logger.trace("  filter = " + filter.getSoapFilter());
+                logger.trace("  filter = " + filter.toSoapFilter());
             }
         }
 
