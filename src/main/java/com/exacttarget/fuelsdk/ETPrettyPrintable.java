@@ -36,10 +36,12 @@ import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.PrettyPrint;
 
 public abstract class ETPrettyPrintable {
-    private Boolean toStringMultiLine = false;
+    private Boolean toStringMultiLine = true;
     private Integer toStringMultiLineIndentAmount = 4;
     // default to true if toStringMultiLine is true
     private Boolean toStringSpaceAroundEquals = toStringMultiLine;
+
+    private static int currentIndentLevel = 0;
 
     @Override
     public String toString() {
@@ -50,6 +52,8 @@ public abstract class ETPrettyPrintable {
         if (toStringMultiLine) {
             stringBuilder.append(System.getProperty("line.separator"));
         }
+
+        currentIndentLevel += toStringMultiLineIndentAmount;
 
         boolean first = true;
         for (Field field : getAllFields()) {
@@ -88,7 +92,7 @@ public abstract class ETPrettyPrintable {
                 continue;
             }
             if (toStringMultiLine) {
-                for (int i = 0; i < toStringMultiLineIndentAmount; i++) {
+                for (int i = 0; i < currentIndentLevel; i++) {
                     stringBuilder.append(" ");
                 }
             } else {
@@ -105,6 +109,14 @@ public abstract class ETPrettyPrintable {
             }
             if (toStringMultiLine) {
                 stringBuilder.append(System.getProperty("line.separator"));
+            }
+        }
+
+        currentIndentLevel -= toStringMultiLineIndentAmount;
+
+        if (toStringMultiLine) {
+            for (int i = 0; i < currentIndentLevel; i++) {
+                stringBuilder.append(" ");
             }
         }
 
