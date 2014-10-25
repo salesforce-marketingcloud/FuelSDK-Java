@@ -136,18 +136,22 @@ public abstract class ETSoapObject extends ETObject {
         this.client = client;
     }
 
+    @Override
     public String getId() {
         return id;
     }
 
+    @Override
     public void setId(String id) {
         this.id = id;
     }
 
+    @Override
     public String getKey() {
         return key;
     }
 
+    @Override
     public void setKey(String key) {
         this.key = key;
     }
@@ -170,27 +174,31 @@ public abstract class ETSoapObject extends ETObject {
         setKey(customerKey);
     }
 
+    @Override
     public Date getCreatedDate() {
         return createdDate;
     }
 
+    @Override
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
 
+    @Override
     public Date getModifiedDate() {
         return modifiedDate;
     }
 
+    @Override
     public void setModifiedDate(Date modifiedDate) {
         this.modifiedDate = modifiedDate;
     }
 
-    protected static <T extends ETSoapObject> ETResponse<ETResult> create(ETClient client,
-                                                                          List<T> objects)
+    protected static <T extends ETSoapObject> ETResponse<T> create(ETClient client,
+                                                                   List<T> objects)
         throws ETSdkException
     {
-        ETResponse<ETResult> response = new ETResponse<ETResult>();
+        ETResponse<T> response = new ETResponse<T>();
 
         if (objects == null || objects.size() == 0) {
             return response;
@@ -246,16 +254,41 @@ public abstract class ETSoapObject extends ETObject {
         }
 
         response.setRequestId(createResponse.getRequestID());
-        response.setStatusCode(createResponse.getOverallStatus());
-        response.setStatusMessage(createResponse.getOverallStatus());
+        response.setResponseCode(createResponse.getOverallStatus());
+        response.setResponseMessage(createResponse.getOverallStatus());
         for (CreateResult createResult : createResponse.getResults()) {
-            ETResult status = new ETResult();
-            status.setStatusCode(createResult.getStatusCode());
-            status.setStatusMessage(createResult.getStatusMessage());
-            status.setErrorCode(createResult.getErrorCode());
-            status.setId(Integer.toString(createResult.getNewID()));
-            status.setGuid(createResult.getNewObjectID());
-            response.addResult(status);
+            //
+            // Allocate a new (external) object:
+            //
+
+            @SuppressWarnings("unchecked")
+            Class<T> externalType = (Class<T>) objects.get(0).getClass();
+
+            T externalObject = null;
+            try {
+                externalObject = externalType.newInstance();
+            } catch (Exception ex) {
+                throw new ETSdkException("could not instantiate "
+                        + externalType.getName(), ex);
+            }
+
+            externalObject.setClient(client);
+
+            //
+            // Convert from internal representation:
+            //
+
+            externalObject.fromInternal(createResult.getObject());
+
+            //
+            // Add result to the list of results:
+            //
+
+            ETResult<T> result = new ETResult<T>();
+            result.setResponseCode(createResult.getStatusCode());
+            result.setResponseMessage(createResult.getStatusMessage());
+            result.setObject(externalObject);
+            response.addResult(result);
         }
 
         return response;
@@ -385,8 +418,8 @@ public abstract class ETSoapObject extends ETObject {
         }
 
         response.setRequestId(retrieveResponseMsg.getRequestID());
-        response.setStatusCode(retrieveResponseMsg.getOverallStatus());
-        response.setStatusMessage(retrieveResponseMsg.getOverallStatus());
+        response.setResponseCode(retrieveResponseMsg.getOverallStatus());
+        response.setResponseMessage(retrieveResponseMsg.getOverallStatus());
         for (APIObject internalObject : retrieveResponseMsg.getResults()) {
             //
             // Allocate a new (external) object:
@@ -412,7 +445,9 @@ public abstract class ETSoapObject extends ETObject {
             // Add result to the list of results:
             //
 
-            response.getResults().add(externalObject);
+            ETResult<T> result = new ETResult<T>();
+            result.setObject(externalObject);
+            response.addResult(result);
         }
 
         if (retrieveResponseMsg.getOverallStatus().equals("MoreDataAvailable")) {
@@ -422,11 +457,11 @@ public abstract class ETSoapObject extends ETObject {
         return response;
     }
 
-    protected static <T extends ETSoapObject> ETResponse<ETResult> update(ETClient client,
-                                                                          List<T> objects)
+    protected static <T extends ETSoapObject> ETResponse<T> update(ETClient client,
+                                                                   List<T> objects)
         throws ETSdkException
     {
-        ETResponse<ETResult> response = new ETResponse<ETResult>();
+        ETResponse<T> response = new ETResponse<T>();
 
         if (objects == null || objects.size() == 0) {
             return response;
@@ -482,24 +517,51 @@ public abstract class ETSoapObject extends ETObject {
         }
 
         response.setRequestId(updateResponse.getRequestID());
-        response.setStatusCode(updateResponse.getOverallStatus());
-        response.setStatusMessage(updateResponse.getOverallStatus());
+        response.setResponseCode(updateResponse.getOverallStatus());
+        response.setResponseMessage(updateResponse.getOverallStatus());
         for (UpdateResult updateResult : updateResponse.getResults()) {
-            ETResult status = new ETResult();
-            status.setStatusCode(updateResult.getStatusCode());
-            status.setStatusMessage(updateResult.getStatusMessage());
-            status.setErrorCode(updateResult.getErrorCode());
-            response.addResult(status);
+            //
+            // Allocate a new (external) object:
+            //
+
+            @SuppressWarnings("unchecked")
+            Class<T> externalType = (Class<T>) objects.get(0).getClass();
+
+            T externalObject = null;
+            try {
+                externalObject = externalType.newInstance();
+            } catch (Exception ex) {
+                throw new ETSdkException("could not instantiate "
+                        + externalType.getName(), ex);
+            }
+
+            externalObject.setClient(client);
+
+            //
+            // Convert from internal representation:
+            //
+
+            externalObject.fromInternal(updateResult.getObject());
+
+            //
+            // Add result to the list of results:
+            //
+
+            ETResult<T> result = new ETResult<T>();
+            result.setResponseCode(updateResult.getStatusCode());
+            result.setResponseMessage(updateResult.getStatusMessage());
+            result.setObject(externalObject);
+            response.addResult(result);
         }
 
         return response;
     }
 
-    protected static <T extends ETSoapObject> ETResponse<ETResult> delete(ETClient client,
-                                                                          List<T> objects)
+    protected static <T extends ETSoapObject> ETResponse<T> delete(ETClient client,
+                                                                   List<T> objects)
         throws ETSdkException
     {
-        ETResponse<ETResult> response = new ETResponse<ETResult>();
+        ETResponse<T> response = new ETResponse<T>();
 
         if (objects == null || objects.size() == 0) {
             return response;
@@ -555,14 +617,13 @@ public abstract class ETSoapObject extends ETObject {
         }
 
         response.setRequestId(deleteResponse.getRequestID());
-        response.setStatusCode(deleteResponse.getOverallStatus());
-        response.setStatusMessage(deleteResponse.getOverallStatus());
+        response.setResponseCode(deleteResponse.getOverallStatus());
+        response.setResponseMessage(deleteResponse.getOverallStatus());
         for (DeleteResult deleteResult : deleteResponse.getResults()) {
-            ETResult status = new ETResult();
-            status.setStatusCode(deleteResult.getStatusCode());
-            status.setStatusMessage(deleteResult.getStatusMessage());
-            status.setErrorCode(deleteResult.getErrorCode());
-            response.addResult(status);
+            ETResult<T> result = new ETResult<T>();
+            result.setResponseCode(deleteResult.getStatusCode());
+            result.setResponseMessage(deleteResult.getStatusMessage());
+            response.addResult(result);
         }
 
         return response;

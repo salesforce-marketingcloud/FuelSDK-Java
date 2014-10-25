@@ -37,5 +37,6 @@ import java.lang.annotation.Target;
 public @interface RestObject {
     String path();
     String primaryKey();
-    String collectionKey();
+    String collection();
+    String totalCount();
 }

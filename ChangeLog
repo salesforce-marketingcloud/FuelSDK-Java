@@ -1,3 +1,39 @@
+2014-10-25  Ian Murdock  <imurdock@exacttarget.com>
+
+    * ETClient.java (create): Changed return type to ETResponse<T>
+    from ETResponse<ETResult>.
+    (update): Likewise.
+    (delete): Likewise.
+    * ETResponse.java: Refactored. T must now extend ETObject, and
+    all results are stored in ETResult objects, which now contain
+    object references so we can properly return created or updated
+    objects returned by the underlying API call.
+    (getResponseCode): Renamed from getStatusCode().
+    (setResponseCode): Renamed from setStatusCode().
+    (getResponseMessage): Renamed from getStatusMessage().
+    (setResponseMessage): Renamed from setStatusMessage().
+    (getObject): New method.
+    (getObjects): New method.
+    * ETResult.java: Refactored. Objects now take a parameterized
+    type that must extend ETObject, and ETResult now stores
+    result objects for creates, retrieves and updates (deletes do
+    not return objects for either API).
+    (getResponseCode): Renamed from getStatusCode().
+    (setResponseCode): Renamed from setStatusCode().
+    (getResponseMessage): Renamed from getStatusMessage().
+    (setResponseMessage): Renamed from setStatusMessage().
+    (getObject): New method.
+    (getObjectId): Renamed from getId().
+    (setObjectId): Renamed from setId().
+    * ETRestObject.java (create): Changed return type to ETResponse<T>
+    from ETResponse<ETResult>.
+    (update): Likewise.
+    (delete): Likewise.
+    * ETSoapObject.java (create): Changed return type to ETResponse<T>
+    from ETResponse<ETResult>.
+    (update): Likewise.
+    (delete): Likewise.
+
 2014-10-23  Ian Murdock  <imurdock@exacttarget.com>
 
     * ETDataExtension.java (update(String filter, String... values)):

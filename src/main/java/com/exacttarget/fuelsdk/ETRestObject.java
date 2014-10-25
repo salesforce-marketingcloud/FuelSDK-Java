@@ -68,43 +68,51 @@ public abstract class ETRestObject extends ETObject {
         this.client = client;
     }
 
+    @Override
     public String getId() {
         return id;
     }
 
+    @Override
     public void setId(String id) {
         this.id = id;
     }
 
+    @Override
     public String getKey() {
         return key;
     }
 
+    @Override
     public void setKey(String key) {
         this.key = key;
     }
 
+    @Override
     public Date getCreatedDate() {
         return createdDate;
     }
 
+    @Override
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
 
+    @Override
     public Date getModifiedDate() {
         return modifiedDate;
     }
 
+    @Override
     public void setModifiedDate(Date modifiedDate) {
         this.modifiedDate = modifiedDate;
     }
 
-    protected static <T extends ETRestObject> ETResponse<ETResult> create(ETClient client,
-                                                                          List<T> objects)
+    protected static <T extends ETRestObject> ETResponse<T> create(ETClient client,
+                                                                   List<T> objects)
         throws ETSdkException
     {
-        ETResponse<ETResult> response = new ETResponse<ETResult>();
+        ETResponse<T> response = new ETResponse<T>();
 
         if (objects == null || objects.size() == 0) {
             return response;
@@ -130,18 +138,17 @@ public abstract class ETRestObject extends ETObject {
 
         assert annotations != null;
 
-        String path = annotations.path();
-        logger.trace("path: " + path);
-        String primaryKey = annotations.primaryKey();
-        logger.trace("primaryKey: " + primaryKey);
-        String collectionKey = annotations.collectionKey();
-        logger.trace("collectionKey: " + collectionKey);
+        logger.trace("path: " + annotations.path());
+        logger.trace("primaryKey: " + annotations.primaryKey());
+        logger.trace("collection: " + annotations.collection());
+        logger.trace("totalCount: " + annotations.totalCount());
 
         //
         // Remove the primary key from the end of the path:
         //
 
-        path = removePrimaryKeyFromEnd(path, primaryKey);
+        String path = removePrimaryKeyFromEnd(annotations.path(),
+                                              annotations.primaryKey());
 
         Gson gson = connection.getGson();
         JsonParser jsonParser = new JsonParser();
@@ -176,14 +183,14 @@ public abstract class ETRestObject extends ETObject {
                 }
             }
 
+            ETResult<T> result = new ETResult<T>();
+            result.setRequestId(connection.getLastCallRequestId());
+            result.setResponseCode(connection.getLastCallResponseCode());
+            result.setResponseMessage(connection.getLastCallResponseMessage());
             @SuppressWarnings("unchecked")
             T createdObject = (T) gson.fromJson(json, object.getClass());
-
-            ETResult result = new ETResult();
-            result.setRequestId(connection.getLastCallRequestId());
-            result.setStatusCode(connection.getLastCallResponseCode());
-            result.setStatusMessage(connection.getLastCallResponseMessage());
-            result.setId(createdObject.getId());
+            createdObject.setClient(client);
+            result.setObject(createdObject);
 
             response.addResult(result);
 
@@ -227,12 +234,12 @@ public abstract class ETRestObject extends ETObject {
 
         assert annotations != null;
 
-        String path = annotations.path();
-        logger.trace("path: " + path);
-        String primaryKey = annotations.primaryKey();
-        logger.trace("primaryKey: " + primaryKey);
-        String collectionKey = annotations.collectionKey();
-        logger.trace("collectionKey: " + collectionKey);
+        logger.trace("path: " + annotations.path());
+        logger.trace("primaryKey: " + annotations.primaryKey());
+        logger.trace("collection: " + annotations.collection());
+        logger.trace("totalCount: " + annotations.totalCount());
+
+        String path = null;
 
         if (filter != null) {
             //
@@ -241,7 +248,9 @@ public abstract class ETRestObject extends ETObject {
 
             logger.trace("filter: " + filter);
 
-            path = replaceVariable(path, filter.getProperty(), filter.getValue());
+            path = replaceVariable(annotations.path(),
+                                   filter.getProperty(),
+                                   filter.getValue());
 
             // XXX should throw an exception if not all are specified
         } else {
@@ -249,7 +258,8 @@ public abstract class ETRestObject extends ETObject {
             // Remove the primary key from the end of the path:
             //
 
-            path = removePrimaryKeyFromEnd(path, primaryKey);
+            path = removePrimaryKeyFromEnd(annotations.path(),
+                                           annotations.primaryKey());
         }
 
         StringBuilder stringBuilder = new StringBuilder(path);
@@ -270,8 +280,8 @@ public abstract class ETRestObject extends ETObject {
         String json = connection.get(path);
 
         response.setRequestId(connection.getLastCallRequestId());
-        response.setStatusCode(connection.getLastCallResponseCode());
-        response.setStatusMessage(connection.getLastCallResponseMessage());
+        response.setResponseCode(connection.getLastCallResponseCode());
+        response.setResponseMessage(connection.getLastCallResponseMessage());
 
         Gson gson = connection.getGson();
         JsonParser jsonParser = new JsonParser();
@@ -289,11 +299,7 @@ public abstract class ETRestObject extends ETObject {
             logger.trace("page = " + response.getPage());
             response.setPageSize(jsonObject.get("pageSize").getAsInt());
             logger.trace("pageSize = " + response.getPageSize());
-            JsonElement totalCount = jsonObject.get("totalCount");
-            if (totalCount == null) {
-                // XXX this should be standardized
-                totalCount = jsonObject.get("count");
-            }
+            JsonElement totalCount = jsonObject.get(annotations.totalCount());
             response.setTotalCount(totalCount.getAsInt());
             logger.trace("totalCount = " + response.getTotalCount());
 
@@ -301,27 +307,31 @@ public abstract class ETRestObject extends ETObject {
                 response.setMoreResults(true);
             }
 
-            JsonArray collection = jsonObject.get(collectionKey).getAsJsonArray();
+            JsonArray collection = jsonObject.get(annotations.collection()).getAsJsonArray();
 
             for (JsonElement element : collection) {
                 ETRestObject object = gson.fromJson(element, type);
                 object.setClient(client);
-                response.addResult(object);
+                ETResult<T> result = new ETResult<T>();
+                result.setObject((T) object);
+                response.addResult(result);
             }
         } else {
             ETRestObject object = gson.fromJson(json, type);
             object.setClient(client);
-            response.addResult(object);
+            ETResult<T> result = new ETResult<T>();
+            result.setObject((T) object);
+            response.addResult(result);
         }
 
         return response;
     }
 
-    protected static <T extends ETRestObject> ETResponse<ETResult> update(ETClient client,
-                                                                          List<T> objects)
+    protected static <T extends ETRestObject> ETResponse<T> update(ETClient client,
+                                                                   List<T> objects)
         throws ETSdkException
     {
-        ETResponse<ETResult> response = new ETResponse<ETResult>();
+        ETResponse<T> response = new ETResponse<T>();
 
         if (objects == null || objects.size() == 0) {
             return response;
@@ -347,12 +357,10 @@ public abstract class ETRestObject extends ETObject {
 
         assert annotations != null;
 
-        String path = annotations.path();
-        logger.trace("path: " + path);
-        String primaryKey = annotations.primaryKey();
-        logger.trace("primaryKey: " + primaryKey);
-        String collectionKey = annotations.collectionKey();
-        logger.trace("collectionKey: " + collectionKey);
+        logger.trace("path: " + annotations.path());
+        logger.trace("primaryKey: " + annotations.primaryKey());
+        logger.trace("collection: " + annotations.collection());
+        logger.trace("totalCount: " + annotations.totalCount());
 
         Gson gson = connection.getGson();
         JsonParser jsonParser = new JsonParser();
@@ -371,7 +379,7 @@ public abstract class ETRestObject extends ETObject {
             // XXX should throw an exception for complex expressions
 
             // XXX substitute primaryKey here w/ reflection to get getter
-            String p = replaceVariable(path, "id", object.getId());
+            String p = replaceVariable(annotations.path(), "id", object.getId());
 
             String json = gson.toJson(object);
 
@@ -396,10 +404,14 @@ public abstract class ETRestObject extends ETObject {
                 }
             }
 
-            ETResult result = new ETResult();
+            ETResult<T> result = new ETResult<T>();
             result.setRequestId(connection.getLastCallRequestId());
-            result.setStatusCode(connection.getLastCallResponseCode());
-            result.setStatusMessage(connection.getLastCallResponseMessage());
+            result.setResponseCode(connection.getLastCallResponseCode());
+            result.setResponseMessage(connection.getLastCallResponseMessage());
+            @SuppressWarnings("unchecked")
+            T updatedObject = (T) gson.fromJson(json, object.getClass());
+            updatedObject.setClient(client);
+            result.setObject(updatedObject);
 
             response.addResult(result);
 
@@ -409,11 +421,11 @@ public abstract class ETRestObject extends ETObject {
         return response;
     }
 
-    protected static <T extends ETRestObject> ETResponse<ETResult> delete(ETClient client,
-                                                                          List<T> objects)
+    protected static <T extends ETRestObject> ETResponse<T> delete(ETClient client,
+                                                                   List<T> objects)
         throws ETSdkException
     {
-        ETResponse<ETResult> response = new ETResponse<ETResult>();
+        ETResponse<T> response = new ETResponse<T>();
 
         if (objects == null || objects.size() == 0) {
             return response;
@@ -439,12 +451,10 @@ public abstract class ETRestObject extends ETObject {
 
         assert annotations != null;
 
-        String path = annotations.path();
-        logger.trace("path: " + path);
-        String primaryKey = annotations.primaryKey();
-        logger.trace("primaryKey: " + primaryKey);
-        String collectionKey = annotations.collectionKey();
-        logger.trace("collectionKey: " + collectionKey);
+        logger.trace("path: " + annotations.path());
+        logger.trace("primaryKey: " + annotations.primaryKey());
+        logger.trace("collection: " + annotations.collection());
+        logger.trace("totalCount: " + annotations.totalCount());
 
         Gson gson = connection.getGson();
         JsonParser jsonParser = new JsonParser();
@@ -463,7 +473,7 @@ public abstract class ETRestObject extends ETObject {
             // XXX should throw an exception for complex expressions
 
             // XXX substitute primaryKey here w/ reflection to get getter
-            String p = replaceVariable(path, "id", object.getId());
+            String p = replaceVariable(annotations.path(), "id", object.getId());
 
             String json = gson.toJson(object);
 
@@ -477,22 +487,13 @@ public abstract class ETRestObject extends ETObject {
                 }
             }
 
-            json = connection.delete(p);
+            // XXX doesn't return any data.. are all like this?
+            connection.delete(p);
 
-            // doesn't return any data.. are all like this?
-//            JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
-//
-//            if (logger.isTraceEnabled()) {
-//                String jsonPrettyPrinted = gson.toJson(jsonObject);
-//                for (String line : jsonPrettyPrinted.split("\\n")) {
-//                    logger.trace(line);
-//                }
-//            }
-
-            ETResult result = new ETResult();
+            ETResult<T> result = new ETResult<T>();
             result.setRequestId(connection.getLastCallRequestId());
-            result.setStatusCode(connection.getLastCallResponseCode());
-            result.setStatusMessage(connection.getLastCallResponseMessage());
+            result.setResponseCode(connection.getLastCallResponseCode());
+            result.setResponseMessage(connection.getLastCallResponseMessage());
 
             response.addResult(result);
 

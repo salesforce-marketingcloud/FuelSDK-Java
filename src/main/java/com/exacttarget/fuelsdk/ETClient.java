@@ -121,8 +121,6 @@ public class ETClient {
         // If a SOAP endpoint isn't specified automatically determine it:
         //
 
-        // XXX use Endpoints object
-
         if (soapEndpoint == null) {
             String response = restConnection.get(PATH_ENDPOINTS_SOAP);
             JsonParser jsonParser = new JsonParser();
@@ -254,17 +252,17 @@ public class ETClient {
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends ETObject> ETResponse<ETResult> create(T object)
+    public <T extends ETObject> ETResponse<T> create(T object)
         throws ETSdkException
     {
         return create(Arrays.asList(object));
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends ETObject> ETResponse<ETResult> create(List<T> objects)
+    public <T extends ETObject> ETResponse<T> create(List<T> objects)
         throws ETSdkException
     {
-        ETResponse<ETResult> response = new ETResponse<ETResult>();
+        ETResponse<T> response = new ETResponse<T>();
 
         if (objects == null || objects.size() == 0) {
             return response;
@@ -279,7 +277,7 @@ public class ETClient {
 
         Method create = getMethod(superClass, "create", ETClient.class, List.class);
 
-        response = (ETResponse<ETResult>) invokeMethod(create, objects);
+        response = invokeMethod(create, objects);
 
         return response;
     }
@@ -376,24 +374,24 @@ public class ETClient {
                                                        type,
                                                        properties);
         } catch (Exception ex) {
-            throw new ETSdkException("could not invoke retrieve method on class " + type, ex);
+            throw new ETSdkException("error invoking retrieve method of type " + type, ex);
         }
 
         return response;
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends ETObject> ETResponse<ETResult> update(T object)
+    public <T extends ETObject> ETResponse<T> update(T object)
         throws ETSdkException
     {
         return update(Arrays.asList(object));
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends ETObject> ETResponse<ETResult> update(List<T> objects)
+    public <T extends ETObject> ETResponse<T> update(List<T> objects)
         throws ETSdkException
     {
-        ETResponse<ETResult> response = new ETResponse<ETResult>();
+        ETResponse<T> response = new ETResponse<T>();
 
         if (objects == null || objects.size() == 0) {
             return response;
@@ -408,14 +406,14 @@ public class ETClient {
 
         Method update = getMethod(superClass, "update", ETClient.class, List.class);
 
-        response = (ETResponse<ETResult>) invokeMethod(update, objects);
+        response = invokeMethod(update, objects);
 
         return response;
     }
 
-    public <T extends ETObject> ETResponse<ETResult> update(Class<T> type,
-                                                            String filter,
-                                                            String... values)
+    public <T extends ETObject> ETResponse<T> update(Class<T> type,
+                                                     String filter,
+                                                     String... values)
         throws ETSdkException
     {
         // XXX optimize
@@ -424,7 +422,7 @@ public class ETClient {
 
         // XXX assert operators is "="?
 
-        List<T> objects = response.getResults();
+        List<T> objects = response.getObjects();
         for (T object : objects) {
             for (String value : values) {
                 ETFilter parsedFilter = ETFilter.parse(value);
@@ -453,17 +451,17 @@ public class ETClient {
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends ETObject> ETResponse<ETResult> delete(T object)
+    public <T extends ETObject> ETResponse<T> delete(T object)
         throws ETSdkException
     {
         return delete(Arrays.asList(object));
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends ETObject> ETResponse<ETResult> delete(List<T> objects)
+    public <T extends ETObject> ETResponse<T> delete(List<T> objects)
         throws ETSdkException
     {
-        ETResponse<ETResult> response = new ETResponse<ETResult>();
+        ETResponse<T> response = new ETResponse<T>();
 
         if (objects == null || objects.size() == 0) {
             return response;
@@ -478,24 +476,25 @@ public class ETClient {
 
         Method delete = getMethod(superClass, "delete", ETClient.class, List.class);
 
-        response = (ETResponse<ETResult>) invokeMethod(delete, objects);
+        response = invokeMethod(delete, objects);
 
         return response;
     }
 
-    public <T extends ETObject> ETResponse<ETResult> delete(Class<T> type,
-                                                            String filter)
+    public <T extends ETObject> ETResponse<T> delete(Class<T> type,
+                                                     String filter)
         throws ETSdkException
     {
         // XXX optimize
         ETResponse<T> response = retrieve(type, filter);
-        return delete(response.getResults());
+        return delete(response.getObjects());
     }
 
     /**
      * @deprecated
      * Use XXX
      */
+    @Deprecated
     public ETDataExtension retrieveDataExtension(com.exacttarget.fuelsdk.filter.ETFilter filter)
         throws ETSdkException
     {
@@ -507,6 +506,7 @@ public class ETClient {
      * @deprecated
      * Use XXX
      */
+    @Deprecated
     public List<ETDataExtension> retrieveDataExtensions()
         throws ETSdkException
     {
@@ -518,6 +518,7 @@ public class ETClient {
      * @deprecated
      * Use XXX
      */
+    @Deprecated
     public List<ETDataExtension> retrieveDataExtensions(ETFilter filter)
         throws ETSdkException
     {
@@ -535,7 +536,7 @@ public class ETClient {
         } catch (Exception ex) {
             throw new ETSdkException("error getting "
                                      + name
-                                     + " method of "
+                                     + " method of type "
                                      + type, ex);
         }
 
@@ -543,17 +544,17 @@ public class ETClient {
     }
 
     @SuppressWarnings("unchecked")
-    private <T extends ETObject> ETResponse<?> invokeMethod(Method method, List<T> arguments)
+    private <T extends ETObject> ETResponse<T> invokeMethod(Method method, List<T> arguments)
         throws ETSdkException
     {
-        ETResponse<?> response = null;
+        ETResponse<T> response = null;
 
         try {
-            response = (ETResponse<ETResult>) method.invoke(null, this, arguments);
+            response = (ETResponse<T>) method.invoke(null, this, arguments);
         } catch (Exception ex) {
             throw new ETSdkException("error invoking "
                                      + method.getName()
-                                     + " method on object "
+                                     + " method of object "
                                      + arguments, ex);
         }
 

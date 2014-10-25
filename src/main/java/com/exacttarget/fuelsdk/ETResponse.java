@@ -32,67 +32,93 @@ import java.util.List;
 
 import com.exacttarget.fuelsdk.annotations.PrettyPrint;
 
-public class ETResponse<T> extends ETPrettyPrintable {
+public class ETResponse<T extends ETObject> extends ETPrettyPrintable {
     @PrettyPrint
-    private String requestId = null;
+    private ETResult<T> batchResult = null;
     @PrettyPrint
-    private ETResult overallResult = new ETResult();
+    private List<ETResult<T>> individualResults = new ArrayList<ETResult<T>>();
     @PrettyPrint
-    private List<T> results = new ArrayList<T>();
+    private Boolean moreResults = false;
     @PrettyPrint
     private Integer page = null;
     @PrettyPrint
     private Integer pageSize = null;
     @PrettyPrint
     private Integer totalCount = null;
-    @PrettyPrint
-    private boolean moreResults = false;
 
     public String getRequestId() {
-        return requestId;
+        if (batchResult != null) {
+            return batchResult.getRequestId();
+        }
+        return null;
     }
 
     public void setRequestId(String requestId) {
-        this.requestId = requestId;
+        if (batchResult == null) {
+            batchResult = new ETResult<T>();
+        }
+        batchResult.setRequestId(requestId);
     }
 
-    public String getStatusCode() {
-        return overallResult.getStatusCode();
+    public String getResponseCode() {
+        if (batchResult != null) {
+            return batchResult.getResponseCode();
+        }
+        return null;
     }
 
-    public void setStatusCode(String statusCode) {
-        overallResult.setStatusCode(statusCode);
+    public void setResponseCode(String responseCode) {
+        if (batchResult == null) {
+            batchResult = new ETResult<T>();
+        }
+        batchResult.setResponseCode(responseCode);
     }
 
-    public String getStatusMessage() {
-        return overallResult.getStatusMessage();
+    public String getResponseMessage() {
+        if (batchResult != null) {
+            return batchResult.getResponseMessage();
+        }
+        return null;
     }
 
-    public void setStatusMessage(String statusMessage) {
-        overallResult.setStatusMessage(statusMessage);
+    public void setResponseMessage(String responseMessage) {
+        if (batchResult == null) {
+            batchResult = new ETResult<T>();
+        }
+        batchResult.setResponseMessage(responseMessage);
     }
 
-    public Integer getErrorCode() {
-        return overallResult.getErrorCode();
+    public T getObject() {
+        return getResult().getObject();
     }
 
-    public void setErrorCode(Integer errorCode) {
-        overallResult.setErrorCode(errorCode);
+    public List<T> getObjects() {
+        List<T> objects = new ArrayList<T>();
+        for (ETResult<T> result : individualResults) {
+            objects.add(result.getObject());
+        }
+        return objects;
     }
 
-    public T getResult() {
-        assert results != null && results.size() == 1;
-        return results.get(0);
+    public ETResult<T> getResult() {
+        assert individualResults != null && individualResults.size() == 1;
+        return individualResults.get(0);
     }
 
-    public List<T> getResults() {
-        return results;
+    public List<ETResult<T>> getResults() {
+        return individualResults;
     }
 
-    // XXX
-    //public void addResult(T result) {
-    public void addResult(Object result) {
-        results.add((T) result);
+    public void addResult(ETResult<T> result) {
+        individualResults.add(result);
+    }
+
+    public Boolean hasMoreResults() {
+        return moreResults;
+    }
+
+    public void setMoreResults(Boolean moreResults) {
+        this.moreResults = moreResults;
     }
 
     public Integer getPage() {
@@ -119,17 +145,45 @@ public class ETResponse<T> extends ETPrettyPrintable {
         this.totalCount = totalCount;
     }
 
-    public boolean hasMoreResults() {
-        return moreResults;
-    }
-
-    public void setMoreResults(boolean moreResults) {
-        this.moreResults = moreResults;
+    /**
+     * @deprecated
+     * Use <code>getResponseCode</code>.
+     */
+    @Deprecated
+    public String getStatusCode() {
+        return getResponseCode();
     }
 
     /**
      * @deprecated
-     * Use <code>getStatusCode</code>.
+     * Use <code>setResponseCode</code>.
+     */
+    @Deprecated
+    public void setStatusCode(String statusCode) {
+        setResponseCode(statusCode);
+    }
+
+    /**
+     * @deprecated
+     * Use <code>getResponseMessage</code>.
+     */
+    @Deprecated
+    public String getStatusMessage() {
+        return getResponseMessage();
+    }
+
+    /**
+     * @deprecated
+     * Use <code>setResponseMessage</code>.
+     */
+    @Deprecated
+    public void setStatusMessage(String statusMessage) {
+        setResponseMessage(statusMessage);
+    }
+
+    /**
+     * @deprecated
+     * Use <code>getResponseCode</code>.
      */
     @Deprecated
     public boolean getStatus() {
@@ -141,7 +195,7 @@ public class ETResponse<T> extends ETPrettyPrintable {
 
     /**
      * @deprecated
-     * Use <code>getStatusMessage</code>.
+     * Use <code>getResponseMessage</code>.
      */
     @Deprecated
     public String getMessage() {

@@ -29,19 +29,15 @@ package com.exacttarget.fuelsdk;
 
 import com.exacttarget.fuelsdk.annotations.PrettyPrint;
 
-public class ETResult extends ETPrettyPrintable {
+public class ETResult<T extends ETObject> extends ETPrettyPrintable {
     @PrettyPrint
     private String requestId = null;
     @PrettyPrint
-    private String statusCode = null;
+    private String responseCode = null;
     @PrettyPrint
-    private String statusMessage = null;
+    private String responseMessage = null;
     @PrettyPrint
-    private Integer errorCode = null;
-    @PrettyPrint
-    private String id = null;
-    @PrettyPrint
-    private String guid = null;
+    private T object = null;
 
     public String getRequestId() {
         return requestId;
@@ -51,43 +47,89 @@ public class ETResult extends ETPrettyPrintable {
         this.requestId = requestId;
     }
 
+    public String getResponseCode() {
+        return responseCode;
+    }
+
+    public void setResponseCode(String responseCode) {
+        this.responseCode = responseCode;
+    }
+
+    public String getResponseMessage() {
+        return responseMessage;
+    }
+
+    public void setResponseMessage(String responseMessage) {
+        this.responseMessage = responseMessage;
+    }
+
+    public T getObject() {
+        return object;
+    }
+
+    public void setObject(T object) {
+        this.object = object;
+    }
+
+    public String getObjectId() {
+        return object.getId();
+    }
+
+    public void setObjectId(String objectId) {
+        object.setId(objectId); // XXX?
+    }
+
+    /**
+     * @deprecated
+     * Use <code>getResponseCode</code>.
+     */
+    @Deprecated
     public String getStatusCode() {
-        return statusCode;
+        return getResponseCode();
     }
 
+    /**
+     * @deprecated
+     * Use <code>setResponseCode</code>.
+     */
+    @Deprecated
     public void setStatusCode(String statusCode) {
-        this.statusCode = statusCode;
+        setResponseCode(statusCode);
     }
 
+    /**
+     * @deprecated
+     * Use <code>getResponseMessage</code>.
+     */
+    @Deprecated
     public String getStatusMessage() {
-        return statusMessage;
+        return getResponseMessage();
     }
 
+    /**
+     * @deprecated
+     * Use <code>setResponseMessage</code>.
+     */
+    @Deprecated
     public void setStatusMessage(String statusMessage) {
-        this.statusMessage = statusMessage;
+        setResponseMessage(statusMessage);
     }
 
-    public Integer getErrorCode() {
-        return errorCode;
-    }
-
-    public void setErrorCode(Integer errorCode) {
-        this.errorCode = errorCode;
-    }
-
+    /**
+     * @deprecated
+     * Use <code>getId</code>.
+     */
+    @Deprecated
     public String getId() {
-        return id;
+        return getObjectId();
     }
 
+    /**
+     * @deprecated
+     * Use <code>setId</code>.
+     */
+    @Deprecated
     public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getGuid() {
-        return guid;
-    }
-
-    public void setGuid(String guid) {
-        this.guid = guid;
+        setObjectId(id);
     }
 }
