@@ -53,7 +53,7 @@ public class ETFolderTest {
         throws ETSdkException
     {
         ETResponse<ETFolder> response = client.retrieve(ETFolder.class);
-        for (ETFolder folder : response.getResults()) {
+        for (ETFolder folder : response.getObjects()) {
             // ensure all properties were retrieved
             assertNotNull(folder.getId());
             assertNotNull(folder.getKey());
@@ -77,7 +77,7 @@ public class ETFolderTest {
                                                         "key",
                                                         "name",
                                                         "description");
-        for (ETFolder folder : response.getResults()) {
+        for (ETFolder folder : response.getObjects()) {
             // ensure only the specified properties were retrieved
             assertNull(folder.getId());
             assertNotNull(folder.getKey());
@@ -102,8 +102,8 @@ public class ETFolderTest {
         ETResponse<ETFolder> response = client.retrieve(ETFolder.class,
                                                         "key='dataextension_default'");
         // ensure we only received 1
-        assertEquals(1, response.getResults().size());
-        ETFolder folder = response.getResults().get(0);
+        assertEquals(1, response.getObjects().size());
+        ETFolder folder = response.getObjects().get(0);
         // ensure it's the Data Extensions folder
         // and that all properties were retrieved
         assertNotNull(folder.getId());
@@ -129,8 +129,8 @@ public class ETFolderTest {
                                                         "name",
                                                         "description");
         // ensure we only received 1
-        assertEquals(1, response.getResults().size());
-        ETFolder folder = response.getResults().get(0);
+        assertEquals(1, response.getObjects().size());
+        ETFolder folder = response.getObjects().get(0);
         // ensure it's the Data Extensions folder
         // and that only the specified properties
         // were retrieved
@@ -159,24 +159,21 @@ public class ETFolderTest {
         folder.setDescription("test1");
         folder.setContentType("dataextension");
         folder.setParentFolderKey("dataextension_default");
-        ETResponse<ETResult> response = client.create(folder);
+        ETResponse<ETFolder> response = client.create(folder);
         assertNotNull(response.getRequestId());
-        assertEquals("OK", response.getStatusCode());
-        assertEquals("OK", response.getStatusMessage());
-        assertNull(response.getErrorCode());
+        assertEquals("OK", response.getResponseCode());
+        assertEquals("OK", response.getResponseMessage());
         assertNull(response.getPage());
         assertNull(response.getPageSize());
         assertNull(response.getTotalCount());
         assertFalse(response.hasMoreResults());
         assertEquals(1, response.getResults().size());
-        ETResult result = response.getResults().get(0);
-        assertEquals("OK", result.getStatusCode());
-        assertEquals("Folder created successfully.", result.getStatusMessage());
-        assertNull(result.getErrorCode());
-        assertNotNull(result.getId());
-        assertNotNull(result.getGuid());
+        ETResult<ETFolder> result = response.getResults().get(0);
+        assertEquals("OK", result.getResponseCode());
+        assertEquals("Folder created successfully.", result.getResponseMessage());
+        assertNotNull(result.getObjectId());
         // save the ID for use in the next test
-        id = result.getId();
+        id = result.getObjectId();
     }
 
     private static ETFolder createdFolder = null;
@@ -187,8 +184,8 @@ public class ETFolderTest {
     {
         ETResponse<ETFolder> response = client.retrieve(ETFolder.class, "id=" + id);
         // ensure we only received 1
-        assertEquals(1, response.getResults().size());
-        createdFolder = response.getResults().get(0);
+        assertEquals(1, response.getObjects().size());
+        createdFolder = response.getObjects().get(0);
         // ensure it's the folder we just created
         assertEquals(id, createdFolder.getId());
         assertEquals("test1", createdFolder.getKey());
@@ -208,22 +205,18 @@ public class ETFolderTest {
         throws ETSdkException
     {
         createdFolder.setName("TEST1");
-        ETResponse<ETResult> response = client.update(createdFolder);
+        ETResponse<ETFolder> response = client.update(createdFolder);
         assertNotNull(response.getRequestId());
-        assertEquals("OK", response.getStatusCode());
-        assertEquals("OK", response.getStatusMessage());
-        assertNull(response.getErrorCode());
+        assertEquals("OK", response.getResponseCode());
+        assertEquals("OK", response.getResponseMessage());
         assertNull(response.getPage());
         assertNull(response.getPageSize());
         assertNull(response.getTotalCount());
         assertFalse(response.hasMoreResults());
         assertEquals(1, response.getResults().size());
-        ETResult result = response.getResults().get(0);
-        assertEquals("OK", result.getStatusCode());
-        assertEquals("Folder updated successfully.", result.getStatusMessage());
-        assertNull(result.getErrorCode());
-        assertNull(result.getId());
-        assertNull(result.getGuid());
+        ETResult<ETFolder> result = response.getResults().get(0);
+        assertEquals("OK", result.getResponseCode());
+        assertEquals("Folder updated successfully.", result.getResponseMessage());
     }
 
     @Test
@@ -232,8 +225,8 @@ public class ETFolderTest {
     {
         ETResponse<ETFolder> response = client.retrieve(ETFolder.class, "id=" + id);
         // ensure we only received 1
-        assertEquals(1, response.getResults().size());
-        ETFolder folder = response.getResults().get(0);
+        assertEquals(1, response.getObjects().size());
+        ETFolder folder = response.getObjects().get(0);
         assertEquals(id, folder.getId());
         assertEquals("test1", folder.getKey());
         assertEquals("TEST1", folder.getName());
@@ -253,22 +246,18 @@ public class ETFolderTest {
     {
         ETFolder folder = new ETFolder();
         folder.setKey("test1");
-        ETResponse<ETResult> response = client.delete(folder);
+        ETResponse<ETFolder> response = client.delete(folder);
         assertNotNull(response.getRequestId());
-        assertEquals("OK", response.getStatusCode());
-        assertEquals("OK", response.getStatusMessage());
-        assertNull(response.getErrorCode());
+        assertEquals("OK", response.getResponseCode());
+        assertEquals("OK", response.getResponseMessage());
         assertNull(response.getPage());
         assertNull(response.getPageSize());
         assertNull(response.getTotalCount());
         assertFalse(response.hasMoreResults());
         assertEquals(1, response.getResults().size());
-        ETResult result = response.getResults().get(0);
-        assertEquals("OK", result.getStatusCode());
-        assertEquals("Folder deleted successfully.", result.getStatusMessage());
-        assertNull(result.getErrorCode());
-        assertNull(result.getId());
-        assertNull(result.getGuid());
+        ETResult<ETFolder> result = response.getResults().get(0);
+        assertEquals("OK", result.getResponseCode());
+        assertEquals("Folder deleted successfully.", result.getResponseMessage());
     }
 
     private static String id1 = null;
@@ -293,32 +282,27 @@ public class ETFolderTest {
         List<ETFolder> folders = new ArrayList<ETFolder>();
         folders.add(folder1);
         folders.add(folder2);
-        ETResponse<ETResult> response = client.create(folders);
+        ETResponse<ETFolder> response = client.create(folders);
         assertNotNull(response.getRequestId());
-        assertEquals("OK", response.getStatusCode());
-        assertEquals("OK", response.getStatusMessage());
-        assertNull(response.getErrorCode());
+        assertEquals("OK", response.getResponseCode());
+        assertEquals("OK", response.getResponseMessage());
         assertNull(response.getPage());
         assertNull(response.getPageSize());
         assertNull(response.getTotalCount());
         assertFalse(response.hasMoreResults());
         assertEquals(2, response.getResults().size());
-        ETResult result1 = response.getResults().get(0);
-        assertEquals("OK", result1.getStatusCode());
-        assertEquals("Folder created successfully.", result1.getStatusMessage());
-        assertNull(result1.getErrorCode());
-        assertNotNull(result1.getId());
-        assertNotNull(result1.getGuid());
+        ETResult<ETFolder> result1 = response.getResults().get(0);
+        assertEquals("OK", result1.getResponseCode());
+        assertEquals("Folder created successfully.", result1.getResponseMessage());
+        assertNotNull(result1.getObjectId());
         // save the ID for use in the next test
-        id1 = result1.getId();
-        ETResult result2 = response.getResults().get(0);
-        assertEquals("OK", result2.getStatusCode());
-        assertEquals("Folder created successfully.", result2.getStatusMessage());
-        assertNull(result2.getErrorCode());
-        assertNotNull(result2.getId());
-        assertNotNull(result2.getGuid());
+        id1 = result1.getObjectId();
+        ETResult<ETFolder> result2 = response.getResults().get(0);
+        assertEquals("OK", result2.getResponseCode());
+        assertEquals("Folder created successfully.", result2.getResponseMessage());
+        assertNotNull(result2.getObjectId());
         // save the ID for use in the next test
-        id2 = result2.getId();
+        id2 = result2.getObjectId();
     }
 
     @Test
@@ -353,27 +337,20 @@ public class ETFolderTest {
         List<ETFolder> folders = new ArrayList<ETFolder>();
         folders.add(folder1);
         folders.add(folder2);
-        ETResponse<ETResult> response = client.delete(folders);
+        ETResponse<ETFolder> response = client.delete(folders);
         assertNotNull(response.getRequestId());
-        assertEquals("OK", response.getStatusCode());
-        assertEquals("OK", response.getStatusMessage());
-        assertNull(response.getErrorCode());
+        assertEquals("OK", response.getResponseCode());
+        assertEquals("OK", response.getResponseMessage());
         assertNull(response.getPage());
         assertNull(response.getPageSize());
         assertNull(response.getTotalCount());
         assertFalse(response.hasMoreResults());
         assertEquals(2, response.getResults().size());
-        ETResult result1 = response.getResults().get(0);
-        assertEquals("OK", result1.getStatusCode());
-        assertEquals("Folder deleted successfully.", result1.getStatusMessage());
-        assertNull(result1.getErrorCode());
-        assertNull(result1.getId());
-        assertNull(result1.getGuid());
-        ETResult result2 = response.getResults().get(0);
-        assertEquals("OK", result2.getStatusCode());
-        assertEquals("Folder deleted successfully.", result2.getStatusMessage());
-        assertNull(result2.getErrorCode());
-        assertNull(result2.getId());
-        assertNull(result2.getGuid());
+        ETResult<ETFolder> result1 = response.getResults().get(0);
+        assertEquals("OK", result1.getResponseCode());
+        assertEquals("Folder deleted successfully.", result1.getResponseMessage());
+        ETResult<ETFolder> result2 = response.getResults().get(0);
+        assertEquals("OK", result2.getResponseCode());
+        assertEquals("Folder deleted successfully.", result2.getResponseMessage());
     }
 }
