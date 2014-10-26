@@ -294,6 +294,7 @@ public abstract class ETSoapObject extends ETObject {
             ETResult<T> result = new ETResult<T>();
             result.setResponseCode(createResult.getStatusCode());
             result.setResponseMessage(createResult.getStatusMessage());
+            result.setErrorCode(createResult.getErrorCode());
             if (result.getResponseCode().equals("OK")) { // XXX?
                 result.setObject(externalObject);
             }
@@ -568,6 +569,7 @@ public abstract class ETSoapObject extends ETObject {
             ETResult<T> result = new ETResult<T>();
             result.setResponseCode(updateResult.getStatusCode());
             result.setResponseMessage(updateResult.getStatusMessage());
+            result.setErrorCode(updateResult.getErrorCode());
             if (result.getResponseCode().equals("OK")) { // XXX?
                 result.setObject(externalObject);
             }
@@ -643,6 +645,7 @@ public abstract class ETSoapObject extends ETObject {
             ETResult<T> result = new ETResult<T>();
             result.setResponseCode(deleteResult.getStatusCode());
             result.setResponseMessage(deleteResult.getStatusMessage());
+            result.setErrorCode(deleteResult.getErrorCode());
             response.addResult(result);
         }
 

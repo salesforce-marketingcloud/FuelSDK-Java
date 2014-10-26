@@ -171,6 +171,7 @@ public class ETFolderTest {
         ETResult<ETFolder> result = response.getResults().get(0);
         assertEquals("OK", result.getResponseCode());
         assertEquals("Folder created successfully.", result.getResponseMessage());
+        assertNull(result.getErrorCode());
         assertNotNull(result.getObjectId());
         // save the ID for use in the next test
         id = result.getObjectId();
@@ -217,6 +218,7 @@ public class ETFolderTest {
         ETResult<ETFolder> result = response.getResults().get(0);
         assertEquals("OK", result.getResponseCode());
         assertEquals("Folder updated successfully.", result.getResponseMessage());
+        assertNull(result.getErrorCode());
     }
 
     @Test
@@ -258,6 +260,7 @@ public class ETFolderTest {
         ETResult<ETFolder> result = response.getResults().get(0);
         assertEquals("OK", result.getResponseCode());
         assertEquals("Folder deleted successfully.", result.getResponseMessage());
+        assertNull(result.getErrorCode());
     }
 
     private static String id1 = null;
@@ -294,12 +297,14 @@ public class ETFolderTest {
         ETResult<ETFolder> result1 = response.getResults().get(0);
         assertEquals("OK", result1.getResponseCode());
         assertEquals("Folder created successfully.", result1.getResponseMessage());
+        assertNull(result1.getErrorCode());
         assertNotNull(result1.getObjectId());
         // save the ID for use in the next test
         id1 = result1.getObjectId();
         ETResult<ETFolder> result2 = response.getResults().get(0);
         assertEquals("OK", result2.getResponseCode());
         assertEquals("Folder created successfully.", result2.getResponseMessage());
+        assertNull(result2.getErrorCode());
         assertNotNull(result2.getObjectId());
         // save the ID for use in the next test
         id2 = result2.getObjectId();
@@ -349,8 +354,10 @@ public class ETFolderTest {
         ETResult<ETFolder> result1 = response.getResults().get(0);
         assertEquals("OK", result1.getResponseCode());
         assertEquals("Folder deleted successfully.", result1.getResponseMessage());
+        assertNull(result1.getErrorCode());
         ETResult<ETFolder> result2 = response.getResults().get(0);
         assertEquals("OK", result2.getResponseCode());
         assertEquals("Folder deleted successfully.", result2.getResponseMessage());
+        assertNull(result2.getErrorCode());
     }
 }

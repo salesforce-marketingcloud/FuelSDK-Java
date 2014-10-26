@@ -37,6 +37,8 @@ public class ETResult<T extends ETObject> extends ETPrettyPrintable {
     @PrettyPrint
     private String responseMessage = null;
     @PrettyPrint
+    private Integer errorCode = null;
+    @PrettyPrint
     private T object = null;
 
     public String getRequestId() {
@@ -61,6 +63,14 @@ public class ETResult<T extends ETObject> extends ETPrettyPrintable {
 
     public void setResponseMessage(String responseMessage) {
         this.responseMessage = responseMessage;
+    }
+
+    public Integer getErrorCode() {
+        return errorCode;
+    }
+
+    public void setErrorCode(Integer errorCode) {
+        this.errorCode = errorCode;
     }
 
     public T getObject() {
