@@ -30,6 +30,13 @@ package com.exacttarget.fuelsdk;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import org.apache.log4j.Logger;
 
@@ -170,7 +177,8 @@ public class ETDataExtension extends ETSoapObject {
         return select(null);
     }
 
-    public ETResponse<ETDataExtensionRow> select(String filter, String... columns)
+    public ETResponse<ETDataExtensionRow> select(String filter,
+                                                 String... columns)
         throws ETSdkException
     {
         // XXX copied and pasted from ETClient.retrieve(filter, properties)
@@ -314,6 +322,166 @@ public class ETDataExtension extends ETSoapObject {
         }
 
         return response;
+    }
+
+    public ETResponse<ETDataExtensionRow> select(Integer page,
+                                                 Integer pageSize,
+                                                 String... columns)
+        throws ETSdkException
+    {
+        return select(null, page, pageSize, columns);
+    }
+
+    public ETResponse<ETDataExtensionRow> select(String filter,
+                                                 Integer page,
+                                                 Integer pageSize,
+                                                 String... columns)
+        throws ETSdkException
+    {
+        ETClient client = getClient();
+
+        // XXX copied and pasted from ETRestObject.retrieve
+
+        ETResponse<ETDataExtensionRow> response = new ETResponse<ETDataExtensionRow>();
+
+        //
+        // Get handle to the REST connection:
+        //
+
+        ETRestConnection connection = client.getRestConnection();
+
+        //
+        // Automatically refresh the token if necessary:
+        //
+
+        client.refreshToken();
+
+        StringBuilder stringBuilder = new StringBuilder("/data/v1/customobjectdata/key/" + getKey() + "/rowset");
+
+        stringBuilder.append("?");
+        stringBuilder.append("$page=");
+        stringBuilder.append(page);
+        stringBuilder.append("&");
+        stringBuilder.append("$pagesize=");
+        stringBuilder.append(pageSize);
+
+        if (columns.length > 0) {
+            //
+            // Only request those columns specified:
+            //
+
+            boolean first = true;
+            for (String column : columns) {
+                if (first) {
+                    stringBuilder.append("&");
+                    stringBuilder.append("$fields=");
+                    first = false;
+                } else {
+                    stringBuilder.append(",");
+                }
+                stringBuilder.append(column);
+            }
+        }
+
+        if (filter != null) {
+            stringBuilder.append("&");
+            stringBuilder.append("$filter=");
+            stringBuilder.append(toQueryParameters(ETFilter.parse(filter)));
+        }
+
+        String path = stringBuilder.toString();
+
+        logger.trace("GET " + path);
+
+        String json = connection.get(path);
+
+        response.setRequestId(connection.getLastCallRequestId());
+        response.setResponseCode(connection.getLastCallResponseCode());
+        response.setResponseMessage(connection.getLastCallResponseMessage());
+
+        Gson gson = connection.getGson();
+        JsonParser jsonParser = new JsonParser();
+        JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
+
+        if (logger.isTraceEnabled()) {
+            String jsonPrettyPrinted = gson.toJson(jsonObject);
+            for (String line : jsonPrettyPrinted.split("\\n")) {
+                logger.trace(line);
+            }
+        }
+
+        response.setPage(jsonObject.get("page").getAsInt());
+        logger.trace("page = " + response.getPage());
+        response.setPageSize(jsonObject.get("pageSize").getAsInt());
+        logger.trace("pageSize = " + response.getPageSize());
+        response.setTotalCount(jsonObject.get("count").getAsInt());
+        logger.trace("totalCount = " + response.getTotalCount());
+
+        if (response.getPage() * response.getPageSize() < response.getTotalCount()) {
+            response.setMoreResults(true);
+        }
+
+        JsonArray collection = jsonObject.get("items").getAsJsonArray();
+
+        for (JsonElement element : collection) {
+            JsonObject object = element.getAsJsonObject();
+            ETDataExtensionRow row = new ETDataExtensionRow();
+            JsonObject keys = object.get("keys").getAsJsonObject();
+            for (Map.Entry<String, JsonElement> entry : keys.entrySet()) {
+                row.setColumn(entry.getKey(), entry.getValue().getAsString());
+            }
+            JsonObject values = object.get("values").getAsJsonObject();
+            for (Map.Entry<String, JsonElement> entry : values.entrySet()) {
+                row.setColumn(entry.getKey(), entry.getValue().getAsString());
+            }
+            row.setClient(client);
+            ETResult<ETDataExtensionRow> result = new ETResult<ETDataExtensionRow>();
+            result.setObject(row);
+            response.addResult(result);
+        }
+
+        return response;
+    }
+
+    private String toQueryParameters(ETFilter filter) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        String operator = filter.getOperator();
+        if (operator.equals("and") ||
+            operator.equals("or"))
+        {
+            stringBuilder.append(toQueryParameters(filter.getFilters().get(0)));
+            stringBuilder.append("%20");
+            stringBuilder.append(operator);
+            stringBuilder.append("%20");
+            stringBuilder.append(toQueryParameters(filter.getFilters().get(1)));
+        } else if (operator.equals("not")) {
+            stringBuilder.append(operator);
+            stringBuilder.append("%20");
+            stringBuilder.append(toQueryParameters(filter.getFilters().get(0)));
+        } else {
+            stringBuilder.append(filter.getProperty());
+            stringBuilder.append("%20");
+            if (operator.equals("=")) {
+                stringBuilder.append("eq");
+            } else if (operator.equals("!=")) {
+                stringBuilder.append("ne");
+            } else if (operator.equals("<")) {
+                stringBuilder.append("lt");
+            } else if (operator.equals("<=")) {
+                stringBuilder.append("lte");
+            } else if (operator.equals(">")) {
+                stringBuilder.append("gt");
+            } else if (operator.equals(">=")) {
+                stringBuilder.append("gte");
+            } else {
+                stringBuilder.append(operator);
+            }
+            stringBuilder.append("%20");
+            stringBuilder.append(filter.getValue());
+        }
+
+        return stringBuilder.toString();
     }
 
     public ETResponse<ETDataExtensionRow> update(ETDataExtensionRow... rows)

@@ -1,3 +1,12 @@
+2014-10-26  Ian Murdock  <imurdock@exacttarget.com>
+
+    * ETDataExtension.java: Added support for paginated data extension
+    retrieves.
+    (select(Integer page, Integer pageSize,
+    String... columns): New method.
+    (select(String filter, Integer page, Integer pageSize,
+    String... columns): New method.
+
 2014-10-25  Ian Murdock  <imurdock@exacttarget.com>
 
     * ETClient.java (create): Changed return type to ETResponse<T>

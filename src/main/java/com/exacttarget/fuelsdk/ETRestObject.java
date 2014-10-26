@@ -299,8 +299,7 @@ public abstract class ETRestObject extends ETObject {
             logger.trace("page = " + response.getPage());
             response.setPageSize(jsonObject.get("pageSize").getAsInt());
             logger.trace("pageSize = " + response.getPageSize());
-            JsonElement totalCount = jsonObject.get(annotations.totalCount());
-            response.setTotalCount(totalCount.getAsInt());
+            response.setTotalCount(jsonObject.get(annotations.totalCount()).getAsInt());
             logger.trace("totalCount = " + response.getTotalCount());
 
             if (response.getPage() * response.getPageSize() < response.getTotalCount()) {
