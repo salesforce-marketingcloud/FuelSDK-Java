@@ -45,7 +45,8 @@ import com.google.gson.annotations.SerializedName;
 
 @RestObject(path = "/internal/v1/AudienceBuilder/Audience/{id}",
             primaryKey = "id",
-            collectionKey = "entities")
+            collection = "entities",
+            totalCount = "totalCount")
 public class ETAudience extends ETRestObject {
     @Expose @SerializedName("audienceDefinitionID")
     @ExternalName("id")
@@ -93,18 +94,22 @@ public class ETAudience extends ETRestObject {
         return id;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }
 
+    @Override
     public String getDescription() {
         return description;
     }
 
+    @Override
     public void setDescription(String description) {
         this.description = description;
     }

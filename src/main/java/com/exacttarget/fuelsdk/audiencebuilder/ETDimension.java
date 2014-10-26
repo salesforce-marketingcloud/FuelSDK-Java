@@ -37,7 +37,8 @@ import com.exacttarget.fuelsdk.annotations.RestObject;
 
 @RestObject(path = "/internal/v1/AudienceBuilder/Dimension/{id}",
             primaryKey = "id",
-            collectionKey = "entities")
+            collection = "entities",
+            totalCount = "totalCount")
 public class ETDimension extends ETRestObject {
     @Expose @SerializedName("dimensionID")
     @ExternalName("id")
@@ -70,8 +71,22 @@ public class ETDimension extends ETRestObject {
         return id;
     }
 
+    @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public void setName(String name) {
+    }
+
+    @Override
+    public String getDescription() {
+        return null;
+    }
+
+    @Override
+    public void setDescription(String description) {
     }
 
     public Integer getType() {

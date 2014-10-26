@@ -33,7 +33,8 @@ import com.google.gson.annotations.Expose;
 
 @RestObject(path = "/hub/v1/campaigns/{id}",
             primaryKey = "id",
-            collectionKey = "items")
+            collection = "items",
+            totalCount = "count")
 public class ETCampaign extends ETRestObject {
     @ExternalName("name") @Expose
     private String name = null;
@@ -46,18 +47,22 @@ public class ETCampaign extends ETRestObject {
     @ExternalName("favorite") @Expose
     private Boolean favorite = null;
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }
 
+    @Override
     public String getDescription() {
         return description;
     }
 
+    @Override
     public void setDescription(String description) {
         this.description = description;
     }

@@ -29,10 +29,9 @@ package com.exacttarget.fuelsdk.audiencebuilder;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.exacttarget.fuelsdk.ETRestObject;
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 
-public class ETDimensionValue extends ETRestObject {
+public class ETDimensionValue {
     @Expose @SerializedName("pK")
     @ExternalName("key")
     private String key = null;
@@ -43,7 +42,6 @@ public class ETDimensionValue extends ETRestObject {
     @ExternalName("count")
     private Integer count = null;
 
-    @Override
     public String getKey() {
         return key;
     }
