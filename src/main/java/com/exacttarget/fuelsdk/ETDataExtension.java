@@ -31,6 +31,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.InternalName;
 import com.exacttarget.fuelsdk.annotations.SoapObject;
@@ -49,6 +51,8 @@ import com.exacttarget.fuelsdk.internal.Soap;
     "ID", "Fields"
 })
 public class ETDataExtension extends ETSoapObject {
+    private static Logger logger = Logger.getLogger(ETDataExtension.class);
+
     @ExternalName("name")
     private String name = null;
     @ExternalName("description")
@@ -66,18 +70,22 @@ public class ETDataExtension extends ETSoapObject {
 
     public ETDataExtension() {}
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(String name) {
         this.name = name;
     }
 
+    @Override
     public String getDescription() {
         return description;
     }
 
+    @Override
     public void setDescription(String description) {
         this.description = description;
     }
@@ -138,7 +146,7 @@ public class ETDataExtension extends ETSoapObject {
         this.isTestable = isTestable;
     }
 
-    public List<ETResult> insert(ETDataExtensionRow... rows)
+    public ETResponse<ETDataExtensionRow> insert(ETDataExtensionRow... rows)
         throws ETSdkException
     {
         ETClient client = getClient();
@@ -153,20 +161,16 @@ public class ETDataExtension extends ETSoapObject {
             }
         }
 
-        ETResponse<ETResult> response = client.create(Arrays.asList(rows));
-
-        // XXX check for errors and throw the appropriate exception
-
-        return response.getResults();
+        return client.create(Arrays.asList(rows));
     }
 
-    public List<ETDataExtensionRow> select()
+    public ETResponse<ETDataExtensionRow> select()
         throws ETSdkException
     {
         return select(null);
     }
 
-    public List<ETDataExtensionRow> select(String filter, String... columns)
+    public ETResponse<ETDataExtensionRow> select(String filter, String... columns)
         throws ETSdkException
     {
         // XXX copied and pasted from ETClient.retrieve(filter, properties)
@@ -211,6 +215,10 @@ public class ETDataExtension extends ETSoapObject {
 
         ETClient client = getClient();
 
+        // XXX copied and pasted from ETSoapObject.retrieve
+
+        ETResponse<ETDataExtensionRow> response = new ETResponse<ETDataExtensionRow>();
+
         //
         // Get handle to the SOAP connection:
         //
@@ -222,6 +230,10 @@ public class ETDataExtension extends ETSoapObject {
         //
 
         client.refreshToken();
+
+        //
+        // Perform the SOAP retrieve:
+        //
 
         Soap soap = connection.getSoap();
 
@@ -235,15 +247,44 @@ public class ETDataExtension extends ETSoapObject {
 //            retrieveRequest.setContinueRequest(continueRequestId);
 //        }
 
+        if (logger.isTraceEnabled()) {
+            logger.trace("RetrieveRequest:");
+            logger.trace("  objectType = " + retrieveRequest.getObjectType());
+            String line = null;
+            for (String property : retrieveRequest.getProperties()) {
+                if (line == null) {
+                    line = "  properties = { " + property;
+                } else {
+                    line += ", " + property;
+                }
+            }
+            logger.trace(line + " }");
+            if (filter != null) {
+                logger.trace("  filter = " + f.toSoapFilter());
+            }
+        }
+
+        logger.trace("calling soap.retrieve...");
+
         RetrieveRequestMsg retrieveRequestMsg = new RetrieveRequestMsg();
         retrieveRequestMsg.setRetrieveRequest(retrieveRequest);
 
         RetrieveResponseMsg retrieveResponseMsg = soap.retrieve(retrieveRequestMsg);
 
-        // XXX check for errors and throw the appropriate exception
+        if (logger.isTraceEnabled()) {
+            logger.trace("RetrieveResponseMsg:");
+            logger.trace("  requestId = " + retrieveResponseMsg.getRequestID());
+            logger.trace("  overallStatus = " + retrieveResponseMsg.getOverallStatus());
+            logger.trace("  results = {");
+            for (APIObject result : retrieveResponseMsg.getResults()) {
+                logger.trace("    " + result);
+            }
+            logger.trace("  }");
+        }
 
-        List<ETDataExtensionRow> rows = new ArrayList<ETDataExtensionRow>();
-
+        response.setRequestId(retrieveResponseMsg.getRequestID());
+        response.setResponseCode(retrieveResponseMsg.getOverallStatus());
+        response.setResponseMessage(retrieveResponseMsg.getOverallStatus());
         for (APIObject internalObject : retrieveResponseMsg.getResults()) {
             //
             // Allocate a new (external) object:
@@ -263,13 +304,19 @@ public class ETDataExtension extends ETSoapObject {
             // Add result to the list of results:
             //
 
-            rows.add(row);
+            ETResult<ETDataExtensionRow> result = new ETResult<ETDataExtensionRow>();
+            result.setObject(row);
+            response.addResult(result);
         }
 
-        return rows;
+        if (retrieveResponseMsg.getOverallStatus().equals("MoreDataAvailable")) {
+            response.setMoreResults(true);
+        }
+
+        return response;
     }
 
-    public List<ETResult> update(ETDataExtensionRow... rows)
+    public ETResponse<ETDataExtensionRow> update(ETDataExtensionRow... rows)
         throws ETSdkException
     {
         ETClient client = getClient();
@@ -284,23 +331,17 @@ public class ETDataExtension extends ETSoapObject {
             }
         }
 
-        ETResponse<ETResult> response = client.update(Arrays.asList(rows));
-
-        // XXX check for errors and throw the appropriate exception
-
-        return response.getResults();
+        return client.update(Arrays.asList(rows));
     }
 
-    public List<ETResult> update(String filter, String... values)
+    public ETResponse<ETDataExtensionRow> update(String filter, String... values)
         throws ETSdkException
     {
         ETClient client = getClient();
-        ETResponse<ETResult> response = client.update(ETDataExtensionRow.class, filter, values);
-        // XXX check for errors and throw the appropriate exception
-        return response.getResults();
+        return client.update(ETDataExtensionRow.class, filter, values);
     }
 
-    public List<ETResult> delete(ETDataExtensionRow... rows)
+    public ETResponse<ETDataExtensionRow> delete(ETDataExtensionRow... rows)
         throws ETSdkException
     {
         ETClient client = getClient();
@@ -315,20 +356,14 @@ public class ETDataExtension extends ETSoapObject {
             }
         }
 
-        ETResponse<ETResult> response = client.delete(Arrays.asList(rows));
-
-        // XXX check for errors and throw the appropriate exception
-
-        return response.getResults();
+        return client.delete(Arrays.asList(rows));
     }
 
-    public List<ETResult> delete(String filter)
+    public ETResponse<ETDataExtensionRow> delete(String filter)
         throws ETSdkException
     {
         ETClient client = getClient();
-        ETResponse<ETResult> response = client.delete(ETDataExtensionRow.class, filter);
-        // XXX check for errors and throw the appropriate exception
-        return response.getResults();
+        return client.delete(ETDataExtensionRow.class, filter);
     }
 
 //    public void addColumn(ETDataExtensionColumn column)
@@ -400,6 +435,6 @@ public class ETDataExtension extends ETSoapObject {
 
         // XXX check for errors and throw the appropriate exception
 
-        return response.getResults();
+        return response.getObjects();
     }
 }

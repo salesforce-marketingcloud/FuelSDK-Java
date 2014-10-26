@@ -4,6 +4,11 @@
     from ETResponse<ETResult>.
     (update): Likewise.
     (delete): Likewise.
+    * ETDataExtension.java (insert): Changed return type
+    to ETResponse<ETDataExtensionRow> from List<ETResult>.
+    (select): Likewise (from List<ETDataExtensionRow>).
+    (update): Likewise.
+    (delete): Likewise.
     * ETResponse.java: Refactored. T must now extend ETObject, and
     all results are stored in ETResult objects, which now contain
     object references so we can properly return created or updated

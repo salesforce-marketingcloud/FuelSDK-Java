@@ -278,7 +278,14 @@ public abstract class ETSoapObject extends ETObject {
             // Convert from internal representation:
             //
 
-            externalObject.fromInternal(createResult.getObject());
+            // not all SOAP calls return the object though some do..
+            APIObject internalObject = createResult.getObject();
+            if (internalObject != null) {
+                externalObject.fromInternal(createResult.getObject());
+            } else {
+                // XXX populate fields from the object passed to the call?
+                externalObject.setId(Integer.toString(createResult.getNewID()));
+            }
 
             //
             // Add result to the list of results:
@@ -287,7 +294,9 @@ public abstract class ETSoapObject extends ETObject {
             ETResult<T> result = new ETResult<T>();
             result.setResponseCode(createResult.getStatusCode());
             result.setResponseMessage(createResult.getStatusMessage());
-            result.setObject(externalObject);
+            if (result.getResponseCode().equals("OK")) { // XXX?
+                result.setObject(externalObject);
+            }
             response.addResult(result);
         }
 
@@ -381,6 +390,9 @@ public abstract class ETSoapObject extends ETObject {
         if (filter != null) {
             retrieveRequest.setFilter(filter.toSoapFilter());
         }
+//        if (continueRequestId != null) {
+//            retrieveRequest.setContinueRequest(continueRequestId);
+//        }
 
         if (logger.isTraceEnabled()) {
             logger.trace("RetrieveRequest:");
@@ -541,7 +553,13 @@ public abstract class ETSoapObject extends ETObject {
             // Convert from internal representation:
             //
 
-            externalObject.fromInternal(updateResult.getObject());
+            // not all SOAP calls return the object though some do..
+            APIObject internalObject = updateResult.getObject();
+            if (internalObject != null) {
+                externalObject.fromInternal(updateResult.getObject());
+            } else {
+                // XXX populate fields from the object passed to the call?
+            }
 
             //
             // Add result to the list of results:
@@ -550,7 +568,9 @@ public abstract class ETSoapObject extends ETObject {
             ETResult<T> result = new ETResult<T>();
             result.setResponseCode(updateResult.getStatusCode());
             result.setResponseMessage(updateResult.getStatusMessage());
-            result.setObject(externalObject);
+            if (result.getResponseCode().equals("OK")) { // XXX?
+                result.setObject(externalObject);
+            }
             response.addResult(result);
         }
 
