@@ -35,6 +35,8 @@ import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
 
+import com.exacttarget.fuelsdk.deprecated.ETResponse;
+import com.exacttarget.fuelsdk.deprecated.ETResult;
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.filter.ETFilterOperators;
 import com.exacttarget.fuelsdk.filter.ETSimpleFilter;
@@ -187,7 +189,6 @@ public class ETFolderTestDeprecatedMethods {
         assertEquals("Folder created successfully.", result.getStatusMessage());
         assertNull(result.getErrorCode());
         assertNotNull(result.getId());
-        assertNotNull(result.getGuid());
         // save the ID for use in the next test
         id = result.getId();
     }
@@ -239,7 +240,6 @@ public class ETFolderTestDeprecatedMethods {
         assertEquals("Folder updated successfully.", result.getStatusMessage());
         assertNull(result.getErrorCode());
         assertNull(result.getId());
-        assertNull(result.getGuid());
     }
 
     @Test
@@ -287,7 +287,6 @@ public class ETFolderTestDeprecatedMethods {
         assertEquals("Folder deleted successfully.", result.getStatusMessage());
         assertNull(result.getErrorCode());
         assertNull(result.getId());
-        assertNull(result.getGuid());
     }
 
     private static String id1 = null;
@@ -327,7 +326,6 @@ public class ETFolderTestDeprecatedMethods {
         assertEquals("Folder created successfully.", result1.getStatusMessage());
         assertNull(result1.getErrorCode());
         assertNotNull(result1.getId());
-        assertNotNull(result1.getGuid());
         // save the ID for use in the next test
         id1 = result1.getId();
         ETResult result2 = response.getResults().get(0);
@@ -335,7 +333,6 @@ public class ETFolderTestDeprecatedMethods {
         assertEquals("Folder created successfully.", result2.getStatusMessage());
         assertNull(result2.getErrorCode());
         assertNotNull(result2.getId());
-        assertNotNull(result2.getGuid());
         // save the ID for use in the next test
         id2 = result2.getId();
     }
@@ -387,12 +384,10 @@ public class ETFolderTestDeprecatedMethods {
         assertEquals("Folder deleted successfully.", result1.getStatusMessage());
         assertNull(result1.getErrorCode());
         assertNull(result1.getId());
-        assertNull(result1.getGuid());
         ETResult result2 = response.getResults().get(0);
         assertEquals("OK", result2.getStatusCode());
         assertEquals("Folder deleted successfully.", result2.getStatusMessage());
         assertNull(result2.getErrorCode());
         assertNull(result2.getId());
-        assertNull(result2.getGuid());
     }
 }

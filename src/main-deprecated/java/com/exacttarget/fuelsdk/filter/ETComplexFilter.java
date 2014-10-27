@@ -30,6 +30,11 @@ package com.exacttarget.fuelsdk.filter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @deprecated
+ * Use {@link com.exacttarget.fuelsdk.ETFilter}.
+ */
+@Deprecated
 public class ETComplexFilter implements ETFilter {
     private ETFilter leftOperand = null;
     private ETFilter rightOperand = null;

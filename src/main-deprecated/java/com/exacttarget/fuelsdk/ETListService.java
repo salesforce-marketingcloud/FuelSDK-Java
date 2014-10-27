@@ -29,6 +29,8 @@ package com.exacttarget.fuelsdk;
 
 import java.util.List;
 
+import com.exacttarget.fuelsdk.deprecated.ETResponse;
+import com.exacttarget.fuelsdk.deprecated.ETResult;
 import com.exacttarget.fuelsdk.filter.ETFilter;
 
 /**

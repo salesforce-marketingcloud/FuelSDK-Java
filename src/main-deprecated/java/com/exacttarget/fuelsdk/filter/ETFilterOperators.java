@@ -27,6 +27,11 @@
 
 package com.exacttarget.fuelsdk.filter;
 
+/**
+ * @deprecated
+ * Use {@link com.exacttarget.fuelsdk.ETFilter}.
+ */
+@Deprecated
 public enum ETFilterOperators {
     EQUALS("equals"),
     NOT_EQUALS("notEquals"),

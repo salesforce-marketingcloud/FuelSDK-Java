@@ -33,9 +33,9 @@ import java.util.List;
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETFolder;
 import com.exacttarget.fuelsdk.ETFolderService;
-import com.exacttarget.fuelsdk.ETResponse;
-import com.exacttarget.fuelsdk.ETResult;
 import com.exacttarget.fuelsdk.ETSdkException;
+import com.exacttarget.fuelsdk.deprecated.ETResponse;
+import com.exacttarget.fuelsdk.deprecated.ETResult;
 import com.exacttarget.fuelsdk.filter.ETFilter;
 
 /**
@@ -43,6 +43,7 @@ import com.exacttarget.fuelsdk.filter.ETFilter;
  * For information on how to interact with folders, please see
  * {@link com.exacttarget.fuelsdk.ETFolder}.
  */
+@Deprecated
 public class ETFolderServiceImpl extends ETSoapServiceImpl<ETFolder>
     implements ETFolderService
 {

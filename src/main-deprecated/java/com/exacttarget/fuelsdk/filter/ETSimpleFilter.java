@@ -31,6 +31,11 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * @deprecated
+ * Use {@link com.exacttarget.fuelsdk.ETFilter}.
+ */
+@Deprecated
 public class ETSimpleFilter implements ETFilter {
     private String property = null;
     private ETFilterOperators operator = null;
@@ -50,9 +55,9 @@ public class ETSimpleFilter implements ETFilter {
         if (values.size() > 0) {
             Object o = values.get(0);
             if (o instanceof String) {
-                this.values = (List<String>) values;
+                this.values = values;
             } else if (o instanceof Date) {
-                this.dateValues = (List<Date>) values;
+                this.dateValues = values;
             }
         }
     }

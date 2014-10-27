@@ -28,23 +28,18 @@
 package com.exacttarget.fuelsdk.soap;
 
 import java.lang.reflect.Method;
-import java.util.Date;
 import java.util.List;
 
 import com.exacttarget.fuelsdk.ETClient;
-import com.exacttarget.fuelsdk.ETResponse;
-import com.exacttarget.fuelsdk.ETResult;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.ETSoapObject;
+import com.exacttarget.fuelsdk.deprecated.ETResponse;
+import com.exacttarget.fuelsdk.deprecated.ETResult;
 import com.exacttarget.fuelsdk.filter.ETComplexFilter;
 import com.exacttarget.fuelsdk.filter.ETFilter;
 import com.exacttarget.fuelsdk.filter.ETSimpleFilter;
-import com.exacttarget.fuelsdk.internal.ComplexFilterPart;
-import com.exacttarget.fuelsdk.internal.FilterPart;
-import com.exacttarget.fuelsdk.internal.LogicalOperators;
-import com.exacttarget.fuelsdk.internal.SimpleFilterPart;
-import com.exacttarget.fuelsdk.internal.SimpleOperators;
 
+@Deprecated
 public abstract class ETSoapServiceImpl<T extends ETSoapObject> {
     //
     // This class is kinda nasty, but we really care about backward
@@ -146,9 +141,7 @@ public abstract class ETSoapServiceImpl<T extends ETSoapObject> {
         // Convert filter:
         //
 
-        com.exacttarget.fuelsdk.ETFilter f = new com.exacttarget.fuelsdk.ETFilter();
-
-        f.setSoapFilter(toSoapFilter(filter));
+        com.exacttarget.fuelsdk.ETFilter f = toNewFilter(filter);
 
         try {
             // first argument of null means method is static
@@ -206,37 +199,19 @@ public abstract class ETSoapServiceImpl<T extends ETSoapObject> {
         return response;
     }
 
-    private FilterPart toSoapFilter(ETFilter filter) {
-        FilterPart filterPart = null;
+    private com.exacttarget.fuelsdk.ETFilter toNewFilter(ETFilter filter) {
+        com.exacttarget.fuelsdk.ETFilter f = new com.exacttarget.fuelsdk.ETFilter();
         if (filter instanceof ETSimpleFilter) {
-            filterPart = new SimpleFilterPart();
-            ETSimpleFilter external = (ETSimpleFilter) filter;
-            SimpleFilterPart internal = (SimpleFilterPart) filterPart;
-            internal.setProperty(external.getProperty());
-            internal.setSimpleOperator
-                (SimpleOperators.valueOf(external.getOperator().toString()));
-            internal.getValue().addAll(external.getValues());
-            if (external.getDateValues() != null) {
-                for (Date date : external.getDateValues()) {
-                    internal.getDateValue().add(date);
-                }
+            f.setProperty(((ETSimpleFilter) filter).getProperty());
+            f.setOperator(((ETSimpleFilter) filter).getOperator().toString());
+            for (String value : ((ETSimpleFilter) filter).getValues()) {
+                f.addValue(value);
             }
         } else if (filter instanceof ETComplexFilter) {
-            filterPart = new ComplexFilterPart();
-            ETComplexFilter external = (ETComplexFilter) filter;
-            ComplexFilterPart internal = (ComplexFilterPart) filterPart;
-            internal.setLeftOperand
-                (toSoapFilter(external.getLeftOperand()));
-            internal.setLogicalOperator
-                (LogicalOperators.valueOf(external.getOperator().toString()));
-            internal.setRightOperand
-                (toSoapFilter(external.getRightOperand()));
-            if (external.getAdditionalOperands() != null) {
-                for (ETFilter f : external.getAdditionalOperands()) {
-                    internal.getAdditionalOperands().getOperand().add(toSoapFilter(f));
-                }
-            }
+            f.setOperator(((ETComplexFilter) filter).getOperator().toString());
+            f.addFilter(toNewFilter(((ETComplexFilter) filter).getLeftOperand()));
+            f.addFilter(toNewFilter(((ETComplexFilter) filter).getRightOperand()));
         }
-        return filterPart;
+        return f;
     }
 }
