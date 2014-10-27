@@ -60,6 +60,9 @@ import com.exacttarget.fuelsdk.internal.Soap;
 public class ETDataExtension extends ETSoapObject {
     private static Logger logger = Logger.getLogger(ETDataExtension.class);
 
+    @ExternalName("id")
+    @InternalName("objectID")
+    private String id = null;
     @ExternalName("name")
     private String name = null;
     @ExternalName("description")
@@ -76,6 +79,16 @@ public class ETDataExtension extends ETSoapObject {
     private Boolean isTestable = null;
 
     public ETDataExtension() {}
+
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(String id) {
+        this.id = id;
+    }
 
     @Override
     public String getName() {

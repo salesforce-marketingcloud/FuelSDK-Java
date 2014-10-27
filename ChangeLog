@@ -1,3 +1,8 @@
+2014-10-27  Ian Murdock  <imurdock@exacttarget.com>
+
+    * ETDataExtension.java (getId): New function.
+    (setId): New function.
+
 2014-10-26  Ian Murdock  <imurdock@exacttarget.com>
 
     * ETDataExtension.java: Added support for paginated data extension
