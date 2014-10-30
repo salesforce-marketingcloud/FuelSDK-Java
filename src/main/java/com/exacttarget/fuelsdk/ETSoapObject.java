@@ -53,6 +53,7 @@ import com.exacttarget.fuelsdk.annotations.InternalProperty;
 import com.exacttarget.fuelsdk.annotations.SoapObject;
 import com.exacttarget.fuelsdk.internal.APIObject;
 import com.exacttarget.fuelsdk.internal.APIProperty;
+import com.exacttarget.fuelsdk.internal.ComplexFilterPart;
 //import com.exacttarget.fuelsdk.internal.Account;
 //import com.exacttarget.fuelsdk.internal.AccountTypeEnum;
 //import com.exacttarget.fuelsdk.internal.BounceEvent;
@@ -72,6 +73,7 @@ import com.exacttarget.fuelsdk.internal.DeleteOptions;
 import com.exacttarget.fuelsdk.internal.DeleteRequest;
 import com.exacttarget.fuelsdk.internal.DeleteResponse;
 import com.exacttarget.fuelsdk.internal.DeleteResult;
+import com.exacttarget.fuelsdk.internal.FilterPart;
 //import com.exacttarget.fuelsdk.internal.DeliveryProfile;
 //import com.exacttarget.fuelsdk.internal.DeliveryProfileDomainTypeEnum;
 //import com.exacttarget.fuelsdk.internal.DeliveryProfileSourceAddressTypeEnum;
@@ -83,6 +85,7 @@ import com.exacttarget.fuelsdk.internal.DeleteResult;
 import com.exacttarget.fuelsdk.internal.ListClassificationEnum;
 //import com.exacttarget.fuelsdk.internal.ListSubscriber;
 import com.exacttarget.fuelsdk.internal.ListTypeEnum;
+import com.exacttarget.fuelsdk.internal.LogicalOperators;
 import com.exacttarget.fuelsdk.internal.ObjectExtension;
 //import com.exacttarget.fuelsdk.internal.OpenEvent;
 //import com.exacttarget.fuelsdk.internal.Permission;
@@ -90,6 +93,8 @@ import com.exacttarget.fuelsdk.internal.ObjectExtension;
 import com.exacttarget.fuelsdk.internal.RetrieveRequest;
 import com.exacttarget.fuelsdk.internal.RetrieveRequestMsg;
 import com.exacttarget.fuelsdk.internal.RetrieveResponseMsg;
+import com.exacttarget.fuelsdk.internal.SimpleFilterPart;
+import com.exacttarget.fuelsdk.internal.SimpleOperators;
 //import com.exacttarget.fuelsdk.internal.Role;
 //import com.exacttarget.fuelsdk.internal.SalutationSourceEnum;
 //import com.exacttarget.fuelsdk.internal.SendClassification;
@@ -397,7 +402,7 @@ public abstract class ETSoapObject extends ETObject {
             for (ETFilter f : filter.getFilters()) {
                 f.setProperty(getInternalProperty(type, f.getProperty()));
             }
-            retrieveRequest.setFilter(filter.toSoapFilter());
+            retrieveRequest.setFilter(toFilterPart(filter));
         }
 //        if (continueRequestId != null) {
 //            retrieveRequest.setContinueRequest(continueRequestId);
@@ -416,7 +421,7 @@ public abstract class ETSoapObject extends ETObject {
             }
             logger.trace(line + " }");
             if (filter != null) {
-                logger.trace("  filter = " + filter.toSoapFilter());
+                logger.trace("  filter = " + toFilterPart(filter));
             }
         }
 
@@ -1405,5 +1410,69 @@ public abstract class ETSoapObject extends ETObject {
         }
 
         return internalProperties;
+    }
+
+    public static FilterPart toFilterPart(ETFilter filter) {
+        ETFilter.Operator operator = filter.getOperator();
+        if (operator == ETFilter.Operator.AND ||
+            operator == ETFilter.Operator.OR)
+        {
+            List<ETFilter> filters = filter.getFilters();
+            ComplexFilterPart complexFilterPart = new ComplexFilterPart();
+            complexFilterPart.setLeftOperand(toFilterPart(filters.get(0)));
+            if (operator == ETFilter.Operator.AND) {
+                complexFilterPart.setLogicalOperator(LogicalOperators.AND);
+            } else if (operator == ETFilter.Operator.OR) {
+                complexFilterPart.setLogicalOperator(LogicalOperators.OR);
+            }
+            complexFilterPart.setRightOperand(toFilterPart(filters.get(1)));
+            return complexFilterPart;
+        } else {
+            String property = filter.getProperty();
+            List<String> values = filter.getValues();
+            SimpleFilterPart simpleFilterPart = new SimpleFilterPart();
+            simpleFilterPart.setProperty(property);
+            switch (operator) {
+              case EQUALS:
+                simpleFilterPart.setSimpleOperator(SimpleOperators.EQUALS);
+                break;
+              case NOT_EQUALS:
+                simpleFilterPart.setSimpleOperator(SimpleOperators.NOT_EQUALS);
+                break;
+              case LESS_THAN:
+                simpleFilterPart.setSimpleOperator(SimpleOperators.LESS_THAN);
+                break;
+              case LESS_THAN_OR_EQUALS:
+                simpleFilterPart.setSimpleOperator(SimpleOperators.LESS_THAN_OR_EQUAL);
+                break;
+              case GREATER_THAN:
+                simpleFilterPart.setSimpleOperator(SimpleOperators.GREATER_THAN);
+                break;
+              case GREATER_THAN_OR_EQUALS:
+                simpleFilterPart.setSimpleOperator(SimpleOperators.GREATER_THAN_OR_EQUAL);
+                break;
+              case IS_NULL:
+                simpleFilterPart.setSimpleOperator(SimpleOperators.IS_NULL);
+                break;
+              case IS_NOT_NULL:
+                simpleFilterPart.setSimpleOperator(SimpleOperators.IS_NOT_NULL);
+                break;
+              case BETWEEN:
+                simpleFilterPart.setSimpleOperator(SimpleOperators.BETWEEN);
+                break;
+              case IN:
+                simpleFilterPart.setSimpleOperator(SimpleOperators.IN);
+                break;
+              case LIKE:
+                simpleFilterPart.setSimpleOperator(SimpleOperators.LIKE);
+                break;
+              default:
+                break;
+            }
+            for (String value : values) {
+                simpleFilterPart.getValue().add(value);
+            }
+            return simpleFilterPart;
+        }
     }
 }

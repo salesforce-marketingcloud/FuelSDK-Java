@@ -111,7 +111,7 @@ ETFilter OrExpression():
         filter2 = AndExpression()
         {
             filter = new ETFilter();
-            filter.setOperator("or");
+            filter.setOperator(ETFilter.Operator.OR);
             filter.addFilter(filter1);
             filter.addFilter(filter2);
             filter1 = filter;
@@ -152,7 +152,7 @@ ETFilter AndExpression():
         )
         {
             filter = new ETFilter();
-            filter.setOperator("and");
+            filter.setOperator(ETFilter.Operator.AND);
             filter.addFilter(filter1);
             filter.addFilter(filter2);
             filter1 = filter;
@@ -195,7 +195,7 @@ ETFilter BetweenExpression():
 
     < BETWEEN >
     {
-        filter.setOperator("between");
+        filter.setOperator(ETFilter.Operator.BETWEEN);
     }
 
     value = Value()
@@ -211,7 +211,7 @@ ETFilter BetweenExpression():
     }
 
     {
-        logger.trace("returning filter: " + filter);
+        logger.trace("BetweenExpression: " + filter);
         return filter;
     }
 }
@@ -230,31 +230,31 @@ ETFilter ComparisonExpression():
     (
         "="
         {
-            filter.setOperator("=");
+            filter.setOperator(ETFilter.Operator.EQUALS);
         }
         | "!="
         {
-            filter.setOperator("!=");
+            filter.setOperator(ETFilter.Operator.NOT_EQUALS);
         }
         | "<"
         {
-            filter.setOperator("<");
+            filter.setOperator(ETFilter.Operator.LESS_THAN);
         }
         | "<="
         {
-            filter.setOperator("<=");
+            filter.setOperator(ETFilter.Operator.LESS_THAN_OR_EQUALS);
         }
         | ">"
         {
-            filter.setOperator(">");
+            filter.setOperator(ETFilter.Operator.GREATER_THAN);
         }
         | ">="
         {
-            filter.setOperator(">=");
+            filter.setOperator(ETFilter.Operator.GREATER_THAN_OR_EQUALS);
         }
         | < LIKE >
         {
-            filter.setOperator("like");
+            filter.setOperator(ETFilter.Operator.LIKE);
         }
     )
 
@@ -282,7 +282,7 @@ ETFilter InExpression():
 
     < IN >
     {
-        filter.setOperator("in");
+        filter.setOperator(ETFilter.Operator.IN);
     }
 
     "("
@@ -304,7 +304,7 @@ ETFilter InExpression():
     ")"
 
     {
-        logger.trace("returning filter: " + filter);
+        logger.trace("InExpression: " + filter);
         return filter;
     }
 }
@@ -325,16 +325,16 @@ ETFilter IsNullExpression():
     (
         < NULL >
         {
-            filter.setOperator("is null");
+            filter.setOperator(ETFilter.Operator.IS_NULL);
         }
         | < NOT > < NULL >
         {
-            filter.setOperator("is not null");
+            filter.setOperator(ETFilter.Operator.IS_NOT_NULL);
         }
     )
 
     {
-        logger.trace("returning filter: " + filter);
+        logger.trace("IsNullExpression: " + filter);
         return filter;
     }
 }

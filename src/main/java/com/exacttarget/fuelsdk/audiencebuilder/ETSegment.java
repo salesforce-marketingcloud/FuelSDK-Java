@@ -28,9 +28,9 @@
 package com.exacttarget.fuelsdk.audiencebuilder;
 
 import com.exacttarget.fuelsdk.ETFilter;
-import com.exacttarget.fuelsdk.ETFilter.AudienceBuilderFilter;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.annotations.ExternalName;
+import com.exacttarget.fuelsdk.audiencebuilder.ETAudience.AudienceBuilderFilter;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -116,7 +116,7 @@ public class ETSegment {
     public void setFilter(ETFilter filter) {
         parsedFilter = filter;
         this.filter = new Filter();
-        this.filter.setFilterDefinition(parsedFilter.toAudienceBuilderFilter());
+        this.filter.setFilterDefinition(ETAudience.toAudienceBuilderFilter(parsedFilter));
     }
 
     public void setFilter(String filter)

@@ -43,12 +43,7 @@ import org.apache.log4j.Logger;
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.InternalName;
 import com.exacttarget.fuelsdk.annotations.SoapObject;
-import com.exacttarget.fuelsdk.internal.APIObject;
 import com.exacttarget.fuelsdk.internal.DataExtension;
-import com.exacttarget.fuelsdk.internal.RetrieveRequest;
-import com.exacttarget.fuelsdk.internal.RetrieveRequestMsg;
-import com.exacttarget.fuelsdk.internal.RetrieveResponseMsg;
-import com.exacttarget.fuelsdk.internal.Soap;
 
 /**
  * The <code>ETDataExtension</code> class represents an ExactTarget
@@ -473,7 +468,7 @@ public class ETDataExtension extends ETSoapObject {
 
         ETFilter filter = new ETFilter();
         filter.setProperty("DataExtension.CustomerKey");
-        filter.setOperator("=");
+        filter.setOperator(ETFilter.Operator.EQUALS);
         filter.addValue(getKey());
 
         ETResponse<ETDataExtensionColumn> response =
@@ -492,20 +487,27 @@ public class ETDataExtension extends ETSoapObject {
     private String toQueryParameters(ETFilter filter) {
         StringBuilder stringBuilder = new StringBuilder();
 
-        String operator = filter.getOperator();
-        if (operator.equals("and") ||
-            operator.equals("or"))
-        {
+        ETFilter.Operator operator = filter.getOperator();
+        switch (operator) {
+          case AND:
+          case OR:
             stringBuilder.append(toQueryParameters(filter.getFilters().get(0)));
             stringBuilder.append("%20");
             stringBuilder.append(operator);
             stringBuilder.append("%20");
             stringBuilder.append(toQueryParameters(filter.getFilters().get(1)));
-        } else if (operator.equals("not")) {
+            break;
+          case NOT:
             stringBuilder.append(operator);
             stringBuilder.append("%20");
             stringBuilder.append(toQueryParameters(filter.getFilters().get(0)));
-        } else {
+            break;
+          case EQUALS:
+          case NOT_EQUALS:
+          case LESS_THAN:
+          case LESS_THAN_OR_EQUALS:
+          case GREATER_THAN:
+          case GREATER_THAN_OR_EQUALS:
             stringBuilder.append(filter.getProperty());
             stringBuilder.append("%20");
             if (operator.equals("=")) {
@@ -525,6 +527,9 @@ public class ETDataExtension extends ETSoapObject {
             }
             stringBuilder.append("%20");
             stringBuilder.append(filter.getValue());
+            break;
+          default:
+            // XXX throw exception unsupported
         }
 
         return stringBuilder.toString();
