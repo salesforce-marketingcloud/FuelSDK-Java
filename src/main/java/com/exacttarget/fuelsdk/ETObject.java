@@ -27,10 +27,7 @@
 
 package com.exacttarget.fuelsdk;
 
-import java.lang.reflect.Field;
 import java.util.Date;
-
-import com.exacttarget.fuelsdk.annotations.InternalName;
 
 public abstract class ETObject extends ETPrettyPrintable {
     public abstract String getId();
@@ -45,27 +42,4 @@ public abstract class ETObject extends ETPrettyPrintable {
     public abstract void setCreatedDate(Date createdDate);
     public abstract Date getModifiedDate();
     public abstract void setModifiedDate(Date modifiedDate);
-
-    protected static String getInternalProperty(Class<? extends ETObject> type,
-                                                String name)
-        throws ETSdkException
-    {
-        String internalProperty = null;
-
-        Class<? extends ETObject> externalType = type; // for code readability
-
-        Field externalField = getField(externalType, name);
-
-        InternalName internalNameAnnotation =
-                externalField.getAnnotation(InternalName.class);
-
-        if (internalNameAnnotation != null) {
-            internalProperty = internalNameAnnotation.value();
-        } else {
-            // internal name is the same as external name
-            internalProperty = externalField.getName();
-        }
-
-        return internalProperty;
-    }
 }

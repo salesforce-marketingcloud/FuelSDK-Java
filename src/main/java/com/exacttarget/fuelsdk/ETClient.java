@@ -297,8 +297,7 @@ public class ETClient {
         ETFilter f = null;
         String[] p = properties;
         try {
-            // XXX
-            f = ETFilter.parse(filter, (Class<? extends ETSoapObject>) type);
+            f = ETFilter.parse(filter);
         } catch (ETSdkException ex) {
             // XXX check against ex.getCause();
 
@@ -335,8 +334,7 @@ public class ETClient {
                                                        String... properties)
         throws ETSdkException
     {
-        // XXX
-        return retrieve(type, ETFilter.parse(filter, (Class<? extends ETSoapObject>) type), page, pageSize, properties);
+        return retrieve(type, ETFilter.parse(filter), page, pageSize, properties);
     }
 
     @SuppressWarnings("unchecked")

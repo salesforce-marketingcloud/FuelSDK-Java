@@ -152,20 +152,58 @@ public class ETFilter {
     public static ETFilter parse(String filter)
         throws ETSdkException
     {
-        return parse(filter, null);
-    }
-
-    public static ETFilter parse(String filter, Class<? extends ETSoapObject> type)
-        throws ETSdkException
-    {
         ETFilterParser parser = new ETFilterParser(new ByteArrayInputStream(filter.getBytes()));
         ETFilter parsedFilter = null;
         try {
-            parsedFilter = parser.parse(type);
+            parsedFilter = parser.parse();
         } catch (ParseException ex) {
             throw new ETSdkException("could not parse filter: " + filter, ex);
         }
         return parsedFilter;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        switch(operator) {
+          case EQUALS:
+          case NOT_EQUALS:
+          case LESS_THAN:
+          case LESS_THAN_OR_EQUAL:
+          case GREATER_THAN:
+          case GREATER_THAN_OR_EQUAL:
+          case IN:
+          case BETWEEN:
+          case LIKE:
+            stringBuilder.append(property);
+            stringBuilder.append(" ");
+            stringBuilder.append(operator.toString());
+            stringBuilder.append(" ");
+            stringBuilder.append(values);
+            break;
+          case IS_NULL:
+          case IS_NOT_NULL:
+            stringBuilder.append(property);
+            stringBuilder.append(" ");
+            stringBuilder.append(operator.toString());
+            break;
+          case AND:
+          case OR:
+            stringBuilder.append(filters.get(0));
+            stringBuilder.append(" ");
+            stringBuilder.append(operator.toString());
+            stringBuilder.append(" ");
+            stringBuilder.append(filters.get(1));
+            break;
+          case NOT:
+            stringBuilder.append(operator.toString());
+            stringBuilder.append(" ");
+            stringBuilder.append(filters.get(0));
+            break;
+        }
+
+        return stringBuilder.toString();
     }
 
     public FilterPart toSoapFilter() {
