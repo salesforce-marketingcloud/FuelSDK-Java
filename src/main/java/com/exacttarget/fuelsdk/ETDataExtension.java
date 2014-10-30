@@ -187,7 +187,8 @@ public class ETDataExtension extends ETSoapObject {
     public ETResponse<ETDataExtensionRow> select()
         throws ETSdkException
     {
-        return select(null);
+        // new String[0] = empty properties
+        return select((ETFilter) null, null, null, new String[0]);
     }
 
     public ETResponse<ETDataExtensionRow> select(String filter,
@@ -197,144 +198,26 @@ public class ETDataExtension extends ETSoapObject {
         // XXX copied and pasted from ETClient.retrieve(filter, properties)
         ETFilter f = null;
         String[] c = columns;
-        if (filter != null) {
-            try {
-                f = ETFilter.parse(filter);
-            } catch (ETSdkException ex) {
-                // XXX check against ex.getCause();
+        try {
+            f = ETFilter.parse(filter);
+        } catch (ETSdkException ex) {
+            // XXX check against ex.getCause();
 
-                //
-                // The filter argument is actually a column. This is a bit
-                // of a hack, but this method needs to handle the case of
-                // both a filtered and a filterless retrieve with columns,
-                // as having one method for each results in ambiguous methods.
-                //
+            //
+            // The filter argument is actually a column. This is a bit
+            // of a hack, but this method needs to handle the case of
+            // both a filtered and a filterless retrieve with columns,
+            // as having one method for each results in ambiguous methods.
+            //
 
-                c = new String[columns.length + 1];
-                c[0] = filter;
-                int i = 1;
-                for (String column : columns) {
-                    c[i++] = column;
-                }
+            c = new String[columns.length + 1];
+            c[0] = filter;
+            int i = 1;
+            for (String column : columns) {
+                c[i++] = column;
             }
         }
-
-        if (c.length == 0) {
-            //
-            // If columns aren't specified retrieve all columns:
-            //
-
-            // XXX this adds another API call.. is there a native way?
-
-            List<ETDataExtensionColumn> dataExtensionColumns = retrieveColumns();
-            c = new String[dataExtensionColumns.size()];
-            int i = 0;
-            for (ETDataExtensionColumn column : dataExtensionColumns) {
-                c[i++] = column.getName();
-            }
-        }
-
-        ETClient client = getClient();
-
-        // XXX copied and pasted from ETSoapObject.retrieve
-
-        ETResponse<ETDataExtensionRow> response = new ETResponse<ETDataExtensionRow>();
-
-        //
-        // Get handle to the SOAP connection:
-        //
-
-        ETSoapConnection connection = client.getSoapConnection();
-
-        //
-        // Automatically refresh the token if necessary:
-        //
-
-        client.refreshToken();
-
-        //
-        // Perform the SOAP retrieve:
-        //
-
-        Soap soap = connection.getSoap();
-
-        RetrieveRequest retrieveRequest = new RetrieveRequest();
-        retrieveRequest.setObjectType("DataExtensionObject[" + name + "]");
-        retrieveRequest.getProperties().addAll(Arrays.asList(c));
-        if (f != null) {
-            retrieveRequest.setFilter(f.toSoapFilter());
-        }
-//        if (continueRequestId != null) {
-//            retrieveRequest.setContinueRequest(continueRequestId);
-//        }
-
-        if (logger.isTraceEnabled()) {
-            logger.trace("RetrieveRequest:");
-            logger.trace("  objectType = " + retrieveRequest.getObjectType());
-            String line = null;
-            for (String property : retrieveRequest.getProperties()) {
-                if (line == null) {
-                    line = "  properties = { " + property;
-                } else {
-                    line += ", " + property;
-                }
-            }
-            logger.trace(line + " }");
-            if (filter != null) {
-                logger.trace("  filter = " + f.toSoapFilter());
-            }
-        }
-
-        logger.trace("calling soap.retrieve...");
-
-        RetrieveRequestMsg retrieveRequestMsg = new RetrieveRequestMsg();
-        retrieveRequestMsg.setRetrieveRequest(retrieveRequest);
-
-        RetrieveResponseMsg retrieveResponseMsg = soap.retrieve(retrieveRequestMsg);
-
-        if (logger.isTraceEnabled()) {
-            logger.trace("RetrieveResponseMsg:");
-            logger.trace("  requestId = " + retrieveResponseMsg.getRequestID());
-            logger.trace("  overallStatus = " + retrieveResponseMsg.getOverallStatus());
-            logger.trace("  results = {");
-            for (APIObject result : retrieveResponseMsg.getResults()) {
-                logger.trace("    " + result);
-            }
-            logger.trace("  }");
-        }
-
-        response.setRequestId(retrieveResponseMsg.getRequestID());
-        response.setResponseCode(retrieveResponseMsg.getOverallStatus());
-        response.setResponseMessage(retrieveResponseMsg.getOverallStatus());
-        for (APIObject internalObject : retrieveResponseMsg.getResults()) {
-            //
-            // Allocate a new (external) object:
-            //
-
-            ETDataExtensionRow row = new ETDataExtensionRow();
-
-            row.setClient(client);
-
-            //
-            // Convert from internal representation:
-            //
-
-            row.fromInternal(internalObject);
-
-            //
-            // Add result to the list of results:
-            //
-
-            ETResult<ETDataExtensionRow> result = new ETResult<ETDataExtensionRow>();
-            result.setObject(row);
-            response.addResult(result);
-        }
-
-        if (retrieveResponseMsg.getOverallStatus().equals("MoreDataAvailable")) {
-            response.setMoreResults(true);
-        }
-
-        return response;
+        return select(f, null, null, c);
     }
 
     public ETResponse<ETDataExtensionRow> select(Integer page,
@@ -342,10 +225,19 @@ public class ETDataExtension extends ETSoapObject {
                                                  String... columns)
         throws ETSdkException
     {
-        return select(null, page, pageSize, columns);
+        return select((ETFilter) null, page, pageSize, columns);
     }
 
     public ETResponse<ETDataExtensionRow> select(String filter,
+                                                 Integer page,
+                                                 Integer pageSize,
+                                                 String... columns)
+        throws ETSdkException
+    {
+        return select(ETFilter.parse(filter), page, pageSize, columns);
+    }
+
+    public ETResponse<ETDataExtensionRow> select(ETFilter filter,
                                                  Integer page,
                                                  Integer pageSize,
                                                  String... columns)
@@ -369,26 +261,38 @@ public class ETDataExtension extends ETSoapObject {
 
         client.refreshToken();
 
-        StringBuilder stringBuilder = new StringBuilder("/data/v1/customobjectdata/key/" + getKey() + "/rowset");
+        String path = "/data/v1/customobjectdata/key/" + getKey() + "/rowset";
 
-        stringBuilder.append("?");
-        stringBuilder.append("$page=");
-        stringBuilder.append(page);
-        stringBuilder.append("&");
-        stringBuilder.append("$pagesize=");
-        stringBuilder.append(pageSize);
+        StringBuilder stringBuilder = new StringBuilder(path);
+
+        boolean firstQueryParameter = true;
+
+        if (page != null && pageSize != null) {
+            firstQueryParameter = false;
+            stringBuilder.append("?");
+            stringBuilder.append("$page=");
+            stringBuilder.append(page);
+            stringBuilder.append("&");
+            stringBuilder.append("$pagesize=");
+            stringBuilder.append(pageSize);
+        }
 
         if (columns.length > 0) {
             //
             // Only request those columns specified:
             //
 
-            boolean first = true;
+            boolean firstField = true;
             for (String column : columns) {
-                if (first) {
-                    stringBuilder.append("&");
+                if (firstField) {
+                    firstField = false;
+                    if (firstQueryParameter) {
+                        firstQueryParameter = false;
+                        stringBuilder.append("?");
+                    } else {
+                        stringBuilder.append("&");
+                    }
                     stringBuilder.append("$fields=");
-                    first = false;
                 } else {
                     stringBuilder.append(",");
                 }
@@ -397,12 +301,17 @@ public class ETDataExtension extends ETSoapObject {
         }
 
         if (filter != null) {
-            stringBuilder.append("&");
+            if (firstQueryParameter) {
+                firstQueryParameter = false;
+                stringBuilder.append("?");
+            } else {
+                stringBuilder.append("&");
+            }
             stringBuilder.append("$filter=");
-            stringBuilder.append(toQueryParameters(ETFilter.parse(filter)));
+            stringBuilder.append(toQueryParameters(filter));
         }
 
-        String path = stringBuilder.toString();
+        path = stringBuilder.toString();
 
         logger.trace("GET " + path);
 
@@ -423,78 +332,39 @@ public class ETDataExtension extends ETSoapObject {
             }
         }
 
-        response.setPage(jsonObject.get("page").getAsInt());
-        logger.trace("page = " + response.getPage());
-        response.setPageSize(jsonObject.get("pageSize").getAsInt());
-        logger.trace("pageSize = " + response.getPageSize());
-        response.setTotalCount(jsonObject.get("count").getAsInt());
-        logger.trace("totalCount = " + response.getTotalCount());
+        if (jsonObject.get("page") != null) {
+            response.setPage(jsonObject.get("page").getAsInt());
+            logger.trace("page = " + response.getPage());
+            response.setPageSize(jsonObject.get("pageSize").getAsInt());
+            logger.trace("pageSize = " + response.getPageSize());
+            response.setTotalCount(jsonObject.get("count").getAsInt());
+            logger.trace("totalCount = " + response.getTotalCount());
 
-        if (response.getPage() * response.getPageSize() < response.getTotalCount()) {
-            response.setMoreResults(true);
-        }
-
-        JsonArray collection = jsonObject.get("items").getAsJsonArray();
-
-        for (JsonElement element : collection) {
-            JsonObject object = element.getAsJsonObject();
-            ETDataExtensionRow row = new ETDataExtensionRow();
-            JsonObject keys = object.get("keys").getAsJsonObject();
-            for (Map.Entry<String, JsonElement> entry : keys.entrySet()) {
-                row.setColumn(entry.getKey(), entry.getValue().getAsString());
+            if (response.getPage() * response.getPageSize() < response.getTotalCount()) {
+                response.setMoreResults(true);
             }
-            JsonObject values = object.get("values").getAsJsonObject();
-            for (Map.Entry<String, JsonElement> entry : values.entrySet()) {
-                row.setColumn(entry.getKey(), entry.getValue().getAsString());
+
+            JsonArray collection = jsonObject.get("items").getAsJsonArray();
+
+            for (JsonElement element : collection) {
+                JsonObject object = element.getAsJsonObject();
+                ETDataExtensionRow row = new ETDataExtensionRow();
+                JsonObject keys = object.get("keys").getAsJsonObject();
+                for (Map.Entry<String, JsonElement> entry : keys.entrySet()) {
+                    row.setColumn(entry.getKey(), entry.getValue().getAsString());
+                }
+                JsonObject values = object.get("values").getAsJsonObject();
+                for (Map.Entry<String, JsonElement> entry : values.entrySet()) {
+                    row.setColumn(entry.getKey(), entry.getValue().getAsString());
+                }
+                row.setClient(client);
+                ETResult<ETDataExtensionRow> result = new ETResult<ETDataExtensionRow>();
+                result.setObject(row);
+                response.addResult(result);
             }
-            row.setClient(client);
-            ETResult<ETDataExtensionRow> result = new ETResult<ETDataExtensionRow>();
-            result.setObject(row);
-            response.addResult(result);
         }
 
         return response;
-    }
-
-    private String toQueryParameters(ETFilter filter) {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        String operator = filter.getOperator();
-        if (operator.equals("and") ||
-            operator.equals("or"))
-        {
-            stringBuilder.append(toQueryParameters(filter.getFilters().get(0)));
-            stringBuilder.append("%20");
-            stringBuilder.append(operator);
-            stringBuilder.append("%20");
-            stringBuilder.append(toQueryParameters(filter.getFilters().get(1)));
-        } else if (operator.equals("not")) {
-            stringBuilder.append(operator);
-            stringBuilder.append("%20");
-            stringBuilder.append(toQueryParameters(filter.getFilters().get(0)));
-        } else {
-            stringBuilder.append(filter.getProperty());
-            stringBuilder.append("%20");
-            if (operator.equals("=")) {
-                stringBuilder.append("eq");
-            } else if (operator.equals("!=")) {
-                stringBuilder.append("ne");
-            } else if (operator.equals("<")) {
-                stringBuilder.append("lt");
-            } else if (operator.equals("<=")) {
-                stringBuilder.append("lte");
-            } else if (operator.equals(">")) {
-                stringBuilder.append("gt");
-            } else if (operator.equals(">=")) {
-                stringBuilder.append("gte");
-            } else {
-                stringBuilder.append(operator);
-            }
-            stringBuilder.append("%20");
-            stringBuilder.append(filter.getValue());
-        }
-
-        return stringBuilder.toString();
     }
 
     public ETResponse<ETDataExtensionRow> update(ETDataExtensionRow... rows)
@@ -617,5 +487,46 @@ public class ETDataExtension extends ETSoapObject {
         // XXX check for errors and throw the appropriate exception
 
         return response.getObjects();
+    }
+
+    private String toQueryParameters(ETFilter filter) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        String operator = filter.getOperator();
+        if (operator.equals("and") ||
+            operator.equals("or"))
+        {
+            stringBuilder.append(toQueryParameters(filter.getFilters().get(0)));
+            stringBuilder.append("%20");
+            stringBuilder.append(operator);
+            stringBuilder.append("%20");
+            stringBuilder.append(toQueryParameters(filter.getFilters().get(1)));
+        } else if (operator.equals("not")) {
+            stringBuilder.append(operator);
+            stringBuilder.append("%20");
+            stringBuilder.append(toQueryParameters(filter.getFilters().get(0)));
+        } else {
+            stringBuilder.append(filter.getProperty());
+            stringBuilder.append("%20");
+            if (operator.equals("=")) {
+                stringBuilder.append("eq");
+            } else if (operator.equals("!=")) {
+                stringBuilder.append("ne");
+            } else if (operator.equals("<")) {
+                stringBuilder.append("lt");
+            } else if (operator.equals("<=")) {
+                stringBuilder.append("lte");
+            } else if (operator.equals(">")) {
+                stringBuilder.append("gt");
+            } else if (operator.equals(">=")) {
+                stringBuilder.append("gte");
+            } else {
+                stringBuilder.append(operator);
+            }
+            stringBuilder.append("%20");
+            stringBuilder.append(filter.getValue());
+        }
+
+        return stringBuilder.toString();
     }
 }

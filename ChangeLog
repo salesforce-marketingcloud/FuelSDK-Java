@@ -1,3 +1,7 @@
+2014-10-30  Ian Murdock  <imurdock@exacttarget.com>
+
+    * ETDataExtension.java (select): Use REST route for all versions.
+
 2014-10-27  Ian Murdock  <imurdock@exacttarget.com>
 
     * ETDataExtension.java (getId): New function.
