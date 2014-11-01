@@ -132,6 +132,23 @@ public class ETClient {
         soapConnection = new ETSoapConnection(this, soapEndpoint);
     }
 
+    public String getClientId() {
+        return clientId;
+    }
+
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    /**
+     * @deprecated
+     * Legacy tokens are no longer supported.
+     */
+    @Deprecated
+    public String getLegacyToken() {
+        return legacyToken;
+    }
+
     public String refreshToken()
         throws ETSdkException
     {
@@ -210,19 +227,6 @@ public class ETClient {
         }
 
         return accessToken;
-    }
-
-    public String getAccessToken() {
-        return accessToken;
-    }
-
-    /**
-     * @deprecated
-     * Legacy tokens are no longer supported.
-     */
-    @Deprecated
-    public String getLegacyToken() {
-        return legacyToken;
     }
 
     public ETRestConnection getRestConnection() {

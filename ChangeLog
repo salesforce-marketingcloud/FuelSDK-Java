@@ -1,3 +1,7 @@
+2014-11-01  Ian Murdock  <imurdock@exacttarget.com>
+
+    * ETClient.java (getClientId): New method.
+
 2014-10-30  Ian Murdock  <imurdock@exacttarget.com>
 
     * ETDataExtension.java (select): Use REST route for all versions.
