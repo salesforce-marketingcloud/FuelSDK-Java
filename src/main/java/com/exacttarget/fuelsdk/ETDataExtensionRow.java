@@ -29,6 +29,7 @@ package com.exacttarget.fuelsdk;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.InternalName;
@@ -39,8 +40,6 @@ import com.exacttarget.fuelsdk.internal.DataExtensionObject;
 public class ETDataExtensionRow extends ETSoapObject {
     @ExternalName("name")
     private String name = null;
-    @ExternalName("keys")
-    private Map<String, String> keys = null;
     @ExternalName("columns")
     @InternalName("properties")
     private Map<String, String> columns = new HashMap<String, String>();
@@ -74,23 +73,30 @@ public class ETDataExtensionRow extends ETSoapObject {
         columns.put(name, value);
     }
 
+    public Set<String> getColumnNames() {
+        return columns.keySet();
+    }
+
     /**
+     * @deprecated
      * Use <code>getColumn</code> and <code>setColumn</code>.
      */
     @Deprecated
     public Map<String, String> getKeys() {
-        return keys;
+        return columns;
     }
 
     /**
+     * @deprecated
      * Use <code>getColumn</code> and <code>setColumn</code>.
      */
     @Deprecated
     public void setKeys(Map<String, String> keys) {
-        this.keys = keys;
+        this.columns = keys;
     }
 
     /**
+     * @deprecated
      * Use <code>getColumn</code> and <code>setColumn</code>.
      */
     @Deprecated
@@ -99,6 +105,7 @@ public class ETDataExtensionRow extends ETSoapObject {
     }
 
     /**
+     * @deprecated
      * Use <code>getColumn</code> and <code>setColumn</code>.
      */
     @Deprecated

@@ -1,3 +1,8 @@
+2014-11-02  Ian Murdock  <imurdock@exacttarget.com>
+
+    * ETDataExtension.java (addColumn): New method.
+    * ETDataExtensionRow.java (getColumnNames): New method.
+
 2014-11-01  Ian Murdock  <imurdock@exacttarget.com>
 
     * ETClient.java (getClientId): New method.
@@ -8,8 +13,8 @@
 
 2014-10-27  Ian Murdock  <imurdock@exacttarget.com>
 
-    * ETDataExtension.java (getId): New function.
-    (setId): New function.
+    * ETDataExtension.java (getId): New method.
+    (setId): New method.
 
 2014-10-26  Ian Murdock  <imurdock@exacttarget.com>
 
@@ -279,7 +284,7 @@
 
 2014-03-23  Ian Murdock  <imurdock@exacttarget.com>
 
-    * ETSoapObject.java (getInternalProperty): New function.
+    * ETSoapObject.java (getInternalProperty): New method.
     (getInternalProperties): Renamed from getProperties() and made static.
     (getField): Made private.
     (getAllFields): Made private.

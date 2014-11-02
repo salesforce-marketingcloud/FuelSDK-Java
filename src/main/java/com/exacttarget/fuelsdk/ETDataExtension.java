@@ -43,7 +43,15 @@ import org.apache.log4j.Logger;
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.InternalName;
 import com.exacttarget.fuelsdk.annotations.SoapObject;
+import com.exacttarget.fuelsdk.internal.APIObject;
+import com.exacttarget.fuelsdk.internal.APIProperty;
 import com.exacttarget.fuelsdk.internal.DataExtension;
+import com.exacttarget.fuelsdk.internal.DataExtensionObject;
+import com.exacttarget.fuelsdk.internal.DeleteOptions;
+import com.exacttarget.fuelsdk.internal.DeleteRequest;
+import com.exacttarget.fuelsdk.internal.DeleteResponse;
+import com.exacttarget.fuelsdk.internal.DeleteResult;
+import com.exacttarget.fuelsdk.internal.Soap;
 
 /**
  * The <code>ETDataExtension</code> class represents an ExactTarget
@@ -136,8 +144,70 @@ public class ETDataExtension extends ETSoapObject {
     }
 
     public void addColumn(String name) {
+        addColumn(name, null, null, null, null, null, null, null);
+    }
+
+    public void addColumn(String name, ETDataExtensionColumnType type)
+    {
+        addColumn(name, type, null, null, null, null, null, null);
+    }
+
+    public void addColumn(String name, Boolean isPrimaryKey)
+    {
+        addColumn(name, null, null, null, null, isPrimaryKey, null, null);
+    }
+
+    public void addColumn(String name,
+                          ETDataExtensionColumnType type,
+                          Boolean isPrimaryKey)
+    {
+        addColumn(name, type, null, null, null, isPrimaryKey, null, null);
+    }
+
+    private void addColumn(String name,
+                           ETDataExtensionColumnType type,
+                           Integer length,
+                           Integer precision,
+                           Integer scale,
+                           Boolean isPrimaryKey,
+                           Boolean isRequired,
+                           String defaultValue)
+    {
         ETDataExtensionColumn column = new ETDataExtensionColumn();
         column.setName(name);
+        if (type != null) {
+            column.setType(type);
+        } else {
+            // default is text type
+            column.setType(ETDataExtensionColumnType.TEXT);
+        }
+        // mimics the UI default values for length, precision, and scale
+        if (column.getType() == ETDataExtensionColumnType.TEXT) {
+            if (length != null) {
+                column.setLength(length);
+            } else {
+                column.setLength(50);
+            }
+        }
+        if (column.getType() == ETDataExtensionColumnType.DECIMAL) {
+            if (precision != null) {
+                column.setPrecision(precision);
+            } else {
+                column.setPrecision(18);
+            }
+            if (scale != null) {
+                column.setScale(scale);
+            } else {
+                column.setScale(0);
+            }
+        }
+        column.setIsPrimaryKey(isPrimaryKey);
+        if (isPrimaryKey != null && isPrimaryKey) {
+            column.setIsRequired(true);
+        } else {
+            column.setIsRequired(isRequired);
+        }
+        column.setDefaultValue(defaultValue);
         addColumn(column);
     }
 
@@ -392,17 +462,97 @@ public class ETDataExtension extends ETSoapObject {
     {
         ETClient client = getClient();
 
-        for (ETDataExtensionRow row : rows) {
-            //
-            // Set the data extension name if it isn't already set:
-            //
+        // XXX copied and pasted from ETSoapObject.delete
 
-            if (row.getName() == null) {
-                row.setName(name);
-            }
+        ETResponse<ETDataExtensionRow> response = new ETResponse<ETDataExtensionRow>();
+
+        if (rows == null || rows.length == 0) {
+            return response;
         }
 
-        return client.delete(Arrays.asList(rows));
+        //
+        // Get handle to the SOAP connection:
+        //
+
+        ETSoapConnection connection = client.getSoapConnection();
+
+        //
+        // Automatically refresh the token if necessary:
+        //
+
+        client.refreshToken();
+
+        //
+        // Perform the SOAP delete:
+        //
+
+        Soap soap = connection.getSoap();
+
+        DeleteRequest deleteRequest = new DeleteRequest();
+        deleteRequest.setOptions(new DeleteOptions());
+        for (ETDataExtensionRow row : rows) {
+            row.setClient(client);
+
+            //
+            // We hand construct this one, since all we need
+            // to pass in is the primary key, and we pass it
+            // in to DeleteRequest differently (in the Keys
+            // property) than we received it from
+            // RetrieveRequest (in the Properties property):
+            //
+
+            DataExtensionObject internalRow = new DataExtensionObject();
+            DataExtensionObject.Keys keys = new DataExtensionObject.Keys();
+            // XXX really only needs to set the primary
+            // key but we don't have a reliable way
+            // of knowing what that is yet (coming soon)
+            for (String name : row.getColumnNames()) {
+                APIProperty property = new APIProperty();
+                property.setName(name);
+                property.setValue(row.getColumn(name));
+                keys.getKey().add(property);
+            }
+            internalRow.setName(name);
+            internalRow.setKeys(keys);
+            deleteRequest.getObjects().add(internalRow);
+        }
+
+        if (logger.isTraceEnabled()) {
+            logger.trace("DeleteRequest:");
+            logger.trace("  objects = {");
+            for (APIObject object : deleteRequest.getObjects()) {
+                logger.trace("    " + object);
+            }
+            logger.trace("  }");
+        }
+
+        logger.trace("calling soap.delete...");
+
+        DeleteResponse deleteResponse = soap.delete(deleteRequest);
+
+        if (logger.isTraceEnabled()) {
+            logger.trace("DeleteResponse:");
+            logger.trace("  requestId = " + deleteResponse.getRequestID());
+            logger.trace("  overallStatus = " + deleteResponse.getOverallStatus());
+            logger.trace("  results = {");
+            for (DeleteResult result : deleteResponse.getResults()) {
+                logger.trace("    " + result);
+            }
+            logger.trace("  }");
+        }
+
+        response.setRequestId(deleteResponse.getRequestID());
+        response.setResponseCode(deleteResponse.getOverallStatus());
+        response.setResponseMessage(deleteResponse.getOverallStatus());
+        for (DeleteResult deleteResult : deleteResponse.getResults()) {
+            ETResult<ETDataExtensionRow> result = new ETResult<ETDataExtensionRow>();
+            result.setResponseCode(deleteResult.getStatusCode());
+            result.setResponseMessage(deleteResult.getStatusMessage());
+            result.setErrorCode(deleteResult.getErrorCode());
+            response.addResult(result);
+        }
+
+        return response;
     }
 
     public ETResponse<ETDataExtensionRow> delete(String filter)
@@ -411,45 +561,6 @@ public class ETDataExtension extends ETSoapObject {
         ETClient client = getClient();
         return client.delete(ETDataExtensionRow.class, filter);
     }
-
-//    public void addColumn(ETDataExtensionColumn column)
-//        throws ETSdkException
-//    {
-//        ETClient client = getClient();
-//
-//        //
-//        // Get handle to the SOAP connection:
-//        //
-//
-//        ETSoapConnection connection = client.getSoapConnection();
-//
-//        //
-//        // Automatically refresh the token if necessary:
-//        //
-//
-//        client.refreshToken();
-//
-//        //
-//        // Add the column to the data extension:
-//        //
-//
-//        Soap soap = connection.getSoap();
-//
-//        DataExtension dataExtension = new DataExtension();
-//        dataExtension.setCustomerKey(getKey());
-//
-//        DataExtension.Fields fields = new DataExtension.Fields();
-//        fields.getField().add((DataExtensionField) column.toInternal());
-//        dataExtension.setFields(fields);
-//
-//        UpdateRequest updateRequest = new UpdateRequest();
-//        updateRequest.setOptions(new UpdateOptions());
-//        updateRequest.getObjects().add(dataExtension);
-//
-//        soap.update(updateRequest);
-//
-//        // XXX check for errors and throw the appropriate exception
-//    }
 
     public List<ETDataExtensionColumn> retrieveColumns()
         throws ETSdkException
@@ -486,45 +597,66 @@ public class ETDataExtension extends ETSoapObject {
 
     private String toQueryParameters(ETFilter filter) {
         StringBuilder stringBuilder = new StringBuilder();
-
         ETFilter.Operator operator = filter.getOperator();
         switch (operator) {
           case AND:
+            stringBuilder.append(toQueryParameters(filter.getFilters().get(0)));
+            stringBuilder.append("%20");
+            stringBuilder.append("and");
+            stringBuilder.append("%20");
+            stringBuilder.append(toQueryParameters(filter.getFilters().get(1)));
+            break;
           case OR:
             stringBuilder.append(toQueryParameters(filter.getFilters().get(0)));
             stringBuilder.append("%20");
-            stringBuilder.append(operator);
+            stringBuilder.append("or");
             stringBuilder.append("%20");
             stringBuilder.append(toQueryParameters(filter.getFilters().get(1)));
             break;
           case NOT:
-            stringBuilder.append(operator);
+            stringBuilder.append("not");
             stringBuilder.append("%20");
             stringBuilder.append(toQueryParameters(filter.getFilters().get(0)));
             break;
           case EQUALS:
+            stringBuilder.append(filter.getProperty());
+            stringBuilder.append("%20");
+            stringBuilder.append("eq");
+            stringBuilder.append("%20");
+            stringBuilder.append(filter.getValue());
+            break;
           case NOT_EQUALS:
+            stringBuilder.append(filter.getProperty());
+            stringBuilder.append("%20");
+            stringBuilder.append("ne");
+            stringBuilder.append("%20");
+            stringBuilder.append(filter.getValue());
+            break;
           case LESS_THAN:
+            stringBuilder.append(filter.getProperty());
+            stringBuilder.append("%20");
+            stringBuilder.append("lt");
+            stringBuilder.append("%20");
+            stringBuilder.append(filter.getValue());
+            break;
           case LESS_THAN_OR_EQUALS:
+            stringBuilder.append(filter.getProperty());
+            stringBuilder.append("%20");
+            stringBuilder.append("lte");
+            stringBuilder.append("%20");
+            stringBuilder.append(filter.getValue());
+            break;
           case GREATER_THAN:
+            stringBuilder.append(filter.getProperty());
+            stringBuilder.append("%20");
+            stringBuilder.append("gt");
+            stringBuilder.append("%20");
+            stringBuilder.append(filter.getValue());
+            break;
           case GREATER_THAN_OR_EQUALS:
             stringBuilder.append(filter.getProperty());
             stringBuilder.append("%20");
-            if (operator.equals("=")) {
-                stringBuilder.append("eq");
-            } else if (operator.equals("!=")) {
-                stringBuilder.append("ne");
-            } else if (operator.equals("<")) {
-                stringBuilder.append("lt");
-            } else if (operator.equals("<=")) {
-                stringBuilder.append("lte");
-            } else if (operator.equals(">")) {
-                stringBuilder.append("gt");
-            } else if (operator.equals(">=")) {
-                stringBuilder.append("gte");
-            } else {
-                stringBuilder.append(operator);
-            }
+            stringBuilder.append("gte");
             stringBuilder.append("%20");
             stringBuilder.append(filter.getValue());
             break;

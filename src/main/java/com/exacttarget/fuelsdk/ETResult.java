@@ -82,11 +82,17 @@ public class ETResult<T extends ETObject> extends ETPrettyPrintable {
     }
 
     public String getObjectId() {
-        return object.getId();
+        if (object != null) {
+            return object.getId();
+        }
+        return null;
     }
 
     public void setObjectId(String objectId) {
-        object.setId(objectId); // XXX?
+        // XXX do we even want / need this?
+        if (object != null) {
+            object.setId(objectId);
+        }
     }
 
     /**
