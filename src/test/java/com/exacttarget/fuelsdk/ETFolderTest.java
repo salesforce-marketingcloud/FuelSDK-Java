@@ -54,7 +54,6 @@ public class ETFolderTest {
     {
         ETResponse<ETFolder> response = client.retrieve(ETFolder.class);
         for (ETFolder folder : response.getObjects()) {
-            // ensure all properties were retrieved
             assertNotNull(folder.getId());
             assertNotNull(folder.getKey());
             assertNotNull(folder.getName());
@@ -62,7 +61,6 @@ public class ETFolderTest {
             assertNotNull(folder.getCreatedDate());
             assertNotNull(folder.getModifiedDate());
             assertNotNull(folder.getContentType());
-            // parentFolder can be null if there's no parent
             assertNotNull(folder.getIsActive());
             assertNotNull(folder.getIsEditable());
             assertNotNull(folder.getAllowChildren());
@@ -70,7 +68,7 @@ public class ETFolderTest {
     }
 
     @Test
-    public void _02_TestRetrieveAllPropertiesSubset()
+    public void _02_TestRetrieveAllPropertiesSpecified()
         throws ETSdkException
     {
         ETResponse<ETFolder> response = client.retrieve(ETFolder.class,
@@ -78,7 +76,6 @@ public class ETFolderTest {
                                                         "name",
                                                         "description");
         for (ETFolder folder : response.getObjects()) {
-            // ensure only the specified properties were retrieved
             assertNull(folder.getId());
             assertNotNull(folder.getKey());
             assertNotNull(folder.getName());
@@ -101,11 +98,8 @@ public class ETFolderTest {
         // has customer key of dataextension_default
         ETResponse<ETFolder> response = client.retrieve(ETFolder.class,
                                                         "key='dataextension_default'");
-        // ensure we only received 1
         assertEquals(1, response.getObjects().size());
         ETFolder folder = response.getObjects().get(0);
-        // ensure it's the Data Extensions folder
-        // and that all properties were retrieved
         assertNotNull(folder.getId());
         assertEquals("dataextension_default", folder.getKey());
         assertEquals("Data Extensions", folder.getName());
@@ -120,7 +114,7 @@ public class ETFolderTest {
     }
 
     @Test
-    public void _04_TestRetrieveFilteredPropertiesSubset()
+    public void _04_TestRetrieveFilteredPropertiesSpecified()
         throws ETSdkException
     {
         ETResponse<ETFolder> response = client.retrieve(ETFolder.class,
@@ -128,12 +122,8 @@ public class ETFolderTest {
                                                         "key",
                                                         "name",
                                                         "description");
-        // ensure we only received 1
         assertEquals(1, response.getObjects().size());
         ETFolder folder = response.getObjects().get(0);
-        // ensure it's the Data Extensions folder
-        // and that only the specified properties
-        // were retrieved
         assertNull(folder.getId());
         assertEquals("dataextension_default", folder.getKey());
         assertEquals("Data Extensions", folder.getName());
@@ -168,7 +158,7 @@ public class ETFolderTest {
         assertNull(response.getTotalCount());
         assertFalse(response.hasMoreResults());
         assertEquals(1, response.getResults().size());
-        ETResult<ETFolder> result = response.getResults().get(0);
+        ETResult<ETFolder> result = response.getResult();
         assertEquals("OK", result.getResponseCode());
         assertEquals("Folder created successfully.", result.getResponseMessage());
         assertNull(result.getErrorCode());
@@ -177,36 +167,41 @@ public class ETFolderTest {
         id = result.getObjectId();
     }
 
-    private static ETFolder createdFolder = null;
+    private static ETFolder folder = null;
 
     @Test
-    public void _06_TestRetrieveCreatedSingle()
+    public void _06_TestRetrieveSingle()
         throws ETSdkException
     {
         ETResponse<ETFolder> response = client.retrieve(ETFolder.class, "id=" + id);
-        // ensure we only received 1
+        assertNotNull(response.getRequestId());
+        assertEquals("OK", response.getResponseCode());
+        assertEquals("OK", response.getResponseMessage());
+        assertNull(response.getPage());
+        assertNull(response.getPageSize());
+        assertNull(response.getTotalCount());
+        assertFalse(response.hasMoreResults());
         assertEquals(1, response.getObjects().size());
-        createdFolder = response.getObjects().get(0);
-        // ensure it's the folder we just created
-        assertEquals(id, createdFolder.getId());
-        assertEquals("test1", createdFolder.getKey());
-        assertEquals("test1", createdFolder.getName());
-        assertEquals("test1", createdFolder.getDescription());
-        assertNotNull(createdFolder.getCreatedDate());
-        assertNotNull(createdFolder.getModifiedDate());
-        assertEquals("dataextension", createdFolder.getContentType());
-        assertEquals("dataextension_default", createdFolder.getParentFolderKey());
-        assertTrue(createdFolder.getIsActive());
-        assertFalse(createdFolder.getIsEditable());
-        assertFalse(createdFolder.getAllowChildren());
+        folder = response.getObject();
+        assertEquals(id, folder.getId());
+        assertEquals("test1", folder.getKey());
+        assertEquals("test1", folder.getName());
+        assertEquals("test1", folder.getDescription());
+        assertNotNull(folder.getCreatedDate());
+        assertNotNull(folder.getModifiedDate());
+        assertEquals("dataextension", folder.getContentType());
+        assertEquals("dataextension_default", folder.getParentFolderKey());
+        assertTrue(folder.getIsActive());
+        assertFalse(folder.getIsEditable());
+        assertFalse(folder.getAllowChildren());
     }
 
     @Test
     public void _07_TestUpdateSingle()
         throws ETSdkException
     {
-        createdFolder.setName("TEST1");
-        ETResponse<ETFolder> response = client.update(createdFolder);
+        folder.setName("TEST1");
+        ETResponse<ETFolder> response = client.update(folder);
         assertNotNull(response.getRequestId());
         assertEquals("OK", response.getResponseCode());
         assertEquals("OK", response.getResponseMessage());
@@ -222,7 +217,7 @@ public class ETFolderTest {
     }
 
     @Test
-    public void _08_TestRetrieveUpdatedSingle()
+    public void _08_TestRetrieveSingle()
         throws ETSdkException
     {
         ETResponse<ETFolder> response = client.retrieve(ETFolder.class, "id=" + id);
@@ -257,7 +252,7 @@ public class ETFolderTest {
         assertNull(response.getTotalCount());
         assertFalse(response.hasMoreResults());
         assertEquals(1, response.getResults().size());
-        ETResult<ETFolder> result = response.getResults().get(0);
+        ETResult<ETFolder> result = response.getResult();
         assertEquals("OK", result.getResponseCode());
         assertEquals("Folder deleted successfully.", result.getResponseMessage());
         assertNull(result.getErrorCode());
@@ -311,7 +306,7 @@ public class ETFolderTest {
     }
 
     @Test
-    public void _11_TestRetrieveCreatedMultiple()
+    public void _11_TestRetrieveMultiple()
         throws ETSdkException
     {
         // XXX implement when we can pass the filter id = <id1> and id = <id2>
@@ -325,7 +320,7 @@ public class ETFolderTest {
     }
 
     @Test
-    public void _13_TestRetrieveUpdatedMultiple()
+    public void _13_TestRetrieveMultiple()
         throws ETSdkException
     {
         // XXX implement when we implement _12_TestUpdateMultiple
