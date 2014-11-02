@@ -260,7 +260,7 @@ public class ETDataExtension extends ETSoapObject {
                                                  String... columns)
         throws ETSdkException
     {
-        // XXX copied and pasted from ETClient.retrieve(filter, properties)
+        // XXX much of this is copied and pasted from ETClient.retrieve(filter, properties)
         ETFilter f = null;
         String[] c = columns;
         try {
@@ -310,7 +310,7 @@ public class ETDataExtension extends ETSoapObject {
     {
         ETClient client = getClient();
 
-        // XXX copied and pasted from ETRestObject.retrieve
+        // XXX much of this is copied and pasted from ETRestObject.retrieve
 
         ETResponse<ETDataExtensionRow> response = new ETResponse<ETDataExtensionRow>();
 
@@ -453,8 +453,20 @@ public class ETDataExtension extends ETSoapObject {
     public ETResponse<ETDataExtensionRow> update(String filter, String... values)
         throws ETSdkException
     {
-        ETClient client = getClient();
-        return client.update(ETDataExtensionRow.class, filter, values);
+        // XXX optimize
+
+        ETResponse<ETDataExtensionRow> response = select(filter);
+
+        List<ETDataExtensionRow> rows = response.getObjects();
+        for (ETDataExtensionRow row : rows) {
+            for (String value : values) {
+                ETFilter parsedFilter = ETFilter.parse(value);
+                // XXX throw exception if operation not = ?
+                row.setColumn(parsedFilter.getProperty(), parsedFilter.getValue());
+            }
+        }
+
+        return update(rows.toArray(new ETDataExtensionRow[rows.size()]));
     }
 
     public ETResponse<ETDataExtensionRow> delete(ETDataExtensionRow... rows)
@@ -462,7 +474,7 @@ public class ETDataExtension extends ETSoapObject {
     {
         ETClient client = getClient();
 
-        // XXX copied and pasted from ETSoapObject.delete
+        // XXX much of this is copied and pasted from ETSoapObject.delete
 
         ETResponse<ETDataExtensionRow> response = new ETResponse<ETDataExtensionRow>();
 
@@ -514,6 +526,7 @@ public class ETDataExtension extends ETSoapObject {
             }
             internalRow.setName(name);
             internalRow.setKeys(keys);
+
             deleteRequest.getObjects().add(internalRow);
         }
 
@@ -558,8 +571,13 @@ public class ETDataExtension extends ETSoapObject {
     public ETResponse<ETDataExtensionRow> delete(String filter)
         throws ETSdkException
     {
-        ETClient client = getClient();
-        return client.delete(ETDataExtensionRow.class, filter);
+        // XXX optimize
+
+        ETResponse<ETDataExtensionRow> response = select(filter);
+
+        List<ETDataExtensionRow> rows = response.getObjects();
+
+        return delete(rows.toArray(new ETDataExtensionRow[rows.size()]));
     }
 
     public List<ETDataExtensionColumn> retrieveColumns()
