@@ -38,7 +38,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo=bar");
         assertEquals("foo", filter.getProperty());
-        assertEquals("=", filter.getOperator());
+        assertEquals(ETFilter.Operator.EQUALS, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -48,7 +48,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo='bar'");
         assertEquals("foo", filter.getProperty());
-        assertEquals("=", filter.getOperator());
+        assertEquals(ETFilter.Operator.EQUALS, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -58,7 +58,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo=\"bar\"");
         assertEquals("foo", filter.getProperty());
-        assertEquals("=", filter.getOperator());
+        assertEquals(ETFilter.Operator.EQUALS, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -68,7 +68,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("'foo'=bar");
         assertEquals("foo", filter.getProperty());
-        assertEquals("=", filter.getOperator());
+        assertEquals(ETFilter.Operator.EQUALS, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -78,7 +78,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("\"foo\"=bar");
         assertEquals("foo", filter.getProperty());
-        assertEquals("=", filter.getOperator());
+        assertEquals(ETFilter.Operator.EQUALS, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -88,7 +88,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("'foo foo'='bar bar'");
         assertEquals("foo foo", filter.getProperty());
-        assertEquals("=", filter.getOperator());
+        assertEquals(ETFilter.Operator.EQUALS, filter.getOperator());
         assertEquals("bar bar", filter.getValue());
     }
 
@@ -98,7 +98,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo = bar");
         assertEquals("foo", filter.getProperty());
-        assertEquals("=", filter.getOperator());
+        assertEquals(ETFilter.Operator.EQUALS, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -108,7 +108,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo  =    bar");
         assertEquals("foo", filter.getProperty());
-        assertEquals("=", filter.getOperator());
+        assertEquals(ETFilter.Operator.EQUALS, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -118,7 +118,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo!=bar");
         assertEquals("foo", filter.getProperty());
-        assertEquals("!=", filter.getOperator());
+        assertEquals(ETFilter.Operator.NOT_EQUALS, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -128,7 +128,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo!='bar'");
         assertEquals("foo", filter.getProperty());
-        assertEquals("!=", filter.getOperator());
+        assertEquals(ETFilter.Operator.NOT_EQUALS, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -138,7 +138,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo!=\"bar\"");
         assertEquals("foo", filter.getProperty());
-        assertEquals("!=", filter.getOperator());
+        assertEquals(ETFilter.Operator.NOT_EQUALS, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -148,7 +148,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("'foo'!=bar");
         assertEquals("foo", filter.getProperty());
-        assertEquals("!=", filter.getOperator());
+        assertEquals(ETFilter.Operator.NOT_EQUALS, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -158,7 +158,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("\"foo\"!=bar");
         assertEquals("foo", filter.getProperty());
-        assertEquals("!=", filter.getOperator());
+        assertEquals(ETFilter.Operator.NOT_EQUALS, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -168,7 +168,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("'foo foo'!='bar bar'");
         assertEquals("foo foo", filter.getProperty());
-        assertEquals("!=", filter.getOperator());
+        assertEquals(ETFilter.Operator.NOT_EQUALS, filter.getOperator());
         assertEquals("bar bar", filter.getValue());
     }
 
@@ -178,7 +178,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo != bar");
         assertEquals("foo", filter.getProperty());
-        assertEquals("!=", filter.getOperator());
+        assertEquals(ETFilter.Operator.NOT_EQUALS, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -188,7 +188,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo  !=    bar");
         assertEquals("foo", filter.getProperty());
-        assertEquals("!=", filter.getOperator());
+        assertEquals(ETFilter.Operator.NOT_EQUALS, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -198,7 +198,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo<bar");
         assertEquals("foo", filter.getProperty());
-        assertEquals("<", filter.getOperator());
+        assertEquals(ETFilter.Operator.LESS_THAN, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -208,7 +208,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo<'bar'");
         assertEquals("foo", filter.getProperty());
-        assertEquals("<", filter.getOperator());
+        assertEquals(ETFilter.Operator.LESS_THAN, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -218,7 +218,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo<\"bar\"");
         assertEquals("foo", filter.getProperty());
-        assertEquals("<", filter.getOperator());
+        assertEquals(ETFilter.Operator.LESS_THAN, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -228,7 +228,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("'foo'<bar");
         assertEquals("foo", filter.getProperty());
-        assertEquals("<", filter.getOperator());
+        assertEquals(ETFilter.Operator.LESS_THAN, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -238,7 +238,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("\"foo\"<bar");
         assertEquals("foo", filter.getProperty());
-        assertEquals("<", filter.getOperator());
+        assertEquals(ETFilter.Operator.LESS_THAN, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -248,7 +248,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("'foo foo'<'bar bar'");
         assertEquals("foo foo", filter.getProperty());
-        assertEquals("<", filter.getOperator());
+        assertEquals(ETFilter.Operator.LESS_THAN, filter.getOperator());
         assertEquals("bar bar", filter.getValue());
     }
 
@@ -258,7 +258,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo < bar");
         assertEquals("foo", filter.getProperty());
-        assertEquals("<", filter.getOperator());
+        assertEquals(ETFilter.Operator.LESS_THAN, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -268,7 +268,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo  <    bar");
         assertEquals("foo", filter.getProperty());
-        assertEquals("<", filter.getOperator());
+        assertEquals(ETFilter.Operator.LESS_THAN, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -278,7 +278,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo<=bar");
         assertEquals("foo", filter.getProperty());
-        assertEquals("<=", filter.getOperator());
+        assertEquals(ETFilter.Operator.LESS_THAN_OR_EQUALS, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -288,7 +288,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo<='bar'");
         assertEquals("foo", filter.getProperty());
-        assertEquals("<=", filter.getOperator());
+        assertEquals(ETFilter.Operator.LESS_THAN_OR_EQUALS, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -298,7 +298,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo<=\"bar\"");
         assertEquals("foo", filter.getProperty());
-        assertEquals("<=", filter.getOperator());
+        assertEquals(ETFilter.Operator.LESS_THAN_OR_EQUALS, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -308,7 +308,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("'foo'<=bar");
         assertEquals("foo", filter.getProperty());
-        assertEquals("<=", filter.getOperator());
+        assertEquals(ETFilter.Operator.LESS_THAN_OR_EQUALS, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -318,7 +318,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("\"foo\"<=bar");
         assertEquals("foo", filter.getProperty());
-        assertEquals("<=", filter.getOperator());
+        assertEquals(ETFilter.Operator.LESS_THAN_OR_EQUALS, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -328,7 +328,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("'foo foo'<='bar bar'");
         assertEquals("foo foo", filter.getProperty());
-        assertEquals("<=", filter.getOperator());
+        assertEquals(ETFilter.Operator.LESS_THAN_OR_EQUALS, filter.getOperator());
         assertEquals("bar bar", filter.getValue());
     }
 
@@ -338,7 +338,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo <= bar");
         assertEquals("foo", filter.getProperty());
-        assertEquals("<=", filter.getOperator());
+        assertEquals(ETFilter.Operator.LESS_THAN_OR_EQUALS, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -348,7 +348,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo  <=    bar");
         assertEquals("foo", filter.getProperty());
-        assertEquals("<=", filter.getOperator());
+        assertEquals(ETFilter.Operator.LESS_THAN_OR_EQUALS, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -358,7 +358,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo>bar");
         assertEquals("foo", filter.getProperty());
-        assertEquals(">", filter.getOperator());
+        assertEquals(ETFilter.Operator.GREATER_THAN, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -368,7 +368,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo>'bar'");
         assertEquals("foo", filter.getProperty());
-        assertEquals(">", filter.getOperator());
+        assertEquals(ETFilter.Operator.GREATER_THAN, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -378,7 +378,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo>\"bar\"");
         assertEquals("foo", filter.getProperty());
-        assertEquals(">", filter.getOperator());
+        assertEquals(ETFilter.Operator.GREATER_THAN, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -388,7 +388,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("'foo'>bar");
         assertEquals("foo", filter.getProperty());
-        assertEquals(">", filter.getOperator());
+        assertEquals(ETFilter.Operator.GREATER_THAN, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -398,7 +398,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("\"foo\">bar");
         assertEquals("foo", filter.getProperty());
-        assertEquals(">", filter.getOperator());
+        assertEquals(ETFilter.Operator.GREATER_THAN, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -408,7 +408,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("'foo foo'>'bar bar'");
         assertEquals("foo foo", filter.getProperty());
-        assertEquals(">", filter.getOperator());
+        assertEquals(ETFilter.Operator.GREATER_THAN, filter.getOperator());
         assertEquals("bar bar", filter.getValue());
     }
 
@@ -418,7 +418,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo > bar");
         assertEquals("foo", filter.getProperty());
-        assertEquals(">", filter.getOperator());
+        assertEquals(ETFilter.Operator.GREATER_THAN, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -428,7 +428,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo  >    bar");
         assertEquals("foo", filter.getProperty());
-        assertEquals(">", filter.getOperator());
+        assertEquals(ETFilter.Operator.GREATER_THAN, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -438,7 +438,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo>=bar");
         assertEquals("foo", filter.getProperty());
-        assertEquals(">=", filter.getOperator());
+        assertEquals(ETFilter.Operator.GREATER_THAN_OR_EQUALS, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -448,7 +448,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo>='bar'");
         assertEquals("foo", filter.getProperty());
-        assertEquals(">=", filter.getOperator());
+        assertEquals(ETFilter.Operator.GREATER_THAN_OR_EQUALS, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -458,7 +458,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo>=\"bar\"");
         assertEquals("foo", filter.getProperty());
-        assertEquals(">=", filter.getOperator());
+        assertEquals(ETFilter.Operator.GREATER_THAN_OR_EQUALS, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -468,7 +468,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("'foo'>=bar");
         assertEquals("foo", filter.getProperty());
-        assertEquals(">=", filter.getOperator());
+        assertEquals(ETFilter.Operator.GREATER_THAN_OR_EQUALS, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -478,7 +478,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("\"foo\">=bar");
         assertEquals("foo", filter.getProperty());
-        assertEquals(">=", filter.getOperator());
+        assertEquals(ETFilter.Operator.GREATER_THAN_OR_EQUALS, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -488,7 +488,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("'foo foo'>='bar bar'");
         assertEquals("foo foo", filter.getProperty());
-        assertEquals(">=", filter.getOperator());
+        assertEquals(ETFilter.Operator.GREATER_THAN_OR_EQUALS, filter.getOperator());
         assertEquals("bar bar", filter.getValue());
     }
 
@@ -498,7 +498,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo >= bar");
         assertEquals("foo", filter.getProperty());
-        assertEquals(">=", filter.getOperator());
+        assertEquals(ETFilter.Operator.GREATER_THAN_OR_EQUALS, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -508,7 +508,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo  >=    bar");
         assertEquals("foo", filter.getProperty());
-        assertEquals(">=", filter.getOperator());
+        assertEquals(ETFilter.Operator.GREATER_THAN_OR_EQUALS, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -518,7 +518,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo is null");
         assertEquals("foo", filter.getProperty());
-        assertEquals("is null", filter.getOperator());
+        assertEquals(ETFilter.Operator.IS_NULL, filter.getOperator());
     }
 
     @Test
@@ -527,7 +527,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("'foo' is null");
         assertEquals("foo", filter.getProperty());
-        assertEquals("is null", filter.getOperator());
+        assertEquals(ETFilter.Operator.IS_NULL, filter.getOperator());
     }
 
     @Test
@@ -536,7 +536,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("\"foo\" is null");
         assertEquals("foo", filter.getProperty());
-        assertEquals("is null", filter.getOperator());
+        assertEquals(ETFilter.Operator.IS_NULL, filter.getOperator());
     }
 
     @Test
@@ -545,7 +545,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo  is    null");
         assertEquals("foo", filter.getProperty());
-        assertEquals("is null", filter.getOperator());
+        assertEquals(ETFilter.Operator.IS_NULL, filter.getOperator());
     }
 
     @Test
@@ -554,7 +554,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo is not null");
         assertEquals("foo", filter.getProperty());
-        assertEquals("is not null", filter.getOperator());
+        assertEquals(ETFilter.Operator.IS_NOT_NULL, filter.getOperator());
     }
 
     @Test
@@ -563,7 +563,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("'foo' is not null");
         assertEquals("foo", filter.getProperty());
-        assertEquals("is not null", filter.getOperator());
+        assertEquals(ETFilter.Operator.IS_NOT_NULL, filter.getOperator());
     }
 
     @Test
@@ -572,7 +572,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("\"foo\" is not null");
         assertEquals("foo", filter.getProperty());
-        assertEquals("is not null", filter.getOperator());
+        assertEquals(ETFilter.Operator.IS_NOT_NULL, filter.getOperator());
     }
 
     @Test
@@ -581,7 +581,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo  is    not        null");
         assertEquals("foo", filter.getProperty());
-        assertEquals("is not null", filter.getOperator());
+        assertEquals(ETFilter.Operator.IS_NOT_NULL, filter.getOperator());
     }
 
     @Test
@@ -590,7 +590,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo in (1,2)");
         assertEquals("foo", filter.getProperty());
-        assertEquals("in", filter.getOperator());
+        assertEquals(ETFilter.Operator.IN, filter.getOperator());
         assertEquals("1", filter.getValues().get(0));
         assertEquals("2", filter.getValues().get(1));
     }
@@ -601,7 +601,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo in (1, 2)");
         assertEquals("foo", filter.getProperty());
-        assertEquals("in", filter.getOperator());
+        assertEquals(ETFilter.Operator.IN, filter.getOperator());
         assertEquals("1", filter.getValues().get(0));
         assertEquals("2", filter.getValues().get(1));
     }
@@ -612,7 +612,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo in (1,2,3)");
         assertEquals("foo", filter.getProperty());
-        assertEquals("in", filter.getOperator());
+        assertEquals(ETFilter.Operator.IN, filter.getOperator());
         assertEquals("1", filter.getValues().get(0));
         assertEquals("2", filter.getValues().get(1));
         assertEquals("3", filter.getValues().get(2));
@@ -624,7 +624,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo in (1,2, 3)");
         assertEquals("foo", filter.getProperty());
-        assertEquals("in", filter.getOperator());
+        assertEquals(ETFilter.Operator.IN, filter.getOperator());
         assertEquals("1", filter.getValues().get(0));
         assertEquals("2", filter.getValues().get(1));
         assertEquals("3", filter.getValues().get(2));
@@ -636,7 +636,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo in (1, 2, 3)");
         assertEquals("foo", filter.getProperty());
-        assertEquals("in", filter.getOperator());
+        assertEquals(ETFilter.Operator.IN, filter.getOperator());
         assertEquals("1", filter.getValues().get(0));
         assertEquals("2", filter.getValues().get(1));
         assertEquals("3", filter.getValues().get(2));
@@ -648,7 +648,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo in ('bar', 'baz')");
         assertEquals("foo", filter.getProperty());
-        assertEquals("in", filter.getOperator());
+        assertEquals(ETFilter.Operator.IN, filter.getOperator());
         assertEquals("bar", filter.getValues().get(0));
         assertEquals("baz", filter.getValues().get(1));
     }
@@ -659,7 +659,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo in (\"bar\", \"baz\")");
         assertEquals("foo", filter.getProperty());
-        assertEquals("in", filter.getOperator());
+        assertEquals(ETFilter.Operator.IN, filter.getOperator());
         assertEquals("bar", filter.getValues().get(0));
         assertEquals("baz", filter.getValues().get(1));
     }
@@ -670,7 +670,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo between 1 and 2");
         assertEquals("foo", filter.getProperty());
-        assertEquals("between", filter.getOperator());
+        assertEquals(ETFilter.Operator.BETWEEN, filter.getOperator());
         assertEquals("1", filter.getValues().get(0));
         assertEquals("2", filter.getValues().get(1));
     }
@@ -681,7 +681,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo between  1   and    2");
         assertEquals("foo", filter.getProperty());
-        assertEquals("between", filter.getOperator());
+        assertEquals(ETFilter.Operator.BETWEEN, filter.getOperator());
         assertEquals("1", filter.getValues().get(0));
         assertEquals("2", filter.getValues().get(1));
     }
@@ -692,7 +692,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo like bar");
         assertEquals("foo", filter.getProperty());
-        assertEquals("like", filter.getOperator());
+        assertEquals(ETFilter.Operator.LIKE, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -702,7 +702,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo like 'bar'");
         assertEquals("foo", filter.getProperty());
-        assertEquals("like", filter.getOperator());
+        assertEquals(ETFilter.Operator.LIKE, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -712,7 +712,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("foo like \"bar\"");
         assertEquals("foo", filter.getProperty());
-        assertEquals("like", filter.getOperator());
+        assertEquals(ETFilter.Operator.LIKE, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -722,7 +722,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("'foo' like bar");
         assertEquals("foo", filter.getProperty());
-        assertEquals("like", filter.getOperator());
+        assertEquals(ETFilter.Operator.LIKE, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -732,7 +732,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("\"foo\" like bar");
         assertEquals("foo", filter.getProperty());
-        assertEquals("like", filter.getOperator());
+        assertEquals(ETFilter.Operator.LIKE, filter.getOperator());
         assertEquals("bar", filter.getValue());
     }
 
@@ -742,7 +742,7 @@ public class ETFilterTest {
     {
         ETFilter filter = ETFilter.parse("'foo foo' like 'bar bar'");
         assertEquals("foo foo", filter.getProperty());
-        assertEquals("like", filter.getOperator());
+        assertEquals(ETFilter.Operator.LIKE, filter.getOperator());
         assertEquals("bar bar", filter.getValue());
     }
 
@@ -751,14 +751,14 @@ public class ETFilterTest {
         throws ETSdkException
     {
         ETFilter filter = ETFilter.parse("foo = bar and bar = baz");
-        assertEquals("and", filter.getOperator());
+        assertEquals(ETFilter.Operator.AND, filter.getOperator());
         ETFilter filter1 = filter.getFilters().get(0);
         ETFilter filter2 = filter.getFilters().get(1);
         assertEquals("foo", filter1.getProperty());
-        assertEquals("=", filter1.getOperator());
+        assertEquals(ETFilter.Operator.EQUALS, filter1.getOperator());
         assertEquals("bar", filter1.getValue());
         assertEquals("bar", filter2.getProperty());
-        assertEquals("=", filter2.getOperator());
+        assertEquals(ETFilter.Operator.EQUALS, filter2.getOperator());
         assertEquals("baz", filter2.getValue());
     }
 
@@ -767,14 +767,14 @@ public class ETFilterTest {
         throws ETSdkException
     {
         ETFilter filter = ETFilter.parse("foo = bar or bar = baz");
-        assertEquals("or", filter.getOperator());
+        assertEquals(ETFilter.Operator.OR, filter.getOperator());
         ETFilter filter1 = filter.getFilters().get(0);
         ETFilter filter2 = filter.getFilters().get(1);
         assertEquals("foo", filter1.getProperty());
-        assertEquals("=", filter1.getOperator());
+        assertEquals(ETFilter.Operator.EQUALS, filter1.getOperator());
         assertEquals("bar", filter1.getValue());
         assertEquals("bar", filter2.getProperty());
-        assertEquals("=", filter2.getOperator());
+        assertEquals(ETFilter.Operator.EQUALS, filter2.getOperator());
         assertEquals("baz", filter2.getValue());
     }
 
@@ -783,20 +783,20 @@ public class ETFilterTest {
         throws ETSdkException
     {
         ETFilter filter = ETFilter.parse("foo = bar and bar = baz or baz = foo");
-        assertEquals("or", filter.getOperator());
+        assertEquals(ETFilter.Operator.OR, filter.getOperator());
         ETFilter filter1 = filter.getFilters().get(0);
         ETFilter filter2 = filter.getFilters().get(1);
-        assertEquals("and", filter1.getOperator());
+        assertEquals(ETFilter.Operator.AND, filter1.getOperator());
         ETFilter filter3 = filter1.getFilters().get(0);
         ETFilter filter4 = filter1.getFilters().get(1);
         assertEquals("baz", filter2.getProperty());
-        assertEquals("=", filter2.getOperator());
+        assertEquals(ETFilter.Operator.EQUALS, filter2.getOperator());
         assertEquals("foo", filter2.getValue());
         assertEquals("foo", filter3.getProperty());
-        assertEquals("=", filter3.getOperator());
+        assertEquals(ETFilter.Operator.EQUALS, filter3.getOperator());
         assertEquals("bar", filter3.getValue());
         assertEquals("bar", filter4.getProperty());
-        assertEquals("=", filter4.getOperator());
+        assertEquals(ETFilter.Operator.EQUALS, filter4.getOperator());
         assertEquals("baz", filter4.getValue());
     }
 
@@ -805,20 +805,20 @@ public class ETFilterTest {
         throws ETSdkException
     {
         ETFilter filter = ETFilter.parse("foo = bar or bar = baz and baz = foo");
-        assertEquals("and", filter.getOperator());
+        assertEquals(ETFilter.Operator.AND, filter.getOperator());
         ETFilter filter1 = filter.getFilters().get(0);
         ETFilter filter2 = filter.getFilters().get(1);
-        assertEquals("or", filter1.getOperator());
+        assertEquals(ETFilter.Operator.OR, filter1.getOperator());
         ETFilter filter3 = filter1.getFilters().get(0);
         ETFilter filter4 = filter1.getFilters().get(1);
         assertEquals("baz", filter2.getProperty());
-        assertEquals("=", filter2.getOperator());
+        assertEquals(ETFilter.Operator.EQUALS, filter2.getOperator());
         assertEquals("foo", filter2.getValue());
         assertEquals("foo", filter3.getProperty());
-        assertEquals("=", filter3.getOperator());
+        assertEquals(ETFilter.Operator.EQUALS, filter3.getOperator());
         assertEquals("bar", filter3.getValue());
         assertEquals("bar", filter4.getProperty());
-        assertEquals("=", filter4.getOperator());
+        assertEquals(ETFilter.Operator.EQUALS, filter4.getOperator());
         assertEquals("baz", filter4.getValue());
     }
 }
