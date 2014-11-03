@@ -27,6 +27,7 @@
 
 package com.exacttarget.fuelsdk;
 
+import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.List;
 
@@ -36,6 +37,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 import org.apache.log4j.Logger;
 
@@ -241,9 +243,17 @@ public abstract class ETRestObject extends ETObject {
 
         String path = null;
 
-        if (filter != null) {
+        if (filter == null) {
             //
-            // Replace all variables in the path per the filter:
+            // Remove the primary key from the end of the path:
+            //
+
+            path = removePrimaryKeyFromEnd(annotations.path(),
+                                           annotations.primaryKey());
+        } else if (filter.getOperator() == ETFilter.Operator.EQUALS) {
+            //
+            // Replace the variable in the path with the value
+            // from the filter:
             //
 
             logger.trace("filter: " + filter);
@@ -253,6 +263,8 @@ public abstract class ETRestObject extends ETObject {
                                    filter.getValue());
 
             // XXX should throw an exception if not all are specified
+        } else if (filter.getOperator() == ETFilter.Operator.AND) {
+            // XXX support multiple variables
         } else {
             //
             // Remove the primary key from the end of the path:
@@ -260,6 +272,16 @@ public abstract class ETRestObject extends ETObject {
 
             path = removePrimaryKeyFromEnd(annotations.path(),
                                            annotations.primaryKey());
+
+            // XXX hack just to get it working..
+            T hack = null;
+            try {
+                hack = type.newInstance();
+            } catch (Exception ex) {
+                throw new ETSdkException(ex);
+            }
+
+            path += "?" + hack.getFilterQueryParams(filter);
         }
 
         StringBuilder stringBuilder = new StringBuilder(path);
@@ -500,6 +522,36 @@ public abstract class ETRestObject extends ETObject {
         }
 
         return response;
+    }
+
+    protected String getFilterQueryParams(ETFilter filter)
+        throws ETSdkException
+    {
+        // XXX
+        return null;
+    }
+
+    protected static String getInternalProperty(Class<? extends ETRestObject> type,
+                                                String name)
+        throws ETSdkException
+    {
+        String internalProperty = null;
+
+        Class<? extends ETRestObject> externalType = type; // for code readability
+
+        Field externalField = getField(externalType, name);
+
+        SerializedName serializedNameAnnotation =
+                externalField.getAnnotation(SerializedName.class);
+
+        if (serializedNameAnnotation != null) {
+            internalProperty = serializedNameAnnotation.value();
+        } else {
+            // internal name is the same as external name
+            internalProperty = externalField.getName();
+        }
+
+        return internalProperty;
     }
 
     // XXX private?

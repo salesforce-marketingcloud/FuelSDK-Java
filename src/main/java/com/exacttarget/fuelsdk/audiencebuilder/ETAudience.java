@@ -31,6 +31,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.google.gson.Gson;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETFilter;
 import com.exacttarget.fuelsdk.ETRestConnection;
@@ -38,9 +42,6 @@ import com.exacttarget.fuelsdk.ETRestObject;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.RestObject;
-import com.google.gson.Gson;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 
 @RestObject(path = "/internal/v1/AudienceBuilder/Audience/{id}",
             primaryKey = "id",
@@ -239,6 +240,60 @@ public class ETAudience extends ETRestObject {
         f.addCondition(condition);
 
         return f;
+    }
+
+    // XXX
+    @Override
+    protected String getFilterQueryParams(ETFilter filter)
+        throws ETSdkException
+    {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        String internalProperty = getInternalProperty(ETDimension.class,
+                                                      filter.getProperty());
+
+        stringBuilder.append(internalProperty);
+
+        stringBuilder.append("=");
+
+        ETFilter.Operator operator = filter.getOperator();
+        switch(operator) {
+          case EQUALS:
+            stringBuilder.append(filter.getValue());
+            break;
+          case NOT_EQUALS:
+            stringBuilder.append("not(" + filter.getValue() + ")");
+            break;
+          case LESS_THAN:
+            stringBuilder.append("lt(" + filter.getValue() + ")");
+            break;
+          case LESS_THAN_OR_EQUALS:
+            stringBuilder.append("lte(" + filter.getValue() + ")");
+            break;
+          case GREATER_THAN:
+            stringBuilder.append("gt(" + filter.getValue() + ")");
+            break;
+          case GREATER_THAN_OR_EQUALS:
+            stringBuilder.append("gte(" + filter.getValue() + ")");
+            break;
+          case IN:
+            stringBuilder.append("in(");
+            boolean first = true;
+            for (String value : filter.getValues()) {
+                if (first) {
+                    first = false;
+                } else {
+                    stringBuilder.append(",");
+                }
+                stringBuilder.append(value);
+            }
+            stringBuilder.append(")");
+            break;
+          default:
+            // XXX throw exception unsupported
+        }
+
+        return stringBuilder.toString();
     }
 
     public class AudienceBuilderFilter {
