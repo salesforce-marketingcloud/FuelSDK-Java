@@ -398,10 +398,17 @@ public abstract class ETSoapObject extends ETObject {
             // Convert the property names to their internal counterparts:
             //
 
-            filter.setProperty(getInternalProperty(type, filter.getProperty()));
-            for (ETFilter f : filter.getFilters()) {
-                f.setProperty(getInternalProperty(type, f.getProperty()));
+            String property = filter.getProperty();
+            if (property != null) {
+                filter.setProperty(getInternalProperty(type, property));
             }
+            for (ETFilter f : filter.getFilters()) {
+                String p = f.getProperty();
+                if (p != null) {
+                    f.setProperty(getInternalProperty(type, p));
+                }
+            }
+
             retrieveRequest.setFilter(toFilterPart(filter));
         }
 //        if (continueRequestId != null) {
