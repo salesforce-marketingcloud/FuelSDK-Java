@@ -249,7 +249,7 @@ public class ETAudience extends ETRestObject {
     {
         StringBuilder stringBuilder = new StringBuilder();
 
-        String internalProperty = getInternalProperty(ETDimension.class,
+        String internalProperty = getInternalProperty(ETAudience.class,
                                                       filter.getProperty());
 
         stringBuilder.append(internalProperty);
