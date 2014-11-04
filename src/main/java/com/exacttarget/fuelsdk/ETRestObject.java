@@ -210,10 +210,6 @@ public abstract class ETRestObject extends ETObject {
                                                                      String... properties)
         throws ETSdkException
     {
-        if (properties.length != 0) {
-            throw new ETSdkException("REST objects do not support partial retrieves");
-        }
-
         ETResponse<T> response = new ETResponse<T>();
 
         //
@@ -243,6 +239,8 @@ public abstract class ETRestObject extends ETObject {
 
         String path = null;
 
+        boolean firstQueryParameter = true;
+
         if (filter == null) {
             //
             // Remove the primary key from the end of the path:
@@ -263,8 +261,8 @@ public abstract class ETRestObject extends ETObject {
                                    filter.getValue());
 
             // XXX should throw an exception if not all are specified
-        } else if (filter.getOperator() == ETFilter.Operator.AND) {
-            // XXX support multiple variables
+//        } else if (filter.getOperator() == ETFilter.Operator.AND) {
+//            // XXX support multiple path variables
         } else {
             //
             // Remove the primary key from the end of the path:
@@ -281,18 +279,71 @@ public abstract class ETRestObject extends ETObject {
                 throw new ETSdkException(ex);
             }
 
-            path += "?" + hack.getFilterQueryParams(filter);
+            if (firstQueryParameter) {
+                firstQueryParameter = false;
+                path += "?";
+            } else {
+                path += "&";
+            }
+
+            path += hack.getFilterQueryParams(filter);
         }
 
         StringBuilder stringBuilder = new StringBuilder(path);
 
         if (page != null && pageSize != null) {
-            stringBuilder.append("?");
+            if (firstQueryParameter) {
+                firstQueryParameter = false;
+                stringBuilder.append("?");
+            } else {
+                stringBuilder.append("&");
+            }
             stringBuilder.append("$page=");
             stringBuilder.append(page);
             stringBuilder.append("&");
             stringBuilder.append("$pagesize=");
             stringBuilder.append(pageSize);
+        }
+
+        if (properties != null) {
+            if (properties.length != 1) {
+                throw new ETSdkException("REST objects do not support partial retrieves");
+            }
+            String s = properties[0];
+            // XXX need to deal with parse errors
+            if (!s.startsWith("order by") &&
+                !s.startsWith("ORDER BY"))
+            {
+                throw new ETSdkException("REST objects do not support partial retrieves");
+            }
+            String tokens[] = s.substring(9).split(" ");
+            String property = tokens[0];
+            Boolean ascending = null;
+            if (tokens.length == 2) {
+                if (tokens[1].equals("asc")) {
+                    ascending = true;
+                } else if (tokens[1].equals("desc")) {
+                    ascending = false;
+                } else {
+                    // XXX parse error
+                }
+            }
+            if (firstQueryParameter) {
+                firstQueryParameter = false;
+                stringBuilder.append("?");
+            } else {
+                stringBuilder.append("&");
+            }
+            stringBuilder.append("$orderby=");
+            stringBuilder.append(property);
+            if (ascending != null) {
+                stringBuilder.append("%20");
+                if (ascending) {
+                    stringBuilder.append("asc");
+                } else {
+                    stringBuilder.append("desc");
+                }
+            }
         }
 
         path = stringBuilder.toString();
