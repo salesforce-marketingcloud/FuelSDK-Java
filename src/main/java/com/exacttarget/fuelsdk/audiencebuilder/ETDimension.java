@@ -27,11 +27,11 @@
 
 package com.exacttarget.fuelsdk.audiencebuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
 import com.exacttarget.fuelsdk.ETFilter;
 import com.exacttarget.fuelsdk.ETRestObject;
 import com.exacttarget.fuelsdk.ETSdkException;
@@ -123,37 +123,50 @@ public class ETDimension extends ETRestObject {
     {
         StringBuilder stringBuilder = new StringBuilder();
 
-        String internalProperty = getInternalProperty(ETDimension.class,
-                                                      filter.getProperty());
+        String internalProperty = null;
 
-        stringBuilder.append(internalProperty);
+        if (filter.getProperty() != null) {
+            internalProperty = getInternalProperty(ETDimension.class,
+                                                   filter.getProperty());
 
-        stringBuilder.append("=");
+            // convert " " to "%20" in property
+            internalProperty = internalProperty.replaceAll(" ", "%20");
+
+            stringBuilder.append(internalProperty);
+
+            stringBuilder.append("=");
+        }
+
+        // convert " " to "%20" in all values
+        List<String> values = new ArrayList<String>();
+        for (String value : filter.getValues()) {
+            values.add(value.replaceAll(" ", "%20"));
+        }
 
         ETFilter.Operator operator = filter.getOperator();
         switch(operator) {
           case EQUALS:
-            stringBuilder.append(filter.getValue());
+            stringBuilder.append(values.get(0));
             break;
           case NOT_EQUALS:
-            stringBuilder.append("not(" + filter.getValue() + ")");
+            stringBuilder.append("not(" + values.get(0) + ")");
             break;
           case LESS_THAN:
-            stringBuilder.append("lt(" + filter.getValue() + ")");
+            stringBuilder.append("lt(" + values.get(0) + ")");
             break;
           case LESS_THAN_OR_EQUALS:
-            stringBuilder.append("lte(" + filter.getValue() + ")");
+            stringBuilder.append("lte(" + values.get(0) + ")");
             break;
           case GREATER_THAN:
-            stringBuilder.append("gt(" + filter.getValue() + ")");
+            stringBuilder.append("gt(" + values.get(0) + ")");
             break;
           case GREATER_THAN_OR_EQUALS:
-            stringBuilder.append("gte(" + filter.getValue() + ")");
+            stringBuilder.append("gte(" + values.get(0) + ")");
             break;
           case IN:
             stringBuilder.append("in(");
             boolean first = true;
-            for (String value : filter.getValues()) {
+            for (String value : values) {
                 if (first) {
                     first = false;
                 } else {
@@ -163,8 +176,15 @@ public class ETDimension extends ETRestObject {
             }
             stringBuilder.append(")");
             break;
+          case AND:
+            stringBuilder.append(getFilterQueryParams(filter.getFilters().get(0)));
+            stringBuilder.append("&");
+            stringBuilder.append(getFilterQueryParams(filter.getFilters().get(1)));
+            break;
+          case OR:
+            throw new ETSdkException("or expressions are not supported on Audience Builder retrieves");
           default:
-            // XXX throw exception unsupported
+            throw new ETSdkException("unsupported operator: " + operator);
         }
 
         return stringBuilder.toString();
