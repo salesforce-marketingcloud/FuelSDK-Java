@@ -66,7 +66,7 @@ public class ETDataExtensionRow extends ETSoapObject {
     }
 
     public String getColumn(String name) {
-        return columns.get(name);
+        return columns.get(name.toLowerCase());
     }
 
     public void setColumn(String name, String value) {
