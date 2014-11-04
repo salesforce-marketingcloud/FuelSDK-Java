@@ -323,6 +323,14 @@ public class ETClient {
     }
 
     public <T extends ETObject> ETResponse<T> retrieve(Class<T> type,
+                                                       ETFilter filter,
+                                                       String... properties)
+        throws ETSdkException
+    {
+        return retrieve(type, filter, null, null, properties);
+    }
+
+    public <T extends ETObject> ETResponse<T> retrieve(Class<T> type,
                                                        Integer page,
                                                        Integer pageSize,
                                                        String... properties)
@@ -342,11 +350,11 @@ public class ETClient {
     }
 
     @SuppressWarnings("unchecked")
-    private <T extends ETObject> ETResponse<T> retrieve(Class<T> type,
-                                                        ETFilter filter,
-                                                        Integer page,
-                                                        Integer pageSize,
-                                                        String... properties)
+    public <T extends ETObject> ETResponse<T> retrieve(Class<T> type,
+                                                       ETFilter filter,
+                                                       Integer page,
+                                                       Integer pageSize,
+                                                       String... properties)
         throws ETSdkException
     {
         //
