@@ -613,7 +613,9 @@ public class ETDataExtension extends ETSoapObject {
         return response.getObjects();
     }
 
-    private String toQueryParameters(ETFilter filter) {
+    private String toQueryParameters(ETFilter filter)
+        throws ETSdkException
+    {
         StringBuilder stringBuilder = new StringBuilder();
         ETFilter.Operator operator = filter.getOperator();
         switch (operator) {
@@ -679,7 +681,7 @@ public class ETDataExtension extends ETSoapObject {
             stringBuilder.append(filter.getValue());
             break;
           default:
-            // XXX throw exception unsupported
+            throw new ETSdkException("unsupported operator: " + operator);
         }
 
         return stringBuilder.toString();
