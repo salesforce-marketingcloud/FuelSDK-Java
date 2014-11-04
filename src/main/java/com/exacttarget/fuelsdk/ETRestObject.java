@@ -305,27 +305,21 @@ public abstract class ETRestObject extends ETObject {
             stringBuilder.append(pageSize);
         }
 
-        if (properties != null) {
-            if (properties.length != 1) {
-                throw new ETSdkException("REST objects do not support partial retrieves");
-            }
-            String s = properties[0];
-            // XXX need to deal with parse errors
-            if (!s.startsWith("order by") &&
-                !s.startsWith("ORDER BY"))
+        if (properties.length > 0) {
+            if (properties.length != 1
+                || properties[0].length() < 8
+                || !properties[0].substring(0, 8).toLowerCase().equals("order by"))
             {
                 throw new ETSdkException("REST objects do not support partial retrieves");
             }
-            String tokens[] = s.substring(9).split(" ");
+            String tokens[] = properties[0].substring(9).split(" ");
             String property = tokens[0];
             Boolean ascending = null;
             if (tokens.length == 2) {
-                if (tokens[1].equals("asc")) {
+                if (tokens[1].toLowerCase().equals("asc")) {
                     ascending = true;
-                } else if (tokens[1].equals("desc")) {
+                } else if (tokens[1].toLowerCase().equals("desc")) {
                     ascending = false;
-                } else {
-                    // XXX parse error
                 }
             }
             if (firstQueryParameter) {
