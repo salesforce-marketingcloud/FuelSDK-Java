@@ -142,10 +142,12 @@ public class ETAudience extends ETRestObject {
         return parsedFilter;
     }
 
-    public void setFilter(ETFilter filter) {
+    public void setFilter(ETFilter filter)
+        throws ETSdkException
+    {
         parsedFilter = filter;
         this.filter = new Filter();
-        this.filter.setFilterDefinition(toAudienceBuilderFilter(parsedFilter));
+        this.filter.setFilterDefinition(toFilterDefinition(parsedFilter));
     }
 
     public void setFilter(String filter)
@@ -189,10 +191,8 @@ public class ETAudience extends ETRestObject {
     public static Integer retrieveAudienceCount(ETClient client, String filter)
         throws ETSdkException
     {
-        ETAudience audience = new ETAudience();
-        AudienceCountsRequest request = audience.new AudienceCountsRequest();
-        ETFilter parsedFilter = ETFilter.parse(filter);
-        request.addFilterDefinition(toAudienceBuilderFilter(parsedFilter));
+        AudienceCountsRequest request = new AudienceCountsRequest();
+        request.addFilterDefinition(toFilterDefinition(ETFilter.parse(filter)));
         ETRestConnection connection = client.getRestConnection();
         Gson gson = new Gson();
         String json = connection.post("/internal/v1/AudienceBuilder/AudienceCounts",
@@ -205,7 +205,7 @@ public class ETAudience extends ETRestObject {
         throws ETSdkException
     {
         PublishRequest request = new PublishRequest();
-        request.setAudienceDefinitionId(id);
+        request.setId(audienceBuilds.get(0).getId());
         ETRestConnection connection = getClient().getRestConnection();
         Gson gson = new Gson();
         String json = connection.post("/internal/v1/AudienceBuilder/Publish",
@@ -218,31 +218,29 @@ public class ETAudience extends ETRestObject {
     {
         ETRestConnection connection = getClient().getRestConnection();
         Gson gson = new Gson();
-        String json = connection.get("/internal/v1/AudienceBuilder/Publish/" + id);
+        String json = connection.get("/internal/v1/AudienceBuilder/Publish/" + publishResponse.getId());
         publishResponse = gson.fromJson(json, PublishResponse.class);
     }
 
-    public static AudienceBuilderFilter toAudienceBuilderFilter(ETFilter filter) {
-        ETAudience audience = new ETAudience();
-        AudienceBuilderFilter f = audience.new AudienceBuilderFilter();
-        AudienceBuilderFilter.Condition condition = f.new Condition();
+    public static FilterDefinition toFilterDefinition(ETFilter filter)
+        throws ETSdkException
+    {
+        FilterDefinition filterDefinition = new FilterDefinition();
+        FilterDefinition.Condition condition = new FilterDefinition.Condition();
         condition.setId(filter.getProperty());
-        // XXX others?
         ETFilter.Operator operator = filter.getOperator();
         switch (operator) {
           case EQUALS:
             condition.setOperator("Equals");
             break;
           default:
-            // XXX throw exception unsupported
+            throw new ETSdkException("unsupported operator: " + operator);
         }
         condition.setConditionValue(filter.getValue());
-        f.addCondition(condition);
-
-        return f;
+        filterDefinition.addCondition(condition);
+        return filterDefinition;
     }
 
-    // XXX
     @Override
     protected String getFilterQueryParams(ETFilter filter)
         throws ETSdkException
@@ -250,6 +248,10 @@ public class ETAudience extends ETRestObject {
         StringBuilder stringBuilder = new StringBuilder();
 
         String internalProperty = null;
+
+        if (filter == null) {
+            return "";
+        }
 
         if (filter.getProperty() != null) {
             internalProperty = getInternalProperty(ETDimension.class,
@@ -307,8 +309,6 @@ public class ETAudience extends ETRestObject {
             stringBuilder.append("&");
             stringBuilder.append(getFilterQueryParams(filter.getFilters().get(1)));
             break;
-          case OR:
-            throw new ETSdkException("or expressions are not supported on Audience Builder retrieves");
           default:
             throw new ETSdkException("unsupported operator: " + operator);
         }
@@ -316,7 +316,82 @@ public class ETAudience extends ETRestObject {
         return stringBuilder.toString();
     }
 
-    public class AudienceBuilderFilter {
+    //
+    // These are just here so we can construct the JSON requests:
+    //
+
+    protected static class AudienceBuild {
+        @Expose
+        @SerializedName("buildAudienceDefinitionID")
+        private String id = null;
+        @Expose
+        private String name = "default";
+        @Expose
+        @SerializedName("publishedDataExtensionName")
+        private String dataExtensionName = null;
+        @Expose
+        @SerializedName("publishedFolderCategoryID")
+        private Integer dataExtensionFolderId = null;
+        @Expose
+        private Integer audiencePublishTypeID = 1;
+        @Expose
+        private Boolean available = true;
+        @Expose
+        private String publishChannel = "EMAIL";
+        @Expose
+        private String status = "";
+
+        public String getId() {
+            return id;
+        }
+
+        public String getDataExtensionName() {
+            return dataExtensionName;
+        }
+
+        public void setDataExtensionName(String dataExtensionName) {
+            this.dataExtensionName = dataExtensionName;
+        }
+
+        public Integer getDataExtensionFolderId() {
+            return dataExtensionFolderId;
+        }
+
+        public void setDataExtensionFolderId(Integer dataExtensionFolderId) {
+            this.dataExtensionFolderId = dataExtensionFolderId;
+        }
+    }
+
+    protected static class AudienceCountsRequest {
+        @Expose
+        @SerializedName("FilterDefinitions")
+        private List<FilterDefinition> filterDefinitions = new ArrayList<FilterDefinition>();
+
+        public void addFilterDefinition(FilterDefinition filterDefinition) {
+            filterDefinitions.add(filterDefinition);
+        }
+    }
+
+    protected static class AudienceCountsResponse {
+        @Expose
+        private Integer count = null;
+
+        public Integer getCount() {
+            return count;
+        }
+    }
+
+    protected static class Filter {
+        @Expose
+        @SerializedName("filterDefinitionJSON")
+        private FilterDefinition filterDefinition = null;
+
+        public void setFilterDefinition(FilterDefinition filterDefinition) {
+            this.filterDefinition = filterDefinition;
+        }
+    }
+
+    protected static class FilterDefinition {
         @Expose
         @SerializedName("UseEnterprise")
         private Boolean useEnterprise = false;
@@ -330,8 +405,8 @@ public class ETAudience extends ETRestObject {
         @SerializedName("ConditionSet")
         private ConditionSet conditionSet = new ConditionSet();
 
-        public AudienceBuilderFilter() {
-            conditionSet.setOperator("INC"); // XXX?
+        public FilterDefinition() {
+            conditionSet.setOperator("OR");
             conditionSet.setConditionSetName("");
         }
 
@@ -343,7 +418,7 @@ public class ETAudience extends ETRestObject {
             conditionSet.addCondition(condition);
         }
 
-        public class Condition {
+        public static class Condition {
             @Expose
             @SerializedName("ID")
             private String id = null;
@@ -379,7 +454,7 @@ public class ETAudience extends ETRestObject {
             }
         }
 
-        public class ConditionSet {
+        public static class ConditionSet {
             @Expose
             @SerializedName("Operator")
             private String operator = null;
@@ -416,92 +491,19 @@ public class ETAudience extends ETRestObject {
         }
     }
 
-    //
-    // These are just here so we can construct the JSON requests:
-    //
-
-    protected class AudienceBuild {
+    protected static class PublishRequest {
         @Expose
-        private String name = "default";
-        @Expose
-        @SerializedName("publishedDataExtensionName")
-        private String dataExtensionName = null;
-        @Expose
-        @SerializedName("publishedFolderCategoryID")
-        private Integer dataExtensionFolderId = null;
-        @Expose
-        private Boolean available = true;
-        @Expose
-        private String publishChannel = "EMAIL";
-        @Expose
-        private String status = "";
-
-        public String getDataExtensionName() {
-            return dataExtensionName;
-        }
-
-        public void setDataExtensionName(String dataExtensionName) {
-            this.dataExtensionName = dataExtensionName;
-        }
-
-        public Integer getDataExtensionFolderId() {
-            return dataExtensionFolderId;
-        }
-
-        public void setDataExtensionFolderId(Integer dataExtensionFolderId) {
-            this.dataExtensionFolderId = dataExtensionFolderId;
-        }
-    }
-
-    protected class AudienceCountsRequest {
-        @Expose
-        @SerializedName("FilterDefinitions")
-        private List<AudienceBuilderFilter> filterDefinitions = new ArrayList<AudienceBuilderFilter>();
-
-        public void addFilterDefinition(AudienceBuilderFilter audienceBuilderFilter) {
-            filterDefinitions.add(audienceBuilderFilter);
-        }
-    }
-
-    protected class AudienceCountsResponse {
-        @Expose
-        private Integer count = null;
-
-        public Integer getCount() {
-            return count;
-        }
-    }
-
-    protected class Filter {
-        @Expose
-        @SerializedName("filterDefinitionJSON")
-        private AudienceBuilderFilter filterDefinition = null;
-
-        public void setFilterDefinition(AudienceBuilderFilter filterDefinition) {
-            this.filterDefinition = filterDefinition;
-        }
-    }
-
-    protected class PublishRequest {
-        @Expose
-        @SerializedName("audienceBuilderPublishID")
+        @SerializedName("buildAudienceDefinitionID")
         private String id = null;
-        @Expose
-        @SerializedName("audienceDefinitionID")
-        private String audienceDefinitionId = null;
 
         public void setId(String id) {
             this.id = id;
         }
-
-        public void setAudienceDefinitionId(String audienceDefinitionId) {
-            this.audienceDefinitionId = audienceDefinitionId;
-        }
     }
 
-    protected class PublishResponse {
+    protected static class PublishResponse {
         @Expose
-        @SerializedName("audienceBuilderPublishID")
+        @SerializedName("audienceBuilderPublishId")
         private String id = null;
         @Expose
         private String status = null;

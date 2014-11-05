@@ -30,7 +30,7 @@ package com.exacttarget.fuelsdk.audiencebuilder;
 import com.exacttarget.fuelsdk.ETFilter;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.annotations.ExternalName;
-import com.exacttarget.fuelsdk.audiencebuilder.ETAudience.AudienceBuilderFilter;
+import com.exacttarget.fuelsdk.audiencebuilder.ETAudience.FilterDefinition;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -113,10 +113,12 @@ public class ETSegment {
         return parsedFilter;
     }
 
-    public void setFilter(ETFilter filter) {
+    public void setFilter(ETFilter filter)
+        throws ETSdkException
+    {
         parsedFilter = filter;
         this.filter = new Filter();
-        this.filter.setFilterDefinition(ETAudience.toAudienceBuilderFilter(parsedFilter));
+        this.filter.setFilterDefinition(ETAudience.toFilterDefinition(parsedFilter));
     }
 
     public void setFilter(String filter)
@@ -129,12 +131,12 @@ public class ETSegment {
     // These are just here so we can construct the JSON requests:
     //
 
-    protected class Filter {
+    protected static class Filter {
         @Expose
         @SerializedName("filterDefinitionJSON")
-        private AudienceBuilderFilter filterDefinition = null;
+        private FilterDefinition filterDefinition = null;
 
-        public void setFilterDefinition(AudienceBuilderFilter filterDefinition) {
+        public void setFilterDefinition(FilterDefinition filterDefinition) {
             this.filterDefinition = filterDefinition;
         }
     }

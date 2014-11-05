@@ -52,16 +52,15 @@ public class ETDimension extends ETRestObject {
     @Expose
     @ExternalName("type")
     private Integer type = null;
-    // XXX better name for customObjectField?
     @Expose @SerializedName("customObjectFieldID")
-    @ExternalName("customObjectFieldId")
-    private String customObjectFieldId = null;
-    @Expose
-    @ExternalName("customObjectFieldName")
-    private String customObjectFieldName = null;
+    @ExternalName("fieldId")
+    private String fieldId = null;
+    @Expose @SerializedName("customObjectFieldName")
+    @ExternalName("fieldName")
+    private String fieldName = null;
     @Expose @SerializedName("dataType")
-    @ExternalName("customObjectFieldType")
-    private Integer customObjectFieldType = null;
+    @ExternalName("fieldType")
+    private Integer fieldType = null;
     @Expose @SerializedName("recordCount")
     @ExternalName("count")
     private Integer count = null;
@@ -96,16 +95,16 @@ public class ETDimension extends ETRestObject {
         return type;
     }
 
-    public String getCustomObjectFieldId() {
-        return customObjectFieldId;
+    public String getFieldId() {
+        return fieldId;
     }
 
-    public String getCustomObjectFieldName() {
-        return customObjectFieldName;
+    public String getFieldName() {
+        return fieldName;
     }
 
-    public Integer getCustomObjectFieldType() {
-        return customObjectFieldType;
+    public Integer getFieldType() {
+        return fieldType;
     }
 
     public Integer getCount() {
@@ -116,7 +115,6 @@ public class ETDimension extends ETRestObject {
         return values;
     }
 
-    // XXX
     @Override
     protected String getFilterQueryParams(ETFilter filter)
         throws ETSdkException
@@ -124,6 +122,10 @@ public class ETDimension extends ETRestObject {
         StringBuilder stringBuilder = new StringBuilder();
 
         String internalProperty = null;
+
+        if (filter == null) {
+            return "";
+        }
 
         if (filter.getProperty() != null) {
             internalProperty = getInternalProperty(ETDimension.class,
@@ -181,12 +183,37 @@ public class ETDimension extends ETRestObject {
             stringBuilder.append("&");
             stringBuilder.append(getFilterQueryParams(filter.getFilters().get(1)));
             break;
-          case OR:
-            throw new ETSdkException("or expressions are not supported on Audience Builder retrieves");
           default:
             throw new ETSdkException("unsupported operator: " + operator);
         }
 
         return stringBuilder.toString();
+    }
+
+    /**
+     * @deprecated
+     * Use <code>getFieldId</code>.
+     */
+    @Deprecated
+    public String getCustomObjectFieldId() {
+        return getFieldId();
+    }
+
+    /**
+     * @deprecated
+     * Use <code>getFieldName</code>.
+     */
+    @Deprecated
+    public String getCustomObjectFieldName() {
+        return getFieldName();
+    }
+
+    /**
+     * @deprecated
+     * Use <code>getFieldType</code>.
+     */
+    @Deprecated
+    public Integer getCustomObjectFieldType() {
+        return getFieldType();
     }
 }
