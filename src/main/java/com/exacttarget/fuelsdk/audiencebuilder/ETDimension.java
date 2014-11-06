@@ -38,7 +38,7 @@ import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.RestObject;
 
-@RestObject(path = "/internal/v1/AudienceBuilder/Dimension/{id}",
+@RestObject(path = "/internal/v1/AudienceBuilder/Dimension",
             primaryKey = "id",
             collection = "entities",
             totalCount = "totalCount")
@@ -115,79 +115,10 @@ public class ETDimension extends ETRestObject {
         return values;
     }
 
-    @Override
-    protected String getFilterQueryParams(ETFilter filter)
+    public static String toQueryParams(ETFilter filter)
         throws ETSdkException
     {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        String internalProperty = null;
-
-        if (filter == null) {
-            return "";
-        }
-
-        if (filter.getProperty() != null) {
-            internalProperty = getInternalProperty(ETDimension.class,
-                                                   filter.getProperty());
-
-            // convert " " to "%20" in property
-            internalProperty = internalProperty.replaceAll(" ", "%20");
-
-            stringBuilder.append(internalProperty);
-
-            stringBuilder.append("=");
-        }
-
-        // convert " " to "%20" in all values
-        List<String> values = new ArrayList<String>();
-        for (String value : filter.getValues()) {
-            values.add(value.replaceAll(" ", "%20"));
-        }
-
-        ETFilter.Operator operator = filter.getOperator();
-        switch(operator) {
-          case EQUALS:
-            stringBuilder.append(values.get(0));
-            break;
-          case NOT_EQUALS:
-            stringBuilder.append("not(" + values.get(0) + ")");
-            break;
-          case LESS_THAN:
-            stringBuilder.append("lt(" + values.get(0) + ")");
-            break;
-          case LESS_THAN_OR_EQUALS:
-            stringBuilder.append("lte(" + values.get(0) + ")");
-            break;
-          case GREATER_THAN:
-            stringBuilder.append("gt(" + values.get(0) + ")");
-            break;
-          case GREATER_THAN_OR_EQUALS:
-            stringBuilder.append("gte(" + values.get(0) + ")");
-            break;
-          case IN:
-            stringBuilder.append("in(");
-            boolean first = true;
-            for (String value : values) {
-                if (first) {
-                    first = false;
-                } else {
-                    stringBuilder.append(",");
-                }
-                stringBuilder.append(value);
-            }
-            stringBuilder.append(")");
-            break;
-          case AND:
-            stringBuilder.append(getFilterQueryParams(filter.getFilters().get(0)));
-            stringBuilder.append("&");
-            stringBuilder.append(getFilterQueryParams(filter.getFilters().get(1)));
-            break;
-          default:
-            throw new ETSdkException("unsupported operator: " + operator);
-        }
-
-        return stringBuilder.toString();
+        return ETAudience.toQueryParams(filter);
     }
 
     /**

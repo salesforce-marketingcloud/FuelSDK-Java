@@ -28,6 +28,8 @@
 package com.exacttarget.fuelsdk;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.List;
 
@@ -145,14 +147,10 @@ public abstract class ETRestObject extends ETObject {
         logger.trace("collection: " + annotations.collection());
         logger.trace("totalCount: " + annotations.totalCount());
 
-        //
-        // Remove the primary key from the end of the path:
-        //
-
-        String path = removePrimaryKeyFromEnd(annotations.path(),
-                                              annotations.primaryKey());
+        String path = annotations.path();
 
         Gson gson = connection.getGson();
+
         JsonParser jsonParser = new JsonParser();
 
         //
@@ -213,18 +211,6 @@ public abstract class ETRestObject extends ETObject {
         ETResponse<T> response = new ETResponse<T>();
 
         //
-        // Get handle to the REST connection:
-        //
-
-        ETRestConnection connection = client.getRestConnection();
-
-        //
-        // Automatically refresh the token if necessary:
-        //
-
-        client.refreshToken();
-
-        //
         // Read call details from the RestObject annotation:
         //
 
@@ -237,59 +223,111 @@ public abstract class ETRestObject extends ETObject {
         logger.trace("collection: " + annotations.collection());
         logger.trace("totalCount: " + annotations.totalCount());
 
-        String path = null;
+        String path = annotations.path();
 
-        boolean firstQueryParameter = true;
-
-        if (filter == null) {
-            //
-            // Remove the primary key from the end of the path:
-            //
-
-            path = removePrimaryKeyFromEnd(annotations.path(),
-                                           annotations.primaryKey());
-        } else if (filter.getOperator() == ETFilter.Operator.EQUALS) {
-            //
-            // Replace the variable in the path with the value
-            // from the filter:
-            //
-
+        if (filter != null) {
             logger.trace("filter: " + filter);
 
-            path = replaceVariable(annotations.path(),
-                                   filter.getProperty(),
-                                   filter.getValue());
+            if ((filter.getOperator() == ETFilter.Operator.EQUALS) &&
+                (filter.getProperty().equals(annotations.primaryKey())))
+            {
+                //
+                // Replace the item via the primary key in the filter:
+                //
 
-            // XXX should throw an exception if not all are specified
-//        } else if (filter.getOperator() == ETFilter.Operator.AND) {
-//            // XXX support multiple path variables
-        } else {
-            //
-            // Remove the primary key from the end of the path:
-            //
-
-            path = removePrimaryKeyFromEnd(annotations.path(),
-                                           annotations.primaryKey());
-
-            // XXX hack just to get it working..
-            T hack = null;
-            try {
-                hack = type.newInstance();
-            } catch (Exception ex) {
-                throw new ETSdkException(ex);
-            }
-
-            if (firstQueryParameter) {
-                firstQueryParameter = false;
-                path += "?";
+                path += "/" + filter.getValue();
             } else {
-                path += "&";
-            }
+                //
+                // Add object specific query parameters:
+                //
 
-            path += hack.getFilterQueryParams(filter);
+                Method method = null;
+                try {
+                    method = type.getDeclaredMethod("toQueryParams", ETFilter.class);
+                } catch (NoSuchMethodException ex) {
+                    // there's no toQueryParams method on TYPE
+                } catch (SecurityException ex) {
+                    throw new ETSdkException(ex);
+                }
+
+                if (method != null) {
+                    try {
+                        path += "?" + method.invoke(null, filter);
+                    } catch (Exception ex) {
+                        throw new ETSdkException(ex);
+                    }
+                }
+            }
         }
 
+        ETRestConnection connection = client.getRestConnection();
+
+        Gson gson = connection.getGson();
+
+        JsonObject jsonObject = retrieve(client, path, page, pageSize, properties);
+
+        response.setRequestId(connection.getLastCallRequestId());
+        response.setResponseCode(connection.getLastCallResponseCode());
+        response.setResponseMessage(connection.getLastCallResponseMessage());
+
+        if (jsonObject.get("page") != null) {
+            response.setPage(jsonObject.get("page").getAsInt());
+            logger.trace("page = " + response.getPage());
+            response.setPageSize(jsonObject.get("pageSize").getAsInt());
+            logger.trace("pageSize = " + response.getPageSize());
+            response.setTotalCount(jsonObject.get(annotations.totalCount()).getAsInt());
+            logger.trace("totalCount = " + response.getTotalCount());
+
+            if (response.getPage() * response.getPageSize() < response.getTotalCount()) {
+                response.setMoreResults(true);
+            }
+
+            JsonArray collection = jsonObject.get(annotations.collection()).getAsJsonArray();
+
+            for (JsonElement element : collection) {
+                T object = gson.fromJson(element, type);
+                object.setClient(client);
+                ETResult<T> result = new ETResult<T>();
+                result.setObject(object);
+                response.addResult(result);
+            }
+        } else {
+            T object = gson.fromJson(jsonObject, type);
+            object.setClient(client);
+            ETResult<T> result = new ETResult<T>();
+            result.setObject(object);
+            response.addResult(result);
+        }
+
+        return response;
+    }
+
+    protected static JsonObject retrieve(ETClient client,
+                                         String path,
+                                         Integer page,
+                                         Integer pageSize,
+                                         String... properties)
+        throws ETSdkException
+    {
+        //
+        // Get handle to the REST connection:
+        //
+
+        ETRestConnection connection = client.getRestConnection();
+
+        //
+        // Automatically refresh the token if necessary:
+        //
+
+        client.refreshToken();
+
+        //
+        // Append the query parameter string:
+        //
+
         StringBuilder stringBuilder = new StringBuilder(path);
+
+        boolean firstQueryParameter = true;
 
         if (page != null && pageSize != null) {
             if (firstQueryParameter) {
@@ -342,13 +380,13 @@ public abstract class ETRestObject extends ETObject {
 
         path = stringBuilder.toString();
 
+        //
+        // Perform the HTTP GET:
+        //
+
         logger.trace("GET " + path);
 
         String json = connection.get(path);
-
-        response.setRequestId(connection.getLastCallRequestId());
-        response.setResponseCode(connection.getLastCallResponseCode());
-        response.setResponseMessage(connection.getLastCallResponseMessage());
 
         Gson gson = connection.getGson();
         JsonParser jsonParser = new JsonParser();
@@ -361,36 +399,7 @@ public abstract class ETRestObject extends ETObject {
             }
         }
 
-        if (jsonObject.get("page") != null) {
-            response.setPage(jsonObject.get("page").getAsInt());
-            logger.trace("page = " + response.getPage());
-            response.setPageSize(jsonObject.get("pageSize").getAsInt());
-            logger.trace("pageSize = " + response.getPageSize());
-            response.setTotalCount(jsonObject.get(annotations.totalCount()).getAsInt());
-            logger.trace("totalCount = " + response.getTotalCount());
-
-            if (response.getPage() * response.getPageSize() < response.getTotalCount()) {
-                response.setMoreResults(true);
-            }
-
-            JsonArray collection = jsonObject.get(annotations.collection()).getAsJsonArray();
-
-            for (JsonElement element : collection) {
-                ETRestObject object = gson.fromJson(element, type);
-                object.setClient(client);
-                ETResult<T> result = new ETResult<T>();
-                result.setObject((T) object);
-                response.addResult(result);
-            }
-        } else {
-            ETRestObject object = gson.fromJson(json, type);
-            object.setClient(client);
-            ETResult<T> result = new ETResult<T>();
-            result.setObject((T) object);
-            response.addResult(result);
-        }
-
-        return response;
+        return jsonObject;
     }
 
     protected static <T extends ETRestObject> ETResponse<T> update(ETClient client,
@@ -444,8 +453,7 @@ public abstract class ETRestObject extends ETObject {
 
             // XXX should throw an exception for complex expressions
 
-            // XXX substitute primaryKey here w/ reflection to get getter
-            String p = replaceVariable(annotations.path(), "id", object.getId());
+            String p = annotations.path();
 
             String json = gson.toJson(object);
 
@@ -538,8 +546,7 @@ public abstract class ETRestObject extends ETObject {
 
             // XXX should throw an exception for complex expressions
 
-            // XXX substitute primaryKey here w/ reflection to get getter
-            String p = replaceVariable(annotations.path(), "id", object.getId());
+            String p = annotations.path();
 
             String json = gson.toJson(object);
 
@@ -569,13 +576,6 @@ public abstract class ETRestObject extends ETObject {
         return response;
     }
 
-    protected String getFilterQueryParams(ETFilter filter)
-        throws ETSdkException
-    {
-        // XXX
-        return null;
-    }
-
     protected static String getInternalProperty(Class<? extends ETRestObject> type,
                                                 String name)
         throws ETSdkException
@@ -597,42 +597,5 @@ public abstract class ETRestObject extends ETObject {
         }
 
         return internalProperty;
-    }
-
-    // XXX private?
-    protected static String removePrimaryKeyFromEnd(String path, String primaryKey)
-        throws ETSdkException
-    {
-        StringBuilder stringBuilder = new StringBuilder(path);
-        int index = stringBuilder.lastIndexOf("/");
-        if (!stringBuilder.substring(index + 1).equals("{" + primaryKey + "}")) {
-            throw new ETSdkException("path \""
-                                     + path
-                                     + "\" does not end with variable \"{"
-                                     + primaryKey
-                                     + "}\"");
-        }
-        stringBuilder.delete(index, stringBuilder.length());
-        return stringBuilder.toString();
-    }
-
-    // XXX private?
-    protected static String replaceVariable(String path,
-                                            String key,
-                                            String value)
-        throws ETSdkException
-    {
-        StringBuilder stringBuilder = new StringBuilder(path);
-        String variable = "{" + key + "}";
-        int index = stringBuilder.indexOf(variable);
-        if (index == -1) {
-            throw new ETSdkException("path \""
-                                     + path
-                                     + "\" does not contain variable \"{"
-                                     + key
-                                     + "}\"");
-        }
-        stringBuilder.replace(index, index + variable.length(), value);
-        return stringBuilder.toString();
     }
 }

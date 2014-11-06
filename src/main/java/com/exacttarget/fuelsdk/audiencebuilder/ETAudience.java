@@ -43,7 +43,7 @@ import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.RestObject;
 
-@RestObject(path = "/internal/v1/AudienceBuilder/Audience/{id}",
+@RestObject(path = "/internal/v1/AudienceBuilder/Audience",
             primaryKey = "id",
             collection = "entities",
             totalCount = "totalCount")
@@ -241,8 +241,7 @@ public class ETAudience extends ETRestObject {
         return filterDefinition;
     }
 
-    @Override
-    protected String getFilterQueryParams(ETFilter filter)
+    public static String toQueryParams(ETFilter filter)
         throws ETSdkException
     {
         StringBuilder stringBuilder = new StringBuilder();
@@ -305,9 +304,9 @@ public class ETAudience extends ETRestObject {
             stringBuilder.append(")");
             break;
           case AND:
-            stringBuilder.append(getFilterQueryParams(filter.getFilters().get(0)));
+            stringBuilder.append(toQueryParams(filter.getFilters().get(0)));
             stringBuilder.append("&");
-            stringBuilder.append(getFilterQueryParams(filter.getFilters().get(1)));
+            stringBuilder.append(toQueryParams(filter.getFilters().get(1)));
             break;
           default:
             throw new ETSdkException("unsupported operator: " + operator);
