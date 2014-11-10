@@ -52,12 +52,10 @@ public class ETCampaignAsset extends ETRestObject {
     public void setName(String name) {
     }
 
-    @Override
     public String getDescription() {
         return null;
     }
 
-    @Override
     public void setDescription(String description) {
     }
 

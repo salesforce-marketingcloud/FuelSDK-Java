@@ -56,21 +56,12 @@ public class ETDataExtensionRow extends ETSoapObject {
         this.name = name;
     }
 
-    @Override
-    public String getDescription() {
-        return null;
-    }
-
-    @Override
-    public void setDescription(String description) {
-    }
-
     public String getColumn(String name) {
         return columns.get(name.toLowerCase());
     }
 
     public void setColumn(String name, String value) {
-        columns.put(name, value);
+        columns.put(name.toLowerCase(), value);
     }
 
     public Set<String> getColumnNames() {

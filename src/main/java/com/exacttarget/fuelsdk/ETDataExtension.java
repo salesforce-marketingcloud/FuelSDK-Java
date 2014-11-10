@@ -27,22 +27,23 @@
 
 package com.exacttarget.fuelsdk;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import org.apache.log4j.Logger;
 
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.InternalName;
 import com.exacttarget.fuelsdk.annotations.SoapObject;
+import com.exacttarget.fuelsdk.ETDataExtensionColumn.Type;
 import com.exacttarget.fuelsdk.internal.APIObject;
 import com.exacttarget.fuelsdk.internal.APIProperty;
 import com.exacttarget.fuelsdk.internal.DataExtension;
@@ -61,8 +62,6 @@ import com.exacttarget.fuelsdk.internal.Soap;
     "ID", "Fields"
 })
 public class ETDataExtension extends ETSoapObject {
-    private static Logger logger = Logger.getLogger(ETDataExtension.class);
-
     @ExternalName("id")
     @InternalName("objectID")
     private String id = null;
@@ -80,6 +79,10 @@ public class ETDataExtension extends ETSoapObject {
     private Boolean isSendable = null;
     @ExternalName("isTestable")
     private Boolean isTestable = null;
+
+    private static Logger logger = Logger.getLogger(ETDataExtension.class);
+
+    private boolean isHydrated = false;
 
     public ETDataExtension() {}
 
@@ -103,12 +106,10 @@ public class ETDataExtension extends ETSoapObject {
         this.name = name;
     }
 
-    @Override
     public String getDescription() {
         return description;
     }
 
-    @Override
     public void setDescription(String description) {
         this.description = description;
     }
@@ -121,51 +122,51 @@ public class ETDataExtension extends ETSoapObject {
         this.folderId = folderId;
     }
 
-    /**
-     * @deprecated
-     * Use <code>getFolderId()</code>.
-     */
-    @Deprecated
-    public Integer getCategoryId() {
-        return getFolderId();
-    }
-
-    /**
-     * @deprecated
-     * Use <code>setFolderId()</code>.
-     */
-    @Deprecated
-    public void setCategoryId(Integer categoryId) {
-        setFolderId(categoryId);
-    }
-
     public List<ETDataExtensionColumn> getColumns() {
         return columns;
+    }
+
+    public ETDataExtensionColumn getColumn(String name) {
+        for (ETDataExtensionColumn column : columns) {
+            if (column.getName().equals(name.toLowerCase())) {
+                return column;
+            }
+        }
+        return null;
+    }
+
+    public ETDataExtensionColumn getPrimaryKeyColumn()
+        throws ETSdkException
+    {
+        if (!isHydrated) {
+            hydrate();
+        }
+        for (ETDataExtensionColumn column : columns) {
+            if (column.getIsPrimaryKey()) {
+                return column;
+            }
+        }
+        return null;
     }
 
     public void addColumn(String name) {
         addColumn(name, null, null, null, null, null, null, null);
     }
 
-    public void addColumn(String name, ETDataExtensionColumnType type)
-    {
+    public void addColumn(String name, Type type) {
         addColumn(name, type, null, null, null, null, null, null);
     }
 
-    public void addColumn(String name, Boolean isPrimaryKey)
-    {
+    public void addColumn(String name, Boolean isPrimaryKey) {
         addColumn(name, null, null, null, null, isPrimaryKey, null, null);
     }
 
-    public void addColumn(String name,
-                          ETDataExtensionColumnType type,
-                          Boolean isPrimaryKey)
-    {
+    public void addColumn(String name, Type type, Boolean isPrimaryKey) {
         addColumn(name, type, null, null, null, isPrimaryKey, null, null);
     }
 
     private void addColumn(String name,
-                           ETDataExtensionColumnType type,
+                           Type type,
                            Integer length,
                            Integer precision,
                            Integer scale,
@@ -174,22 +175,22 @@ public class ETDataExtension extends ETSoapObject {
                            String defaultValue)
     {
         ETDataExtensionColumn column = new ETDataExtensionColumn();
-        column.setName(name);
+        column.setName(name.toLowerCase());
         if (type != null) {
             column.setType(type);
         } else {
             // default is text type
-            column.setType(ETDataExtensionColumnType.TEXT);
+            column.setType(Type.TEXT);
         }
         // mimics the UI default values for length, precision, and scale
-        if (column.getType() == ETDataExtensionColumnType.TEXT) {
+        if (column.getType() == Type.TEXT) {
             if (length != null) {
                 column.setLength(length);
             } else {
                 column.setLength(50);
             }
         }
-        if (column.getType() == ETDataExtensionColumnType.DECIMAL) {
+        if (column.getType() == Type.DECIMAL) {
             if (precision != null) {
                 column.setPrecision(precision);
             } else {
@@ -231,6 +232,24 @@ public class ETDataExtension extends ETSoapObject {
         this.isTestable = isTestable;
     }
 
+    /**
+     * @deprecated
+     * Use <code>getFolderId()</code>.
+     */
+    @Deprecated
+    public Integer getCategoryId() {
+        return getFolderId();
+    }
+
+    /**
+     * @deprecated
+     * Use <code>setFolderId()</code>.
+     */
+    @Deprecated
+    public void setCategoryId(Integer categoryId) {
+        setFolderId(categoryId);
+    }
+
     public ETResponse<ETDataExtensionRow> insert(ETDataExtensionRow... rows)
         throws ETSdkException
     {
@@ -260,26 +279,28 @@ public class ETDataExtension extends ETSoapObject {
                                                  String... columns)
         throws ETSdkException
     {
-        // XXX much of this is copied and pasted from ETClient.retrieve(filter, properties)
+        // see also: ETClient.retrieve(type, filter, properties)
         ETFilter f = null;
         String[] c = columns;
         try {
             f = ETFilter.parse(filter);
         } catch (ETSdkException ex) {
-            // XXX check against ex.getCause();
+            if (ex.getCause() instanceof ParseException) {
+                //
+                // The filter argument is actually a column. This is a bit
+                // of a hack, but this method needs to handle the case of
+                // both a filtered and a filterless retrieve with columns,
+                // as having one method for each results in ambiguous methods.
+                //
 
-            //
-            // The filter argument is actually a column. This is a bit
-            // of a hack, but this method needs to handle the case of
-            // both a filtered and a filterless retrieve with columns,
-            // as having one method for each results in ambiguous methods.
-            //
-
-            c = new String[columns.length + 1];
-            c[0] = filter;
-            int i = 1;
-            for (String column : columns) {
-                c[i++] = column;
+                c = new String[columns.length + 1];
+                c[0] = filter;
+                int i = 1;
+                for (String property : columns) {
+                    c[i++] = property;
+                }
+            } else {
+                throw ex;
             }
         }
         return select(f, null, null, c);
@@ -310,21 +331,7 @@ public class ETDataExtension extends ETSoapObject {
     {
         ETClient client = getClient();
 
-        // XXX much of this is copied and pasted from ETRestObject.retrieve
-
         ETResponse<ETDataExtensionRow> response = new ETResponse<ETDataExtensionRow>();
-
-        //
-        // Get handle to the REST connection:
-        //
-
-        ETRestConnection connection = client.getRestConnection();
-
-        //
-        // Automatically refresh the token if necessary:
-        //
-
-        client.refreshToken();
 
         String path = "/data/v1/customobjectdata/key/" + getKey() + "/rowset";
 
@@ -332,15 +339,7 @@ public class ETDataExtension extends ETSoapObject {
 
         boolean firstQueryParameter = true;
 
-        if (page != null && pageSize != null) {
-            firstQueryParameter = false;
-            stringBuilder.append("?");
-            stringBuilder.append("$page=");
-            stringBuilder.append(page);
-            stringBuilder.append("&");
-            stringBuilder.append("$pagesize=");
-            stringBuilder.append(pageSize);
-        }
+        String[] properties = new String[0]; // empty by default
 
         if (columns.length > 0) {
             //
@@ -349,19 +348,25 @@ public class ETDataExtension extends ETSoapObject {
 
             boolean firstField = true;
             for (String column : columns) {
-                if (firstField) {
-                    firstField = false;
-                    if (firstQueryParameter) {
-                        firstQueryParameter = false;
-                        stringBuilder.append("?");
-                    } else {
-                        stringBuilder.append("&");
-                    }
-                    stringBuilder.append("$fields=");
+                if (column.substring(0, 8).toLowerCase().equals("order by")) {
+                    // not actually a column, an order by string
+                    properties = new String[1];
+                    properties[0] = columns[columns.length - 1];
                 } else {
-                    stringBuilder.append(",");
+                    if (firstField) {
+                        firstField = false;
+                        if (firstQueryParameter) {
+                            firstQueryParameter = false;
+                            stringBuilder.append("?");
+                        } else {
+                            stringBuilder.append("&");
+                        }
+                        stringBuilder.append("$fields=");
+                    } else {
+                        stringBuilder.append(",");
+                    }
+                    stringBuilder.append(column);
                 }
-                stringBuilder.append(column);
             }
         }
 
@@ -373,29 +378,18 @@ public class ETDataExtension extends ETSoapObject {
                 stringBuilder.append("&");
             }
             stringBuilder.append("$filter=");
-            stringBuilder.append(toQueryParameters(filter));
+            stringBuilder.append(toQueryParams(filter));
         }
 
         path = stringBuilder.toString();
 
-        logger.trace("GET " + path);
+        ETRestConnection connection = client.getRestConnection();
 
-        String json = connection.get(path);
+        JsonObject jsonObject = ETRestObject.retrieve(client, path, page, pageSize, properties);
 
         response.setRequestId(connection.getLastCallRequestId());
         response.setResponseCode(connection.getLastCallResponseCode());
         response.setResponseMessage(connection.getLastCallResponseMessage());
-
-        Gson gson = connection.getGson();
-        JsonParser jsonParser = new JsonParser();
-        JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
-
-        if (logger.isTraceEnabled()) {
-            String jsonPrettyPrinted = gson.toJson(jsonObject);
-            for (String line : jsonPrettyPrinted.split("\\n")) {
-                logger.trace(line);
-            }
-        }
 
         if (jsonObject.get("page") != null) {
             response.setPage(jsonObject.get("page").getAsInt());
@@ -453,7 +447,7 @@ public class ETDataExtension extends ETSoapObject {
     public ETResponse<ETDataExtensionRow> update(String filter, String... values)
         throws ETSdkException
     {
-        // XXX optimize
+        // XXX can this be optimized?
 
         ETResponse<ETDataExtensionRow> response = select(filter);
 
@@ -461,7 +455,9 @@ public class ETDataExtension extends ETSoapObject {
         for (ETDataExtensionRow row : rows) {
             for (String value : values) {
                 ETFilter parsedFilter = ETFilter.parse(value);
-                // XXX throw exception if operation not = ?
+                if (parsedFilter.getOperator() != ETFilter.Operator.EQUALS) {
+                    throw new ETSdkException("unsupported operator: " + parsedFilter.getOperator());
+                }
                 row.setColumn(parsedFilter.getProperty(), parsedFilter.getValue());
             }
         }
@@ -515,15 +511,11 @@ public class ETDataExtension extends ETSoapObject {
 
             DataExtensionObject internalRow = new DataExtensionObject();
             DataExtensionObject.Keys keys = new DataExtensionObject.Keys();
-            // XXX really only needs to set the primary
-            // key but we don't have a reliable way
-            // of knowing what that is yet (coming soon)
-            for (String name : row.getColumnNames()) {
-                APIProperty property = new APIProperty();
-                property.setName(name);
-                property.setValue(row.getColumn(name));
-                keys.getKey().add(property);
-            }
+            ETDataExtensionColumn primaryKeyColumn = getPrimaryKeyColumn();
+            APIProperty property = new APIProperty();
+            property.setName(primaryKeyColumn.getName());
+            property.setValue(row.getColumn(property.getName()));
+            keys.getKey().add(property);
             internalRow.setName(name);
             internalRow.setKeys(keys);
 
@@ -580,7 +572,7 @@ public class ETDataExtension extends ETSoapObject {
         return delete(rows.toArray(new ETDataExtensionRow[rows.size()]));
     }
 
-    public List<ETDataExtensionColumn> retrieveColumns()
+    public void hydrate()
         throws ETSdkException
     {
         ETClient client = getClient();
@@ -608,35 +600,37 @@ public class ETDataExtension extends ETSoapObject {
                                                ETDataExtensionColumn.class,
                                                new String[0]); // properties
 
-        // XXX check for errors and throw the appropriate exception
+        columns = response.getObjects();
 
-        return response.getObjects();
+        // XXX deal with partially loaded DataExtension objects too
+
+        isHydrated = true;
     }
 
-    private String toQueryParameters(ETFilter filter)
+    public static String toQueryParams(ETFilter filter)
         throws ETSdkException
     {
         StringBuilder stringBuilder = new StringBuilder();
         ETFilter.Operator operator = filter.getOperator();
         switch (operator) {
           case AND:
-            stringBuilder.append(toQueryParameters(filter.getFilters().get(0)));
+            stringBuilder.append(toQueryParams(filter.getFilters().get(0)));
             stringBuilder.append("%20");
             stringBuilder.append("and");
             stringBuilder.append("%20");
-            stringBuilder.append(toQueryParameters(filter.getFilters().get(1)));
+            stringBuilder.append(toQueryParams(filter.getFilters().get(1)));
             break;
           case OR:
-            stringBuilder.append(toQueryParameters(filter.getFilters().get(0)));
+            stringBuilder.append(toQueryParams(filter.getFilters().get(0)));
             stringBuilder.append("%20");
             stringBuilder.append("or");
             stringBuilder.append("%20");
-            stringBuilder.append(toQueryParameters(filter.getFilters().get(1)));
+            stringBuilder.append(toQueryParams(filter.getFilters().get(1)));
             break;
           case NOT:
             stringBuilder.append("not");
             stringBuilder.append("%20");
-            stringBuilder.append(toQueryParameters(filter.getFilters().get(0)));
+            stringBuilder.append(toQueryParams(filter.getFilters().get(0)));
             break;
           case EQUALS:
             stringBuilder.append(filter.getProperty());
@@ -648,7 +642,7 @@ public class ETDataExtension extends ETSoapObject {
           case NOT_EQUALS:
             stringBuilder.append(filter.getProperty());
             stringBuilder.append("%20");
-            stringBuilder.append("ne");
+            stringBuilder.append("neq");
             stringBuilder.append("%20");
             stringBuilder.append(filter.getValue());
             break;
@@ -679,6 +673,47 @@ public class ETDataExtension extends ETSoapObject {
             stringBuilder.append("gte");
             stringBuilder.append("%20");
             stringBuilder.append(filter.getValue());
+            break;
+          case IN:
+            stringBuilder.append(filter.getProperty());
+            stringBuilder.append("%20");
+            stringBuilder.append("in");
+            stringBuilder.append("%20");
+            stringBuilder.append("(");
+            boolean first = true;
+            for (String value : filter.getValues()) {
+                if (first) {
+                    first = false;
+                } else {
+                    stringBuilder.append(",");
+                }
+                stringBuilder.append(value);
+            }
+            stringBuilder.append(")");
+            break;
+          case BETWEEN:
+            stringBuilder.append(filter.getProperty());
+            stringBuilder.append("%20");
+            stringBuilder.append("between");
+            stringBuilder.append("%20");
+            stringBuilder.append(filter.getValues().get(0));
+            stringBuilder.append("%20");
+            stringBuilder.append("and");
+            stringBuilder.append("%20");
+            stringBuilder.append(filter.getValues().get(1));
+            break;
+          case LIKE:
+            stringBuilder.append(filter.getProperty());
+            stringBuilder.append("%20");
+            stringBuilder.append("like");
+            stringBuilder.append("%20");
+            stringBuilder.append("'");
+            try {
+                stringBuilder.append(URLEncoder.encode(filter.getValue(), "UTF-8"));
+            } catch (UnsupportedEncodingException ex) {
+                throw new ETSdkException("error URL encoding " + filter.getValue(), ex);
+            }
+            stringBuilder.append("'");
             break;
           default:
             throw new ETSdkException("unsupported operator: " + operator);

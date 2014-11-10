@@ -44,7 +44,7 @@ public class ETDataExtensionColumn extends ETSoapObject {
     private ETDataExtension dataExtension = null;
     @ExternalName("type")
     @InternalName("fieldType")
-    private ETDataExtensionColumnType type = null;
+    private Type type = null;
     @ExternalName("defaultValue")
     private String defaultValue = null;
     @ExternalName("isPrimaryKey")
@@ -61,12 +61,14 @@ public class ETDataExtensionColumn extends ETSoapObject {
 
     public ETDataExtensionColumn() {}
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void setName(String name) {
-        this.name = name;
+        this.name = name.toLowerCase();
     }
 
     public String getDescription() {
@@ -85,30 +87,12 @@ public class ETDataExtensionColumn extends ETSoapObject {
         this.dataExtension = dataExtension;
     }
 
-    public ETDataExtensionColumnType getType() {
+    public Type getType() {
         return type;
     }
 
-    public void setType(ETDataExtensionColumnType type) {
+    public void setType(Type type) {
         this.type = type;
-    }
-
-    /**
-     * @deprecated
-     * Use <code>getType()</code>.
-     */
-    @Deprecated
-    public ETDataExtensionColumnType getColumnType() {
-        return getType();
-    }
-
-    /**
-     * @deprecated
-     * Use <code>setType()</code>.
-     */
-    @Deprecated
-    public void setColumnType(ETDataExtensionColumnType columnType) {
-        setType(columnType);
     }
 
     public String getDefaultValue() {
@@ -143,6 +127,40 @@ public class ETDataExtensionColumn extends ETSoapObject {
         this.length = length;
     }
 
+    public Integer getPrecision() {
+        return precision;
+    }
+
+    public void setPrecision(Integer precision) {
+        this.precision = precision;
+    }
+
+    public Integer getScale() {
+        return scale;
+    }
+
+    public void setScale(Integer scale) {
+        this.scale = scale;
+    }
+
+    /**
+     * @deprecated
+     * Use <code>getType()</code>.
+     */
+    @Deprecated
+    public Type getColumnType() {
+        return getType();
+    }
+
+    /**
+     * @deprecated
+     * Use <code>setType()</code>.
+     */
+    @Deprecated
+    public void setColumnType(Type columnType) {
+        setType(columnType);
+    }
+
     /**
      * @deprecated
      * Use <code>getMaxLength()</code>.
@@ -161,19 +179,32 @@ public class ETDataExtensionColumn extends ETSoapObject {
         setLength(maxLength);
     }
 
-    public Integer getPrecision() {
-        return precision;
-    }
+    public enum Type {
+        BOOLEAN("Boolean"),
+        DATE("Date"),
+        DECIMAL("Decimal"),
+        EMAIL_ADDRESS("EmailAddress"),
+        LOCALE("Locale"),
+        NUMBER("Number"),
+        PHONE("Phone"),
+        TEXT("Text");
+        private final String value;
 
-    public void setPrecision(Integer precision) {
-        this.precision = precision;
-    }
+        Type(String value) {
+            this.value = value;
+        }
 
-    public Integer getScale() {
-        return scale;
-    }
+        public String value() {
+            return value;
+        }
 
-    public void setScale(Integer scale) {
-        this.scale = scale;
+        public static Type fromValue(String value) {
+            for (Type v : Type.values()) {
+                if (v.value.equals(value)) {
+                    return v;
+                }
+            }
+            throw new IllegalArgumentException(value);
+        }
     }
 }

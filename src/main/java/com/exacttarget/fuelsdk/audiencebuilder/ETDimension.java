@@ -82,15 +82,6 @@ public class ETDimension extends ETRestObject {
     public void setName(String name) {
     }
 
-    @Override
-    public String getDescription() {
-        return null;
-    }
-
-    @Override
-    public void setDescription(String description) {
-    }
-
     public Integer getType() {
         return type;
     }

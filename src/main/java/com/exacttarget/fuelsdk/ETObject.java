@@ -36,8 +36,6 @@ public abstract class ETObject extends ETPrettyPrintable {
     public abstract void setKey(String key);
     public abstract String getName();
     public abstract void setName(String name);
-    public abstract String getDescription();
-    public abstract void setDescription(String description);
     public abstract Date getCreatedDate();
     public abstract void setCreatedDate(Date createdDate);
     public abstract Date getModifiedDate();

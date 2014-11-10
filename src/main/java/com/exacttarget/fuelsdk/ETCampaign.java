@@ -57,12 +57,10 @@ public class ETCampaign extends ETRestObject {
         this.name = name;
     }
 
-    @Override
     public String getDescription() {
         return description;
     }
 
-    @Override
     public void setDescription(String description) {
         this.description = description;
     }

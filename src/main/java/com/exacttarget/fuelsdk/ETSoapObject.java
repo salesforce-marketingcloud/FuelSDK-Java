@@ -717,7 +717,7 @@ public abstract class ETSoapObject extends ETObject {
 
         // ETDataExtensionColumnType
         convertUtils.register(new EnumConverter(),
-                ETDataExtensionColumnType.class);
+                ETDataExtensionColumn.Type.class);
         convertUtils.register(new EnumConverter(),
                 DataExtensionFieldType.class);
 
@@ -1312,7 +1312,12 @@ public abstract class ETSoapObject extends ETObject {
 
         Class<? extends ETSoapObject> externalType = type; // for code readability
 
-        Field externalField = getField(externalType, name);
+        Field externalField = null;
+        try {
+            externalField = getField(externalType, name);
+        } catch (ETSdkException ex) {
+            return name; // XXX
+        }
 
         InternalProperty internalPropertyAnnotation =
                 externalField.getAnnotation(InternalProperty.class);

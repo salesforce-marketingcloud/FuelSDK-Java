@@ -104,12 +104,10 @@ public class ETAudience extends ETRestObject {
         this.name = name;
     }
 
-    @Override
     public String getDescription() {
         return description;
     }
 
-    @Override
     public void setDescription(String description) {
         this.description = description;
     }
@@ -227,16 +225,41 @@ public class ETAudience extends ETRestObject {
     {
         FilterDefinition filterDefinition = new FilterDefinition();
         FilterDefinition.Condition condition = new FilterDefinition.Condition();
-        condition.setId(filter.getProperty());
         ETFilter.Operator operator = filter.getOperator();
         switch (operator) {
           case EQUALS:
+            condition.setId(filter.getProperty());
             condition.setOperator("Equals");
+            condition.setConditionValue(filter.getValue());
+            break;
+          case NOT_EQUALS:
+            condition.setId(filter.getProperty());
+            condition.setOperator("NotEquals");
+            condition.setConditionValue(filter.getValue());
+            break;
+          case LESS_THAN:
+            condition.setId(filter.getProperty());
+            condition.setOperator("LessThan");
+            condition.setConditionValue(filter.getValue());
+            break;
+          case LESS_THAN_OR_EQUALS:
+            condition.setId(filter.getProperty());
+            condition.setOperator("LessThanOrEquals");
+            condition.setConditionValue(filter.getValue());
+            break;
+          case GREATER_THAN:
+            condition.setId(filter.getProperty());
+            condition.setOperator("GreaterThan");
+            condition.setConditionValue(filter.getValue());
+            break;
+          case GREATER_THAN_OR_EQUALS:
+            condition.setId(filter.getProperty());
+            condition.setOperator("GreaterThanOrEquals");
+            condition.setConditionValue(filter.getValue());
             break;
           default:
             throw new ETSdkException("unsupported operator: " + operator);
         }
-        condition.setConditionValue(filter.getValue());
         filterDefinition.addCondition(condition);
         return filterDefinition;
     }
@@ -390,7 +413,7 @@ public class ETAudience extends ETRestObject {
         }
     }
 
-    protected static class FilterDefinition {
+    public static class FilterDefinition {
         @Expose
         @SerializedName("UseEnterprise")
         private Boolean useEnterprise = false;

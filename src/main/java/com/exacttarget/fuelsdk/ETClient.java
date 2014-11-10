@@ -298,25 +298,28 @@ public class ETClient {
                                                        String... properties)
         throws ETSdkException
     {
+        // see also: ETDataExtension.select(filter, columns)
         ETFilter f = null;
         String[] p = properties;
         try {
             f = ETFilter.parse(filter);
         } catch (ETSdkException ex) {
-            // XXX check against ex.getCause();
+            if (ex.getCause() instanceof ParseException) {
+                //
+                // The filter argument is actually a property. This is a bit
+                // of a hack, but this method needs to handle the case of
+                // both a filtered and a filterless retrieve with properties,
+                // as having one method for each results in ambiguous methods.
+                //
 
-            //
-            // The filter argument is actually a property. This is a bit
-            // of a hack, but this method needs to handle the case of
-            // both a filtered and a filterless retrieve with properties,
-            // as having one method for each results in ambiguous methods.
-            //
-
-            p = new String[properties.length + 1];
-            p[0] = filter;
-            int i = 1;
-            for (String property : properties) {
-                p[i++] = property;
+                p = new String[properties.length + 1];
+                p[0] = filter;
+                int i = 1;
+                for (String property : properties) {
+                    p[i++] = property;
+                }
+            } else {
+                throw ex;
             }
         }
         return retrieve(type, f, null, null, p);

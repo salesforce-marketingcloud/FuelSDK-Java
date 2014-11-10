@@ -28,7 +28,6 @@
 package com.exacttarget.fuelsdk;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Date;
 import java.util.List;
@@ -327,7 +326,12 @@ public abstract class ETRestObject extends ETObject {
 
         StringBuilder stringBuilder = new StringBuilder(path);
 
-        boolean firstQueryParameter = true;
+        boolean firstQueryParameter;
+        if (path.indexOf('?') == -1) {
+            firstQueryParameter = true;
+        } else {
+            firstQueryParameter = false;
+        }
 
         if (page != null && pageSize != null) {
             if (firstQueryParameter) {
