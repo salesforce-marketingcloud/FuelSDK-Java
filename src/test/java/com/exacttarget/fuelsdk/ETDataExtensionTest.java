@@ -447,6 +447,7 @@ public class ETDataExtensionTest {
         throws ETSdkException
     {
         ETResponse<ETDataExtensionRow> response = dataExtension.select(1, 2);
+        assertNotNull(response.getRequestId());
         assertEquals("200", response.getResponseCode());
         assertEquals("OK", response.getResponseMessage());
         assertEquals((Integer) 1, response.getPage());
@@ -477,6 +478,7 @@ public class ETDataExtensionTest {
     {
         ETResponse<ETDataExtensionRow> response = dataExtension.select(1, 2,
                                                                        "LastName");
+        assertNotNull(response.getRequestId());
         assertEquals("200", response.getResponseCode());
         assertEquals("OK", response.getResponseMessage());
         assertEquals((Integer) 1, response.getPage());
@@ -509,6 +511,7 @@ public class ETDataExtensionTest {
                                                                        "LastName",
                                                                        "FirstName",
                                                                        "EmailAddress");
+        assertNotNull(response.getRequestId());
         assertEquals("200", response.getResponseCode());
         assertEquals("OK", response.getResponseMessage());
         assertEquals((Integer) 1, response.getPage());
@@ -538,6 +541,7 @@ public class ETDataExtensionTest {
         throws ETSdkException
     {
         ETResponse<ETDataExtensionRow> response = dataExtension.select("LastName=Flintstone");
+        assertNotNull(response.getRequestId());
         assertEquals("200", response.getResponseCode());
         assertEquals("OK", response.getResponseMessage());
         assertEquals((Integer) 1, response.getPage());
@@ -568,6 +572,7 @@ public class ETDataExtensionTest {
     {
         ETResponse<ETDataExtensionRow> response = dataExtension.select("LastName=Flintstone",
                                                                        "LastName");
+        assertNotNull(response.getRequestId());
         assertEquals("200", response.getResponseCode());
         assertEquals("OK", response.getResponseMessage());
         assertEquals((Integer) 1, response.getPage());
@@ -600,6 +605,7 @@ public class ETDataExtensionTest {
                                                                        "LastName",
                                                                        "FirstName",
                                                                        "EmailAddress");
+        assertNotNull(response.getRequestId());
         assertEquals("200", response.getResponseCode());
         assertEquals("OK", response.getResponseMessage());
         assertEquals((Integer) 1, response.getPage());
@@ -629,6 +635,7 @@ public class ETDataExtensionTest {
         throws ETSdkException
     {
         ETResponse<ETDataExtensionRow> response = dataExtension.select("LastName != Flintstone");
+        assertNotNull(response.getRequestId());
         assertEquals("200", response.getResponseCode());
         assertEquals("OK", response.getResponseMessage());
         assertEquals((Integer) 1, response.getPage());
@@ -651,6 +658,7 @@ public class ETDataExtensionTest {
         throws ETSdkException
     {
         ETResponse<ETDataExtensionRow> response = dataExtension.select("Age < 36");
+        assertNotNull(response.getRequestId());
         assertEquals("200", response.getResponseCode());
         assertEquals("OK", response.getResponseMessage());
         assertEquals((Integer) 1, response.getPage());
@@ -673,6 +681,7 @@ public class ETDataExtensionTest {
         throws ETSdkException
     {
         ETResponse<ETDataExtensionRow> response = dataExtension.select("Age <= 36");
+        assertNotNull(response.getRequestId());
         assertEquals("200", response.getResponseCode());
         assertEquals("OK", response.getResponseMessage());
         assertEquals((Integer) 1, response.getPage());
@@ -702,6 +711,7 @@ public class ETDataExtensionTest {
         throws ETSdkException
     {
         ETResponse<ETDataExtensionRow> response = dataExtension.select("Age > 36");
+        assertNotNull(response.getRequestId());
         assertEquals("200", response.getResponseCode());
         assertEquals("OK", response.getResponseMessage());
         assertEquals((Integer) 1, response.getPage());
@@ -724,6 +734,7 @@ public class ETDataExtensionTest {
         throws ETSdkException
     {
         ETResponse<ETDataExtensionRow> response = dataExtension.select("Age >= 36");
+        assertNotNull(response.getRequestId());
         assertEquals("200", response.getResponseCode());
         assertEquals("OK", response.getResponseMessage());
         assertEquals((Integer) 1, response.getPage());
@@ -753,6 +764,7 @@ public class ETDataExtensionTest {
         throws ETSdkException
     {
         ETResponse<ETDataExtensionRow> response = dataExtension.select("Age in (34, 35)");
+        assertNotNull(response.getRequestId());
         assertEquals("200", response.getResponseCode());
         assertEquals("OK", response.getResponseMessage());
         assertEquals((Integer) 1, response.getPage());
@@ -775,6 +787,7 @@ public class ETDataExtensionTest {
         throws ETSdkException
     {
         ETResponse<ETDataExtensionRow> response = dataExtension.select("Age in (34, 35, 36)");
+        assertNotNull(response.getRequestId());
         assertEquals("200", response.getResponseCode());
         assertEquals("OK", response.getResponseMessage());
         assertEquals((Integer) 1, response.getPage());
@@ -804,6 +817,7 @@ public class ETDataExtensionTest {
         throws ETSdkException
     {
         ETResponse<ETDataExtensionRow> response = dataExtension.select("Age in (34, 35, 36, 37)");
+        assertNotNull(response.getRequestId());
         assertEquals("200", response.getResponseCode());
         assertEquals("OK", response.getResponseMessage());
         assertEquals((Integer) 1, response.getPage());
@@ -833,6 +847,7 @@ public class ETDataExtensionTest {
         throws ETSdkException
     {
         ETResponse<ETDataExtensionRow> response = dataExtension.select("Age between 30 and 40");
+        assertNotNull(response.getRequestId());
         assertEquals("200", response.getResponseCode());
         assertEquals("OK", response.getResponseMessage());
         assertEquals((Integer) 1, response.getPage());
@@ -862,6 +877,7 @@ public class ETDataExtensionTest {
         throws ETSdkException
     {
         ETResponse<ETDataExtensionRow> response = dataExtension.select("LastName like 'Flint%'");
+        assertNotNull(response.getRequestId());
         assertEquals("200", response.getResponseCode());
         assertEquals("OK", response.getResponseMessage());
         assertEquals((Integer) 1, response.getPage());
@@ -891,6 +907,7 @@ public class ETDataExtensionTest {
         throws ETSdkException
     {
         ETResponse<ETDataExtensionRow> response = dataExtension.select("LastName=Flintstone and FirstName = 'Wilma'");
+        assertNotNull(response.getRequestId());
         assertEquals("200", response.getResponseCode());
         assertEquals("OK", response.getResponseMessage());
         assertEquals((Integer) 1, response.getPage());
@@ -1008,7 +1025,7 @@ public class ETDataExtensionTest {
     }
 
     @Test
-    public void _33_TestUpdateMultipleRowsFiltered()
+    public void _33_TestUpdateRowsByFilter()
         throws ETSdkException
     {
         ETResponse<ETDataExtensionRow> response = dataExtension.update("LastName=Flintstone",
@@ -1021,32 +1038,41 @@ public class ETDataExtensionTest {
         assertNull(response.getTotalCount());
         assertFalse(response.hasMoreResults());
         assertEquals(2, response.getResults().size());
-        ETResult<ETDataExtensionRow> result = response.getResult();
-        assertEquals("OK", result.getResponseCode());
-        assertEquals("Updated DataExtensionObject", result.getResponseMessage());
-        assertNull(result.getErrorCode());
-        assertNull(result.getObjectId());
+        ETResult<ETDataExtensionRow> result1 = response.getResults().get(0);
+        assertNull(result1.getRequestId());
+        assertEquals("OK", result1.getResponseCode());
+        assertEquals("Updated DataExtensionObject", result1.getResponseMessage());
+        assertNull(result1.getErrorCode());
+        assertNull(result1.getObjectId());
+        ETDataExtensionRow r1 = result1.getObject();
+        assertEquals("2", r1.getColumn("CustomerID"));
+        assertEquals("Fred Flintstone", r1.getColumn("FullName"));
+        assertEquals("Fred and Wilma", r1.getColumn("FirstName"));
+        assertEquals("Flintstone", r1.getColumn("LastName"));
+        assertEquals("36", r1.getColumn("Age"));
+        assertEquals("fred@flintstone.com", r1.getColumn("EmailAddress"));
+        ETResult<ETDataExtensionRow> result2 = response.getResults().get(1);
+        assertNull(result2.getRequestId());
+        assertEquals("OK", result2.getResponseCode());
+        assertEquals("Updated DataExtensionObject", result2.getResponseMessage());
+        assertNull(result2.getErrorCode());
+        assertNull(result2.getObjectId());
+        ETDataExtensionRow r2 = result2.getObject();
+        assertEquals("3", r2.getColumn("CustomerID"));
+        assertEquals("Wilma Flintstone", r2.getColumn("FullName"));
+        assertEquals("Fred and Wilma", r2.getColumn("FirstName"));
+        assertEquals("Flintstone", r2.getColumn("LastName"));
+        assertEquals("34", r2.getColumn("Age"));
+        assertEquals("wilma@flintstone.com", r2.getColumn("EmailAddress"));
     }
 
     @Test(expected = ETSdkException.class)
-    public void _34_TestUpdateMultipleRowsFilteredInvalidOperator()
+    public void _34_TestUpdateRowsByFilterInvalidOperator()
         throws ETSdkException
     {
+        @SuppressWarnings("unused")
         ETResponse<ETDataExtensionRow> response = dataExtension.update("LastName=Flintstone",
                                                                        "FirstName != 'Fred and Wilma'");
-        assertNotNull(response.getRequestId());
-        assertEquals("OK", response.getResponseCode());
-        assertEquals("OK", response.getResponseMessage());
-        assertNull(response.getPage());
-        assertNull(response.getPageSize());
-        assertNull(response.getTotalCount());
-        assertFalse(response.hasMoreResults());
-        assertEquals(2, response.getResults().size());
-        ETResult<ETDataExtensionRow> result = response.getResult();
-        assertEquals("OK", result.getResponseCode());
-        assertEquals("Updated DataExtensionObject", result.getResponseMessage());
-        assertNull(result.getErrorCode());
-        assertNull(result.getObjectId());
     }
 
     @Test
@@ -1065,10 +1091,18 @@ public class ETDataExtensionTest {
         assertFalse(response.hasMoreResults());
         assertEquals(1, response.getResults().size());
         ETResult<ETDataExtensionRow> result = response.getResult();
+        assertNull(result.getRequestId());
         assertEquals("OK", result.getResponseCode());
         assertEquals("Deleted DataExtensionObject", result.getResponseMessage());
         assertNull(result.getErrorCode());
         assertNull(result.getObjectId());
+//        ETDataExtensionRow r = result.getObject();
+//        assertEquals("1", r.getColumn("CustomerID"));
+//        assertNull(r.getColumn("FullName"));
+//        assertEquals("IAN", r.getColumn("FirstName"));
+//        assertNull(r.getColumn("LastName"));
+//        assertNull(r.getColumn("Age"));
+//        assertNull(r.getColumn("EmailAddress"));
     }
 
     @Test
@@ -1088,20 +1122,48 @@ public class ETDataExtensionTest {
         assertNull(response.getTotalCount());
         assertFalse(response.hasMoreResults());
         assertEquals(2, response.getResults().size());
-        ETResult<ETDataExtensionRow> result1 = response.getResult();
+        ETResult<ETDataExtensionRow> result1 = response.getResults().get(0);
+        assertNull(result1.getRequestId());
         assertEquals("OK", result1.getResponseCode());
         assertEquals("Deleted DataExtensionObject", result1.getResponseMessage());
         assertNull(result1.getErrorCode());
         assertNull(result1.getObjectId());
-        ETResult<ETDataExtensionRow> result2 = response.getResult();
-        assertEquals("OK", result2.getResponseCode());
-        assertEquals("Deleted DataExtensionObject", result2.getResponseMessage());
-        assertNull(result2.getErrorCode());
-        assertNull(result2.getObjectId());
+//        ETDataExtensionRow r1 = result1.getObject();
+//        assertEquals("2", r1.getColumn("CustomerID"));
+//        assertEquals("Fred Flintstone", r1.getColumn("FullName"));
+//        assertEquals("Fred and Wilma", r1.getColumn("FirstName"));
+//        assertEquals("Flintstone", r1.getColumn("LastName"));
+//        assertEquals("36", r1.getColumn("Age"));
+//        assertEquals("fred@flintstone.com", r1.getColumn("EmailAddress"));
+//        ETResult<ETDataExtensionRow> result2 = response.getResults().get(1);
+//        assertNull(result2.getRequestId());
+//        assertEquals("OK", result2.getResponseCode());
+//        assertEquals("Deleted DataExtensionObject", result2.getResponseMessage());
+//        assertNull(result2.getErrorCode());
+//        assertNull(result2.getObjectId());
+//        ETDataExtensionRow r2 = result2.getObject();
+//        assertEquals("3", r2.getColumn("CustomerID"));
+//        assertEquals("Wilma Flintstone", r2.getColumn("FullName"));
+//        assertEquals("Fred and Wilma", r2.getColumn("FirstName"));
+//        assertEquals("Flintstone", r2.getColumn("LastName"));
+//        assertEquals("34", r2.getColumn("Age"));
+//        assertEquals("wilma@flintstone.com", r2.getColumn("EmailAddress"));
+    }
+
+    //@Test
+    public void _37_TestDeleteRowsByFilter()
+        throws ETSdkException
+    {
+    }
+
+    //@Test
+    public void _38_TestDeleteRowsByFilterInvalidOperator()
+        throws ETSdkException
+    {
     }
 
     @Test
-    public void _37_TestDeleteSingle()
+    public void _39_TestDeleteSingle()
         throws ETSdkException
     {
         ETDataExtension dataExtension = new ETDataExtension();
@@ -1116,6 +1178,7 @@ public class ETDataExtensionTest {
         assertFalse(response.hasMoreResults());
         assertEquals(1, response.getResults().size());
         ETResult<ETDataExtension> result = response.getResult();
+        assertNull(result.getRequestId());
         assertEquals("OK", result.getResponseCode());
         assertEquals("Data Extension deleted.", result.getResponseMessage());
         assertNull(result.getErrorCode());
