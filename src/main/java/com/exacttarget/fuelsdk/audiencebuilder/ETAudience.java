@@ -101,7 +101,19 @@ public class ETAudience extends ETRestObject {
 
     @Override
     public void setName(String name) {
+        String oldName = this.name;
+
         this.name = name;
+
+        //
+        // Default audience code to audience name:
+        //
+
+        if (audienceCode == null || audienceCode.equals(oldName)) {
+            audienceCode = name;
+        }
+
+        audienceBuilds.get(0).setTrackingCode(name + "_EMAIL");
     }
 
     public String getDescription() {
@@ -224,44 +236,108 @@ public class ETAudience extends ETRestObject {
         throws ETSdkException
     {
         FilterDefinition filterDefinition = new FilterDefinition();
-        FilterDefinition.Condition condition = new FilterDefinition.Condition();
         ETFilter.Operator operator = filter.getOperator();
         switch (operator) {
           case EQUALS:
-            condition.setId(filter.getProperty());
-            condition.setOperator("Equals");
-            condition.setConditionValue(filter.getValue());
-            break;
           case NOT_EQUALS:
-            condition.setId(filter.getProperty());
-            condition.setOperator("NotEquals");
-            condition.setConditionValue(filter.getValue());
-            break;
           case LESS_THAN:
-            condition.setId(filter.getProperty());
-            condition.setOperator("LessThan");
-            condition.setConditionValue(filter.getValue());
-            break;
           case LESS_THAN_OR_EQUALS:
-            condition.setId(filter.getProperty());
-            condition.setOperator("LessThanOrEquals");
-            condition.setConditionValue(filter.getValue());
-            break;
           case GREATER_THAN:
-            condition.setId(filter.getProperty());
-            condition.setOperator("GreaterThan");
-            condition.setConditionValue(filter.getValue());
-            break;
           case GREATER_THAN_OR_EQUALS:
-            condition.setId(filter.getProperty());
-            condition.setOperator("GreaterThanOrEquals");
-            condition.setConditionValue(filter.getValue());
+            filterDefinition.addCondition(toCondition(filter));
+            break;
+          case IN:
+          case AND:
+          case OR:
+            filterDefinition.addConditionSet(toConditionSet(filter));
             break;
           default:
             throw new ETSdkException("unsupported operator: " + operator);
         }
-        filterDefinition.addCondition(condition);
         return filterDefinition;
+    }
+
+    public static FilterDefinition.Condition toCondition(ETFilter filter)
+        throws ETSdkException
+    {
+        FilterDefinition.Condition condition =
+                new FilterDefinition.Condition();
+        condition.setId(filter.getProperty());
+        ETFilter.Operator operator = filter.getOperator();
+        switch (operator) {
+          case EQUALS:
+            condition.setOperator("Equals");
+            break;
+          case NOT_EQUALS:
+            condition.setOperator("NotEquals");
+            break;
+          case LESS_THAN:
+            condition.setOperator("LessThan");
+            break;
+          case LESS_THAN_OR_EQUALS:
+            condition.setOperator("LessThanOrEquals");
+            break;
+          case GREATER_THAN:
+            condition.setOperator("GreaterThan");
+            break;
+          case GREATER_THAN_OR_EQUALS:
+            condition.setOperator("GreaterThanOrEquals");
+            break;
+          default:
+            throw new ETSdkException("invalid operator: " + operator);
+        }
+        condition.setConditionValue(filter.getValue());
+        return condition;
+    }
+
+    public static FilterDefinition.ConditionSet toConditionSet(ETFilter filter)
+        throws ETSdkException
+    {
+        FilterDefinition.ConditionSet conditionSet =
+                new FilterDefinition.ConditionSet();
+        ETFilter.Operator operator = filter.getOperator();
+        switch (operator) {
+          case IN:
+            conditionSet.setOperator("InList");
+            for (String value : filter.getValues()) {
+                FilterDefinition.Condition condition =
+                        new FilterDefinition.Condition();
+                condition.setId(filter.getProperty());
+                condition.setOperator("Equals");
+                condition.setConditionValue(value);
+                conditionSet.addCondition(condition);
+            }
+            break;
+          case AND:
+          case OR:
+            if (operator == ETFilter.Operator.AND) {
+                conditionSet.setOperator("AND");
+            } else if (operator == ETFilter.Operator.OR) {
+                conditionSet.setOperator("OR");
+            }
+            ETFilter filter1 = filter.getFilters().get(0);
+            ETFilter filter2 = filter.getFilters().get(1);
+            if (filter1.getOperator() == ETFilter.Operator.IN ||
+                filter1.getOperator() == ETFilter.Operator.AND ||
+                filter1.getOperator() == ETFilter.Operator.OR)
+            {
+                conditionSet.addConditionSet(toConditionSet(filter1));
+            } else {
+                conditionSet.addCondition(toCondition(filter1));
+            }
+            if (filter2.getOperator() == ETFilter.Operator.IN ||
+                filter2.getOperator() == ETFilter.Operator.AND ||
+                filter2.getOperator() == ETFilter.Operator.OR)
+            {
+                conditionSet.addConditionSet(toConditionSet(filter2));
+            } else {
+                conditionSet.addCondition(toCondition(filter2));
+            }
+            break;
+          default:
+            throw new ETSdkException("invalid operator: " + operator);
+        }
+        return conditionSet;
     }
 
     public static String toQueryParams(ETFilter filter)
@@ -362,6 +438,8 @@ public class ETAudience extends ETRestObject {
         private String publishChannel = "EMAIL";
         @Expose
         private String status = "";
+        @Expose
+        private String trackingCode = null;
 
         public String getId() {
             return id;
@@ -381,6 +459,14 @@ public class ETAudience extends ETRestObject {
 
         public void setDataExtensionFolderId(Integer dataExtensionFolderId) {
             this.dataExtensionFolderId = dataExtensionFolderId;
+        }
+
+        public String getTrackingCode() {
+            return trackingCode;
+        }
+
+        public void setTrackingCode(String trackingCode) {
+            this.trackingCode = trackingCode;
         }
     }
 
@@ -436,6 +522,10 @@ public class ETAudience extends ETRestObject {
             return conditionSet;
         }
 
+        public void addConditionSet(ConditionSet conditionSet) {
+            conditionSet.addConditionSet(conditionSet);
+        }
+
         public void addCondition(Condition condition) {
             conditionSet.addCondition(condition);
         }
@@ -484,8 +574,10 @@ public class ETAudience extends ETRestObject {
             @SerializedName("ConditionSetName")
             private String conditionSetName = null;
             @Expose
+            @SerializedName("ConditionSet")
+            private List<ConditionSet> conditionSets = null;
             @SerializedName("Condition")
-            private List<Condition> conditions = new ArrayList<Condition>();
+            private List<Condition> conditions = null;
 
             public String getOperator() {
                 return operator;
@@ -503,11 +595,25 @@ public class ETAudience extends ETRestObject {
                 this.conditionSetName = conditionSetName;
             }
 
+            public List<ConditionSet> getConditionSets() {
+                return conditionSets;
+            }
+
+            public void addConditionSet(ConditionSet conditionSet) {
+                if (conditionSets == null) {
+                    conditionSets = new ArrayList<ConditionSet>();
+                }
+                conditionSets.add(conditionSet);
+            }
+
             public List<Condition> getConditions() {
                 return conditions;
             }
 
             public void addCondition(Condition condition) {
+                if (conditions == null) {
+                    conditions = new ArrayList<Condition>();
+                }
                 conditions.add(condition);
             }
         }

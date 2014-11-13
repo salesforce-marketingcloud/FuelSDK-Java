@@ -427,8 +427,14 @@ public class ETAudienceBuilderTest {
         if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
             return;
         }
-
         ETResponse<ETAudience> response = client.delete(ETAudience.class,
                                                         "id=" + id);
+        assertNotNull(response.getRequestId());
+        assertEquals("200", response.getResponseCode());
+        assertEquals("OK", response.getResponseMessage());
+        assertNull(response.getPage());
+        assertNull(response.getPageSize());
+        assertNull(response.getTotalCount());
+        assertFalse(response.hasMoreResults());
     }
 }
