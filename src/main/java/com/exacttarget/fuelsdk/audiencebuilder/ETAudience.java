@@ -317,17 +317,21 @@ public class ETAudience extends ETRestObject {
             }
             ETFilter filter1 = filter.getFilters().get(0);
             ETFilter filter2 = filter.getFilters().get(1);
-            if (filter1.getOperator() == ETFilter.Operator.IN ||
-                filter1.getOperator() == ETFilter.Operator.AND ||
-                filter1.getOperator() == ETFilter.Operator.OR)
+            if (filter1.getOperator() == null) {
+                conditionSet.addConditionSet(toConditionSet(filter1.getFilters().get(0)));
+            } else if (filter1.getOperator() == ETFilter.Operator.IN ||
+                       filter1.getOperator() == ETFilter.Operator.AND ||
+                       filter1.getOperator() == ETFilter.Operator.OR)
             {
                 conditionSet.addConditionSet(toConditionSet(filter1));
             } else {
                 conditionSet.addCondition(toCondition(filter1));
             }
-            if (filter2.getOperator() == ETFilter.Operator.IN ||
-                filter2.getOperator() == ETFilter.Operator.AND ||
-                filter2.getOperator() == ETFilter.Operator.OR)
+            if (filter2.getOperator() == null) {
+                conditionSet.addConditionSet(toConditionSet(filter2.getFilters().get(0)));
+            } else if (filter2.getOperator() == ETFilter.Operator.IN ||
+                       filter2.getOperator() == ETFilter.Operator.AND ||
+                       filter2.getOperator() == ETFilter.Operator.OR)
             {
                 conditionSet.addConditionSet(toConditionSet(filter2));
             } else {
@@ -523,11 +527,11 @@ public class ETAudience extends ETRestObject {
         }
 
         public void addConditionSet(ConditionSet conditionSet) {
-            conditionSet.addConditionSet(conditionSet);
+            this.conditionSet.addConditionSet(conditionSet);
         }
 
         public void addCondition(Condition condition) {
-            conditionSet.addCondition(condition);
+            this.conditionSet.addCondition(condition);
         }
 
         public static class Condition {
@@ -576,6 +580,7 @@ public class ETAudience extends ETRestObject {
             @Expose
             @SerializedName("ConditionSet")
             private List<ConditionSet> conditionSets = null;
+            @Expose
             @SerializedName("Condition")
             private List<Condition> conditions = null;
 
