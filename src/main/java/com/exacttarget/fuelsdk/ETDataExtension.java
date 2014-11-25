@@ -403,23 +403,26 @@ public class ETDataExtension extends ETSoapObject {
                 response.setMoreResults(true);
             }
 
-            JsonArray collection = jsonObject.get("items").getAsJsonArray();
+            JsonElement items = jsonObject.get("items");
+            if (items != null) {
+                JsonArray collection = items.getAsJsonArray();
 
-            for (JsonElement element : collection) {
-                JsonObject object = element.getAsJsonObject();
-                ETDataExtensionRow row = new ETDataExtensionRow();
-                JsonObject keys = object.get("keys").getAsJsonObject();
-                for (Map.Entry<String, JsonElement> entry : keys.entrySet()) {
-                    row.setColumn(entry.getKey(), entry.getValue().getAsString());
+                for (JsonElement element : collection) {
+                    JsonObject object = element.getAsJsonObject();
+                    ETDataExtensionRow row = new ETDataExtensionRow();
+                    JsonObject keys = object.get("keys").getAsJsonObject();
+                    for (Map.Entry<String, JsonElement> entry : keys.entrySet()) {
+                        row.setColumn(entry.getKey(), entry.getValue().getAsString());
+                    }
+                    JsonObject values = object.get("values").getAsJsonObject();
+                    for (Map.Entry<String, JsonElement> entry : values.entrySet()) {
+                        row.setColumn(entry.getKey(), entry.getValue().getAsString());
+                    }
+                    row.setClient(client);
+                    ETResult<ETDataExtensionRow> result = new ETResult<ETDataExtensionRow>();
+                    result.setObject(row);
+                    response.addResult(result);
                 }
-                JsonObject values = object.get("values").getAsJsonObject();
-                for (Map.Entry<String, JsonElement> entry : values.entrySet()) {
-                    row.setColumn(entry.getKey(), entry.getValue().getAsString());
-                }
-                row.setClient(client);
-                ETResult<ETDataExtensionRow> result = new ETResult<ETDataExtensionRow>();
-                result.setObject(row);
-                response.addResult(result);
             }
         }
 
