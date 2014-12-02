@@ -165,14 +165,14 @@ public class ETDataExtension extends ETSoapObject {
         addColumn(name, type, null, null, null, isPrimaryKey, null, null);
     }
 
-    private void addColumn(String name,
-                           Type type,
-                           Integer length,
-                           Integer precision,
-                           Integer scale,
-                           Boolean isPrimaryKey,
-                           Boolean isRequired,
-                           String defaultValue)
+    public void addColumn(String name,
+                          Type type,
+                          Integer length,
+                          Integer precision,
+                          Integer scale,
+                          Boolean isPrimaryKey,
+                          Boolean isRequired,
+                          String defaultValue)
     {
         ETDataExtensionColumn column = new ETDataExtensionColumn();
         column.setName(name.toLowerCase());
@@ -676,6 +676,22 @@ public class ETDataExtension extends ETSoapObject {
             stringBuilder.append("gte");
             stringBuilder.append("%20");
             stringBuilder.append(filter.getValue());
+            break;
+          case IS_NULL:
+            stringBuilder.append(filter.getProperty());
+            stringBuilder.append("%20");
+            stringBuilder.append("is");
+            stringBuilder.append("%20");
+            stringBuilder.append("null");
+            break;
+          case IS_NOT_NULL:
+            stringBuilder.append(filter.getProperty());
+            stringBuilder.append("%20");
+            stringBuilder.append("is");
+            stringBuilder.append("%20");
+            stringBuilder.append("not");
+            stringBuilder.append("%20");
+            stringBuilder.append("null");
             break;
           case IN:
             stringBuilder.append(filter.getProperty());
