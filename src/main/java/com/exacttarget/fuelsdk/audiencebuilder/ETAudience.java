@@ -198,6 +198,15 @@ public class ETAudience extends ETRestObject {
         audienceBuild.setDataExtensionFolderId(folderId);
     }
 
+    public Integer[] getAppendedAttributeSetIds() {
+        return audienceBuild.getAppendedAttributeSetIds();
+
+    }
+
+    public void setAppendedAttributeSetIds(Integer[] appendedAttributeSetIds) {
+        audienceBuild.setAppendedAttributeSetIds(appendedAttributeSetIds);
+    }
+
     public static Integer retrieveAudienceCount(ETClient client, String filter)
         throws ETSdkException
     {
@@ -435,6 +444,9 @@ public class ETAudience extends ETRestObject {
         @SerializedName("publishedFolderCategoryID")
         private Integer dataExtensionFolderId = null;
         @Expose
+        @SerializedName("appendedAttributeSetIDs")
+        private Integer[] appendedAttributeSetIds = null;
+        @Expose
         private Integer audiencePublishTypeID = 1;
         @Expose
         private Boolean available = true;
@@ -463,6 +475,14 @@ public class ETAudience extends ETRestObject {
 
         public void setDataExtensionFolderId(Integer dataExtensionFolderId) {
             this.dataExtensionFolderId = dataExtensionFolderId;
+        }
+
+        public Integer[] getAppendedAttributeSetIds() {
+            return appendedAttributeSetIds;
+        }
+
+        public void setAppendedAttributeSetIds(Integer[] appendedAttributeSetIds) {
+            this.appendedAttributeSetIds = appendedAttributeSetIds;
         }
 
         public String getTrackingCode() {
