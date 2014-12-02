@@ -58,6 +58,8 @@ public class ETClient {
     private int expiresIn = 0;
     private String refreshToken = null;
 
+    private ETConfiguration configuration = null;
+
     private long tokenExpirationTime = 0;
 
     private ETRestConnection authConnection = null;
@@ -79,6 +81,8 @@ public class ETClient {
     public ETClient(ETConfiguration configuration)
         throws ETSdkException
     {
+        this.configuration = configuration;
+
         if (configuration.getEndpoint() != null
             && !configuration.getEndpoint().equals(""))
         {
@@ -132,21 +136,20 @@ public class ETClient {
         soapConnection = new ETSoapConnection(this, soapEndpoint);
     }
 
-    public String getClientId() {
-        return clientId;
-    }
-
     public String getAccessToken() {
         return accessToken;
     }
 
-    /**
-     * @deprecated
-     * Legacy tokens are no longer supported.
-     */
-    @Deprecated
-    public String getLegacyToken() {
-        return legacyToken;
+    public ETConfiguration getConfiguration() {
+        return configuration;
+    }
+
+    public ETRestConnection getRestConnection() {
+        return restConnection;
+    }
+
+    public ETSoapConnection getSoapConnection() {
+        return soapConnection;
     }
 
     public String refreshToken()
@@ -227,32 +230,6 @@ public class ETClient {
         }
 
         return accessToken;
-    }
-
-    public ETRestConnection getRestConnection() {
-        return restConnection;
-    }
-
-    /**
-     * @deprecated
-     * Use getRestConnection().
-     */
-    @Deprecated
-    public ETRestConnection getRESTConnection() {
-        return getRestConnection();
-    }
-
-    public ETSoapConnection getSoapConnection() {
-        return soapConnection;
-    }
-
-    /**
-     * @deprecated
-     * Use getSoapConnection().
-     */
-    @Deprecated
-    public ETSoapConnection getSOAPConnection() {
-        return getSoapConnection();
     }
 
     @SuppressWarnings("unchecked")
@@ -503,41 +480,6 @@ public class ETClient {
         return delete(response.getObjects());
     }
 
-    /**
-     * @deprecated
-     * Use XXX
-     */
-    @Deprecated
-    public ETDataExtension retrieveDataExtension(com.exacttarget.fuelsdk.filter.ETFilter filter)
-        throws ETSdkException
-    {
-        // XXX
-        return null;
-    }
-
-    /**
-     * @deprecated
-     * Use XXX
-     */
-    @Deprecated
-    public List<ETDataExtension> retrieveDataExtensions()
-        throws ETSdkException
-    {
-        // XXX
-        return null;
-    }
-
-    /**
-     * @deprecated
-     * Use XXX
-     */
-    @Deprecated
-    public List<ETDataExtension> retrieveDataExtensions(ETFilter filter)
-        throws ETSdkException
-    {
-        // XXX
-        return null;
-    }
 
     private <T extends ETObject> Method getMethod(Class<T> type, String name, Class<?>... arguments)
         throws ETSdkException
@@ -572,5 +514,68 @@ public class ETClient {
         }
 
         return response;
+    }
+
+    /**
+     * @deprecated
+     * Legacy tokens are no longer supported.
+     */
+    @Deprecated
+    public String getLegacyToken() {
+        return legacyToken;
+    }
+
+    /**
+     * @deprecated
+     * Use getRestConnection().
+     */
+    @Deprecated
+    public ETRestConnection getRESTConnection() {
+        return getRestConnection();
+    }
+
+    /**
+     * @deprecated
+     * Use getSoapConnection().
+     */
+    @Deprecated
+    public ETSoapConnection getSOAPConnection() {
+        return getSoapConnection();
+    }
+
+    /**
+     * @deprecated
+     * Use XXX
+     */
+    @Deprecated
+    public ETDataExtension retrieveDataExtension(com.exacttarget.fuelsdk.filter.ETFilter filter)
+        throws ETSdkException
+    {
+        // XXX
+        return null;
+    }
+
+    /**
+     * @deprecated
+     * Use XXX
+     */
+    @Deprecated
+    public List<ETDataExtension> retrieveDataExtensions()
+        throws ETSdkException
+    {
+        // XXX
+        return null;
+    }
+
+    /**
+     * @deprecated
+     * Use XXX
+     */
+    @Deprecated
+    public List<ETDataExtension> retrieveDataExtensions(ETFilter filter)
+        throws ETSdkException
+    {
+        // XXX
+        return null;
     }
 }

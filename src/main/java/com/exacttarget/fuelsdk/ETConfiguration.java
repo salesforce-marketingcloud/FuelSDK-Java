@@ -42,6 +42,9 @@ public class ETConfiguration {
     private String soapEndpoint = null;
     private String clientId = null;
     private String clientSecret = null;
+    private Boolean toStringMultiLine = false;
+    private Integer toStringMultiLineIndentAmount = 4;
+    private Boolean toStringSpaceAroundEquals = false;
 
     public ETConfiguration()
         throws ETSdkException
@@ -71,12 +74,24 @@ public class ETConfiguration {
         soapEndpoint = properties.getProperty("soapEndpoint");
         clientId = properties.getProperty("clientId");
         clientSecret = properties.getProperty("clientSecret");
+        toStringMultiLine =
+                Boolean.parseBoolean(properties.getProperty("toStringMultiLine"));
+        toStringMultiLineIndentAmount =
+                Integer.parseInt(properties.getProperty("toStringMultiLineIndentAmount"));
+        toStringSpaceAroundEquals =
+                Boolean.parseBoolean(properties.getProperty("toStringSpaceAroundEquals"));
         if (logger.isTraceEnabled()) {
             logger.trace("endpoint = " + endpoint);
             logger.trace("authEndpoint = " + authEndpoint);
             logger.trace("soapEndpoint = " + soapEndpoint);
             logger.trace("clientId = " + clientId);
             logger.trace("clientSecret = " + clientSecret);
+            logger.trace("toStringMultiLine = "
+                    + toStringMultiLine);
+            logger.trace("toStringMultiLineIndentAmount = "
+                    + toStringMultiLineIndentAmount);
+            logger.trace("toStringSpaceAroundEquals = "
+                    + toStringSpaceAroundEquals);
         }
     }
 
@@ -118,5 +133,29 @@ public class ETConfiguration {
 
     public void setClientSecret(String clientSecret) {
         this.clientSecret = clientSecret;
+    }
+
+    public Boolean getToStringMultiLine() {
+        return toStringMultiLine;
+    }
+
+    public void setToStringMultiLine(Boolean toStringMultiLine) {
+        this.toStringMultiLine = toStringMultiLine;
+    }
+
+    public Integer getToStringMultiLineIndentAmount() {
+        return toStringMultiLineIndentAmount;
+    }
+
+    public void setToStringMultiLineIndentAmount(Integer toStringMultiLineIndentAmount) {
+        this.toStringMultiLineIndentAmount = toStringMultiLineIndentAmount;
+    }
+
+    public Boolean getToStringSpaceAroundEquals() {
+        return toStringSpaceAroundEquals;
+    }
+
+    public void setToStringSpaceAroundEquals(Boolean toStringSpaceAroundEquals) {
+        this.toStringSpaceAroundEquals = toStringSpaceAroundEquals;
     }
 }

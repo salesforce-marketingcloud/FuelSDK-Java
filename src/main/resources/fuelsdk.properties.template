@@ -1,5 +1,25 @@
-endpoint=
-authEndpoint=
-soapEndpoint=
+#
+# OAuth client credentials (obtained from App
+# Center at https://appcenter.exacttarget.com):
+#
+
 clientId=
 clientSecret=
+
+#
+# API endpoint URLs (the defaults should work in most cases:
+#
+
+#endpoint=
+#authEndpoint=
+#soapEndpoint=
+
+#
+# Configuration:
+#
+
+# Pretty printing:
+
+toStringMultiLine=false
+toStringMultiLineIndentAmount=4
+toStringSpaceAroundEquals=false
