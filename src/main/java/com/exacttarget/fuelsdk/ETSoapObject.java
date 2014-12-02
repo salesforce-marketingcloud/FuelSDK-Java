@@ -117,8 +117,6 @@ import com.exacttarget.fuelsdk.internal.UpdateResult;
 public abstract class ETSoapObject extends ETObject {
     private static Logger logger = Logger.getLogger(ETSoapObject.class);
 
-    private ETClient client = null;
-
     @ExternalName("id")
     private String id = null;
     @ExternalName("key")
@@ -131,14 +129,6 @@ public abstract class ETSoapObject extends ETObject {
 
     public ETSoapObject() {
         registerConverters();
-    }
-
-    protected ETClient getClient() {
-        return client;
-    }
-
-    protected void setClient(ETClient client) {
-        this.client = client;
     }
 
     @Override

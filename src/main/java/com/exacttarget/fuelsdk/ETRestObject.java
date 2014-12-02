@@ -48,8 +48,6 @@ import com.exacttarget.fuelsdk.annotations.RestObject;
 public abstract class ETRestObject extends ETObject {
     private static Logger logger = Logger.getLogger(ETRestObject.class);
 
-    private ETClient client = null;
-
     @Expose
     @ExternalName("id")
     private String id = null;
@@ -62,14 +60,6 @@ public abstract class ETRestObject extends ETObject {
     @Expose
     @ExternalName("modifiedDate")
     private Date modifiedDate = null;
-
-    protected ETClient getClient() {
-        return client;
-    }
-
-    protected void setClient(ETClient client) {
-        this.client = client;
-    }
 
     @Override
     public String getId() {
