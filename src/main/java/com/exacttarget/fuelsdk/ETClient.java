@@ -136,6 +136,10 @@ public class ETClient {
         soapConnection = new ETSoapConnection(this, soapEndpoint);
     }
 
+    public String getClientId() {
+        return clientId;
+    }
+
     public String getAccessToken() {
         return accessToken;
     }
