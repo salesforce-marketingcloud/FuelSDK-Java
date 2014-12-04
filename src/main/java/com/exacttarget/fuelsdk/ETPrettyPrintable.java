@@ -53,13 +53,15 @@ public abstract class ETPrettyPrintable {
 
     @Override
     public String toString() {
-        ETConfiguration configuration = client.getConfiguration();
-        toStringMultiLine =
-                configuration.getToStringMultiLine();
-        toStringMultiLineIndentAmount =
-                configuration.getToStringMultiLineIndentAmount();
-        toStringSpaceAroundEquals =
-                configuration.getToStringSpaceAroundEquals();
+        if (client != null) {
+            ETConfiguration configuration = client.getConfiguration();
+            toStringMultiLine =
+                    configuration.getToStringMultiLine();
+            toStringMultiLineIndentAmount =
+                    configuration.getToStringMultiLineIndentAmount();
+            toStringSpaceAroundEquals =
+                    configuration.getToStringSpaceAroundEquals();
+        }
 
         StringBuilder stringBuilder = new StringBuilder();
 
