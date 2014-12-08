@@ -4,19 +4,35 @@
                              http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.exacttarget</groupId>
-  <artifactId>fuelsdk</artifactId>
-  <version>0.999999-pre1.0-2</version>
+  <artifactId>fuel-java</artifactId>
+  <version>0.999999-pre1.0-3</version>
   <packaging>jar</packaging>
-  <name>Fuel Java SDK</name>
+  <name>Fuel Java client library</name>
   <url>http://code.exacttarget.com</url>
   <properties>
     <cxf.version>2.7.5</cxf.version>
   </properties>
   <dependencies>
     <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.2.4</version>
+    </dependency>
+    <dependency>
       <groupId>commons-beanutils</groupId>
       <artifactId>commons-beanutils</artifactId>
       <version>1.8.3</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.11</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>log4j</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.2.17</version>
     </dependency>
     <dependency>
       <groupId>org.apache.cxf</groupId>
@@ -34,29 +50,13 @@
       <version>2.7.0</version>
     </dependency>
     <dependency>
-      <groupId>com.google.code.gson</groupId>
-      <artifactId>gson</artifactId>
-      <version>2.2.4</version>
-    </dependency>
-    <dependency>
       <groupId>org.codehaus.mojo</groupId>
       <artifactId>javacc-maven-plugin</artifactId>
       <version>2.6</version>
     </dependency>
-    <dependency>
-      <groupId>log4j</groupId>
-      <artifactId>log4j</artifactId>
-      <version>1.2.17</version>
-    </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.11</version>
-      <scope>test</scope>
-    </dependency>
   </dependencies>
   <build>
-    <finalName>fuelsdk-${project.version}</finalName>
+    <finalName>fuel-java-${project.version}</finalName>
     <plugins>
       <!-- generate Java source from WSDL -->
       <plugin>
@@ -168,14 +168,23 @@
                 <pluginExecution>
                   <pluginExecutionFilter>
                     <groupId>org.apache.cxf</groupId>
-                    <artifactId>
-                      cxf-codegen-plugin
-                    </artifactId>
-                    <versionRange>
-                      [2.7.5,)
-                    </versionRange>
+                    <artifactId>cxf-codegen-plugin</artifactId>
+                    <versionRange>[2.7.5,)</versionRange>
                     <goals>
                       <goal>wsdl2java</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore></ignore>
+                  </action>
+                </pluginExecution>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <versionRange>[1.8,)</versionRange>
+                    <goals>
+                      <goal>add-source</goal>
                     </goals>
                   </pluginExecutionFilter>
                   <action>
