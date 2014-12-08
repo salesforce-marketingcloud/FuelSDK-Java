@@ -640,42 +640,42 @@ public class ETDataExtension extends ETSoapObject {
             stringBuilder.append("%20");
             stringBuilder.append("eq");
             stringBuilder.append("%20");
-            stringBuilder.append(filter.getValue());
+            stringBuilder.append(toQueryParams(filter.getValue()));
             break;
           case NOT_EQUALS:
             stringBuilder.append(filter.getProperty());
             stringBuilder.append("%20");
             stringBuilder.append("neq");
             stringBuilder.append("%20");
-            stringBuilder.append(filter.getValue());
+            stringBuilder.append(toQueryParams(filter.getValue()));
             break;
           case LESS_THAN:
             stringBuilder.append(filter.getProperty());
             stringBuilder.append("%20");
             stringBuilder.append("lt");
             stringBuilder.append("%20");
-            stringBuilder.append(filter.getValue());
+            stringBuilder.append(toQueryParams(filter.getValue()));
             break;
           case LESS_THAN_OR_EQUALS:
             stringBuilder.append(filter.getProperty());
             stringBuilder.append("%20");
             stringBuilder.append("lte");
             stringBuilder.append("%20");
-            stringBuilder.append(filter.getValue());
+            stringBuilder.append(toQueryParams(filter.getValue()));
             break;
           case GREATER_THAN:
             stringBuilder.append(filter.getProperty());
             stringBuilder.append("%20");
             stringBuilder.append("gt");
             stringBuilder.append("%20");
-            stringBuilder.append(filter.getValue());
+            stringBuilder.append(toQueryParams(filter.getValue()));
             break;
           case GREATER_THAN_OR_EQUALS:
             stringBuilder.append(filter.getProperty());
             stringBuilder.append("%20");
             stringBuilder.append("gte");
             stringBuilder.append("%20");
-            stringBuilder.append(filter.getValue());
+            stringBuilder.append(toQueryParams(filter.getValue()));
             break;
           case IS_NULL:
             stringBuilder.append(filter.getProperty());
@@ -706,7 +706,7 @@ public class ETDataExtension extends ETSoapObject {
                 } else {
                     stringBuilder.append(",");
                 }
-                stringBuilder.append(value);
+                stringBuilder.append(toQueryParams(value));
             }
             stringBuilder.append(")");
             break;
@@ -715,29 +715,58 @@ public class ETDataExtension extends ETSoapObject {
             stringBuilder.append("%20");
             stringBuilder.append("between");
             stringBuilder.append("%20");
-            stringBuilder.append(filter.getValues().get(0));
+            stringBuilder.append(toQueryParams(filter.getValues().get(0)));
             stringBuilder.append("%20");
             stringBuilder.append("and");
             stringBuilder.append("%20");
-            stringBuilder.append(filter.getValues().get(1));
+            stringBuilder.append(toQueryParams(filter.getValues().get(1)));
             break;
           case LIKE:
             stringBuilder.append(filter.getProperty());
             stringBuilder.append("%20");
             stringBuilder.append("like");
             stringBuilder.append("%20");
-            stringBuilder.append("'");
-            try {
-                stringBuilder.append(URLEncoder.encode(filter.getValue(), "UTF-8"));
-            } catch (UnsupportedEncodingException ex) {
-                throw new ETSdkException("error URL encoding " + filter.getValue(), ex);
-            }
-            stringBuilder.append("'");
+            stringBuilder.append(toQueryParams(filter.getValue(), true));
             break;
           default:
             throw new ETSdkException("unsupported operator: " + operator);
         }
 
         return stringBuilder.toString();
+    }
+
+    private static String toQueryParams(String value)
+        throws ETSdkException
+    {
+        return toQueryParams(value, false);
+    }
+
+    private static String toQueryParams(String value, boolean forceQuotes)
+        throws ETSdkException
+    {
+        if (value.equals("")) {
+            forceQuotes = true;
+        }
+        boolean quotes = forceQuotes;
+        if (!forceQuotes) {
+            // needs quotes in the URL if there's whitespace
+            for (int i = 0; i < value.length(); i++) {
+                if (Character.isWhitespace(value.charAt(i))) {
+                    quotes = true;
+                    break;
+                }
+            }
+        }
+        String v = null;
+        if (quotes) {
+            v = "'" + value + "'";
+        } else {
+            v = value.toString();
+        }
+        try {
+            return URLEncoder.encode(v, "UTF-8");
+        } catch (UnsupportedEncodingException ex) {
+            throw new ETSdkException("error URL encoding " + v, ex);
+        }
     }
 }
