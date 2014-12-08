@@ -54,7 +54,6 @@ public class ETClient {
     private String clientSecret = null;
 
     private String accessToken = null;
-    private String legacyToken = null;
     private int expiresIn = 0;
     private String refreshToken = null;
 
@@ -374,6 +373,42 @@ public class ETClient {
         return response;
     }
 
+    public <T extends ETObject> T retrieveObject(Class<T> type,
+                                                 String filter,
+                                                 String... properties)
+        throws ETSdkException
+    {
+        ETResponse<T> response = retrieve(type, filter, properties);
+        return response.getObject();
+    }
+
+    public <T extends ETObject> List<T> retrieveObjects(Class<T> type)
+        throws ETSdkException
+    {
+        ETResponse<T> response = retrieve(type);
+        return response.getObjects();
+    }
+
+    public <T extends ETObject> List<T> retrieveObjects(Class<T> type,
+                                                        String filter,
+                                                        String... properties)
+        throws ETSdkException
+    {
+        ETResponse<T> response = retrieve(type, filter, properties);
+        return response.getObjects();
+    }
+
+    public <T extends ETObject> List<T> retrieveObjects(Class<T> type,
+                                                        String filter,
+                                                        Integer page,
+                                                        Integer pageSize,
+                                                        String... properties)
+        throws ETSdkException
+    {
+        ETResponse<T> response = retrieve(type, filter, page, pageSize, properties);
+        return response.getObjects();
+    }
+
     @SuppressWarnings("unchecked")
     public <T extends ETObject> ETResponse<T> update(T object)
         throws ETSdkException
@@ -484,7 +519,6 @@ public class ETClient {
         return delete(response.getObjects());
     }
 
-
     private <T extends ETObject> Method getMethod(Class<T> type, String name, Class<?>... arguments)
         throws ETSdkException
     {
@@ -526,7 +560,7 @@ public class ETClient {
      */
     @Deprecated
     public String getLegacyToken() {
-        return legacyToken;
+        return null;
     }
 
     /**
@@ -545,41 +579,5 @@ public class ETClient {
     @Deprecated
     public ETSoapConnection getSOAPConnection() {
         return getSoapConnection();
-    }
-
-    /**
-     * @deprecated
-     * Use XXX
-     */
-    @Deprecated
-    public ETDataExtension retrieveDataExtension(com.exacttarget.fuelsdk.filter.ETFilter filter)
-        throws ETSdkException
-    {
-        // XXX
-        return null;
-    }
-
-    /**
-     * @deprecated
-     * Use XXX
-     */
-    @Deprecated
-    public List<ETDataExtension> retrieveDataExtensions()
-        throws ETSdkException
-    {
-        // XXX
-        return null;
-    }
-
-    /**
-     * @deprecated
-     * Use XXX
-     */
-    @Deprecated
-    public List<ETDataExtension> retrieveDataExtensions(ETFilter filter)
-        throws ETSdkException
-    {
-        // XXX
-        return null;
     }
 }
