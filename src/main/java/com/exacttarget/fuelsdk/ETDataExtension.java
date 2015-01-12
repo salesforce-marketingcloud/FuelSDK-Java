@@ -54,10 +54,6 @@ import com.exacttarget.fuelsdk.internal.DeleteResponse;
 import com.exacttarget.fuelsdk.internal.DeleteResult;
 import com.exacttarget.fuelsdk.internal.Soap;
 
-/**
- * The <code>ETDataExtension</code> class represents an ExactTarget
- * data extension.
- */
 @SoapObject(internalType = DataExtension.class, unretrievable = {
     "ID", "Fields"
 })
@@ -745,6 +741,10 @@ public class ETDataExtension extends ETSoapObject {
         throws ETSdkException
     {
         if (value.equals("")) {
+            forceQuotes = true;
+        }
+        // XXX workaround for FUEL-3348--remove after 02
+        if (value.contains("-")) {
             forceQuotes = true;
         }
         boolean quotes = forceQuotes;
