@@ -571,6 +571,48 @@ public class ETDataExtension extends ETSoapObject {
         return delete(rows.toArray(new ETDataExtensionRow[rows.size()]));
     }
 
+
+    public ETResponse<ETDataExtensionRow> export(String filter,
+                                                 String file)
+        throws ETSdkException
+    {
+        return export(ETFilter.parse(filter), file);
+    }
+
+    public ETResponse<ETDataExtensionRow> export(ETFilter filter,
+                                                 String fileName)
+        throws ETSdkException
+    {
+        ETClient client = getClient();
+
+        ETResponse<ETDataExtensionRow> response = new ETResponse<ETDataExtensionRow>();
+
+        String path = "/data/v1/customobjectdata/export";
+
+        StringBuilder stringBuilder = new StringBuilder(path);
+
+        if (filter != null) {
+            stringBuilder.append("?filter=");
+            stringBuilder.append(toQueryParams(filter));
+        }
+
+        path = stringBuilder.toString();
+
+        ETRestConnection connection = client.getRestConnection();
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("customerKey", getKey());
+        jsonObject.addProperty("fileName", fileName);
+
+        connection.post(path, jsonObject); // XXX handle return value
+
+        response.setRequestId(connection.getLastCallRequestId());
+        response.setResponseCode(connection.getLastCallResponseCode());
+        response.setResponseMessage(connection.getLastCallResponseMessage());
+
+        return response;
+    }
+
     public void hydrate()
         throws ETSdkException
     {
