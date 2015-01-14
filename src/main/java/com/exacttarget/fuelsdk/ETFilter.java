@@ -31,7 +31,9 @@ import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ETFilter {
+import com.exacttarget.fuelsdk.annotations.PrettyPrint;
+
+public class ETFilter extends ETPrettyPrintable {
     public enum Operator {
         EQUALS("="),
         NOT_EQUALS("!="),
@@ -67,9 +69,13 @@ public class ETFilter {
         }
     }
 
+    @PrettyPrint
     private String property = null;
+    @PrettyPrint
     private Operator operator = null;
+    @PrettyPrint
     private List<String> values = new ArrayList<String>();
+    @PrettyPrint
     private List<ETFilter> filters = new ArrayList<ETFilter>();
 
     public String getProperty() {

@@ -52,13 +52,6 @@ public class ETCampaignAsset extends ETRestObject {
     public void setName(String name) {
     }
 
-    public String getDescription() {
-        return null;
-    }
-
-    public void setDescription(String description) {
-    }
-
     public String getCampaignId() {
         return campaignId;
     }
