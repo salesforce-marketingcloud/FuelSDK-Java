@@ -36,126 +36,125 @@ import org.apache.log4j.Logger;
 public class ETConfiguration {
     private static Logger logger = Logger.getLogger(ETConfiguration.class);
 
-    private static final String DEFAULT_FILE_NAME = "/fuelsdk.properties";
-    private String endpoint = null;
-    private String authEndpoint = null;
-    private String soapEndpoint = null;
-    private String clientId = null;
-    private String clientSecret = null;
-    private Boolean toStringMultiLine = false;
-    private Integer toStringMultiLineIndentAmount = 4;
-    private Boolean toStringSpaceAroundEquals = false;
+    private Properties properties = new Properties();
 
-    public ETConfiguration()
-        throws ETSdkException
-    {
-        this(DEFAULT_FILE_NAME);
-    }
+    public ETConfiguration() {}
 
     public ETConfiguration(String file)
         throws ETSdkException
     {
-        if (file == null) {
-            file = DEFAULT_FILE_NAME;
-        }
         logger.trace("reading configuration from " + file);
         InputStream is = getClass().getResourceAsStream(file);
         if (is == null) {
             throw new ETSdkException("error opening " + file);
         }
-        Properties properties = new Properties();
         try {
             properties.load(is);
         } catch (IOException ex) {
             throw new ETSdkException("error reading " + file, ex);
         }
-        endpoint = properties.getProperty("endpoint");
-        authEndpoint = properties.getProperty("authEndpoint");
-        soapEndpoint = properties.getProperty("soapEndpoint");
-        clientId = properties.getProperty("clientId");
-        clientSecret = properties.getProperty("clientSecret");
-        toStringMultiLine =
-                Boolean.parseBoolean(properties.getProperty("toStringMultiLine"));
-        toStringMultiLineIndentAmount =
-                Integer.parseInt(properties.getProperty("toStringMultiLineIndentAmount"));
-        toStringSpaceAroundEquals =
-                Boolean.parseBoolean(properties.getProperty("toStringSpaceAroundEquals"));
         if (logger.isTraceEnabled()) {
-            logger.trace("endpoint = " + endpoint);
-            logger.trace("authEndpoint = " + authEndpoint);
-            logger.trace("soapEndpoint = " + soapEndpoint);
-            logger.trace("clientId = " + clientId);
-            logger.trace("clientSecret = " + clientSecret);
-            logger.trace("toStringMultiLine = "
-                    + toStringMultiLine);
-            logger.trace("toStringMultiLineIndentAmount = "
-                    + toStringMultiLineIndentAmount);
-            logger.trace("toStringSpaceAroundEquals = "
-                    + toStringSpaceAroundEquals);
+            for (String property : properties.stringPropertyNames()) {
+                logger.trace("  " + property + " = " + get(property));
+            }
         }
     }
 
-    public String getEndpoint() {
-        return endpoint;
+    public String get(String key) {
+        return properties.getProperty(key);
     }
 
-    public void setEndpoint(String endpoint) {
-        this.endpoint = endpoint;
+    public void set(String key, String value) {
+        properties.setProperty(key, value);
     }
 
-    public String getAuthEndpoint() {
-        return authEndpoint;
-    }
-
-    public void setAuthEndpoint(String authEndpoint) {
-        this.authEndpoint = authEndpoint;
-    }
-
-    public String getSoapEndpoint() {
-        return soapEndpoint;
-    }
-
-    public void setSoapEndpoint(String soapEndpoint) {
-        this.soapEndpoint = soapEndpoint;
-    }
-
+    /**
+     * @deprecated
+     * Use <code>get("clientId")</code>.
+     */
+    @Deprecated
     public String getClientId() {
-        return clientId;
+        return get("clientId");
     }
 
+    /**
+     * @deprecated
+     * Use <code>set("clientId", clientId)</code>.
+     */
+    @Deprecated
     public void setClientId(String clientId) {
-        this.clientId = clientId;
+        set("clientId", clientId);
     }
 
+    /**
+     * @deprecated
+     * Use <code>get("clientSecret")</code>.
+     */
+    @Deprecated
     public String getClientSecret() {
-        return clientSecret;
+        return get("clientSecret");
     }
 
+    /**
+     * @deprecated
+     * Use <code>set("clientSecret", clientSecret)</code>.
+     */
+    @Deprecated
     public void setClientSecret(String clientSecret) {
-        this.clientSecret = clientSecret;
+        set("clientSecret", clientSecret);
     }
 
-    public Boolean getToStringMultiLine() {
-        return toStringMultiLine;
+    /**
+     * @deprecated
+     * Use <code>get("endpoint")</code>.
+     */
+    @Deprecated
+    public String getEndpoint() {
+        return get("endpoint");
     }
 
-    public void setToStringMultiLine(Boolean toStringMultiLine) {
-        this.toStringMultiLine = toStringMultiLine;
+    /**
+     * @deprecated
+     * Use <code>set("endpoint", endpoint)</code>.
+     */
+    @Deprecated
+    public void setEndpoint(String endpoint) {
+        set("endpoint", endpoint);
     }
 
-    public Integer getToStringMultiLineIndentAmount() {
-        return toStringMultiLineIndentAmount;
+    /**
+     * @deprecated
+     * Use <code>get("authEndpoint")</code>.
+     */
+    @Deprecated
+    public String getAuthEndpoint() {
+        return get("authEndpoint");
     }
 
-    public void setToStringMultiLineIndentAmount(Integer toStringMultiLineIndentAmount) {
-        this.toStringMultiLineIndentAmount = toStringMultiLineIndentAmount;
+    /**
+     * @deprecated
+     * Use <code>set("authEndpoint", authEndpoint)</code>.
+     */
+    @Deprecated
+    public void setAuthEndpoint(String authEndpoint) {
+        set("authEndpoint", authEndpoint);
     }
 
-    public Boolean getToStringSpaceAroundEquals() {
-        return toStringSpaceAroundEquals;
+    /**
+     * @deprecated
+     * Use <code>get("soapEndpoint")</code>.
+     */
+    @Deprecated
+    public String getSoapEndpoint() {
+        return get("soapEndpoint");
     }
 
-    public void setToStringSpaceAroundEquals(Boolean toStringSpaceAroundEquals) {
-        this.toStringSpaceAroundEquals = toStringSpaceAroundEquals;
+    /**
+     * @deprecated
+     * Use <code>set("soapEndpoint", soapEndpoint)</code>.
+     */
+    @Deprecated
+    public void setSoapEndpoint(String soapEndpoint) {
+        set("soapEndpoint", soapEndpoint);
     }
 }

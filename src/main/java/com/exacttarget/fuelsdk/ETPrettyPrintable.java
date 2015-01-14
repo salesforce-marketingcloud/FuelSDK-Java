@@ -37,6 +37,7 @@ import com.exacttarget.fuelsdk.annotations.PrettyPrint;
 
 public abstract class ETPrettyPrintable {
     private ETClient client = null;
+    // XXX support configurable values
     private Boolean toStringMultiLine = false;
     private Integer toStringMultiLineIndentAmount = 4;
     private Boolean toStringSpaceAroundEquals = false;
@@ -53,16 +54,6 @@ public abstract class ETPrettyPrintable {
 
     @Override
     public String toString() {
-        if (client != null) {
-            ETConfiguration configuration = client.getConfiguration();
-            toStringMultiLine =
-                    configuration.getToStringMultiLine();
-            toStringMultiLineIndentAmount =
-                    configuration.getToStringMultiLineIndentAmount();
-            toStringSpaceAroundEquals =
-                    configuration.getToStringSpaceAroundEquals();
-        }
-
         StringBuilder stringBuilder = new StringBuilder();
 
         stringBuilder.append(getClass().getName());

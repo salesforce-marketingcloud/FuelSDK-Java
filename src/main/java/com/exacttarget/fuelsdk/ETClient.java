@@ -39,36 +39,41 @@ import com.google.gson.JsonParser;
 import org.apache.log4j.Logger;
 
 public class ETClient {
+    private static Logger logger = Logger.getLogger(ETClient.class);
+
+    private static final String DEFAULT_PROPERTIES_FILE_NAME =
+            "/fuelsdk.properties";
+    private static final String DEFAULT_ENDPOINT =
+            "https://www.exacttargetapis.com";
+    private static final String DEFAULT_AUTH_ENDPOINT =
+            "https://auth.exacttargetapis.com";
     private static final String PATH_REQUESTTOKEN =
             "/v1/requestToken";
     private static final String PATH_ENDPOINTS_SOAP =
             "/platform/v1/endpoints/soap";
 
-    private static Logger logger = Logger.getLogger(ETClient.class);
-
-    // set endpoint and authEndpoint to production default values
-    private String endpoint = "https://www.exacttargetapis.com";
-    private String authEndpoint = "https://auth.exacttargetapis.com";
-    private String soapEndpoint = null;
-    private String clientId = null;
-    private String clientSecret = null;
-
-    private String accessToken = null;
-    private int expiresIn = 0;
-    private String refreshToken = null;
-
     private ETConfiguration configuration = null;
 
-    private long tokenExpirationTime = 0;
+    private String clientId = null;
+    private String clientSecret = null;
+    private String endpoint = null;
+    private String authEndpoint = null;
+    private String soapEndpoint = null;
 
     private ETRestConnection authConnection = null;
     private ETRestConnection restConnection = null;
     private ETSoapConnection soapConnection = null;
 
+    private String accessToken = null;
+    private int expiresIn = 0;
+    private String refreshToken = null;
+
+    private long tokenExpirationTime = 0;
+
     public ETClient()
         throws ETSdkException
     {
-        this(new ETConfiguration());
+        this(DEFAULT_PROPERTIES_FILE_NAME);
     }
 
     public ETClient(String file)
@@ -82,38 +87,22 @@ public class ETClient {
     {
         this.configuration = configuration;
 
-        if (configuration.getEndpoint() != null
-            && !configuration.getEndpoint().equals(""))
-        {
-            endpoint = configuration.getEndpoint();
-        }
-        if (configuration.getAuthEndpoint() != null
-            && !configuration.getAuthEndpoint().equals(""))
-        {
-            authEndpoint = configuration.getAuthEndpoint();
-        }
-        if (configuration.getSoapEndpoint() != null
-            && !configuration.getSoapEndpoint().equals(""))
-        {
-            soapEndpoint = configuration.getSoapEndpoint();
-        }
-
-        clientId = configuration.getClientId();
+        clientId = configuration.get("clientId");
         if (clientId == null || clientId.equals("")) {
             throw new ETSdkException("clientId not specified");
         }
-
-        clientSecret = configuration.getClientSecret();
+        clientSecret = configuration.get("clientSecret");
         if (clientSecret == null || clientSecret.equals("")) {
             throw new ETSdkException("clientSecret not specified");
         }
 
-        if (logger.isTraceEnabled()) {
-            logger.trace("endpoint = " + endpoint);
-            logger.trace("authEndpoint = " + authEndpoint);
-            logger.trace("soapEndpoint = " + soapEndpoint);
-            logger.trace("clientId = " + clientId);
-            logger.trace("clientSecret = " + clientSecret);
+        endpoint = configuration.get("endpoint");
+        if (endpoint == null || endpoint.equals("")) {
+            endpoint = DEFAULT_ENDPOINT;
+        }
+        authEndpoint = configuration.get("authEndpoint");
+        if (authEndpoint == null || authEndpoint.equals("")) {
+            authEndpoint = DEFAULT_AUTH_ENDPOINT;
         }
 
         authConnection = new ETRestConnection(this, authEndpoint, true);
@@ -129,10 +118,18 @@ public class ETClient {
             JsonParser jsonParser = new JsonParser();
             JsonObject jsonObject = jsonParser.parse(response).getAsJsonObject();
             soapEndpoint = jsonObject.get("url").getAsString();
-            logger.debug("SOAP endpoint: " + soapEndpoint);
         }
 
         soapConnection = new ETSoapConnection(this, soapEndpoint);
+
+        if (logger.isTraceEnabled()) {
+            logger.trace("ETClient initialized:");
+            logger.trace("  clientId = " + clientId);
+            logger.trace("  clientSecret = " + clientSecret);
+            logger.trace("  endpoint = " + endpoint);
+            logger.trace("  authEndpoint = " + authEndpoint);
+            logger.trace("  soapEndpoint = " + soapEndpoint);
+        }
     }
 
     public String getClientId() {
