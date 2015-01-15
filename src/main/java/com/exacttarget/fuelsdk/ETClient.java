@@ -235,11 +235,10 @@ public class ETClient {
         return accessToken;
     }
 
-    @SuppressWarnings("unchecked")
-    public <T extends ETObject> ETResponse<T> create(T object)
+    public <T extends ETObject> ETResponse<T> create(T... objects)
         throws ETSdkException
     {
-        return create(Arrays.asList(object));
+        return create(Arrays.asList(objects));
     }
 
     @SuppressWarnings("unchecked")
@@ -473,11 +472,10 @@ public class ETClient {
         return response.getObjects();
     }
 
-    @SuppressWarnings("unchecked")
-    public <T extends ETObject> ETResponse<T> update(T object)
+    public <T extends ETObject> ETResponse<T> update(T... objects)
         throws ETSdkException
     {
-        return update(Arrays.asList(object));
+        return update(Arrays.asList(objects));
     }
 
     @SuppressWarnings("unchecked")
@@ -543,11 +541,10 @@ public class ETClient {
         return update(objects);
     }
 
-    @SuppressWarnings("unchecked")
-    public <T extends ETObject> ETResponse<T> delete(T object)
+    public <T extends ETObject> ETResponse<T> delete(T... objects)
         throws ETSdkException
     {
-        return delete(Arrays.asList(object));
+        return delete(Arrays.asList(objects));
     }
 
     @SuppressWarnings("unchecked")
