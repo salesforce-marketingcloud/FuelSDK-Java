@@ -58,6 +58,8 @@ import com.exacttarget.fuelsdk.internal.Soap;
     "ID", "Fields"
 })
 public class ETDataExtension extends ETSoapObject {
+    private static Logger logger = Logger.getLogger(ETDataExtension.class);
+
     @ExternalName("id")
     @InternalName("objectID")
     private String id = null;
@@ -75,8 +77,6 @@ public class ETDataExtension extends ETSoapObject {
     private Boolean isSendable = null;
     @ExternalName("isTestable")
     private Boolean isTestable = null;
-
-    private static Logger logger = Logger.getLogger(ETDataExtension.class);
 
     private boolean isHydrated = false;
 
@@ -249,6 +249,12 @@ public class ETDataExtension extends ETSoapObject {
     public ETResponse<ETDataExtensionRow> insert(ETDataExtensionRow... rows)
         throws ETSdkException
     {
+        return insert(Arrays.asList(rows));
+    }
+
+    public ETResponse<ETDataExtensionRow> insert(List<ETDataExtensionRow> rows)
+        throws ETSdkException
+    {
         ETClient client = getClient();
 
         for (ETDataExtensionRow row : rows) {
@@ -261,7 +267,7 @@ public class ETDataExtension extends ETSoapObject {
             }
         }
 
-        return client.create(Arrays.asList(rows));
+        return client.create(rows);
     }
 
     public ETResponse<ETDataExtensionRow> select()
@@ -428,6 +434,12 @@ public class ETDataExtension extends ETSoapObject {
     public ETResponse<ETDataExtensionRow> update(ETDataExtensionRow... rows)
         throws ETSdkException
     {
+        return update(Arrays.asList(rows));
+    }
+
+    public ETResponse<ETDataExtensionRow> update(List<ETDataExtensionRow> rows)
+        throws ETSdkException
+    {
         ETClient client = getClient();
 
         for (ETDataExtensionRow row : rows) {
@@ -440,7 +452,7 @@ public class ETDataExtension extends ETSoapObject {
             }
         }
 
-        return client.update(Arrays.asList(rows));
+        return client.update(rows);
     }
 
     public ETResponse<ETDataExtensionRow> update(String filter, String... values)
@@ -467,13 +479,19 @@ public class ETDataExtension extends ETSoapObject {
     public ETResponse<ETDataExtensionRow> delete(ETDataExtensionRow... rows)
         throws ETSdkException
     {
+        return delete(Arrays.asList(rows));
+    }
+
+    public ETResponse<ETDataExtensionRow> delete(List<ETDataExtensionRow> rows)
+        throws ETSdkException
+    {
         ETClient client = getClient();
 
         // XXX much of this is copied and pasted from ETSoapObject.delete
 
         ETResponse<ETDataExtensionRow> response = new ETResponse<ETDataExtensionRow>();
 
-        if (rows == null || rows.length == 0) {
+        if (rows == null || rows.size() == 0) {
             return response;
         }
 
