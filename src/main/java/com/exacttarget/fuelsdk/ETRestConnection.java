@@ -47,11 +47,11 @@ import org.apache.log4j.Logger;
 public class ETRestConnection {
     private static Logger logger = Logger.getLogger(ETRestConnection.class);
 
-    private Gson gson = null;
-
     private ETClient client = null;
 
     private String endpoint = null;
+
+    private Gson gson = null;
 
     private boolean isAuthConnection = false;
 
@@ -81,7 +81,7 @@ public class ETRestConnection {
         GsonBuilder gsonBuilder = new GsonBuilder()
             .excludeFieldsWithoutExposeAnnotation()
             .setDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        if (logger.isTraceEnabled()) {
+        if (logger.isDebugEnabled()) {
             gson = gsonBuilder.setPrettyPrinting().create();
         } else {
             gson = gsonBuilder.create();
@@ -209,7 +209,7 @@ public class ETRestConnection {
     private HttpURLConnection sendRequest(URL url, Method method, String payload)
         throws ETSdkException
     {
-        logger.trace(method + " " + url);
+        logger.debug(method + " " + url);
 
         HttpURLConnection connection = null;
         try {
@@ -240,19 +240,19 @@ public class ETRestConnection {
             connection.setRequestProperty("Authorization", "Bearer " + client.refreshToken());
         }
 
-        if (logger.isTraceEnabled()) {
+        if (logger.isDebugEnabled()) {
             for (String key : connection.getRequestProperties().keySet()) {
-                logger.trace(key + ": " + connection.getRequestProperty(key));
+                logger.debug(key + ": " + connection.getRequestProperty(key));
             }
         }
 
         if (payload != null) {
-            if (logger.isTraceEnabled()) {
+            if (logger.isDebugEnabled()) {
                 JsonParser jsonParser = new JsonParser();
                 String payloadPrettyPrinted =
                         gson.toJson(jsonParser.parse(payload));
                 for (String line : payloadPrettyPrinted.split("\\n")) {
-                    logger.trace(line);
+                    logger.debug(line);
                 }
             }
             try {
@@ -265,7 +265,7 @@ public class ETRestConnection {
         }
 
         try {
-            logger.trace(connection.getResponseCode() + " " + connection.getResponseMessage());
+            logger.debug(connection.getResponseCode() + " " + connection.getResponseMessage());
         } catch (IOException ex) {
             throw new ETSdkException("error getting response code / message", ex);
         }
@@ -306,11 +306,11 @@ public class ETRestConnection {
 
         String response = stringBuilder.toString();
 
-        if (logger.isTraceEnabled()) {
+        if (logger.isDebugEnabled()) {
             JsonParser jsonParser = new JsonParser();
             String responsePrettyPrinted = gson.toJson(jsonParser.parse(response));
             for (String line : responsePrettyPrinted.split("\\n")) {
-                logger.trace(line);
+                logger.debug(line);
             }
         }
 
