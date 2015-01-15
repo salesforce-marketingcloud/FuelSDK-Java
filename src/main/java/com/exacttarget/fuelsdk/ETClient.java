@@ -273,14 +273,6 @@ public class ETClient {
     }
 
     public <T extends ETObject> ETResponse<T> retrieve(Class<T> type,
-                                                       ETFilter filter)
-        throws ETSdkException
-    {
-        // new String[0] = empty properties
-        return retrieve(type, filter, null, null, new String[0]);
-    }
-
-    public <T extends ETObject> ETResponse<T> retrieve(Class<T> type,
                                                        ETFilter filter,
                                                        String... properties)
         throws ETSdkException
@@ -381,15 +373,6 @@ public class ETClient {
     }
 
     public <T extends ETObject> T retrieveObject(Class<T> type,
-                                                 ETFilter filter)
-        throws ETSdkException
-    {
-        // new String[0] = empty properties
-        ETResponse<T> response = retrieve(type, filter, new String[0]);
-        return response.getObject();
-    }
-
-    public <T extends ETObject> T retrieveObject(Class<T> type,
                                                  ETFilter filter,
                                                  String... properties)
         throws ETSdkException
@@ -411,14 +394,6 @@ public class ETClient {
         throws ETSdkException
     {
         ETResponse<T> response = retrieve(type);
-        return response.getObjects();
-    }
-
-    public <T extends ETObject> List<T> retrieveObjects(Class<T> type,
-                                                        ETFilter filter)
-        throws ETSdkException
-    {
-        ETResponse<T> response = retrieve(type, filter);
         return response.getObjects();
     }
 
