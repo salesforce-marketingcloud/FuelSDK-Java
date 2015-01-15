@@ -277,6 +277,21 @@ public class ETDataExtension extends ETSoapObject {
         return select((ETFilter) null, null, null, new String[0]);
     }
 
+    public ETResponse<ETDataExtensionRow> select(ETFilter filter)
+        throws ETSdkException
+    {
+        // new String[0] = empty properties
+        return select(filter, null, null, new String[0]);
+    }
+
+    public ETResponse<ETDataExtensionRow> select(ETFilter filter,
+                                                 String... properties)
+        throws ETSdkException
+    {
+        // new String[0] = empty properties
+        return select(filter, null, null, properties);
+    }
+
     public ETResponse<ETDataExtensionRow> select(String filter,
                                                  String... columns)
         throws ETSdkException
@@ -314,15 +329,6 @@ public class ETDataExtension extends ETSoapObject {
         throws ETSdkException
     {
         return select((ETFilter) null, page, pageSize, columns);
-    }
-
-    public ETResponse<ETDataExtensionRow> select(String filter,
-                                                 Integer page,
-                                                 Integer pageSize,
-                                                 String... columns)
-        throws ETSdkException
-    {
-        return select(ETFilter.parse(filter), page, pageSize, columns);
     }
 
     public ETResponse<ETDataExtensionRow> select(ETFilter filter,
@@ -429,6 +435,15 @@ public class ETDataExtension extends ETSoapObject {
         }
 
         return response;
+    }
+
+    public ETResponse<ETDataExtensionRow> select(String filter,
+                                                 Integer page,
+                                                 Integer pageSize,
+                                                 String... columns)
+        throws ETSdkException
+    {
+        return select(ETFilter.parse(filter), page, pageSize, columns);
     }
 
     public ETResponse<ETDataExtensionRow> update(ETDataExtensionRow... rows)
