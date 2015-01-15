@@ -107,13 +107,16 @@ public class ETClient {
 
         authConnection = new ETRestConnection(this, authEndpoint, true);
 
+        refreshToken();
+
         restConnection = new ETRestConnection(this, endpoint);
 
-        //
-        // If a SOAP endpoint isn't specified automatically determine it:
-        //
+        soapEndpoint = configuration.get("soapEndpoint");
+        if (soapEndpoint == null || soapEndpoint.equals("")) {
+            //
+            // If a SOAP endpoint isn't specified automatically determine it:
+            //
 
-        if (soapEndpoint == null) {
             String response = restConnection.get(PATH_ENDPOINTS_SOAP);
             JsonParser jsonParser = new JsonParser();
             JsonObject jsonObject = jsonParser.parse(response).getAsJsonObject();
