@@ -131,20 +131,6 @@ public class ETDataExtension extends ETSoapObject {
         return null;
     }
 
-    public ETDataExtensionColumn getPrimaryKeyColumn()
-        throws ETSdkException
-    {
-        if (!isHydrated) {
-            hydrate();
-        }
-        for (ETDataExtensionColumn column : columns) {
-            if (column.getIsPrimaryKey()) {
-                return column;
-            }
-        }
-        return null;
-    }
-
     public void addColumn(String name) {
         addColumn(name, null, null, null, null, null, null, null);
     }
@@ -255,8 +241,6 @@ public class ETDataExtension extends ETSoapObject {
     public ETResponse<ETDataExtensionRow> insert(List<ETDataExtensionRow> rows)
         throws ETSdkException
     {
-        ETClient client = getClient();
-
         for (ETDataExtensionRow row : rows) {
             //
             // Set the data extension name if it isn't already set:
@@ -267,29 +251,32 @@ public class ETDataExtension extends ETSoapObject {
             }
         }
 
-        return client.create(rows);
+        return getClient().create(rows);
     }
 
     public ETResponse<ETDataExtensionRow> select()
         throws ETSdkException
     {
-        // new String[0] = empty properties
-        return select((ETFilter) null, null, null, new String[0]);
+        return select((ETFilter) null, getColumnNames());
     }
 
     public ETResponse<ETDataExtensionRow> select(ETFilter filter)
         throws ETSdkException
     {
-        // new String[0] = empty properties
-        return select(filter, null, null, new String[0]);
+        return select(filter, getColumnNames());
     }
 
     public ETResponse<ETDataExtensionRow> select(ETFilter filter,
-                                                 String... properties)
+                                                 String... columns)
         throws ETSdkException
     {
-        // new String[0] = empty properties
-        return select(filter, null, null, properties);
+        return retrieve(getClient(),
+                        "DataExtensionObject[" + name + "]",
+                        filter,
+                        null,
+                        null,
+                        ETDataExtensionRow.class,
+                        columns);
     }
 
     public ETResponse<ETDataExtensionRow> select(String filter,
@@ -297,6 +284,7 @@ public class ETDataExtension extends ETSoapObject {
         throws ETSdkException
     {
         // see also: ETClient.retrieve(type, filter, properties)
+        // XXX it would be very nice if this could use this code
         ETFilter f = null;
         String[] c = columns;
         try {
@@ -320,7 +308,16 @@ public class ETDataExtension extends ETSoapObject {
                 throw ex;
             }
         }
-        return select(f, null, null, c);
+        if (c.length == 0) {
+            c = getColumnNames();
+        }
+        return retrieve(getClient(),
+                        "DataExtensionObject[" + name + "]",
+                        f,
+                        null,
+                        null,
+                        ETDataExtensionRow.class,
+                        c);
     }
 
     public ETResponse<ETDataExtensionRow> select(Integer page,
@@ -455,8 +452,6 @@ public class ETDataExtension extends ETSoapObject {
     public ETResponse<ETDataExtensionRow> update(List<ETDataExtensionRow> rows)
         throws ETSdkException
     {
-        ETClient client = getClient();
-
         for (ETDataExtensionRow row : rows) {
             //
             // Set the data extension name if it isn't already set:
@@ -467,7 +462,7 @@ public class ETDataExtension extends ETSoapObject {
             }
         }
 
-        return client.update(rows);
+        return getClient().update(rows);
     }
 
     public ETResponse<ETDataExtensionRow> update(String filter, String... values)
@@ -535,7 +530,7 @@ public class ETDataExtension extends ETSoapObject {
 
             //
             // We hand construct this one, since all we need
-            // to pass in is the primary key, and we pass it
+            // to pass in is the primary keys, and we pass them
             // in to DeleteRequest differently (in the Keys
             // property) than we received it from
             // RetrieveRequest (in the Properties property):
@@ -543,11 +538,15 @@ public class ETDataExtension extends ETSoapObject {
 
             DataExtensionObject internalRow = new DataExtensionObject();
             DataExtensionObject.Keys keys = new DataExtensionObject.Keys();
-            ETDataExtensionColumn primaryKeyColumn = getPrimaryKeyColumn();
-            APIProperty property = new APIProperty();
-            property.setName(primaryKeyColumn.getName());
-            property.setValue(row.getColumn(property.getName()));
-            keys.getKey().add(property);
+            hydrate();
+            for (ETDataExtensionColumn column : columns) {
+                if (column.getIsPrimaryKey()) {
+                    APIProperty property = new APIProperty();
+                    property.setName(column.getName());
+                    property.setValue(row.getColumn(property.getName()));
+                    keys.getKey().add(property);
+                }
+            }
             internalRow.setName(name);
             internalRow.setKeys(keys);
 
@@ -649,6 +648,10 @@ public class ETDataExtension extends ETSoapObject {
     public void hydrate()
         throws ETSdkException
     {
+        if (isHydrated) {
+            return;
+        }
+
         ETClient client = getClient();
 
         //
@@ -843,5 +846,17 @@ public class ETDataExtension extends ETSoapObject {
         } catch (UnsupportedEncodingException ex) {
             throw new ETSdkException("error URL encoding " + v, ex);
         }
+    }
+
+    private String[] getColumnNames()
+        throws ETSdkException
+    {
+        hydrate();
+        String c[] = new String[columns.size()];
+        int i = 0;
+        for (ETDataExtensionColumn column : columns) {
+            c[i++] = column.getName();
+        }
+        return c;
     }
 }

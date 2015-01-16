@@ -307,6 +307,26 @@ public abstract class ETSoapObject extends ETObject {
                                                                      String... properties)
         throws ETSdkException
     {
+        return retrieve(client, null, filter, page, pageSize, type, properties);
+    }
+
+    //
+    // ETSoapObject has an additional retrieve method that takes
+    // the SOAP object name. In most cases, the SOAP object name
+    // is the same as the internal class name, but in a few cases,
+    // it is not (e.g., DataExtensionObjects require the name
+    // of the data extension in brackets: DataExtensionObject[foo]).
+    //
+
+    protected static <T extends ETSoapObject> ETResponse<T> retrieve(ETClient client,
+                                                                     String soapObjectType,
+                                                                     ETFilter filter,
+                                                                     Integer page,
+                                                                     Integer pageSize,
+                                                                     Class<T> type,
+                                                                     String... properties)
+        throws ETSdkException
+    {
         if ((page != null) || (pageSize != null)) {
             throw new ETSdkException("SOAP objects do not support paginated retrieves");
         }
@@ -381,7 +401,13 @@ public abstract class ETSoapObject extends ETObject {
         Soap soap = connection.getSoap();
 
         RetrieveRequest retrieveRequest = new RetrieveRequest();
-        retrieveRequest.setObjectType(internalType.getSimpleName());
+        // if soapObjectType is specified, use it; otherwise, default
+        // to the name of the internal class representing the object:
+        if (soapObjectType != null) {
+            retrieveRequest.setObjectType(soapObjectType);
+        } else {
+            retrieveRequest.setObjectType(internalType.getSimpleName());
+        }
         retrieveRequest.getProperties().addAll(internalProperties);
         if (filter != null) {
             //
