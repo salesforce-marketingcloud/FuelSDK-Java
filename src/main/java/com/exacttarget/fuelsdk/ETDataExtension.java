@@ -596,7 +596,12 @@ public class ETDataExtension extends ETSoapObject {
     {
         // XXX optimize
 
-        ETResponse<ETDataExtensionRow> response = select(filter);
+        // XXX use the REST-based method for now since the
+        // SOAP-based methods are returning case-sensitive
+        // column names
+
+        //ETResponse<ETDataExtensionRow> response = select(filter);
+        ETResponse<ETDataExtensionRow> response = select(filter, null, null, new String[0]);
 
         List<ETDataExtensionRow> rows = response.getObjects();
 
