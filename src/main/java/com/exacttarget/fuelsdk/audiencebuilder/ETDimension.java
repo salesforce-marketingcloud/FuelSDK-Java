@@ -44,7 +44,7 @@ import com.exacttarget.fuelsdk.annotations.RestObject;
 public class ETDimension extends ETRestObject {
     @Expose @SerializedName("dimensionID")
     @ExternalName("id")
-    String id = null;
+    private String id = null;
     @Expose
     @ExternalName("name")
     private String name = null;
@@ -73,12 +73,18 @@ public class ETDimension extends ETRestObject {
     }
 
     @Override
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Override
     public String getName() {
         return name;
     }
 
     @Override
     public void setName(String name) {
+        this.name = name;
     }
 
     public Integer getType() {

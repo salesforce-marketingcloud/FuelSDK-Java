@@ -95,6 +95,11 @@ public class ETAudience extends ETRestObject {
     }
 
     @Override
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Override
     public String getName() {
         return name;
     }
