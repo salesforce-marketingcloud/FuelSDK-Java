@@ -27,7 +27,6 @@
 
 package com.exacttarget.fuelsdk.audiencebuilder;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.annotations.Expose;
