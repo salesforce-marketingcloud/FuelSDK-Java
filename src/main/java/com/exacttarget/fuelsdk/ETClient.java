@@ -204,7 +204,7 @@ public class ETClient {
 
         ETRestConnection.Response response = authConnection.post(PATH_REQUESTTOKEN, requestPayload);
 
-        if (response.getResponseCode() != HttpURLConnection.HTTP_CREATED) {
+        if (response.getResponseCode() != HttpURLConnection.HTTP_OK) {
             throw new ETSdkException("error obtaining access token "
                                      + "("
                                      + response.getResponseCode()
