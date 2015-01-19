@@ -219,9 +219,11 @@ public class ETAudience extends ETRestObject {
         request.addFilterDefinition(toFilterDefinition(ETFilter.parse(filter)));
         ETRestConnection connection = client.getRestConnection();
         Gson gson = new Gson();
-        String json = connection.post("/internal/v1/AudienceBuilder/AudienceCounts",
-                                      gson.toJson(request));
-        AudienceCountsResponse response = gson.fromJson(json, AudienceCountsResponse.class);
+        String requestPayload = gson.toJson(request);
+        ETRestConnection.Response r = connection.post("/internal/v1/AudienceBuilder/AudienceCounts",
+                                                      requestPayload);
+        String responsePayload = r.getResponsePayload();
+        AudienceCountsResponse response = gson.fromJson(responsePayload, AudienceCountsResponse.class);
         return response.getCount();
     }
 
@@ -232,9 +234,11 @@ public class ETAudience extends ETRestObject {
         request.setId(audienceBuilds.get(0).getId());
         ETRestConnection connection = getClient().getRestConnection();
         Gson gson = new Gson();
-        String json = connection.post("/internal/v1/AudienceBuilder/Publish",
-                                      gson.toJson(request));
-        publishResponse = gson.fromJson(json, PublishResponse.class);
+        String requestPayload = gson.toJson(request);
+        ETRestConnection.Response r = connection.post("/internal/v1/AudienceBuilder/Publish",
+                                                      requestPayload);
+        String responsePayload = r.getResponsePayload();
+        publishResponse = gson.fromJson(responsePayload, PublishResponse.class);
     }
 
     public void updatePublishStatus()
@@ -242,8 +246,9 @@ public class ETAudience extends ETRestObject {
     {
         ETRestConnection connection = getClient().getRestConnection();
         Gson gson = new Gson();
-        String json = connection.get("/internal/v1/AudienceBuilder/Publish/" + publishResponse.getId());
-        publishResponse = gson.fromJson(json, PublishResponse.class);
+        ETRestConnection.Response r = connection.get("/internal/v1/AudienceBuilder/Publish/" + publishResponse.getId());
+        String responsePayload = r.getResponsePayload();
+        publishResponse = gson.fromJson(responsePayload, PublishResponse.class);
     }
 
     public static FilterDefinition toFilterDefinition(ETFilter filter)
