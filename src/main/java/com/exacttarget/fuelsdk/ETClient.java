@@ -158,7 +158,7 @@ public class ETClient {
         return soapConnection;
     }
 
-    public String refreshToken()
+    public synchronized String refreshToken()
         throws ETSdkException
     {
         if (tokenExpirationTime == 0) {
