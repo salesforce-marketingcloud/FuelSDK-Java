@@ -46,6 +46,20 @@ public class ETResponse<T extends ETObject> extends ETPrettyPrintable {
     @PrettyPrint
     private Integer totalCount = null;
 
+    public ETResult.Status getStatus() {
+        if (batchResult != null) {
+            return batchResult.getStatus();
+        }
+        return null;
+    }
+
+    public void setStatus(ETResult.Status status) {
+        if (batchResult == null) {
+            batchResult = new ETResult<T>();
+        }
+        batchResult.setStatus(status);
+    }
+
     public String getRequestId() {
         if (batchResult != null) {
             return batchResult.getRequestId();
@@ -179,26 +193,5 @@ public class ETResponse<T extends ETObject> extends ETPrettyPrintable {
     @Deprecated
     public void setStatusMessage(String statusMessage) {
         setResponseMessage(statusMessage);
-    }
-
-    /**
-     * @deprecated
-     * Use <code>getResponseCode</code>.
-     */
-    @Deprecated
-    public boolean getStatus() {
-        if (getStatusCode().equals("OK")) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * @deprecated
-     * Use <code>getResponseMessage</code>.
-     */
-    @Deprecated
-    public String getMessage() {
-        return getStatusMessage();
     }
 }

@@ -249,6 +249,11 @@ public abstract class ETSoapObject extends ETObject {
         }
 
         response.setRequestId(createResponse.getRequestID());
+        if (createResponse.getOverallStatus().equals("OK")) {
+            response.setStatus(ETResult.Status.OK);
+        } else if (createResponse.getOverallStatus().equals("Error")) {
+            response.setStatus(ETResult.Status.ERROR);
+        }
         response.setResponseCode(createResponse.getOverallStatus());
         response.setResponseMessage(createResponse.getOverallStatus());
         for (CreateResult createResult : createResponse.getResults()) {
@@ -287,6 +292,11 @@ public abstract class ETSoapObject extends ETObject {
             //
 
             ETResult<T> result = new ETResult<T>();
+            if (createResult.getStatusCode().equals("OK")) {
+                result.setStatus(ETResult.Status.OK);
+            } else if (createResult.getStatusCode().equals("Error")) {
+                result.setStatus(ETResult.Status.ERROR);
+            }
             result.setResponseCode(createResult.getStatusCode());
             result.setResponseMessage(createResult.getStatusMessage());
             result.setErrorCode(createResult.getErrorCode());
@@ -467,6 +477,11 @@ public abstract class ETSoapObject extends ETObject {
         }
 
         response.setRequestId(retrieveResponseMsg.getRequestID());
+        if (retrieveResponseMsg.getOverallStatus().equals("OK")) {
+            response.setStatus(ETResult.Status.OK);
+        } else if (retrieveResponseMsg.getOverallStatus().equals("Error")) {
+            response.setStatus(ETResult.Status.ERROR);
+        }
         response.setResponseCode(retrieveResponseMsg.getOverallStatus());
         response.setResponseMessage(retrieveResponseMsg.getOverallStatus());
         for (APIObject internalObject : retrieveResponseMsg.getResults()) {
@@ -566,6 +581,11 @@ public abstract class ETSoapObject extends ETObject {
         }
 
         response.setRequestId(updateResponse.getRequestID());
+        if (updateResponse.getOverallStatus().equals("OK")) {
+            response.setStatus(ETResult.Status.OK);
+        } else if (updateResponse.getOverallStatus().equals("Error")) {
+            response.setStatus(ETResult.Status.ERROR);
+        }
         response.setResponseCode(updateResponse.getOverallStatus());
         response.setResponseMessage(updateResponse.getOverallStatus());
         for (UpdateResult updateResult : updateResponse.getResults()) {
@@ -603,6 +623,11 @@ public abstract class ETSoapObject extends ETObject {
             //
 
             ETResult<T> result = new ETResult<T>();
+            if (updateResult.getStatusCode().equals("OK")) {
+                result.setStatus(ETResult.Status.OK);
+            } else if (updateResult.getStatusCode().equals("Error")) {
+                result.setStatus(ETResult.Status.ERROR);
+            }
             result.setResponseCode(updateResult.getStatusCode());
             result.setResponseMessage(updateResult.getStatusMessage());
             result.setErrorCode(updateResult.getErrorCode());
@@ -691,10 +716,20 @@ public abstract class ETSoapObject extends ETObject {
         }
 
         response.setRequestId(deleteResponse.getRequestID());
+        if (deleteResponse.getOverallStatus().equals("OK")) {
+            response.setStatus(ETResult.Status.OK);
+        } else if (deleteResponse.getOverallStatus().equals("Error")) {
+            response.setStatus(ETResult.Status.ERROR);
+        }
         response.setResponseCode(deleteResponse.getOverallStatus());
         response.setResponseMessage(deleteResponse.getOverallStatus());
         for (DeleteResult deleteResult : deleteResponse.getResults()) {
             ETResult<T> result = new ETResult<T>();
+            if (deleteResult.getStatusCode().equals("OK")) {
+                result.setStatus(ETResult.Status.OK);
+            } else if (deleteResult.getStatusCode().equals("Error")) {
+                result.setStatus(ETResult.Status.ERROR);
+            }
             result.setResponseCode(deleteResult.getStatusCode());
             result.setResponseMessage(deleteResult.getStatusMessage());
             result.setErrorCode(deleteResult.getErrorCode());

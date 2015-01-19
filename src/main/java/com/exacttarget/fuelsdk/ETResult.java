@@ -30,8 +30,14 @@ package com.exacttarget.fuelsdk;
 import com.exacttarget.fuelsdk.annotations.PrettyPrint;
 
 public class ETResult<T extends ETObject> extends ETPrettyPrintable {
+    public enum Status {
+        OK, ERROR
+    }
+
     @PrettyPrint
     private String requestId = null;
+    @PrettyPrint
+    private Status status = null;
     @PrettyPrint
     private String responseCode = null;
     @PrettyPrint
@@ -40,6 +46,14 @@ public class ETResult<T extends ETObject> extends ETPrettyPrintable {
     private Integer errorCode = null;
     @PrettyPrint
     private T object = null;
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 
     public String getRequestId() {
         return requestId;

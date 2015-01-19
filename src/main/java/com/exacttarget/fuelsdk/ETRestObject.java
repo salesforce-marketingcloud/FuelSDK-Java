@@ -174,6 +174,12 @@ public abstract class ETRestObject extends ETObject {
 
             ETResult<T> result = new ETResult<T>();
             result.setRequestId(connection.getLastCallRequestId());
+            if (connection.getLastCallResponseCode().startsWith("2")) {
+                result.setStatus(ETResult.Status.OK);
+            } else if (connection.getLastCallResponseCode().startsWith("4") ||
+                       connection.getLastCallResponseCode().startsWith("5")) {
+                result.setStatus(ETResult.Status.ERROR);
+            }
             result.setResponseCode(connection.getLastCallResponseCode());
             result.setResponseMessage(connection.getLastCallResponseMessage());
             @SuppressWarnings("unchecked")
@@ -256,6 +262,12 @@ public abstract class ETRestObject extends ETObject {
         JsonObject jsonObject = retrieve(client, path, page, pageSize, properties);
 
         response.setRequestId(connection.getLastCallRequestId());
+        if (connection.getLastCallResponseCode().startsWith("2")) {
+            response.setStatus(ETResult.Status.OK);
+        } else if (connection.getLastCallResponseCode().startsWith("4") ||
+                   connection.getLastCallResponseCode().startsWith("5")) {
+            response.setStatus(ETResult.Status.ERROR);
+        }
         response.setResponseCode(connection.getLastCallResponseCode());
         response.setResponseMessage(connection.getLastCallResponseMessage());
 
@@ -474,6 +486,12 @@ public abstract class ETRestObject extends ETObject {
 
             ETResult<T> result = new ETResult<T>();
             result.setRequestId(connection.getLastCallRequestId());
+            if (connection.getLastCallResponseCode().startsWith("2")) {
+                result.setStatus(ETResult.Status.OK);
+            } else if (connection.getLastCallResponseCode().startsWith("4") ||
+                       connection.getLastCallResponseCode().startsWith("5")) {
+                result.setStatus(ETResult.Status.ERROR);
+            }
             result.setResponseCode(connection.getLastCallResponseCode());
             result.setResponseMessage(connection.getLastCallResponseMessage());
             @SuppressWarnings("unchecked")
@@ -559,6 +577,12 @@ public abstract class ETRestObject extends ETObject {
 
             ETResult<T> result = new ETResult<T>();
             result.setRequestId(connection.getLastCallRequestId());
+            if (connection.getLastCallResponseCode().startsWith("2")) {
+                result.setStatus(ETResult.Status.OK);
+            } else if (connection.getLastCallResponseCode().startsWith("4") ||
+                       connection.getLastCallResponseCode().startsWith("5")) {
+                result.setStatus(ETResult.Status.ERROR);
+            }
             result.setResponseCode(connection.getLastCallResponseCode());
             result.setResponseMessage(connection.getLastCallResponseMessage());
 
