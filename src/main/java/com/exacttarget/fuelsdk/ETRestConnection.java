@@ -39,7 +39,6 @@ import java.net.URL;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import org.apache.log4j.Logger;
@@ -54,10 +53,6 @@ public class ETRestConnection {
     private Gson gson = null;
 
     private boolean isAuthConnection = false;
-
-    private String lastCallRequestId = null;
-    private String lastCallResponseCode = null;
-    private String lastCallResponseMessage = null;
 
     private enum Method {
         GET, POST, PATCH, DELETE
@@ -88,100 +83,76 @@ public class ETRestConnection {
         }
     }
 
-    public String get(String path)
+    public Response get(String path)
         throws ETSdkException
     {
+        Response response = new Response();
         HttpURLConnection connection = sendRequest(path, Method.GET);
-        String response = receiveResponse(connection);
-        lastCallRequestId = connection.getHeaderField("X-Mashery-Message-ID");
+        String json = receiveResponse(connection);
+        response.setRequestId(connection.getHeaderField("X-Mashery-Message-ID"));
         try {
-            lastCallResponseCode = Integer.toString(connection.getResponseCode());
-            lastCallResponseMessage = connection.getResponseMessage();
+            response.setResponseCode(connection.getResponseCode());
+            response.setResponseMessage(connection.getResponseMessage());
         } catch (IOException ex) {
             throw new ETSdkException(ex);
         }
+        response.setResponsePayload(json);
         connection.disconnect();
         return response;
     }
 
-    public String post(String path, String payload)
+    public Response post(String path, String payload)
         throws ETSdkException
     {
+        Response response = new Response();
         HttpURLConnection connection = sendRequest(path, Method.POST, payload);
-        String response = receiveResponse(connection);
-        lastCallRequestId = connection.getHeaderField("X-Mashery-Message-ID");
+        String json = receiveResponse(connection);
+        response.setRequestId(connection.getHeaderField("X-Mashery-Message-ID"));
         try {
-            lastCallResponseCode = Integer.toString(connection.getResponseCode());
-            lastCallResponseMessage = connection.getResponseMessage();
+            response.setResponseCode(connection.getResponseCode());
+            response.setResponseMessage(connection.getResponseMessage());
         } catch (IOException ex) {
             throw new ETSdkException(ex);
         }
+        response.setResponsePayload(json);
         connection.disconnect();
         return response;
     }
 
-    public String patch(String path, String payload)
+    public Response patch(String path, String payload)
         throws ETSdkException
     {
+        Response response = new Response();
         HttpURLConnection connection = sendRequest(path, Method.PATCH, payload);
-        String response = receiveResponse(connection);
-        lastCallRequestId = connection.getHeaderField("X-Mashery-Message-ID");
+        String json = receiveResponse(connection);
+        response.setRequestId(connection.getHeaderField("X-Mashery-Message-ID"));
         try {
-            lastCallResponseCode = Integer.toString(connection.getResponseCode());
-            lastCallResponseMessage = connection.getResponseMessage();
+            response.setResponseCode(connection.getResponseCode());
+            response.setResponseMessage(connection.getResponseMessage());
         } catch (IOException ex) {
             throw new ETSdkException(ex);
         }
+        response.setResponsePayload(json);
         connection.disconnect();
         return response;
     }
 
-    public String delete(String path)
+    public Response delete(String path)
         throws ETSdkException
     {
+        Response response = new Response();
         HttpURLConnection connection = sendRequest(path, Method.DELETE);
-        String response = receiveResponse(connection);
-        lastCallRequestId = connection.getHeaderField("X-Mashery-Message-ID");
+        String json = receiveResponse(connection);
+        response.setRequestId(connection.getHeaderField("X-Mashery-Message-ID"));
         try {
-            lastCallResponseCode = Integer.toString(connection.getResponseCode());
-            lastCallResponseMessage = connection.getResponseMessage();
+            response.setResponseCode(connection.getResponseCode());
+            response.setResponseMessage(connection.getResponseMessage());
         } catch (IOException ex) {
             throw new ETSdkException(ex);
         }
+        response.setResponsePayload(json);
         connection.disconnect();
         return response;
-    }
-
-    public String post(String path, JsonObject jsonObject)
-        throws ETSdkException
-    {
-        return post(path, jsonObject.toString());
-    }
-
-    public String patch(String path, JsonObject jsonObject)
-        throws ETSdkException
-    {
-        return patch(path, jsonObject.toString());
-    }
-
-    public String getEndpoint() {
-        return endpoint;
-    }
-
-    public boolean isAuthConnection() {
-        return isAuthConnection;
-    }
-
-    public String getLastCallRequestId() {
-        return lastCallRequestId;
-    }
-
-    public String getLastCallResponseCode() {
-        return lastCallResponseCode;
-    }
-
-    public String getLastCallResponseMessage() {
-        return lastCallResponseMessage;
     }
 
     protected Gson getGson() {
@@ -315,5 +286,44 @@ public class ETRestConnection {
         }
 
         return response;
+    }
+
+    public class Response {
+        private String requestId = null;
+        private Integer responseCode = null;
+        private String responseMessage = null;
+        private String responsePayload = null;
+
+        public String getRequestId() {
+            return requestId;
+        }
+
+        public void setRequestId(String requestId) {
+            this.requestId = requestId;
+        }
+
+        public Integer getResponseCode() {
+            return responseCode;
+        }
+
+        public void setResponseCode(Integer responseCode) {
+            this.responseCode = responseCode;
+        }
+
+        public String getResponseMessage() {
+            return responseMessage;
+        }
+
+        public void setResponseMessage(String responseMessage) {
+            this.responseMessage = responseMessage;
+        }
+
+        public String getResponsePayload() {
+            return responsePayload;
+        }
+
+        public void setResponsePayload(String responsePayload) {
+            this.responsePayload = responsePayload;
+        }
     }
 }

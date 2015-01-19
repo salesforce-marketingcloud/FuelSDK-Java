@@ -33,6 +33,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -107,7 +108,7 @@ public class ETClient {
 
         authConnection = new ETRestConnection(this, authEndpoint, true);
 
-        refreshToken();
+//        refreshToken();
 
         restConnection = new ETRestConnection(this, endpoint);
 
@@ -117,9 +118,10 @@ public class ETClient {
             // If a SOAP endpoint isn't specified automatically determine it:
             //
 
-            String response = restConnection.get(PATH_ENDPOINTS_SOAP);
+            ETRestConnection.Response response = restConnection.get(PATH_ENDPOINTS_SOAP);
+            String responsePayload = response.getResponsePayload();
             JsonParser jsonParser = new JsonParser();
-            JsonObject jsonObject = jsonParser.parse(response).getAsJsonObject();
+            JsonObject jsonObject = jsonParser.parse(responsePayload).getAsJsonObject();
             soapEndpoint = jsonObject.get("url").getAsString();
         }
 
@@ -195,7 +197,13 @@ public class ETClient {
             jsonObject.addProperty("refreshToken", refreshToken);
         }
 
-        String response = authConnection.post(PATH_REQUESTTOKEN, jsonObject);
+        Gson gson = restConnection.getGson();
+
+        String requestPayload = gson.toJson(jsonObject);
+
+        ETRestConnection.Response response = authConnection.post(PATH_REQUESTTOKEN, requestPayload);
+
+        // XXX fix error handling
 
         if (response == null) {
             throw new ETSdkException("failed to obtain access token");
@@ -206,8 +214,10 @@ public class ETClient {
         // variables:
         //
 
+        String responsePayload = response.getResponsePayload();
+
         JsonParser jsonParser = new JsonParser();
-        jsonObject = jsonParser.parse(response).getAsJsonObject();
+        jsonObject = jsonParser.parse(responsePayload).getAsJsonObject();
         logger.debug("received token:");
         accessToken = jsonObject.get("accessToken").getAsString();
         logger.debug("  accessToken: " + accessToken);

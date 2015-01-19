@@ -149,21 +149,23 @@ public abstract class ETRestObject extends ETObject {
         //
 
         for (T object : objects) {
-            String json = gson.toJson(object);
+            String requestPayload = gson.toJson(object);
 
             logger.trace("POST " + path);
 
             if (logger.isTraceEnabled()) {
-                JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
+                JsonObject jsonObject = jsonParser.parse(requestPayload).getAsJsonObject();
                 String jsonPrettyPrinted = gson.toJson(jsonObject);
                 for (String line : jsonPrettyPrinted.split("\\n")) {
                     logger.trace(line);
                 }
             }
 
-            json = connection.post(path, json);
+            ETRestConnection.Response r = connection.post(path, requestPayload);
 
-            JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
+            String responsePayload = r.getResponsePayload();
+
+            JsonObject jsonObject = jsonParser.parse(responsePayload).getAsJsonObject();
 
             if (logger.isTraceEnabled()) {
                 String jsonPrettyPrinted = gson.toJson(jsonObject);
@@ -173,17 +175,16 @@ public abstract class ETRestObject extends ETObject {
             }
 
             ETResult<T> result = new ETResult<T>();
-            result.setRequestId(connection.getLastCallRequestId());
-            if (connection.getLastCallResponseCode().startsWith("2")) {
+            result.setRequestId(r.getRequestId());
+            if (r.getResponseCode() >= 200 && r.getResponseCode() <= 299) {
                 result.setStatus(ETResult.Status.OK);
-            } else if (connection.getLastCallResponseCode().startsWith("4") ||
-                       connection.getLastCallResponseCode().startsWith("5")) {
+            } else if (r.getResponseCode() >= 400 && r.getResponseCode() <= 599) {
                 result.setStatus(ETResult.Status.ERROR);
             }
-            result.setResponseCode(connection.getLastCallResponseCode());
-            result.setResponseMessage(connection.getLastCallResponseMessage());
+            result.setResponseCode(r.getResponseCode().toString());
+            result.setResponseMessage(r.getResponseMessage());
             @SuppressWarnings("unchecked")
-            T createdObject = (T) gson.fromJson(json, object.getClass());
+            T createdObject = (T) gson.fromJson(responsePayload, object.getClass());
             createdObject.setClient(client);
             result.setObject(createdObject);
 
@@ -257,19 +258,20 @@ public abstract class ETRestObject extends ETObject {
 
         ETRestConnection connection = client.getRestConnection();
 
-        Gson gson = connection.getGson();
+        ETRestConnection.Response r = retrieve(client, path, page, pageSize, properties);
 
-        JsonObject jsonObject = retrieve(client, path, page, pageSize, properties);
-
-        response.setRequestId(connection.getLastCallRequestId());
-        if (connection.getLastCallResponseCode().startsWith("2")) {
+        response.setRequestId(r.getRequestId());
+        if (r.getResponseCode() >= 200 && r.getResponseCode() <= 299) {
             response.setStatus(ETResult.Status.OK);
-        } else if (connection.getLastCallResponseCode().startsWith("4") ||
-                   connection.getLastCallResponseCode().startsWith("5")) {
+        } else if (r.getResponseCode() >= 400 && r.getResponseCode() <= 599) {
             response.setStatus(ETResult.Status.ERROR);
         }
-        response.setResponseCode(connection.getLastCallResponseCode());
-        response.setResponseMessage(connection.getLastCallResponseMessage());
+        response.setResponseCode(r.getResponseCode().toString());
+        response.setResponseMessage(r.getResponseMessage());
+
+        Gson gson = connection.getGson();
+        JsonParser jsonParser = new JsonParser();
+        JsonObject jsonObject = jsonParser.parse(r.getResponsePayload()).getAsJsonObject();
 
         if (jsonObject.get("page") != null) {
             response.setPage(jsonObject.get("page").getAsInt());
@@ -303,11 +305,11 @@ public abstract class ETRestObject extends ETObject {
         return response;
     }
 
-    protected static JsonObject retrieve(ETClient client,
-                                         String path,
-                                         Integer page,
-                                         Integer pageSize,
-                                         String... properties)
+    protected static ETRestConnection.Response retrieve(ETClient client,
+                                                        String path,
+                                                        Integer page,
+                                                        Integer pageSize,
+                                                        String... properties)
         throws ETSdkException
     {
         //
@@ -392,20 +394,7 @@ public abstract class ETRestObject extends ETObject {
 
         logger.trace("GET " + path);
 
-        String json = connection.get(path);
-
-        Gson gson = connection.getGson();
-        JsonParser jsonParser = new JsonParser();
-        JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
-
-        if (logger.isTraceEnabled()) {
-            String jsonPrettyPrinted = gson.toJson(jsonObject);
-            for (String line : jsonPrettyPrinted.split("\\n")) {
-                logger.trace(line);
-            }
-        }
-
-        return jsonObject;
+        return connection.get(path);
     }
 
     protected static <T extends ETRestObject> ETResponse<T> update(ETClient client,
@@ -443,7 +432,10 @@ public abstract class ETRestObject extends ETObject {
         logger.trace("collection: " + annotations.collection());
         logger.trace("totalCount: " + annotations.totalCount());
 
+        String path = annotations.path();
+
         Gson gson = connection.getGson();
+
         JsonParser jsonParser = new JsonParser();
 
         //
@@ -453,29 +445,23 @@ public abstract class ETRestObject extends ETObject {
         //
 
         for (T object : objects) {
-            //
-            // Construct the path to the object:
-            //
+            String requestPayload = gson.toJson(object);
 
-            // XXX should throw an exception for complex expressions
-
-            String p = annotations.path();
-
-            String json = gson.toJson(object);
-
-            logger.trace("PATCH " + p);
+            logger.trace("PATCH " + path);
 
             if (logger.isTraceEnabled()) {
-                JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
+                JsonObject jsonObject = jsonParser.parse(requestPayload).getAsJsonObject();
                 String jsonPrettyPrinted = gson.toJson(jsonObject);
                 for (String line : jsonPrettyPrinted.split("\\n")) {
                     logger.trace(line);
                 }
             }
 
-            json = connection.patch(p, json);
+            ETRestConnection.Response r = connection.patch(path, requestPayload);
 
-            JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
+            String responsePayload = r.getResponsePayload();
+
+            JsonObject jsonObject = jsonParser.parse(responsePayload).getAsJsonObject();
 
             if (logger.isTraceEnabled()) {
                 String jsonPrettyPrinted = gson.toJson(jsonObject);
@@ -485,17 +471,16 @@ public abstract class ETRestObject extends ETObject {
             }
 
             ETResult<T> result = new ETResult<T>();
-            result.setRequestId(connection.getLastCallRequestId());
-            if (connection.getLastCallResponseCode().startsWith("2")) {
+            result.setRequestId(r.getRequestId());
+            if (r.getResponseCode() >= 200 && r.getResponseCode() <= 299) {
                 result.setStatus(ETResult.Status.OK);
-            } else if (connection.getLastCallResponseCode().startsWith("4") ||
-                       connection.getLastCallResponseCode().startsWith("5")) {
+            } else if (r.getResponseCode() >= 400 && r.getResponseCode() <= 599) {
                 result.setStatus(ETResult.Status.ERROR);
             }
-            result.setResponseCode(connection.getLastCallResponseCode());
-            result.setResponseMessage(connection.getLastCallResponseMessage());
+            result.setResponseCode(r.getResponseCode().toString());
+            result.setResponseMessage(r.getResponseMessage());
             @SuppressWarnings("unchecked")
-            T updatedObject = (T) gson.fromJson(json, object.getClass());
+            T updatedObject = (T) gson.fromJson(responsePayload, object.getClass());
             updatedObject.setClient(client);
             result.setObject(updatedObject);
 
@@ -542,7 +527,10 @@ public abstract class ETRestObject extends ETObject {
         logger.trace("collection: " + annotations.collection());
         logger.trace("totalCount: " + annotations.totalCount());
 
+        String path = annotations.path();
+
         Gson gson = connection.getGson();
+
         JsonParser jsonParser = new JsonParser();
 
         //
@@ -552,39 +540,31 @@ public abstract class ETRestObject extends ETObject {
         //
 
         for (T object : objects) {
-            //
-            // Construct the path to the object:
-            //
+            String requestPayload = gson.toJson(object);
 
-            // XXX should throw an exception for complex expressions
-
-            String p = annotations.path();
-
-            String json = gson.toJson(object);
-
-            logger.trace("DELETE " + p);
+            logger.trace("DELETE " + path);
 
             if (logger.isTraceEnabled()) {
-                JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
+                JsonObject jsonObject = jsonParser.parse(requestPayload).getAsJsonObject();
                 String jsonPrettyPrinted = gson.toJson(jsonObject);
                 for (String line : jsonPrettyPrinted.split("\\n")) {
                     logger.trace(line);
                 }
             }
 
-            // XXX doesn't return any data.. are all like this?
-            connection.delete(p);
+            ETRestConnection.Response r = connection.delete(path);
+
+            // no response payload for deletes
 
             ETResult<T> result = new ETResult<T>();
-            result.setRequestId(connection.getLastCallRequestId());
-            if (connection.getLastCallResponseCode().startsWith("2")) {
+            result.setRequestId(r.getRequestId());
+            if (r.getResponseCode() >= 200 && r.getResponseCode() <= 299) {
                 result.setStatus(ETResult.Status.OK);
-            } else if (connection.getLastCallResponseCode().startsWith("4") ||
-                       connection.getLastCallResponseCode().startsWith("5")) {
+            } else if (r.getResponseCode() >= 400 && r.getResponseCode() <= 599) {
                 result.setStatus(ETResult.Status.ERROR);
             }
-            result.setResponseCode(connection.getLastCallResponseCode());
-            result.setResponseMessage(connection.getLastCallResponseMessage());
+            result.setResponseCode(r.getResponseCode().toString());
+            result.setResponseMessage(r.getResponseMessage());
 
             response.addResult(result);
 

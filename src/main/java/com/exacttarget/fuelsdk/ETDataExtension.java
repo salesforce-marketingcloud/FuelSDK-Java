@@ -34,9 +34,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import org.apache.log4j.Logger;
 
@@ -294,10 +296,10 @@ public class ETDataExtension extends ETSoapObject {
                 //
 
                 c = new String[columns.length + 1];
-                c[0] = filter;
+                c[0] = filter.toLowerCase();
                 int i = 1;
                 for (String property : columns) {
-                    c[i++] = property;
+                    c[i++] = property.toLowerCase();
                 }
             } else {
                 throw ex;
@@ -383,13 +385,19 @@ public class ETDataExtension extends ETSoapObject {
 
         path = stringBuilder.toString();
 
-        ETRestConnection connection = client.getRestConnection();
+        ETRestConnection.Response r = ETRestObject.retrieve(client, path, page, pageSize, properties);
 
-        JsonObject jsonObject = ETRestObject.retrieve(client, path, page, pageSize, properties);
+        response.setRequestId(r.getRequestId());
+        if (r.getResponseCode() >= 200 && r.getResponseCode() <= 299) {
+            response.setStatus(ETResult.Status.OK);
+        } else if (r.getResponseCode() >= 400 && r.getResponseCode() <= 599) {
+            response.setStatus(ETResult.Status.ERROR);
+        }
+        response.setResponseCode(r.getResponseCode().toString());
+        response.setResponseMessage(r.getResponseMessage());
 
-        response.setRequestId(connection.getLastCallRequestId());
-        response.setResponseCode(connection.getLastCallResponseCode());
-        response.setResponseMessage(connection.getLastCallResponseMessage());
+        JsonParser jsonParser = new JsonParser();
+        JsonObject jsonObject = jsonParser.parse(r.getResponsePayload()).getAsJsonObject();
 
         if (jsonObject.get("page") != null) {
             response.setPage(jsonObject.get("page").getAsInt());
@@ -569,12 +577,20 @@ public class ETDataExtension extends ETSoapObject {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("customerKey", getKey());
         jsonObject.addProperty("fileName", fileName);
+        Gson gson = connection.getGson();
+        String json = gson.toJson(jsonObject);
 
-        connection.post(path, jsonObject); // XXX handle return value
+        // XXX handle return value?
+        ETRestConnection.Response r = connection.post(path, json);
 
-        response.setRequestId(connection.getLastCallRequestId());
-        response.setResponseCode(connection.getLastCallResponseCode());
-        response.setResponseMessage(connection.getLastCallResponseMessage());
+        response.setRequestId(r.getRequestId());
+        if (r.getResponseCode() >= 200 && r.getResponseCode() <= 299) {
+            response.setStatus(ETResult.Status.OK);
+        } else if (r.getResponseCode() >= 400 && r.getResponseCode() <= 599) {
+            response.setStatus(ETResult.Status.ERROR);
+        }
+        response.setResponseCode(r.getResponseCode().toString());
+        response.setResponseMessage(r.getResponseMessage());
 
         return response;
     }
