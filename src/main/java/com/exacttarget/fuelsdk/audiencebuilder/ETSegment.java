@@ -57,7 +57,7 @@ public class ETSegment {
     @ExternalName("capPercent")
     private Integer capPercent = null;
     @Expose
-    private Filter filter = null;
+    private Filter filter = new Filter();
     @ExternalName("filter")
     private ETFilter parsedFilter = null; // internal
 

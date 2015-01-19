@@ -109,9 +109,9 @@ public class ETClient {
 
         authConnection = new ETRestConnection(this, authEndpoint, true);
 
-//        refreshToken();
-
         restConnection = new ETRestConnection(this, endpoint);
+
+        refreshToken();
 
         soapEndpoint = configuration.get("soapEndpoint");
         if (soapEndpoint == null || soapEndpoint.equals("")) {
