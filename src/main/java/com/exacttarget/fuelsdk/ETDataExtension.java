@@ -48,11 +48,6 @@ import com.exacttarget.fuelsdk.internal.APIObject;
 import com.exacttarget.fuelsdk.internal.APIProperty;
 import com.exacttarget.fuelsdk.internal.DataExtension;
 import com.exacttarget.fuelsdk.internal.DataExtensionObject;
-import com.exacttarget.fuelsdk.internal.DeleteOptions;
-import com.exacttarget.fuelsdk.internal.DeleteRequest;
-import com.exacttarget.fuelsdk.internal.DeleteResponse;
-import com.exacttarget.fuelsdk.internal.DeleteResult;
-import com.exacttarget.fuelsdk.internal.Soap;
 
 @SoapObject(internalType = DataExtension.class, unretrievable = {
     "ID", "Fields"
@@ -495,39 +490,9 @@ public class ETDataExtension extends ETSoapObject {
     public ETResponse<ETDataExtensionRow> delete(List<ETDataExtensionRow> rows)
         throws ETSdkException
     {
-        ETClient client = getClient();
+        List<APIObject> internalRows = new ArrayList<APIObject>();
 
-        // XXX much of this is copied and pasted from ETSoapObject.delete
-
-        ETResponse<ETDataExtensionRow> response = new ETResponse<ETDataExtensionRow>();
-
-        if (rows == null || rows.size() == 0) {
-            return response;
-        }
-
-        //
-        // Get handle to the SOAP connection:
-        //
-
-        ETSoapConnection connection = client.getSoapConnection();
-
-        //
-        // Automatically refresh the token if necessary:
-        //
-
-        client.refreshToken();
-
-        //
-        // Perform the SOAP delete:
-        //
-
-        Soap soap = connection.getSoap();
-
-        DeleteRequest deleteRequest = new DeleteRequest();
-        deleteRequest.setOptions(new DeleteOptions());
         for (ETDataExtensionRow row : rows) {
-            row.setClient(client);
-
             //
             // We hand construct this one, since all we need
             // to pass in is the primary keys, and we pass them
@@ -550,45 +515,10 @@ public class ETDataExtension extends ETSoapObject {
             internalRow.setName(name);
             internalRow.setKeys(keys);
 
-            deleteRequest.getObjects().add(internalRow);
+            internalRows.add(internalRow);
         }
 
-        if (logger.isTraceEnabled()) {
-            logger.trace("DeleteRequest:");
-            logger.trace("  objects = {");
-            for (APIObject object : deleteRequest.getObjects()) {
-                logger.trace("    " + object);
-            }
-            logger.trace("  }");
-        }
-
-        logger.trace("calling soap.delete...");
-
-        DeleteResponse deleteResponse = soap.delete(deleteRequest);
-
-        if (logger.isTraceEnabled()) {
-            logger.trace("DeleteResponse:");
-            logger.trace("  requestId = " + deleteResponse.getRequestID());
-            logger.trace("  overallStatus = " + deleteResponse.getOverallStatus());
-            logger.trace("  results = {");
-            for (DeleteResult result : deleteResponse.getResults()) {
-                logger.trace("    " + result);
-            }
-            logger.trace("  }");
-        }
-
-        response.setRequestId(deleteResponse.getRequestID());
-        response.setResponseCode(deleteResponse.getOverallStatus());
-        response.setResponseMessage(deleteResponse.getOverallStatus());
-        for (DeleteResult deleteResult : deleteResponse.getResults()) {
-            ETResult<ETDataExtensionRow> result = new ETResult<ETDataExtensionRow>();
-            result.setResponseCode(deleteResult.getStatusCode());
-            result.setResponseMessage(deleteResult.getStatusMessage());
-            result.setErrorCode(deleteResult.getErrorCode());
-            response.addResult(result);
-        }
-
-        return response;
+        return super.delete(getClient(), internalRows, true);
     }
 
     public ETResponse<ETDataExtensionRow> delete(String filter)
@@ -607,7 +537,6 @@ public class ETDataExtension extends ETSoapObject {
 
         return delete(rows.toArray(new ETDataExtensionRow[rows.size()]));
     }
-
 
     public ETResponse<ETDataExtensionRow> export(String filter,
                                                  String file)

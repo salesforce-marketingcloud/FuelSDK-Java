@@ -619,6 +619,25 @@ public abstract class ETSoapObject extends ETObject {
                                                                    List<T> objects)
         throws ETSdkException
     {
+        List<APIObject> internalObjects = new ArrayList<APIObject>();
+
+        //
+        // Convert the external objects to internal objects:
+        //
+
+        for (T object : objects) {
+            object.setClient(client);
+            internalObjects.add(object.toInternal());
+        }
+
+        return delete(client, internalObjects, true);
+    }
+
+    protected static <T extends ETSoapObject> ETResponse<T> delete(ETClient client,
+                                                                   List<APIObject> objects,
+                                                                   boolean internal)
+        throws ETSdkException
+    {
         ETResponse<T> response = new ETResponse<T>();
 
         if (objects == null || objects.size() == 0) {
@@ -645,10 +664,7 @@ public abstract class ETSoapObject extends ETObject {
 
         DeleteRequest deleteRequest = new DeleteRequest();
         deleteRequest.setOptions(new DeleteOptions());
-        for (T object : objects) {
-            object.setClient(client);
-            deleteRequest.getObjects().add(object.toInternal());
-        }
+        deleteRequest.getObjects().addAll(objects);
 
         if (logger.isTraceEnabled()) {
             logger.trace("DeleteRequest:");
