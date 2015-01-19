@@ -29,6 +29,7 @@ package com.exacttarget.fuelsdk;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.net.HttpURLConnection;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -203,10 +204,13 @@ public class ETClient {
 
         ETRestConnection.Response response = authConnection.post(PATH_REQUESTTOKEN, requestPayload);
 
-        // XXX fix error handling
-
-        if (response == null) {
-            throw new ETSdkException("failed to obtain access token");
+        if (response.getResponseCode() != HttpURLConnection.HTTP_CREATED) {
+            throw new ETSdkException("error obtaining access token "
+                                     + "("
+                                     + response.getResponseCode()
+                                     + " "
+                                     + response.getResponseMessage()
+                                     + ")");
         }
 
         //
