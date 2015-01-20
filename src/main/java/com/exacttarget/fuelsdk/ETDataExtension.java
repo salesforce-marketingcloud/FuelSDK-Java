@@ -254,26 +254,22 @@ public class ETDataExtension extends ETSoapObject {
     public ETResponse<ETDataExtensionRow> select()
         throws ETSdkException
     {
-        return select((ETFilter) null, getColumnNames());
+        // new String[0] = empty properties
+        return select((ETFilter) null, null, null, new String[0]);
     }
 
     public ETResponse<ETDataExtensionRow> select(ETFilter filter)
         throws ETSdkException
     {
-        return select(filter, getColumnNames());
+        // new String[0] = empty properties
+        return select(filter, null, null, new String[0]);
     }
 
     public ETResponse<ETDataExtensionRow> select(ETFilter filter,
                                                  String... columns)
         throws ETSdkException
     {
-        return retrieve(getClient(),
-                        "DataExtensionObject[" + name + "]",
-                        filter,
-                        null,
-                        null,
-                        ETDataExtensionRow.class,
-                        columns);
+        return select(filter, null, null, columns);
     }
 
     public ETResponse<ETDataExtensionRow> select(String filter,
@@ -308,13 +304,7 @@ public class ETDataExtension extends ETSoapObject {
         if (c.length == 0) {
             c = getColumnNames();
         }
-        return retrieve(getClient(),
-                        "DataExtensionObject[" + name + "]",
-                        f,
-                        null,
-                        null,
-                        ETDataExtensionRow.class,
-                        c);
+        return select(f, null, null, c);
     }
 
     public ETResponse<ETDataExtensionRow> select(Integer page,
@@ -350,7 +340,8 @@ public class ETDataExtension extends ETSoapObject {
 
             boolean firstField = true;
             for (String column : columns) {
-                if (column.substring(0, 8).toLowerCase().equals("order by")) {
+                if (column.length() >= 8 &&
+                    column.substring(0, 8).toLowerCase().equals("order by")) {
                     // not actually a column, an order by string
                     properties = new String[1];
                     properties[0] = columns[columns.length - 1];
@@ -534,12 +525,7 @@ public class ETDataExtension extends ETSoapObject {
     {
         // XXX optimize
 
-        // XXX use the REST-based method for now since the
-        // SOAP-based methods are returning case-sensitive
-        // column names
-
-        //ETResponse<ETDataExtensionRow> response = select(filter);
-        ETResponse<ETDataExtensionRow> response = select(filter, null, null, new String[0]);
+        ETResponse<ETDataExtensionRow> response = select(filter);
 
         List<ETDataExtensionRow> rows = response.getObjects();
 
