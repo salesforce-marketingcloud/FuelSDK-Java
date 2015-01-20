@@ -58,6 +58,8 @@ public class ETRestConnection {
         GET, POST, PATCH, DELETE
     }
 
+    private final static int URL_MAX_LENGTH = 2048;
+
     public ETRestConnection(ETClient client, String endpoint)
         throws ETSdkException
     {
@@ -162,6 +164,9 @@ public class ETRestConnection {
     private HttpURLConnection sendRequest(String path, Method method)
         throws ETSdkException
     {
+        if (path.length() > URL_MAX_LENGTH) {
+            throw new ETSdkException(path + ": URL too long");
+        }
         return sendRequest(path, method, null);
     }
 
