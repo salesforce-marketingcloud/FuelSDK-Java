@@ -189,8 +189,8 @@ public abstract class ETSoapObject extends ETObject {
         this.modifiedDate = modifiedDate;
     }
 
-    protected static <T extends ETSoapObject> ETResponse<T> create(ETClient client,
-                                                                   List<T> objects)
+    public static <T extends ETSoapObject> ETResponse<T> create(ETClient client,
+                                                                List<T> objects)
         throws ETSdkException
     {
         ETResponse<T> response = new ETResponse<T>();
@@ -309,12 +309,12 @@ public abstract class ETSoapObject extends ETObject {
         return response;
     }
 
-    protected static <T extends ETSoapObject> ETResponse<T> retrieve(ETClient client,
-                                                                     ETFilter filter,
-                                                                     Integer page,
-                                                                     Integer pageSize,
-                                                                     Class<T> type,
-                                                                     String... properties)
+    public static <T extends ETSoapObject> ETResponse<T> retrieve(ETClient client,
+                                                                  ETFilter filter,
+                                                                  Integer page,
+                                                                  Integer pageSize,
+                                                                  Class<T> type,
+                                                                  String... properties)
         throws ETSdkException
     {
         return retrieve(client, null, filter, page, pageSize, type, properties);
@@ -328,13 +328,13 @@ public abstract class ETSoapObject extends ETObject {
     // of the data extension in brackets: DataExtensionObject[foo]).
     //
 
-    protected static <T extends ETSoapObject> ETResponse<T> retrieve(ETClient client,
-                                                                     String soapObjectType,
-                                                                     ETFilter filter,
-                                                                     Integer page,
-                                                                     Integer pageSize,
-                                                                     Class<T> type,
-                                                                     String... properties)
+    public static <T extends ETSoapObject> ETResponse<T> retrieve(ETClient client,
+                                                                  String soapObjectType,
+                                                                  ETFilter filter,
+                                                                  Integer page,
+                                                                  Integer pageSize,
+                                                                  Class<T> type,
+                                                                  String... properties)
         throws ETSdkException
     {
         if ((page != null) || (pageSize != null)) {
@@ -521,8 +521,8 @@ public abstract class ETSoapObject extends ETObject {
         return response;
     }
 
-    protected static <T extends ETSoapObject> ETResponse<T> update(ETClient client,
-                                                                   List<T> objects)
+    public static <T extends ETSoapObject> ETResponse<T> update(ETClient client,
+                                                                List<T> objects)
         throws ETSdkException
     {
         ETResponse<T> response = new ETResponse<T>();
@@ -640,8 +640,8 @@ public abstract class ETSoapObject extends ETObject {
         return response;
     }
 
-    protected static <T extends ETSoapObject> ETResponse<T> delete(ETClient client,
-                                                                   List<T> objects)
+    public static <T extends ETSoapObject> ETResponse<T> delete(ETClient client,
+                                                                List<T> objects)
         throws ETSdkException
     {
         List<APIObject> internalObjects = new ArrayList<APIObject>();

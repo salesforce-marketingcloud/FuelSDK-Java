@@ -101,8 +101,8 @@ public abstract class ETRestObject extends ETObject {
         this.modifiedDate = modifiedDate;
     }
 
-    protected static <T extends ETRestObject> ETResponse<T> create(ETClient client,
-                                                                   List<T> objects)
+    public static <T extends ETRestObject> ETResponse<T> create(ETClient client,
+                                                                List<T> objects)
         throws ETSdkException
     {
         ETResponse<T> response = new ETResponse<T>();
@@ -196,12 +196,12 @@ public abstract class ETRestObject extends ETObject {
         return response;
     }
 
-    protected static <T extends ETRestObject> ETResponse<T> retrieve(ETClient client,
-                                                                     ETFilter filter,
-                                                                     Integer page,
-                                                                     Integer pageSize,
-                                                                     Class<T> type,
-                                                                     String... properties)
+    public static <T extends ETRestObject> ETResponse<T> retrieve(ETClient client,
+                                                                  ETFilter filter,
+                                                                  Integer page,
+                                                                  Integer pageSize,
+                                                                  Class<T> type,
+                                                                  String... properties)
         throws ETSdkException
     {
         ETResponse<T> response = new ETResponse<T>();
@@ -397,8 +397,8 @@ public abstract class ETRestObject extends ETObject {
         return connection.get(path);
     }
 
-    protected static <T extends ETRestObject> ETResponse<T> update(ETClient client,
-                                                                   List<T> objects)
+    public static <T extends ETRestObject> ETResponse<T> update(ETClient client,
+                                                                List<T> objects)
         throws ETSdkException
     {
         ETResponse<T> response = new ETResponse<T>();
@@ -492,8 +492,8 @@ public abstract class ETRestObject extends ETObject {
         return response;
     }
 
-    protected static <T extends ETRestObject> ETResponse<T> delete(ETClient client,
-                                                                   List<T> objects)
+    public static <T extends ETRestObject> ETResponse<T> delete(ETClient client,
+                                                                List<T> objects)
         throws ETSdkException
     {
         ETResponse<T> response = new ETResponse<T>();
