@@ -134,7 +134,7 @@ public class ETSegment {
     protected static class Filter {
         @Expose
         @SerializedName("filterDefinitionJSON")
-        private FilterDefinition filterDefinition = null;
+        private FilterDefinition filterDefinition = new FilterDefinition();
 
         public void setFilterDefinition(FilterDefinition filterDefinition) {
             this.filterDefinition = filterDefinition;
