@@ -475,31 +475,49 @@ public class ETDataExtensionTest {
         throws ETSdkException
     {
         assertEquals(CLIENT_ID, client.getClientId());
-        ETResponse<ETDataExtensionRow> response = dataExtension.select(1, 2);
-        assertNotNull(response.getRequestId());
-        assertEquals(OK, response.getStatus());
-        assertEquals("200", response.getResponseCode());
-        assertEquals("OK", response.getResponseMessage());
-        assertEquals((Integer) 1, response.getPage());
-        assertEquals((Integer) 2, response.getPageSize());
-        assertEquals((Integer) 3, response.getTotalCount());
-        assertTrue(response.hasMoreResults());
-        List<ETDataExtensionRow> rows = response.getObjects();
-        assertEquals(2, rows.size());
-        ETDataExtensionRow row1 = rows.get(0);
+        ETResponse<ETDataExtensionRow> response1 = dataExtension.select(1, 2);
+        assertNotNull(response1.getRequestId());
+        assertEquals(OK, response1.getStatus());
+        assertEquals("200", response1.getResponseCode());
+        assertEquals("OK", response1.getResponseMessage());
+        assertEquals((Integer) 1, response1.getPage());
+        assertEquals((Integer) 2, response1.getPageSize());
+        assertEquals((Integer) 3, response1.getTotalCount());
+        assertTrue(response1.hasMoreResults());
+        List<ETDataExtensionRow> rows1 = response1.getObjects();
+        assertEquals(2, rows1.size());
+        ETDataExtensionRow row1 = rows1.get(0);
         assertEquals("1", row1.getColumn("CustomerID"));
         assertEquals("Ian Murdock", row1.getColumn("FullName"));
         assertEquals("Ian", row1.getColumn("FirstName"));
         assertEquals("Murdock", row1.getColumn("LastName"));
         assertEquals("41", row1.getColumn("Age"));
         assertEquals("imurdock@example.com", row1.getColumn("EmailAddress"));
-        ETDataExtensionRow row2 = rows.get(1);
+        ETDataExtensionRow row2 = rows1.get(1);
         assertEquals("2", row2.getColumn("CustomerID"));
         assertEquals("Fred Flintstone", row2.getColumn("FullName"));
         assertEquals("Fred", row2.getColumn("FirstName"));
         assertEquals("Flintstone", row2.getColumn("LastName"));
         assertEquals("36", row2.getColumn("Age"));
         assertEquals("fred@flintstone.com", row2.getColumn("EmailAddress"));
+        ETResponse<ETDataExtensionRow> response2 = dataExtension.select(2, 2);
+        assertNotNull(response2.getRequestId());
+        assertEquals(OK, response2.getStatus());
+        assertEquals("200", response2.getResponseCode());
+        assertEquals("OK", response2.getResponseMessage());
+        assertEquals((Integer) 2, response2.getPage());
+        assertEquals((Integer) 2, response2.getPageSize());
+        assertEquals((Integer) 3, response2.getTotalCount());
+        assertFalse(response2.hasMoreResults());
+        List<ETDataExtensionRow> rows2 = response2.getObjects();
+        assertEquals(1, rows2.size());
+        ETDataExtensionRow row3 = rows2.get(0);
+        assertEquals("3", row3.getColumn("CustomerID"));
+        assertEquals("Wilma Flintstone", row3.getColumn("FullName"));
+        assertEquals("Wilma", row3.getColumn("FirstName"));
+        assertEquals("Flintstone", row3.getColumn("LastName"));
+        assertEquals("34", row3.getColumn("Age"));
+        assertEquals("wilma@flintstone.com", row3.getColumn("EmailAddress"));
     }
 
     @Test
@@ -507,32 +525,51 @@ public class ETDataExtensionTest {
         throws ETSdkException
     {
         assertEquals(CLIENT_ID, client.getClientId());
-        ETResponse<ETDataExtensionRow> response = dataExtension.select(1, 2,
-                                                                       "LastName");
-        assertNotNull(response.getRequestId());
-        assertEquals(OK, response.getStatus());
-        assertEquals("200", response.getResponseCode());
-        assertEquals("OK", response.getResponseMessage());
-        assertEquals((Integer) 1, response.getPage());
-        assertEquals((Integer) 2, response.getPageSize());
-        assertEquals((Integer) 3, response.getTotalCount());
-        assertTrue(response.hasMoreResults());
-        List<ETDataExtensionRow> rows = response.getObjects();
-        assertEquals(2, rows.size());
-        ETDataExtensionRow row1 = rows.get(0);
+        ETResponse<ETDataExtensionRow> response1 = dataExtension.select(1, 2,
+                                                                        "LastName");
+        assertNotNull(response1.getRequestId());
+        assertEquals(OK, response1.getStatus());
+        assertEquals("200", response1.getResponseCode());
+        assertEquals("OK", response1.getResponseMessage());
+        assertEquals((Integer) 1, response1.getPage());
+        assertEquals((Integer) 2, response1.getPageSize());
+        assertEquals((Integer) 3, response1.getTotalCount());
+        assertTrue(response1.hasMoreResults());
+        List<ETDataExtensionRow> rows1 = response1.getObjects();
+        assertEquals(2, rows1.size());
+        ETDataExtensionRow row1 = rows1.get(0);
         assertNull(row1.getColumn("CustomerID"));
         assertNull(row1.getColumn("FullName"));
         assertNull(row1.getColumn("FirstName"));
         assertEquals("Murdock", row1.getColumn("LastName"));
         assertNull(row1.getColumn("Age"));
         assertNull(row1.getColumn("EmailAddress"));
-        ETDataExtensionRow row2 = rows.get(1);
+        ETDataExtensionRow row2 = rows1.get(1);
         assertNull(row2.getColumn("CustomerID"));
         assertNull(row2.getColumn("FullName"));
         assertNull(row2.getColumn("FirstName"));
         assertEquals("Flintstone", row2.getColumn("LastName"));
         assertNull(row2.getColumn("Age"));
         assertNull(row2.getColumn("EmailAddress"));
+        ETResponse<ETDataExtensionRow> response2 = dataExtension.select(2, 2,
+                                                                        "LastName");
+        assertNotNull(response2.getRequestId());
+        assertEquals(OK, response2.getStatus());
+        assertEquals("200", response2.getResponseCode());
+        assertEquals("OK", response2.getResponseMessage());
+        assertEquals((Integer) 2, response2.getPage());
+        assertEquals((Integer) 2, response2.getPageSize());
+        assertEquals((Integer) 3, response2.getTotalCount());
+        assertFalse(response2.hasMoreResults());
+        List<ETDataExtensionRow> rows2 = response2.getObjects();
+        assertEquals(1, rows2.size());
+        ETDataExtensionRow row3 = rows2.get(0);
+        assertNull(row3.getColumn("CustomerID"));
+        assertNull(row3.getColumn("FullName"));
+        assertNull(row3.getColumn("FirstName"));
+        assertEquals("Flintstone", row3.getColumn("LastName"));
+        assertNull(row3.getColumn("Age"));
+        assertNull(row3.getColumn("EmailAddress"));
     }
 
     @Test
@@ -540,34 +577,55 @@ public class ETDataExtensionTest {
         throws ETSdkException
     {
         assertEquals(CLIENT_ID, client.getClientId());
-        ETResponse<ETDataExtensionRow> response = dataExtension.select(1, 2,
-                                                                       "LastName",
-                                                                       "FirstName",
-                                                                       "EmailAddress");
-        assertNotNull(response.getRequestId());
-        assertEquals(OK, response.getStatus());
-        assertEquals("200", response.getResponseCode());
-        assertEquals("OK", response.getResponseMessage());
-        assertEquals((Integer) 1, response.getPage());
-        assertEquals((Integer) 2, response.getPageSize());
-        assertEquals((Integer) 3, response.getTotalCount());
-        assertTrue(response.hasMoreResults());
-        List<ETDataExtensionRow> rows = response.getObjects();
-        assertEquals(2, rows.size());
-        ETDataExtensionRow row1 = rows.get(0);
+        ETResponse<ETDataExtensionRow> response1 = dataExtension.select(1, 2,
+                                                                        "LastName",
+                                                                        "FirstName",
+                                                                        "EmailAddress");
+        assertNotNull(response1.getRequestId());
+        assertEquals(OK, response1.getStatus());
+        assertEquals("200", response1.getResponseCode());
+        assertEquals("OK", response1.getResponseMessage());
+        assertEquals((Integer) 1, response1.getPage());
+        assertEquals((Integer) 2, response1.getPageSize());
+        assertEquals((Integer) 3, response1.getTotalCount());
+        assertTrue(response1.hasMoreResults());
+        List<ETDataExtensionRow> rows1 = response1.getObjects();
+        assertEquals(2, rows1.size());
+        ETDataExtensionRow row1 = rows1.get(0);
         assertNull(row1.getColumn("CustomerID"));
         assertNull(row1.getColumn("FullName"));
         assertEquals("Ian", row1.getColumn("FirstName"));
         assertEquals("Murdock", row1.getColumn("LastName"));
         assertNull(row1.getColumn("Age"));
         assertEquals("imurdock@example.com", row1.getColumn("EmailAddress"));
-        ETDataExtensionRow row2 = rows.get(1);
+        ETDataExtensionRow row2 = rows1.get(1);
         assertNull(row2.getColumn("CustomerID"));
         assertNull(row2.getColumn("FullName"));
         assertEquals("Fred", row2.getColumn("FirstName"));
         assertEquals("Flintstone", row2.getColumn("LastName"));
         assertNull(row2.getColumn("Age"));
         assertEquals("fred@flintstone.com", row2.getColumn("EmailAddress"));
+        ETResponse<ETDataExtensionRow> response2 = dataExtension.select(2, 2,
+                                                                        "LastName",
+                                                                        "FirstName",
+                                                                        "EmailAddress");
+        assertNotNull(response2.getRequestId());
+        assertEquals(OK, response2.getStatus());
+        assertEquals("200", response2.getResponseCode());
+        assertEquals("OK", response2.getResponseMessage());
+        assertEquals((Integer) 2, response2.getPage());
+        assertEquals((Integer) 2, response2.getPageSize());
+        assertEquals((Integer) 3, response2.getTotalCount());
+        assertFalse(response2.hasMoreResults());
+        List<ETDataExtensionRow> rows2 = response2.getObjects();
+        assertEquals(1, rows2.size());
+        ETDataExtensionRow row3 = rows2.get(0);
+        assertNull(row3.getColumn("CustomerID"));
+        assertNull(row3.getColumn("FullName"));
+        assertEquals("Wilma", row3.getColumn("FirstName"));
+        assertEquals("Flintstone", row3.getColumn("LastName"));
+        assertNull(row3.getColumn("Age"));
+        assertEquals("wilma@flintstone.com", row3.getColumn("EmailAddress"));
     }
 
     @Test
