@@ -459,14 +459,29 @@ public class ETDataExtension extends ETSoapObject {
         return getClient().update(rows);
     }
 
+    private List<ETDataExtensionRow> getMatchingRows(String filter)
+        throws ETSdkException
+    {
+        List<ETDataExtensionRow> rows = new ArrayList<ETDataExtensionRow>();
+
+        // XXX only include primary keys in payload
+
+        int page = 1;
+        int page_size = 2500;
+
+        ETResponse<ETDataExtensionRow> response = null;
+        do {
+            response = select(filter, page++, page_size);
+            rows.addAll(response.getObjects());
+        } while (response.hasMoreResults() == true);
+
+        return rows;
+    }
+
     public ETResponse<ETDataExtensionRow> update(String filter, String... values)
         throws ETSdkException
     {
-        // XXX can this be optimized?
-
-        ETResponse<ETDataExtensionRow> response = select(filter);
-
-        List<ETDataExtensionRow> rows = response.getObjects();
+        List<ETDataExtensionRow> rows = getMatchingRows(filter);
         for (ETDataExtensionRow row : rows) {
             for (String value : values) {
                 ETFilter parsedFilter = ETFilter.parse(value);
@@ -476,8 +491,7 @@ public class ETDataExtension extends ETSoapObject {
                 row.setColumn(parsedFilter.getProperty(), parsedFilter.getValue());
             }
         }
-
-        return update(rows.toArray(new ETDataExtensionRow[rows.size()]));
+        return update(rows);
     }
 
     public ETResponse<ETDataExtensionRow> delete(ETDataExtensionRow... rows)
@@ -523,13 +537,8 @@ public class ETDataExtension extends ETSoapObject {
     public ETResponse<ETDataExtensionRow> delete(String filter)
         throws ETSdkException
     {
-        // XXX optimize
-
-        ETResponse<ETDataExtensionRow> response = select(filter);
-
-        List<ETDataExtensionRow> rows = response.getObjects();
-
-        return delete(rows.toArray(new ETDataExtensionRow[rows.size()]));
+        List<ETDataExtensionRow> rows = getMatchingRows(filter);
+        return delete(rows);
     }
 
     public ETResponse<ETDataExtensionRow> export(String filter,
