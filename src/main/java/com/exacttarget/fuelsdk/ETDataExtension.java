@@ -258,13 +258,6 @@ public class ETDataExtension extends ETSoapObject {
         return select((ETFilter) null, null, null, new String[0]);
     }
 
-    public ETResponse<ETDataExtensionRow> select(ETFilter filter)
-        throws ETSdkException
-    {
-        // new String[0] = empty properties
-        return select(filter, null, null, new String[0]);
-    }
-
     public ETResponse<ETDataExtensionRow> select(ETFilter filter,
                                                  String... columns)
         throws ETSdkException
@@ -464,14 +457,25 @@ public class ETDataExtension extends ETSoapObject {
     {
         List<ETDataExtensionRow> rows = new ArrayList<ETDataExtensionRow>();
 
-        // XXX only include primary keys in payload
+        hydrate();
+
+        //
+        // Only retrieve primary key columns:
+        //
+
+        List<String> primaryKeyColumnNames = new ArrayList<String>();
+        for (ETDataExtensionColumn column : columns) {
+            if (column.getIsPrimaryKey()) {
+                primaryKeyColumnNames.add(column.getName());
+            }
+        }
 
         int page = 1;
         int page_size = 2500;
 
         ETResponse<ETDataExtensionRow> response = null;
         do {
-            response = select(filter, page++, page_size);
+            response = select(filter, page++, page_size, primaryKeyColumnNames.toArray(new String[0]));
             rows.addAll(response.getObjects());
         } while (response.hasMoreResults() == true);
 
