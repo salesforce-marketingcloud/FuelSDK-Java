@@ -551,13 +551,6 @@ public class ETClient {
                                                                      List<T> objects)
         throws ETSdkException
     {
-        ETResponse<T> response = new ETResponse<T>();
-
-        if (objects == null || objects.size() == 0) {
-            response.setStatus(ETResult.Status.OK);
-            return response;
-        }
-
         //
         // Get the appropriate method from the superclass
         // of T (all methods are found in the superclass):
@@ -568,9 +561,7 @@ public class ETClient {
 
         Method create = getMethod(superClass, method, ETClient.class, List.class);
 
-        response = invokeMethod(create, objects);
-
-        return response;
+        return invokeMethod(create, objects);
     }
 
     private <T extends ETApiObject> Method getMethod(Class<T> type, String name, Class<?>... arguments)
