@@ -108,6 +108,7 @@ public abstract class ETRestObject extends ETObject {
         ETResponse<T> response = new ETResponse<T>();
 
         if (objects == null || objects.size() == 0) {
+            response.setStatus(ETResult.Status.OK);
             return response;
         }
 
@@ -404,6 +405,7 @@ public abstract class ETRestObject extends ETObject {
         ETResponse<T> response = new ETResponse<T>();
 
         if (objects == null || objects.size() == 0) {
+            response.setStatus(ETResult.Status.OK);
             return response;
         }
 
@@ -499,6 +501,7 @@ public abstract class ETRestObject extends ETObject {
         ETResponse<T> response = new ETResponse<T>();
 
         if (objects == null || objects.size() == 0) {
+            response.setStatus(ETResult.Status.OK);
             return response;
         }
 
