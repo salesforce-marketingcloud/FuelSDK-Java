@@ -27,9 +27,31 @@
 
 package com.exacttarget.fuelsdk;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+
+/**
+ * An <code>ETObject</code> is a retrievable object in the
+ * Salesforce Marketing Cloud. All retrievable objects are
+ * guaranteed to have the following properties:
+ *
+ * id -
+ * key -
+ * name -
+ * createdDate -
+ * modifiedDate -
+ */
 
 public abstract class ETObject extends ETPrettyPrintable {
+    private static Logger logger = Logger.getLogger(ETObject.class);
+
+    private Map<String, Boolean> isModified = new HashMap<String, Boolean>();
+
     public abstract String getId();
     public abstract void setId(String id);
     public abstract String getKey();
@@ -40,4 +62,28 @@ public abstract class ETObject extends ETPrettyPrintable {
     public abstract void setCreatedDate(Date createdDate);
     public abstract Date getModifiedDate();
     public abstract void setModifiedDate(Date modifiedDate);
+
+    //public abstract void hydrate();
+    //public abstract Boolean isHydrated();
+    //public abstract void refresh();
+
+    public Boolean getModified(String property) {
+        logger.trace("isModified[" + property + "] = " + isModified.get(property));
+        return isModified.get(property);
+    }
+
+    public Boolean setModified(String property, Boolean value) {
+        logger.trace("isModified[" + property + "] = " + value);
+        return isModified.put(property, value);
+    }
+
+    public List<String> getAllModified() {
+        List<String> modified = new ArrayList<String>();
+        for (Map.Entry<String, Boolean> entry : isModified.entrySet()) {
+            if (entry.getValue() == true) {
+                modified.add(entry.getKey());
+            }
+        }
+        return modified;
+    }
 }
