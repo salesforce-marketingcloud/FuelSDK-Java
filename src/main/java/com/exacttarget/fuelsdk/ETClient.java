@@ -40,6 +40,11 @@ import com.google.gson.JsonParser;
 
 import org.apache.log4j.Logger;
 
+/**
+ * <code>ETClient</code> is the central object in the Java
+ * client library.
+ */
+
 public class ETClient {
     private static Logger logger = Logger.getLogger(ETClient.class);
 
@@ -262,6 +267,7 @@ public class ETClient {
         ETResponse<T> response = new ETResponse<T>();
 
         if (objects == null || objects.size() == 0) {
+            response.setStatus(ETResult.Status.OK);
             return response;
         }
 
@@ -474,6 +480,7 @@ public class ETClient {
         ETResponse<T> response = new ETResponse<T>();
 
         if (objects == null || objects.size() == 0) {
+            response.setStatus(ETResult.Status.OK);
             return response;
         }
 
@@ -543,6 +550,7 @@ public class ETClient {
         ETResponse<T> response = new ETResponse<T>();
 
         if (objects == null || objects.size() == 0) {
+            response.setStatus(ETResult.Status.OK);
             return response;
         }
 
