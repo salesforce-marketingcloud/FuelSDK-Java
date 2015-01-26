@@ -30,21 +30,27 @@ package com.exacttarget.fuelsdk;
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.RestObject;
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
-@RestObject(path = "/hub/v1/campaigns/{id}",
+@RestObject(path = "/hub/v1/campaigns",
             primaryKey = "id",
             collection = "items",
             totalCount = "count")
 public class ETCampaign extends ETRestObject {
-    @ExternalName("name") @Expose
+    @Expose
+    @ExternalName("name")
     private String name = null;
-    @ExternalName("description") @Expose
+    @Expose
+    @ExternalName("description")
     private String description = null;
-    @ExternalName("campaignCode") @Expose
-    private String campaignCode = null;
-    @ExternalName("color") @Expose
+    @Expose @SerializedName("campaignCode")
+    @ExternalName("code")
+    private String code = null;
+    @Expose
+    @ExternalName("color")
     private String color = null;
-    @ExternalName("favorite") @Expose
+    @Expose
+    @ExternalName("favorite")
     private Boolean favorite = null;
 
     @Override
@@ -65,12 +71,12 @@ public class ETCampaign extends ETRestObject {
         this.description = description;
     }
 
-    public String getCampaignCode() {
-        return campaignCode;
+    public String getCode() {
+        return code;
     }
 
-    public void setCampaignCode(String campaignCode) {
-        this.campaignCode = campaignCode;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getColor() {

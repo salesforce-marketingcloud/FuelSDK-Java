@@ -27,8 +27,6 @@
 
 package com.exacttarget.fuelsdk;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -46,6 +44,7 @@ import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.InternalName;
 import com.exacttarget.fuelsdk.annotations.SoapObject;
 import com.exacttarget.fuelsdk.ETDataExtensionColumn.Type;
+import com.exacttarget.fuelsdk.ETRestConnection.Response;
 import com.exacttarget.fuelsdk.internal.APIObject;
 import com.exacttarget.fuelsdk.internal.APIProperty;
 import com.exacttarget.fuelsdk.internal.DataExtension;
@@ -292,62 +291,19 @@ public class ETDataExtension extends ETSoapObject {
                                                  String... columns)
         throws ETSdkException
     {
-        ETClient client = getClient();
+        String path = "/data/v1/customobjectdata/key/" + getKey() + "/rowset";
+
+        Response r = ETRestObject.retrieve(getClient(),
+                                           path,
+                                           null,
+                                           filter,
+                                           page,
+                                           pageSize,
+                                           columns);
 
         ETResponse<ETDataExtensionRow> response = new ETResponse<ETDataExtensionRow>();
 
-        String path = "/data/v1/customobjectdata/key/" + getKey() + "/rowset";
-
-        StringBuilder stringBuilder = new StringBuilder(path);
-
-        boolean firstQueryParameter = true;
-
-        String[] properties = new String[0]; // empty by default
-
-        if (columns.length > 0) {
-            //
-            // Only request those columns specified:
-            //
-
-            boolean firstField = true;
-            for (String column : columns) {
-                if (column.length() >= 8 &&
-                    column.substring(0, 8).toLowerCase().equals("order by")) {
-                    // not actually a column, an order by string
-                    properties = new String[1];
-                    properties[0] = columns[columns.length - 1];
-                } else {
-                    if (firstField) {
-                        firstField = false;
-                        if (firstQueryParameter) {
-                            firstQueryParameter = false;
-                            stringBuilder.append("?");
-                        } else {
-                            stringBuilder.append("&");
-                        }
-                        stringBuilder.append("$fields=");
-                    } else {
-                        stringBuilder.append(",");
-                    }
-                    stringBuilder.append(column);
-                }
-            }
-        }
-
-        if (filter != null) {
-            if (firstQueryParameter) {
-                firstQueryParameter = false;
-                stringBuilder.append("?");
-            } else {
-                stringBuilder.append("&");
-            }
-            stringBuilder.append("$filter=");
-            stringBuilder.append(toQueryParams(filter));
-        }
-
-        path = stringBuilder.toString();
-
-        ETRestConnection.Response r = ETRestObject.retrieve(client, path, page, pageSize, properties);
+        // XXX still too much duplicate code here
 
         response.setRequestId(r.getRequestId());
         if (r.getResponseCode() >= 200 && r.getResponseCode() <= 299) {
@@ -373,26 +329,23 @@ public class ETDataExtension extends ETSoapObject {
                 response.setMoreResults(true);
             }
 
-            JsonElement items = jsonObject.get("items");
-            if (items != null) {
-                JsonArray collection = items.getAsJsonArray();
+            JsonArray elements = jsonObject.get("items").getAsJsonArray();
 
-                for (JsonElement element : collection) {
-                    JsonObject object = element.getAsJsonObject();
-                    ETDataExtensionRow row = new ETDataExtensionRow();
-                    JsonObject keys = object.get("keys").getAsJsonObject();
-                    for (Map.Entry<String, JsonElement> entry : keys.entrySet()) {
-                        row.setColumn(entry.getKey(), entry.getValue().getAsString());
-                    }
-                    JsonObject values = object.get("values").getAsJsonObject();
-                    for (Map.Entry<String, JsonElement> entry : values.entrySet()) {
-                        row.setColumn(entry.getKey(), entry.getValue().getAsString());
-                    }
-                    row.setClient(client);
-                    ETResult<ETDataExtensionRow> result = new ETResult<ETDataExtensionRow>();
-                    result.setObject(row);
-                    response.addResult(result);
+            for (JsonElement element : elements) {
+                JsonObject object = element.getAsJsonObject();
+                ETDataExtensionRow row = new ETDataExtensionRow();
+                JsonObject keys = object.get("keys").getAsJsonObject();
+                for (Map.Entry<String, JsonElement> entry : keys.entrySet()) {
+                    row.setColumn(entry.getKey(), entry.getValue().getAsString());
                 }
+                JsonObject values = object.get("values").getAsJsonObject();
+                for (Map.Entry<String, JsonElement> entry : values.entrySet()) {
+                    row.setColumn(entry.getKey(), entry.getValue().getAsString());
+                }
+                row.setClient(getClient());
+                ETResult<ETDataExtensionRow> result = new ETResult<ETDataExtensionRow>();
+                result.setObject(row);
+                response.addResult(result);
             }
         }
 
@@ -529,7 +482,7 @@ public class ETDataExtension extends ETSoapObject {
 
         if (filter != null) {
             stringBuilder.append("?filter=");
-            stringBuilder.append(toQueryParams(filter));
+            stringBuilder.append(ETRestObject.toQueryParameter(filter));
         }
 
         path = stringBuilder.toString();
@@ -603,131 +556,6 @@ public class ETDataExtension extends ETSoapObject {
         isHydrated = true;
     }
 
-    public static String toQueryParams(ETFilter filter)
-        throws ETSdkException
-    {
-        StringBuilder stringBuilder = new StringBuilder();
-        ETFilter.Operator operator = filter.getOperator();
-        switch (operator) {
-          case AND:
-            stringBuilder.append(toQueryParams(filter.getFilters().get(0)));
-            stringBuilder.append("%20");
-            stringBuilder.append("and");
-            stringBuilder.append("%20");
-            stringBuilder.append(toQueryParams(filter.getFilters().get(1)));
-            break;
-          case OR:
-            stringBuilder.append(toQueryParams(filter.getFilters().get(0)));
-            stringBuilder.append("%20");
-            stringBuilder.append("or");
-            stringBuilder.append("%20");
-            stringBuilder.append(toQueryParams(filter.getFilters().get(1)));
-            break;
-          case NOT:
-            stringBuilder.append("not");
-            stringBuilder.append("%20");
-            stringBuilder.append(toQueryParams(filter.getFilters().get(0)));
-            break;
-          case EQUALS:
-            stringBuilder.append(filter.getProperty());
-            stringBuilder.append("%20");
-            stringBuilder.append("eq");
-            stringBuilder.append("%20");
-            stringBuilder.append(toQueryParams(filter.getValue()));
-            break;
-          case NOT_EQUALS:
-            stringBuilder.append(filter.getProperty());
-            stringBuilder.append("%20");
-            stringBuilder.append("neq");
-            stringBuilder.append("%20");
-            stringBuilder.append(toQueryParams(filter.getValue()));
-            break;
-          case LESS_THAN:
-            stringBuilder.append(filter.getProperty());
-            stringBuilder.append("%20");
-            stringBuilder.append("lt");
-            stringBuilder.append("%20");
-            stringBuilder.append(toQueryParams(filter.getValue()));
-            break;
-          case LESS_THAN_OR_EQUALS:
-            stringBuilder.append(filter.getProperty());
-            stringBuilder.append("%20");
-            stringBuilder.append("lte");
-            stringBuilder.append("%20");
-            stringBuilder.append(toQueryParams(filter.getValue()));
-            break;
-          case GREATER_THAN:
-            stringBuilder.append(filter.getProperty());
-            stringBuilder.append("%20");
-            stringBuilder.append("gt");
-            stringBuilder.append("%20");
-            stringBuilder.append(toQueryParams(filter.getValue()));
-            break;
-          case GREATER_THAN_OR_EQUALS:
-            stringBuilder.append(filter.getProperty());
-            stringBuilder.append("%20");
-            stringBuilder.append("gte");
-            stringBuilder.append("%20");
-            stringBuilder.append(toQueryParams(filter.getValue()));
-            break;
-          case IS_NULL:
-            stringBuilder.append(filter.getProperty());
-            stringBuilder.append("%20");
-            stringBuilder.append("is");
-            stringBuilder.append("%20");
-            stringBuilder.append("null");
-            break;
-          case IS_NOT_NULL:
-            stringBuilder.append(filter.getProperty());
-            stringBuilder.append("%20");
-            stringBuilder.append("is");
-            stringBuilder.append("%20");
-            stringBuilder.append("not");
-            stringBuilder.append("%20");
-            stringBuilder.append("null");
-            break;
-          case IN:
-            stringBuilder.append(filter.getProperty());
-            stringBuilder.append("%20");
-            stringBuilder.append("in");
-            stringBuilder.append("%20");
-            stringBuilder.append("(");
-            boolean first = true;
-            for (String value : filter.getValues()) {
-                if (first) {
-                    first = false;
-                } else {
-                    stringBuilder.append(",");
-                }
-                stringBuilder.append(toQueryParams(value));
-            }
-            stringBuilder.append(")");
-            break;
-          case BETWEEN:
-            stringBuilder.append(filter.getProperty());
-            stringBuilder.append("%20");
-            stringBuilder.append("between");
-            stringBuilder.append("%20");
-            stringBuilder.append(toQueryParams(filter.getValues().get(0)));
-            stringBuilder.append("%20");
-            stringBuilder.append("and");
-            stringBuilder.append("%20");
-            stringBuilder.append(toQueryParams(filter.getValues().get(1)));
-            break;
-          case LIKE:
-            stringBuilder.append(filter.getProperty());
-            stringBuilder.append("%20");
-            stringBuilder.append("like");
-            stringBuilder.append("%20");
-            stringBuilder.append(toQueryParams(filter.getValue(), true));
-            break;
-          default:
-            throw new ETSdkException("unsupported operator: " + operator);
-        }
-
-        return stringBuilder.toString();
-    }
-
     private List<ETDataExtensionRow> getMatchingRows(String filter)
         throws ETSdkException
     {
@@ -768,44 +596,5 @@ public class ETDataExtension extends ETSoapObject {
             c[i++] = column.getName();
         }
         return c;
-    }
-
-    private static String toQueryParams(String value)
-        throws ETSdkException
-    {
-        return toQueryParams(value, false);
-    }
-
-    private static String toQueryParams(String value, boolean forceQuotes)
-        throws ETSdkException
-    {
-        if (value.equals("")) {
-            forceQuotes = true;
-        }
-        // XXX workaround for FUEL-3348--remove after 02
-        if (value.contains("-")) {
-            forceQuotes = true;
-        }
-        boolean quotes = forceQuotes;
-        if (!forceQuotes) {
-            // needs quotes in the URL if there's whitespace
-            for (int i = 0; i < value.length(); i++) {
-                if (Character.isWhitespace(value.charAt(i))) {
-                    quotes = true;
-                    break;
-                }
-            }
-        }
-        String v = null;
-        if (quotes) {
-            v = "'" + value + "'";
-        } else {
-            v = value.toString();
-        }
-        try {
-            return URLEncoder.encode(v, "UTF-8");
-        } catch (UnsupportedEncodingException ex) {
-            throw new ETSdkException("error URL encoding " + v, ex);
-        }
     }
 }

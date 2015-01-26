@@ -31,16 +31,19 @@ import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.RestObject;
 import com.google.gson.annotations.Expose;
 
-@RestObject(path = "/hub/v1/campaigns/{campaignId}/assets/{id}",
+@RestObject(path = "/hub/v1/campaigns/{campaignId}/assets",
             primaryKey = "id",
             collection = "entities",
             totalCount = "count")
 public class ETCampaignAsset extends ETRestObject {
-    @ExternalName("campaignId") @Expose
+    @Expose
+    @ExternalName("campaignId")
     private String campaignId = null;
-    @ExternalName("type") @Expose
+    @Expose
+    @ExternalName("type")
     private String type = null;
-    @ExternalName("objectId") @Expose
+    @Expose
+    @ExternalName("objectId")
     private String objectId = null;
 
     @Override
