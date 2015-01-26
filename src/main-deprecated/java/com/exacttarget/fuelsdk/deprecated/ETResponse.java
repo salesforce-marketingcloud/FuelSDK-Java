@@ -30,7 +30,7 @@ package com.exacttarget.fuelsdk.deprecated;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.exacttarget.fuelsdk.ETPrettyPrintable;
+import com.exacttarget.fuelsdk.ETObject;
 import com.exacttarget.fuelsdk.annotations.PrettyPrint;
 
 /**
@@ -38,7 +38,7 @@ import com.exacttarget.fuelsdk.annotations.PrettyPrint;
  * Use {@link com.exacttarget.fuelsdk.ETResponse}.
  */
 @Deprecated
-public class ETResponse<T> extends ETPrettyPrintable {
+public class ETResponse<T> extends ETObject {
     @PrettyPrint
     private String requestId = null;
     @PrettyPrint

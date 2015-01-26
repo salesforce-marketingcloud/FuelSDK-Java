@@ -27,63 +27,174 @@
 
 package com.exacttarget.fuelsdk;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.ListIterator;
 
-import org.apache.log4j.Logger;
+import com.exacttarget.fuelsdk.annotations.ExternalName;
+import com.exacttarget.fuelsdk.annotations.PrettyPrint;
 
-/**
- * An <code>ETObject</code> is a retrievable object in the
- * Salesforce Marketing Cloud. All retrievable objects are
- * guaranteed to have the following properties:
- *
- * id -
- * key -
- * name -
- * createdDate -
- * modifiedDate -
- */
+public abstract class ETObject {
+    private ETClient client = null;
+    // XXX support configurable values
+    private Boolean toStringMultiLine = false;
+    private Integer toStringMultiLineIndentAmount = 4;
+    private Boolean toStringSpaceAroundEquals = false;
 
-public abstract class ETObject extends ETPrettyPrintable {
-    private static Logger logger = Logger.getLogger(ETObject.class);
+    private static int currentIndentLevel = 0;
 
-    private Map<String, Boolean> isModified = new HashMap<String, Boolean>();
-
-    public abstract String getId();
-    public abstract void setId(String id);
-    public abstract String getKey();
-    public abstract void setKey(String key);
-    public abstract String getName();
-    public abstract void setName(String name);
-    public abstract Date getCreatedDate();
-    public abstract void setCreatedDate(Date createdDate);
-    public abstract Date getModifiedDate();
-    public abstract void setModifiedDate(Date modifiedDate);
-
-    //public abstract void hydrate();
-    //public abstract Boolean isHydrated();
-    //public abstract void refresh();
-
-    public Boolean getModified(String property) {
-        logger.trace("isModified[" + property + "] = " + isModified.get(property));
-        return isModified.get(property);
+    public ETClient getClient() {
+        return client;
     }
 
-    public Boolean setModified(String property, Boolean value) {
-        logger.trace("isModified[" + property + "] = " + value);
-        return isModified.put(property, value);
+    public void setClient(ETClient client) {
+        this.client = client;
     }
 
-    public List<String> getAllModified() {
-        List<String> modified = new ArrayList<String>();
-        for (Map.Entry<String, Boolean> entry : isModified.entrySet()) {
-            if (entry.getValue() == true) {
-                modified.add(entry.getKey());
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append(getClass().getName());
+        stringBuilder.append("[");
+        if (toStringMultiLine) {
+            stringBuilder.append(System.getProperty("line.separator"));
+        }
+
+        currentIndentLevel += toStringMultiLineIndentAmount;
+
+        boolean first = true;
+        for (Field field : getAllFields()) {
+            PrettyPrint prettyPrintAnnotation =
+                    field.getAnnotation(PrettyPrint.class);
+
+            // @ExternalName implies @PrettyPrint
+            ExternalName externalNameAnnotation =
+                    field.getAnnotation(ExternalName.class);
+
+            if (prettyPrintAnnotation == null && externalNameAnnotation == null) {
+                continue;
+            }
+
+            String name = null;
+            if (externalNameAnnotation != null) {
+                name = externalNameAnnotation.value();
+            } else {
+                name = field.getName();
+            }
+            String value = null;
+            try {
+                // briefly change accessibility so we can get value
+                boolean isAccessible = field.isAccessible();
+                if (!isAccessible) {
+                    field.setAccessible(true);
+                }
+                if (field.get(this) != null) {
+                    value = field.get(this).toString();
+                }
+                field.setAccessible(isAccessible);
+            } catch (IllegalAccessException ex) {
+                throw new AssertionError("should never ever get here");
+            }
+            if (value == null) {
+                continue;
+            }
+            if (toStringMultiLine) {
+                for (int i = 0; i < currentIndentLevel; i++) {
+                    stringBuilder.append(" ");
+                }
+            } else {
+                if (first) {
+                    first = false;
+                } else {
+                    stringBuilder.append(",");
+                }
+            }
+            if (toStringSpaceAroundEquals) {
+                stringBuilder.append(name + " = " + value);
+            } else {
+                stringBuilder.append(name + "=" + value);
+            }
+            if (toStringMultiLine) {
+                stringBuilder.append(System.getProperty("line.separator"));
             }
         }
-        return modified;
+
+        currentIndentLevel -= toStringMultiLineIndentAmount;
+
+        if (toStringMultiLine) {
+            for (int i = 0; i < currentIndentLevel; i++) {
+                stringBuilder.append(" ");
+            }
+        }
+
+        stringBuilder.append("]");
+
+        return stringBuilder.toString();
+    }
+
+    protected Field getField(String property) {
+        for (Field field : getAllFields()) {
+            ExternalName externalName =
+                    field.getAnnotation(ExternalName.class);
+            if (externalName != null && externalName.value().equals(property)) {
+                return field;
+            }
+        }
+        return null;
+    }
+
+    protected static Field getField(Class<?> type, String name)
+        throws ETSdkException
+    {
+        Field field = null;
+
+        for (Class<?> t = type; t != null; t = t.getSuperclass()) {
+            try {
+                field = t.getDeclaredField(name);
+                break;
+            } catch (NoSuchFieldException ex) {
+                continue;
+            }
+        }
+
+        if (field == null) {
+            throw new ETSdkException("field \""
+                    + name
+                    + "\" does not exist in class "
+                    + type.getName());
+        }
+
+        return field;
+    }
+
+    protected List<Field> getAllFields() {
+        return getAllFields(getClass());
+    }
+
+    protected static List<Field> getAllFields(Class<?> type) {
+        List<Field> fields = new ArrayList<Field>();
+
+        // XXX this needs to account for overrides
+
+        // account for fields of superclasses too
+
+        List<Class<?>> types = new ArrayList<Class<?>>();
+        for (Class<?> t = type; t != null; t = t.getSuperclass()) {
+            types.add(t);
+        }
+
+        // make sure superclass fields are first for readability
+
+        ListIterator<Class<?>> li = types.listIterator(types.size());
+        while (li.hasPrevious()) {
+            Class<?> t = li.previous();
+            for (Field field : t.getDeclaredFields()) {
+                fields.add(field);
+            }
+        }
+
+        return fields;
     }
 }

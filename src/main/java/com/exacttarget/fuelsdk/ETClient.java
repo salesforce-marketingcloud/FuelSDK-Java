@@ -249,14 +249,14 @@ public class ETClient {
         return accessToken;
     }
 
-    public <T extends ETObject> ETResponse<T> create(T... objects)
+    public <T extends ETApiObject> ETResponse<T> create(T... objects)
         throws ETSdkException
     {
         return create(Arrays.asList(objects));
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends ETObject> ETResponse<T> create(List<T> objects)
+    public <T extends ETApiObject> ETResponse<T> create(List<T> objects)
         throws ETSdkException
     {
         ETResponse<T> response = new ETResponse<T>();
@@ -279,24 +279,24 @@ public class ETClient {
         return response;
     }
 
-    public <T extends ETObject> ETResponse<T> retrieve(Class<T> type)
+    public <T extends ETApiObject> ETResponse<T> retrieve(Class<T> type)
         throws ETSdkException
     {
         // new String[0] = empty properties
         return retrieve(type, (ETFilter) null, null, null, new String[0]);
     }
 
-    public <T extends ETObject> ETResponse<T> retrieve(Class<T> type,
-                                                       ETFilter filter,
-                                                       String... properties)
+    public <T extends ETApiObject> ETResponse<T> retrieve(Class<T> type,
+                                                          ETFilter filter,
+                                                          String... properties)
         throws ETSdkException
     {
         return retrieve(type, filter, null, null, properties);
     }
 
-    public <T extends ETObject> ETResponse<T> retrieve(Class<T> type,
-                                                       String filter,
-                                                       String... properties)
+    public <T extends ETApiObject> ETResponse<T> retrieve(Class<T> type,
+                                                          String filter,
+                                                          String... properties)
         throws ETSdkException
     {
         // see also: ETDataExtension.select(filter, columns)
@@ -326,21 +326,21 @@ public class ETClient {
         return retrieve(type, f, null, null, p);
     }
 
-    public <T extends ETObject> ETResponse<T> retrieve(Class<T> type,
-                                                       Integer page,
-                                                       Integer pageSize,
-                                                       String... properties)
+    public <T extends ETApiObject> ETResponse<T> retrieve(Class<T> type,
+                                                          Integer page,
+                                                          Integer pageSize,
+                                                          String... properties)
         throws ETSdkException
     {
         return retrieve(type, (ETFilter) null, page, pageSize, properties);
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends ETObject> ETResponse<T> retrieve(Class<T> type,
-                                                       ETFilter filter,
-                                                       Integer page,
-                                                       Integer pageSize,
-                                                       String... properties)
+    public <T extends ETApiObject> ETResponse<T> retrieve(Class<T> type,
+                                                          ETFilter filter,
+                                                          Integer page,
+                                                          Integer pageSize,
+                                                          String... properties)
         throws ETSdkException
     {
         //
@@ -376,99 +376,99 @@ public class ETClient {
         return response;
     }
 
-    public <T extends ETObject> ETResponse<T> retrieve(Class<T> type,
-                                                       String filter,
-                                                       Integer page,
-                                                       Integer pageSize,
-                                                       String... properties)
+    public <T extends ETApiObject> ETResponse<T> retrieve(Class<T> type,
+                                                          String filter,
+                                                          Integer page,
+                                                          Integer pageSize,
+                                                          String... properties)
         throws ETSdkException
     {
         return retrieve(type, ETFilter.parse(filter), page, pageSize, properties);
     }
 
-    public <T extends ETObject> T retrieveObject(Class<T> type,
-                                                 ETFilter filter,
-                                                 String... properties)
+    public <T extends ETApiObject> T retrieveObject(Class<T> type,
+                                                    ETFilter filter,
+                                                    String... properties)
         throws ETSdkException
     {
         ETResponse<T> response = retrieve(type, filter, properties);
         return response.getObject();
     }
 
-    public <T extends ETObject> T retrieveObject(Class<T> type,
-                                                 String filter,
-                                                 String... properties)
+    public <T extends ETApiObject> T retrieveObject(Class<T> type,
+                                                    String filter,
+                                                    String... properties)
         throws ETSdkException
     {
         ETResponse<T> response = retrieve(type, filter, properties);
         return response.getObject();
     }
 
-    public <T extends ETObject> List<T> retrieveObjects(Class<T> type)
+    public <T extends ETApiObject> List<T> retrieveObjects(Class<T> type)
         throws ETSdkException
     {
         ETResponse<T> response = retrieve(type);
         return response.getObjects();
     }
 
-    public <T extends ETObject> List<T> retrieveObjects(Class<T> type,
-                                                        ETFilter filter,
-                                                        String... properties)
+    public <T extends ETApiObject> List<T> retrieveObjects(Class<T> type,
+                                                           ETFilter filter,
+                                                           String... properties)
         throws ETSdkException
     {
         ETResponse<T> response = retrieve(type, filter, properties);
         return response.getObjects();
     }
 
-    public <T extends ETObject> List<T> retrieveObjects(Class<T> type,
-                                                        String filter,
-                                                        String... properties)
+    public <T extends ETApiObject> List<T> retrieveObjects(Class<T> type,
+                                                           String filter,
+                                                           String... properties)
         throws ETSdkException
     {
         ETResponse<T> response = retrieve(type, filter, properties);
         return response.getObjects();
     }
 
-    public <T extends ETObject> List<T> retrieveObjects(Class<T> type,
-                                                        Integer page,
-                                                        Integer pageSize,
-                                                        String... properties)
+    public <T extends ETApiObject> List<T> retrieveObjects(Class<T> type,
+                                                           Integer page,
+                                                           Integer pageSize,
+                                                           String... properties)
         throws ETSdkException
     {
         ETResponse<T> response = retrieve(type, page, pageSize, properties);
         return response.getObjects();
     }
 
-    public <T extends ETObject> List<T> retrieveObjects(Class<T> type,
-                                                        ETFilter filter,
-                                                        Integer page,
-                                                        Integer pageSize,
-                                                        String... properties)
+    public <T extends ETApiObject> List<T> retrieveObjects(Class<T> type,
+                                                           ETFilter filter,
+                                                           Integer page,
+                                                           Integer pageSize,
+                                                           String... properties)
         throws ETSdkException
     {
         ETResponse<T> response = retrieve(type, filter, page, pageSize, properties);
         return response.getObjects();
     }
 
-    public <T extends ETObject> List<T> retrieveObjects(Class<T> type,
-                                                        String filter,
-                                                        Integer page,
-                                                        Integer pageSize,
-                                                        String... properties)
+    public <T extends ETApiObject> List<T> retrieveObjects(Class<T> type,
+                                                           String filter,
+                                                           Integer page,
+                                                           Integer pageSize,
+                                                           String... properties)
         throws ETSdkException
     {
         ETResponse<T> response = retrieve(type, filter, page, pageSize, properties);
         return response.getObjects();
     }
 
-    public <T extends ETObject> ETResponse<T> update(T... objects)
+    public <T extends ETApiObject> ETResponse<T> update(T... objects)
         throws ETSdkException
     {
         return update(Arrays.asList(objects));
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends ETObject> ETResponse<T> update(List<T> objects)
+    public <T extends ETApiObject> ETResponse<T> update(List<T> objects)
         throws ETSdkException
     {
         ETResponse<T> response = new ETResponse<T>();
@@ -491,9 +491,9 @@ public class ETClient {
         return response;
     }
 
-    public <T extends ETObject> ETResponse<T> update(Class<T> type,
-                                                     String filter,
-                                                     String... values)
+    public <T extends ETApiObject> ETResponse<T> update(Class<T> type,
+                                                        String filter,
+                                                        String... values)
         throws ETSdkException
     {
         // XXX optimize
@@ -530,14 +530,14 @@ public class ETClient {
         return update(objects);
     }
 
-    public <T extends ETObject> ETResponse<T> delete(T... objects)
+    public <T extends ETApiObject> ETResponse<T> delete(T... objects)
         throws ETSdkException
     {
         return delete(Arrays.asList(objects));
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends ETObject> ETResponse<T> delete(List<T> objects)
+    public <T extends ETApiObject> ETResponse<T> delete(List<T> objects)
         throws ETSdkException
     {
         ETResponse<T> response = new ETResponse<T>();
@@ -560,8 +560,8 @@ public class ETClient {
         return response;
     }
 
-    public <T extends ETObject> ETResponse<T> delete(Class<T> type,
-                                                     String filter)
+    public <T extends ETApiObject> ETResponse<T> delete(Class<T> type,
+                                                        String filter)
         throws ETSdkException
     {
         // XXX optimize
@@ -569,7 +569,7 @@ public class ETClient {
         return delete(response.getObjects());
     }
 
-    private <T extends ETObject> Method getMethod(Class<T> type, String name, Class<?>... arguments)
+    private <T extends ETApiObject> Method getMethod(Class<T> type, String name, Class<?>... arguments)
         throws ETSdkException
     {
         Method method = null;
@@ -587,7 +587,7 @@ public class ETClient {
     }
 
     @SuppressWarnings("unchecked")
-    private <T extends ETObject> ETResponse<T> invokeMethod(Method method, List<T> arguments)
+    private <T extends ETApiObject> ETResponse<T> invokeMethod(Method method, List<T> arguments)
         throws ETSdkException
     {
         ETResponse<T> response = null;

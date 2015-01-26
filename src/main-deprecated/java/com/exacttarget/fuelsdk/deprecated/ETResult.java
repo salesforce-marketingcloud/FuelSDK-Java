@@ -27,7 +27,7 @@
 
 package com.exacttarget.fuelsdk.deprecated;
 
-import com.exacttarget.fuelsdk.ETPrettyPrintable;
+import com.exacttarget.fuelsdk.ETObject;
 import com.exacttarget.fuelsdk.annotations.PrettyPrint;
 
 /**
@@ -35,7 +35,7 @@ import com.exacttarget.fuelsdk.annotations.PrettyPrint;
  * Use {@link com.exacttarget.fuelsdk.ETResult}.
  */
 @Deprecated
-public class ETResult extends ETPrettyPrintable {
+public class ETResult extends ETObject {
     @PrettyPrint
     private String requestId = null;
     @PrettyPrint

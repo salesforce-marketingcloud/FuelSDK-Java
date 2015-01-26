@@ -114,7 +114,7 @@ import com.exacttarget.fuelsdk.internal.UpdateRequest;
 import com.exacttarget.fuelsdk.internal.UpdateResponse;
 import com.exacttarget.fuelsdk.internal.UpdateResult;
 
-public abstract class ETSoapObject extends ETObject {
+public abstract class ETSoapObject extends ETApiObject {
     private static Logger logger = Logger.getLogger(ETSoapObject.class);
 
     @ExternalName("id")

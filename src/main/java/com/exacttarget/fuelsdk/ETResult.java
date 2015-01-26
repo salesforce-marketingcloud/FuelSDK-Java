@@ -29,7 +29,7 @@ package com.exacttarget.fuelsdk;
 
 import com.exacttarget.fuelsdk.annotations.PrettyPrint;
 
-public class ETResult<T extends ETObject> extends ETPrettyPrintable {
+public class ETResult<T extends ETApiObject> extends ETObject {
     public enum Status {
         OK, ERROR
     }

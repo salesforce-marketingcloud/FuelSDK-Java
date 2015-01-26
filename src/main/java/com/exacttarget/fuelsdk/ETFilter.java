@@ -33,7 +33,7 @@ import java.util.List;
 
 import com.exacttarget.fuelsdk.annotations.PrettyPrint;
 
-public class ETFilter extends ETPrettyPrintable {
+public class ETFilter extends ETObject {
     public enum Operator {
         EQUALS("="),
         NOT_EQUALS("!="),

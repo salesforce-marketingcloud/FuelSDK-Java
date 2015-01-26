@@ -134,7 +134,7 @@ public class ETObjectTest {
         assertEquals("test3", modified.get(1));
     }
 
-    class TestObject extends ETObject {
+    class TestObject extends ETApiObject {
         private String id = null;
         private String key = null;
         private String name = null;

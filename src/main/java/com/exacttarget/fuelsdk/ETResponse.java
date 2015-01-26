@@ -32,7 +32,7 @@ import java.util.List;
 
 import com.exacttarget.fuelsdk.annotations.PrettyPrint;
 
-public class ETResponse<T extends ETObject> extends ETPrettyPrintable {
+public class ETResponse<T extends ETApiObject> extends ETObject {
     @PrettyPrint
     private ETResult<T> batchResult = null;
     @PrettyPrint

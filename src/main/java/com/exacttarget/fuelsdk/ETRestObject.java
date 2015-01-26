@@ -45,7 +45,7 @@ import org.apache.log4j.Logger;
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.RestObject;
 
-public abstract class ETRestObject extends ETObject {
+public abstract class ETRestObject extends ETApiObject {
     private static Logger logger = Logger.getLogger(ETRestObject.class);
 
     @Expose
