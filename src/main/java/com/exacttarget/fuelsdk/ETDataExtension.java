@@ -229,28 +229,6 @@ public class ETDataExtension extends ETSoapObject {
         setFolderId(categoryId);
     }
 
-    public ETResponse<ETDataExtensionRow> insert(ETDataExtensionRow... rows)
-        throws ETSdkException
-    {
-        return insert(Arrays.asList(rows));
-    }
-
-    public ETResponse<ETDataExtensionRow> insert(List<ETDataExtensionRow> rows)
-        throws ETSdkException
-    {
-        for (ETDataExtensionRow row : rows) {
-            //
-            // Set the data extension name if it isn't already set:
-            //
-
-            if (row.getName() == null) {
-                row.setName(name);
-            }
-        }
-
-        return getClient().create(rows);
-    }
-
     public ETResponse<ETDataExtensionRow> select()
         throws ETSdkException
     {
@@ -430,6 +408,28 @@ public class ETDataExtension extends ETSoapObject {
         return select(ETFilter.parse(filter), page, pageSize, columns);
     }
 
+    public ETResponse<ETDataExtensionRow> insert(ETDataExtensionRow... rows)
+        throws ETSdkException
+    {
+        return insert(Arrays.asList(rows));
+    }
+
+    public ETResponse<ETDataExtensionRow> insert(List<ETDataExtensionRow> rows)
+        throws ETSdkException
+    {
+        for (ETDataExtensionRow row : rows) {
+            //
+            // Set the data extension name if it isn't already set:
+            //
+
+            if (row.getName() == null) {
+                row.setName(name);
+            }
+        }
+
+        return super.create(getClient(), rows);
+    }
+
     public ETResponse<ETDataExtensionRow> update(ETDataExtensionRow... rows)
         throws ETSdkException
     {
@@ -449,37 +449,47 @@ public class ETDataExtension extends ETSoapObject {
             }
         }
 
-        return getClient().update(rows);
+        return super.update(getClient(), rows);
     }
 
-    private List<ETDataExtensionRow> getMatchingRows(String filter)
+    public ETResponse<ETDataExtensionRow> delete(ETDataExtensionRow... rows)
         throws ETSdkException
     {
-        List<ETDataExtensionRow> rows = new ArrayList<ETDataExtensionRow>();
+        return delete(Arrays.asList(rows));
+    }
 
-        hydrate();
+    public ETResponse<ETDataExtensionRow> delete(List<ETDataExtensionRow> rows)
+        throws ETSdkException
+    {
+        List<APIObject> internalRows = new ArrayList<APIObject>();
 
-        //
-        // Only retrieve primary key columns:
-        //
+        for (ETDataExtensionRow row : rows) {
+            //
+            // We hand construct this one, since all we need
+            // to pass in are the primary keys, and we pass them
+            // in to DeleteRequest differently (in the Keys
+            // property) than we received it from
+            // RetrieveRequest (in the Properties property):
+            //
 
-        List<String> primaryKeyColumnNames = new ArrayList<String>();
-        for (ETDataExtensionColumn column : columns) {
-            if (column.getIsPrimaryKey()) {
-                primaryKeyColumnNames.add(column.getName());
+            DataExtensionObject internalRow = new DataExtensionObject();
+            DataExtensionObject.Keys keys = new DataExtensionObject.Keys();
+            hydrate(); // make sure we've retrieved all columns
+            for (ETDataExtensionColumn column : columns) {
+                if (column.getIsPrimaryKey()) {
+                    APIProperty property = new APIProperty();
+                    property.setName(column.getName());
+                    property.setValue(row.getColumn(property.getName()));
+                    keys.getKey().add(property);
+                }
             }
+            internalRow.setName(name);
+            internalRow.setKeys(keys);
+            internalRows.add(internalRow);
         }
 
-        int page = 1;
-        int page_size = 2500;
-
-        ETResponse<ETDataExtensionRow> response = null;
-        do {
-            response = select(filter, page++, page_size, primaryKeyColumnNames.toArray(new String[0]));
-            rows.addAll(response.getObjects());
-        } while (response.hasMoreResults() == true);
-
-        return rows;
+        // call delete method that operates on internal objects
+        return super.delete(getClient(), internalRows, true);
     }
 
     public ETResponse<ETDataExtensionRow> update(String filter, String... values)
@@ -498,58 +508,11 @@ public class ETDataExtension extends ETSoapObject {
         return update(rows);
     }
 
-    public ETResponse<ETDataExtensionRow> delete(ETDataExtensionRow... rows)
-        throws ETSdkException
-    {
-        return delete(Arrays.asList(rows));
-    }
-
-    public ETResponse<ETDataExtensionRow> delete(List<ETDataExtensionRow> rows)
-        throws ETSdkException
-    {
-        List<APIObject> internalRows = new ArrayList<APIObject>();
-
-        for (ETDataExtensionRow row : rows) {
-            //
-            // We hand construct this one, since all we need
-            // to pass in is the primary keys, and we pass them
-            // in to DeleteRequest differently (in the Keys
-            // property) than we received it from
-            // RetrieveRequest (in the Properties property):
-            //
-
-            DataExtensionObject internalRow = new DataExtensionObject();
-            DataExtensionObject.Keys keys = new DataExtensionObject.Keys();
-            hydrate();
-            for (ETDataExtensionColumn column : columns) {
-                if (column.getIsPrimaryKey()) {
-                    APIProperty property = new APIProperty();
-                    property.setName(column.getName());
-                    property.setValue(row.getColumn(property.getName()));
-                    keys.getKey().add(property);
-                }
-            }
-            internalRow.setName(name);
-            internalRow.setKeys(keys);
-
-            internalRows.add(internalRow);
-        }
-
-        return super.delete(getClient(), internalRows, true);
-    }
-
     public ETResponse<ETDataExtensionRow> delete(String filter)
         throws ETSdkException
     {
         List<ETDataExtensionRow> rows = getMatchingRows(filter);
         return delete(rows);
-    }
-
-    public ETResponse<ETDataExtensionRow> export(String filter,
-                                                 String file)
-        throws ETSdkException
-    {
-        return export(ETFilter.parse(filter), file);
     }
 
     public ETResponse<ETDataExtensionRow> export(ETFilter filter,
@@ -592,6 +555,13 @@ public class ETDataExtension extends ETSoapObject {
         response.setResponseMessage(r.getResponseMessage());
 
         return response;
+    }
+
+    public ETResponse<ETDataExtensionRow> export(String filter,
+                                                 String file)
+        throws ETSdkException
+    {
+        return export(ETFilter.parse(filter), file);
     }
 
     public void hydrate()
@@ -758,6 +728,48 @@ public class ETDataExtension extends ETSoapObject {
         return stringBuilder.toString();
     }
 
+    private List<ETDataExtensionRow> getMatchingRows(String filter)
+        throws ETSdkException
+    {
+        List<ETDataExtensionRow> rows = new ArrayList<ETDataExtensionRow>();
+
+        hydrate(); // make sure we've retrieved all columns
+
+        //
+        // Only retrieve primary key columns:
+        //
+
+        List<String> primaryKeyColumnNames = new ArrayList<String>();
+        for (ETDataExtensionColumn column : columns) {
+            if (column.getIsPrimaryKey()) {
+                primaryKeyColumnNames.add(column.getName());
+            }
+        }
+
+        int page = 1;
+        int page_size = 2500;
+
+        ETResponse<ETDataExtensionRow> response = null;
+        do {
+            response = select(filter, page++, page_size, primaryKeyColumnNames.toArray(new String[0]));
+            rows.addAll(response.getObjects());
+        } while (response.hasMoreResults() == true);
+
+        return rows;
+    }
+
+    private String[] getColumnNames()
+        throws ETSdkException
+    {
+        hydrate(); // make sure we've retrieved all columns
+        String c[] = new String[columns.size()];
+        int i = 0;
+        for (ETDataExtensionColumn column : columns) {
+            c[i++] = column.getName();
+        }
+        return c;
+    }
+
     private static String toQueryParams(String value)
         throws ETSdkException
     {
@@ -795,17 +807,5 @@ public class ETDataExtension extends ETSoapObject {
         } catch (UnsupportedEncodingException ex) {
             throw new ETSdkException("error URL encoding " + v, ex);
         }
-    }
-
-    private String[] getColumnNames()
-        throws ETSdkException
-    {
-        hydrate();
-        String c[] = new String[columns.size()];
-        int i = 0;
-        for (ETDataExtensionColumn column : columns) {
-            c[i++] = column.getName();
-        }
-        return c;
     }
 }
