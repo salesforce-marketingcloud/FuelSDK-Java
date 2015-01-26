@@ -163,6 +163,33 @@ public class ETClient {
         return soapConnection;
     }
 
+    /**
+     * @deprecated
+     * Legacy tokens are no longer supported.
+     */
+    @Deprecated
+    public String getLegacyToken() {
+        return null;
+    }
+
+    /**
+     * @deprecated
+     * Use getRestConnection().
+     */
+    @Deprecated
+    public ETRestConnection getRESTConnection() {
+        return getRestConnection();
+    }
+
+    /**
+     * @deprecated
+     * Use getSoapConnection().
+     */
+    @Deprecated
+    public ETSoapConnection getSOAPConnection() {
+        return getSoapConnection();
+    }
+
     public synchronized String refreshToken()
         throws ETSdkException
     {
@@ -252,37 +279,6 @@ public class ETClient {
         }
 
         return accessToken;
-    }
-
-    public <T extends ETApiObject> ETResponse<T> create(T... objects)
-        throws ETSdkException
-    {
-        return create(Arrays.asList(objects));
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T extends ETApiObject> ETResponse<T> create(List<T> objects)
-        throws ETSdkException
-    {
-        ETResponse<T> response = new ETResponse<T>();
-
-        if (objects == null || objects.size() == 0) {
-            response.setStatus(ETResult.Status.OK);
-            return response;
-        }
-
-        //
-        // Get the create method from the superclass of
-        // T (all methods are found in the superclass):
-        //
-
-        Class<T> superClass = (Class<T>) objects.get(0).getClass().getSuperclass();
-
-        Method create = getMethod(superClass, "create", ETClient.class, List.class);
-
-        response = invokeMethod(create, objects);
-
-        return response;
     }
 
     public <T extends ETApiObject> ETResponse<T> retrieve(Class<T> type)
@@ -467,35 +463,40 @@ public class ETClient {
         return response.getObjects();
     }
 
+    public <T extends ETApiObject> ETResponse<T> create(T... objects)
+        throws ETSdkException
+    {
+        return createUpdateDelete("create", Arrays.asList(objects));
+    }
+
+    public <T extends ETApiObject> ETResponse<T> create(List<T> objects)
+        throws ETSdkException
+    {
+        return createUpdateDelete("create", objects);
+    }
+
     public <T extends ETApiObject> ETResponse<T> update(T... objects)
         throws ETSdkException
     {
-        return update(Arrays.asList(objects));
+        return createUpdateDelete("update", Arrays.asList(objects));
     }
 
-    @SuppressWarnings("unchecked")
     public <T extends ETApiObject> ETResponse<T> update(List<T> objects)
         throws ETSdkException
     {
-        ETResponse<T> response = new ETResponse<T>();
+        return createUpdateDelete("update", objects);
+    }
 
-        if (objects == null || objects.size() == 0) {
-            response.setStatus(ETResult.Status.OK);
-            return response;
-        }
+    public <T extends ETApiObject> ETResponse<T> delete(T... objects)
+        throws ETSdkException
+    {
+        return createUpdateDelete("delete", Arrays.asList(objects));
+    }
 
-        //
-        // Get the update method from the superclass of
-        // T (all methods are found in the superclass):
-        //
-
-        Class<T> superClass = (Class<T>) objects.get(0).getClass().getSuperclass();
-
-        Method update = getMethod(superClass, "update", ETClient.class, List.class);
-
-        response = invokeMethod(update, objects);
-
-        return response;
+    public <T extends ETApiObject> ETResponse<T> delete(List<T> objects)
+        throws ETSdkException
+    {
+        return createUpdateDelete("delete", objects);
     }
 
     public <T extends ETApiObject> ETResponse<T> update(Class<T> type,
@@ -537,14 +538,17 @@ public class ETClient {
         return update(objects);
     }
 
-    public <T extends ETApiObject> ETResponse<T> delete(T... objects)
+    public <T extends ETApiObject> ETResponse<T> delete(Class<T> type,
+                                                        String filter)
         throws ETSdkException
     {
-        return delete(Arrays.asList(objects));
+        // XXX optimize
+        ETResponse<T> response = retrieve(type, filter);
+        return delete(response.getObjects());
     }
 
-    @SuppressWarnings("unchecked")
-    public <T extends ETApiObject> ETResponse<T> delete(List<T> objects)
+    private <T extends ETApiObject> ETResponse<T> createUpdateDelete(String method,
+                                                                     List<T> objects)
         throws ETSdkException
     {
         ETResponse<T> response = new ETResponse<T>();
@@ -555,26 +559,18 @@ public class ETClient {
         }
 
         //
-        // Get the delete method from the superclass of
-        // T (all methods are found in the superclass):
+        // Get the appropriate method from the superclass
+        // of T (all methods are found in the superclass):
         //
 
+        @SuppressWarnings("unchecked")
         Class<T> superClass = (Class<T>) objects.get(0).getClass().getSuperclass();
 
-        Method delete = getMethod(superClass, "delete", ETClient.class, List.class);
+        Method create = getMethod(superClass, method, ETClient.class, List.class);
 
-        response = invokeMethod(delete, objects);
+        response = invokeMethod(create, objects);
 
         return response;
-    }
-
-    public <T extends ETApiObject> ETResponse<T> delete(Class<T> type,
-                                                        String filter)
-        throws ETSdkException
-    {
-        // XXX optimize
-        ETResponse<T> response = retrieve(type, filter);
-        return delete(response.getObjects());
     }
 
     private <T extends ETApiObject> Method getMethod(Class<T> type, String name, Class<?>... arguments)
@@ -610,32 +606,5 @@ public class ETClient {
         }
 
         return response;
-    }
-
-    /**
-     * @deprecated
-     * Legacy tokens are no longer supported.
-     */
-    @Deprecated
-    public String getLegacyToken() {
-        return null;
-    }
-
-    /**
-     * @deprecated
-     * Use getRestConnection().
-     */
-    @Deprecated
-    public ETRestConnection getRESTConnection() {
-        return getRestConnection();
-    }
-
-    /**
-     * @deprecated
-     * Use getSoapConnection().
-     */
-    @Deprecated
-    public ETSoapConnection getSOAPConnection() {
-        return getSoapConnection();
     }
 }
