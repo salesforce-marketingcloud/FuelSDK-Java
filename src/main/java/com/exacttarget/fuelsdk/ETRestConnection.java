@@ -54,7 +54,7 @@ public class ETRestConnection {
 
     private boolean isAuthConnection = false;
 
-    private enum Method {
+    public enum Method {
         GET, POST, PATCH, DELETE
     }
 
