@@ -362,19 +362,15 @@ public abstract class ETRestObject extends ETApiObject {
 
         String path = annotations.path();
 
-        Gson gson = connection.getGson();
-
-        JsonParser jsonParser = new JsonParser();
-
         //
-        // There's currently no way to do this in bulk so
+        // There's currently no way to do this in bulk, so
         // we walk through the list of objects and create,
         // update, or delete them one at a time:
         //
 
-        for (T object : objects) {
-            String requestPayload = gson.toJson(object);
+        Gson gson = connection.getGson();
 
+        for (T object : objects) {
             switch (method) {
               case POST:
                 logger.trace("POST " + path);
@@ -389,9 +385,12 @@ public abstract class ETRestObject extends ETApiObject {
                 throw new ETSdkException("invalid method: " + method);
             }
 
+            String requestPayload = null;
             if (method != ETRestConnection.Method.DELETE) {
                 // no request payload for deletes
+                requestPayload = gson.toJson(object);
                 if (logger.isTraceEnabled()) {
+                    JsonParser jsonParser = new JsonParser();
                     JsonObject jsonObject = jsonParser.parse(requestPayload).getAsJsonObject();
                     String jsonPrettyPrinted = gson.toJson(jsonObject);
                     for (String line : jsonPrettyPrinted.split("\\n")) {
@@ -427,16 +426,14 @@ public abstract class ETRestObject extends ETApiObject {
             if (method != ETRestConnection.Method.DELETE) {
                 // no response payload for deletes
                 String responsePayload = r.getResponsePayload();
-
+                JsonParser jsonParser = new JsonParser();
                 JsonObject jsonObject = jsonParser.parse(responsePayload).getAsJsonObject();
-
                 if (logger.isTraceEnabled()) {
                     String jsonPrettyPrinted = gson.toJson(jsonObject);
                     for (String line : jsonPrettyPrinted.split("\\n")) {
                         logger.trace(line);
                     }
                 }
-
                 @SuppressWarnings("unchecked")
                 T responseObject = (T) gson.fromJson(responsePayload, object.getClass());
                 responseObject.setClient(client);
@@ -445,7 +442,7 @@ public abstract class ETRestObject extends ETApiObject {
 
             response.addResult(result);
 
-            object.setClient(client);
+            object.setClient(client); // XXX
         }
 
         return response;
