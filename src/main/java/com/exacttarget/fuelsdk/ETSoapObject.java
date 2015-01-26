@@ -151,24 +151,6 @@ public abstract class ETSoapObject extends ETApiObject {
         this.key = key;
     }
 
-    /**
-     * @deprecated
-     * Use <code>getKey()</code>.
-     */
-    @Deprecated
-    public String getCustomerKey() {
-        return getKey();
-    }
-
-    /**
-     * @deprecated
-     * Use <code>setKey()</code>.
-     */
-    @Deprecated
-    public void setCustomerKey(String customerKey) {
-        setKey(customerKey);
-    }
-
     @Override
     public Date getCreatedDate() {
         return createdDate;
@@ -189,125 +171,22 @@ public abstract class ETSoapObject extends ETApiObject {
         this.modifiedDate = modifiedDate;
     }
 
-    public static <T extends ETSoapObject> ETResponse<T> create(ETClient client,
-                                                                List<T> objects)
-        throws ETSdkException
-    {
-        ETResponse<T> response = new ETResponse<T>();
+    /**
+     * @deprecated
+     * Use <code>getKey()</code>.
+     */
+    @Deprecated
+    public String getCustomerKey() {
+        return getKey();
+    }
 
-        if (objects == null || objects.size() == 0) {
-            response.setStatus(ETResult.Status.OK);
-            return response;
-        }
-
-        //
-        // Get handle to the SOAP connection:
-        //
-
-        ETSoapConnection connection = client.getSoapConnection();
-
-        //
-        // Automatically refresh the token if necessary:
-        //
-
-        client.refreshToken();
-
-        //
-        // Perform the SOAP create:
-        //
-
-        Soap soap = connection.getSoap();
-
-        CreateRequest createRequest = new CreateRequest();
-        createRequest.setOptions(new CreateOptions());
-        for (T object : objects) {
-            object.setClient(client);
-            createRequest.getObjects().add(object.toInternal());
-        }
-
-        if (logger.isTraceEnabled()) {
-            logger.trace("CreateRequest:");
-            logger.trace("  objects = {");
-            for (APIObject object : createRequest.getObjects()) {
-                logger.trace("    " + object);
-            }
-            logger.trace("  }");
-        }
-
-        logger.trace("calling soap.create...");
-
-        CreateResponse createResponse = soap.create(createRequest);
-
-        if (logger.isTraceEnabled()) {
-            logger.trace("CreateResponse:");
-            logger.trace("  requestId = " + createResponse.getRequestID());
-            logger.trace("  overallStatus = " + createResponse.getOverallStatus());
-            logger.trace("  results = {");
-            for (CreateResult result : createResponse.getResults()) {
-                logger.trace("    " + result);
-            }
-            logger.trace("  }");
-        }
-
-        response.setRequestId(createResponse.getRequestID());
-        if (createResponse.getOverallStatus().equals("OK")) {
-            response.setStatus(ETResult.Status.OK);
-        } else if (createResponse.getOverallStatus().equals("Error")) {
-            response.setStatus(ETResult.Status.ERROR);
-        }
-        response.setResponseCode(createResponse.getOverallStatus());
-        response.setResponseMessage(createResponse.getOverallStatus());
-        for (CreateResult createResult : createResponse.getResults()) {
-            //
-            // Allocate a new (external) object:
-            //
-
-            @SuppressWarnings("unchecked")
-            Class<T> externalType = (Class<T>) objects.get(0).getClass();
-
-            T externalObject = null;
-            try {
-                externalObject = externalType.newInstance();
-            } catch (Exception ex) {
-                throw new ETSdkException("could not instantiate "
-                        + externalType.getName(), ex);
-            }
-
-            externalObject.setClient(client);
-
-            //
-            // Convert from internal representation:
-            //
-
-            // not all SOAP calls return the object though some do..
-            APIObject internalObject = createResult.getObject();
-            if (internalObject != null) {
-                externalObject.fromInternal(createResult.getObject());
-            } else {
-                // XXX populate fields from the object passed to the call?
-                externalObject.setId(Integer.toString(createResult.getNewID()));
-            }
-
-            //
-            // Add result to the list of results:
-            //
-
-            ETResult<T> result = new ETResult<T>();
-            if (createResult.getStatusCode().equals("OK")) {
-                result.setStatus(ETResult.Status.OK);
-            } else if (createResult.getStatusCode().equals("Error")) {
-                result.setStatus(ETResult.Status.ERROR);
-            }
-            result.setResponseCode(createResult.getStatusCode());
-            result.setResponseMessage(createResult.getStatusMessage());
-            result.setErrorCode(createResult.getErrorCode());
-            if (result.getResponseCode().equals("OK")) { // XXX?
-                result.setObject(externalObject);
-            }
-            response.addResult(result);
-        }
-
-        return response;
+    /**
+     * @deprecated
+     * Use <code>setKey()</code>.
+     */
+    @Deprecated
+    public void setCustomerKey(String customerKey) {
+        setKey(customerKey);
     }
 
     public static <T extends ETSoapObject> ETResponse<T> retrieve(ETClient client,
@@ -329,13 +208,13 @@ public abstract class ETSoapObject extends ETApiObject {
     // of the data extension in brackets: DataExtensionObject[foo]).
     //
 
-    public static <T extends ETSoapObject> ETResponse<T> retrieve(ETClient client,
-                                                                  String soapObjectType,
-                                                                  ETFilter filter,
-                                                                  Integer page,
-                                                                  Integer pageSize,
-                                                                  Class<T> type,
-                                                                  String... properties)
+    protected static <T extends ETSoapObject> ETResponse<T> retrieve(ETClient client,
+                                                                     String soapObjectType,
+                                                                     ETFilter filter,
+                                                                     Integer page,
+                                                                     Integer pageSize,
+                                                                     Class<T> type,
+                                                                     String... properties)
         throws ETSdkException
     {
         if ((page != null) || (pageSize != null)) {
@@ -517,6 +396,127 @@ public abstract class ETSoapObject extends ETApiObject {
 
         if (retrieveResponseMsg.getOverallStatus().equals("MoreDataAvailable")) {
             response.setMoreResults(true);
+        }
+
+        return response;
+    }
+
+    public static <T extends ETSoapObject> ETResponse<T> create(ETClient client,
+                                                                List<T> objects)
+        throws ETSdkException
+    {
+        ETResponse<T> response = new ETResponse<T>();
+
+        if (objects == null || objects.size() == 0) {
+            response.setStatus(ETResult.Status.OK);
+            return response;
+        }
+
+        //
+        // Get handle to the SOAP connection:
+        //
+
+        ETSoapConnection connection = client.getSoapConnection();
+
+        //
+        // Automatically refresh the token if necessary:
+        //
+
+        client.refreshToken();
+
+        //
+        // Perform the SOAP create:
+        //
+
+        Soap soap = connection.getSoap();
+
+        CreateRequest createRequest = new CreateRequest();
+        createRequest.setOptions(new CreateOptions());
+        for (T object : objects) {
+            object.setClient(client);
+            createRequest.getObjects().add(object.toInternal());
+        }
+
+        if (logger.isTraceEnabled()) {
+            logger.trace("CreateRequest:");
+            logger.trace("  objects = {");
+            for (APIObject object : createRequest.getObjects()) {
+                logger.trace("    " + object);
+            }
+            logger.trace("  }");
+        }
+
+        logger.trace("calling soap.create...");
+
+        CreateResponse createResponse = soap.create(createRequest);
+
+        if (logger.isTraceEnabled()) {
+            logger.trace("CreateResponse:");
+            logger.trace("  requestId = " + createResponse.getRequestID());
+            logger.trace("  overallStatus = " + createResponse.getOverallStatus());
+            logger.trace("  results = {");
+            for (CreateResult result : createResponse.getResults()) {
+                logger.trace("    " + result);
+            }
+            logger.trace("  }");
+        }
+
+        response.setRequestId(createResponse.getRequestID());
+        if (createResponse.getOverallStatus().equals("OK")) {
+            response.setStatus(ETResult.Status.OK);
+        } else if (createResponse.getOverallStatus().equals("Error")) {
+            response.setStatus(ETResult.Status.ERROR);
+        }
+        response.setResponseCode(createResponse.getOverallStatus());
+        response.setResponseMessage(createResponse.getOverallStatus());
+        for (CreateResult createResult : createResponse.getResults()) {
+            //
+            // Allocate a new (external) object:
+            //
+
+            @SuppressWarnings("unchecked")
+            Class<T> externalType = (Class<T>) objects.get(0).getClass();
+
+            T externalObject = null;
+            try {
+                externalObject = externalType.newInstance();
+            } catch (Exception ex) {
+                throw new ETSdkException("could not instantiate "
+                        + externalType.getName(), ex);
+            }
+
+            externalObject.setClient(client);
+
+            //
+            // Convert from internal representation:
+            //
+
+            // not all SOAP calls return the object though some do..
+            APIObject internalObject = createResult.getObject();
+            if (internalObject != null) {
+                externalObject.fromInternal(createResult.getObject());
+            } else {
+                // XXX populate fields from the object passed to the call?
+                externalObject.setId(Integer.toString(createResult.getNewID()));
+            }
+
+            //
+            // Add result to the list of results:
+            //
+
+            ETResult<T> result = new ETResult<T>();
+            if (createResult.getStatusCode().equals("OK")) {
+                result.setStatus(ETResult.Status.OK);
+            } else if (createResult.getStatusCode().equals("Error")) {
+                result.setStatus(ETResult.Status.ERROR);
+            }
+            result.setResponseCode(createResult.getStatusCode());
+            result.setResponseMessage(createResult.getStatusMessage());
+            result.setErrorCode(createResult.getErrorCode());
+            if (result.getResponseCode().equals("OK")) { // XXX?
+                result.setObject(externalObject);
+            }
+            response.addResult(result);
         }
 
         return response;

@@ -101,102 +101,6 @@ public abstract class ETRestObject extends ETApiObject {
         this.modifiedDate = modifiedDate;
     }
 
-    public static <T extends ETRestObject> ETResponse<T> create(ETClient client,
-                                                                List<T> objects)
-        throws ETSdkException
-    {
-        ETResponse<T> response = new ETResponse<T>();
-
-        if (objects == null || objects.size() == 0) {
-            response.setStatus(ETResult.Status.OK);
-            return response;
-        }
-
-        //
-        // Get handle to the REST connection:
-        //
-
-        ETRestConnection connection = client.getRestConnection();
-
-        //
-        // Automatically refresh the token if necessary:
-        //
-
-        client.refreshToken();
-
-        //
-        // Read call details from the RestObject annotation:
-        //
-
-        RestObject annotations = objects.get(0).getClass().getAnnotation(RestObject.class);
-
-        assert annotations != null;
-
-        logger.trace("path: " + annotations.path());
-        logger.trace("primaryKey: " + annotations.primaryKey());
-        logger.trace("collection: " + annotations.collection());
-        logger.trace("totalCount: " + annotations.totalCount());
-
-        String path = annotations.path();
-
-        Gson gson = connection.getGson();
-
-        JsonParser jsonParser = new JsonParser();
-
-        //
-        // There's currently no way to do this in bulk so
-        // we walk through the list of objects and create
-        // them one at a time:
-        //
-
-        for (T object : objects) {
-            String requestPayload = gson.toJson(object);
-
-            logger.trace("POST " + path);
-
-            if (logger.isTraceEnabled()) {
-                JsonObject jsonObject = jsonParser.parse(requestPayload).getAsJsonObject();
-                String jsonPrettyPrinted = gson.toJson(jsonObject);
-                for (String line : jsonPrettyPrinted.split("\\n")) {
-                    logger.trace(line);
-                }
-            }
-
-            ETRestConnection.Response r = connection.post(path, requestPayload);
-
-            String responsePayload = r.getResponsePayload();
-
-            JsonObject jsonObject = jsonParser.parse(responsePayload).getAsJsonObject();
-
-            if (logger.isTraceEnabled()) {
-                String jsonPrettyPrinted = gson.toJson(jsonObject);
-                for (String line : jsonPrettyPrinted.split("\\n")) {
-                    logger.trace(line);
-                }
-            }
-
-            ETResult<T> result = new ETResult<T>();
-            result.setRequestId(r.getRequestId());
-            if (r.getResponseCode() >= 200 && r.getResponseCode() <= 299) {
-                result.setStatus(ETResult.Status.OK);
-            } else if (r.getResponseCode() >= 400 && r.getResponseCode() <= 599) {
-                result.setStatus(ETResult.Status.ERROR);
-            }
-            result.setResponseCode(r.getResponseCode().toString());
-            result.setResponseMessage(r.getResponseMessage());
-            @SuppressWarnings("unchecked")
-            T createdObject = (T) gson.fromJson(responsePayload, object.getClass());
-            createdObject.setClient(client);
-            result.setObject(createdObject);
-
-            response.addResult(result);
-
-            object.setClient(client);
-        }
-
-        return response;
-    }
-
     public static <T extends ETRestObject> ETResponse<T> retrieve(ETClient client,
                                                                   ETFilter filter,
                                                                   Integer page,
@@ -396,6 +300,102 @@ public abstract class ETRestObject extends ETApiObject {
         logger.trace("GET " + path);
 
         return connection.get(path);
+    }
+
+    public static <T extends ETRestObject> ETResponse<T> create(ETClient client,
+                                                                List<T> objects)
+        throws ETSdkException
+    {
+        ETResponse<T> response = new ETResponse<T>();
+
+        if (objects == null || objects.size() == 0) {
+            response.setStatus(ETResult.Status.OK);
+            return response;
+        }
+
+        //
+        // Get handle to the REST connection:
+        //
+
+        ETRestConnection connection = client.getRestConnection();
+
+        //
+        // Automatically refresh the token if necessary:
+        //
+
+        client.refreshToken();
+
+        //
+        // Read call details from the RestObject annotation:
+        //
+
+        RestObject annotations = objects.get(0).getClass().getAnnotation(RestObject.class);
+
+        assert annotations != null;
+
+        logger.trace("path: " + annotations.path());
+        logger.trace("primaryKey: " + annotations.primaryKey());
+        logger.trace("collection: " + annotations.collection());
+        logger.trace("totalCount: " + annotations.totalCount());
+
+        String path = annotations.path();
+
+        Gson gson = connection.getGson();
+
+        JsonParser jsonParser = new JsonParser();
+
+        //
+        // There's currently no way to do this in bulk so
+        // we walk through the list of objects and create
+        // them one at a time:
+        //
+
+        for (T object : objects) {
+            String requestPayload = gson.toJson(object);
+
+            logger.trace("POST " + path);
+
+            if (logger.isTraceEnabled()) {
+                JsonObject jsonObject = jsonParser.parse(requestPayload).getAsJsonObject();
+                String jsonPrettyPrinted = gson.toJson(jsonObject);
+                for (String line : jsonPrettyPrinted.split("\\n")) {
+                    logger.trace(line);
+                }
+            }
+
+            ETRestConnection.Response r = connection.post(path, requestPayload);
+
+            String responsePayload = r.getResponsePayload();
+
+            JsonObject jsonObject = jsonParser.parse(responsePayload).getAsJsonObject();
+
+            if (logger.isTraceEnabled()) {
+                String jsonPrettyPrinted = gson.toJson(jsonObject);
+                for (String line : jsonPrettyPrinted.split("\\n")) {
+                    logger.trace(line);
+                }
+            }
+
+            ETResult<T> result = new ETResult<T>();
+            result.setRequestId(r.getRequestId());
+            if (r.getResponseCode() >= 200 && r.getResponseCode() <= 299) {
+                result.setStatus(ETResult.Status.OK);
+            } else if (r.getResponseCode() >= 400 && r.getResponseCode() <= 599) {
+                result.setStatus(ETResult.Status.ERROR);
+            }
+            result.setResponseCode(r.getResponseCode().toString());
+            result.setResponseMessage(r.getResponseMessage());
+            @SuppressWarnings("unchecked")
+            T createdObject = (T) gson.fromJson(responsePayload, object.getClass());
+            createdObject.setClient(client);
+            result.setObject(createdObject);
+
+            response.addResult(result);
+
+            object.setClient(client);
+        }
+
+        return response;
     }
 
     public static <T extends ETRestObject> ETResponse<T> update(ETClient client,
