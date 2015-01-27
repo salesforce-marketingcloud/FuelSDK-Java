@@ -110,6 +110,7 @@ import com.exacttarget.fuelsdk.internal.Subscriber;
 //import com.exacttarget.fuelsdk.internal.SubscriberList;
 import com.exacttarget.fuelsdk.internal.SubscriberStatus;
 import com.exacttarget.fuelsdk.internal.TriggeredSendDefinition;
+import com.exacttarget.fuelsdk.internal.TriggeredSendStatusEnum;
 //import com.exacttarget.fuelsdk.internal.UnsubEvent;
 import com.exacttarget.fuelsdk.internal.UpdateOptions;
 import com.exacttarget.fuelsdk.internal.UpdateRequest;
@@ -950,9 +951,15 @@ public abstract class ETSoapObject extends ETApiObject {
 
         // ETTriggeredSend
         convertUtils.register(new EnumConverter(),
-                ETTriggeredSend.class);
+                ETTriggeredEmail.class);
         convertUtils.register(new EnumConverter(),
                 TriggeredSendDefinition.class);
+
+        // ETTriggeredSend.Status
+        convertUtils.register(new EnumConverter(),
+                ETTriggeredEmail.Status.class);
+        convertUtils.register(new EnumConverter(),
+                TriggeredSendStatusEnum.class);
 
 //        // ETUnsubEvent
 //        convertUtils.register(new ExternalObjectConverter(),
