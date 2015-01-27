@@ -37,6 +37,12 @@ import com.google.gson.annotations.Expose;
             totalCount = "count")
 public class ETCampaignAsset extends ETRestObject {
     @Expose
+    @ExternalName("id")
+    private String id = null;
+    @Expose
+    @ExternalName("key")
+    private String key = null;
+    @Expose
     @ExternalName("campaignId")
     private String campaignId = null;
     @Expose
@@ -47,12 +53,23 @@ public class ETCampaignAsset extends ETRestObject {
     private String objectId = null;
 
     @Override
-    public String getName() {
-        return null;
+    public String getId() {
+        return id;
     }
 
     @Override
-    public void setName(String name) {
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Override
+    public String getKey() {
+        return key;
+    }
+
+    @Override
+    public void setKey(String key) {
+        this.key = key;
     }
 
     public String getCampaignId() {

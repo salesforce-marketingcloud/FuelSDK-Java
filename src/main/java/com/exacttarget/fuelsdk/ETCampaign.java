@@ -38,6 +38,12 @@ import com.google.gson.annotations.SerializedName;
             totalCount = "count")
 public class ETCampaign extends ETRestObject {
     @Expose
+    @ExternalName("id")
+    private String id = null;
+    @Expose
+    @ExternalName("key")
+    private String key = null;
+    @Expose
     @ExternalName("name")
     private String name = null;
     @Expose
@@ -54,11 +60,29 @@ public class ETCampaign extends ETRestObject {
     private Boolean favorite = null;
 
     @Override
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Override
+    public String getKey() {
+        return key;
+    }
+
+    @Override
+    public void setKey(String key) {
+        this.key = key;
+    }
+
     public String getName() {
         return name;
     }
 
-    @Override
     public void setName(String name) {
         this.name = name;
     }

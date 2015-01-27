@@ -36,15 +36,23 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 /**
- * An <code>ETObject</code> is a retrievable object in the
- * Salesforce Marketing Cloud. All retrievable objects are
- * guaranteed to have the following properties:
+ * An <code>ETApiObject</code> is an object available via
+ * the Salesforce Marketing Cloud API. All API objects
+ * are guaranteed to have the following properties, which
+ * is enforced via abstract getter and setter methods:
  *
  * id -
  * key -
  * name -
  * createdDate -
  * modifiedDate -
+ *
+ * Typically, a specific API object will extend either
+ * <code>ETRestObject</code> or <code>ETSoapObject</code>
+ * (depending on whether it is a REST or SOAP API,
+ * respectively), adding object-specific property
+ * getters and setters. In a few cases (e.g., ETDataExtension),
+ * API objects are hybrids of both REST and SOAP.
  */
 
 public abstract class ETApiObject extends ETObject {
@@ -56,8 +64,6 @@ public abstract class ETApiObject extends ETObject {
     public abstract void setId(String id);
     public abstract String getKey();
     public abstract void setKey(String key);
-    public abstract String getName();
-    public abstract void setName(String name);
     public abstract Date getCreatedDate();
     public abstract void setCreatedDate(Date createdDate);
     public abstract Date getModifiedDate();

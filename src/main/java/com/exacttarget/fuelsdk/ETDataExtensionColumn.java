@@ -36,6 +36,11 @@ import com.exacttarget.fuelsdk.internal.DataExtensionField;
     "ID", "Description", "DataExtension", "Precision"
 })
 public class ETDataExtensionColumn extends ETSoapObject {
+    @ExternalName("id")
+    private String id = null;
+    @ExternalName("key")
+    @InternalName("customerKey")
+    private String key = null;
     @ExternalName("name")
     private String name = null;
     @ExternalName("description")
@@ -62,11 +67,29 @@ public class ETDataExtensionColumn extends ETSoapObject {
     public ETDataExtensionColumn() {}
 
     @Override
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Override
+    public String getKey() {
+        return key;
+    }
+
+    @Override
+    public void setKey(String key) {
+        this.key = key;
+    }
+
     public String getName() {
         return name;
     }
 
-    @Override
     public void setName(String name) {
         this.name = name.toLowerCase();
     }
@@ -145,38 +168,20 @@ public class ETDataExtensionColumn extends ETSoapObject {
 
     /**
      * @deprecated
-     * Use <code>getType()</code>.
+     * Use <code>getKey()</code>.
      */
     @Deprecated
-    public Type getColumnType() {
-        return getType();
+    public String getCustomerKey() {
+        return getKey();
     }
 
     /**
      * @deprecated
-     * Use <code>setType()</code>.
+     * Use <code>setKey()</code>.
      */
     @Deprecated
-    public void setColumnType(Type columnType) {
-        setType(columnType);
-    }
-
-    /**
-     * @deprecated
-     * Use <code>getMaxLength()</code>.
-     */
-    @Deprecated
-    public Integer getMaxLength() {
-        return getLength();
-    }
-
-    /**
-     * @deprecated
-     * Use <code>setMaxLength()</code>.
-     */
-    @Deprecated
-    public void setMaxLength(Integer maxLength) {
-        setLength(maxLength);
+    public void setCustomerKey(String customerKey) {
+        setKey(customerKey);
     }
 
     public enum Type {

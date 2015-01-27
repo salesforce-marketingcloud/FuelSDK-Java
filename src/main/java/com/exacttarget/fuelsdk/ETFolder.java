@@ -28,12 +28,18 @@
 package com.exacttarget.fuelsdk;
 
 import com.exacttarget.fuelsdk.annotations.ExternalName;
+import com.exacttarget.fuelsdk.annotations.InternalName;
 import com.exacttarget.fuelsdk.annotations.InternalProperty;
 import com.exacttarget.fuelsdk.annotations.SoapObject;
 import com.exacttarget.fuelsdk.internal.DataFolder;
 
 @SoapObject(internalType = DataFolder.class)
 public class ETFolder extends ETSoapObject {
+    @ExternalName("id")
+    private String id = null;
+    @ExternalName("key")
+    @InternalName("customerKey")
+    private String key = null;
     @ExternalName("name")
     private String name = null;
     @ExternalName("description")
@@ -53,11 +59,29 @@ public class ETFolder extends ETSoapObject {
     public ETFolder() {}
 
     @Override
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Override
+    public String getKey() {
+        return key;
+    }
+
+    @Override
+    public void setKey(String key) {
+        this.key = key;
+    }
+
     public String getName() {
         return name;
     }
 
-    @Override
     public void setName(String name) {
         this.name = name;
     }
@@ -90,6 +114,24 @@ public class ETFolder extends ETSoapObject {
             parentFolder = new ETFolder();
         }
         parentFolder.setKey(parentFolderKey);
+    }
+
+    /**
+     * @deprecated
+     * Use <code>getKey()</code>.
+     */
+    @Deprecated
+    public String getCustomerKey() {
+        return getKey();
+    }
+
+    /**
+     * @deprecated
+     * Use <code>setKey()</code>.
+     */
+    @Deprecated
+    public void setCustomerKey(String customerKey) {
+        setKey(customerKey);
     }
 
     /**

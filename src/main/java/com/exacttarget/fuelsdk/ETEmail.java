@@ -27,17 +27,13 @@
 
 package com.exacttarget.fuelsdk;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.InternalName;
 import com.exacttarget.fuelsdk.annotations.SoapObject;
-import com.exacttarget.fuelsdk.internal.DataExtensionObject;
+import com.exacttarget.fuelsdk.internal.Email;
 
-@SoapObject(internalType = DataExtensionObject.class)
-public class ETDataExtensionRow extends ETSoapObject {
+@SoapObject(internalType = Email.class)
+public class ETEmail extends ETSoapObject {
     @ExternalName("id")
     private String id = null;
     @ExternalName("key")
@@ -45,11 +41,23 @@ public class ETDataExtensionRow extends ETSoapObject {
     private String key = null;
     @ExternalName("name")
     private String name = null;
-    @ExternalName("columns")
-    @InternalName("properties")
-    private Map<String, String> columns = new HashMap<String, String>();
+    @ExternalName("folderId")
+    @InternalName("categoryID")
+    private Integer folderId = null;
+    @ExternalName("subject")
+    private String subject = null;
+    @ExternalName("htmlBody")
+    private String htmlBody = null;
+    @ExternalName("textBody")
+    private String textBody = null;
+    @ExternalName("isHtmlPaste")
+    @InternalName("isHTMLPaste")
+    private Boolean isHtmlPaste = null;
+    @ExternalName("type")
+    @InternalName("emailType")
+    private String type = null; // XXX enum?
 
-    public ETDataExtensionRow() {}
+    public ETEmail() {}
 
     @Override
     public String getId() {
@@ -79,16 +87,52 @@ public class ETDataExtensionRow extends ETSoapObject {
         this.name = name;
     }
 
-    public String getColumn(String name) {
-        return columns.get(name.toLowerCase());
+    public Integer getFolderId() {
+        return folderId;
     }
 
-    public void setColumn(String name, String value) {
-        columns.put(name.toLowerCase(), value);
+    public void setFolderId(Integer folderId) {
+        this.folderId = folderId;
     }
 
-    public Set<String> getColumnNames() {
-        return columns.keySet();
+    public String getSubject() {
+        return subject;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public String getHtmlBody() {
+        return htmlBody;
+    }
+
+    public void setHtmlBody(String htmlBody) {
+        this.htmlBody = htmlBody;
+    }
+
+    public String getTextBody() {
+        return textBody;
+    }
+
+    public void setTextBody(String textBody) {
+        this.textBody = textBody;
+    }
+
+    public Boolean getIsHtmlPaste() {
+        return isHtmlPaste;
+    }
+
+    public void setIsHtmlPaste(Boolean isHtmlPaste) {
+        this.isHtmlPaste = isHtmlPaste;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     /**
@@ -107,5 +151,37 @@ public class ETDataExtensionRow extends ETSoapObject {
     @Deprecated
     public void setCustomerKey(String customerKey) {
         setKey(customerKey);
+    }
+
+    /**
+     * @deprecated
+     * Use <code>getFolderId()</code>.
+     */
+    @Deprecated
+    public Integer getCategoryId() {
+        return getFolderId();
+    }
+
+    /**
+     * @deprecated
+     * Use <code>setFolderId()</code>.
+     */
+    @Deprecated
+    public void setCategoryId(Integer categoryId) {
+        setFolderId(categoryId);
+    }
+
+    public enum Type {
+        HTML("HTML"),
+        TEXT("Text");
+        private final String value;
+
+        Type(String value) {
+            this.value = value;
+        }
+
+        public String value() {
+            return value;
+        }
     }
 }

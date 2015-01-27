@@ -56,37 +56,11 @@ public abstract class ETRestObject extends ETApiObject {
     private static Logger logger = Logger.getLogger(ETRestObject.class);
 
     @Expose
-    @ExternalName("id")
-    private String id = null;
-    @Expose
-    @ExternalName("key")
-    private String key = null;
-    @Expose
     @ExternalName("createdDate")
     private Date createdDate = null;
     @Expose
     @ExternalName("modifiedDate")
     private Date modifiedDate = null;
-
-    @Override
-    public String getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    @Override
-    public String getKey() {
-        return key;
-    }
-
-    @Override
-    public void setKey(String key) {
-        this.key = key;
-    }
 
     @Override
     public Date getCreatedDate() {

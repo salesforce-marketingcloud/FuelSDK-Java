@@ -34,6 +34,11 @@ import com.exacttarget.fuelsdk.internal.List;
 
 @SoapObject(internalType = List.class)
 public class ETList extends ETSoapObject {
+    @ExternalName("id")
+    private String id = null;
+    @ExternalName("key")
+    @InternalName("customerKey")
+    private String key = null;
     @ExternalName("name")
     @InternalName("listName")
     private String name = null;
@@ -44,11 +49,31 @@ public class ETList extends ETSoapObject {
     private Integer folderId = null;
     @ExternalName("classification")
     @InternalName("listClassification")
-    private ETListClassification classification = null;
+    private Classification classification = null;
     @ExternalName("type")
-    private ETListType type = null;
+    private Type type = null;
 
     public ETList() {}
+
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Override
+    public String getKey() {
+        return key;
+    }
+
+    @Override
+    public void setKey(String key) {
+        this.key = key;
+    }
 
     public String getName() {
         return name;
@@ -74,10 +99,45 @@ public class ETList extends ETSoapObject {
         this.folderId = folderId;
     }
 
+    public Classification getClassification() {
+        return classification;
+    }
+
+    public void setClassification(Classification classification) {
+        this.classification = classification;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public void setType(Type type) {
+        this.type = type;
+    }
+
+    /**
+     * @deprecated
+     * Use <code>getKey()</code>.
+     */
+    @Deprecated
+    public String getCustomerKey() {
+        return getKey();
+    }
+
+    /**
+     * @deprecated
+     * Use <code>setKey()</code>.
+     */
+    @Deprecated
+    public void setCustomerKey(String customerKey) {
+        setKey(customerKey);
+    }
+
     /**
      * @deprecated
      * Use <code>getFolderId()</code>.
      */
+    @Deprecated
     public Integer getCategoryId() {
         return getFolderId();
     }
@@ -91,55 +151,35 @@ public class ETList extends ETSoapObject {
         setFolderId(categoryId);
     }
 
-    public ETListClassification getClassification() {
-        return classification;
+    public enum Classification {
+        EXACT_TARGET_LIST("ExactTargetList"),
+        PUBLICATION_LIST("PublicationList"),
+        SUPPRESSION_LIST("SuppressionList");
+        private final String value;
+
+        Classification(String value) {
+            this.value = value;
+        }
+
+        public String value() {
+            return value;
+        }
     }
 
-    public void setClassification(ETListClassification classification) {
-        this.classification = classification;
-    }
+    public enum Type {
+        GLOBAL_UNSUBSCRIBE("GlobalUnsubscribe"),
+        MASTER("Master"),
+        PRIVATE("Private"),
+        PUBLIC("Public"),
+        SALES_FORCE("SalesForce");
+        private final String value;
 
-    /**
-     * @deprecated
-     * Use <code>getClassification()</code>.
-     */
-    @Deprecated
-    public ETListClassification getListClassification() {
-        return getClassification();
-    }
+        Type(String value) {
+            this.value = value;
+        }
 
-    /**
-     * @deprecated
-     * Use <code>setClassification()</code>.
-     */
-    @Deprecated
-    public void setListClassification(ETListClassification listClassification) {
-        setClassification(listClassification);
-    }
-
-    public ETListType getType() {
-        return type;
-    }
-
-    public void setType(ETListType type) {
-        this.type = type;
-    }
-
-    /**
-     * @deprecated
-     * Use <code>getType()</code>.
-     */
-    @Deprecated
-    public ETListType getListType() {
-        return getType();
-    }
-
-    /**
-     * @deprecated
-     * Use <code>setType()</code>.
-     */
-    @Deprecated
-    public void setListType(ETListType listType) {
-        setType(listType);
+        public String value() {
+            return value;
+        }
     }
 }

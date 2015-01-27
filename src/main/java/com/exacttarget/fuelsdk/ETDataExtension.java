@@ -59,6 +59,9 @@ public class ETDataExtension extends ETSoapObject {
     @ExternalName("id")
     @InternalName("objectID")
     private String id = null;
+    @ExternalName("key")
+    @InternalName("customerKey")
+    private String key = null;
     @ExternalName("name")
     private String name = null;
     @ExternalName("description")
@@ -89,11 +92,19 @@ public class ETDataExtension extends ETSoapObject {
     }
 
     @Override
+    public String getKey() {
+        return key;
+    }
+
+    @Override
+    public void setKey(String key) {
+        this.key = key;
+    }
+
     public String getName() {
         return name;
     }
 
-    @Override
     public void setName(String name) {
         this.name = name;
     }
@@ -208,6 +219,24 @@ public class ETDataExtension extends ETSoapObject {
 
     public void setIsTestable(Boolean isTestable) {
         this.isTestable = isTestable;
+    }
+
+    /**
+     * @deprecated
+     * Use <code>getKey()</code>.
+     */
+    @Deprecated
+    public String getCustomerKey() {
+        return getKey();
+    }
+
+    /**
+     * @deprecated
+     * Use <code>setKey()</code>.
+     */
+    @Deprecated
+    public void setCustomerKey(String customerKey) {
+        setKey(customerKey);
     }
 
     /**

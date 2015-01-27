@@ -53,6 +53,7 @@ import com.exacttarget.fuelsdk.annotations.InternalProperty;
 import com.exacttarget.fuelsdk.annotations.SoapObject;
 import com.exacttarget.fuelsdk.internal.APIObject;
 import com.exacttarget.fuelsdk.internal.APIProperty;
+import com.exacttarget.fuelsdk.internal.Attribute;
 import com.exacttarget.fuelsdk.internal.ComplexFilterPart;
 //import com.exacttarget.fuelsdk.internal.Account;
 //import com.exacttarget.fuelsdk.internal.AccountTypeEnum;
@@ -77,9 +78,9 @@ import com.exacttarget.fuelsdk.internal.FilterPart;
 //import com.exacttarget.fuelsdk.internal.DeliveryProfile;
 //import com.exacttarget.fuelsdk.internal.DeliveryProfileDomainTypeEnum;
 //import com.exacttarget.fuelsdk.internal.DeliveryProfileSourceAddressTypeEnum;
-//import com.exacttarget.fuelsdk.internal.Email;
+import com.exacttarget.fuelsdk.internal.Email;
 //import com.exacttarget.fuelsdk.internal.EmailSendDefinition;
-//import com.exacttarget.fuelsdk.internal.EmailType;
+import com.exacttarget.fuelsdk.internal.EmailType;
 //import com.exacttarget.fuelsdk.internal.EventType;
 //import com.exacttarget.fuelsdk.internal.LayoutType;
 import com.exacttarget.fuelsdk.internal.ListClassificationEnum;
@@ -105,9 +106,10 @@ import com.exacttarget.fuelsdk.internal.SimpleOperators;
 //import com.exacttarget.fuelsdk.internal.SenderProfile;
 //import com.exacttarget.fuelsdk.internal.SentEvent;
 import com.exacttarget.fuelsdk.internal.Soap;
-//import com.exacttarget.fuelsdk.internal.Subscriber;
+import com.exacttarget.fuelsdk.internal.Subscriber;
 //import com.exacttarget.fuelsdk.internal.SubscriberList;
-//import com.exacttarget.fuelsdk.internal.SubscriberStatus;
+import com.exacttarget.fuelsdk.internal.SubscriberStatus;
+import com.exacttarget.fuelsdk.internal.TriggeredSendDefinition;
 //import com.exacttarget.fuelsdk.internal.UnsubEvent;
 import com.exacttarget.fuelsdk.internal.UpdateOptions;
 import com.exacttarget.fuelsdk.internal.UpdateRequest;
@@ -117,11 +119,6 @@ import com.exacttarget.fuelsdk.internal.UpdateResult;
 public abstract class ETSoapObject extends ETApiObject {
     private static Logger logger = Logger.getLogger(ETSoapObject.class);
 
-    @ExternalName("id")
-    private String id = null;
-    @ExternalName("key")
-    @InternalName("customerKey")
-    private String key = null;
     @ExternalName("createdDate")
     private Date createdDate = null;
     @ExternalName("modifiedDate")
@@ -129,26 +126,6 @@ public abstract class ETSoapObject extends ETApiObject {
 
     public ETSoapObject() {
         registerConverters();
-    }
-
-    @Override
-    public String getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    @Override
-    public String getKey() {
-        return key;
-    }
-
-    @Override
-    public void setKey(String key) {
-        this.key = key;
     }
 
     @Override
@@ -169,24 +146,6 @@ public abstract class ETSoapObject extends ETApiObject {
     @Override
     public void setModifiedDate(Date modifiedDate) {
         this.modifiedDate = modifiedDate;
-    }
-
-    /**
-     * @deprecated
-     * Use <code>getKey()</code>.
-     */
-    @Deprecated
-    public String getCustomerKey() {
-        return getKey();
-    }
-
-    /**
-     * @deprecated
-     * Use <code>setKey()</code>.
-     */
-    @Deprecated
-    public void setCustomerKey(String customerKey) {
-        setKey(customerKey);
     }
 
     public static <T extends ETSoapObject> ETResponse<T> retrieve(ETClient client,
@@ -826,24 +785,24 @@ public abstract class ETSoapObject extends ETApiObject {
 //                ETDeliveryProfileSourceAddressType.class);
 //        convertUtils.register(new EnumConverter(),
 //                DeliveryProfileSourceAddressTypeEnum.class);
-//
-//        // ETEmail
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETEmail.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                Email.class);
-//
+
+        // ETEmail
+        convertUtils.register(new ExternalObjectConverter(),
+                ETEmail.class);
+        convertUtils.register(new InternalObjectConverter(),
+                Email.class);
+
 //        // ETEmailSendDefinition
 //        convertUtils.register(new ExternalObjectConverter(),
 //                ETEmailSendDefinition.class);
 //        convertUtils.register(new InternalObjectConverter(),
 //                EmailSendDefinition.class);
-//
-//        // ETEmailType
-//        convertUtils.register(new EnumConverter(),
-//                ETEmailType.class);
-//        convertUtils.register(new EnumConverter(),
-//                EmailType.class);
+
+        // ETEmail.Type
+        convertUtils.register(new EnumConverter(),
+                ETEmail.Type.class);
+        convertUtils.register(new EnumConverter(),
+                EmailType.class);
 //
 //        // ETEventType
 //        convertUtils.register(new EnumConverter(),
@@ -869,9 +828,9 @@ public abstract class ETSoapObject extends ETApiObject {
         convertUtils.register(new InternalObjectConverter(),
                 com.exacttarget.fuelsdk.internal.List.class);
 
-        // ETListClassification
+        // ETList.Classification
         convertUtils.register(new EnumConverter(),
-                ETListClassification.class);
+                ETList.Classification.class);
         convertUtils.register(new EnumConverter(),
                 ListClassificationEnum.class);
 
@@ -881,9 +840,9 @@ public abstract class ETSoapObject extends ETApiObject {
 //        convertUtils.register(new InternalObjectConverter(),
 //                ListSubscriber.class);
 
-        // ETListType
+        // ETList.Type
         convertUtils.register(new EnumConverter(),
-                ETListType.class);
+                ETList.Type.class);
         convertUtils.register(new EnumConverter(),
                 ListTypeEnum.class);
 
@@ -964,25 +923,37 @@ public abstract class ETSoapObject extends ETApiObject {
 //                ETSentEvent.class);
 //        convertUtils.register(new InternalObjectConverter(),
 //                SentEvent.class);
-//
-//        // ETSubscriber
-//        convertUtils.register(new ExternalObjectConverter(),
-//                ETSubscriber.class);
-//        convertUtils.register(new InternalObjectConverter(),
-//                Subscriber.class);
-//
+
+        // ETSubscriber
+        convertUtils.register(new ExternalObjectConverter(),
+                ETSubscriber.class);
+        convertUtils.register(new InternalObjectConverter(),
+                Subscriber.class);
+
 //        // ETSubscriberList
 //        convertUtils.register(new ExternalObjectConverter(),
 //                ETSubscriberList.class);
 //        convertUtils.register(new InternalObjectConverter(),
 //                SubscriberList.class);
-//
-//        // ETSubscriberStatus
-//        convertUtils.register(new EnumConverter(),
-//                ETSubscriberStatus.class);
-//        convertUtils.register(new EnumConverter(),
-//                SubscriberStatus.class);
-//
+
+        // ETSubscriber.Attribute
+        convertUtils.register(new EnumConverter(),
+                ETSubscriber.Status.class);
+        convertUtils.register(new EnumConverter(),
+                Attribute.class);
+
+        // ETSubscriber.Status
+        convertUtils.register(new EnumConverter(),
+                ETSubscriber.Status.class);
+        convertUtils.register(new EnumConverter(),
+                SubscriberStatus.class);
+
+        // ETTriggeredSend
+        convertUtils.register(new EnumConverter(),
+                ETTriggeredSend.class);
+        convertUtils.register(new EnumConverter(),
+                TriggeredSendDefinition.class);
+
 //        // ETUnsubEvent
 //        convertUtils.register(new ExternalObjectConverter(),
 //                ETUnsubEvent.class);
