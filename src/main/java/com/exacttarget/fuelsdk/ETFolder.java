@@ -33,6 +33,11 @@ import com.exacttarget.fuelsdk.annotations.InternalProperty;
 import com.exacttarget.fuelsdk.annotations.SoapObject;
 import com.exacttarget.fuelsdk.internal.DataFolder;
 
+/**
+ * An <code>ETFolder</code> object represents a folder
+ * in the Salesforce Marketing Cloud.
+ */
+
 @SoapObject(internalType = DataFolder.class)
 public class ETFolder extends ETSoapObject {
     @ExternalName("id")

@@ -36,7 +36,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 /**
- * An <code>ETApiObject</code> is an object available via
+ * An <code>ETApiObject</code> represents an object available via
  * the Salesforce Marketing Cloud API. All API objects
  * are guaranteed to have the following properties, which
  * is enforced via abstract getter and setter methods:

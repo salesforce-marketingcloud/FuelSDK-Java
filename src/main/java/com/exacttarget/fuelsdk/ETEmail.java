@@ -32,6 +32,11 @@ import com.exacttarget.fuelsdk.annotations.InternalName;
 import com.exacttarget.fuelsdk.annotations.SoapObject;
 import com.exacttarget.fuelsdk.internal.Email;
 
+/**
+ * An <code>ETEmail</code> object represents an email
+ * in the Salesforce Marketing Cloud.
+ */
+
 @SoapObject(internalType = Email.class)
 public class ETEmail extends ETSoapObject {
     @ExternalName("id")

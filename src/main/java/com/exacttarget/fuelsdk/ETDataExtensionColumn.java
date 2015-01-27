@@ -32,6 +32,11 @@ import com.exacttarget.fuelsdk.annotations.InternalName;
 import com.exacttarget.fuelsdk.annotations.SoapObject;
 import com.exacttarget.fuelsdk.internal.DataExtensionField;
 
+/**
+ * An <code>ETDataExtensionColumn</code> object represents a
+ * data extension column in the Salesforce Marketing Cloud.
+ */
+
 @SoapObject(internalType = DataExtensionField.class, unretrievable = {
     "ID", "Description", "DataExtension", "Precision"
 })

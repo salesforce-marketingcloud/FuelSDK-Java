@@ -32,6 +32,11 @@ import com.exacttarget.fuelsdk.annotations.RestObject;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+/**
+ * An <code>ETCampaign</code> object represents a campaign
+ * in the Salesforce Marketing Cloud.
+ */
+
 @RestObject(path = "/hub/v1/campaigns",
             primaryKey = "id",
             collection = "items",

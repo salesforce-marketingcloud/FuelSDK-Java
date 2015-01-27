@@ -46,6 +46,11 @@ import com.exacttarget.fuelsdk.internal.Subscriber;
 import com.exacttarget.fuelsdk.internal.TriggeredSend;
 import com.exacttarget.fuelsdk.internal.TriggeredSendDefinition;
 
+/**
+ * An <code>ETTriggeredEmail</code> object represents a triggered email
+ * in the Salesforce Marketing Cloud.
+ */
+
 @SoapObject(internalType = TriggeredSendDefinition.class, unretrievable = {
     "SendSourceDataExtension"
 })

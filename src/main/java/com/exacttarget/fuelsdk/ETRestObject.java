@@ -52,6 +52,11 @@ import com.exacttarget.fuelsdk.ETRestConnection.Response;
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.RestObject;
 
+/**
+ * An <code>ETRestObject</code> represents an object
+ * available via the REST API.
+ */
+
 public abstract class ETRestObject extends ETApiObject {
     private static Logger logger = Logger.getLogger(ETRestObject.class);
 

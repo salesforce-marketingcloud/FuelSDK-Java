@@ -48,6 +48,11 @@ import org.apache.log4j.Logger;
 import com.exacttarget.fuelsdk.internal.PartnerAPI;
 import com.exacttarget.fuelsdk.internal.Soap;
 
+/**
+ * An <code>ETSoapConnection</code> represents an active
+ * connection to the SOAP API.
+ */
+
 public class ETSoapConnection {
     private static Logger logger = Logger.getLogger(ETSoapConnection.class);
 

@@ -35,6 +35,11 @@ import java.util.ListIterator;
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.PrettyPrint;
 
+/**
+ * An <code>ETObject</code> represents an object in the Java
+ * client library.
+ */
+
 public abstract class ETObject {
     private ETClient client = null;
     // XXX support configurable values
@@ -44,10 +49,16 @@ public abstract class ETObject {
 
     private static int currentIndentLevel = 0;
 
+    /**
+     * Gets the client handle associated with this object.
+     */
     public ETClient getClient() {
         return client;
     }
 
+    /**
+     * Sets the client handle associated with this object.
+     */
     public void setClient(ETClient client) {
         this.client = client;
     }

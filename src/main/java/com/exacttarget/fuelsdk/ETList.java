@@ -32,6 +32,11 @@ import com.exacttarget.fuelsdk.annotations.InternalName;
 import com.exacttarget.fuelsdk.annotations.SoapObject;
 import com.exacttarget.fuelsdk.internal.List;
 
+/**
+ * An <code>ETList</code> object represents an email list
+ * in the Salesforce Marketing Cloud.
+ */
+
 @SoapObject(internalType = List.class)
 public class ETList extends ETSoapObject {
     @ExternalName("id")

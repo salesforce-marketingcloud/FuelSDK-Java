@@ -31,6 +31,11 @@ import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.RestObject;
 import com.google.gson.annotations.Expose;
 
+/**
+ * An <code>ETCampaignAsset</code> object represents a campaign asset
+ * in the Salesforce Marketing Cloud.
+ */
+
 @RestObject(path = "/hub/v1/campaigns/{campaignId}/assets",
             primaryKey = "id",
             collection = "entities",

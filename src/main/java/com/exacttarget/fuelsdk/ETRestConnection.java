@@ -43,6 +43,11 @@ import com.google.gson.JsonParser;
 
 import org.apache.log4j.Logger;
 
+/**
+ * An <code>ETRestConnection</code> represents an active
+ * connection to the REST API.
+ */
+
 public class ETRestConnection {
     private static Logger logger = Logger.getLogger(ETRestConnection.class);
 

@@ -36,6 +36,11 @@ import com.exacttarget.fuelsdk.annotations.InternalName;
 import com.exacttarget.fuelsdk.annotations.SoapObject;
 import com.exacttarget.fuelsdk.internal.DataExtensionObject;
 
+/**
+ * An <code>ETDataExtensionRow</code> object represents a
+ * data extension row in the Salesforce Marketing Cloud.
+ */
+
 @SoapObject(internalType = DataExtensionObject.class)
 public class ETDataExtensionRow extends ETSoapObject {
     @ExternalName("id")
