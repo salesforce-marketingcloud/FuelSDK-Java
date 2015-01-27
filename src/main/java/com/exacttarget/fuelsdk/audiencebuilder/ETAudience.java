@@ -28,8 +28,10 @@
 package com.exacttarget.fuelsdk.audiencebuilder;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
@@ -51,6 +53,9 @@ public class ETAudience extends ETRestObject {
     @Expose @SerializedName("audienceDefinitionID")
     @ExternalName("id")
     private String id = null;
+    @Expose
+    @ExternalName("key")
+    private String key = null;
     @Expose
     @ExternalName("name")
     private String name = null;
@@ -80,6 +85,10 @@ public class ETAudience extends ETRestObject {
 
     private PublishResponse publishResponse = null; // internal
 
+    private String persistenceId = UUID.randomUUID().toString();
+
+    private int segmentPriority = 1;
+
     public ETAudience() {
         //
         // By default we assume just one AudienceBuild:
@@ -87,6 +96,10 @@ public class ETAudience extends ETRestObject {
 
         audienceBuild = new AudienceBuild();
         audienceBuilds.add(audienceBuild);
+        ETSegment segment = new ETSegment();
+        segment.setPersistenceId(persistenceId);
+        segment.setPriority(Integer.MAX_VALUE);
+        addSegment(segment);
     }
 
     @Override
@@ -100,11 +113,19 @@ public class ETAudience extends ETRestObject {
     }
 
     @Override
+    public String getKey() {
+        return key;
+    }
+
+    @Override
+    public void setKey(String key) {
+        this.key = key;
+    }
+
     public String getName() {
         return name;
     }
 
-    @Override
     public void setName(String name) {
         String oldName = this.name;
 
@@ -161,8 +182,10 @@ public class ETAudience extends ETRestObject {
         throws ETSdkException
     {
         parsedFilter = filter;
+        FilterDefinition filterDefinition = toFilterDefinition(parsedFilter);
+        filterDefinition.setPersistenceId(persistenceId);
         this.filter = new Filter();
-        this.filter.setFilterDefinition(toFilterDefinition(parsedFilter));
+        this.filter.setFilterDefinition(filterDefinition);
     }
 
     public void setFilter(String filter)
@@ -176,7 +199,12 @@ public class ETAudience extends ETRestObject {
     }
 
     public void addSegment(ETSegment segment) {
+        segment.setPersistenceId(persistenceId);
+        if (segment.getPriority() == null) {
+            segment.setPriority(segmentPriority++);
+        }
         segments.add(segment);
+        Collections.sort(segments);
     }
 
     public void addSegment(String filter)
@@ -184,7 +212,7 @@ public class ETAudience extends ETRestObject {
     {
         ETSegment segment = new ETSegment();
         segment.setFilter(filter);
-        segments.add(segment);
+        addSegment(segment);
     }
 
     public String getPublishedDataExtensionName() {
@@ -535,6 +563,9 @@ public class ETAudience extends ETRestObject {
 
     public static class FilterDefinition {
         @Expose
+        @SerializedName("PersistenceID")
+        private String persistenceId = null;
+        @Expose
         @SerializedName("UseEnterprise")
         private Boolean useEnterprise = false;
         @Expose
@@ -550,6 +581,14 @@ public class ETAudience extends ETRestObject {
         public FilterDefinition() {
             conditionSet.setOperator("OR");
             conditionSet.setConditionSetName("");
+        }
+
+        public String getPersistenceId() {
+            return persistenceId;
+        }
+
+        public void setPersistenceId(String persistenceId) {
+            this.persistenceId = persistenceId;
         }
 
         public ConditionSet getConditionSet() {

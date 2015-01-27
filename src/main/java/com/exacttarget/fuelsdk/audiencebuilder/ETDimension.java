@@ -46,6 +46,9 @@ public class ETDimension extends ETRestObject {
     @ExternalName("id")
     private String id = null;
     @Expose
+    @ExternalName("key")
+    private String key = null;
+    @Expose
     @ExternalName("name")
     private String name = null;
     @Expose
@@ -78,11 +81,19 @@ public class ETDimension extends ETRestObject {
     }
 
     @Override
+    public String getKey() {
+        return key;
+    }
+
+    @Override
+    public void setKey(String key) {
+        this.key = key;
+    }
+
     public String getName() {
         return name;
     }
 
-    @Override
     public void setName(String name) {
         this.name = name;
     }

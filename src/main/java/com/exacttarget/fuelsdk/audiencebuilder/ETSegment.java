@@ -27,14 +27,15 @@
 
 package com.exacttarget.fuelsdk.audiencebuilder;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
 import com.exacttarget.fuelsdk.ETFilter;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.audiencebuilder.ETAudience.FilterDefinition;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 
-public class ETSegment {
+public class ETSegment implements Comparable<ETSegment> {
     @Expose @SerializedName("audienceSegmentDefinitionID")
     @ExternalName("id")
     private String id = null;
@@ -57,9 +58,13 @@ public class ETSegment {
     @ExternalName("capPercent")
     private Integer capPercent = null;
     @Expose
+    private String isIncludedInPublish = "true";
+    @Expose
     private Filter filter = new Filter();
     @ExternalName("filter")
     private ETFilter parsedFilter = null; // internal
+
+    private String persistenceId = null;
 
     public String getId() {
         return id;
@@ -109,6 +114,15 @@ public class ETSegment {
         this.capPercent = capPercent;
     }
 
+    public String getPersistenceId() {
+        return persistenceId;
+    }
+
+    public void setPersistenceId(String persistenceId) {
+        this.persistenceId = persistenceId;
+        filter.getFilterDefinition().setPersistenceId(persistenceId);
+    }
+
     public ETFilter getFilter() {
         return parsedFilter;
     }
@@ -117,8 +131,10 @@ public class ETSegment {
         throws ETSdkException
     {
         parsedFilter = filter;
+        FilterDefinition filterDefinition = ETAudience.toFilterDefinition(filter);
+        filterDefinition.setPersistenceId(persistenceId);
         this.filter = new Filter();
-        this.filter.setFilterDefinition(ETAudience.toFilterDefinition(parsedFilter));
+        this.filter.setFilterDefinition(filterDefinition);
     }
 
     public void setFilter(String filter)
@@ -131,10 +147,18 @@ public class ETSegment {
     // These are just here so we can construct the JSON requests:
     //
 
+    public int compareTo(ETSegment segment) {
+        return new Integer(priority) - new Integer(segment.getPriority());
+    }
+
     protected static class Filter {
         @Expose
         @SerializedName("filterDefinitionJSON")
         private FilterDefinition filterDefinition = new FilterDefinition();
+
+        public FilterDefinition getFilterDefinition() {
+            return filterDefinition;
+        }
 
         public void setFilterDefinition(FilterDefinition filterDefinition) {
             this.filterDefinition = filterDefinition;
