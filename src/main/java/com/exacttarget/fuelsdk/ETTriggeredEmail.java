@@ -27,16 +27,31 @@
 
 package com.exacttarget.fuelsdk;
 
+import java.util.Arrays;
+import java.util.List;
+
+import org.apache.log4j.Logger;
+
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.InternalName;
 import com.exacttarget.fuelsdk.annotations.InternalProperty;
 import com.exacttarget.fuelsdk.annotations.SoapObject;
+import com.exacttarget.fuelsdk.internal.APIObject;
+import com.exacttarget.fuelsdk.internal.CreateOptions;
+import com.exacttarget.fuelsdk.internal.CreateRequest;
+import com.exacttarget.fuelsdk.internal.CreateResponse;
+import com.exacttarget.fuelsdk.internal.CreateResult;
+import com.exacttarget.fuelsdk.internal.Soap;
+import com.exacttarget.fuelsdk.internal.Subscriber;
+import com.exacttarget.fuelsdk.internal.TriggeredSend;
 import com.exacttarget.fuelsdk.internal.TriggeredSendDefinition;
 
 @SoapObject(internalType = TriggeredSendDefinition.class, unretrievable = {
     "SendSourceDataExtension"
 })
 public class ETTriggeredEmail extends ETSoapObject {
+    private static Logger logger = Logger.getLogger(ETTriggeredEmail.class);
+
     @ExternalName("id")
     @InternalName("objectID")
     private String id = null;
@@ -221,6 +236,100 @@ public class ETTriggeredEmail extends ETSoapObject {
 
     public void setSuppressTracking(Boolean suppressTracking) {
         this.suppressTracking = suppressTracking;
+    }
+
+    public ETResponse<ETTriggeredEmail> send(ETSubscriber... subscribers)
+        throws ETSdkException
+    {
+        return send(Arrays.asList(subscribers));
+
+    }
+
+    public ETResponse<ETTriggeredEmail> send(List<ETSubscriber> subscribers)
+        throws ETSdkException
+    {
+        ETResponse<ETTriggeredEmail> response = new ETResponse<ETTriggeredEmail>();
+
+        if (subscribers == null || subscribers.size() == 0) {
+            response.setStatus(ETResult.Status.OK);
+            return response;
+        }
+
+        //
+        // Get handle to the SOAP connection:
+        //
+
+        ETSoapConnection connection = getClient().getSoapConnection();
+
+        //
+        // Automatically refresh the token if necessary:
+        //
+
+        getClient().refreshToken();
+
+        //
+        // Perform the SOAP create:
+        //
+
+        Soap soap = connection.getSoap();
+
+        CreateRequest createRequest = new CreateRequest();
+        createRequest.setOptions(new CreateOptions());
+        TriggeredSend triggeredSend = new TriggeredSend();
+        TriggeredSendDefinition triggeredSendDefinition = new TriggeredSendDefinition();
+        triggeredSendDefinition.setCustomerKey(getKey());
+        triggeredSend.setTriggeredSendDefinition(triggeredSendDefinition);
+        for (ETSubscriber subscriber : subscribers) {
+            triggeredSend.getSubscribers().add((Subscriber) subscriber.toInternal());
+        }
+        createRequest.getObjects().add(triggeredSend);
+
+        if (logger.isTraceEnabled()) {
+            logger.trace("CreateRequest:");
+            logger.trace("  objects = {");
+            for (APIObject object : createRequest.getObjects()) {
+                logger.trace("    " + object);
+            }
+            logger.trace("  }");
+        }
+
+        logger.trace("calling soap.create...");
+
+        CreateResponse createResponse = soap.create(createRequest);
+
+        if (logger.isTraceEnabled()) {
+            logger.trace("CreateResponse:");
+            logger.trace("  requestId = " + createResponse.getRequestID());
+            logger.trace("  overallStatus = " + createResponse.getOverallStatus());
+            logger.trace("  results = {");
+            for (CreateResult result : createResponse.getResults()) {
+                logger.trace("    " + result);
+            }
+            logger.trace("  }");
+        }
+
+        response.setRequestId(createResponse.getRequestID());
+        if (createResponse.getOverallStatus().equals("OK")) {
+            response.setStatus(ETResult.Status.OK);
+        } else if (createResponse.getOverallStatus().equals("Error")) {
+            response.setStatus(ETResult.Status.ERROR);
+        }
+        response.setResponseCode(createResponse.getOverallStatus());
+        response.setResponseMessage(createResponse.getOverallStatus());
+        for (CreateResult createResult : createResponse.getResults()) {
+            ETResult<ETTriggeredEmail> result = new ETResult<ETTriggeredEmail>();
+            if (createResult.getStatusCode().equals("OK")) {
+                result.setStatus(ETResult.Status.OK);
+            } else if (createResult.getStatusCode().equals("Error")) {
+                result.setStatus(ETResult.Status.ERROR);
+            }
+            result.setResponseCode(createResult.getStatusCode());
+            result.setResponseMessage(createResult.getStatusMessage());
+            result.setErrorCode(createResult.getErrorCode());
+            response.addResult(result);
+        }
+
+        return response;
     }
 
     /**
