@@ -113,4 +113,22 @@ public class ETDataExtensionRow extends ETSoapObject {
     public void setCustomerKey(String customerKey) {
         setKey(customerKey);
     }
+
+    /**
+     * @deprecated
+     * Use <code>getColumn</code> and <code>setColumn</code>.
+     */
+    @Deprecated
+    public Map<String, String> getColumns() {
+        return columns;
+    }
+
+    /**
+     * @deprecated
+     * Use <code>getColumn</code> and <code>setColumn</code>.
+     */
+    @Deprecated
+    public void setColumns(Map<String, String> columns) {
+        this.columns = columns;
+    }
 }
