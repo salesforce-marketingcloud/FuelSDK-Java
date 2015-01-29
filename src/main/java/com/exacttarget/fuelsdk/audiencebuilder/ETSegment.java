@@ -57,8 +57,9 @@ public class ETSegment implements Comparable<ETSegment> {
     @Expose
     @ExternalName("capPercent")
     private Integer capPercent = null;
-    @Expose
-    private String isIncludedInPublish = "true";
+    @Expose @SerializedName ("isIncludedInPublish")
+    @ExternalName("includeInPublish")
+    private Boolean includeInPublish = true;
     @Expose
     private Filter filter = new Filter();
     @ExternalName("filter")
@@ -112,6 +113,14 @@ public class ETSegment implements Comparable<ETSegment> {
 
     public void setCapPercent(Integer capPercent) {
         this.capPercent = capPercent;
+    }
+
+    public Boolean getIncludeInPublish() {
+        return includeInPublish;
+    }
+
+    public void setIncludeInPublish(Boolean includeInPublish) {
+        this.includeInPublish = includeInPublish;
     }
 
     public String getPersistenceId() {
