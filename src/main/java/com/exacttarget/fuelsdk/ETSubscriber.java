@@ -28,15 +28,21 @@
 package com.exacttarget.fuelsdk;
 
 import java.util.Date;
-import java.util.List;
 
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.InternalName;
+import com.exacttarget.fuelsdk.annotations.InternalProperty;
 import com.exacttarget.fuelsdk.annotations.SoapObject;
 import com.exacttarget.fuelsdk.internal.Subscriber;
+import com.exacttarget.fuelsdk.internal.SubscriberList;
+
+/**
+ * An <code>ETSubscriber</code> object represents an email subscriber
+ * in the Salesforce Marketing Cloud.
+ */
 
 @SoapObject(internalType = Subscriber.class, unretrievable = {
-    "Attributes", "ModifiedDate"
+    "Attributes", "Lists", "ModifiedDate"
 })
 public class ETSubscriber extends ETSoapObject {
     @ExternalName("id")
@@ -55,8 +61,8 @@ public class ETSubscriber extends ETSoapObject {
     private Date unsubscribedDate = null;
 //    @ExternalName("attributes")
 //    private List<Attribute> attributes = null;
-//    @ExternalName("lists")
-//    private List<ETList> lists = null;
+    @ExternalName("lists")
+    private java.util.List<ETList> lists = null;
 
     public ETSubscriber() {}
 
@@ -119,31 +125,13 @@ public class ETSubscriber extends ETSoapObject {
 //    public void setAttributes(List<Attribute> attributes) {
 //        this.attributes = attributes;
 //    }
-//
-//    public List<ETList> getLists() {
-//        return lists;
-//    }
-//
-//    public void setLists(List<ETList> lists) {
-//        this.lists = lists;
-//    }
 
-    /**
-     * @deprecated
-     * Use <code>getKey()</code>.
-     */
-    @Deprecated
-    public String getSubscriberKey() {
-        return getKey();
+    public java.util.List<ETList> getLists() {
+        return lists;
     }
 
-    /**
-     * @deprecated
-     * Use <code>setKey()</code>.
-     */
-    @Deprecated
-    public void setSubscriberKey(String subscriberKey) {
-        setKey(subscriberKey);
+    public void setLists(java.util.List<ETList> lists) {
+        this.lists = lists;
     }
 
     public class Attribute {
@@ -164,6 +152,70 @@ public class ETSubscriber extends ETSoapObject {
 
         public void setValue(String value) {
             this.value = value;
+        }
+    }
+
+    @SoapObject(internalType = SubscriberList.class, unretrievable = {
+        "CustomerKey"
+    })
+    public class List extends ETSoapObject {
+        @ExternalName("id")
+        private String id = null;
+        @ExternalName("key")
+        @InternalName("customerKey")
+        private String key = null;
+        @ExternalName("subscriber")
+        @InternalProperty("Subscriber.ID")
+        private ETSubscriber subscriber = null;
+        @ExternalName("lists")
+        private java.util.List<List> lists = null;
+
+        public List() {}
+
+        @Override
+        public String getId() {
+            return id;
+        }
+
+        @Override
+        public void setId(String id) {
+            this.id = id;
+        }
+
+        @Override
+        public String getKey() {
+            return key;
+        }
+
+        @Override
+        public void setKey(String key) {
+            this.key = key;
+        }
+
+        public ETSubscriber getSubscriber() {
+            return subscriber;
+        }
+
+        public void setSubscriber(ETSubscriber subscriber) {
+            this.subscriber = subscriber;
+        }
+
+        /**
+         * @deprecated
+         * Use <code>getKey()</code>.
+         */
+        @Deprecated
+        public String getSubscriberKey() {
+            return getKey();
+        }
+
+        /**
+         * @deprecated
+         * Use <code>setKey()</code>.
+         */
+        @Deprecated
+        public void setSubscriberKey(String subscriberKey) {
+            setKey(subscriberKey);
         }
     }
 
