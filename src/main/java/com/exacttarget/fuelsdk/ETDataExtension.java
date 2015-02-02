@@ -412,6 +412,7 @@ public class ETDataExtension extends ETSoapObject {
                                            filter,
                                            page,
                                            pageSize,
+                                           ETRestObject.class,
                                            columns);
 
         ETResponse<ETDataExtensionRow> response = new ETResponse<ETDataExtensionRow>();
@@ -680,7 +681,7 @@ public class ETDataExtension extends ETSoapObject {
 
         if (filter != null) {
             stringBuilder.append("?filter=");
-            stringBuilder.append(ETRestObject.toQueryParameter(filter));
+            stringBuilder.append(ETRestObject.toFilterString(filter));
         }
 
         path = stringBuilder.toString();

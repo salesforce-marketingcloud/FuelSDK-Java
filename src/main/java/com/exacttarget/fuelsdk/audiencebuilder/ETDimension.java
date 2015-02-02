@@ -122,10 +122,10 @@ public class ETDimension extends ETRestObject {
         return values;
     }
 
-    public static String toQueryParameter(ETFilter filter)
+    public static String toFilterString(ETFilter filter)
         throws ETSdkException
     {
-        return ETAudience.toQueryParameter(filter);
+        return ETAudience.toFilterString(filter);
     }
 
     /**

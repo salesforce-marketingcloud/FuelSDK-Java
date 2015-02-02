@@ -392,7 +392,7 @@ public class ETAudience extends ETRestObject {
         return conditionSet;
     }
 
-    public static String toQueryParameter(ETFilter filter)
+    public static String toFilterString(ETFilter filter)
         throws ETSdkException
     {
         StringBuilder stringBuilder = new StringBuilder();
@@ -455,9 +455,9 @@ public class ETAudience extends ETRestObject {
             stringBuilder.append(")");
             break;
           case AND:
-            stringBuilder.append(toQueryParameter(filter.getFilters().get(0)));
+            stringBuilder.append(toFilterString(filter.getFilters().get(0)));
             stringBuilder.append("&");
-            stringBuilder.append(toQueryParameter(filter.getFilters().get(1)));
+            stringBuilder.append(toFilterString(filter.getFilters().get(1)));
             break;
           default:
             throw new ETSdkException("unsupported operator: " + operator);

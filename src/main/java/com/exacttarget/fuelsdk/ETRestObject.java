@@ -115,7 +115,7 @@ public abstract class ETRestObject extends ETApiObject {
         logger.trace("collection: " + collection);
         logger.trace("totalCount: " + totalCount);
 
-        Response r = retrieve(client, path, primaryKey, filter, page, pageSize, properties);
+        Response r = retrieve(client, path, primaryKey, filter, page, pageSize, type, properties);
 
         ETResponse<T> response = new ETResponse<T>();
 
@@ -186,6 +186,7 @@ public abstract class ETRestObject extends ETApiObject {
                                                                 ETFilter filter,
                                                                 Integer page,
                                                                 Integer pageSize,
+                                                                Class<T> type,
                                                                 String... properties)
         throws ETSdkException
     {
@@ -238,8 +239,23 @@ public abstract class ETRestObject extends ETApiObject {
                 } else {
                     stringBuilder.append("&");
                 }
-                stringBuilder.append("$filter=");
-                stringBuilder.append(toQueryParameter(filter));
+
+                java.lang.reflect.Method method = null;
+                try {
+                    method = type.getDeclaredMethod("toFilterString", ETFilter.class);
+                } catch (NoSuchMethodException ex) {
+                    // there's no toFilterString method on TYPE
+                } catch (SecurityException ex) {
+                    throw new ETSdkException(ex);
+                }
+
+                if (method != null) {
+                    try {
+                        stringBuilder.append(method.invoke(null, filter));
+                    } catch (Exception ex) {
+                        throw new ETSdkException(ex);
+                    }
+                }
             }
         }
 
@@ -486,13 +502,13 @@ public abstract class ETRestObject extends ETApiObject {
         return internalProperty;
     }
 
-    private static String toQueryParameter(String value)
+    private static String toFilterString(String value)
         throws ETSdkException
     {
-        return toQueryParameter(value, false);
+        return toFilterString(value, false);
     }
 
-    private static String toQueryParameter(String value, boolean forceQuotes)
+    private static String toFilterString(String value, boolean forceQuotes)
         throws ETSdkException
     {
         if (value.equals("")) {
@@ -525,72 +541,73 @@ public abstract class ETRestObject extends ETApiObject {
         }
     }
 
-    protected static String toQueryParameter(ETFilter filter)
+    protected static String toFilterString(ETFilter filter)
         throws ETSdkException
     {
         StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("$filter=");
         ETFilter.Operator operator = filter.getOperator();
         switch (operator) {
           case AND:
-            stringBuilder.append(toQueryParameter(filter.getFilters().get(0)));
+            stringBuilder.append(toFilterString(filter.getFilters().get(0)));
             stringBuilder.append("%20");
             stringBuilder.append("and");
             stringBuilder.append("%20");
-            stringBuilder.append(toQueryParameter(filter.getFilters().get(1)));
+            stringBuilder.append(toFilterString(filter.getFilters().get(1)));
             break;
           case OR:
-            stringBuilder.append(toQueryParameter(filter.getFilters().get(0)));
+            stringBuilder.append(toFilterString(filter.getFilters().get(0)));
             stringBuilder.append("%20");
             stringBuilder.append("or");
             stringBuilder.append("%20");
-            stringBuilder.append(toQueryParameter(filter.getFilters().get(1)));
+            stringBuilder.append(toFilterString(filter.getFilters().get(1)));
             break;
           case NOT:
             stringBuilder.append("not");
             stringBuilder.append("%20");
-            stringBuilder.append(toQueryParameter(filter.getFilters().get(0)));
+            stringBuilder.append(toFilterString(filter.getFilters().get(0)));
             break;
           case EQUALS:
             stringBuilder.append(filter.getProperty());
             stringBuilder.append("%20");
             stringBuilder.append("eq");
             stringBuilder.append("%20");
-            stringBuilder.append(toQueryParameter(filter.getValue()));
+            stringBuilder.append(toFilterString(filter.getValue()));
             break;
           case NOT_EQUALS:
             stringBuilder.append(filter.getProperty());
             stringBuilder.append("%20");
             stringBuilder.append("neq");
             stringBuilder.append("%20");
-            stringBuilder.append(toQueryParameter(filter.getValue()));
+            stringBuilder.append(toFilterString(filter.getValue()));
             break;
           case LESS_THAN:
             stringBuilder.append(filter.getProperty());
             stringBuilder.append("%20");
             stringBuilder.append("lt");
             stringBuilder.append("%20");
-            stringBuilder.append(toQueryParameter(filter.getValue()));
+            stringBuilder.append(toFilterString(filter.getValue()));
             break;
           case LESS_THAN_OR_EQUALS:
             stringBuilder.append(filter.getProperty());
             stringBuilder.append("%20");
             stringBuilder.append("lte");
             stringBuilder.append("%20");
-            stringBuilder.append(toQueryParameter(filter.getValue()));
+            stringBuilder.append(toFilterString(filter.getValue()));
             break;
           case GREATER_THAN:
             stringBuilder.append(filter.getProperty());
             stringBuilder.append("%20");
             stringBuilder.append("gt");
             stringBuilder.append("%20");
-            stringBuilder.append(toQueryParameter(filter.getValue()));
+            stringBuilder.append(toFilterString(filter.getValue()));
             break;
           case GREATER_THAN_OR_EQUALS:
             stringBuilder.append(filter.getProperty());
             stringBuilder.append("%20");
             stringBuilder.append("gte");
             stringBuilder.append("%20");
-            stringBuilder.append(toQueryParameter(filter.getValue()));
+            stringBuilder.append(toFilterString(filter.getValue()));
             break;
           case IS_NULL:
             stringBuilder.append(filter.getProperty());
@@ -621,7 +638,7 @@ public abstract class ETRestObject extends ETApiObject {
                 } else {
                     stringBuilder.append(",");
                 }
-                stringBuilder.append(toQueryParameter(value));
+                stringBuilder.append(toFilterString(value));
             }
             stringBuilder.append(")");
             break;
@@ -630,18 +647,18 @@ public abstract class ETRestObject extends ETApiObject {
             stringBuilder.append("%20");
             stringBuilder.append("between");
             stringBuilder.append("%20");
-            stringBuilder.append(toQueryParameter(filter.getValues().get(0)));
+            stringBuilder.append(toFilterString(filter.getValues().get(0)));
             stringBuilder.append("%20");
             stringBuilder.append("and");
             stringBuilder.append("%20");
-            stringBuilder.append(toQueryParameter(filter.getValues().get(1)));
+            stringBuilder.append(toFilterString(filter.getValues().get(1)));
             break;
           case LIKE:
             stringBuilder.append(filter.getProperty());
             stringBuilder.append("%20");
             stringBuilder.append("like");
             stringBuilder.append("%20");
-            stringBuilder.append(toQueryParameter(filter.getValue(), true));
+            stringBuilder.append(toFilterString(filter.getValue(), true));
             break;
           default:
             throw new ETSdkException("unsupported operator: " + operator);
