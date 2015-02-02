@@ -805,20 +805,20 @@ public class ETFilterTest {
         throws ETSdkException
     {
         ETFilter filter = ETFilter.parse("foo = bar or bar = baz and baz = foo");
-        assertEquals(ETFilter.Operator.AND, filter.getOperator());
+        assertEquals(ETFilter.Operator.OR, filter.getOperator());
         ETFilter filter1 = filter.getFilters().get(0);
         ETFilter filter2 = filter.getFilters().get(1);
-        assertEquals(ETFilter.Operator.OR, filter1.getOperator());
-        ETFilter filter3 = filter1.getFilters().get(0);
-        ETFilter filter4 = filter1.getFilters().get(1);
-        assertEquals("baz", filter2.getProperty());
-        assertEquals(ETFilter.Operator.EQUALS, filter2.getOperator());
-        assertEquals("foo", filter2.getValue());
-        assertEquals("foo", filter3.getProperty());
+        assertEquals("foo", filter1.getProperty());
+        assertEquals(ETFilter.Operator.EQUALS, filter1.getOperator());
+        assertEquals("bar", filter1.getValue());
+        assertEquals(ETFilter.Operator.AND, filter2.getOperator());
+        ETFilter filter3 = filter2.getFilters().get(0);
+        ETFilter filter4 = filter2.getFilters().get(1);
+        assertEquals("bar", filter3.getProperty());
         assertEquals(ETFilter.Operator.EQUALS, filter3.getOperator());
-        assertEquals("bar", filter3.getValue());
-        assertEquals("bar", filter4.getProperty());
+        assertEquals("baz", filter3.getValue());
+        assertEquals("baz", filter4.getProperty());
         assertEquals(ETFilter.Operator.EQUALS, filter4.getOperator());
-        assertEquals("baz", filter4.getValue());
+        assertEquals("foo", filter4.getValue());
     }
 }
