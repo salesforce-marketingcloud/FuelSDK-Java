@@ -41,6 +41,7 @@ import org.apache.log4j.Logger;
 
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.InternalName;
+import com.exacttarget.fuelsdk.annotations.RestObject;
 import com.exacttarget.fuelsdk.annotations.SoapObject;
 import com.exacttarget.fuelsdk.ETDataExtensionColumn.Type;
 import com.exacttarget.fuelsdk.ETRestConnection.Response;
@@ -54,6 +55,10 @@ import com.exacttarget.fuelsdk.internal.DataExtensionObject;
  * in the Salesforce Marketing Cloud.
  */
 
+@RestObject(path = "/data/v1/customobjectdata/key/{key}/rowset",
+            primaryKey = "key",
+            collection = "items",
+            totalCount = "count")
 @SoapObject(internalType = DataExtension.class, unretrievable = {
     "ID", "Fields"
 })
@@ -265,14 +270,14 @@ public class ETDataExtension extends ETSoapObject {
         throws ETSdkException
     {
         // new String[0] = empty properties
-        return select((ETFilter) null, null, null, new String[0]);
+        return selectRest((ETFilter) null, null, null, new String[0]);
     }
 
     public ETResponse<ETDataExtensionRow> select(ETFilter filter,
                                                  String... columns)
         throws ETSdkException
     {
-        return select(filter, null, null, columns);
+        return selectRest(filter, null, null, columns);
     }
 
     public ETResponse<ETDataExtensionRow> select(String filter,
@@ -307,7 +312,7 @@ public class ETDataExtension extends ETSoapObject {
         if (c.length == 0) {
             c = getColumnNames();
         }
-        return select(f, null, null, c);
+        return selectRest(f, null, null, c);
     }
 
     public ETResponse<ETDataExtensionRow> select(Integer page,
@@ -315,13 +320,88 @@ public class ETDataExtension extends ETSoapObject {
                                                  String... columns)
         throws ETSdkException
     {
-        return select((ETFilter) null, page, pageSize, columns);
+        return selectRest((ETFilter) null, page, pageSize, columns);
     }
 
     public ETResponse<ETDataExtensionRow> select(ETFilter filter,
                                                  Integer page,
                                                  Integer pageSize,
                                                  String... columns)
+        throws ETSdkException
+    {
+        return selectRest(filter, page, pageSize, columns);
+    }
+
+    public ETResponse<ETDataExtensionRow> select(String filter,
+                                                 Integer page,
+                                                 Integer pageSize,
+                                                 String... columns)
+        throws ETSdkException
+    {
+        return selectRest(ETFilter.parse(filter), page, pageSize, columns);
+    }
+
+    public ETResponse<ETDataExtensionRow> selectRest()
+        throws ETSdkException
+    {
+        // new String[0] = empty properties
+        return selectRest((ETFilter) null, null, null, new String[0]);
+    }
+
+    public ETResponse<ETDataExtensionRow> selectRest(ETFilter filter,
+                                                     String... columns)
+        throws ETSdkException
+    {
+        return selectRest(filter, null, null, columns);
+    }
+
+    public ETResponse<ETDataExtensionRow> selectRest(String filter,
+                                                     String... columns)
+        throws ETSdkException
+    {
+        // see also: ETClient.retrieve(type, filter, properties)
+        // XXX it would be very nice if this could use this code
+        ETFilter f = null;
+        String[] c = columns;
+        try {
+            f = ETFilter.parse(filter);
+        } catch (ETSdkException ex) {
+            if (ex.getCause() instanceof ParseException) {
+                //
+                // The filter argument is actually a column. This is a bit
+                // of a hack, but this method needs to handle the case of
+                // both a filtered and a filterless retrieve with columns,
+                // as having one method for each results in ambiguous methods.
+                //
+
+                c = new String[columns.length + 1];
+                c[0] = filter.toLowerCase();
+                int i = 1;
+                for (String property : columns) {
+                    c[i++] = property.toLowerCase();
+                }
+            } else {
+                throw ex;
+            }
+        }
+        if (c.length == 0) {
+            c = getColumnNames();
+        }
+        return selectRest(f, null, null, c);
+    }
+
+    public ETResponse<ETDataExtensionRow> selectRest(Integer page,
+                                                     Integer pageSize,
+                                                     String... columns)
+        throws ETSdkException
+    {
+        return selectRest((ETFilter) null, page, pageSize, columns);
+    }
+
+    public ETResponse<ETDataExtensionRow> selectRest(ETFilter filter,
+                                                     Integer page,
+                                                     Integer pageSize,
+                                                     String... columns)
         throws ETSdkException
     {
         String path = "/data/v1/customobjectdata/key/" + getKey() + "/rowset";
@@ -386,13 +466,97 @@ public class ETDataExtension extends ETSoapObject {
         return response;
     }
 
-    public ETResponse<ETDataExtensionRow> select(String filter,
-                                                 Integer page,
-                                                 Integer pageSize,
-                                                 String... columns)
+    public ETResponse<ETDataExtensionRow> selectRest(String filter,
+                                                     Integer page,
+                                                     Integer pageSize,
+                                                     String... columns)
         throws ETSdkException
     {
-        return select(ETFilter.parse(filter), page, pageSize, columns);
+        return selectRest(ETFilter.parse(filter), page, pageSize, columns);
+    }
+
+    public ETResponse<ETDataExtensionRow> selectSoap()
+        throws ETSdkException
+    {
+        // new String[0] = empty properties
+        return selectSoap((ETFilter) null, null, null, new String[0]);
+    }
+
+    public ETResponse<ETDataExtensionRow> selectSoap(ETFilter filter,
+                                                     String... columns)
+        throws ETSdkException
+    {
+        return selectSoap(filter, null, null, columns);
+    }
+
+    public ETResponse<ETDataExtensionRow> selectSoap(String filter,
+                                                     String... columns)
+        throws ETSdkException
+    {
+        // see also: ETClient.retrieve(type, filter, properties)
+        // XXX it would be very nice if this could use this code
+        ETFilter f = null;
+        String[] c = columns;
+        try {
+            f = ETFilter.parse(filter);
+        } catch (ETSdkException ex) {
+            if (ex.getCause() instanceof ParseException) {
+                //
+                // The filter argument is actually a column. This is a bit
+                // of a hack, but this method needs to handle the case of
+                // both a filtered and a filterless retrieve with columns,
+                // as having one method for each results in ambiguous methods.
+                //
+
+                c = new String[columns.length + 1];
+                c[0] = filter.toLowerCase();
+                int i = 1;
+                for (String property : columns) {
+                    c[i++] = property.toLowerCase();
+                }
+            } else {
+                throw ex;
+            }
+        }
+        if (c.length == 0) {
+            c = getColumnNames();
+        }
+        return selectSoap(f, null, null, c);
+    }
+
+    public ETResponse<ETDataExtensionRow> selectSoap(Integer page,
+                                                     Integer pageSize,
+                                                     String... columns)
+        throws ETSdkException
+    {
+        return selectSoap((ETFilter) null, page, pageSize, columns);
+    }
+
+    public ETResponse<ETDataExtensionRow> selectSoap(ETFilter filter,
+                                                     Integer page,
+                                                     Integer pageSize,
+                                                     String... columns)
+        throws ETSdkException
+    {
+        if (columns.length == 0) {
+            columns = getColumnNames();
+        }
+        return ETSoapObject.retrieve(getClient(),
+                                     "DataExtensionObject[" + name + "]",
+                                     filter,
+                                     page,
+                                     pageSize,
+                                     ETDataExtensionRow.class,
+                                     columns);
+    }
+
+    public ETResponse<ETDataExtensionRow> selectSoap(String filter,
+                                                     Integer page,
+                                                     Integer pageSize,
+                                                     String... columns)
+        throws ETSdkException
+    {
+        return selectSoap(ETFilter.parse(filter), page, pageSize, columns);
     }
 
     public ETResponse<ETDataExtensionRow> insert(ETDataExtensionRow... rows)
