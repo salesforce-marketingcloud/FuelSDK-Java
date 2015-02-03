@@ -162,7 +162,8 @@ public class ETRestConnection {
         return response;
     }
 
-    protected Gson getGson() {
+    // XXX protected?
+    public Gson getGson() {
         return gson;
     }
 
