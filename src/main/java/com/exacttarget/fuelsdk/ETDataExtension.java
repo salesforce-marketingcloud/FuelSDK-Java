@@ -680,7 +680,6 @@ public class ETDataExtension extends ETSoapObject {
         StringBuilder stringBuilder = new StringBuilder(path);
 
         if (filter != null) {
-            stringBuilder.append("?filter=");
             stringBuilder.append(ETRestObject.toFilterString(filter));
         }
 

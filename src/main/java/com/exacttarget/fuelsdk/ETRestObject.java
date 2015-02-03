@@ -544,70 +544,78 @@ public abstract class ETRestObject extends ETApiObject {
     protected static String toFilterString(ETFilter filter)
         throws ETSdkException
     {
+        return toFilterString(filter, true);
+    }
+
+    protected static String toFilterString(ETFilter filter, boolean first)
+        throws ETSdkException
+    {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("$filter=");
+        if (first) {
+            stringBuilder.append("$filter=");
+        }
         ETFilter.Operator operator = filter.getOperator();
         switch (operator) {
           case AND:
-            stringBuilder.append(toFilterString(filter.getFilters().get(0)));
+            stringBuilder.append(toFilterString(filter.getFilters().get(0), false));
             stringBuilder.append("%20");
             stringBuilder.append("and");
             stringBuilder.append("%20");
-            stringBuilder.append(toFilterString(filter.getFilters().get(1)));
+            stringBuilder.append(toFilterString(filter.getFilters().get(1), false));
             break;
           case OR:
-            stringBuilder.append(toFilterString(filter.getFilters().get(0)));
+            stringBuilder.append(toFilterString(filter.getFilters().get(0), false));
             stringBuilder.append("%20");
             stringBuilder.append("or");
             stringBuilder.append("%20");
-            stringBuilder.append(toFilterString(filter.getFilters().get(1)));
+            stringBuilder.append(toFilterString(filter.getFilters().get(1), false));
             break;
           case NOT:
             stringBuilder.append("not");
             stringBuilder.append("%20");
-            stringBuilder.append(toFilterString(filter.getFilters().get(0)));
+            stringBuilder.append(toFilterString(filter.getFilters().get(0), false));
             break;
           case EQUALS:
             stringBuilder.append(filter.getProperty());
             stringBuilder.append("%20");
             stringBuilder.append("eq");
             stringBuilder.append("%20");
-            stringBuilder.append(toFilterString(filter.getValue()));
+            stringBuilder.append(toFilterString(filter.getValue(), false));
             break;
           case NOT_EQUALS:
             stringBuilder.append(filter.getProperty());
             stringBuilder.append("%20");
             stringBuilder.append("neq");
             stringBuilder.append("%20");
-            stringBuilder.append(toFilterString(filter.getValue()));
+            stringBuilder.append(toFilterString(filter.getValue(), false));
             break;
           case LESS_THAN:
             stringBuilder.append(filter.getProperty());
             stringBuilder.append("%20");
             stringBuilder.append("lt");
             stringBuilder.append("%20");
-            stringBuilder.append(toFilterString(filter.getValue()));
+            stringBuilder.append(toFilterString(filter.getValue(), false));
             break;
           case LESS_THAN_OR_EQUALS:
             stringBuilder.append(filter.getProperty());
             stringBuilder.append("%20");
             stringBuilder.append("lte");
             stringBuilder.append("%20");
-            stringBuilder.append(toFilterString(filter.getValue()));
+            stringBuilder.append(toFilterString(filter.getValue(), false));
             break;
           case GREATER_THAN:
             stringBuilder.append(filter.getProperty());
             stringBuilder.append("%20");
             stringBuilder.append("gt");
             stringBuilder.append("%20");
-            stringBuilder.append(toFilterString(filter.getValue()));
+            stringBuilder.append(toFilterString(filter.getValue(), false));
             break;
           case GREATER_THAN_OR_EQUALS:
             stringBuilder.append(filter.getProperty());
             stringBuilder.append("%20");
             stringBuilder.append("gte");
             stringBuilder.append("%20");
-            stringBuilder.append(toFilterString(filter.getValue()));
+            stringBuilder.append(toFilterString(filter.getValue(), false));
             break;
           case IS_NULL:
             stringBuilder.append(filter.getProperty());
@@ -631,10 +639,10 @@ public abstract class ETRestObject extends ETApiObject {
             stringBuilder.append("in");
             stringBuilder.append("%20");
             stringBuilder.append("(");
-            boolean first = true;
+            boolean firstValue = true;
             for (String value : filter.getValues()) {
-                if (first) {
-                    first = false;
+                if (firstValue) {
+                    firstValue = false;
                 } else {
                     stringBuilder.append(",");
                 }
@@ -647,11 +655,11 @@ public abstract class ETRestObject extends ETApiObject {
             stringBuilder.append("%20");
             stringBuilder.append("between");
             stringBuilder.append("%20");
-            stringBuilder.append(toFilterString(filter.getValues().get(0)));
+            stringBuilder.append(toFilterString(filter.getValues().get(0), false));
             stringBuilder.append("%20");
             stringBuilder.append("and");
             stringBuilder.append("%20");
-            stringBuilder.append(toFilterString(filter.getValues().get(1)));
+            stringBuilder.append(toFilterString(filter.getValues().get(1), false));
             break;
           case LIKE:
             stringBuilder.append(filter.getProperty());
