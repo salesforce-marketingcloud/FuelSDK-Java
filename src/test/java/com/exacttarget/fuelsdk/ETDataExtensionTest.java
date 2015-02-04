@@ -1196,7 +1196,25 @@ public class ETDataExtensionTest {
     }
 
     @Test
-    public void _31_TestUpdateSingleRow()
+    public void _31_TestSelectZeroRowsReturned()
+        throws ETSdkException
+    {
+        assertEquals(CLIENT_ID, client.getClientId());
+        ETResponse<ETDataExtensionRow> response = dataExtension.select("LastName=fnord");
+        assertNotNull(response.getRequestId());
+        assertEquals(OK, response.getStatus());
+        assertEquals("200", response.getResponseCode());
+        assertEquals("OK", response.getResponseMessage());
+        assertEquals((Integer) 1, response.getPage());
+        assertEquals((Integer) 2500, response.getPageSize());
+        assertEquals((Integer) 0, response.getTotalCount());
+        assertFalse(response.hasMoreResults());
+        List<ETDataExtensionRow> rows = response.getObjects();
+        assertEquals(0, rows.size());
+    }
+
+    @Test
+    public void _32_TestUpdateSingleRow()
         throws ETSdkException
     {
         assertEquals(CLIENT_ID, client.getClientId());
@@ -1230,7 +1248,7 @@ public class ETDataExtensionTest {
     }
 
     @Test
-    public void _32_TestUpdateMultipleRows()
+    public void _33_TestUpdateMultipleRows()
         throws ETSdkException
     {
         assertEquals(CLIENT_ID, client.getClientId());
@@ -1281,7 +1299,7 @@ public class ETDataExtensionTest {
     }
 
     @Test
-    public void _33_TestUpdateRowsByFilter()
+    public void _34_TestUpdateRowsByFilter()
         throws ETSdkException
     {
         assertEquals(CLIENT_ID, client.getClientId());
@@ -1327,7 +1345,7 @@ public class ETDataExtensionTest {
     }
 
     @Test(expected = ETSdkException.class)
-    public void _34_TestUpdateRowsByFilterInvalidOperator()
+    public void _35_TestUpdateRowsByFilterInvalidOperator()
         throws ETSdkException
     {
         assertEquals(CLIENT_ID, client.getClientId());
@@ -1337,7 +1355,7 @@ public class ETDataExtensionTest {
     }
 
     @Test
-    public void _35_TestDeleteSingleRow()
+    public void _36_TestDeleteSingleRow()
         throws ETSdkException
     {
         assertEquals(CLIENT_ID, client.getClientId());
@@ -1364,7 +1382,7 @@ public class ETDataExtensionTest {
     }
 
     @Test
-    public void _36_TestDeleteMultipleRows()
+    public void _37_TestDeleteMultipleRows()
         throws ETSdkException
     {
         assertEquals(CLIENT_ID, client.getClientId());
@@ -1401,21 +1419,21 @@ public class ETDataExtensionTest {
     }
 
     //@Test
-    public void _37_TestDeleteRowsByFilter()
+    public void _38_TestDeleteRowsByFilter()
         throws ETSdkException
     {
         assertEquals(CLIENT_ID, client.getClientId());
     }
 
     //@Test
-    public void _38_TestDeleteRowsByFilterInvalidOperator()
+    public void _39_TestDeleteRowsByFilterInvalidOperator()
         throws ETSdkException
     {
         assertEquals(CLIENT_ID, client.getClientId());
     }
 
     @Test
-    public void _39_TestDeleteSingle()
+    public void _40_TestDeleteSingle()
         throws ETSdkException
     {
         assertEquals(CLIENT_ID, client.getClientId());
