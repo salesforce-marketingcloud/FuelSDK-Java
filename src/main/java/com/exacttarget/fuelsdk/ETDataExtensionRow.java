@@ -96,6 +96,13 @@ public class ETDataExtensionRow extends ETSoapObject {
     }
 
     public void setColumn(String name, String value) {
+        setColumn(name, value, true);
+    }
+
+    public void setColumn(String name, String value, boolean setModified) {
+        if (setModified) {
+            setModified(name, true);
+        }
         columns.put(name.toLowerCase(), value);
     }
 
