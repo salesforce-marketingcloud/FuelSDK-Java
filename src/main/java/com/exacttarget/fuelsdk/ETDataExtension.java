@@ -273,6 +273,82 @@ public class ETDataExtension extends ETSoapObject {
         setFolderId(categoryId);
     }
 
+    public static ETResponse<ETDataExtensionRow> select(ETClient client,
+                                                        String dataExtension,
+                                                        String filter,
+                                                        Integer page,
+                                                        Integer pageSize,
+                                                        String... columns)
+        throws ETSdkException
+    {
+        // XXX this is a prototype--make thismore robust
+
+        String key = dataExtension.substring(4);
+
+        String path = "/data/v1/customobjectdata/key/" + key + "/rowset";
+
+        Response r = ETRestObject.retrieve(client,
+                                           path,
+                                           null,
+                                           ETFilter.parse(filter),
+                                           page,
+                                           pageSize,
+                                           ETRestObject.class,
+                                           columns);
+
+        ETResponse<ETDataExtensionRow> response = new ETResponse<ETDataExtensionRow>();
+
+        // XXX still too much duplicate code here
+
+        response.setRequestId(r.getRequestId());
+        if (r.getResponseCode() >= 200 && r.getResponseCode() <= 299) {
+            response.setStatus(ETResult.Status.OK);
+        } else if (r.getResponseCode() >= 400 && r.getResponseCode() <= 599) {
+            response.setStatus(ETResult.Status.ERROR);
+        }
+        response.setResponseCode(r.getResponseCode().toString());
+        response.setResponseMessage(r.getResponseMessage());
+
+        JsonParser jsonParser = new JsonParser();
+        JsonObject jsonObject = jsonParser.parse(r.getResponsePayload()).getAsJsonObject();
+
+        if (jsonObject.get("page") != null) {
+            response.setPage(jsonObject.get("page").getAsInt());
+            logger.trace("page = " + response.getPage());
+            response.setPageSize(jsonObject.get("pageSize").getAsInt());
+            logger.trace("pageSize = " + response.getPageSize());
+            response.setTotalCount(jsonObject.get("count").getAsInt());
+            logger.trace("totalCount = " + response.getTotalCount());
+
+            if (response.getPage() * response.getPageSize() < response.getTotalCount()) {
+                response.setMoreResults(true);
+            }
+
+            JsonElement elements = jsonObject.get("items");
+            if (elements != null) {
+                for (JsonElement element : elements.getAsJsonArray()) {
+                    JsonObject object = element.getAsJsonObject();
+                    ETDataExtensionRow row = new ETDataExtensionRow();
+                    JsonObject keys = object.get("keys").getAsJsonObject();
+                    for (Map.Entry<String, JsonElement> entry : keys.entrySet()) {
+                        row.setColumn(entry.getKey(), entry.getValue().getAsString(), false);
+                    }
+                    JsonObject values = object.get("values").getAsJsonObject();
+                    for (Map.Entry<String, JsonElement> entry : values.entrySet()) {
+                        row.setColumn(entry.getKey(), entry.getValue().getAsString(), false);
+                    }
+                    row.setClient(client);
+                    ETResult<ETDataExtensionRow> result = new ETResult<ETDataExtensionRow>();
+                    result.setObject(row);
+                    response.addResult(result);
+                }
+            }
+        }
+
+        return response;
+
+    }
+
     public ETResponse<ETDataExtensionRow> select()
         throws ETSdkException
     {
@@ -457,11 +533,11 @@ public class ETDataExtension extends ETSoapObject {
                     ETDataExtensionRow row = new ETDataExtensionRow();
                     JsonObject keys = object.get("keys").getAsJsonObject();
                     for (Map.Entry<String, JsonElement> entry : keys.entrySet()) {
-                        row.setColumn(entry.getKey(), entry.getValue().getAsString());
+                        row.setColumn(entry.getKey(), entry.getValue().getAsString(), false);
                     }
                     JsonObject values = object.get("values").getAsJsonObject();
                     for (Map.Entry<String, JsonElement> entry : values.entrySet()) {
-                        row.setColumn(entry.getKey(), entry.getValue().getAsString());
+                        row.setColumn(entry.getKey(), entry.getValue().getAsString(), false);
                     }
                     row.setClient(getClient());
                     ETResult<ETDataExtensionRow> result = new ETResult<ETDataExtensionRow>();
