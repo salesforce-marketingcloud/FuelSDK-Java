@@ -1,5 +1,5 @@
 //
-// This file is part of the Salesforce Marketing Cloud Java client library.
+// This file is part of the Fuel Java client library.
 //
 // Copyright (c) 2013, 2014, 2015, ExactTarget, Inc.
 // All rights reserved.
