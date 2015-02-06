@@ -754,6 +754,16 @@ public class ETDataExtension extends ETSoapObject {
                                                  String fileName)
         throws ETSdkException
     {
+        return export(filter, fileName, true, false, null);
+    }
+
+    public ETResponse<ETDataExtensionRow> export(ETFilter filter,
+                                                 String fileName,
+                                                 Boolean includeHeader,
+                                                 Boolean compress,
+                                                 Integer encryptionKey)
+        throws ETSdkException
+    {
         ETClient client = getClient();
 
         ETResponse<ETDataExtensionRow> response = new ETResponse<ETDataExtensionRow>();
@@ -773,10 +783,18 @@ public class ETDataExtension extends ETSoapObject {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("customerKey", getKey());
         jsonObject.addProperty("fileName", fileName);
+        if (includeHeader != null) {
+            jsonObject.addProperty("includeHeader", includeHeader);
+        }
+        if (compress != null) {
+            jsonObject.addProperty("compress", compress);
+        }
+        if (encryptionKey != null) {
+            jsonObject.addProperty("encryptionKey", encryptionKey);
+        }
         Gson gson = connection.getGson();
         String json = gson.toJson(jsonObject);
 
-        // XXX handle return value?
         ETRestConnection.Response r = connection.post(path, json);
 
         response.setRequestId(r.getRequestId());
@@ -796,6 +814,20 @@ public class ETDataExtension extends ETSoapObject {
         throws ETSdkException
     {
         return export(ETFilter.parse(filter), fileName);
+    }
+
+    public ETResponse<ETDataExtensionRow> export(String filter,
+                                                 String fileName,
+                                                 Boolean includeHeader,
+                                                 Boolean compress,
+                                                 Integer encryptionKey)
+        throws ETSdkException
+    {
+        return export(ETFilter.parse(filter),
+                      fileName,
+                      includeHeader,
+                      compress,
+                      encryptionKey);
     }
 
     public void hydrate()
