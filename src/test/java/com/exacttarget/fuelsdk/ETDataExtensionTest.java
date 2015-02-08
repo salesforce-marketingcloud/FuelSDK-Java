@@ -1323,11 +1323,11 @@ public class ETDataExtensionTest {
         assertNull(result1.getObjectId());
         ETDataExtensionRow r1 = result1.getObject();
         assertEquals("2", r1.getColumn("CustomerID"));
-        assertEquals("Fred Flintstone", r1.getColumn("FullName"));
+        assertEquals(null, r1.getColumn("FullName"));
         assertEquals("Fred and Wilma", r1.getColumn("FirstName"));
-        assertEquals("Flintstone", r1.getColumn("LastName"));
-        assertEquals("36", r1.getColumn("Age"));
-        assertEquals("fred@flintstone.com", r1.getColumn("EmailAddress"));
+        assertEquals(null, r1.getColumn("LastName"));
+        assertEquals(null, r1.getColumn("Age"));
+        assertEquals(null, r1.getColumn("EmailAddress"));
         ETResult<ETDataExtensionRow> result2 = response.getResults().get(1);
         assertNull(result2.getRequestId());
         assertEquals(OK, result2.getStatus());
@@ -1337,11 +1337,11 @@ public class ETDataExtensionTest {
         assertNull(result2.getObjectId());
         ETDataExtensionRow r2 = result2.getObject();
         assertEquals("3", r2.getColumn("CustomerID"));
-        assertEquals("Wilma Flintstone", r2.getColumn("FullName"));
+        assertEquals(null, r2.getColumn("FullName"));
         assertEquals("Fred and Wilma", r2.getColumn("FirstName"));
-        assertEquals("Flintstone", r2.getColumn("LastName"));
-        assertEquals("34", r2.getColumn("Age"));
-        assertEquals("wilma@flintstone.com", r2.getColumn("EmailAddress"));
+        assertEquals(null, r2.getColumn("LastName"));
+        assertEquals(null, r2.getColumn("Age"));
+        assertEquals(null, r2.getColumn("EmailAddress"));
     }
 
     @Test(expected = ETSdkException.class)
