@@ -37,9 +37,13 @@ package com.exacttarget.fuelsdk;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.exacttarget.fuelsdk.annotations.PrettyPrint;
 
 public class ETResponse<T extends ETApiObject> extends ETObject {
+    private static Logger logger = Logger.getLogger(ETResponse.class);
+
     @PrettyPrint
     private ETResult<T> batchResult = null;
     @PrettyPrint
@@ -122,7 +126,12 @@ public class ETResponse<T extends ETApiObject> extends ETObject {
     }
 
     public ETResult<T> getResult() {
-        assert individualResults != null && individualResults.size() == 1;
+        if (individualResults.size() == 0) {
+            return null;
+        }
+        if (individualResults.size() > 1) {
+            logger.warn("getResult() called on response with results > 1");
+        }
         return individualResults.get(0);
     }
 
