@@ -143,6 +143,8 @@ public class ETDataExtensionRow extends ETSoapObject {
      */
     @Deprecated
     public void setColumns(Map<String, String> columns) {
-        this.columns = columns;
+        for (Map.Entry<String, String> column : columns.entrySet()) {
+            setColumn(column.getKey().toLowerCase(), column.getValue());
+        }
     }
 }
