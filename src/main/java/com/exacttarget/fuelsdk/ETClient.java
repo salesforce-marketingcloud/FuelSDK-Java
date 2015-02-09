@@ -288,6 +288,20 @@ public class ETClient {
         return accessToken;
     }
 
+    public <T extends ETApiObject> T instantiate(Class <T> type)
+        throws ETSdkException
+    {
+        T object = null;
+        try {
+            object = type.newInstance();
+        } catch (Exception ex) {
+            throw new ETSdkException("could not instantiate "
+                    + type.getName(), ex);
+        }
+        object.setClient(this);
+        return object;
+    }
+
     public <T extends ETApiObject> ETResponse<T> retrieve(Class<T> type)
         throws ETSdkException
     {
@@ -514,8 +528,6 @@ public class ETClient {
         // XXX optimize
 
         ETResponse<T> response = retrieve(type, filter);
-
-        // XXX assert operators is "="?
 
         List<T> objects = response.getObjects();
         for (T object : objects) {
