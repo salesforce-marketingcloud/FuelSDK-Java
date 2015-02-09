@@ -34,6 +34,9 @@
 
 package com.exacttarget.fuelsdk;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -53,7 +56,11 @@ public class ETConfiguration {
         logger.trace("reading configuration from " + file);
         InputStream is = getClass().getResourceAsStream(file);
         if (is == null) {
-            throw new ETSdkException("error opening " + file);
+            try {
+                is = new FileInputStream(new File(file));
+            } catch (FileNotFoundException e) {
+                throw new ETSdkException("error opening " + file);
+            }
         }
         try {
             properties.load(is);
