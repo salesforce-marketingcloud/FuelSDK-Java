@@ -289,6 +289,13 @@ public class ETDataExtension extends ETSoapObject {
     {
         String name = null;
 
+        // XXX hack
+        for (String column : columns) {
+            if (column.length() >= 8 && column.substring(0, 8).toLowerCase().equals("order by")) {
+                return select(client, dataExtension, filter, null, null, columns);
+            }
+        }
+
         ETFilter f = ETFilter.parse(dataExtension);
         if (f.getProperty().toLowerCase().equals("key")
                 && f.getOperator() == ETFilter.Operator.EQUALS) {
@@ -478,13 +485,37 @@ public class ETDataExtension extends ETSoapObject {
                                                  String... columns)
         throws ETSdkException
     {
-        if (columns.length == 0) {
-            columns = getColumnNames();
+        // see also: ETClient.retrieve(type, filter, properties)
+        ETFilter f = null;
+        String[] c = columns;
+        try {
+            f = ETFilter.parse(filter);
+        } catch (ETSdkException ex) {
+            if (ex.getCause() instanceof ParseException) {
+                //
+                // The filter argument is actually a column. This is a bit
+                // of a hack, but this method needs to handle the case of
+                // both a filtered and a filterless retrieve with columns,
+                // as having one method for each results in ambiguous methods.
+                //
+
+                c = new String[columns.length + 1];
+                c[0] = filter.toLowerCase();
+                int i = 1;
+                for (String property : columns) {
+                    c[i++] = property.toLowerCase();
+                }
+            } else {
+                throw ex;
+            }
+        }
+        if (c.length == 0) {
+            c = getColumnNames();
         }
         return ETDataExtension.select(getClient(),
                                       "key=" + getKey(),
-                                      filter,
-                                      columns);
+                                      f,
+                                      c);
     }
 
     public ETResponse<ETDataExtensionRow> select(Integer page,
