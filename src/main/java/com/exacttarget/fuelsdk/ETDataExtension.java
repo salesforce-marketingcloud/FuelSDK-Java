@@ -274,23 +274,116 @@ public class ETDataExtension extends ETSoapObject {
     }
 
     public static ETResponse<ETDataExtensionRow> select(ETClient client,
+                                                        String dataExtension)
+        throws ETSdkException
+    {
+        // new String[0] = empty properties
+        return select(client, dataExtension, (ETFilter) null, new String[0]);
+    }
+
+    public static ETResponse<ETDataExtensionRow> select(ETClient client,
+                                                        String dataExtension,
+                                                        ETFilter filter,
+                                                        String... columns)
+        throws ETSdkException
+    {
+        String name = null;
+
+        ETFilter f = ETFilter.parse(dataExtension);
+        if (f.getProperty().toLowerCase().equals("key")
+                && f.getOperator() == ETFilter.Operator.EQUALS) {
+            name = f.getValue();
+        } else if (f.getProperty().toLowerCase().equals("name")
+                && f.getOperator() == ETFilter.Operator.EQUALS) {
+            name = f.getValue();
+        } else {
+            throw new ETSdkException("invalid data extension filter string");
+        }
+
+        // XXX can we do something more intelligent when
+        // columns.length == 0 in the static select call?
+
+        if (columns.length == 0) {
+            throw new ETSdkException("invalid column array");
+        }
+
+        return ETSoapObject.retrieve(client,
+                                     "DataExtensionObject[" + name + "]",
+                                     filter,
+                                     null,
+                                     null,
+                                     ETDataExtensionRow.class,
+                                     columns);
+    }
+
+    public static ETResponse<ETDataExtensionRow> select(ETClient client,
                                                         String dataExtension,
                                                         String filter,
+                                                        String... columns)
+        throws ETSdkException
+    {
+        // see also: ETClient.retrieve(type, filter, properties)
+        ETFilter f = null;
+        String[] c = columns;
+        try {
+            f = ETFilter.parse(filter);
+        } catch (ETSdkException ex) {
+            if (ex.getCause() instanceof ParseException) {
+                //
+                // The filter argument is actually a column. This is a bit
+                // of a hack, but this method needs to handle the case of
+                // both a filtered and a filterless retrieve with columns,
+                // as having one method for each results in ambiguous methods.
+                //
+
+                c = new String[columns.length + 1];
+                c[0] = filter.toLowerCase();
+                int i = 1;
+                for (String property : columns) {
+                    c[i++] = property.toLowerCase();
+                }
+            } else {
+                throw ex;
+            }
+        }
+        return select(client, dataExtension, f, c);
+    }
+
+    public static ETResponse<ETDataExtensionRow> select(ETClient client,
+                                                        String dataExtension,
                                                         Integer page,
                                                         Integer pageSize,
                                                         String... columns)
         throws ETSdkException
     {
-        // XXX this is a prototype--make thismore robust
+        return select(client, dataExtension, (ETFilter) null, page, pageSize, columns);
+    }
 
-        String key = dataExtension.substring(4);
+    public static ETResponse<ETDataExtensionRow> select(ETClient client,
+                                                        String dataExtension,
+                                                        ETFilter filter,
+                                                        Integer page,
+                                                        Integer pageSize,
+                                                        String... columns)
+        throws ETSdkException
+    {
+        String path = "/data/v1/customobjectdata";
 
-        String path = "/data/v1/customobjectdata/key/" + key + "/rowset";
+        ETFilter f = ETFilter.parse(dataExtension);
+        if (f.getProperty().toLowerCase().equals("id")
+                && f.getOperator() == ETFilter.Operator.EQUALS) {
+            path += "/" + f.getValue() + "/rowset";
+        } else if (f.getProperty().toLowerCase().equals("key")
+                && f.getOperator() == ETFilter.Operator.EQUALS) {
+            path += "/key/" + f.getValue() + "/rowset";
+        } else {
+            throw new ETSdkException("invalid data extension filter string");
+        }
 
         Response r = ETRestObject.retrieve(client,
                                            path,
                                            null,
-                                           ETFilter.parse(filter),
+                                           filter,
                                            page,
                                            pageSize,
                                            ETRestObject.class,
@@ -346,56 +439,52 @@ public class ETDataExtension extends ETSoapObject {
         }
 
         return response;
+    }
 
+    public static ETResponse<ETDataExtensionRow> select(ETClient client,
+                                                        String dataExtension,
+                                                        String filter,
+                                                        Integer page,
+                                                        Integer pageSize,
+                                                        String... columns)
+        throws ETSdkException
+    {
+        return select(client, dataExtension, ETFilter.parse(filter), page, pageSize, columns);
     }
 
     public ETResponse<ETDataExtensionRow> select()
         throws ETSdkException
     {
-        // new String[0] = empty properties
-        return selectRest((ETFilter) null, null, null, new String[0]);
+        return ETDataExtension.select(getClient(),
+                                      "key=" + getKey(),
+                                      (ETFilter) null,
+                                      getColumnNames());
     }
 
     public ETResponse<ETDataExtensionRow> select(ETFilter filter,
                                                  String... columns)
         throws ETSdkException
     {
-        return selectRest(filter, null, null, columns);
+        if (columns.length == 0) {
+            columns = getColumnNames();
+        }
+        return ETDataExtension.select(getClient(),
+                                      "key=" + getKey(),
+                                      filter,
+                                      columns);
     }
 
     public ETResponse<ETDataExtensionRow> select(String filter,
                                                  String... columns)
         throws ETSdkException
     {
-        // see also: ETClient.retrieve(type, filter, properties)
-        // XXX it would be very nice if this could use this code
-        ETFilter f = null;
-        String[] c = columns;
-        try {
-            f = ETFilter.parse(filter);
-        } catch (ETSdkException ex) {
-            if (ex.getCause() instanceof ParseException) {
-                //
-                // The filter argument is actually a column. This is a bit
-                // of a hack, but this method needs to handle the case of
-                // both a filtered and a filterless retrieve with columns,
-                // as having one method for each results in ambiguous methods.
-                //
-
-                c = new String[columns.length + 1];
-                c[0] = filter.toLowerCase();
-                int i = 1;
-                for (String property : columns) {
-                    c[i++] = property.toLowerCase();
-                }
-            } else {
-                throw ex;
-            }
+        if (columns.length == 0) {
+            columns = getColumnNames();
         }
-        if (c.length == 0) {
-            c = getColumnNames();
-        }
-        return selectRest(f, null, null, c);
+        return ETDataExtension.select(getClient(),
+                                      "key=" + getKey(),
+                                      filter,
+                                      columns);
     }
 
     public ETResponse<ETDataExtensionRow> select(Integer page,
@@ -403,7 +492,14 @@ public class ETDataExtension extends ETSoapObject {
                                                  String... columns)
         throws ETSdkException
     {
-        return selectRest((ETFilter) null, page, pageSize, columns);
+        if (columns.length == 0) {
+            columns = getColumnNames();
+        }
+        return ETDataExtension.select(getClient(),
+                                      "key=" + getKey(),
+                                      page,
+                                      pageSize,
+                                      columns);
     }
 
     public ETResponse<ETDataExtensionRow> select(ETFilter filter,
@@ -412,7 +508,15 @@ public class ETDataExtension extends ETSoapObject {
                                                  String... columns)
         throws ETSdkException
     {
-        return selectRest(filter, page, pageSize, columns);
+        if (columns.length == 0) {
+            columns = getColumnNames();
+        }
+        return ETDataExtension.select(getClient(),
+                                      "key=" + getKey(),
+                                      filter,
+                                      page,
+                                      pageSize,
+                                      columns);
     }
 
     public ETResponse<ETDataExtensionRow> select(String filter,
@@ -421,226 +525,15 @@ public class ETDataExtension extends ETSoapObject {
                                                  String... columns)
         throws ETSdkException
     {
-        return selectRest(ETFilter.parse(filter), page, pageSize, columns);
-    }
-
-    public ETResponse<ETDataExtensionRow> selectRest()
-        throws ETSdkException
-    {
-        // new String[0] = empty properties
-        return selectRest((ETFilter) null, null, null, new String[0]);
-    }
-
-    public ETResponse<ETDataExtensionRow> selectRest(ETFilter filter,
-                                                     String... columns)
-        throws ETSdkException
-    {
-        return selectRest(filter, null, null, columns);
-    }
-
-    public ETResponse<ETDataExtensionRow> selectRest(String filter,
-                                                     String... columns)
-        throws ETSdkException
-    {
-        // see also: ETClient.retrieve(type, filter, properties)
-        // XXX it would be very nice if this could use this code
-        ETFilter f = null;
-        String[] c = columns;
-        try {
-            f = ETFilter.parse(filter);
-        } catch (ETSdkException ex) {
-            if (ex.getCause() instanceof ParseException) {
-                //
-                // The filter argument is actually a column. This is a bit
-                // of a hack, but this method needs to handle the case of
-                // both a filtered and a filterless retrieve with columns,
-                // as having one method for each results in ambiguous methods.
-                //
-
-                c = new String[columns.length + 1];
-                c[0] = filter.toLowerCase();
-                int i = 1;
-                for (String property : columns) {
-                    c[i++] = property.toLowerCase();
-                }
-            } else {
-                throw ex;
-            }
-        }
-        if (c.length == 0) {
-            c = getColumnNames();
-        }
-        return selectRest(f, null, null, c);
-    }
-
-    public ETResponse<ETDataExtensionRow> selectRest(Integer page,
-                                                     Integer pageSize,
-                                                     String... columns)
-        throws ETSdkException
-    {
-        return selectRest((ETFilter) null, page, pageSize, columns);
-    }
-
-    public ETResponse<ETDataExtensionRow> selectRest(ETFilter filter,
-                                                     Integer page,
-                                                     Integer pageSize,
-                                                     String... columns)
-        throws ETSdkException
-    {
-        String path = "/data/v1/customobjectdata/key/" + getKey() + "/rowset";
-
-        Response r = ETRestObject.retrieve(getClient(),
-                                           path,
-                                           null,
-                                           filter,
-                                           page,
-                                           pageSize,
-                                           ETRestObject.class,
-                                           columns);
-
-        ETResponse<ETDataExtensionRow> response = new ETResponse<ETDataExtensionRow>();
-
-        // XXX still too much duplicate code here
-
-        response.setRequestId(r.getRequestId());
-        if (r.getResponseCode() >= 200 && r.getResponseCode() <= 299) {
-            response.setStatus(ETResult.Status.OK);
-        } else if (r.getResponseCode() >= 400 && r.getResponseCode() <= 599) {
-            response.setStatus(ETResult.Status.ERROR);
-        }
-        response.setResponseCode(r.getResponseCode().toString());
-        response.setResponseMessage(r.getResponseMessage());
-
-        JsonParser jsonParser = new JsonParser();
-        JsonObject jsonObject = jsonParser.parse(r.getResponsePayload()).getAsJsonObject();
-
-        if (jsonObject.get("page") != null) {
-            response.setPage(jsonObject.get("page").getAsInt());
-            logger.trace("page = " + response.getPage());
-            response.setPageSize(jsonObject.get("pageSize").getAsInt());
-            logger.trace("pageSize = " + response.getPageSize());
-            response.setTotalCount(jsonObject.get("count").getAsInt());
-            logger.trace("totalCount = " + response.getTotalCount());
-
-            if (response.getPage() * response.getPageSize() < response.getTotalCount()) {
-                response.setMoreResults(true);
-            }
-
-            JsonElement elements = jsonObject.get("items");
-            if (elements != null) {
-                for (JsonElement element : elements.getAsJsonArray()) {
-                    JsonObject object = element.getAsJsonObject();
-                    ETDataExtensionRow row = new ETDataExtensionRow();
-                    JsonObject keys = object.get("keys").getAsJsonObject();
-                    for (Map.Entry<String, JsonElement> entry : keys.entrySet()) {
-                        row.setColumn(entry.getKey(), entry.getValue().getAsString(), false);
-                    }
-                    JsonObject values = object.get("values").getAsJsonObject();
-                    for (Map.Entry<String, JsonElement> entry : values.entrySet()) {
-                        row.setColumn(entry.getKey(), entry.getValue().getAsString(), false);
-                    }
-                    row.setClient(getClient());
-                    ETResult<ETDataExtensionRow> result = new ETResult<ETDataExtensionRow>();
-                    result.setObject(row);
-                    response.addResult(result);
-                }
-            }
-        }
-
-        return response;
-    }
-
-    public ETResponse<ETDataExtensionRow> selectRest(String filter,
-                                                     Integer page,
-                                                     Integer pageSize,
-                                                     String... columns)
-        throws ETSdkException
-    {
-        return selectRest(ETFilter.parse(filter), page, pageSize, columns);
-    }
-
-    public ETResponse<ETDataExtensionRow> selectSoap()
-        throws ETSdkException
-    {
-        // new String[0] = empty properties
-        return selectSoap((ETFilter) null, null, null, new String[0]);
-    }
-
-    public ETResponse<ETDataExtensionRow> selectSoap(ETFilter filter,
-                                                     String... columns)
-        throws ETSdkException
-    {
-        return selectSoap(filter, null, null, columns);
-    }
-
-    public ETResponse<ETDataExtensionRow> selectSoap(String filter,
-                                                     String... columns)
-        throws ETSdkException
-    {
-        // see also: ETClient.retrieve(type, filter, properties)
-        // XXX it would be very nice if this could use this code
-        ETFilter f = null;
-        String[] c = columns;
-        try {
-            f = ETFilter.parse(filter);
-        } catch (ETSdkException ex) {
-            if (ex.getCause() instanceof ParseException) {
-                //
-                // The filter argument is actually a column. This is a bit
-                // of a hack, but this method needs to handle the case of
-                // both a filtered and a filterless retrieve with columns,
-                // as having one method for each results in ambiguous methods.
-                //
-
-                c = new String[columns.length + 1];
-                c[0] = filter.toLowerCase();
-                int i = 1;
-                for (String property : columns) {
-                    c[i++] = property.toLowerCase();
-                }
-            } else {
-                throw ex;
-            }
-        }
-        if (c.length == 0) {
-            c = getColumnNames();
-        }
-        return selectSoap(f, null, null, c);
-    }
-
-    public ETResponse<ETDataExtensionRow> selectSoap(Integer page,
-                                                     Integer pageSize,
-                                                     String... columns)
-        throws ETSdkException
-    {
-        return selectSoap((ETFilter) null, page, pageSize, columns);
-    }
-
-    public ETResponse<ETDataExtensionRow> selectSoap(ETFilter filter,
-                                                     Integer page,
-                                                     Integer pageSize,
-                                                     String... columns)
-        throws ETSdkException
-    {
         if (columns.length == 0) {
             columns = getColumnNames();
         }
-        return ETSoapObject.retrieve(getClient(),
-                                     "DataExtensionObject[" + name + "]",
-                                     filter,
-                                     page,
-                                     pageSize,
-                                     ETDataExtensionRow.class,
-                                     columns);
-    }
-
-    public ETResponse<ETDataExtensionRow> selectSoap(String filter,
-                                                     Integer page,
-                                                     Integer pageSize,
-                                                     String... columns)
-        throws ETSdkException
-    {
-        return selectSoap(ETFilter.parse(filter), page, pageSize, columns);
+        return ETDataExtension.select(getClient(),
+                                      "key=" + getKey(),
+                                      filter,
+                                      page,
+                                      pageSize,
+                                      columns);
     }
 
     public ETResponse<ETDataExtensionRow> insert(ETDataExtensionRow... rows)
