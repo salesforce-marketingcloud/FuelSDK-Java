@@ -58,8 +58,8 @@ public class ETConfiguration {
         if (is == null) {
             try {
                 is = new FileInputStream(new File(file));
-            } catch (FileNotFoundException e) {
-                throw new ETSdkException("error opening " + file);
+            } catch (FileNotFoundException ex) {
+                throw new ETSdkException("error opening " + file, ex);
             }
         }
         try {

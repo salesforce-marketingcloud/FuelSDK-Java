@@ -172,15 +172,6 @@ public class ETClient {
 
     /**
      * @deprecated
-     * Legacy tokens are no longer supported.
-     */
-    @Deprecated
-    public String getLegacyToken() {
-        return null;
-    }
-
-    /**
-     * @deprecated
      * Use getRestConnection().
      */
     @Deprecated
@@ -220,7 +211,9 @@ public class ETClient {
 
             logger.debug("refreshing access token...");
 
-            assert refreshToken != null;
+            if (refreshToken == null) {
+                throw new ETSdkException("refreshToken == null");
+            }
         }
 
         //
