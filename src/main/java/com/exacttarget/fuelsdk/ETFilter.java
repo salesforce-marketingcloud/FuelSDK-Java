@@ -34,158 +34,96 @@
 
 package com.exacttarget.fuelsdk;
 
-import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.exacttarget.fuelsdk.annotations.PrettyPrint;
 
 public class ETFilter extends ETObject {
-    public enum Operator {
-        EQUALS("="),
-        NOT_EQUALS("!="),
-        LESS_THAN("<"),
-        LESS_THAN_OR_EQUALS("<="),
-        GREATER_THAN(">"),
-        GREATER_THAN_OR_EQUALS(">="),
-        IS_NULL("is null"),
-        IS_NOT_NULL("is not null"),
-        IN("in"),
-        BETWEEN("between"),
-        LIKE("like"),
-        AND("and"),
-        OR("or"),
-        NOT("not");
-        private final String value;
-
-        Operator(String value) {
-            this.value = value;
-        }
-
-        public String value() {
-            return value;
-        }
-
-        public static Operator fromValue(String value) {
-            for (Operator v : Operator.values()) {
-                if (v.value.equals(value)) {
-                    return v;
-                }
-            }
-            throw new IllegalArgumentException(value);
-        }
-    }
-
     @PrettyPrint
-    private String property = null;
+    private ETExpression expression = null;
     @PrettyPrint
-    private Operator operator = null;
+    private List<String> orderBy = new ArrayList<String>();
     @PrettyPrint
-    private List<String> values = new ArrayList<String>();
+    private List<String> properties = new ArrayList<String>();
     @PrettyPrint
-    private List<ETFilter> filters = new ArrayList<ETFilter>();
+    private Boolean orderByAsc = true;
 
-    public String getProperty() {
-        return property;
+    public ETExpression getExpression() {
+        return expression;
     }
 
-    public void setProperty(String property) {
-        this.property = property;
+    public void setExpression(ETExpression expression) {
+        this.expression = expression;
     }
 
-    public Operator getOperator() {
-        return operator;
+    public List<String> getOrderBy() {
+        return orderBy;
     }
 
-    public void setOperator(Operator operator) {
-        this.operator = operator;
+    public void setOrderBy(List<String> orderBy) {
+        this.orderBy = orderBy;
     }
 
-    public void setOperator(String operator) {
-        this.operator = Operator.fromValue(operator);
+    public Boolean getOrderByAsc() {
+        return orderByAsc;
     }
 
-    public String getValue() {
-        assert values.size() == 1;
-        return values.get(0);
+    public void setOrderByAsc(Boolean orderByAsc) {
+        this.orderByAsc = orderByAsc;
     }
 
-    public List<String> getValues() {
-        return values;
+    public List<String> getProperties() {
+        return properties;
     }
 
-    public void addValue(String value) {
-        values.add(value);
+    public void addProperty(String property) {
+        this.properties.add(property);
     }
 
-    public List<ETFilter> getFilters() {
-        return filters;
-    }
-
-    public void addFilter(ETFilter filter) {
-        filters.add(filter);
-    }
-
-    public static ETFilter parse(String filter)
+    public static ETFilter parse(String... s)
         throws ETSdkException
     {
-        ETFilterParser parser = new ETFilterParser(new ByteArrayInputStream(filter.getBytes()));
-        ETFilter parsedFilter = null;
-        try {
-            parsedFilter = parser.parse();
-        } catch (ParseException ex) {
-            throw new ETSdkException("could not parse filter: " + filter, ex);
-        }
-        return parsedFilter;
-    }
+        ETFilter filter = new ETFilter();
 
-    @Override
-    public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
+        for (String t : s) {
+            try {
+                filter.setExpression(ETExpression.parse(t));
+            } catch (ETSdkException ex) {
+                if (ex.getCause() instanceof ParseException) {
+                    //
+                    // It's not an expression, so it's either
+                    // an order by clause or it's a property:
+                    //
 
-        if (operator != null) {
-            switch(operator) {
-              case EQUALS:
-              case NOT_EQUALS:
-              case LESS_THAN:
-              case LESS_THAN_OR_EQUALS:
-              case GREATER_THAN:
-              case GREATER_THAN_OR_EQUALS:
-              case IN:
-              case BETWEEN:
-              case LIKE:
-                stringBuilder.append(property);
-                stringBuilder.append(" ");
-                stringBuilder.append(operator.toString());
-                stringBuilder.append(" ");
-                stringBuilder.append(values);
-                break;
-              case IS_NULL:
-              case IS_NOT_NULL:
-                stringBuilder.append(property);
-                stringBuilder.append(" ");
-                stringBuilder.append(operator.toString());
-                break;
-              case AND:
-              case OR:
-                stringBuilder.append(filters.get(0));
-                stringBuilder.append(" ");
-                stringBuilder.append(operator.toString());
-                stringBuilder.append(" ");
-                stringBuilder.append(filters.get(1));
-                break;
-              case NOT:
-                stringBuilder.append(operator.toString());
-                stringBuilder.append(" ");
-                stringBuilder.append(filters.get(0));
-                break;
+                    if (t.length() >= 8
+                            && t.substring(0, 8).toLowerCase().equals("order by")) {
+                        //
+                        // Order by clause:
+                        //
+
+                        String tokens[] = t.substring(9).split(" ");
+
+                        if (tokens.length > 1
+                                && tokens[1].toLowerCase().equals("desc")) {
+                            filter.setOrderByAsc(false);
+                        }
+
+                        filter.setOrderBy(Arrays.asList(tokens[0].split(",")));
+                    } else {
+                        //
+                        // Property:
+                        //
+
+                        filter.addProperty(t);
+                    }
+                } else {
+                    throw ex;
+                }
             }
-        } else {
-            stringBuilder.append("(");
-            stringBuilder.append(filters.get(0));
-            stringBuilder.append(")");
         }
 
-        return stringBuilder.toString();
+        return filter;
     }
 }
