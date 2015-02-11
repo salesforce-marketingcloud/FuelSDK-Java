@@ -1,0 +1,368 @@
+//
+// This file is part of the Fuel Java client library.
+//
+// Copyright (c) 2013, 2014, 2015, ExactTarget, Inc.
+// All rights reserved.
+//
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions
+// are met:
+//
+// * Redistributions of source code must retain the above copyright
+// notice, this list of conditions and the following disclaimer.
+//
+// * Redistributions in binary form must reproduce the above copyright
+// notice, this list of conditions and the following disclaimer in the
+// documentation and/or other materials provided with the distribution.
+//
+// * Neither the name of ExactTarget, Inc. nor the names of its
+// contributors may be used to endorse or promote products derived
+// from this software without specific prior written permission.
+//
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+// HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+//
+
+options
+{
+    static = false;
+}
+
+PARSER_BEGIN(ETExpressionParser)
+package com.exacttarget.fuelsdk;
+
+import org.apache.log4j.Logger;
+
+public class ETExpressionParser {
+    private static Logger logger = Logger.getLogger(ETExpressionParser.class);
+}
+PARSER_END(ETExpressionParser)
+
+SKIP: { " " | "\n" | "\r" | "\t" }
+
+TOKEN [IGNORE_CASE]:
+{
+    < AND : "and" >
+    | < OR : "or" >
+    | < NOT : "not" >
+    | < BETWEEN : "between" >
+    | < IN : "in" >
+    | < IS : "is" >
+    | < LIKE : "like" >
+    | < NULL : "null" >
+}
+
+TOKEN:
+{
+    < UNQUOTED_STRING : (~[" ", "\n", "\r", "\t", "'", "\"", "=", "!", "<", ">", "(", ")", ","])+ >
+    | < SINGLE_QUOTED_STRING : "'" (~["\n", "\r", "'"])* "'" >
+    | < DOUBLE_QUOTED_STRING : "\"" (~["\n", "\r", "\""])* "\"" >
+}
+
+ETExpression parse():
+{
+    ETExpression expression = null;
+}
+{
+    expression = Expression()
+
+    {
+        logger.trace("returning expression: " + expression);
+        return expression;
+    }
+}
+
+ETExpression Expression():
+{
+    ETExpression expression = null;
+}
+{
+    (
+        LOOKAHEAD(OrExpression()) expression = OrExpression()
+        | "(" expression = Expression() ")"
+        {
+            ETExpression e = expression;
+            expression = new ETExpression();
+            expression.addExpression(e);
+        }
+    )
+
+    {
+        logger.trace("Expression: " + expression);
+        return expression;
+    }
+}
+
+ETExpression OrExpression():
+{
+    ETExpression expression = null;
+    ETExpression expression1 = null;
+    ETExpression expression2 = null;
+}
+{
+    expression1 = AndExpression()
+    {
+        expression = expression1;
+    }
+    (
+        LOOKAHEAD(<OR>) <OR>
+        expression2 = AndExpression()
+        {
+            expression = new ETExpression();
+            expression.setOperator(ETExpression.Operator.OR);
+            expression.addExpression(expression1);
+            expression.addExpression(expression2);
+            expression1 = expression;
+        }
+    )*
+
+    {
+        logger.trace("OrExpression: " + expression);
+        return expression;
+    }
+}
+
+ETExpression AndExpression():
+{
+    ETExpression expression = null;
+    ETExpression expression1 = null;
+    ETExpression expression2 = null;
+}
+{
+    (
+        LOOKAHEAD(SimpleExpression()) expression1 = SimpleExpression()
+        | "(" expression1 = OrExpression() ")"
+        {
+            ETExpression e = expression1;
+            expression1 = new ETExpression();
+            expression1.addExpression(e);
+        }
+    )
+    {
+        expression = expression1;
+    }
+
+    (
+        LOOKAHEAD(<AND>) <AND>
+        (
+            LOOKAHEAD(SimpleExpression()) expression2 = SimpleExpression()
+            | "(" expression2 = OrExpression() ")"
+        )
+        {
+            expression = new ETExpression();
+            expression.setOperator(ETExpression.Operator.AND);
+            expression.addExpression(expression1);
+            expression.addExpression(expression2);
+            expression1 = expression;
+        }
+    )*
+
+    {
+        logger.trace("AndExpression: " + expression);
+        return expression;
+    }
+}
+
+ETExpression SimpleExpression():
+{
+    ETExpression expression = new ETExpression();
+}
+{
+    (
+        LOOKAHEAD(BetweenExpression()) expression = BetweenExpression()
+        | LOOKAHEAD(InExpression()) expression = InExpression()
+        | LOOKAHEAD(IsNullExpression()) expression = IsNullExpression()
+        | expression = ComparisonExpression()
+    )
+    {
+        logger.trace("SimpleExpression: " + expression);
+        return expression;
+    }
+}
+
+ETExpression BetweenExpression():
+{
+    ETExpression expression = new ETExpression();
+    String value = null;
+}
+{
+    value = Value()
+    {
+        expression.setProperty(value);
+    }
+
+    < BETWEEN >
+    {
+        expression.setOperator(ETExpression.Operator.BETWEEN);
+    }
+
+    value = Value()
+    {
+        expression.addValue(value);
+    }
+
+    < AND >
+
+    value = Value()
+    {
+        expression.addValue(value);
+    }
+
+    {
+        logger.trace("BetweenExpression: " + expression);
+        return expression;
+    }
+}
+
+ETExpression ComparisonExpression():
+{
+    ETExpression expression = new ETExpression();
+    String value = null;
+}
+{
+    value = Value()
+    {
+        expression.setProperty(value);
+    }
+
+    (
+        "="
+        {
+            expression.setOperator(ETExpression.Operator.EQUALS);
+        }
+        | "!="
+        {
+            expression.setOperator(ETExpression.Operator.NOT_EQUALS);
+        }
+        | "<"
+        {
+            expression.setOperator(ETExpression.Operator.LESS_THAN);
+        }
+        | "<="
+        {
+            expression.setOperator(ETExpression.Operator.LESS_THAN_OR_EQUALS);
+        }
+        | ">"
+        {
+            expression.setOperator(ETExpression.Operator.GREATER_THAN);
+        }
+        | ">="
+        {
+            expression.setOperator(ETExpression.Operator.GREATER_THAN_OR_EQUALS);
+        }
+        | < LIKE >
+        {
+            expression.setOperator(ETExpression.Operator.LIKE);
+        }
+    )
+
+    value = Value()
+    {
+        expression.addValue(value);
+    }
+
+    {
+        logger.trace("ComparisonExpression: " + expression);
+        return expression;
+    }
+}
+
+ETExpression InExpression():
+{
+    ETExpression expression = new ETExpression();
+    String value = null;
+}
+{
+    value = Value()
+    {
+        expression.setProperty(value);
+    }
+
+    < IN >
+    {
+        expression.setOperator(ETExpression.Operator.IN);
+    }
+
+    "("
+
+    value = Value()
+    {
+        expression.addValue(value);
+    }
+
+    (
+        ","
+
+        value = Value()
+        {
+            expression.addValue(value);
+        }
+    )+
+
+    ")"
+
+    {
+        logger.trace("InExpression: " + expression);
+        return expression;
+    }
+}
+
+ETExpression IsNullExpression():
+{
+    ETExpression expression = new ETExpression();
+    String value = null;
+}
+{
+    value = Value()
+    {
+        expression.setProperty(value);
+    }
+
+    < IS >
+
+    (
+        < NULL >
+        {
+            expression.setOperator(ETExpression.Operator.IS_NULL);
+        }
+        | < NOT > < NULL >
+        {
+            expression.setOperator(ETExpression.Operator.IS_NOT_NULL);
+        }
+    )
+
+    {
+        logger.trace("IsNullExpression: " + expression);
+        return expression;
+    }
+}
+
+String Value():
+{
+    Token token = null;
+}
+{
+    (
+        token = < UNQUOTED_STRING >
+        {
+            return token.image;
+        }
+        | token = < SINGLE_QUOTED_STRING >
+        {
+            return token.image.substring(1, token.image.length() - 1);
+        }
+        | token = < DOUBLE_QUOTED_STRING >
+        {
+            return token.image.substring(1, token.image.length() - 1);
+        }
+    )
+}
