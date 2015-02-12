@@ -35,7 +35,6 @@
 package com.exacttarget.fuelsdk;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,15 +65,6 @@ public abstract class ETApiObject extends ETObject {
     private static Logger logger = Logger.getLogger(ETApiObject.class);
 
     private Map<String, Boolean> isModified = new HashMap<String, Boolean>();
-
-    public abstract String getId();
-    public abstract void setId(String id);
-    public abstract String getKey();
-    public abstract void setKey(String key);
-    public abstract Date getCreatedDate();
-    public abstract void setCreatedDate(Date createdDate);
-    public abstract Date getModifiedDate();
-    public abstract void setModifiedDate(Date modifiedDate);
 
     //public abstract void hydrate();
     //public abstract Boolean isHydrated();
