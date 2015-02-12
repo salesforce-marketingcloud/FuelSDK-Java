@@ -146,6 +146,30 @@ public class ETFolder extends ETSoapObject {
         parentFolder.setKey(parentFolderKey);
     }
 
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public Boolean getIsEditable() {
+        return isEditable;
+    }
+
+    public void setIsEditable(Boolean isEditable) {
+        this.isEditable = isEditable;
+    }
+
+    public Boolean getAllowChildren() {
+        return allowChildren;
+    }
+
+    public void setAllowChildren(Boolean allowChildren) {
+        this.allowChildren = allowChildren;
+    }
+
     /**
      * @deprecated
      * Use <code>getKey()</code>.
@@ -180,29 +204,5 @@ public class ETFolder extends ETSoapObject {
     @Deprecated
     public void setParentFolder(ETFolder parentFolder) {
         this.parentFolder = parentFolder;
-    }
-
-    public Boolean getIsActive() {
-        return isActive;
-    }
-
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
-    }
-
-    public Boolean getIsEditable() {
-        return isEditable;
-    }
-
-    public void setIsEditable(Boolean isEditable) {
-        this.isEditable = isEditable;
-    }
-
-    public Boolean getAllowChildren() {
-        return allowChildren;
-    }
-
-    public void setAllowChildren(Boolean allowChildren) {
-        this.allowChildren = allowChildren;
     }
 }
