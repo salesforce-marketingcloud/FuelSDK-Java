@@ -34,6 +34,8 @@
 
 package com.exacttarget.fuelsdk;
 
+import java.util.Date;
+
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.RestObject;
 import com.google.gson.annotations.Expose;
@@ -52,11 +54,11 @@ public class ETCampaignAsset extends ETRestObject {
     @ExternalName("id")
     private String id = null;
     @Expose
-    @ExternalName("key")
-    private String key = null;
-    @Expose
     @ExternalName("campaignId")
     private String campaignId = null;
+    @Expose
+    @ExternalName("createdDate")
+    private Date createdDate = null;
     @Expose
     @ExternalName("type")
     private String type = null;
@@ -64,24 +66,12 @@ public class ETCampaignAsset extends ETRestObject {
     @ExternalName("objectId")
     private String objectId = null;
 
-    @Override
     public String getId() {
         return id;
     }
 
-    @Override
     public void setId(String id) {
         this.id = id;
-    }
-
-    @Override
-    public String getKey() {
-        return key;
-    }
-
-    @Override
-    public void setKey(String key) {
-        this.key = key;
     }
 
     public String getCampaignId() {
@@ -90,6 +80,14 @@ public class ETCampaignAsset extends ETRestObject {
 
     public void setCampaignId(String campaignId) {
         this.campaignId = campaignId;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
     }
 
     public String getType() {

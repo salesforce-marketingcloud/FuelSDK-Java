@@ -50,6 +50,10 @@ public class ETSubscriber extends ETSoapObject {
     @ExternalName("key")
     @InternalName("subscriberKey")
     private String key = null;
+    @ExternalName("createdDate")
+    private Date createdDate = null;
+    @ExternalName("modifiedDate")
+    private Date modifiedDate = null;
     @ExternalName("emailAddress")
     private String emailAddress = null;
     @ExternalName("preferredEmailType")
@@ -66,24 +70,36 @@ public class ETSubscriber extends ETSoapObject {
 
     public ETSubscriber() {}
 
-    @Override
     public String getId() {
         return id;
     }
 
-    @Override
     public void setId(String id) {
         this.id = id;
     }
 
-    @Override
     public String getKey() {
         return key;
     }
 
-    @Override
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public Date getModifiedDate() {
+        return modifiedDate;
+    }
+
+    public void setModifiedDate(Date modifiedDate) {
+        this.modifiedDate = modifiedDate;
     }
 
     public String getEmailAddress() {

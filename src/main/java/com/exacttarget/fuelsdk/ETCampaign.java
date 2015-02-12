@@ -34,6 +34,8 @@
 
 package com.exacttarget.fuelsdk;
 
+import java.util.Date;
+
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.RestObject;
 import com.google.gson.annotations.Expose;
@@ -53,14 +55,17 @@ public class ETCampaign extends ETRestObject {
     @ExternalName("id")
     private String id = null;
     @Expose
-    @ExternalName("key")
-    private String key = null;
-    @Expose
     @ExternalName("name")
     private String name = null;
     @Expose
     @ExternalName("description")
     private String description = null;
+    @Expose
+    @ExternalName("createdDate")
+    private Date createdDate = null;
+    @Expose
+    @ExternalName("modifiedDate")
+    private Date modifiedDate = null;
     @Expose @SerializedName("campaignCode")
     @ExternalName("code")
     private String code = null;
@@ -71,24 +76,12 @@ public class ETCampaign extends ETRestObject {
     @ExternalName("favorite")
     private Boolean favorite = null;
 
-    @Override
     public String getId() {
         return id;
     }
 
-    @Override
     public void setId(String id) {
         this.id = id;
-    }
-
-    @Override
-    public String getKey() {
-        return key;
-    }
-
-    @Override
-    public void setKey(String key) {
-        this.key = key;
     }
 
     public String getName() {
@@ -105,6 +98,22 @@ public class ETCampaign extends ETRestObject {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public Date getModifiedDate() {
+        return modifiedDate;
+    }
+
+    public void setModifiedDate(Date modifiedDate) {
+        this.modifiedDate = modifiedDate;
     }
 
     public String getCode() {

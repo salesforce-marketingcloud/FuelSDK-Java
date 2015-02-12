@@ -34,6 +34,8 @@
 
 package com.exacttarget.fuelsdk;
 
+import java.util.Date;
+
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.InternalName;
 import com.exacttarget.fuelsdk.annotations.SoapObject;
@@ -56,6 +58,10 @@ public class ETList extends ETSoapObject {
     private String name = null;
     @ExternalName("description")
     private String description = null;
+    @ExternalName("createdDate")
+    private Date createdDate = null;
+    @ExternalName("modifiedDate")
+    private Date modifiedDate = null;
     @ExternalName("folderId")
     @InternalName("category")
     private Integer folderId = null;
@@ -67,22 +73,18 @@ public class ETList extends ETSoapObject {
 
     public ETList() {}
 
-    @Override
     public String getId() {
         return id;
     }
 
-    @Override
     public void setId(String id) {
         this.id = id;
     }
 
-    @Override
     public String getKey() {
         return key;
     }
 
-    @Override
     public void setKey(String key) {
         this.key = key;
     }
@@ -101,6 +103,22 @@ public class ETList extends ETSoapObject {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public Date getModifiedDate() {
+        return modifiedDate;
+    }
+
+    public void setModifiedDate(Date modifiedDate) {
+        this.modifiedDate = modifiedDate;
     }
 
     public Integer getFolderId() {
