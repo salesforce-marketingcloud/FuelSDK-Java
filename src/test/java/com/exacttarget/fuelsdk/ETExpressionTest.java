@@ -34,6 +34,8 @@
 
 package com.exacttarget.fuelsdk;
 
+import java.util.List;
+
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -827,5 +829,20 @@ public class ETExpressionTest {
         assertEquals("baz", expression4.getProperty());
         assertEquals(ETExpression.Operator.EQUALS, expression4.getOperator());
         assertEquals("foo", expression4.getValue());
+    }
+
+    @Test
+    public void testSetValue() {
+        ETExpression expression = new ETExpression();
+        expression.addValue("foo");
+        expression.addValue("bar");
+        List<String> values1 = expression.getValues();
+        assertEquals(2, values1.size());
+        assertEquals("foo", values1.get(0));
+        assertEquals("bar", values1.get(1));
+        expression.setValue("baz");
+        List<String> values2 = expression.getValues();
+        assertEquals(1, values2.size());
+        assertEquals("baz", values2.get(0));
     }
 }
