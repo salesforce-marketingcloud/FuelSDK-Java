@@ -759,8 +759,8 @@ public class ETExpressionTest {
     {
         ETExpression expression = ETExpression.parse("foo = bar and bar = baz");
         assertEquals(ETExpression.Operator.AND, expression.getOperator());
-        ETExpression expression1 = expression.getExpressions().get(0);
-        ETExpression expression2 = expression.getExpressions().get(1);
+        ETExpression expression1 = expression.getSubexpressions().get(0);
+        ETExpression expression2 = expression.getSubexpressions().get(1);
         assertEquals("foo", expression1.getProperty());
         assertEquals(ETExpression.Operator.EQUALS, expression1.getOperator());
         assertEquals("bar", expression1.getValue());
@@ -775,8 +775,8 @@ public class ETExpressionTest {
     {
         ETExpression expression = ETExpression.parse("foo = bar or bar = baz");
         assertEquals(ETExpression.Operator.OR, expression.getOperator());
-        ETExpression expression1 = expression.getExpressions().get(0);
-        ETExpression expression2 = expression.getExpressions().get(1);
+        ETExpression expression1 = expression.getSubexpressions().get(0);
+        ETExpression expression2 = expression.getSubexpressions().get(1);
         assertEquals("foo", expression1.getProperty());
         assertEquals(ETExpression.Operator.EQUALS, expression1.getOperator());
         assertEquals("bar", expression1.getValue());
@@ -791,11 +791,11 @@ public class ETExpressionTest {
     {
         ETExpression expression = ETExpression.parse("foo = bar and bar = baz or baz = foo");
         assertEquals(ETExpression.Operator.OR, expression.getOperator());
-        ETExpression expression1 = expression.getExpressions().get(0);
-        ETExpression expression2 = expression.getExpressions().get(1);
+        ETExpression expression1 = expression.getSubexpressions().get(0);
+        ETExpression expression2 = expression.getSubexpressions().get(1);
         assertEquals(ETExpression.Operator.AND, expression1.getOperator());
-        ETExpression expression3 = expression1.getExpressions().get(0);
-        ETExpression expression4 = expression1.getExpressions().get(1);
+        ETExpression expression3 = expression1.getSubexpressions().get(0);
+        ETExpression expression4 = expression1.getSubexpressions().get(1);
         assertEquals("baz", expression2.getProperty());
         assertEquals(ETExpression.Operator.EQUALS, expression2.getOperator());
         assertEquals("foo", expression2.getValue());
@@ -813,14 +813,14 @@ public class ETExpressionTest {
     {
         ETExpression expression = ETExpression.parse("foo = bar or bar = baz and baz = foo");
         assertEquals(ETExpression.Operator.OR, expression.getOperator());
-        ETExpression expression1 = expression.getExpressions().get(0);
-        ETExpression expression2 = expression.getExpressions().get(1);
+        ETExpression expression1 = expression.getSubexpressions().get(0);
+        ETExpression expression2 = expression.getSubexpressions().get(1);
         assertEquals("foo", expression1.getProperty());
         assertEquals(ETExpression.Operator.EQUALS, expression1.getOperator());
         assertEquals("bar", expression1.getValue());
         assertEquals(ETExpression.Operator.AND, expression2.getOperator());
-        ETExpression expression3 = expression2.getExpressions().get(0);
-        ETExpression expression4 = expression2.getExpressions().get(1);
+        ETExpression expression3 = expression2.getSubexpressions().get(0);
+        ETExpression expression4 = expression2.getSubexpressions().get(1);
         assertEquals("bar", expression3.getProperty());
         assertEquals(ETExpression.Operator.EQUALS, expression3.getOperator());
         assertEquals("baz", expression3.getValue());
