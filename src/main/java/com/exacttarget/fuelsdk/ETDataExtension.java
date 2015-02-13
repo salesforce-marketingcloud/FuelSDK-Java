@@ -688,7 +688,7 @@ public class ETDataExtension extends ETSoapObject {
         StringBuilder stringBuilder = new StringBuilder(path);
 
         if (filter != null) {
-            stringBuilder.append("?" + ETRestObject.toFilterString(filter));
+            stringBuilder.append("?" + ETRestObject.toFilterString(filter.getExpression()));
         }
 
         path = stringBuilder.toString();
