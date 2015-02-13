@@ -50,13 +50,9 @@ import com.exacttarget.fuelsdk.internal.DataExtensionObject;
 
 @SoapObject(internalType = DataExtensionObject.class)
 public class ETDataExtensionRow extends ETSoapObject {
-    @ExternalName("id")
-    private String id = null;
-    @ExternalName("key")
+    @ExternalName("dataExtensionKey")
     @InternalName("customerKey")
-    private String key = null;
-    @ExternalName("name")
-    private String name = null;
+    private String dataExtensionKey = null;
     @ExternalName("columns")
     @InternalName("properties")
     private Map<String, String> columns = new HashMap<String, String>();
@@ -65,30 +61,21 @@ public class ETDataExtensionRow extends ETSoapObject {
 
     @Override
     public String getId() {
-        return id;
+        // no ID on this object type
+        return null;
     }
 
     @Override
     public void setId(String id) {
-        this.id = id;
+        // no ID on this object type
     }
 
-    @Override
-    public String getKey() {
-        return key;
+    public String getDataExtensionKey() {
+        return dataExtensionKey;
     }
 
-    @Override
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setDataExtensionKey(String dataExtensionKey) {
+        this.dataExtensionKey = dataExtensionKey;
     }
 
     public String getColumn(String name) {
@@ -112,24 +99,6 @@ public class ETDataExtensionRow extends ETSoapObject {
 
     /**
      * @deprecated
-     * Use <code>getKey()</code>.
-     */
-    @Deprecated
-    public String getCustomerKey() {
-        return getKey();
-    }
-
-    /**
-     * @deprecated
-     * Use <code>setKey()</code>.
-     */
-    @Deprecated
-    public void setCustomerKey(String customerKey) {
-        setKey(customerKey);
-    }
-
-    /**
-     * @deprecated
      * Use <code>getColumn</code> and <code>setColumn</code>.
      */
     @Deprecated
@@ -143,8 +112,9 @@ public class ETDataExtensionRow extends ETSoapObject {
      */
     @Deprecated
     public void setColumns(Map<String, String> columns) {
+        // note: this needs to be here because reflection needs it
         for (Map.Entry<String, String> column : columns.entrySet()) {
-            setColumn(column.getKey().toLowerCase(), column.getValue());
+            setColumn(column.getKey(), column.getValue());
         }
     }
 }
