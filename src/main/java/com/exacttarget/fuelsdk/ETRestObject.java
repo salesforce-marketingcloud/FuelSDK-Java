@@ -37,7 +37,6 @@ package com.exacttarget.fuelsdk;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Field;
 import java.net.URLEncoder;
-import java.util.Date;
 import java.util.List;
 
 import com.google.gson.Gson;
@@ -45,7 +44,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import org.apache.log4j.Logger;
@@ -55,7 +53,6 @@ import com.exacttarget.fuelsdk.ETRestConnection.Method;
 import static com.exacttarget.fuelsdk.ETRestConnection.Method.*;
 
 import com.exacttarget.fuelsdk.ETRestConnection.Response;
-import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.RestObject;
 
 /**
