@@ -114,6 +114,11 @@ public class ETExpression extends ETObject {
         return values;
     }
 
+    public void setValue(String value) {
+        values.clear();
+        values.add(value);
+    }
+
     public void addValue(String value) {
         values.add(value);
     }
