@@ -295,68 +295,25 @@ public class ETClient {
         return object;
     }
 
-    public <T extends ETApiObject> ETResponse<T> retrieve(Class<T> type)
+    public <T extends ETApiObject> ETResponse<T> retrieve(Class<T> type,
+                                                          ETFilter filter)
         throws ETSdkException
     {
-        // new String[0] = empty properties
-        return retrieve(type, (ETFilter) null, null, null, new String[0]);
+        return retrieve(type, null, null, filter);
     }
 
     public <T extends ETApiObject> ETResponse<T> retrieve(Class<T> type,
-                                                          ETFilter filter,
-                                                          String... properties)
+                                                          String... filter)
         throws ETSdkException
     {
-        return retrieve(type, filter, null, null, properties);
-    }
-
-    public <T extends ETApiObject> ETResponse<T> retrieve(Class<T> type,
-                                                          String filter,
-                                                          String... properties)
-        throws ETSdkException
-    {
-        // see also: ETDataExtension.select(filter, columns)
-        ETFilter f = null;
-        String[] p = properties;
-        try {
-            f = ETFilter.parse(filter);
-        } catch (ETSdkException ex) {
-            if (ex.getCause() instanceof ParseException) {
-                //
-                // The filter argument is actually a property. This is a bit
-                // of a hack, but this method needs to handle the case of
-                // both a filtered and a filterless retrieve with properties,
-                // as having one method for each results in ambiguous methods.
-                //
-
-                p = new String[properties.length + 1];
-                p[0] = filter;
-                int i = 1;
-                for (String property : properties) {
-                    p[i++] = property;
-                }
-            } else {
-                throw ex;
-            }
-        }
-        return retrieve(type, f, null, null, p);
-    }
-
-    public <T extends ETApiObject> ETResponse<T> retrieve(Class<T> type,
-                                                          Integer page,
-                                                          Integer pageSize,
-                                                          String... properties)
-        throws ETSdkException
-    {
-        return retrieve(type, (ETFilter) null, page, pageSize, properties);
+        return retrieve(type, null, null, ETFilter.parse(filter));
     }
 
     @SuppressWarnings("unchecked")
     public <T extends ETApiObject> ETResponse<T> retrieve(Class<T> type,
-                                                          ETFilter filter,
                                                           Integer page,
                                                           Integer pageSize,
-                                                          String... properties)
+                                                          ETFilter filter)
         throws ETSdkException
     {
         //
@@ -369,22 +326,20 @@ public class ETClient {
         Method retrieve = getMethod(superClass,
                                     "retrieve",
                                     ETClient.class,  // client
-                                    ETFilter.class,  // filter
+                                    Class.class,     // type
                                     Integer.class,   // page
                                     Integer.class,   // pageSize
-                                    Class.class,     // type
-                                    String[].class); // properties
+                                    ETFilter.class); // filter
 
         ETResponse<T> response = null;
         try {
             // first argument of null means method is static
             response = (ETResponse<T>) retrieve.invoke(null,
                                                        this,
-                                                       filter,
+                                                       type,
                                                        page,
                                                        pageSize,
-                                                       type,
-                                                       properties);
+                                                       filter);
         } catch (Exception ex) {
             throw new ETSdkException("error invoking retrieve method of type " + type, ex);
         }
@@ -393,68 +348,140 @@ public class ETClient {
     }
 
     public <T extends ETApiObject> ETResponse<T> retrieve(Class<T> type,
+                                                          Integer page,
+                                                          Integer pageSize,
+                                                          String... filter)
+        throws ETSdkException
+    {
+        return retrieve(type, page, pageSize, ETFilter.parse(filter));
+    }
+
+    /**
+     * @deprecated
+     * Use...
+     */
+    @Deprecated
+    public <T extends ETApiObject> ETResponse<T> retrieve(Class<T> type,
+                                                          ETFilter filter,
+                                                          String... properties)
+        throws ETSdkException
+    {
+        return null; // XXX
+    }
+
+    /**
+     * @deprecated
+     * Use...
+     */
+    @Deprecated
+    public <T extends ETApiObject> ETResponse<T> retrieve(Class<T> type,
+                                                          ETFilter filter,
+                                                          Integer page,
+                                                          Integer pageSize,
+                                                          String... properties)
+        throws ETSdkException
+    {
+        return null; // XXX
+    }
+
+    /**
+     * @deprecated
+     * Use...
+     */
+    @Deprecated
+    public <T extends ETApiObject> ETResponse<T> retrieve(Class<T> type,
                                                           String filter,
                                                           Integer page,
                                                           Integer pageSize,
                                                           String... properties)
         throws ETSdkException
     {
-        return retrieve(type, ETFilter.parse(filter), page, pageSize, properties);
+        return null; // XXX
     }
 
+    public <T extends ETApiObject> T retrieveObject(Class<T> type,
+                                                    ETFilter filter)
+        throws ETSdkException
+    {
+        ETResponse<T> response = retrieve(type, filter);
+        return response.getObject();
+    }
+
+    public <T extends ETApiObject> T retrieveObject(Class<T> type,
+                                                    String... filter)
+        throws ETSdkException
+    {
+        ETResponse<T> response = retrieve(type, filter);
+        return response.getObject();
+    }
+
+    /**
+     * @deprecated
+     * Use...
+     */
+    @Deprecated
     public <T extends ETApiObject> T retrieveObject(Class<T> type,
                                                     ETFilter filter,
                                                     String... properties)
         throws ETSdkException
     {
-        ETResponse<T> response = retrieve(type, filter, properties);
-        return response.getObject();
+        return null; // XXX
     }
 
-    public <T extends ETApiObject> T retrieveObject(Class<T> type,
-                                                    String filter,
-                                                    String... properties)
+    public <T extends ETApiObject> List<T> retrieveObjects(Class<T> type,
+                                                           ETFilter filter)
         throws ETSdkException
     {
-        ETResponse<T> response = retrieve(type, filter, properties);
-        return response.getObject();
-    }
-
-    public <T extends ETApiObject> List<T> retrieveObjects(Class<T> type)
-        throws ETSdkException
-    {
-        ETResponse<T> response = retrieve(type);
+        ETResponse<T> response = retrieve(type, filter);
         return response.getObjects();
     }
 
+    public <T extends ETApiObject> List<T> retrieveObjects(Class<T> type,
+                                                           String... filter)
+        throws ETSdkException
+    {
+        ETResponse<T> response = retrieve(type, filter);
+        return response.getObjects();
+    }
+
+    public <T extends ETApiObject> List<T> retrieveObjects(Class<T> type,
+                                                           Integer page,
+                                                           Integer pageSize,
+                                                           ETFilter filter)
+        throws ETSdkException
+    {
+        ETResponse<T> response = retrieve(type, page, pageSize, filter);
+        return response.getObjects();
+    }
+
+    public <T extends ETApiObject> List<T> retrieveObjects(Class<T> type,
+                                                           Integer page,
+                                                           Integer pageSize,
+                                                           String... filter)
+        throws ETSdkException
+    {
+        ETResponse<T> response = retrieve(type, page, pageSize, filter);
+        return response.getObjects();
+    }
+
+    /**
+     * @deprecated
+     * Use...
+     */
+    @Deprecated
     public <T extends ETApiObject> List<T> retrieveObjects(Class<T> type,
                                                            ETFilter filter,
                                                            String... properties)
         throws ETSdkException
     {
-        ETResponse<T> response = retrieve(type, filter, properties);
-        return response.getObjects();
+        return null; // XXX
     }
 
-    public <T extends ETApiObject> List<T> retrieveObjects(Class<T> type,
-                                                           String filter,
-                                                           String... properties)
-        throws ETSdkException
-    {
-        ETResponse<T> response = retrieve(type, filter, properties);
-        return response.getObjects();
-    }
-
-    public <T extends ETApiObject> List<T> retrieveObjects(Class<T> type,
-                                                           Integer page,
-                                                           Integer pageSize,
-                                                           String... properties)
-        throws ETSdkException
-    {
-        ETResponse<T> response = retrieve(type, page, pageSize, properties);
-        return response.getObjects();
-    }
-
+    /**
+     * @deprecated
+     * Use...
+     */
+    @Deprecated
     public <T extends ETApiObject> List<T> retrieveObjects(Class<T> type,
                                                            ETFilter filter,
                                                            Integer page,
@@ -462,10 +489,14 @@ public class ETClient {
                                                            String... properties)
         throws ETSdkException
     {
-        ETResponse<T> response = retrieve(type, filter, page, pageSize, properties);
-        return response.getObjects();
+        return null; // XXX
     }
 
+    /**
+     * @deprecated
+     * Use...
+     */
+    @Deprecated
     public <T extends ETApiObject> List<T> retrieveObjects(Class<T> type,
                                                            String filter,
                                                            Integer page,
@@ -473,8 +504,7 @@ public class ETClient {
                                                            String... properties)
         throws ETSdkException
     {
-        ETResponse<T> response = retrieve(type, filter, page, pageSize, properties);
-        return response.getObjects();
+        return null; // XXX
     }
 
     public <T extends ETApiObject> ETResponse<T> create(T... objects)
@@ -525,19 +555,19 @@ public class ETClient {
         List<T> objects = response.getObjects();
         for (T object : objects) {
             for (String value : values) {
-                ETFilter parsedFilter = ETFilter.parse(value);
-                Field field = object.getField(parsedFilter.getProperty());
+                ETExpression expression = ETExpression.parse(value);
+                Field field = object.getField(expression.getProperty());
                 try {
                     // briefly change accessibility so we can set value
                     boolean isAccessible = field.isAccessible();
                     if (!isAccessible) {
                         field.setAccessible(true);
                     }
-                    field.set(object, parsedFilter.getValue());
+                    field.set(object, expression.getValue());
                     field.setAccessible(isAccessible);
                 } catch (Exception ex) {
                     throw new ETSdkException("could not update property \""
-                            + parsedFilter.getProperty()
+                            + expression.getProperty()
                             + "\" to value \""
                             + value
                             + "\" on object "

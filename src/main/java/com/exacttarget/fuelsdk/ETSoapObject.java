@@ -132,44 +132,29 @@ import com.exacttarget.fuelsdk.internal.UpdateResult;
 public abstract class ETSoapObject extends ETApiObject {
     private static Logger logger = Logger.getLogger(ETSoapObject.class);
 
-    @ExternalName("createdDate")
-    private Date createdDate = null;
-    @ExternalName("modifiedDate")
-    private Date modifiedDate = null;
-
     public ETSoapObject() {
         registerConverters();
     }
 
-    @Override
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
-    @Override
-    public void setCreatedDate(Date createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    @Override
-    public Date getModifiedDate() {
-        return modifiedDate;
-    }
-
-    @Override
-    public void setModifiedDate(Date modifiedDate) {
-        this.modifiedDate = modifiedDate;
-    }
-
     public static <T extends ETSoapObject> ETResponse<T> retrieve(ETClient client,
-                                                                  ETFilter filter,
+                                                                  Class<T> type,
                                                                   Integer page,
                                                                   Integer pageSize,
-                                                                  Class<T> type,
-                                                                  String... properties)
+                                                                  ETFilter filter)
         throws ETSdkException
     {
-        return retrieve(client, null, filter, page, pageSize, type, properties);
+        if (page != null) {
+            throw new ETSdkException("page argument not supported on this object type");
+        }
+        if (pageSize != null) {
+            throw new ETSdkException("pageSize argument not supported on this object type");
+        }
+
+        if (filter.getOrderBy().size() != 0) {
+            throw new ETSdkException("order by argument not supported on this object type");
+        }
+
+        return retrieve(client, null, type, filter);
     }
 
     //
@@ -181,18 +166,11 @@ public abstract class ETSoapObject extends ETApiObject {
     //
 
     protected static <T extends ETSoapObject> ETResponse<T> retrieve(ETClient client,
-                                                                     String soapObjectType,
-                                                                     ETFilter filter,
-                                                                     Integer page,
-                                                                     Integer pageSize,
+                                                                     String soapObjectName,
                                                                      Class<T> type,
-                                                                     String... properties)
+                                                                     ETFilter filter)
         throws ETSdkException
     {
-        if ((page != null) || (pageSize != null)) {
-            throw new ETSdkException("SOAP objects do not support paginated retrieves");
-        }
-
         ETResponse<T> response = new ETResponse<T>();
 
         //
@@ -223,16 +201,15 @@ public abstract class ETSoapObject extends ETApiObject {
         // Determine properties to retrieve:
         //
 
+        List<String> externalProperties = filter.getProperties();
         List<String> internalProperties = null;
 
-        if (properties.length > 0) {
+        if (externalProperties.size() > 0) {
             //
             // Only request those properties specified:
             //
 
             internalProperties = new ArrayList<String>();
-
-            String[] externalProperties = properties; // for code readability
 
             for (String externalProperty : externalProperties) {
                 String internalProperty =
@@ -265,30 +242,33 @@ public abstract class ETSoapObject extends ETApiObject {
         RetrieveRequest retrieveRequest = new RetrieveRequest();
         // if soapObjectType is specified, use it; otherwise, default
         // to the name of the internal class representing the object:
-        if (soapObjectType != null) {
-            retrieveRequest.setObjectType(soapObjectType);
+        if (soapObjectName != null) {
+            retrieveRequest.setObjectType(soapObjectName);
         } else {
             retrieveRequest.setObjectType(internalType.getSimpleName());
         }
         retrieveRequest.getProperties().addAll(internalProperties);
-        if (filter != null) {
+
+        ETExpression expression = filter.getExpression();
+        if (expression != null) {
             //
             // Convert the property names to their internal counterparts:
             //
 
-            String property = filter.getProperty();
+            String property = expression.getProperty();
             if (property != null) {
-                filter.setProperty(getInternalProperty(type, property));
+                expression.setProperty(getInternalProperty(type, property));
             }
-            for (ETFilter f : filter.getFilters()) {
-                String p = f.getProperty();
+            for (ETExpression e : expression.getExpressions()) {
+                String p = e.getProperty();
                 if (p != null) {
-                    f.setProperty(getInternalProperty(type, p));
+                    e.setProperty(getInternalProperty(type, p));
                 }
             }
 
-            retrieveRequest.setFilter(toFilterPart(filter));
+            retrieveRequest.setFilter(toFilterPart(expression));
         }
+
 //        if (continueRequestId != null) {
 //            retrieveRequest.setContinueRequest(continueRequestId);
 //        }
@@ -306,7 +286,7 @@ public abstract class ETSoapObject extends ETApiObject {
             }
             logger.trace(line + " }");
             if (filter != null) {
-                logger.trace("  filter = " + toFilterPart(filter));
+                logger.trace("  filter = " + toFilterPart(expression));
             }
         }
 
@@ -1484,24 +1464,24 @@ public abstract class ETSoapObject extends ETApiObject {
         return internalProperties;
     }
 
-    public static FilterPart toFilterPart(ETFilter filter) {
-        ETFilter.Operator operator = filter.getOperator();
-        if (operator == ETFilter.Operator.AND ||
-            operator == ETFilter.Operator.OR)
+    public static FilterPart toFilterPart(ETExpression expression) {
+        ETExpression.Operator operator = expression.getOperator();
+        if (operator == ETExpression.Operator.AND ||
+            operator == ETExpression.Operator.OR)
         {
-            List<ETFilter> filters = filter.getFilters();
+            List<ETExpression> expressions = expression.getExpressions();
             ComplexFilterPart complexFilterPart = new ComplexFilterPart();
-            complexFilterPart.setLeftOperand(toFilterPart(filters.get(0)));
-            if (operator == ETFilter.Operator.AND) {
+            complexFilterPart.setLeftOperand(toFilterPart(expressions.get(0)));
+            if (operator == ETExpression.Operator.AND) {
                 complexFilterPart.setLogicalOperator(LogicalOperators.AND);
-            } else if (operator == ETFilter.Operator.OR) {
+            } else if (operator == ETExpression.Operator.OR) {
                 complexFilterPart.setLogicalOperator(LogicalOperators.OR);
             }
-            complexFilterPart.setRightOperand(toFilterPart(filters.get(1)));
+            complexFilterPart.setRightOperand(toFilterPart(expressions.get(1)));
             return complexFilterPart;
         } else {
-            String property = filter.getProperty();
-            List<String> values = filter.getValues();
+            String property = expression.getProperty();
+            List<String> values = expression.getValues();
             SimpleFilterPart simpleFilterPart = new SimpleFilterPart();
             simpleFilterPart.setProperty(property);
             switch (operator) {
