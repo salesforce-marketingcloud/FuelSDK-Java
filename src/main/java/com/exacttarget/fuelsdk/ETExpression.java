@@ -83,7 +83,7 @@ public class ETExpression extends ETObject {
     @PrettyPrint
     private List<String> values = new ArrayList<String>();
     @PrettyPrint
-    private List<ETExpression> expressions = new ArrayList<ETExpression>();
+    private List<ETExpression> subexpressions = new ArrayList<ETExpression>();
 
     public String getProperty() {
         return property;
@@ -118,12 +118,12 @@ public class ETExpression extends ETObject {
         values.add(value);
     }
 
-    public List<ETExpression> getExpressions() {
-        return expressions;
+    public List<ETExpression> getSubexpressions() {
+        return subexpressions;
     }
 
-    public void addExpression(ETExpression expression) {
-        expressions.add(expression);
+    public void addSubexpression(ETExpression expression) {
+        subexpressions.add(expression);
     }
 
     public static ETExpression parse(String s)
@@ -169,21 +169,21 @@ public class ETExpression extends ETObject {
                 break;
               case AND:
               case OR:
-                stringBuilder.append(expressions.get(0));
+                stringBuilder.append(subexpressions.get(0));
                 stringBuilder.append(" ");
                 stringBuilder.append(operator.toString());
                 stringBuilder.append(" ");
-                stringBuilder.append(expressions.get(1));
+                stringBuilder.append(subexpressions.get(1));
                 break;
               case NOT:
                 stringBuilder.append(operator.toString());
                 stringBuilder.append(" ");
-                stringBuilder.append(expressions.get(0));
+                stringBuilder.append(subexpressions.get(0));
                 break;
             }
         } else {
             stringBuilder.append("(");
-            stringBuilder.append(expressions.get(0));
+            stringBuilder.append(subexpressions.get(0));
             stringBuilder.append(")");
         }
 

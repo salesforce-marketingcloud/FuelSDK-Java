@@ -527,23 +527,23 @@ public abstract class ETRestObject extends ETApiObject {
         ETExpression.Operator operator = expression.getOperator();
         switch (operator) {
           case AND:
-            stringBuilder.append(toFilterString(expression.getExpressions().get(0), false));
+            stringBuilder.append(toFilterString(expression.getSubexpressions().get(0), false));
             stringBuilder.append("%20");
             stringBuilder.append("and");
             stringBuilder.append("%20");
-            stringBuilder.append(toFilterString(expression.getExpressions().get(1), false));
+            stringBuilder.append(toFilterString(expression.getSubexpressions().get(1), false));
             break;
           case OR:
-            stringBuilder.append(toFilterString(expression.getExpressions().get(0), false));
+            stringBuilder.append(toFilterString(expression.getSubexpressions().get(0), false));
             stringBuilder.append("%20");
             stringBuilder.append("or");
             stringBuilder.append("%20");
-            stringBuilder.append(toFilterString(expression.getExpressions().get(1), false));
+            stringBuilder.append(toFilterString(expression.getSubexpressions().get(1), false));
             break;
           case NOT:
             stringBuilder.append("not");
             stringBuilder.append("%20");
-            stringBuilder.append(toFilterString(expression.getExpressions().get(0), false));
+            stringBuilder.append(toFilterString(expression.getSubexpressions().get(0), false));
             break;
           case EQUALS:
             stringBuilder.append(expression.getProperty());

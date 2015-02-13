@@ -231,10 +231,10 @@ public abstract class ETSoapObject extends ETApiObject {
             if (property != null) {
                 expression.setProperty(getInternalProperty(type, property));
             }
-            for (ETExpression e : expression.getExpressions()) {
-                String p = e.getProperty();
+            for (ETExpression subexpression : expression.getSubexpressions()) {
+                String p = subexpression.getProperty();
                 if (p != null) {
-                    e.setProperty(getInternalProperty(type, p));
+                    subexpression.setProperty(getInternalProperty(type, p));
                 }
             }
 
@@ -1279,15 +1279,15 @@ public abstract class ETSoapObject extends ETApiObject {
         if (operator == ETExpression.Operator.AND ||
             operator == ETExpression.Operator.OR)
         {
-            List<ETExpression> expressions = expression.getExpressions();
+            List<ETExpression> subexpressions = expression.getSubexpressions();
             ComplexFilterPart complexFilterPart = new ComplexFilterPart();
-            complexFilterPart.setLeftOperand(toFilterPart(expressions.get(0)));
+            complexFilterPart.setLeftOperand(toFilterPart(subexpressions.get(0)));
             if (operator == ETExpression.Operator.AND) {
                 complexFilterPart.setLogicalOperator(LogicalOperators.AND);
             } else if (operator == ETExpression.Operator.OR) {
                 complexFilterPart.setLogicalOperator(LogicalOperators.OR);
             }
-            complexFilterPart.setRightOperand(toFilterPart(expressions.get(1)));
+            complexFilterPart.setRightOperand(toFilterPart(subexpressions.get(1)));
             return complexFilterPart;
         } else {
             String property = expression.getProperty();
