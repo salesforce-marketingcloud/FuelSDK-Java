@@ -34,6 +34,8 @@
 
 package com.exacttarget.fuelsdk;
 
+import java.util.Date;
+
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.InternalName;
 import com.exacttarget.fuelsdk.annotations.SoapObject;
@@ -57,6 +59,10 @@ public class ETDataExtensionColumn extends ETSoapObject {
     private String name = null;
     @ExternalName("description")
     private String description = null;
+    @ExternalName("createdDate")
+    private Date createdDate = null;
+    @ExternalName("modifiedDate")
+    private Date modifiedDate = null;
     @ExternalName("dataExtension")
     private ETDataExtension dataExtension = null;
     @ExternalName("type")
@@ -88,12 +94,10 @@ public class ETDataExtensionColumn extends ETSoapObject {
         this.id = id;
     }
 
-    @Override
     public String getKey() {
         return key;
     }
 
-    @Override
     public void setKey(String key) {
         this.key = key;
     }
@@ -112,6 +116,22 @@ public class ETDataExtensionColumn extends ETSoapObject {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public Date getModifiedDate() {
+        return modifiedDate;
+    }
+
+    public void setModifiedDate(Date modifiedDate) {
+        this.modifiedDate = modifiedDate;
     }
 
     public ETDataExtension getDataExtension() {
