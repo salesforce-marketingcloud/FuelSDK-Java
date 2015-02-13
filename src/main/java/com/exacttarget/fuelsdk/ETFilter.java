@@ -78,6 +78,10 @@ public class ETFilter extends ETObject {
         return properties;
     }
 
+    public void setProperties(List<String> properties) {
+        this.properties = properties;
+    }
+
     public void addProperty(String property) {
         this.properties.add(property);
     }
