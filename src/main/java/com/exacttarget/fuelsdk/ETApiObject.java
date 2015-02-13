@@ -66,6 +66,9 @@ public abstract class ETApiObject extends ETObject {
 
     private Map<String, Boolean> isModified = new HashMap<String, Boolean>();
 
+    public abstract String getId();
+    public abstract void setId(String id);
+
     //public abstract void hydrate();
     //public abstract Boolean isHydrated();
     //public abstract void refresh();
