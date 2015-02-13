@@ -38,9 +38,13 @@ import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.exacttarget.fuelsdk.annotations.PrettyPrint;
 
 public class ETExpression extends ETObject {
+    private static Logger logger = Logger.getLogger(ETExpression.class);
+
     public enum Operator {
         EQUALS("="),
         NOT_EQUALS("!="),
@@ -106,7 +110,9 @@ public class ETExpression extends ETObject {
     }
 
     public String getValue() {
-        assert values.size() == 1;
+        if (values.size() > 1) {
+            logger.warn("getValue() called on expression with values > 1");
+        }
         return values.get(0);
     }
 
@@ -187,9 +193,12 @@ public class ETExpression extends ETObject {
                 break;
             }
         } else {
-            stringBuilder.append("(");
-            stringBuilder.append(subexpressions.get(0));
-            stringBuilder.append(")");
+            // XXX what's this?
+            if (!subexpressions.isEmpty()) {
+                stringBuilder.append("(");
+                stringBuilder.append(subexpressions.get(0));
+                stringBuilder.append(")");
+            }
         }
 
         return stringBuilder.toString();
