@@ -34,6 +34,8 @@
 
 package com.exacttarget.fuelsdk;
 
+import java.util.List;
+
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -48,7 +50,10 @@ public class ETFilterTest {
         throws ETSdkException
     {
         ETFilter filter = ETFilter.parse("order by foo");
-        assertNull(filter.getExpression());
+        assertNotNull(filter.getExpression());
+        assertNull(filter.getExpression().getProperty());
+        assertNull(filter.getExpression().getOperator());
+        assertTrue(filter.getExpression().getValues().isEmpty());
         assertEquals(1, filter.getOrderBy().size());
         assertEquals("foo", filter.getOrderBy().get(0));
         assertEquals(0, filter.getProperties().size());
@@ -60,7 +65,10 @@ public class ETFilterTest {
         throws ETSdkException
     {
         ETFilter filter = ETFilter.parse("order by foo,bar");
-        assertNull(filter.getExpression());
+        assertNotNull(filter.getExpression());
+        assertNull(filter.getExpression().getProperty());
+        assertNull(filter.getExpression().getOperator());
+        assertTrue(filter.getExpression().getValues().isEmpty());
         assertEquals(2, filter.getOrderBy().size());
         assertEquals("foo", filter.getOrderBy().get(0));
         assertEquals("bar", filter.getOrderBy().get(1));
@@ -73,7 +81,10 @@ public class ETFilterTest {
         throws ETSdkException
     {
         ETFilter filter = ETFilter.parse("order by foo,bar,baz");
-        assertNull(filter.getExpression());
+        assertNotNull(filter.getExpression());
+        assertNull(filter.getExpression().getProperty());
+        assertNull(filter.getExpression().getOperator());
+        assertTrue(filter.getExpression().getValues().isEmpty());
         assertEquals(3, filter.getOrderBy().size());
         assertEquals("foo", filter.getOrderBy().get(0));
         assertEquals("bar", filter.getOrderBy().get(1));
@@ -87,7 +98,10 @@ public class ETFilterTest {
         throws ETSdkException
     {
         ETFilter filter = ETFilter.parse("order by foo desc");
-        assertNull(filter.getExpression());
+        assertNotNull(filter.getExpression());
+        assertNull(filter.getExpression().getProperty());
+        assertNull(filter.getExpression().getOperator());
+        assertTrue(filter.getExpression().getValues().isEmpty());
         assertEquals(1, filter.getOrderBy().size());
         assertEquals("foo", filter.getOrderBy().get(0));
         assertEquals(0, filter.getProperties().size());
@@ -99,7 +113,10 @@ public class ETFilterTest {
         throws ETSdkException
     {
         ETFilter filter = ETFilter.parse("order by foo,bar desc");
-        assertNull(filter.getExpression());
+        assertNotNull(filter.getExpression());
+        assertNull(filter.getExpression().getProperty());
+        assertNull(filter.getExpression().getOperator());
+        assertTrue(filter.getExpression().getValues().isEmpty());
         assertEquals(2, filter.getOrderBy().size());
         assertEquals("foo", filter.getOrderBy().get(0));
         assertEquals("bar", filter.getOrderBy().get(1));
@@ -112,7 +129,10 @@ public class ETFilterTest {
         throws ETSdkException
     {
         ETFilter filter = ETFilter.parse("order by foo,bar,baz desc");
-        assertNull(filter.getExpression());
+        assertNotNull(filter.getExpression());
+        assertNull(filter.getExpression().getProperty());
+        assertNull(filter.getExpression().getOperator());
+        assertTrue(filter.getExpression().getValues().isEmpty());
         assertEquals(3, filter.getOrderBy().size());
         assertEquals("foo", filter.getOrderBy().get(0));
         assertEquals("bar", filter.getOrderBy().get(1));
@@ -130,7 +150,10 @@ public class ETFilterTest {
         throws ETSdkException
     {
         ETFilter filter = ETFilter.parse("foo", "bar");
-        assertNull(filter.getExpression());
+        assertNotNull(filter.getExpression());
+        assertNull(filter.getExpression().getProperty());
+        assertNull(filter.getExpression().getOperator());
+        assertTrue(filter.getExpression().getValues().isEmpty());
         assertEquals(0, filter.getOrderBy().size());
         assertEquals(2, filter.getProperties().size());
         assertEquals("foo", filter.getProperties().get(0));
@@ -143,7 +166,10 @@ public class ETFilterTest {
         throws ETSdkException
     {
         ETFilter filter = ETFilter.parse("foo", "bar", "baz");
-        assertNull(filter.getExpression());
+        assertNotNull(filter.getExpression());
+        assertNull(filter.getExpression().getProperty());
+        assertNull(filter.getExpression().getOperator());
+        assertTrue(filter.getExpression().getValues().isEmpty());
         assertEquals(0, filter.getOrderBy().size());
         assertEquals(3, filter.getProperties().size());
         assertEquals("foo", filter.getProperties().get(0));
@@ -206,7 +232,10 @@ public class ETFilterTest {
         throws ETSdkException
     {
         ETFilter filter = ETFilter.parse("order by foo");
-        assertNull(filter.getExpression());
+        assertNotNull(filter.getExpression());
+        assertNull(filter.getExpression().getProperty());
+        assertNull(filter.getExpression().getOperator());
+        assertTrue(filter.getExpression().getValues().isEmpty());
         assertEquals(1, filter.getOrderBy().size());
         assertEquals("foo", filter.getOrderBy().get(0));
         assertEquals(0, filter.getProperties().size());
@@ -250,7 +279,10 @@ public class ETFilterTest {
         throws ETSdkException
     {
         ETFilter filter = ETFilter.parse("foo");
-        assertNull(filter.getExpression());
+        assertNotNull(filter.getExpression());
+        assertNull(filter.getExpression().getProperty());
+        assertNull(filter.getExpression().getOperator());
+        assertTrue(filter.getExpression().getValues().isEmpty());
         assertEquals(0, filter.getOrderBy().size());
         assertEquals(1, filter.getProperties().size());
         assertEquals("foo", filter.getProperties().get(0));
@@ -289,6 +321,86 @@ public class ETFilterTest {
         assertSuccessFilteredOrderedSubset(filter);
     }
 
+    @Test
+    @SuppressWarnings("deprecation")
+    public void testBackwardCompatibility1()
+    {
+        ETFilter filter = new ETFilter();
+        filter.setProperty("foo");
+        assertEquals("foo", filter.getProperty());
+        assertEquals("foo", filter.getExpression().getProperty());
+    }
+
+    @Test
+    @SuppressWarnings("deprecation")
+    public void testBackwardCompatibility2()
+    {
+        ETFilter filter = new ETFilter();
+        filter.setOperator(ETFilter.Operator.EQUALS);
+        assertEquals(ETFilter.Operator.EQUALS,
+                filter.getOperator());
+        assertEquals(ETExpression.Operator.EQUALS,
+                filter.getExpression().getOperator());
+    }
+
+    @Test
+    @SuppressWarnings("deprecation")
+    public void testBackwardCompatibility3()
+    {
+        ETFilter filter = new ETFilter();
+        filter.addValue("bar");
+        assertEquals("bar", filter.getValue());
+        assertEquals("bar", filter.getExpression().getValue());
+    }
+
+    @Test
+    @SuppressWarnings("deprecation")
+    public void testBackwardCompatibility4()
+    {
+        ETFilter filter = new ETFilter();
+        filter.addValue("bar");
+        filter.addValue("baz");
+        assertEquals(2, filter.getValues().size());
+        assertEquals("bar", filter.getValues().get(0));
+        assertEquals("baz", filter.getValues().get(1));
+        assertEquals(2, filter.getExpression().getValues().size());
+        assertEquals("bar", filter.getExpression().getValues().get(0));
+        assertEquals("baz", filter.getExpression().getValues().get(1));
+    }
+
+    @Test
+    @SuppressWarnings("deprecation")
+    public void testBackwardCompatibility5()
+    {
+        ETFilter filter1 = new ETFilter();
+        filter1.setProperty("foo");
+        filter1.setOperator(ETFilter.Operator.EQUALS);
+        filter1.addValue("bar");
+        ETFilter filter2 = new ETFilter();
+        filter2.setProperty("foo");
+        filter2.setOperator(ETFilter.Operator.EQUALS);
+        filter2.addValue("baz");
+        ETFilter filter = new ETFilter();
+        filter.addFilter(filter1);
+        filter.addFilter(filter2);
+        List<ETFilter> filters = filter.getFilters();
+        assertEquals(2, filters.size());
+        assertEquals("foo", filters.get(0).getProperty());
+        assertEquals(ETFilter.Operator.EQUALS, filters.get(0).getOperator());
+        assertEquals("bar", filters.get(0).getValue());
+        assertEquals("foo", filters.get(1).getProperty());
+        assertEquals(ETFilter.Operator.EQUALS, filters.get(1).getOperator());
+        assertEquals("baz", filters.get(1).getValue());
+        List<ETExpression> subexpressions = filter.getExpression().getSubexpressions();
+        assertEquals(2, subexpressions.size());
+        assertEquals("foo", subexpressions.get(0).getProperty());
+        assertEquals(ETExpression.Operator.EQUALS, subexpressions.get(0).getOperator());
+        assertEquals("bar", subexpressions.get(0).getValue());
+        assertEquals("foo", subexpressions.get(1).getProperty());
+        assertEquals(ETExpression.Operator.EQUALS, subexpressions.get(1).getOperator());
+        assertEquals("baz", subexpressions.get(1).getValue());
+    }
+
     private void assertSuccessFilteredOrdered(ETFilter filter) {
         assertEquals("foo", filter.getExpression().getProperty());
         assertEquals(ETExpression.Operator.EQUALS, filter.getExpression().getOperator());
@@ -310,7 +422,10 @@ public class ETFilterTest {
     }
 
     private void assertSuccessOrderedSubset(ETFilter filter) {
-        assertNull(filter.getExpression());
+        assertNotNull(filter.getExpression());
+        assertNull(filter.getExpression().getProperty());
+        assertNull(filter.getExpression().getOperator());
+        assertTrue(filter.getExpression().getValues().isEmpty());
         assertEquals(1, filter.getOrderBy().size());
         assertEquals("foo", filter.getOrderBy().get(0));
         assertEquals(1, filter.getProperties().size());
