@@ -525,6 +525,9 @@ public abstract class ETRestObject extends ETApiObject {
             stringBuilder.append("$filter=");
         }
         ETExpression.Operator operator = expression.getOperator();
+        if (operator == null) {
+            return null;
+        }
         switch (operator) {
           case AND:
             stringBuilder.append(toFilterString(expression.getSubexpressions().get(0), false));

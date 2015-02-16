@@ -1276,6 +1276,9 @@ public abstract class ETSoapObject extends ETApiObject {
 
     public static FilterPart toFilterPart(ETExpression expression) {
         ETExpression.Operator operator = expression.getOperator();
+        if (operator == null) {
+            return null;
+        }
         if (operator == ETExpression.Operator.AND ||
             operator == ETExpression.Operator.OR)
         {
