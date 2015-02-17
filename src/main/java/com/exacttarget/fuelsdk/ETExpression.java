@@ -193,7 +193,6 @@ public class ETExpression extends ETObject {
                 break;
             }
         } else {
-            // XXX what's this?
             if (!subexpressions.isEmpty()) {
                 stringBuilder.append("(");
                 stringBuilder.append(subexpressions.get(0));
