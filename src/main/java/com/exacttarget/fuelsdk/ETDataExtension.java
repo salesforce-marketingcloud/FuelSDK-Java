@@ -437,7 +437,7 @@ public class ETDataExtension extends ETSoapObject {
 
     /**
      * @deprecated
-     * Use...
+     * Pass columns in <code>filter</code> argument.
      */
     @Deprecated
     public static ETResponse<ETDataExtensionRow> select(ETClient client,
@@ -446,12 +446,18 @@ public class ETDataExtension extends ETSoapObject {
                                                         String... columns)
         throws ETSdkException
     {
-        return null; // XXX
+        // make a copy so we're not modifying argument itself
+        ETFilter f = new ETFilter();
+        f.setExpression(filter.getExpression());
+        for (String column : columns) {
+            f.addProperty(column);
+        }
+        return select(client, dataExtension, f);
     }
 
     /**
      * @deprecated
-     * Use...
+     * Pass columns in <code>filter</code> argument.
      */
     @Deprecated
     public static ETResponse<ETDataExtensionRow> select(ETClient client,
@@ -462,12 +468,18 @@ public class ETDataExtension extends ETSoapObject {
                                                         String... columns)
         throws ETSdkException
     {
-        return null; // XXX
+        // make a copy so we're not modifying argument itself
+        ETFilter f = new ETFilter();
+        f.setExpression(filter.getExpression());
+        for (String column : columns) {
+            f.addProperty(column);
+        }
+        return select(client, dataExtension, page, pageSize, f);
     }
 
     /**
      * @deprecated
-     * Use...
+     * Pass columns in <code>filter</code> argument.
      */
     @Deprecated
     public static ETResponse<ETDataExtensionRow> select(ETClient client,
@@ -478,7 +490,13 @@ public class ETDataExtension extends ETSoapObject {
                                                         String... columns)
         throws ETSdkException
     {
-        return null; // XXX
+        // make a copy so we're not modifying argument itself
+        ETFilter f = new ETFilter();
+        f.setExpression(ETExpression.parse(filter));
+        for (String column : columns) {
+            f.addProperty(column);
+        }
+        return select(client, dataExtension, page, pageSize, f);
     }
 
     public ETResponse<ETDataExtensionRow> select(ETFilter filter)
@@ -519,19 +537,19 @@ public class ETDataExtension extends ETSoapObject {
 
     /**
      * @deprecated
-     * Use...
+     * Pass columns in <code>filter</code> argument.
      */
     @Deprecated
     public ETResponse<ETDataExtensionRow> select(ETFilter filter,
                                                  String... columns)
         throws ETSdkException
     {
-        return null; // XXX
+        return ETDataExtension.select(getClient(), "key=" + getKey(), filter, columns);
     }
 
     /**
      * @deprecated
-     * Use...
+     * Pass columns in <code>filter</code> argument.
      */
     @Deprecated
     public ETResponse<ETDataExtensionRow> select(ETFilter filter,
@@ -540,12 +558,12 @@ public class ETDataExtension extends ETSoapObject {
                                                  String... columns)
         throws ETSdkException
     {
-        return null; // XXX
+        return ETDataExtension.select(getClient(), "key=" + getKey(), filter, page, pageSize, columns);
     }
 
     /**
      * @deprecated
-     * Use...
+     * Pass columns in <code>filter</code> argument.
      */
     @Deprecated
     public ETResponse<ETDataExtensionRow> select(String filter,
@@ -554,7 +572,7 @@ public class ETDataExtension extends ETSoapObject {
                                                  String... columns)
         throws ETSdkException
     {
-        return null; // XXX
+        return ETDataExtension.select(getClient(), "key=" + getKey(), filter, page, pageSize, columns);
     }
 
     public ETResponse<ETDataExtensionRow> insert(ETDataExtensionRow... rows)

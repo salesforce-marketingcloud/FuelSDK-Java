@@ -358,7 +358,7 @@ public class ETClient {
 
     /**
      * @deprecated
-     * Use...
+     * Pass properties in <code>filter</code> argument.
      */
     @Deprecated
     public <T extends ETApiObject> ETResponse<T> retrieve(Class<T> type,
@@ -366,12 +366,18 @@ public class ETClient {
                                                           String... properties)
         throws ETSdkException
     {
-        return null; // XXX
+        // make a copy so we're not modifying argument itself
+        ETFilter f = new ETFilter();
+        f.setExpression(filter.getExpression());
+        for (String property : properties) {
+            f.addProperty(property);
+        }
+        return retrieve(type, null, null, f);
     }
 
     /**
      * @deprecated
-     * Use...
+     * Pass properties in <code>filter</code> argument.
      */
     @Deprecated
     public <T extends ETApiObject> ETResponse<T> retrieve(Class<T> type,
@@ -381,12 +387,18 @@ public class ETClient {
                                                           String... properties)
         throws ETSdkException
     {
-        return null; // XXX
+        // make a copy so we're not modifying argument itself
+        ETFilter f = new ETFilter();
+        f.setExpression(filter.getExpression());
+        for (String property : properties) {
+            f.addProperty(property);
+        }
+        return retrieve(type, page, pageSize, f);
     }
 
     /**
      * @deprecated
-     * Use...
+     * Pass properties in <code>filter</code> argument.
      */
     @Deprecated
     public <T extends ETApiObject> ETResponse<T> retrieve(Class<T> type,
@@ -396,7 +408,13 @@ public class ETClient {
                                                           String... properties)
         throws ETSdkException
     {
-        return null; // XXX
+        // make a copy so we're not modifying argument itself
+        ETFilter f = new ETFilter();
+        f.setExpression(ETExpression.parse(filter));
+        for (String property : properties) {
+            f.addProperty(property);
+        }
+        return retrieve(type, page, pageSize, f);
     }
 
     public <T extends ETApiObject> T retrieveObject(Class<T> type,
@@ -417,7 +435,7 @@ public class ETClient {
 
     /**
      * @deprecated
-     * Use...
+     * Pass properties in <code>filter</code> argument.
      */
     @Deprecated
     public <T extends ETApiObject> T retrieveObject(Class<T> type,
@@ -425,7 +443,8 @@ public class ETClient {
                                                     String... properties)
         throws ETSdkException
     {
-        return null; // XXX
+        ETResponse<T> response = retrieve(type, filter, properties);
+        return response.getObject();
     }
 
     public <T extends ETApiObject> List<T> retrieveObjects(Class<T> type,
@@ -466,7 +485,7 @@ public class ETClient {
 
     /**
      * @deprecated
-     * Use...
+     * Pass properties in <code>filter</code> argument.
      */
     @Deprecated
     public <T extends ETApiObject> List<T> retrieveObjects(Class<T> type,
@@ -474,12 +493,13 @@ public class ETClient {
                                                            String... properties)
         throws ETSdkException
     {
-        return null; // XXX
+        ETResponse<T> response = retrieve(type, filter, properties);
+        return response.getObjects();
     }
 
     /**
      * @deprecated
-     * Use...
+     * Pass properties in <code>filter</code> argument.
      */
     @Deprecated
     public <T extends ETApiObject> List<T> retrieveObjects(Class<T> type,
@@ -489,12 +509,13 @@ public class ETClient {
                                                            String... properties)
         throws ETSdkException
     {
-        return null; // XXX
+        ETResponse<T> response = retrieve(type, filter, page, pageSize, properties);
+        return response.getObjects();
     }
 
     /**
      * @deprecated
-     * Use...
+     * Pass properties in <code>filter</code> argument.
      */
     @Deprecated
     public <T extends ETApiObject> List<T> retrieveObjects(Class<T> type,
@@ -504,7 +525,8 @@ public class ETClient {
                                                            String... properties)
         throws ETSdkException
     {
-        return null; // XXX
+        ETResponse<T> response = retrieve(type, filter, page, pageSize, properties);
+        return response.getObjects();
     }
 
     public <T extends ETApiObject> ETResponse<T> create(T... objects)
