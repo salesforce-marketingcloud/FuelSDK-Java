@@ -43,8 +43,8 @@ import java.util.UUID;
 import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
 import com.exacttarget.fuelsdk.ETClient;
+import com.exacttarget.fuelsdk.ETExpression;
 import com.exacttarget.fuelsdk.ETFilter;
 import com.exacttarget.fuelsdk.ETRestConnection;
 import com.exacttarget.fuelsdk.ETRestObject;
@@ -120,12 +120,10 @@ public class ETAudience extends ETRestObject {
         this.id = id;
     }
 
-    @Override
     public String getKey() {
         return key;
     }
 
-    @Override
     public void setKey(String key) {
         this.key = key;
     }
@@ -190,7 +188,7 @@ public class ETAudience extends ETRestObject {
         throws ETSdkException
     {
         parsedFilter = filter;
-        FilterDefinition filterDefinition = toFilterDefinition(parsedFilter);
+        FilterDefinition filterDefinition = toFilterDefinition(parsedFilter.getExpression());
         filterDefinition.setPersistenceId(persistenceId);
         this.filter = new Filter();
         this.filter.setFilterDefinition(filterDefinition);
@@ -252,7 +250,7 @@ public class ETAudience extends ETRestObject {
         throws ETSdkException
     {
         AudienceCountsRequest request = new AudienceCountsRequest();
-        request.addFilterDefinition(toFilterDefinition(ETFilter.parse(filter)));
+        request.addFilterDefinition(toFilterDefinition(ETFilter.parse(filter).getExpression()));
         ETRestConnection connection = client.getRestConnection();
         Gson gson = new Gson();
         String requestPayload = gson.toJson(request);
@@ -287,11 +285,11 @@ public class ETAudience extends ETRestObject {
         publishResponse = gson.fromJson(responsePayload, PublishResponse.class);
     }
 
-    public static FilterDefinition toFilterDefinition(ETFilter filter)
+    public static FilterDefinition toFilterDefinition(ETExpression expression)
         throws ETSdkException
     {
         FilterDefinition filterDefinition = new FilterDefinition();
-        ETFilter.Operator operator = filter.getOperator();
+        ETExpression.Operator operator = expression.getOperator();
         switch (operator) {
           case EQUALS:
           case NOT_EQUALS:
@@ -299,12 +297,12 @@ public class ETAudience extends ETRestObject {
           case LESS_THAN_OR_EQUALS:
           case GREATER_THAN:
           case GREATER_THAN_OR_EQUALS:
-            filterDefinition.addCondition(toCondition(filter));
+            filterDefinition.addCondition(toCondition(expression));
             break;
           case IN:
           case AND:
           case OR:
-            filterDefinition.addConditionSet(toConditionSet(filter));
+            filterDefinition.addConditionSet(toConditionSet(expression));
             break;
           default:
             throw new ETSdkException("unsupported operator: " + operator);
@@ -312,13 +310,13 @@ public class ETAudience extends ETRestObject {
         return filterDefinition;
     }
 
-    public static FilterDefinition.Condition toCondition(ETFilter filter)
+    public static FilterDefinition.Condition toCondition(ETExpression expression)
         throws ETSdkException
     {
         FilterDefinition.Condition condition =
                 new FilterDefinition.Condition();
-        condition.setId(filter.getProperty());
-        ETFilter.Operator operator = filter.getOperator();
+        condition.setId(expression.getProperty());
+        ETExpression.Operator operator = expression.getOperator();
         switch (operator) {
           case EQUALS:
             condition.setOperator("Equals");
@@ -341,23 +339,23 @@ public class ETAudience extends ETRestObject {
           default:
             throw new ETSdkException("invalid operator: " + operator);
         }
-        condition.setConditionValue(filter.getValue());
+        condition.setConditionValue(expression.getValue());
         return condition;
     }
 
-    public static FilterDefinition.ConditionSet toConditionSet(ETFilter filter)
+    public static FilterDefinition.ConditionSet toConditionSet(ETExpression expression)
         throws ETSdkException
     {
         FilterDefinition.ConditionSet conditionSet =
                 new FilterDefinition.ConditionSet();
-        ETFilter.Operator operator = filter.getOperator();
+        ETExpression.Operator operator = expression.getOperator();
         switch (operator) {
           case IN:
             conditionSet.setOperator("InList");
-            for (String value : filter.getValues()) {
+            for (String value : expression.getValues()) {
                 FilterDefinition.Condition condition =
                         new FilterDefinition.Condition();
-                condition.setId(filter.getProperty());
+                condition.setId(expression.getProperty());
                 condition.setOperator("Equals");
                 condition.setConditionValue(value);
                 conditionSet.addCondition(condition);
@@ -365,32 +363,32 @@ public class ETAudience extends ETRestObject {
             break;
           case AND:
           case OR:
-            if (operator == ETFilter.Operator.AND) {
+            if (operator == ETExpression.Operator.AND) {
                 conditionSet.setOperator("AND");
-            } else if (operator == ETFilter.Operator.OR) {
+            } else if (operator == ETExpression.Operator.OR) {
                 conditionSet.setOperator("OR");
             }
-            ETFilter filter1 = filter.getFilters().get(0);
-            ETFilter filter2 = filter.getFilters().get(1);
-            if (filter1.getOperator() == null) {
-                conditionSet.addConditionSet(toConditionSet(filter1.getFilters().get(0)));
-            } else if (filter1.getOperator() == ETFilter.Operator.IN ||
-                       filter1.getOperator() == ETFilter.Operator.AND ||
-                       filter1.getOperator() == ETFilter.Operator.OR)
+            ETExpression subexpression1 = expression.getSubexpressions().get(0);
+            ETExpression subexpression2 = expression.getSubexpressions().get(1);
+            if (subexpression1.getOperator() == null) {
+                conditionSet.addConditionSet(toConditionSet(subexpression1.getSubexpressions().get(0)));
+            } else if (subexpression1.getOperator() == ETExpression.Operator.IN ||
+                       subexpression1.getOperator() == ETExpression.Operator.AND ||
+                       subexpression1.getOperator() == ETExpression.Operator.OR)
             {
-                conditionSet.addConditionSet(toConditionSet(filter1));
+                conditionSet.addConditionSet(toConditionSet(subexpression1));
             } else {
-                conditionSet.addCondition(toCondition(filter1));
+                conditionSet.addCondition(toCondition(subexpression1));
             }
-            if (filter2.getOperator() == null) {
-                conditionSet.addConditionSet(toConditionSet(filter2.getFilters().get(0)));
-            } else if (filter2.getOperator() == ETFilter.Operator.IN ||
-                       filter2.getOperator() == ETFilter.Operator.AND ||
-                       filter2.getOperator() == ETFilter.Operator.OR)
+            if (subexpression2.getOperator() == null) {
+                conditionSet.addConditionSet(toConditionSet(subexpression2.getSubexpressions().get(0)));
+            } else if (subexpression2.getOperator() == ETExpression.Operator.IN ||
+                       subexpression2.getOperator() == ETExpression.Operator.AND ||
+                       subexpression2.getOperator() == ETExpression.Operator.OR)
             {
-                conditionSet.addConditionSet(toConditionSet(filter2));
+                conditionSet.addConditionSet(toConditionSet(subexpression2));
             } else {
-                conditionSet.addCondition(toCondition(filter2));
+                conditionSet.addCondition(toCondition(subexpression2));
             }
             break;
           default:
@@ -410,9 +408,11 @@ public class ETAudience extends ETRestObject {
             return "";
         }
 
-        if (filter.getProperty() != null) {
+        ETExpression expression = filter.getExpression();
+
+        if (expression.getProperty() != null) {
             internalProperty = getInternalProperty(ETDimension.class,
-                                                   filter.getProperty());
+                                                   expression.getProperty());
 
             // convert " " to "%20" in property
             internalProperty = internalProperty.replaceAll(" ", "%20");
@@ -424,11 +424,11 @@ public class ETAudience extends ETRestObject {
 
         // convert " " to "%20" in all values
         List<String> values = new ArrayList<String>();
-        for (String value : filter.getValues()) {
+        for (String value : expression.getValues()) {
             values.add(value.replaceAll(" ", "%20"));
         }
 
-        ETFilter.Operator operator = filter.getOperator();
+        ETExpression.Operator operator = expression.getOperator();
         switch(operator) {
           case EQUALS:
             stringBuilder.append(values.get(0));
@@ -462,9 +462,9 @@ public class ETAudience extends ETRestObject {
             stringBuilder.append(")");
             break;
           case AND:
-            stringBuilder.append(toFilterString(filter.getFilters().get(0)));
+            stringBuilder.append(toFilterString(expression.getSubexpressions().get(0)));
             stringBuilder.append("&");
-            stringBuilder.append(toFilterString(filter.getFilters().get(1)));
+            stringBuilder.append(toFilterString(expression.getSubexpressions().get(1)));
             break;
           default:
             throw new ETSdkException("unsupported operator: " + operator);

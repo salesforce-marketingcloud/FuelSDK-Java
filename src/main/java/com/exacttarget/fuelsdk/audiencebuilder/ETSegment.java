@@ -147,7 +147,7 @@ public class ETSegment implements Comparable<ETSegment> {
         throws ETSdkException
     {
         parsedFilter = filter;
-        FilterDefinition filterDefinition = ETAudience.toFilterDefinition(filter);
+        FilterDefinition filterDefinition = ETAudience.toFilterDefinition(filter.getExpression());
         filterDefinition.setPersistenceId(persistenceId);
         this.filter = new Filter();
         this.filter.setFilterDefinition(filterDefinition);

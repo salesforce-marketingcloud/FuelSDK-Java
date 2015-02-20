@@ -158,12 +158,10 @@ public class ETObjectTest {
             this.id = id;
         }
 
-        @Override
         public String getKey() {
             return key;
         }
 
-        @Override
         public void setKey(String key) {
             this.key = key;
         }
@@ -176,22 +174,18 @@ public class ETObjectTest {
             this.name = name;
         }
 
-        @Override
         public Date getCreatedDate() {
             return createdDate;
         }
 
-        @Override
         public void setCreatedDate(Date createdDate) {
             this.createdDate = createdDate;
         }
 
-        @Override
         public Date getModifiedDate() {
             return modifiedDate;
         }
 
-        @Override
         public void setModifiedDate(Date modifiedDate) {
             this.modifiedDate = modifiedDate;
         }

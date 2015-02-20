@@ -44,7 +44,6 @@ import com.google.gson.JsonParser;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.exacttarget.fuelsdk.ETClient;
-import com.exacttarget.fuelsdk.ETFilter;
 import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.ETRestConnection;
 import com.exacttarget.fuelsdk.ETRestConnection.Response;
@@ -81,12 +80,10 @@ public class ETCube extends ETRestObject {
         // no-op
     }
 
-    @Override
     public String getKey() {
         return key;
     }
 
-    @Override
     public void setKey(String key) {
         this.key = key;
     }
@@ -128,7 +125,7 @@ public class ETCube extends ETRestObject {
             }
         }
 
-        Response r = retrieve(client, path, "id", (ETFilter) null, null, null, ETCube.class);
+        Response r = retrieve(client, path, "id", ETCube.class, null, null, null);
 
         ETResponse<ETCube> response = new ETResponse<ETCube>();
 
