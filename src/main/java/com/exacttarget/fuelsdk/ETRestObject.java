@@ -484,6 +484,10 @@ public abstract class ETRestObject extends ETApiObject {
         if (value.equals("")) {
             forceQuotes = true;
         }
+        // XXX investigate
+        if (value.contains("*")) {
+            forceQuotes = true;
+        }
         // XXX workaround for FUEL-3348--remove after 02
         if (value.contains("-")) {
             forceQuotes = true;
