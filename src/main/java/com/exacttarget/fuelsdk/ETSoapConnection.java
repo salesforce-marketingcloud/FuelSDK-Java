@@ -63,39 +63,34 @@ import com.exacttarget.fuelsdk.internal.Soap;
 public class ETSoapConnection {
     private static Logger logger = Logger.getLogger(ETSoapConnection.class);
 
-    private ETClient client = null;
+    private static final String WSSE_NAMESPACE_URI =
+            "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd";
 
     private String endpoint = null;
 
     private Soap soap = null;
     private Client soapClient = null;
     private SOAPFactory soapFactory = null;
+    private SOAPElement accessTokenElement = null;
 
-    public ETSoapConnection(ETClient client, String endpoint)
+    public ETSoapConnection(String endpoint)
         throws ETSdkException
     {
-        this.client = client;
-
         this.endpoint = endpoint;
 
         //
         // Initialize the SOAP proxy:
         //
 
-        PartnerAPI service = new PartnerAPI();
-        soap = service.getSoap();
-        soapClient = ClientProxy.getClient(soap);
-        Endpoint soapEndpoint = soapClient.getEndpoint();
-
         try {
+            PartnerAPI service = new PartnerAPI();
+            soap = service.getSoap();
+            soapClient = ClientProxy.getClient(soap);
+            Endpoint soapEndpoint = soapClient.getEndpoint();
             soapFactory = SOAPFactory.newInstance();
-
-            updateHeaders();
-
             soapClient.getRequestContext().put(Message.ENDPOINT_ADDRESS,
                     endpoint);
             soapClient.getRequestContext().put(Message.ENCODING, "UTF-8");
-
             LoggingInInterceptor loggingInInterceptor =
                     new LoggingInInterceptor();
             loggingInInterceptor.setPrettyLogging(true);
@@ -109,29 +104,59 @@ public class ETSoapConnection {
         }
     }
 
-    // XXX this is kind of a hack--ideally just
-    // the fueloauth element would be updated..
-
-    public void updateHeaders()
+    public ETSoapConnection(String endpoint, String username, String password)
         throws ETSdkException
     {
+        this(endpoint);
+
         try {
             List<Header> headers = new ArrayList<Header>();
 
-            SOAPElement oauthElement =
-                    soapFactory.createElement(new QName(null, "fueloauth"));
-            oauthElement.addTextNode(client.getAccessToken());
-            Header oauthHeader =
-                    new Header(new QName("http://exacttarget.com", "fueloauth"),
-                               oauthElement);
-            headers.add(oauthHeader);
+            SOAPElement usernameElement = soapFactory.createElement(
+                    new QName(WSSE_NAMESPACE_URI, "Username", "wsse"));
+            usernameElement.addTextNode(username);
+
+            SOAPElement passwordElement = soapFactory.createElement(
+                    new QName(WSSE_NAMESPACE_URI, "Password", "wsse"));
+            passwordElement.addTextNode(password);
+
+            SOAPElement usernameTokenElement = soapFactory.createElement(
+                    new QName(WSSE_NAMESPACE_URI, "UsernameToken", "wsse"));
+            usernameTokenElement.addChildElement(usernameElement);
+            usernameTokenElement.addChildElement(passwordElement);
+
+            SOAPElement securityElement = soapFactory.createElement(
+                    new QName(WSSE_NAMESPACE_URI, "Security", "wsse"));
+            securityElement.addChildElement(usernameTokenElement);
+
+            headers.add(new Header(new QName(WSSE_NAMESPACE_URI, "Security", "wsse"),
+                    securityElement));
 
             soapClient.getRequestContext().put(Header.HEADER_LIST, headers);
-
-            logger.debug("updated SOAP header with new access token "
-                    + client.getAccessToken());
         } catch (SOAPException ex) {
-            throw new ETSdkException("could not update SOAP headers", ex);
+            throw new ETSdkException("could not initialize SOAP proxy", ex);
+        }
+    }
+
+    public ETSoapConnection(String endpoint, String accessToken)
+        throws ETSdkException
+    {
+        this(endpoint);
+
+        try {
+            List<Header> headers = new ArrayList<Header>();
+
+            accessTokenElement =
+                    soapFactory.createElement(new QName(null, "fueloauth"));
+            if (accessToken != null) {
+                setAccessToken(accessToken);
+            }
+
+            headers.add(new Header(new QName(null, "fueloauth"), accessTokenElement));
+
+            soapClient.getRequestContext().put(Header.HEADER_LIST, headers);
+        } catch (SOAPException ex) {
+            throw new ETSdkException("could not initialize SOAP proxy", ex);
         }
     }
 
@@ -141,5 +166,20 @@ public class ETSoapConnection {
 
     public String getEndpoint() {
         return endpoint;
+    }
+
+    public void setAccessToken(String accessToken)
+        throws ETSdkException
+    {
+        if (accessTokenElement != null) {
+            accessTokenElement.removeContents();
+            try {
+                accessTokenElement.addTextNode(accessToken);
+            } catch (SOAPException ex) {
+                throw new ETSdkException("could not set access token", ex);
+            }
+            logger.debug("updated SOAP header with new access token "
+                    + accessToken);
+        }
     }
 }

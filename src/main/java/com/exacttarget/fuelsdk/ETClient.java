@@ -62,7 +62,7 @@ public class ETClient {
     private static final String DEFAULT_AUTH_ENDPOINT =
             "https://auth.exacttargetapis.com";
     private static final String PATH_REQUESTTOKEN =
-            "/v1/requestToken";
+            "/v1/requestToken?legacy=1";
     private static final String PATH_ENDPOINTS_SOAP =
             "/platform/v1/endpoints/soap";
 
@@ -70,6 +70,10 @@ public class ETClient {
 
     private String clientId = null;
     private String clientSecret = null;
+
+    private String username = null;
+    private String password = null;
+
     private String endpoint = null;
     private String authEndpoint = null;
     private String soapEndpoint = null;
@@ -80,6 +84,7 @@ public class ETClient {
 
     private String accessToken = null;
     private int expiresIn = 0;
+    private String legacyToken = null;
     private String refreshToken = null;
 
     private long tokenExpirationTime = 0;
@@ -102,48 +107,57 @@ public class ETClient {
         this.configuration = configuration;
 
         clientId = configuration.get("clientId");
-        if (clientId == null || clientId.equals("")) {
-            throw new ETSdkException("clientId not specified");
-        }
         clientSecret = configuration.get("clientSecret");
-        if (clientSecret == null || clientSecret.equals("")) {
-            throw new ETSdkException("clientSecret not specified");
-        }
+
+        username = configuration.get("username");
+        password = configuration.get("password");
 
         endpoint = configuration.get("endpoint");
-        if (endpoint == null || endpoint.equals("")) {
+        if (endpoint == null) {
             endpoint = DEFAULT_ENDPOINT;
         }
         authEndpoint = configuration.get("authEndpoint");
-        if (authEndpoint == null || authEndpoint.equals("")) {
+        if (authEndpoint == null) {
             authEndpoint = DEFAULT_AUTH_ENDPOINT;
         }
-
-        authConnection = new ETRestConnection(this, authEndpoint, true);
-
-        restConnection = new ETRestConnection(this, endpoint);
-
-        refreshToken();
-
         soapEndpoint = configuration.get("soapEndpoint");
-        if (soapEndpoint == null || soapEndpoint.equals("")) {
-            //
-            // If a SOAP endpoint isn't specified automatically determine it:
-            //
 
-            ETRestConnection.Response response = restConnection.get(PATH_ENDPOINTS_SOAP);
-            String responsePayload = response.getResponsePayload();
-            JsonParser jsonParser = new JsonParser();
-            JsonObject jsonObject = jsonParser.parse(responsePayload).getAsJsonObject();
-            soapEndpoint = jsonObject.get("url").getAsString();
+        if (clientId != null && clientSecret != null) {
+            authConnection = new ETRestConnection(this, authEndpoint, true);
+            requestToken();
+            restConnection = new ETRestConnection(this, endpoint);
+            if (soapEndpoint == null) {
+                //
+                // If a SOAP endpoint isn't specified automatically determine it:
+                //
+
+                ETRestConnection.Response response = restConnection.get(PATH_ENDPOINTS_SOAP);
+                String responsePayload = response.getResponsePayload();
+                JsonParser jsonParser = new JsonParser();
+                JsonObject jsonObject = jsonParser.parse(responsePayload).getAsJsonObject();
+                soapEndpoint = jsonObject.get("url").getAsString();
+            }
+            soapConnection = new ETSoapConnection(soapEndpoint, accessToken);
+        } else {
+            if (username == null || password == null) {
+                throw new ETSdkException("must specify either " +
+                        "clientId/clientSecret or username/password");
+            }
+            if (soapEndpoint == null) {
+                throw new ETSdkException("must specify soapEndpoint " +
+                        "when authenticating with username/password");
+            }
+            soapConnection = new ETSoapConnection(soapEndpoint,
+                                                  username,
+                                                  password);
         }
-
-        soapConnection = new ETSoapConnection(this, soapEndpoint);
 
         if (logger.isTraceEnabled()) {
             logger.trace("ETClient initialized:");
             logger.trace("  clientId = " + clientId);
-            logger.trace("  clientSecret = " + clientSecret);
+            logger.trace("  clientSecret = *");
+            logger.trace("  username = " + username);
+            logger.trace("  password = *");
             logger.trace("  endpoint = " + endpoint);
             logger.trace("  authEndpoint = " + authEndpoint);
             logger.trace("  soapEndpoint = " + soapEndpoint);
@@ -155,6 +169,10 @@ public class ETClient {
     }
 
     public String getAccessToken() {
+        return accessToken;
+    }
+
+    public String getLegacyToken() {
         return accessToken;
     }
 
@@ -188,33 +206,21 @@ public class ETClient {
         return getSoapConnection();
     }
 
-    public synchronized String refreshToken()
+    public synchronized String requestToken()
         throws ETSdkException
     {
-        if (tokenExpirationTime == 0) {
-            logger.debug("requesting new access token...");
-        } else {
-            logger.debug("access token expires at "
-                    + new Date(tokenExpirationTime));
+        return requestToken(null);
+    }
 
-            //
-            // If the current token expires more than five
-            // minutes from now, we don't need to refresh
-            // (tokenExpirationTime and System.currentTimeMills()
-            // are in milliseconds so we multiply by 1000):
-            //
-
-            if (tokenExpirationTime - System.currentTimeMillis() > 5*60*1000) {
-                logger.debug("not refreshing access token");
-                return accessToken;
-            }
-
-            logger.debug("refreshing access token...");
-
-            if (refreshToken == null) {
-                throw new ETSdkException("refreshToken == null");
-            }
+    public synchronized String requestToken(String refreshToken)
+        throws ETSdkException
+    {
+        if (clientId == null || clientSecret == null) {
+            // no-op
+            return null;
         }
+
+        logger.debug("requesting access token...");
 
         //
         // Construct the JSON payload. Set accessType to offline so
@@ -230,7 +236,7 @@ public class ETClient {
             jsonObject.addProperty("refreshToken", refreshToken);
         }
 
-        Gson gson = restConnection.getGson();
+        Gson gson = authConnection.getGson();
 
         String requestPayload = gson.toJson(jsonObject);
 
@@ -255,12 +261,14 @@ public class ETClient {
         JsonParser jsonParser = new JsonParser();
         jsonObject = jsonParser.parse(responsePayload).getAsJsonObject();
         logger.debug("received token:");
-        accessToken = jsonObject.get("accessToken").getAsString();
-        logger.debug("  accessToken: " + accessToken);
-        expiresIn = jsonObject.get("expiresIn").getAsInt();
-        logger.debug("  expiresIn: " + expiresIn);
-        refreshToken = jsonObject.get("refreshToken").getAsString();
-        logger.debug("  refreshToken: " + refreshToken);
+        this.accessToken = jsonObject.get("accessToken").getAsString();
+        logger.debug("  accessToken: " + this.accessToken);
+        this.expiresIn = jsonObject.get("expiresIn").getAsInt();
+        logger.debug("  expiresIn: " + this.expiresIn);
+        this.legacyToken = jsonObject.get("legacyToken").getAsString();
+        logger.debug("  legacyToken: " + this.legacyToken);
+        this.refreshToken = jsonObject.get("refreshToken").getAsString();
+        logger.debug("  refreshToken: " + this.refreshToken);
 
         //
         // Calculate the token expiration time. As before,
@@ -270,13 +278,39 @@ public class ETClient {
 
         tokenExpirationTime = System.currentTimeMillis() + (expiresIn * 1000);
 
-        logger.debug("new access token expires at "
-                + new Date(tokenExpirationTime));
+        logger.debug("access token expires at " + new Date(tokenExpirationTime));
 
-        // XXX not sure i like this
-        if (soapConnection != null) {
-            soapConnection.updateHeaders();
+        return accessToken;
+    }
+
+    public synchronized String refreshToken()
+        throws ETSdkException
+    {
+        if (tokenExpirationTime > 0) {
+            logger.debug("access token expires at " + new Date(tokenExpirationTime));
+
+            //
+            // If the current token expires more than five
+            // minutes from now, we don't need to refresh
+            // (tokenExpirationTime and System.currentTimeMills()
+            // are in milliseconds so we multiply by 1000):
+            //
+
+            if (tokenExpirationTime - System.currentTimeMillis() > 5*60*1000) {
+                logger.debug("not refreshing access token");
+                return accessToken;
+            }
+
+            logger.debug("refreshing access token...");
+
+            if (refreshToken == null) {
+                throw new ETSdkException("refreshToken == null");
+            }
         }
+
+        requestToken(refreshToken);
+
+        soapConnection.setAccessToken(accessToken);
 
         return accessToken;
     }
