@@ -222,7 +222,7 @@ public abstract class ETSoapObject extends ETApiObject {
         retrieveRequest.getProperties().addAll(internalProperties);
 
         ETExpression expression = filter.getExpression();
-        if (expression != null) {
+        if (expression.getOperator() != null) {
             //
             // Convert the property names to their internal counterparts:
             //

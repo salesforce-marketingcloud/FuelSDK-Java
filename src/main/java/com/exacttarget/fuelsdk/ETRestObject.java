@@ -193,7 +193,7 @@ public abstract class ETRestObject extends ETApiObject {
         logger.trace("filter: " + filter);
 
         ETExpression expression = filter.getExpression();
-        if (expression != null) {
+        if (expression.getOperator() != null) {
             logger.trace("expression: " + filter.getExpression());
 
             if (expression.getOperator() == ETExpression.Operator.EQUALS
