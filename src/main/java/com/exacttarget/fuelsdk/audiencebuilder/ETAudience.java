@@ -397,18 +397,16 @@ public class ETAudience extends ETRestObject {
         return conditionSet;
     }
 
-    public static String toFilterString(ETFilter filter)
+    public static String toFilterString(ETExpression expression)
         throws ETSdkException
     {
         StringBuilder stringBuilder = new StringBuilder();
 
         String internalProperty = null;
 
-        if (filter == null) {
+        if (expression.getOperator() == null) {
             return "";
         }
-
-        ETExpression expression = filter.getExpression();
 
         if (expression.getProperty() != null) {
             internalProperty = getInternalProperty(ETDimension.class,

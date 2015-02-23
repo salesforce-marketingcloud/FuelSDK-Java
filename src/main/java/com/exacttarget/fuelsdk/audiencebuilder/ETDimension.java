@@ -38,7 +38,7 @@ import java.util.List;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.exacttarget.fuelsdk.ETFilter;
+import com.exacttarget.fuelsdk.ETExpression;
 import com.exacttarget.fuelsdk.ETRestObject;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.annotations.ExternalName;
@@ -127,10 +127,10 @@ public class ETDimension extends ETRestObject {
         return values;
     }
 
-    public static String toFilterString(ETFilter filter)
+    public static String toFilterString(ETExpression expression)
         throws ETSdkException
     {
-        return ETAudience.toFilterString(filter);
+        return ETAudience.toFilterString(expression);
     }
 
     /**
