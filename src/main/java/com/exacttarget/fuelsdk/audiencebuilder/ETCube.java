@@ -44,6 +44,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.exacttarget.fuelsdk.ETClient;
+import com.exacttarget.fuelsdk.ETFilter;
 import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.ETRestConnection;
 import com.exacttarget.fuelsdk.ETRestConnection.Response;
@@ -125,7 +126,7 @@ public class ETCube extends ETRestObject {
             }
         }
 
-        Response r = retrieve(client, path, "id", ETCube.class, null, null, null);
+        Response r = retrieve(client, path, "id", ETCube.class, null, null, new ETFilter());
 
         ETResponse<ETCube> response = new ETResponse<ETCube>();
 
