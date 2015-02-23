@@ -79,7 +79,7 @@ public class ETAudienceBuilderTest {
         assertEquals("OK", response.getResponseMessage());
         assertEquals((Integer) 1, response.getPage());
         assertEquals((Integer) 50, response.getPageSize());
-        assertEquals((Integer) 521, response.getTotalCount());
+        assertEquals((Integer) 719, response.getTotalCount());
         assertTrue(response.hasMoreResults());
     }
 
@@ -96,8 +96,8 @@ public class ETAudienceBuilderTest {
         assertEquals("200", response.getResponseCode());
         assertEquals("OK", response.getResponseMessage());
         assertEquals((Integer) 1, response.getPage());
-        assertEquals((Integer) 4, response.getPageSize());
-        assertEquals((Integer) 4, response.getTotalCount());
+        assertEquals((Integer) 10, response.getPageSize());
+        assertEquals((Integer) 10, response.getTotalCount());
         assertFalse(response.hasMoreResults());
     }
 
@@ -115,7 +115,7 @@ public class ETAudienceBuilderTest {
         assertEquals("OK", response.getResponseMessage());
         assertEquals((Integer) 1, response.getPage());
         assertEquals((Integer) 50, response.getPageSize());
-        assertEquals((Integer) 231, response.getTotalCount());
+        assertEquals((Integer) 225, response.getTotalCount());
         assertTrue(response.hasMoreResults());
     }
 
@@ -132,8 +132,8 @@ public class ETAudienceBuilderTest {
         assertEquals("200", response.getResponseCode());
         assertEquals("OK", response.getResponseMessage());
         assertEquals((Integer) 1, response.getPage());
-        assertEquals((Integer) 47, response.getPageSize());
-        assertEquals((Integer) 47, response.getTotalCount());
+        assertEquals((Integer) 41, response.getPageSize());
+        assertEquals((Integer) 41, response.getTotalCount());
         assertFalse(response.hasMoreResults());
     }
 
@@ -187,7 +187,7 @@ public class ETAudienceBuilderTest {
         assertEquals("OK", response.getResponseMessage());
         assertEquals((Integer) 1, response.getPage());
         assertEquals((Integer) 50, response.getPageSize());
-        assertEquals((Integer) 188, response.getTotalCount());
+        assertEquals((Integer) 194, response.getTotalCount());
         assertTrue(response.hasMoreResults());
     }
 
@@ -204,8 +204,8 @@ public class ETAudienceBuilderTest {
         assertEquals("200", response.getResponseCode());
         assertEquals("OK", response.getResponseMessage());
         assertEquals((Integer) 1, response.getPage());
-        assertEquals((Integer) 16, response.getPageSize());
-        assertEquals((Integer) 16, response.getTotalCount());
+        assertEquals((Integer) 22, response.getPageSize());
+        assertEquals((Integer) 22, response.getTotalCount());
         assertFalse(response.hasMoreResults());
     }
 
@@ -222,8 +222,8 @@ public class ETAudienceBuilderTest {
         assertEquals("200", response.getResponseCode());
         assertEquals("OK", response.getResponseMessage());
         assertEquals((Integer) 1, response.getPage());
-        assertEquals((Integer) 22, response.getPageSize());
-        assertEquals((Integer) 22, response.getTotalCount());
+        assertEquals((Integer) 28, response.getPageSize());
+        assertEquals((Integer) 28, response.getTotalCount());
         assertFalse(response.hasMoreResults());
     }
 
@@ -240,8 +240,8 @@ public class ETAudienceBuilderTest {
         assertEquals("200", response.getResponseCode());
         assertEquals("OK", response.getResponseMessage());
         assertEquals((Integer) 1, response.getPage());
-        assertEquals((Integer) 34, response.getPageSize());
-        assertEquals((Integer) 34, response.getTotalCount());
+        assertEquals((Integer) 40, response.getPageSize());
+        assertEquals((Integer) 40, response.getTotalCount());
         assertFalse(response.hasMoreResults());
     }
 
@@ -272,37 +272,37 @@ public class ETAudienceBuilderTest {
         assertEquals((Integer) 9, dimension.getCount());
         assertEquals(9, dimension.getValues().size());
         ETDimensionValue value1 = dimension.getValues().get(0);
-        assertEquals("3", value1.getKey());
-        assertEquals("18 24", value1.getName());
-        assertEquals((Integer) 2475583, value1.getCount());
+        assertEquals("1", value1.getKey());
+        assertEquals("less than 14", value1.getName());
+        assertEquals((Integer) 0, value1.getCount());
         ETDimensionValue value2 = dimension.getValues().get(1);
-        assertEquals("4", value2.getKey());
-        assertEquals("25 - 34", value2.getName());
-        assertEquals((Integer) 2513502, value2.getCount());
+        assertEquals("3", value2.getKey());
+        assertEquals("18 24", value2.getName());
+        assertEquals((Integer) 2475583, value2.getCount());
         ETDimensionValue value3 = dimension.getValues().get(2);
-        assertEquals("6", value3.getKey());
-        assertEquals("45 - 54", value3.getName());
-        assertEquals((Integer) 2165739, value3.getCount());
+        assertEquals("7", value3.getKey());
+        assertEquals("55 - 64", value3.getName());
+        assertEquals((Integer) 2167700, value3.getCount());
         ETDimensionValue value4 = dimension.getValues().get(3);
-        assertEquals("8", value4.getKey());
-        assertEquals("65+", value4.getName());
-        assertEquals((Integer) 1066716, value4.getCount());
+        assertEquals("-1", value4.getKey());
+        assertEquals("no age available", value4.getName());
+        assertEquals((Integer) 197084, value4.getCount());
         ETDimensionValue value5 = dimension.getValues().get(4);
-        assertEquals("7", value5.getKey());
-        assertEquals("55 - 64", value5.getName());
-        assertEquals((Integer) 2167700, value5.getCount());
+        assertEquals("2", value5.getKey());
+        assertEquals("14 - 17", value5.getName());
+        assertEquals((Integer) 1230269, value5.getCount());
         ETDimensionValue value6 = dimension.getValues().get(5);
-        assertEquals("2", value6.getKey());
-        assertEquals("14 - 17", value6.getName());
-        assertEquals((Integer) 1230269, value6.getCount());
+        assertEquals("8", value6.getKey());
+        assertEquals("65+", value6.getName());
+        assertEquals((Integer) 1066716, value6.getCount());
         ETDimensionValue value7 = dimension.getValues().get(6);
-        assertEquals("-1", value7.getKey());
-        assertEquals("no age available", value7.getName());
-        assertEquals((Integer) 197084, value7.getCount());
+        assertEquals("6", value7.getKey());
+        assertEquals("45 - 54", value7.getName());
+        assertEquals((Integer) 2165739, value7.getCount());
         ETDimensionValue value8 = dimension.getValues().get(7);
-        assertEquals("1", value8.getKey());
-        assertEquals("less than 14", value8.getName());
-        assertEquals((Integer) 0, value8.getCount());
+        assertEquals("4", value8.getKey());
+        assertEquals("25 - 34", value8.getName());
+        assertEquals((Integer) 2513502, value8.getCount());
         ETDimensionValue value9 = dimension.getValues().get(8);
         assertEquals("5", value9.getKey());
         assertEquals("35 - 44", value9.getName());
@@ -338,17 +338,17 @@ public class ETAudienceBuilderTest {
         assertEquals((Integer) 3, dimension.getCount());
         assertEquals(3, dimension.getValues().size());
         ETDimensionValue value1 = dimension.getValues().get(0);
-        assertEquals("M", value1.getKey());
-        assertEquals("male", value1.getName());
-        assertEquals((Integer) 6941358, value1.getCount());
+        assertEquals("Unknown", value1.getKey());
+        assertEquals("unknown", value1.getName());
+        assertEquals((Integer) 119415, value1.getCount());
         ETDimensionValue value2 = dimension.getValues().get(1);
-        assertEquals("F", value2.getKey());
-        assertEquals("female", value2.getName());
-        assertEquals((Integer) 6942495, value2.getCount());
+        assertEquals("M", value2.getKey());
+        assertEquals("male", value2.getName());
+        assertEquals((Integer) 6959736, value2.getCount());
         ETDimensionValue value3 = dimension.getValues().get(2);
-        assertEquals("Unknown", value3.getKey());
-        assertEquals("unknown", value3.getName());
-        assertEquals((Integer) 110592, value3.getCount());
+        assertEquals("F", value3.getKey());
+        assertEquals("female", value3.getName());
+        assertEquals((Integer) 6961047, value3.getCount());
         // save fieldId for later
         gender = dimension.getFieldId();
     }
