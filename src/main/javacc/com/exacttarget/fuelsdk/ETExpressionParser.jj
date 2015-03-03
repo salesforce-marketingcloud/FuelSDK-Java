@@ -92,7 +92,7 @@ ETExpression Expression():
         {
             ETExpression e = expression;
             expression = new ETExpression();
-            expression.addExpression(e);
+            expression.addSubexpression(e);
         }
     )
 
@@ -119,8 +119,8 @@ ETExpression OrExpression():
         {
             expression = new ETExpression();
             expression.setOperator(ETExpression.Operator.OR);
-            expression.addExpression(expression1);
-            expression.addExpression(expression2);
+            expression.addSubexpression(expression1);
+            expression.addSubexpression(expression2);
             expression1 = expression;
         }
     )*
@@ -144,7 +144,7 @@ ETExpression AndExpression():
         {
             ETExpression e = expression1;
             expression1 = new ETExpression();
-            expression1.addExpression(e);
+            expression1.addSubexpression(e);
         }
     )
     {
@@ -160,8 +160,8 @@ ETExpression AndExpression():
         {
             expression = new ETExpression();
             expression.setOperator(ETExpression.Operator.AND);
-            expression.addExpression(expression1);
-            expression.addExpression(expression2);
+            expression.addSubexpression(expression1);
+            expression.addSubexpression(expression2);
             expression1 = expression;
         }
     )*
