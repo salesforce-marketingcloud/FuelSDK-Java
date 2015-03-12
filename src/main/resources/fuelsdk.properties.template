@@ -44,3 +44,21 @@
 #soapEndpoint=https://webservice.s4.exacttarget.com/Service.asmx
 #soapEndpoint=https://webservice.s6.exacttarget.com/Service.asmx
 #soapEndpoint=https://webservice.s7.exacttarget.com/Service.asmx
+
+#
+# Configuration:
+#
+
+#
+# Disable the SSL certificate Common Name (CN) check in Apache CXF
+# (default false):
+#
+
+#cxfDisableCNCheck=true
+
+#
+# Request the legacy token from the authentication service (default
+# false):
+#
+
+#requestLegacyToken=true
