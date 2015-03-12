@@ -82,6 +82,22 @@ public class ETConfiguration {
         properties.setProperty(key, value);
     }
 
+    public boolean isTrue(String key) {
+        String value = get(key);
+        if (value != null && value.toLowerCase().equals("true")) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isFalse(String key) {
+        String value = get(key);
+        if (value != null && value.toLowerCase().equals("false")) {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * @deprecated
      * Use <code>get("clientId")</code>.

@@ -42,6 +42,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -62,6 +63,8 @@ public class ETClient {
     private static final String DEFAULT_AUTH_ENDPOINT =
             "https://auth.exacttargetapis.com";
     private static final String PATH_REQUESTTOKEN =
+            "/v1/requestToken";
+    private static final String PATH_REQUESTTOKEN_LEGACY =
             "/v1/requestToken?legacy=1";
     private static final String PATH_ENDPOINTS_SOAP =
             "/platform/v1/endpoints/soap";
@@ -240,7 +243,12 @@ public class ETClient {
 
         String requestPayload = gson.toJson(jsonObject);
 
-        ETRestConnection.Response response = authConnection.post(PATH_REQUESTTOKEN, requestPayload);
+        ETRestConnection.Response response = null;
+        if (configuration.isTrue("requestLegacyToken")) {
+            response = authConnection.post(PATH_REQUESTTOKEN_LEGACY, requestPayload);
+        } else {
+            response = authConnection.post(PATH_REQUESTTOKEN, requestPayload);
+        }
 
         if (response.getResponseCode() != HttpURLConnection.HTTP_OK) {
             throw new ETSdkException("error obtaining access token "
@@ -265,7 +273,10 @@ public class ETClient {
         logger.debug("  accessToken: " + this.accessToken);
         this.expiresIn = jsonObject.get("expiresIn").getAsInt();
         logger.debug("  expiresIn: " + this.expiresIn);
-        this.legacyToken = jsonObject.get("legacyToken").getAsString();
+        JsonElement jsonElement = jsonObject.get("legacyToken");
+        if (jsonElement != null) {
+            this.legacyToken = jsonElement.getAsString();
+        }
         logger.debug("  legacyToken: " + this.legacyToken);
         this.refreshToken = jsonObject.get("refreshToken").getAsString();
         logger.debug("  refreshToken: " + this.refreshToken);
