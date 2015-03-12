@@ -1,25 +1,46 @@
 #
-# OAuth client credentials (obtained from App
-# Center at https://appcenter.exacttarget.com):
+# You can authenticate with the Salesforce Marketing Cloud either via
+# OAuth client credentials (clientId/clientSecret) or user login
+# credentials (username/password). Note that OAuth client credentials
+# and user login credentials are mutually exclusive--if you specify
+# clientId/clientSecret, username/password will be ignored. Also,
+# if you specify username/password, you will only be able to access
+# SFMC SOAP API objects, as the SFMC REST API requires OAuth
+# based authentication. Finally, if you specify username/password,
+# you must also specify the soapEndpoint property, as the
+# SDK will be unable to automatically determine the SOAP endpoint.
 #
 
-clientId=
-clientSecret=
+#
+# OAuth client credentials (obtained from App Center at [1]):
+#
+# [1] https://appcenter.exacttarget.com
+#
+
+#clientId=
+#clientSecret=
 
 #
-# API endpoint URLs (the defaults should work in most cases:
+# API user username and password (see [2] for instructions--in
+# particular, be sure to select "API user" and "Grant the
+# user access to the web services" when creating the API user):
+#
+# [2] https://help.exacttarget.com/en-US/documentation/exacttarget/admin/users/
+#
+
+#username=
+#password=
+
+#
+# API endpoint URLs (the defaults should work in most cases--note
+# that soapEndpoint must be specified if using username/password):
 #
 
 #endpoint=
 #authEndpoint=
 #soapEndpoint=
 
-#
-# Configuration:
-#
-
-# Pretty printing:
-
-toStringMultiLine=false
-toStringMultiLineIndentAmount=4
-toStringSpaceAroundEquals=false
+#soapEndpoint=https://webservice.exacttarget.com/Service.asmx
+#soapEndpoint=https://webservice.s4.exacttarget.com/Service.asmx
+#soapEndpoint=https://webservice.s6.exacttarget.com/Service.asmx
+#soapEndpoint=https://webservice.s7.exacttarget.com/Service.asmx
