@@ -42,6 +42,7 @@ import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPFactory;
 
+import org.apache.cxf.configuration.jsse.TLSClientParameters;
 import org.apache.cxf.endpoint.Client;
 import org.apache.cxf.endpoint.Endpoint;
 import org.apache.cxf.frontend.ClientProxy;
@@ -49,6 +50,7 @@ import org.apache.cxf.headers.Header;
 import org.apache.cxf.interceptor.LoggingInInterceptor;
 import org.apache.cxf.interceptor.LoggingOutInterceptor;
 import org.apache.cxf.message.Message;
+import org.apache.cxf.transport.http.HTTPConduit;
 
 import org.apache.log4j.Logger;
 
@@ -73,7 +75,7 @@ public class ETSoapConnection {
     private SOAPFactory soapFactory = null;
     private SOAPElement accessTokenElement = null;
 
-    public ETSoapConnection(String endpoint)
+    public ETSoapConnection(ETClient client, String endpoint)
         throws ETSdkException
     {
         this.endpoint = endpoint;
@@ -90,6 +92,12 @@ public class ETSoapConnection {
             soapFactory = SOAPFactory.newInstance();
             soapClient.getRequestContext().put(Message.ENDPOINT_ADDRESS,
                     endpoint);
+            if (client.getConfiguration().isTrue("cxfDisableCNCheck")) {
+                HTTPConduit conduit = (HTTPConduit) soapClient.getConduit();
+                TLSClientParameters tlsClientParameters = new TLSClientParameters();
+                tlsClientParameters.setDisableCNCheck(true);
+                conduit.setTlsClientParameters(tlsClientParameters);
+            }
             soapClient.getRequestContext().put(Message.ENCODING, "UTF-8");
             LoggingInInterceptor loggingInInterceptor =
                     new LoggingInInterceptor();
@@ -104,10 +112,12 @@ public class ETSoapConnection {
         }
     }
 
-    public ETSoapConnection(String endpoint, String username, String password)
+    public ETSoapConnection(ETClient client, String endpoint,
+                            String username,
+                            String password)
         throws ETSdkException
     {
-        this(endpoint);
+        this(client, endpoint);
 
         try {
             List<Header> headers = new ArrayList<Header>();
@@ -138,10 +148,10 @@ public class ETSoapConnection {
         }
     }
 
-    public ETSoapConnection(String endpoint, String accessToken)
+    public ETSoapConnection(ETClient client, String endpoint, String accessToken)
         throws ETSdkException
     {
-        this(endpoint);
+        this(client, endpoint);
 
         try {
             List<Header> headers = new ArrayList<Header>();

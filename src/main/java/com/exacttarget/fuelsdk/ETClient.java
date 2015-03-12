@@ -140,7 +140,7 @@ public class ETClient {
                 JsonObject jsonObject = jsonParser.parse(responsePayload).getAsJsonObject();
                 soapEndpoint = jsonObject.get("url").getAsString();
             }
-            soapConnection = new ETSoapConnection(soapEndpoint, accessToken);
+            soapConnection = new ETSoapConnection(this, soapEndpoint, accessToken);
         } else {
             if (username == null || password == null) {
                 throw new ETSdkException("must specify either " +
@@ -150,7 +150,7 @@ public class ETClient {
                 throw new ETSdkException("must specify soapEndpoint " +
                         "when authenticating with username/password");
             }
-            soapConnection = new ETSoapConnection(soapEndpoint,
+            soapConnection = new ETSoapConnection(this, soapEndpoint,
                                                   username,
                                                   password);
         }
