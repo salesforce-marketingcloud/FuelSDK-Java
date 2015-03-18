@@ -362,19 +362,29 @@ public class ETClient {
         throws ETSdkException
     {
         //
-        // Get the retrieve method from the superclass of
-        // T (all methods are found in the superclass):
+        // Find the retrieve method:
         //
 
-        Class<T> superClass = (Class<T>) type.getSuperclass();
+        Method retrieve = null;
+        for (Class<T> t = type; t != null; t = (Class<T>) t.getSuperclass()) {
+            try {
+                retrieve = t.getDeclaredMethod("retrieve",
+                                               ETClient.class,  // client
+                                               Class.class,     // type
+                                               Integer.class,   // page
+                                               Integer.class,   // pageSize
+                                               ETFilter.class); // filter
+                if (retrieve != null) {
+                    break;
+                }
+            } catch (Exception ex) {
+                // ignore
+            }
+        }
 
-        Method retrieve = getMethod(superClass,
-                                    "retrieve",
-                                    ETClient.class,  // client
-                                    Class.class,     // type
-                                    Integer.class,   // page
-                                    Integer.class,   // pageSize
-                                    ETFilter.class); // filter
+        if (retrieve == null) {
+            throw new ETSdkException("could not find retrieve method for type " + type);
+        }
 
         ETResponse<T> response = null;
         try {
@@ -386,7 +396,7 @@ public class ETClient {
                                                        pageSize,
                                                        filter);
         } catch (Exception ex) {
-            throw new ETSdkException("error invoking retrieve method of type " + type, ex);
+            throw new ETSdkException("error invoking retrieve method for type " + type, ex);
         }
 
         return response;
@@ -656,53 +666,39 @@ public class ETClient {
         return delete(response.getObjects());
     }
 
+    @SuppressWarnings("unchecked")
     private <T extends ETApiObject> ETResponse<T> createUpdateDelete(String method,
                                                                      List<T> objects)
         throws ETSdkException
     {
+        Class<T> type = (Class<T>) objects.get(0).getClass();
+
         //
-        // Get the appropriate method from the superclass
-        // of T (all methods are found in the superclass):
+        // Find the appropriate method (create, update, or delete):
         //
 
-        @SuppressWarnings("unchecked")
-        Class<T> superClass = (Class<T>) objects.get(0).getClass().getSuperclass();
-
-        Method create = getMethod(superClass, method, ETClient.class, List.class);
-
-        return invokeMethod(create, objects);
-    }
-
-    private <T extends ETApiObject> Method getMethod(Class<T> type, String name, Class<?>... arguments)
-        throws ETSdkException
-    {
-        Method method = null;
-
-        try {
-            method = type.getDeclaredMethod(name, arguments);
-        } catch (Exception ex) {
-            throw new ETSdkException("error getting "
-                                     + name
-                                     + " method of type "
-                                     + type, ex);
+        Method m = null;
+        for (Class<T> t = type; t != null; t = (Class<T>) t.getSuperclass()) {
+            try {
+                m = t.getDeclaredMethod(method, ETClient.class, List.class);
+                if (m != null) {
+                    break;
+                }
+            } catch (Exception ex) {
+                // ignore
+            }
         }
 
-        return method;
-    }
+        if (m == null) {
+            throw new ETSdkException("could not find " + method + " method for type " + type);
+        }
 
-    @SuppressWarnings("unchecked")
-    private <T extends ETApiObject> ETResponse<T> invokeMethod(Method method, List<T> arguments)
-        throws ETSdkException
-    {
         ETResponse<T> response = null;
-
         try {
-            response = (ETResponse<T>) method.invoke(null, this, arguments);
+            // first argument of null means method is static
+            response = (ETResponse<T>) m.invoke(null, this, objects);
         } catch (Exception ex) {
-            throw new ETSdkException("error invoking "
-                                     + method.getName()
-                                     + " method of object "
-                                     + arguments, ex);
+            throw new ETSdkException("error invoking " + method + " method for type " + type, ex);
         }
 
         return response;
