@@ -375,10 +375,10 @@ public abstract class ETRestObject extends ETApiObject {
                 logger.trace("POST " + path);
                 break;
               case PATCH:
-                logger.trace("PATCH " + path);
+                logger.trace("PATCH " + path + "/" + object.getId());
                 break;
               case DELETE:
-                logger.trace("DELETE " + path);
+                logger.trace("DELETE " + path + "/" + object.getId());
                 break;
               default:
                 throw new ETSdkException("invalid method: " + method);
@@ -404,10 +404,10 @@ public abstract class ETRestObject extends ETApiObject {
                 r = connection.post(path, requestPayload);
                 break;
               case PATCH:
-                r = connection.patch(path, requestPayload);
+                r = connection.patch(path + "/" + object.getId(), requestPayload);
                 break;
               case DELETE:
-                r = connection.delete(path);
+                r = connection.delete(path + "/" + object.getId());
                 break;
               default:
                 throw new ETSdkException("invalid method: " + method);
