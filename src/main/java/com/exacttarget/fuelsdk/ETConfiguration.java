@@ -82,7 +82,24 @@ public class ETConfiguration {
         properties.setProperty(key, value);
     }
 
+    public boolean equals(String key, String value) {
+        String v = get(key);
+        if (v == null) {
+            return false;
+        }
+        return v.equals(value);
+    }
+
+    public boolean notEquals(String key, String value) {
+        String v = get(key);
+        if (v == null) {
+            return true;
+        }
+        return !v.equals(value);
+    }
+
     public boolean isTrue(String key) {
+        // XXX deal with the case where key is unspecified
         String value = get(key);
         if (value != null && value.toLowerCase().equals("true")) {
             return true;
@@ -91,6 +108,7 @@ public class ETConfiguration {
     }
 
     public boolean isFalse(String key) {
+        // XXX deal with the case where key is unspecified
         String value = get(key);
         if (value != null && value.toLowerCase().equals("false")) {
             return true;
