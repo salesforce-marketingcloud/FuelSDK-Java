@@ -310,7 +310,9 @@ public class ETAudience extends ETRestObject {
                 result.setResponseMessage(createResult.getStatusMessage());
                 AudienceBuilderRestCall restResponse =
                         (AudienceBuilderRestCall) createResult.getObject();
-                result.setObject((T) deserialize(restResponse.getPayload(), object.getClass()));
+                T o = (T) deserialize(restResponse.getPayload(), object.getClass());
+                o.setClient(client);
+                result.setObject(o);
                 response.addResult(result);
             }
             return response;
@@ -482,6 +484,30 @@ public class ETAudience extends ETRestObject {
         ETResponse<ETDataExtensionRow> response = new ETResponse<ETDataExtensionRow>();
 
 //        if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
+//            AudienceBuilderRestCall restRequest = new AudienceBuilderRestCall();
+//            restRequest.setMethod("POST");
+//            restRequest.setURL("customobjectdata/export");
+//            String tokens[] = filterString.split("=");
+//            assert tokens.length == 2;
+//            tokens[1] = tokens[1].replaceAll("%20", " ");
+//            APIProperty apiProperty = new APIProperty();
+//            apiProperty.setName(tokens[0]);
+//            apiProperty.setValue(tokens[1]);
+//            restRequest.getParameters().add(apiProperty);
+//            ETSoapConnection connection = client.getSoapConnection();
+//            Soap soap = connection.getSoap();
+//            CreateRequest createRequest = new CreateRequest();
+//            createRequest.setOptions(new CreateOptions());
+//            createRequest.getObjects().add(restRequest);
+//            CreateResponse createResponse = soap.create(createRequest);
+//            response.setRequestId(createResponse.getRequestID());
+//            if (createResponse.getOverallStatus().equals("OK")) {
+//                response.setStatus(ETResult.Status.OK);
+//            } else if (createResponse.getOverallStatus().equals("Error")) {
+//                response.setStatus(ETResult.Status.ERROR);
+//            }
+//            response.setResponseCode(createResponse.getOverallStatus());
+//            response.setResponseMessage(createResponse.getOverallStatus());
 //        } else {
             String path = "/data/v1/customobjectdata/export";
             StringBuilder stringBuilder = new StringBuilder(path);
