@@ -50,6 +50,15 @@
 #
 
 #
+# Specifies whether to use the SOAP or REST API for Audience Builder
+# (default rest):
+#
+
+#audienceBuilderApi=rest
+#audienceBuilderApi=soap
+
+
+#
 # Disable the SSL certificate Common Name (CN) check in Apache CXF
 # (default false):
 #

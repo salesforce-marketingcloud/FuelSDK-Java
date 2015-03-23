@@ -40,7 +40,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -681,86 +680,6 @@ public class ETDataExtension extends ETSoapObject {
     {
         List<ETDataExtensionRow> rows = getMatchingRows(filter);
         return delete(rows);
-    }
-
-    public ETResponse<ETDataExtensionRow> export(ETFilter filter,
-                                                 String fileName)
-        throws ETSdkException
-    {
-        return export(filter, fileName, true, false, null);
-    }
-
-    public ETResponse<ETDataExtensionRow> export(ETFilter filter,
-                                                 String fileName,
-                                                 Boolean includeHeader,
-                                                 Boolean compress,
-                                                 Integer encryptionKey)
-        throws ETSdkException
-    {
-        ETClient client = getClient();
-
-        ETResponse<ETDataExtensionRow> response = new ETResponse<ETDataExtensionRow>();
-
-        String path = "/data/v1/customobjectdata/export";
-
-        StringBuilder stringBuilder = new StringBuilder(path);
-
-        if (filter != null) {
-            stringBuilder.append("?" + ETRestObject.toFilterString(filter.getExpression()));
-        }
-
-        path = stringBuilder.toString();
-
-        ETRestConnection connection = client.getRestConnection();
-
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("customerKey", getKey());
-        jsonObject.addProperty("fileName", fileName);
-        if (includeHeader != null) {
-            jsonObject.addProperty("includeHeader", includeHeader);
-        }
-        if (compress != null) {
-            jsonObject.addProperty("compress", compress);
-        }
-        if (encryptionKey != null) {
-            jsonObject.addProperty("encryptionKey", encryptionKey);
-        }
-        Gson gson = connection.getGson();
-        String json = gson.toJson(jsonObject);
-
-        ETRestConnection.Response r = connection.post(path, json);
-
-        response.setRequestId(r.getRequestId());
-        if (r.getResponseCode() >= 200 && r.getResponseCode() <= 299) {
-            response.setStatus(ETResult.Status.OK);
-        } else if (r.getResponseCode() >= 400 && r.getResponseCode() <= 599) {
-            response.setStatus(ETResult.Status.ERROR);
-        }
-        response.setResponseCode(r.getResponseCode().toString());
-        response.setResponseMessage(r.getResponseMessage());
-
-        return response;
-    }
-
-    public ETResponse<ETDataExtensionRow> export(String filter,
-                                                 String fileName)
-        throws ETSdkException
-    {
-        return export(ETFilter.parse(filter), fileName);
-    }
-
-    public ETResponse<ETDataExtensionRow> export(String filter,
-                                                 String fileName,
-                                                 Boolean includeHeader,
-                                                 Boolean compress,
-                                                 Integer encryptionKey)
-        throws ETSdkException
-    {
-        return export(ETFilter.parse(filter),
-                      fileName,
-                      includeHeader,
-                      compress,
-                      encryptionKey);
     }
 
     public void hydrate()

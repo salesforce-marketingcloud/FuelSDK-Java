@@ -40,23 +40,43 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.log4j.Logger;
+
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.exacttarget.fuelsdk.ETClient;
+import com.exacttarget.fuelsdk.ETDataExtension;
+import com.exacttarget.fuelsdk.ETDataExtensionRow;
 import com.exacttarget.fuelsdk.ETExpression;
 import com.exacttarget.fuelsdk.ETFilter;
+import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.ETRestConnection;
 import com.exacttarget.fuelsdk.ETRestObject;
+import com.exacttarget.fuelsdk.ETResult;
 import com.exacttarget.fuelsdk.ETSdkException;
+import com.exacttarget.fuelsdk.ETSoapConnection;
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.RestObject;
+import com.exacttarget.fuelsdk.internal.APIProperty;
+import com.exacttarget.fuelsdk.internal.AudienceBuilderRestCall;
+import com.exacttarget.fuelsdk.internal.CreateOptions;
+import com.exacttarget.fuelsdk.internal.CreateRequest;
+import com.exacttarget.fuelsdk.internal.CreateResponse;
+import com.exacttarget.fuelsdk.internal.CreateResult;
+import com.exacttarget.fuelsdk.internal.Soap;
 
 @RestObject(path = "/internal/v1/AudienceBuilder/Audience",
             primaryKey = "id",
             collection = "entities",
             totalCount = "totalCount")
 public class ETAudience extends ETRestObject {
+    private static Logger logger = Logger.getLogger(ETAudience.class);
+
     @Expose @SerializedName("audienceDefinitionID")
     @ExternalName("id")
     private String id = null;
@@ -246,17 +266,126 @@ public class ETAudience extends ETRestObject {
         audienceBuild.setAppendedAttributeSetIds(appendedAttributeSetIds);
     }
 
+    public static ETResponse<ETAudience> retrieve(ETClient client,
+                                                  Class<ETAudience> type,
+                                                  Integer page,
+                                                  Integer pageSize,
+                                                  ETFilter filter)
+        throws ETSdkException
+    {
+        // XXX pending API fix
+//        if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
+//            throw new ETSdkException("unsupported operation: retrieve");
+//        }
+        return ETRestObject.retrieve(client, type, page, pageSize, filter);
+    }
+
+    public static <T extends ETRestObject> ETResponse<T> create(ETClient client,
+                                                                List<T> objects)
+        throws ETSdkException
+    {
+        Gson gson = new Gson();
+        if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
+            ETResponse<T> response = new ETResponse<T>();
+            ETSoapConnection connection = client.getSoapConnection();
+            Soap soap = connection.getSoap();
+            for (T object : objects) {
+                AudienceBuilderRestCall restRequest = new AudienceBuilderRestCall();
+                restRequest.setMethod("POST");
+                restRequest.setURL("AudienceBuilder/Audience");
+                restRequest.setPayload(gson.toJson(object));
+                CreateRequest createRequest = new CreateRequest();
+                createRequest.setOptions(new CreateOptions());
+                createRequest.getObjects().add(restRequest);
+                CreateResponse createResponse = soap.create(createRequest);
+                CreateResult createResult = createResponse.getResults().get(0);
+                ETResult<T> result = new ETResult<T>();
+                result.setRequestId(createResponse.getRequestID());
+                if (createResponse.getOverallStatus().equals("OK")) {
+                    result.setStatus(ETResult.Status.OK);
+                } else if (createResponse.getOverallStatus().equals("Error")) {
+                    result.setStatus(ETResult.Status.ERROR);
+                }
+                result.setResponseCode(createResult.getStatusCode());
+                result.setResponseMessage(createResult.getStatusMessage());
+                AudienceBuilderRestCall restResponse =
+                        (AudienceBuilderRestCall) createResult.getObject();
+                result.setObject((T) deserialize(restResponse.getPayload(), object.getClass()));
+                response.addResult(result);
+            }
+            return response;
+        }
+        return ETRestObject.create(client, objects);
+    }
+
+    public static <T extends ETRestObject> ETResponse<T> update(ETClient client,
+                                                                List<T> objects)
+        throws ETSdkException
+    {
+        if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
+            throw new ETSdkException("unsupported operation: update");
+        }
+        return ETRestObject.update(client, objects);
+    }
+
+    public static <T extends ETRestObject> ETResponse<T> delete(ETClient client,
+                                                                List<T> objects)
+        throws ETSdkException
+    {
+        if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
+            ETResponse<T> response = new ETResponse<T>();
+            ETSoapConnection connection = client.getSoapConnection();
+            Soap soap = connection.getSoap();
+            for (T object : objects) {
+                AudienceBuilderRestCall restRequest = new AudienceBuilderRestCall();
+                restRequest.setMethod("DELETE");
+                restRequest.setURL("AudienceBuilder/Audience/{audienceDefinitionID}");
+                APIProperty apiProperty = new APIProperty();
+                apiProperty.setName("audienceDefinitionID");
+                apiProperty.setValue(object.getId());
+                restRequest.getParameters().add(apiProperty);
+                CreateRequest createRequest = new CreateRequest();
+                createRequest.setOptions(new CreateOptions());
+                createRequest.getObjects().add(restRequest);
+                CreateResponse createResponse = soap.create(createRequest);
+                ETResult<T> result = new ETResult<T>();
+                result.setRequestId(createResponse.getRequestID());
+                if (createResponse.getOverallStatus().equals("OK")) {
+                    result.setStatus(ETResult.Status.OK);
+                } else if (createResponse.getOverallStatus().equals("Error")) {
+                    result.setStatus(ETResult.Status.ERROR);
+                }
+                result.setResponseCode(createResponse.getOverallStatus());
+                result.setResponseMessage(createResponse.getOverallStatus());
+                response.addResult(result);
+            }
+            return response;
+        }
+        return ETRestObject.delete(client, objects);
+    }
+
     public static Integer retrieveAudienceCount(ETClient client, String filter)
         throws ETSdkException
     {
         AudienceCountsRequest request = new AudienceCountsRequest();
         request.addFilterDefinition(toFilterDefinition(ETFilter.parse(filter).getExpression()));
-        ETRestConnection connection = client.getRestConnection();
         Gson gson = new Gson();
         String requestPayload = gson.toJson(request);
-        ETRestConnection.Response r = connection.post("/internal/v1/AudienceBuilder/AudienceCounts",
-                                                      requestPayload);
-        String responsePayload = r.getResponsePayload();
+        String responsePayload = null;
+        if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
+            responsePayload = ETAudience.soapRestCall(client,
+                                                      "POST",
+                                                      "AudienceBuilder/AudienceCounts",
+                                                      requestPayload,
+                                                      null,
+                                                      null,
+                                                      new ETFilter());
+        } else {
+            ETRestConnection connection = client.getRestConnection();
+            ETRestConnection.Response r = connection.post("/internal/v1/AudienceBuilder/AudienceCounts",
+                                                          requestPayload);
+            responsePayload = r.getResponsePayload();
+        }
         AudienceCountsResponse response = gson.fromJson(responsePayload, AudienceCountsResponse.class);
         return response.getCount();
     }
@@ -266,23 +395,137 @@ public class ETAudience extends ETRestObject {
     {
         PublishRequest request = new PublishRequest();
         request.setId(audienceBuilds.get(0).getId());
-        ETRestConnection connection = getClient().getRestConnection();
         Gson gson = new Gson();
         String requestPayload = gson.toJson(request);
-        ETRestConnection.Response r = connection.post("/internal/v1/AudienceBuilder/Publish",
-                                                      requestPayload);
-        String responsePayload = r.getResponsePayload();
+        String responsePayload = null;
+        if (getClient().getConfiguration().equals("audienceBuilderApi", "soap")) {
+            responsePayload = ETAudience.soapRestCall(getClient(),
+                                                      "POST",
+                                                      "AudienceBuilder/Publish",
+                                                      requestPayload,
+                                                      null,
+                                                      null,
+                                                      new ETFilter());
+        } else {
+            ETRestConnection connection = getClient().getRestConnection();
+            ETRestConnection.Response r = connection.post("/internal/v1/AudienceBuilder/Publish",
+                                                          requestPayload);
+            responsePayload = r.getResponsePayload();
+        }
         publishResponse = gson.fromJson(responsePayload, PublishResponse.class);
     }
 
     public void updatePublishStatus()
         throws ETSdkException
     {
-        ETRestConnection connection = getClient().getRestConnection();
         Gson gson = new Gson();
-        ETRestConnection.Response r = connection.get("/internal/v1/AudienceBuilder/Publish/" + publishResponse.getId());
-        String responsePayload = r.getResponsePayload();
+        String responsePayload = null;
+        if (getClient().getConfiguration().equals("audienceBuilderApi", "soap")) {
+            ETExpression expression = new ETExpression();
+            expression.setProperty("audienceBuilderPublishId");
+            expression.setOperator(ETExpression.Operator.EQUALS);
+            expression.setValue(publishResponse.getId());
+            ETFilter filter = new ETFilter();
+            filter.setExpression(expression);
+            responsePayload = ETAudience.soapRestCall(getClient(),
+                                                      "GET",
+                                                      "AudienceBuilder/Publish/{audienceBuilderPublishId}",
+                                                      null,
+                                                      null,
+                                                      null,
+                                                      filter);
+        } else {
+            ETRestConnection connection = getClient().getRestConnection();
+            ETRestConnection.Response r = connection.get("/internal/v1/AudienceBuilder/Publish/" + publishResponse.getId());
+            responsePayload = r.getResponsePayload();
+        }
         publishResponse = gson.fromJson(responsePayload, PublishResponse.class);
+    }
+
+    public static ETResponse<ETDataExtensionRow> export(ETClient client,
+                                                        ETDataExtension dataExtension,
+                                                        ETFilter filter,
+                                                        String fileName)
+        throws ETSdkException
+    {
+        return export(client, dataExtension, filter, fileName, true, false, null);
+    }
+
+    public static ETResponse<ETDataExtensionRow> export(ETClient client,
+                                                        ETDataExtension dataExtension,
+                                                        ETFilter filter,
+                                                        String fileName,
+                                                        Boolean includeHeader,
+                                                        Boolean compress,
+                                                        Integer encryptionKey)
+        throws ETSdkException
+    {
+        Gson gson = new Gson();
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("customerKey", dataExtension.getKey());
+        jsonObject.addProperty("fileName", fileName);
+        if (includeHeader != null) {
+            jsonObject.addProperty("includeHeader", includeHeader);
+        }
+        if (compress != null) {
+            jsonObject.addProperty("compress", compress);
+        }
+        if (encryptionKey != null) {
+            jsonObject.addProperty("encryptionKey", encryptionKey);
+        }
+
+        String json = gson.toJson(jsonObject);
+
+        String filterString = ETRestObject.toFilterString(filter.getExpression());
+
+        ETResponse<ETDataExtensionRow> response = new ETResponse<ETDataExtensionRow>();
+
+//        if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
+//        } else {
+            String path = "/data/v1/customobjectdata/export";
+            StringBuilder stringBuilder = new StringBuilder(path);
+            if (filter != null) {
+                stringBuilder.append("?" + filterString);
+            }
+            path = stringBuilder.toString();
+            ETRestConnection connection = client.getRestConnection();
+            ETRestConnection.Response r = connection.post(path, json);
+            response.setRequestId(r.getRequestId());
+            if (r.getResponseCode() >= 200 && r.getResponseCode() <= 299) {
+                response.setStatus(ETResult.Status.OK);
+            } else if (r.getResponseCode() >= 400 && r.getResponseCode() <= 599) {
+                response.setStatus(ETResult.Status.ERROR);
+            }
+            response.setResponseCode(r.getResponseCode().toString());
+            response.setResponseMessage(r.getResponseMessage());
+//        }
+
+        return response;
+    }
+
+    public static ETResponse<ETDataExtensionRow> export(ETClient client,
+                                                        ETDataExtension dataExtension,
+                                                        String filter,
+                                                        String fileName)
+        throws ETSdkException
+    {
+        return export(client, dataExtension, ETFilter.parse(filter), fileName);
+    }
+
+    public static ETResponse<ETDataExtensionRow> export(ETClient client,
+                                                        ETDataExtension dataExtension,
+                                                        String filter,
+                                                        String fileName,
+                                                        Boolean includeHeader,
+                                                        Boolean compress,
+                                                        Integer encryptionKey)
+        throws ETSdkException
+    {
+        return export(client, dataExtension, ETFilter.parse(filter), fileName,
+                      includeHeader,
+                      compress,
+                      encryptionKey);
     }
 
     public static FilterDefinition toFilterDefinition(ETExpression expression)
@@ -469,6 +712,187 @@ public class ETAudience extends ETRestObject {
         }
 
         return stringBuilder.toString();
+    }
+
+    protected static String soapRestCall(ETClient client,
+                                         String method,
+                                         String path,
+                                         String payload,
+                                         Integer page,
+                                         Integer pageSize,
+                                         ETFilter filter)
+        throws ETSdkException
+    {
+        // XXX very basic.. copy and paste abounds here..
+
+        ETSoapConnection connection = client.getSoapConnection();
+
+        Soap soap = connection.getSoap();
+
+        AudienceBuilderRestCall restRequest = new AudienceBuilderRestCall();
+        restRequest.setMethod(method);
+        restRequest.setURL(path);
+        if (payload != null) {
+            restRequest.setPayload(payload);
+        }
+
+        ETExpression expression = filter.getExpression();
+        // XXX
+        if (expression.getOperator() == ETExpression.Operator.EQUALS) {
+            APIProperty apiProperty = new APIProperty();
+            apiProperty.setName(expression.getProperty());
+            apiProperty.setValue(expression.getValue());
+            restRequest.getParameters().add(apiProperty);
+        }
+
+        CreateRequest createRequest = new CreateRequest();
+        createRequest.setOptions(new CreateOptions());
+        createRequest.getObjects().add(restRequest);
+
+        CreateResponse createResponse = soap.create(createRequest);
+        AudienceBuilderRestCall restResponse = (AudienceBuilderRestCall)
+                createResponse.getResults().get(0).getObject();
+
+        return restResponse.getPayload();
+    }
+
+    protected static <T extends ETRestObject> ETResponse<T> soapRestCall(ETClient client,
+                                                                         String method,
+                                                                         String path,
+                                                                         String payload,
+                                                                         Integer page,
+                                                                         Integer pageSize,
+                                                                         ETFilter filter,
+                                                                         Class<T> type)
+        throws ETSdkException
+    {
+        ETResponse<T> response = new ETResponse<T>();
+
+        ETSoapConnection connection = client.getSoapConnection();
+
+        Soap soap = connection.getSoap();
+
+        AudienceBuilderRestCall restRequest = new AudienceBuilderRestCall();
+        restRequest.setMethod(method);
+        restRequest.setURL(path);
+        if (payload != null) {
+            restRequest.setPayload(payload);
+        }
+        if (page != null) {
+            APIProperty apiProperty = new APIProperty();
+            apiProperty.setName("$page");
+            apiProperty.setValue(page.toString());
+            restRequest.getParameters().add(apiProperty);
+        }
+        if (pageSize != null) {
+            APIProperty apiProperty = new APIProperty();
+            apiProperty.setName("$pageSize");
+            apiProperty.setValue(pageSize.toString());
+            restRequest.getParameters().add(apiProperty);
+        }
+
+        ETExpression expression = filter.getExpression();
+        if (expression.getOperator() != null) {
+            java.lang.reflect.Method toFilterString = null;
+            try {
+                toFilterString = type.getMethod("toFilterString", ETExpression.class);
+            } catch (NoSuchMethodException ex) {
+                // there's no toFilterString method on TYPE
+            } catch (SecurityException ex) {
+                throw new ETSdkException(ex);
+            }
+
+            if (toFilterString != null) {
+                try {
+                    String filterString = (String) toFilterString.invoke(null, expression);
+                    String tokens[] = filterString.split("=");
+                    assert tokens.length == 2;
+                    APIProperty apiProperty = new APIProperty();
+                    apiProperty.setName(tokens[0]);
+                    apiProperty.setValue(tokens[1]);
+                    restRequest.getParameters().add(apiProperty);
+                } catch (Exception ex) {
+                    throw new ETSdkException(ex);
+                }
+            }
+        }
+
+        CreateRequest createRequest = new CreateRequest();
+        createRequest.setOptions(new CreateOptions());
+        createRequest.getObjects().add(restRequest);
+
+        CreateResponse createResponse = soap.create(createRequest);
+        response.setRequestId(createResponse.getRequestID());
+        if (createResponse.getOverallStatus().equals("OK")) {
+            response.setStatus(ETResult.Status.OK);
+        } else if (createResponse.getOverallStatus().equals("Error")) {
+            response.setStatus(ETResult.Status.ERROR);
+        }
+        response.setResponseCode(createResponse.getOverallStatus());
+        response.setResponseMessage(createResponse.getOverallStatus());
+
+        AudienceBuilderRestCall restResponse = (AudienceBuilderRestCall)
+                createResponse.getResults().get(0).getObject();
+
+        ETResponse<T> r = deserialize(restResponse.getPayload(), type, "totalCount", "entities");
+        response.setPage(r.getPage());
+        response.setPageSize(r.getPageSize());
+        response.setTotalCount(r.getTotalCount());
+        response.setMoreResults(r.hasMoreResults());
+        for (ETResult<T> result : r.getResults()) {
+            response.addResult(result);
+        }
+
+        return response;
+    }
+
+    public static <T extends ETRestObject> T deserialize(String payload,
+                                                         Class<T> type)
+    {
+        Gson gson = new Gson();
+        JsonParser jsonParser = new JsonParser();
+        JsonObject jsonObject = jsonParser.parse(payload).getAsJsonObject();
+        T object = gson.fromJson(jsonObject, type);
+        //object.setClient(client); // XXX
+        return object;
+    }
+
+    public static <T extends ETRestObject> ETResponse<T> deserialize(String payload,
+                                                                     Class<T> type,
+                                                                     String totalCount,
+                                                                     String collection)
+    {
+        ETResponse<T> response = new ETResponse<T>();
+
+        JsonParser jsonParser = new JsonParser();
+        JsonObject jsonObject = jsonParser.parse(payload).getAsJsonObject();
+
+        if (jsonObject.get("page") != null) {
+            response.setPage(jsonObject.get("page").getAsInt());
+            logger.trace("page = " + response.getPage());
+            response.setPageSize(jsonObject.get("pageSize").getAsInt());
+            logger.trace("pageSize = " + response.getPageSize());
+            response.setTotalCount(jsonObject.get(totalCount).getAsInt());
+            logger.trace("totalCount = " + response.getTotalCount());
+
+            if (response.getPage() * response.getPageSize() < response.getTotalCount()) {
+                response.setMoreResults(true);
+            }
+
+            JsonArray elements = jsonObject.get(collection).getAsJsonArray();
+
+            for (JsonElement element : elements) {
+                ETResult<T> result = new ETResult<T>();
+                result.setObject(deserialize(element.toString(), type));
+                response.addResult(result);
+            }
+        } else {
+            ETResult<T> result = new ETResult<T>();
+            result.setObject(deserialize(jsonObject.toString(), type));
+            response.addResult(result);
+        }
+
+        return response;
     }
 
     //

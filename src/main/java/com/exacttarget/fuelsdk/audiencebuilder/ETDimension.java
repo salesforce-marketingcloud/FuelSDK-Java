@@ -38,7 +38,10 @@ import java.util.List;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETExpression;
+import com.exacttarget.fuelsdk.ETFilter;
+import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.ETRestObject;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.annotations.ExternalName;
@@ -125,6 +128,63 @@ public class ETDimension extends ETRestObject {
 
     public List<ETDimensionValue> getValues() {
         return values;
+    }
+
+    public static ETResponse<ETDimension> retrieve(ETClient client,
+                                                   Class<ETDimension> type,
+                                                   Integer page,
+                                                   Integer pageSize,
+                                                   ETFilter filter)
+        throws ETSdkException
+    {
+        if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
+            ETExpression expression = filter.getExpression();
+            if (expression.getOperator() == ETExpression.Operator.EQUALS &&
+                expression.getProperty().equals("id"))
+            {
+                // XXX pending API fix
+//                return ETAudience.soapRestCall(client,
+//                                               "GET",
+//                                               "AudienceBuilder/Dimension/{dimensionID}",
+//                                               null,
+//                                               page,
+//                                               pageSize,
+//                                               filter,
+//                                               ETDimension.class);
+                return ETRestObject.retrieve(client, type, page, pageSize, filter);
+            } else {
+                return ETAudience.soapRestCall(client,
+                                               "GET",
+                                               "AudienceBuilder/Dimension",
+                                               null,
+                                               page,
+                                               pageSize,
+                                               filter,
+                                               ETDimension.class);
+            }
+        }
+        return ETRestObject.retrieve(client, type, page, pageSize, filter);
+    }
+
+    public static <T extends ETRestObject> ETResponse<T> create(ETClient client,
+                                                                List<T> objects)
+        throws ETSdkException
+    {
+        throw new ETSdkException("unsupported operation: create");
+    }
+
+    public static <T extends ETRestObject> ETResponse<T> update(ETClient client,
+                                                                List<T> objects)
+        throws ETSdkException
+    {
+        throw new ETSdkException("unsupported operation: update");
+    }
+
+    public static <T extends ETRestObject> ETResponse<T> delete(ETClient client,
+                                                                List<T> objects)
+        throws ETSdkException
+    {
+        throw new ETSdkException("unsupported operation: delete");
     }
 
     public static String toFilterString(ETExpression expression)

@@ -4069,6 +4069,20 @@
           </extension>
         </complexContent>
       </complexType>
+      <complexType name="AudienceBuilderRestCall" ETOnly="true">
+        <complexContent>
+          <extension base="tns:APIObject">
+            <sequence>
+              <element name="URL" minOccurs="1" maxOccurs="1" type="xsd:string" />
+              <element name="Method" minOccurs="1" maxOccurs="1" type="xsd:string" />
+              <element name="Parameters" type="tns:APIProperty" minOccurs="0" maxOccurs="unbounded"></element>
+              <element name="Payload" minOccurs="0" maxOccurs="1" type="xsd:string" />
+              <element name="DataVersion" minOccurs="0" maxOccurs="1" type="xsd:string" />
+              <element name="DateKind" minOccurs="0" maxOccurs="1" type="xsd:string" />
+            </sequence>
+          </extension>
+        </complexContent>
+      </complexType>
     </schema>
   </types>
   <message name="createRequest">

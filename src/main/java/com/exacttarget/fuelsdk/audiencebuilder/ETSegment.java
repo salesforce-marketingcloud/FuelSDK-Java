@@ -38,11 +38,12 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import com.exacttarget.fuelsdk.ETFilter;
+import com.exacttarget.fuelsdk.ETRestObject;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.audiencebuilder.ETAudience.FilterDefinition;
 
-public class ETSegment implements Comparable<ETSegment> {
+public class ETSegment extends ETRestObject implements Comparable<ETSegment> {
     @Expose @SerializedName("audienceSegmentDefinitionID")
     @ExternalName("id")
     private String id = null;
@@ -74,12 +75,22 @@ public class ETSegment implements Comparable<ETSegment> {
 
     private String persistenceId = null;
 
+    @Override
     public String getId() {
         return id;
     }
 
+    @Override
+    public void setId(String id) {
+        this.id = id;
+    }
+
     public String getAudienceId() {
         return audienceId;
+    }
+
+    public void setAudienceId(String audienceId) {
+        this.audienceId = audienceId;
     }
 
     public String getName() {

@@ -67,7 +67,7 @@ public class ETAudienceBuilderTest {
     }
 
     @Test
-    public void _01_TestRetrieveAllDimensions()
+    public void _01_TestRetrieveDimensions()
         throws ETSdkException
     {
         if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
@@ -75,7 +75,11 @@ public class ETAudienceBuilderTest {
         }
         ETResponse<ETDimension> response = client.retrieve(ETDimension.class);
         assertNotNull(response.getRequestId());
-        assertEquals("200", response.getResponseCode());
+        if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
+            assertEquals("OK", response.getResponseCode());
+        } else {
+            assertEquals("200", response.getResponseCode());
+        }
         assertEquals("OK", response.getResponseMessage());
         assertEquals((Integer) 1, response.getPage());
         assertEquals((Integer) 50, response.getPageSize());
@@ -84,7 +88,7 @@ public class ETAudienceBuilderTest {
     }
 
     @Test
-    public void _02_TestRetrieveAllFilteredEquals()
+    public void _02_TestRetrieveDimensionsFilteredEquals()
         throws ETSdkException
     {
         if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
@@ -93,7 +97,11 @@ public class ETAudienceBuilderTest {
         ETResponse<ETDimension> response = client.retrieve(ETDimension.class,
                                                            "count = 3");
         assertNotNull(response.getRequestId());
-        assertEquals("200", response.getResponseCode());
+        if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
+            assertEquals("OK", response.getResponseCode());
+        } else {
+            assertEquals("200", response.getResponseCode());
+        }
         assertEquals("OK", response.getResponseMessage());
         assertEquals((Integer) 1, response.getPage());
         assertEquals((Integer) 10, response.getPageSize());
@@ -102,7 +110,7 @@ public class ETAudienceBuilderTest {
     }
 
     @Test
-    public void _03_TestRetrieveAllFilteredNotEquals()
+    public void _03_TestRetrieveDimensionsFilteredNotEquals()
         throws ETSdkException
     {
         if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
@@ -111,7 +119,11 @@ public class ETAudienceBuilderTest {
         ETResponse<ETDimension> response = client.retrieve(ETDimension.class,
                                                            "count != 3");
         assertNotNull(response.getRequestId());
-        assertEquals("200", response.getResponseCode());
+        if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
+            assertEquals("OK", response.getResponseCode());
+        } else {
+            assertEquals("200", response.getResponseCode());
+        }
         assertEquals("OK", response.getResponseMessage());
         assertEquals((Integer) 1, response.getPage());
         assertEquals((Integer) 50, response.getPageSize());
@@ -120,7 +132,7 @@ public class ETAudienceBuilderTest {
     }
 
     @Test
-    public void _04_TestRetrieveAllFilteredLessThan()
+    public void _04_TestRetrieveDimensionsFilteredLessThan()
         throws ETSdkException
     {
         if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
@@ -129,7 +141,11 @@ public class ETAudienceBuilderTest {
         ETResponse<ETDimension> response = client.retrieve(ETDimension.class,
                                                            "count < 3");
         assertNotNull(response.getRequestId());
-        assertEquals("200", response.getResponseCode());
+        if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
+            assertEquals("OK", response.getResponseCode());
+        } else {
+            assertEquals("200", response.getResponseCode());
+        }
         assertEquals("OK", response.getResponseMessage());
         assertEquals((Integer) 1, response.getPage());
         assertEquals((Integer) 41, response.getPageSize());
@@ -138,7 +154,7 @@ public class ETAudienceBuilderTest {
     }
 
     @Test
-    public void _05_TestRetrieveAllFilteredLessThanOrEquals()
+    public void _05_TestRetrieveDimensionsFilteredLessThanOrEquals()
         throws ETSdkException
     {
         if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
@@ -147,7 +163,11 @@ public class ETAudienceBuilderTest {
         ETResponse<ETDimension> response = client.retrieve(ETDimension.class,
                                                            "count <= 3");
         assertNotNull(response.getRequestId());
-        assertEquals("200", response.getResponseCode());
+        if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
+            assertEquals("OK", response.getResponseCode());
+        } else {
+            assertEquals("200", response.getResponseCode());
+        }
         assertEquals("OK", response.getResponseMessage());
         assertEquals((Integer) 1, response.getPage());
         assertEquals((Integer) 50, response.getPageSize());
@@ -156,7 +176,7 @@ public class ETAudienceBuilderTest {
     }
 
     @Test
-    public void _06_TestRetrieveAllFilteredGreaterThan()
+    public void _06_TestRetrieveDimensionsFilteredGreaterThan()
         throws ETSdkException
     {
         if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
@@ -165,7 +185,11 @@ public class ETAudienceBuilderTest {
         ETResponse<ETDimension> response = client.retrieve(ETDimension.class,
                                                            "count > 3");
         assertNotNull(response.getRequestId());
-        assertEquals("200", response.getResponseCode());
+        if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
+            assertEquals("OK", response.getResponseCode());
+        } else {
+            assertEquals("200", response.getResponseCode());
+        }
         assertEquals("OK", response.getResponseMessage());
         assertEquals((Integer) 1, response.getPage());
         assertEquals((Integer) 50, response.getPageSize());
@@ -174,7 +198,7 @@ public class ETAudienceBuilderTest {
     }
 
     @Test
-    public void _07_TestRetrieveAllFilteredGreaterThanOrEquals()
+    public void _07_TestRetrieveDimensionsFilteredGreaterThanOrEquals()
         throws ETSdkException
     {
         if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
@@ -183,7 +207,11 @@ public class ETAudienceBuilderTest {
         ETResponse<ETDimension> response = client.retrieve(ETDimension.class,
                                                            "count >= 3");
         assertNotNull(response.getRequestId());
-        assertEquals("200", response.getResponseCode());
+        if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
+            assertEquals("OK", response.getResponseCode());
+        } else {
+            assertEquals("200", response.getResponseCode());
+        }
         assertEquals("OK", response.getResponseMessage());
         assertEquals((Integer) 1, response.getPage());
         assertEquals((Integer) 50, response.getPageSize());
@@ -192,7 +220,7 @@ public class ETAudienceBuilderTest {
     }
 
     @Test
-    public void _08_TestRetrieveAllFilteredIn1()
+    public void _08_TestRetrieveDimensionsFilteredIn1()
         throws ETSdkException
     {
         if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
@@ -201,7 +229,11 @@ public class ETAudienceBuilderTest {
         ETResponse<ETDimension> response = client.retrieve(ETDimension.class,
                                                            "count in (3, 6)");
         assertNotNull(response.getRequestId());
-        assertEquals("200", response.getResponseCode());
+        if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
+            assertEquals("OK", response.getResponseCode());
+        } else {
+            assertEquals("200", response.getResponseCode());
+        }
         assertEquals("OK", response.getResponseMessage());
         assertEquals((Integer) 1, response.getPage());
         assertEquals((Integer) 22, response.getPageSize());
@@ -210,7 +242,7 @@ public class ETAudienceBuilderTest {
     }
 
     @Test
-    public void _09_TestRetrieveAllFilteredIn2()
+    public void _09_TestRetrieveDimensionsFilteredIn2()
         throws ETSdkException
     {
         if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
@@ -219,7 +251,11 @@ public class ETAudienceBuilderTest {
         ETResponse<ETDimension> response = client.retrieve(ETDimension.class,
                                                            "count in (3, 6, 9)");
         assertNotNull(response.getRequestId());
-        assertEquals("200", response.getResponseCode());
+        if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
+            assertEquals("OK", response.getResponseCode());
+        } else {
+            assertEquals("200", response.getResponseCode());
+        }
         assertEquals("OK", response.getResponseMessage());
         assertEquals((Integer) 1, response.getPage());
         assertEquals((Integer) 28, response.getPageSize());
@@ -228,7 +264,7 @@ public class ETAudienceBuilderTest {
     }
 
     @Test
-    public void _10_TestRetrieveAllFilteredIn3()
+    public void _10_TestRetrieveDimensionsFilteredIn3()
         throws ETSdkException
     {
         if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
@@ -237,7 +273,11 @@ public class ETAudienceBuilderTest {
         ETResponse<ETDimension> response = client.retrieve(ETDimension.class,
                                                            "count in (3, 6, 9, 12)");
         assertNotNull(response.getRequestId());
-        assertEquals("200", response.getResponseCode());
+        if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
+            assertEquals("OK", response.getResponseCode());
+        } else {
+            assertEquals("200", response.getResponseCode());
+        }
         assertEquals("OK", response.getResponseMessage());
         assertEquals((Integer) 1, response.getPage());
         assertEquals((Integer) 40, response.getPageSize());
@@ -248,7 +288,7 @@ public class ETAudienceBuilderTest {
     private static String age = null;
 
     @Test
-    public void _11_TestRetrieveSingle1()
+    public void _11_TestRetrieveDimension1()
         throws ETSdkException
     {
         if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
@@ -261,6 +301,12 @@ public class ETAudienceBuilderTest {
 
         ETResponse<ETDimension> response = client.retrieve(ETDimension.class,
                                                            "id=528"); // age
+//        if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
+//            assertEquals("OK", response.getResponseCode());
+//        } else {
+            assertEquals("200", response.getResponseCode());
+//        }
+        assertEquals("OK", response.getResponseMessage());
         assertEquals(1, response.getObjects().size());
         ETDimension dimension = response.getObject();
         assertEquals("528", dimension.getId());
@@ -314,7 +360,7 @@ public class ETAudienceBuilderTest {
     private static String gender = null;
 
     @Test
-    public void _12_TestRetrieveSingle2()
+    public void _12_TestRetrieveDimension2()
         throws ETSdkException
     {
         if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
@@ -327,6 +373,12 @@ public class ETAudienceBuilderTest {
 
         ETResponse<ETDimension> response = client.retrieve(ETDimension.class,
                                                            "id=278"); // gender
+//        if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
+//            assertEquals("OK", response.getResponseCode());
+//        } else {
+            assertEquals("200", response.getResponseCode());
+//        }
+        assertEquals("OK", response.getResponseMessage());
         assertEquals(1, response.getObjects().size());
         ETDimension dimension = response.getObject();
         assertEquals("278", dimension.getId());
@@ -364,10 +416,34 @@ public class ETAudienceBuilderTest {
         assertEquals((Integer) 2513502, audienceCount);
     }
 
+    private static Integer totalCount = null;
+
+    //@Test
+    public void _14_TestRetrieveAudiences1()
+        throws ETSdkException
+    {
+        if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
+            return;
+        }
+        ETResponse<ETAudience> response = client.retrieve(ETAudience.class);
+        assertNotNull(response.getRequestId());
+        if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
+            assertEquals("OK", response.getResponseCode());
+        } else {
+            assertEquals("200", response.getResponseCode());
+        }
+        assertEquals("OK", response.getResponseMessage());
+        assertEquals((Integer) 1, response.getPage());
+        assertEquals((Integer) 50, response.getPageSize());
+        // totalCount changes frequently, so we don't check it
+        totalCount = response.getTotalCount();
+        assertTrue(response.hasMoreResults());
+    }
+
     private static String id = null;
 
     @Test
-    public void _14_TestCreateAudience()
+    public void _15_TestCreateAudience()
         throws ETSdkException
     {
         if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
@@ -388,16 +464,148 @@ public class ETAudienceBuilderTest {
         assertEquals(1, response.getResults().size());
         ETResult<ETAudience> result = response.getResult();
         assertNotNull(result.getRequestId());
-        assertEquals("201", result.getResponseCode());
-        assertEquals("Created", result.getResponseMessage());
+        if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
+            assertEquals("OK", result.getResponseCode());
+            assertEquals("Audience created.", result.getResponseMessage());
+        } else {
+            assertEquals("201", result.getResponseCode());
+            assertEquals("Created", result.getResponseMessage());
+        }
         assertNull(result.getErrorCode());
         assertNotNull(result.getObjectId());
         // save the ID for use in the next test
         id = result.getObjectId();
     }
 
+    //@Test
+    public void _16_TestRetrieveAudiences2()
+        throws ETSdkException
+    {
+        if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
+            return;
+        }
+        ETResponse<ETAudience> response = client.retrieve(ETAudience.class);
+        assertNotNull(response.getRequestId());
+        if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
+            assertEquals("OK", response.getResponseCode());
+        } else {
+            assertEquals("200", response.getResponseCode());
+        }
+        assertEquals("OK", response.getResponseMessage());
+        assertEquals((Integer) 1, response.getPage());
+        assertEquals((Integer) 50, response.getPageSize());
+        assertEquals((Integer) (totalCount + 1), response.getTotalCount());
+        assertTrue(response.hasMoreResults());
+    }
+
+    //@Test
+    public void _17_TestRetrieveAudience1()
+        throws ETSdkException
+    {
+        if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
+            return;
+        }
+        ETResponse<ETAudience> response = client.retrieve(ETAudience.class,
+                                                          "id=" + id);
+        assertNotNull(response.getRequestId());
+        if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
+            assertEquals("OK", response.getResponseCode());
+        } else {
+            assertEquals("200", response.getResponseCode());
+        }
+        assertEquals("OK", response.getResponseMessage());
+        assertEquals(1, response.getObjects().size());
+        ETAudience audience = response.getObject();
+        assertEquals(id, audience.getId());
+        assertEquals("people age 25-34", audience.getName());
+        assertNull(audience.getDescription());
+        assertEquals("people age 25-34", audience.getAudienceCode());
+        assertEquals((Integer) 0, audience.getPublishCount());
+        assertNotNull(audience.getPublishCountDate());
+        assertEquals(1, audience.getSegments().size());
+        ETSegment segment = audience.getSegments().get(0);
+        assertNotNull(segment.getId());
+        assertEquals(audience.getId(), segment.getAudienceId());
+        assertEquals("Remainder", segment.getName());
+        assertEquals((Integer) Integer.MAX_VALUE, segment.getPriority());
+        assertEquals((Integer) 0, segment.getCap());
+        assertEquals((Integer) 0, segment.getCapPercent());
+        assertEquals(true, segment.getIncludeInPublish());
+    }
+
+    //@Test
+    public void _18_TestUpdateAudience()
+        throws ETSdkException
+    {
+        if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
+            return;
+        }
+        ETResponse<ETAudience> response = client.update(ETAudience.class,
+                                                        "id=" + id,
+                                                        "description='people age 25-34'");
+        assertNotNull(response.getRequestId());
+        if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
+            assertEquals("OK", response.getResponseCode());
+        } else {
+            assertEquals("200", response.getResponseCode());
+        }
+        assertEquals("OK", response.getResponseMessage());
+        assertEquals(1, response.getObjects().size());
+        ETAudience audience = response.getObject();
+        assertEquals(id, audience.getId());
+        assertEquals("people age 25-34", audience.getName());
+        assertEquals("people age 25-34", audience.getDescription());
+        assertEquals("people age 25-34", audience.getAudienceCode());
+        assertEquals((Integer) 0, audience.getPublishCount());
+        assertNotNull(audience.getPublishCountDate());
+        assertEquals(1, audience.getSegments().size());
+        ETSegment segment = audience.getSegments().get(0);
+        assertNotNull(segment.getId());
+        assertEquals(audience.getId(), segment.getAudienceId());
+        assertEquals("Remainder", segment.getName());
+        assertEquals((Integer) Integer.MAX_VALUE, segment.getPriority());
+        assertEquals((Integer) 0, segment.getCap());
+        assertEquals((Integer) 0, segment.getCapPercent());
+        assertEquals(true, segment.getIncludeInPublish());
+    }
+
+    //@Test
+    public void _19_TestRetrieveAudience2()
+        throws ETSdkException
+    {
+        if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
+            return;
+        }
+        ETResponse<ETAudience> response = client.retrieve(ETAudience.class,
+                                                          "id=" + id);
+        assertNotNull(response.getRequestId());
+        if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
+            assertEquals("OK", response.getResponseCode());
+        } else {
+            assertEquals("200", response.getResponseCode());
+        }
+        assertEquals("OK", response.getResponseMessage());
+        assertEquals(1, response.getObjects().size());
+        ETAudience audience = response.getObject();
+        assertEquals(id, audience.getId());
+        assertEquals("people age 25-34", audience.getName());
+        assertEquals("people age 25-34", audience.getDescription());
+        assertEquals("people age 25-34", audience.getAudienceCode());
+        assertEquals((Integer) 0, audience.getPublishCount());
+        assertNotNull(audience.getPublishCountDate());
+        assertEquals(1, audience.getSegments().size());
+        ETSegment segment = audience.getSegments().get(0);
+        assertNotNull(segment.getId());
+        assertEquals(audience.getId(), segment.getAudienceId());
+        assertEquals("Remainder", segment.getName());
+        assertEquals((Integer) Integer.MAX_VALUE, segment.getPriority());
+        assertEquals((Integer) 0, segment.getCap());
+        assertEquals((Integer) 0, segment.getCapPercent());
+        assertEquals(true, segment.getIncludeInPublish());
+    }
+
     @Test
-    public void _15_TestPublishAudience()
+    public void _20_TestPublishAudience()
         throws ETSdkException
     {
         if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
@@ -425,10 +633,49 @@ public class ETAudienceBuilderTest {
                     + " copied.");
         } while (!audience.getStatus().equals("READY") &&
                  !audience.getStatus().equals("ERROR"));
+
+        // XXX this doesn't actually test anything..
+    }
+
+    //@Test
+    public void _21_TestRetrieveAudience3()
+        throws ETSdkException
+    {
+        if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
+            return;
+        }
+        ETResponse<ETAudience> response = client.retrieve(ETAudience.class,
+                                                          "id=" + id);
+        assertNotNull(response.getRequestId());
+        if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
+            assertEquals("OK", response.getResponseCode());
+        } else {
+            assertEquals("200", response.getResponseCode());
+        }
+        assertEquals("OK", response.getResponseMessage());
+        assertEquals(1, response.getObjects().size());
+        ETAudience audience = response.getObject();
+        assertEquals(id, audience.getId());
+        assertEquals("people age 25-34", audience.getName());
+        // XXX pending update fix..
+//        assertEquals("people age 25-34", audience.getDescription());
+        assertNull(audience.getDescription());
+        assertEquals("people age 25-34", audience.getAudienceCode());
+        assertEquals((Integer) 0, audience.getPublishCount());
+        assertNotNull(audience.getPublishCountDate());
+        assertEquals(1, audience.getSegments().size());
+        ETSegment segment = audience.getSegments().get(0);
+        assertNotNull(segment.getId());
+        assertEquals(audience.getId(), segment.getAudienceId());
+        assertEquals("Remainder", segment.getName());
+        assertEquals((Integer) Integer.MAX_VALUE, segment.getPriority());
+        assertEquals((Integer) 0, segment.getCap());
+        assertEquals((Integer) 0, segment.getCapPercent());
+        assertEquals(true, segment.getIncludeInPublish());
     }
 
     @Test
-    public void _16_TestDeleteAudience()
+    public void _22_TestDeleteAudience()
         throws ETSdkException
     {
         if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
@@ -436,12 +683,33 @@ public class ETAudienceBuilderTest {
         }
         ETResponse<ETAudience> response = client.delete(ETAudience.class,
                                                         "id=" + id);
-        assertNotNull(response.getRequestId());
-        assertEquals("200", response.getResponseCode());
-        assertEquals("OK", response.getResponseMessage());
+        assertNull(response.getRequestId());
+        assertNull(response.getResponseCode());
+        assertNull(response.getResponseMessage());
         assertNull(response.getPage());
         assertNull(response.getPageSize());
         assertNull(response.getTotalCount());
         assertFalse(response.hasMoreResults());
+    }
+
+    //@Test
+    public void _23_TestRetrieveAudiences3()
+        throws ETSdkException
+    {
+        if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
+            return;
+        }
+        ETResponse<ETAudience> response = client.retrieve(ETAudience.class);
+        assertNotNull(response.getRequestId());
+        if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
+            assertEquals("OK", response.getResponseCode());
+        } else {
+            assertEquals("200", response.getResponseCode());
+        }
+        assertEquals("OK", response.getResponseMessage());
+        assertEquals((Integer) 1, response.getPage());
+        assertEquals((Integer) 50, response.getPageSize());
+        assertEquals(totalCount, response.getTotalCount());
+        assertTrue(response.hasMoreResults());
     }
 }
