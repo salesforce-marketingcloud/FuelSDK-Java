@@ -37,6 +37,7 @@ package com.exacttarget.fuelsdk;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -658,12 +659,40 @@ public class ETClient {
     }
 
     public <T extends ETApiObject> ETResponse<T> delete(Class<T> type,
+                                                        ETFilter filter)
+        throws ETSdkException
+    {
+        ETExpression expression = filter.getExpression();
+        if (expression.getOperator() == ETExpression.Operator.EQUALS &&
+            expression.getProperty().equals("id"))
+        {
+            //
+            // Optimization: If we're simply deleting a single
+            // object given its primary key just instantiate a
+            // new object and set the primary key accordingly:
+            //
+
+            T object = null;
+            try {
+                object = type.newInstance();
+            } catch (Exception ex) {
+                throw new ETSdkException("could not instantiate "
+                        + type.getName(), ex);
+            }
+            object.setId(expression.getValue());
+            List<T> objects = new ArrayList<T>();
+            objects.add(object);
+            return delete(objects);
+        }
+        ETResponse<T> response = retrieve(type, filter);
+        return delete(response.getObjects());
+    }
+
+    public <T extends ETApiObject> ETResponse<T> delete(Class<T> type,
                                                         String filter)
         throws ETSdkException
     {
-        // XXX optimize
-        ETResponse<T> response = retrieve(type, filter);
-        return delete(response.getObjects());
+        return delete(type, ETFilter.parse(filter));
     }
 
     @SuppressWarnings("unchecked")
