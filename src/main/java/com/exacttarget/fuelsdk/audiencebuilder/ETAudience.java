@@ -273,10 +273,9 @@ public class ETAudience extends ETRestObject {
                                                   ETFilter filter)
         throws ETSdkException
     {
-        // XXX pending API fix
-//        if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
-//            throw new ETSdkException("unsupported operation: retrieve");
-//        }
+        if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
+            throw new ETSdkException("unsupported operation: retrieve");
+        }
         return ETRestObject.retrieve(client, type, page, pageSize, filter);
     }
 

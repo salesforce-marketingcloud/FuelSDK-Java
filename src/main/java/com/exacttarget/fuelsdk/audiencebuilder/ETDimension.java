@@ -142,16 +142,14 @@ public class ETDimension extends ETRestObject {
             if (expression.getOperator() == ETExpression.Operator.EQUALS &&
                 expression.getProperty().equals("id"))
             {
-                // XXX pending API fix
-//                return ETAudience.soapRestCall(client,
-//                                               "GET",
-//                                               "AudienceBuilder/Dimension/{dimensionID}",
-//                                               null,
-//                                               page,
-//                                               pageSize,
-//                                               filter,
-//                                               ETDimension.class);
-                return ETRestObject.retrieve(client, type, page, pageSize, filter);
+                return ETAudience.soapRestCall(client,
+                                               "GET",
+                                               "AudienceBuilder/Dimension/{dimensionID}",
+                                               null,
+                                               page,
+                                               pageSize,
+                                               filter,
+                                               ETDimension.class);
             } else {
                 return ETAudience.soapRestCall(client,
                                                "GET",
