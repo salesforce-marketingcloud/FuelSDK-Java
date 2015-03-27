@@ -283,7 +283,7 @@ public class ETAudience extends ETRestObject {
                                                                 List<T> objects)
         throws ETSdkException
     {
-        Gson gson = new Gson();
+        Gson gson = client.getRestConnection().getGson();
         if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
             ETResponse<T> response = new ETResponse<T>();
             ETSoapConnection connection = client.getSoapConnection();
@@ -309,7 +309,7 @@ public class ETAudience extends ETRestObject {
                 result.setResponseMessage(createResult.getStatusMessage());
                 AudienceBuilderRestCall restResponse =
                         (AudienceBuilderRestCall) createResult.getObject();
-                T o = (T) deserialize(restResponse.getPayload(), object.getClass());
+                T o = (T) deserialize(client, restResponse.getPayload(), object.getClass());
                 o.setClient(client);
                 result.setObject(o);
                 response.addResult(result);
@@ -370,7 +370,7 @@ public class ETAudience extends ETRestObject {
     {
         AudienceCountsRequest request = new AudienceCountsRequest();
         request.addFilterDefinition(toFilterDefinition(ETFilter.parse(filter).getExpression()));
-        Gson gson = new Gson();
+        Gson gson = client.getRestConnection().getGson();
         String requestPayload = gson.toJson(request);
         String responsePayload = null;
         if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
@@ -396,7 +396,7 @@ public class ETAudience extends ETRestObject {
     {
         PublishRequest request = new PublishRequest();
         request.setId(audienceBuilds.get(0).getId());
-        Gson gson = new Gson();
+        Gson gson = getClient().getRestConnection().getGson();
         String requestPayload = gson.toJson(request);
         String responsePayload = null;
         if (getClient().getConfiguration().equals("audienceBuilderApi", "soap")) {
@@ -419,7 +419,7 @@ public class ETAudience extends ETRestObject {
     public void updatePublishStatus()
         throws ETSdkException
     {
-        Gson gson = new Gson();
+        Gson gson = getClient().getRestConnection().getGson();
         String responsePayload = null;
         if (getClient().getConfiguration().equals("audienceBuilderApi", "soap")) {
             ETExpression expression = new ETExpression();
@@ -461,7 +461,7 @@ public class ETAudience extends ETRestObject {
                                                         Integer encryptionKey)
         throws ETSdkException
     {
-        Gson gson = new Gson();
+        Gson gson = client.getRestConnection().getGson();
 
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("customerKey", dataExtension.getKey());
@@ -859,7 +859,7 @@ public class ETAudience extends ETRestObject {
         AudienceBuilderRestCall restResponse = (AudienceBuilderRestCall)
                 createResponse.getResults().get(0).getObject();
 
-        ETResponse<T> r = deserialize(restResponse.getPayload(), type, "totalCount", "entities");
+        ETResponse<T> r = deserialize(client, restResponse.getPayload(), type, "totalCount", "entities");
         response.setPage(r.getPage());
         response.setPageSize(r.getPageSize());
         response.setTotalCount(r.getTotalCount());
@@ -871,18 +871,20 @@ public class ETAudience extends ETRestObject {
         return response;
     }
 
-    public static <T extends ETRestObject> T deserialize(String payload,
+    public static <T extends ETRestObject> T deserialize(ETClient client,
+                                                         String payload,
                                                          Class<T> type)
     {
-        Gson gson = new Gson();
+        Gson gson = client.getRestConnection().getGson();
         JsonParser jsonParser = new JsonParser();
         JsonObject jsonObject = jsonParser.parse(payload).getAsJsonObject();
         T object = gson.fromJson(jsonObject, type);
-        //object.setClient(client); // XXX
+        object.setClient(client);
         return object;
     }
 
-    public static <T extends ETRestObject> ETResponse<T> deserialize(String payload,
+    public static <T extends ETRestObject> ETResponse<T> deserialize(ETClient client,
+                                                                     String payload,
                                                                      Class<T> type,
                                                                      String totalCount,
                                                                      String collection)
@@ -908,12 +910,12 @@ public class ETAudience extends ETRestObject {
 
             for (JsonElement element : elements) {
                 ETResult<T> result = new ETResult<T>();
-                result.setObject(deserialize(element.toString(), type));
+                result.setObject(deserialize(client, element.toString(), type));
                 response.addResult(result);
             }
         } else {
             ETResult<T> result = new ETResult<T>();
-            result.setObject(deserialize(jsonObject.toString(), type));
+            result.setObject(deserialize(client, jsonObject.toString(), type));
             response.addResult(result);
         }
 
