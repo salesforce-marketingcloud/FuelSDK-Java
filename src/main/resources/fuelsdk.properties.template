@@ -57,13 +57,19 @@
 #audienceBuilderApi=rest
 #audienceBuilderApi=soap
 
-
 #
 # Disable the SSL certificate Common Name (CN) check in Apache CXF
 # (default false):
 #
 
 #cxfDisableCNCheck=true
+
+#
+# Enable pagination of data extension retrieves (requires Ehcache)
+# (default false):
+#
+
+#enableDataExtensionPagination=true
 
 #
 # Request the legacy token from the authentication service (default
