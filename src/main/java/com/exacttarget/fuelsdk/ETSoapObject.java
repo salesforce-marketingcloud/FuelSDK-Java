@@ -104,6 +104,8 @@ import com.exacttarget.fuelsdk.internal.UpdateResult;
 public abstract class ETSoapObject extends ETApiObject {
     private static Logger logger = Logger.getLogger(ETSoapObject.class);
 
+    public final static int PAGE_SIZE = 2500;
+
     public ETSoapObject() {
         registerConverters();
     }
@@ -126,21 +128,40 @@ public abstract class ETSoapObject extends ETApiObject {
             throw new ETSdkException("order by argument not supported on this object type");
         }
 
-        return retrieve(client, null, type, filter);
+        return retrieve(client, null, filter, type);
     }
 
     //
-    // ETSoapObject has an additional retrieve method that takes
-    // the SOAP object name. In most cases, the SOAP object name
-    // is the same as the internal class name, but in a few cases,
-    // it is not (e.g., DataExtensionObjects require the name
-    // of the data extension in brackets: DataExtensionObject[foo]).
+    // ETSoapObject has additional retrieve methods that take the
+    // SOAP object name and request ID for continuing requests.
+    // In most cases, the SOAP object name is the same as the
+    // internal class name, but in a few cases, it is not (e.g.,
+    // DataExtensionObjects require the name of
+    // the data extension in brackets: DataExtensionObject[foo]).
     //
 
     protected static <T extends ETSoapObject> ETResponse<T> retrieve(ETClient client,
                                                                      String soapObjectName,
-                                                                     Class<T> type,
-                                                                     ETFilter filter)
+                                                                     ETFilter filter,
+                                                                     Class<T> type)
+        throws ETSdkException
+    {
+        return retrieve(client, soapObjectName, filter, null, type);
+    }
+
+    protected static <T extends ETSoapObject> ETResponse<T> retrieve(ETClient client,
+                                                                     String continueRequest,
+                                                                     Class<T> type)
+        throws ETSdkException
+    {
+        return retrieve(client, null, new ETFilter(), continueRequest, type);
+    }
+
+    protected static <T extends ETSoapObject> ETResponse<T> retrieve(ETClient client,
+                                                                     String soapObjectName,
+                                                                     ETFilter filter,
+                                                                     String continueRequest,
+                                                                     Class<T> type)
         throws ETSdkException
     {
         ETResponse<T> response = new ETResponse<T>();
@@ -168,6 +189,8 @@ public abstract class ETSoapObject extends ETApiObject {
         assert internalTypeAnnotation != null;
         Class<? extends APIObject> internalType = internalTypeAnnotation.internalType();
         assert internalType != null;
+
+        ETExpression expression = filter.getExpression();
 
         //
         // Determine properties to retrieve:
@@ -212,38 +235,40 @@ public abstract class ETSoapObject extends ETApiObject {
         Soap soap = connection.getSoap();
 
         RetrieveRequest retrieveRequest = new RetrieveRequest();
-        // if soapObjectType is specified, use it; otherwise, default
-        // to the name of the internal class representing the object:
-        if (soapObjectName != null) {
-            retrieveRequest.setObjectType(soapObjectName);
-        } else {
-            retrieveRequest.setObjectType(internalType.getSimpleName());
-        }
-        retrieveRequest.getProperties().addAll(internalProperties);
 
-        ETExpression expression = filter.getExpression();
-        if (expression.getOperator() != null) {
-            //
-            // Convert the property names to their internal counterparts:
-            //
-
-            String property = expression.getProperty();
-            if (property != null) {
-                expression.setProperty(getInternalProperty(type, property));
+        if (continueRequest == null) {
+            // if soapObjectType is specified, use it; otherwise, default
+            // to the name of the internal class representing the object:
+            if (soapObjectName != null) {
+                retrieveRequest.setObjectType(soapObjectName);
+            } else {
+                retrieveRequest.setObjectType(internalType.getSimpleName());
             }
-            for (ETExpression subexpression : expression.getSubexpressions()) {
-                String p = subexpression.getProperty();
-                if (p != null) {
-                    subexpression.setProperty(getInternalProperty(type, p));
+            retrieveRequest.getProperties().addAll(internalProperties);
+
+            if (expression.getOperator() != null) {
+                //
+                // Convert the property names to their internal counterparts:
+                //
+
+                String property = expression.getProperty();
+                if (property != null) {
+                    expression.setProperty(getInternalProperty(type, property));
                 }
+                for (ETExpression subexpression : expression.getSubexpressions()) {
+                    String p = subexpression.getProperty();
+                    if (p != null) {
+                        subexpression.setProperty(getInternalProperty(type, p));
+                    }
+                }
+
+                retrieveRequest.setFilter(toFilterPart(expression));
             }
-
-            retrieveRequest.setFilter(toFilterPart(expression));
+        } else {
+            if (continueRequest != null) {
+                retrieveRequest.setContinueRequest(continueRequest);
+            }
         }
-
-//        if (continueRequestId != null) {
-//            retrieveRequest.setContinueRequest(continueRequestId);
-//        }
 
         if (logger.isTraceEnabled()) {
             logger.trace("RetrieveRequest:");
