@@ -321,6 +321,8 @@ public class ETDataExtension extends ETSoapObject {
                                                         ETFilter filter)
         throws ETSdkException
     {
+        // XXX if no columns are explicitly requested retrieve all columns
+
         String dataExtensionKey = null;
 
         //
@@ -464,13 +466,7 @@ public class ETDataExtension extends ETSoapObject {
                                                         String... columns)
         throws ETSdkException
     {
-        // make a copy so we're not modifying argument itself
-        ETFilter f = new ETFilter();
-        f.setExpression(filter.getExpression());
-        for (String column : columns) {
-            f.addProperty(column);
-        }
-        return select(client, dataExtension, f);
+        return select(client, dataExtension, filter, null, null, columns);
     }
 
     /**
@@ -486,12 +482,11 @@ public class ETDataExtension extends ETSoapObject {
                                                         String... columns)
         throws ETSdkException
     {
-        // make a copy so we're not modifying argument itself
-        ETFilter f = new ETFilter();
+        // use the columns parameters as the properties and
+        // order by part of the filter, but override
+        // the expression portion with the filter parameter
+        ETFilter f = ETFilter.parse(columns);
         f.setExpression(filter.getExpression());
-        for (String column : columns) {
-            f.addProperty(column);
-        }
         return select(client, dataExtension, page, pageSize, f);
     }
 
@@ -508,29 +503,19 @@ public class ETDataExtension extends ETSoapObject {
                                                         String... columns)
         throws ETSdkException
     {
-        // make a copy so we're not modifying argument itself
-        ETFilter f = new ETFilter();
-        f.setExpression(ETExpression.parse(filter));
-        for (String column : columns) {
-            f.addProperty(column);
-        }
-        return select(client, dataExtension, page, pageSize, f);
+        return select(client, dataExtension, ETFilter.parse(filter), null, null, columns);
     }
 
     public ETResponse<ETDataExtensionRow> select(ETFilter filter)
         throws ETSdkException
     {
-        // if no columns are explicitly requested retrieve all columns
-        if (filter.getProperties().isEmpty()) {
-            filter.setProperties(getColumnNames());
-        }
-        return ETDataExtension.select(getClient(), "key=" + getKey(), filter);
+        return select((Integer) null, (Integer) null, filter);
     }
 
     public ETResponse<ETDataExtensionRow> select(String... filter)
         throws ETSdkException
     {
-        return select(ETFilter.parse(filter));
+        return select((Integer) null, (Integer) null, ETFilter.parse(filter));
     }
 
     public ETResponse<ETDataExtensionRow> select(Integer page,
@@ -562,7 +547,7 @@ public class ETDataExtension extends ETSoapObject {
                                                  String... columns)
         throws ETSdkException
     {
-        return ETDataExtension.select(getClient(), "key=" + getKey(), filter, columns);
+        return select(filter, null, null, columns);
     }
 
     /**
@@ -576,6 +561,10 @@ public class ETDataExtension extends ETSoapObject {
                                                  String... columns)
         throws ETSdkException
     {
+        // if no columns are explicitly requested retrieve all columns
+        if (filter.getProperties().isEmpty()) {
+            filter.setProperties(getColumnNames());
+        }
         return ETDataExtension.select(getClient(), "key=" + getKey(), filter, page, pageSize, columns);
     }
 
@@ -590,7 +579,7 @@ public class ETDataExtension extends ETSoapObject {
                                                  String... columns)
         throws ETSdkException
     {
-        return ETDataExtension.select(getClient(), "key=" + getKey(), filter, page, pageSize, columns);
+        return select(ETFilter.parse(filter), null, null, columns);
     }
 
     public ETResponse<ETDataExtensionRow> insert(ETDataExtensionRow... rows)
