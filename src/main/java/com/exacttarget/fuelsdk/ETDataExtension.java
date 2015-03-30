@@ -42,6 +42,8 @@ import java.util.List;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
+import net.sf.ehcache.config.CacheConfiguration;
+import net.sf.ehcache.config.Searchable;
 
 import org.apache.log4j.Logger;
 
@@ -101,9 +103,16 @@ public class ETDataExtension extends ETSoapObject {
     private static Cache cache = null;
 
     static {
+        CacheConfiguration cacheConfiguration =
+                new CacheConfiguration("ETDataExtension", 0)
+                    .eternal(false)
+                    .timeToLiveSeconds(60)
+                    .timeToIdleSeconds(30);
+        Searchable searchable = new Searchable();
+        cacheConfiguration.addSearchable(searchable);
+        cache = new Cache(cacheConfiguration);
         cacheManager = CacheManager.create();
-        cacheManager.addCache("ETDataExtension");
-        cache = cacheManager.getCache("ETDataExtension");
+        cacheManager.addCache(cache);
     }
 
     public ETDataExtension() {}
@@ -344,8 +353,7 @@ public class ETDataExtension extends ETSoapObject {
 
         ETResponse<ETDataExtensionRow> response = null;
 
-        if (client.getConfiguration().equals("enableDataExtensionPagination",
-                                             "true")) {
+        if (client.getConfiguration().equals("enableDataExtensionPagination", "true")) {
             if (page == null) {
                 page = 1;
             }
@@ -563,11 +571,16 @@ public class ETDataExtension extends ETSoapObject {
                                                  String... columns)
         throws ETSdkException
     {
+        // use the columns parameters as the properties and
+        // order by part of the filter, but override
+        // the expression portion with the filter parameter
+        ETFilter f = ETFilter.parse(columns);
+        f.setExpression(filter.getExpression());
         // if no columns are explicitly requested retrieve all columns
-        if (filter.getProperties().isEmpty()) {
-            filter.setProperties(getColumnNames());
+        if (f.getProperties().isEmpty()) {
+            f.setProperties(getColumnNames());
         }
-        return ETDataExtension.select(getClient(), "key=" + getKey(), filter, page, pageSize, columns);
+        return ETDataExtension.select(getClient(), "key=" + getKey(), page, pageSize, f);
     }
 
     /**
