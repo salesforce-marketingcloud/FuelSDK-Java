@@ -421,11 +421,6 @@ public class ETDataExtension extends ETSoapObject {
                 ETResponse<ETDataExtensionRow> cachedResponse =
                         (ETResponse<ETDataExtensionRow>) element.getObjectValue();
 
-                if (k == cachedResponse.getResults().size()) {
-                    response.setMoreResults(false);
-                    break;
-                }
-
                 if (response == null) {
                     response = new ETResponse<ETDataExtensionRow>();
                     response.setRequestId(cachedResponse.getRequestId());
@@ -435,6 +430,10 @@ public class ETDataExtension extends ETSoapObject {
                     response.setMoreResults(true);
                     response.setPage(page);
                     response.setPageSize(pageSize);
+                }
+                if (k == cachedResponse.getResults().size()) {
+                    response.setMoreResults(false);
+                    break;
                 }
                 response.addResult(cachedResponse.getResults().get(k));
             }
