@@ -411,30 +411,33 @@ public class ETDataExtension extends ETSoapObject {
             // Return results from the cache:
             //
 
-            response = new ETResponse<ETDataExtensionRow>();
+            for (int i = 0; i < pageSize; i++) {
+                int j = (firstItem + i) / ETSoapObject.PAGE_SIZE;
+                int k = (firstItem + i) % ETSoapObject.PAGE_SIZE;
 
-            int items = 0;
-            while (items < pageSize) {
-                int i = (firstItem + items) / ETSoapObject.PAGE_SIZE;
-                int j = (firstItem + items) % ETSoapObject.PAGE_SIZE;
-
-                Element element = cache.get(key + "#" + i);
+                Element element = cache.get(key + "#" + j);
 
                 @SuppressWarnings("unchecked")
                 ETResponse<ETDataExtensionRow> cachedResponse =
-                    (ETResponse<ETDataExtensionRow>) element.getObjectValue();
+                        (ETResponse<ETDataExtensionRow>) element.getObjectValue();
 
-                if (j >= cachedResponse.getResults().size()) {
+                if (k == cachedResponse.getResults().size()) {
+                    response.setMoreResults(false);
                     break;
                 }
 
-                response.addResult(cachedResponse.getResults().get(j));
-
-                items++;
+                if (response == null) {
+                    response = new ETResponse<ETDataExtensionRow>();
+                    response.setRequestId(cachedResponse.getRequestId());
+                    response.setStatus(cachedResponse.getStatus());
+                    response.setResponseCode(cachedResponse.getResponseCode());
+                    response.setResponseMessage(cachedResponse.getResponseMessage());
+                    response.setMoreResults(true);
+                    response.setPage(page);
+                    response.setPageSize(pageSize);
+                }
+                response.addResult(cachedResponse.getResults().get(k));
             }
-
-            response.setPage(page);
-            response.setPageSize(items);
         } else {
             response = ETSoapObject.retrieve(client,
                                              object,
