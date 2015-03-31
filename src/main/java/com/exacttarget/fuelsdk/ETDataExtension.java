@@ -106,8 +106,8 @@ public class ETDataExtension extends ETSoapObject {
         CacheConfiguration cacheConfiguration =
                 new CacheConfiguration("ETDataExtension", 0)
                     .eternal(false)
-                    .timeToLiveSeconds(60)
-                    .timeToIdleSeconds(30);
+                    .timeToLiveSeconds(1200)
+                    .timeToIdleSeconds(1200);
         Searchable searchable = new Searchable();
         cacheConfiguration.addSearchable(searchable);
         cache = new Cache(cacheConfiguration);
@@ -376,16 +376,16 @@ public class ETDataExtension extends ETSoapObject {
             // Ensure all pages are cached:
             //
 
-            boolean allCached = true;
-            for (int i = firstPage; i <= lastPage; i++) {
-                String k = key + "#" + i;
-                logger.trace("checking cache for page " + k);
-                if (cache.get(k) == null) {
-                    logger.trace("    cache miss for page " + k);
-                    allCached = false;
-                    break;
-                }
-            }
+//            boolean allCached = true;
+//            for (int i = firstPage; i <= lastPage; i++) {
+//                String k = key + "#" + i;
+//                logger.trace("checking cache for page " + k);
+//                if (cache.get(k) == null) {
+//                    logger.trace("    cache miss for page " + k);
+//                    allCached = false;
+//                    break;
+//                }
+//            }
 
             //
             // If all pages are not cached load them into the cache
@@ -393,6 +393,9 @@ public class ETDataExtension extends ETSoapObject {
             // pages of SOAP objects can only be read sequentially):
             //
 
+            int totalCount = 0;
+
+            boolean allCached = false; // XXX
             if (!allCached) {
                 String k = key + "#0";
                 logger.trace("           loading page " + k);
@@ -403,7 +406,10 @@ public class ETDataExtension extends ETSoapObject {
                 logger.trace("            loaded page " + k);
                 cache.put(new Element(key + "#0", r));
                 logger.trace("            cached page " + k);
-                for (int i = 1; i <= lastPage; i++) {
+//                for (int i = 1; i <= lastPage; i++) {
+                int i = 1; // XXX
+                totalCount += r.getResults().size(); // XXX
+                while (r.hasMoreResults()) { // XXX
                     k = key + "#" + i;
                     logger.trace("           loading page " + k);
                     r = ETSoapObject.retrieve(client,
@@ -412,6 +418,8 @@ public class ETDataExtension extends ETSoapObject {
                     logger.trace("            loaded page " + k);
                     cache.put(new Element(key + "#" + i, r));
                     logger.trace("            cached page " + k);
+                    i++; // XXX
+                    totalCount += r.getResults().size(); // XXX
                 }
             }
 
@@ -438,6 +446,7 @@ public class ETDataExtension extends ETSoapObject {
                     response.setMoreResults(true);
                     response.setPage(page);
                     response.setPageSize(pageSize);
+                    response.setTotalCount(totalCount); // XXX
                 }
                 if (k == cachedResponse.getResults().size()) {
                     response.setMoreResults(false);
