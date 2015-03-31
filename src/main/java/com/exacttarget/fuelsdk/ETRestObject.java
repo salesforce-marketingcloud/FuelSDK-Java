@@ -70,7 +70,15 @@ public abstract class ETRestObject extends ETApiObject {
                                                                   ETFilter filter)
         throws ETSdkException
     {
+        ETResponse<T> response = new ETResponse<T>();
+
         ETRestConnection connection = client.getRestConnection();
+
+        //
+        // Automatically refresh the token if necessary:
+        //
+
+        client.refreshToken();
 
         //
         // Read call details from the RestObject annotation:
@@ -89,88 +97,6 @@ public abstract class ETRestObject extends ETApiObject {
         logger.trace("primaryKey: " + primaryKey);
         logger.trace("collection: " + collection);
         logger.trace("totalCount: " + totalCount);
-
-        Response r = retrieve(client, path, primaryKey, type, page, pageSize, filter);
-
-        ETResponse<T> response = new ETResponse<T>();
-
-        response.setRequestId(r.getRequestId());
-        if (r.getResponseCode() >= 200 && r.getResponseCode() <= 299) {
-            response.setStatus(ETResult.Status.OK);
-        } else if (r.getResponseCode() >= 400 && r.getResponseCode() <= 599) {
-            response.setStatus(ETResult.Status.ERROR);
-        }
-        response.setResponseCode(r.getResponseCode().toString());
-        response.setResponseMessage(r.getResponseMessage());
-
-        Gson gson = connection.getGson();
-        JsonParser jsonParser = new JsonParser();
-        JsonObject jsonObject = jsonParser.parse(r.getResponsePayload()).getAsJsonObject();
-
-        if (jsonObject.get("page") != null) {
-            response.setPage(jsonObject.get("page").getAsInt());
-            logger.trace("page = " + response.getPage());
-            response.setPageSize(jsonObject.get("pageSize").getAsInt());
-            logger.trace("pageSize = " + response.getPageSize());
-            response.setTotalCount(jsonObject.get(totalCount).getAsInt());
-            logger.trace("totalCount = " + response.getTotalCount());
-
-            if (response.getPage() * response.getPageSize() < response.getTotalCount()) {
-                response.setMoreResults(true);
-            }
-
-            JsonArray elements = jsonObject.get(collection).getAsJsonArray();
-
-            for (JsonElement element : elements) {
-                // XXX duplicate code A
-                T object = gson.fromJson(element, type);
-                object.setClient(client); // XXX
-                ETResult<T> result = new ETResult<T>();
-                result.setObject(object);
-                response.addResult(result);
-            }
-        } else {
-            // XXX duplicate code A
-            T object = gson.fromJson(jsonObject, type);
-            object.setClient(client); // XXX
-            ETResult<T> result = new ETResult<T>();
-            result.setObject(object);
-            response.addResult(result);
-        }
-
-        return response;
-    }
-
-    //
-    // ETRestObject has an additional retrieve method that takes
-    // path and primaryKey strings. In most cases, these
-    // strings are read from the RestObject annotation, but
-    // in a few cases, custom code needs to directly access the
-    // REST layer (e.g., DataExtension selects and exports).
-    //
-    // In addition, this method returns the raw REST layer Response
-    // object rather than the generic ETResponse object, as in a few
-    // cases, the JSON response needs special processing
-    // (e.g., data extension retrieves return a collection of
-    // keys and values that are not in a flat collection).
-    //
-
-    protected static <T extends ETRestObject> Response retrieve(ETClient client,
-                                                                String path,
-                                                                String primaryKey,
-                                                                Class<T> type,
-                                                                Integer page,
-                                                                Integer pageSize,
-                                                                ETFilter filter)
-        throws ETSdkException
-    {
-        ETRestConnection connection = client.getRestConnection();
-
-        //
-        // Automatically refresh the token if necessary:
-        //
-
-        client.refreshToken();
 
         //
         // Build the query parameters:
@@ -299,7 +225,53 @@ public abstract class ETRestObject extends ETApiObject {
 
         logger.trace("GET " + path);
 
-        return connection.get(path);
+        Response r = connection.get(path);
+
+        response.setRequestId(r.getRequestId());
+        if (r.getResponseCode() >= 200 && r.getResponseCode() <= 299) {
+            response.setStatus(ETResult.Status.OK);
+        } else if (r.getResponseCode() >= 400 && r.getResponseCode() <= 599) {
+            response.setStatus(ETResult.Status.ERROR);
+        }
+        response.setResponseCode(r.getResponseCode().toString());
+        response.setResponseMessage(r.getResponseMessage());
+
+        Gson gson = connection.getGson();
+        JsonParser jsonParser = new JsonParser();
+        JsonObject jsonObject = jsonParser.parse(r.getResponsePayload()).getAsJsonObject();
+
+        if (jsonObject.get("page") != null) {
+            response.setPage(jsonObject.get("page").getAsInt());
+            logger.trace("page = " + response.getPage());
+            response.setPageSize(jsonObject.get("pageSize").getAsInt());
+            logger.trace("pageSize = " + response.getPageSize());
+            response.setTotalCount(jsonObject.get(totalCount).getAsInt());
+            logger.trace("totalCount = " + response.getTotalCount());
+
+            if (response.getPage() * response.getPageSize() < response.getTotalCount()) {
+                response.setMoreResults(true);
+            }
+
+            JsonArray elements = jsonObject.get(collection).getAsJsonArray();
+
+            for (JsonElement element : elements) {
+                // XXX duplicate code A
+                T object = gson.fromJson(element, type);
+                object.setClient(client); // XXX
+                ETResult<T> result = new ETResult<T>();
+                result.setObject(object);
+                response.addResult(result);
+            }
+        } else {
+            // XXX duplicate code A
+            T object = gson.fromJson(jsonObject, type);
+            object.setClient(client); // XXX
+            ETResult<T> result = new ETResult<T>();
+            result.setObject(object);
+            response.addResult(result);
+        }
+
+        return response;
     }
 
     public static <T extends ETRestObject> ETResponse<T> create(ETClient client,
@@ -447,6 +419,11 @@ public abstract class ETRestObject extends ETApiObject {
         // XXX set overall status
 
         return response;
+    }
+
+    public String serialize() {
+        Gson gson = getClient().getRestConnection().getGson();
+        return gson.toJson(this);
     }
 
     protected static String getInternalProperty(Class<? extends ETRestObject> type,

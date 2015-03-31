@@ -34,22 +34,15 @@
 
 package com.exacttarget.fuelsdk.audiencebuilder;
 
-import org.apache.log4j.Logger;
+import java.util.List;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.exacttarget.fuelsdk.ETClient;
+import com.exacttarget.fuelsdk.ETExpression;
 import com.exacttarget.fuelsdk.ETFilter;
 import com.exacttarget.fuelsdk.ETResponse;
-import com.exacttarget.fuelsdk.ETRestConnection;
-import com.exacttarget.fuelsdk.ETRestConnection.Response;
 import com.exacttarget.fuelsdk.ETRestObject;
-import com.exacttarget.fuelsdk.ETResult;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.RestObject;
@@ -59,8 +52,6 @@ import com.exacttarget.fuelsdk.annotations.RestObject;
             collection = "entities",
             totalCount = "totalCount")
 public class ETCube extends ETRestObject {
-    private static Logger logger = Logger.getLogger(ETCube.class);
-
     @Expose @SerializedName("pK")
     @ExternalName("key")
     private String key = null;
@@ -110,62 +101,40 @@ public class ETCube extends ETRestObject {
                                               String... keys)
         throws ETSdkException
     {
-        ETRestConnection connection = client.getRestConnection();
+        ETFilter filter = new ETFilter();
+        ETExpression expression = new ETExpression();
+        expression.setProperty("hierarchyId");
+        expression.setOperator(ETExpression.Operator.EQUALS);
+        expression.setValue(id);
+        filter.setExpression(expression);
+        String responsePayload = ETAudience.soapRestCall(client,
+                                                         "GET",
+                                                         "AudienceBuilder/Hierarchy/{hierarchyId}",
+                                                         null,
+                                                         null,
+                                                         null,
+                                                         filter);
+        return ETAudience.deserialize(client, responsePayload, ETCube.class, "totalCount", "entities");
+    }
 
-        String path = "/internal/v1/AudienceBuilder/Hierarchy/" + id;
+    public static <T extends ETRestObject> ETResponse<T> create(ETClient client,
+                                                                List<T> objects)
+        throws ETSdkException
+    {
+        throw new ETSdkException("unsupported operation: create");
+    }
 
-        if (keys.length > 0) {
-            path += "?Values=";
-            boolean first = true;
-            for (String key : keys) {
-                if (!first) {
-                    path += ",";
-                }
-                first = false;
-                path += key;
-            }
-        }
+    public static <T extends ETRestObject> ETResponse<T> update(ETClient client,
+                                                                List<T> objects)
+        throws ETSdkException
+    {
+        throw new ETSdkException("unsupported operation: update");
+    }
 
-        Response r = retrieve(client, path, "id", ETCube.class, null, null, new ETFilter());
-
-        ETResponse<ETCube> response = new ETResponse<ETCube>();
-
-        response.setRequestId(r.getRequestId());
-        if (r.getResponseCode() >= 200 && r.getResponseCode() <= 299) {
-            response.setStatus(ETResult.Status.OK);
-        } else if (r.getResponseCode() >= 400 && r.getResponseCode() <= 599) {
-            response.setStatus(ETResult.Status.ERROR);
-        }
-        response.setResponseCode(r.getResponseCode().toString());
-        response.setResponseMessage(r.getResponseMessage());
-
-        Gson gson = connection.getGson();
-        JsonParser jsonParser = new JsonParser();
-        JsonObject jsonObject = jsonParser.parse(r.getResponsePayload()).getAsJsonObject();
-
-        if (jsonObject.get("page") != null) {
-            response.setPage(jsonObject.get("page").getAsInt());
-            logger.trace("page = " + response.getPage());
-            response.setPageSize(jsonObject.get("pageSize").getAsInt());
-            logger.trace("pageSize = " + response.getPageSize());
-            response.setTotalCount(jsonObject.get("totalCount").getAsInt());
-            logger.trace("totalCount = " + response.getTotalCount());
-
-            if (response.getPage() * response.getPageSize() < response.getTotalCount()) {
-                response.setMoreResults(true);
-            }
-
-            JsonArray elements = jsonObject.get("entities").getAsJsonArray();
-
-            for (JsonElement element : elements) {
-                ETCube cube = gson.fromJson(element, ETCube.class);
-                cube.setClient(client); // XXX
-                ETResult<ETCube> result = new ETResult<ETCube>();
-                result.setObject(cube);
-                response.addResult(result);
-            }
-        }
-
-        return response;
+    public static <T extends ETRestObject> ETResponse<T> delete(ETClient client,
+                                                                List<T> objects)
+        throws ETSdkException
+    {
+        throw new ETSdkException("unsupported operation: delete");
     }
 }
