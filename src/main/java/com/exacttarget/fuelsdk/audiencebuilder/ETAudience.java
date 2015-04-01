@@ -43,6 +43,7 @@ import java.util.UUID;
 import org.apache.log4j.Logger;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -876,7 +877,10 @@ public class ETAudience extends ETRestObject {
                                                          String payload,
                                                          Class<T> type)
     {
-        Gson gson = client.getRestConnection().getGson();
+        GsonBuilder gsonBuilder = new GsonBuilder()
+            .excludeFieldsWithoutExposeAnnotation()
+            .setDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        Gson gson = gsonBuilder.create();
         JsonParser jsonParser = new JsonParser();
         JsonObject jsonObject = jsonParser.parse(payload).getAsJsonObject();
         T object = gson.fromJson(jsonObject, type);
