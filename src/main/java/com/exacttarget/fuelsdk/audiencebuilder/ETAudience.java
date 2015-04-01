@@ -284,7 +284,10 @@ public class ETAudience extends ETRestObject {
                                                                 List<T> objects)
         throws ETSdkException
     {
-        Gson gson = client.getRestConnection().getGson();
+        GsonBuilder gsonBuilder = new GsonBuilder()
+            .excludeFieldsWithoutExposeAnnotation()
+            .setDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        Gson gson = gsonBuilder.create();
         if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
             ETResponse<T> response = new ETResponse<T>();
             ETSoapConnection connection = client.getSoapConnection();
@@ -371,7 +374,10 @@ public class ETAudience extends ETRestObject {
     {
         AudienceCountsRequest request = new AudienceCountsRequest();
         request.addFilterDefinition(toFilterDefinition(ETFilter.parse(filter).getExpression()));
-        Gson gson = client.getRestConnection().getGson();
+        GsonBuilder gsonBuilder = new GsonBuilder()
+            .excludeFieldsWithoutExposeAnnotation()
+            .setDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        Gson gson = gsonBuilder.create();
         String requestPayload = gson.toJson(request);
         String responsePayload = null;
         if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
@@ -397,7 +403,10 @@ public class ETAudience extends ETRestObject {
     {
         PublishRequest request = new PublishRequest();
         request.setId(audienceBuilds.get(0).getId());
-        Gson gson = getClient().getRestConnection().getGson();
+        GsonBuilder gsonBuilder = new GsonBuilder()
+            .excludeFieldsWithoutExposeAnnotation()
+            .setDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        Gson gson = gsonBuilder.create();
         String requestPayload = gson.toJson(request);
         String responsePayload = null;
         if (getClient().getConfiguration().equals("audienceBuilderApi", "soap")) {
@@ -420,7 +429,10 @@ public class ETAudience extends ETRestObject {
     public void updatePublishStatus()
         throws ETSdkException
     {
-        Gson gson = getClient().getRestConnection().getGson();
+        GsonBuilder gsonBuilder = new GsonBuilder()
+            .excludeFieldsWithoutExposeAnnotation()
+            .setDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        Gson gson = gsonBuilder.create();
         String responsePayload = null;
         if (getClient().getConfiguration().equals("audienceBuilderApi", "soap")) {
             ETExpression expression = new ETExpression();
@@ -462,7 +474,10 @@ public class ETAudience extends ETRestObject {
                                                         Integer encryptionKey)
         throws ETSdkException
     {
-        Gson gson = client.getRestConnection().getGson();
+        GsonBuilder gsonBuilder = new GsonBuilder()
+            .excludeFieldsWithoutExposeAnnotation()
+            .setDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        Gson gson = gsonBuilder.create();
 
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("customerKey", dataExtension.getKey());
