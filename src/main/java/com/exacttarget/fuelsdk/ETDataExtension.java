@@ -376,6 +376,7 @@ public class ETDataExtension extends ETSoapObject {
             // Ensure all pages are cached:
             //
 
+            boolean allCached = false; // XXX
 //            boolean allCached = true;
 //            for (int i = firstPage; i <= lastPage; i++) {
 //                String k = key + "#" + i;
@@ -395,7 +396,6 @@ public class ETDataExtension extends ETSoapObject {
 
             int totalCount = 0;
 
-            boolean allCached = false; // XXX
             if (!allCached) {
                 String k = key + "#0";
                 logger.trace("           loading page " + k);
@@ -603,7 +603,7 @@ public class ETDataExtension extends ETSoapObject {
                                                  String... columns)
         throws ETSdkException
     {
-        return select(ETFilter.parse(filter), null, null, columns);
+        return select(ETFilter.parse(filter), page, pageSize, columns);
     }
 
     public ETResponse<ETDataExtensionRow> insert(ETDataExtensionRow... rows)
