@@ -647,29 +647,71 @@ public class ETAudience extends ETRestObject {
             }
             break;
           case AND:
-          case OR:
-            if (operator == ETExpression.Operator.AND) {
-                conditionSet.setOperator("AND");
-            } else if (operator == ETExpression.Operator.OR) {
-                conditionSet.setOperator("OR");
-            }
-            ETExpression subexpression1 = expression.getSubexpressions().get(0);
-            ETExpression subexpression2 = expression.getSubexpressions().get(1);
-            if (subexpression1.getOperator() == null) {
-                conditionSet.addConditionSet(toConditionSet(subexpression1.getSubexpressions().get(0)));
-            } else if (subexpression1.getOperator() == ETExpression.Operator.IN ||
-                       subexpression1.getOperator() == ETExpression.Operator.AND ||
-                       subexpression1.getOperator() == ETExpression.Operator.OR)
+            conditionSet.setOperator("AND");
+            List<ETExpression> subexpressions = expression.getSubexpressions();
+            ETExpression subexpression1 = subexpressions.get(0);
+            ETExpression subexpression2 = subexpressions.get(1);
+            do {
+                if (subexpression2.getOperator() == ETExpression.Operator.IN ||
+                    subexpression2.getOperator() == ETExpression.Operator.AND ||
+                    subexpression2.getOperator() == ETExpression.Operator.OR)
+                {
+                    conditionSet.addConditionSet(toConditionSet(subexpression2));
+                } else {
+                    conditionSet.addCondition(toCondition(subexpression2));
+                }
+
+                subexpressions = subexpression1.getSubexpressions();
+                subexpression1 = subexpressions.get(0);
+                subexpression2 = subexpressions.get(1);
+            } while (subexpression1.getOperator() == ETExpression.Operator.AND);
+            if (subexpression1.getOperator() == ETExpression.Operator.IN ||
+                subexpression1.getOperator() == ETExpression.Operator.AND ||
+                subexpression1.getOperator() == ETExpression.Operator.OR)
             {
                 conditionSet.addConditionSet(toConditionSet(subexpression1));
             } else {
                 conditionSet.addCondition(toCondition(subexpression1));
             }
-            if (subexpression2.getOperator() == null) {
-                conditionSet.addConditionSet(toConditionSet(subexpression2.getSubexpressions().get(0)));
-            } else if (subexpression2.getOperator() == ETExpression.Operator.IN ||
-                       subexpression2.getOperator() == ETExpression.Operator.AND ||
-                       subexpression2.getOperator() == ETExpression.Operator.OR)
+            if (subexpression2.getOperator() == ETExpression.Operator.IN ||
+                subexpression2.getOperator() == ETExpression.Operator.AND ||
+                subexpression2.getOperator() == ETExpression.Operator.OR)
+            {
+                conditionSet.addConditionSet(toConditionSet(subexpression2));
+            } else {
+                conditionSet.addCondition(toCondition(subexpression2));
+            }
+            break;
+          case OR:
+            conditionSet.setOperator("OR");
+            subexpressions = expression.getSubexpressions();
+            subexpression1 = subexpressions.get(0);
+            subexpression2 = subexpressions.get(1);
+            do {
+                if (subexpression2.getOperator() == ETExpression.Operator.IN ||
+                    subexpression2.getOperator() == ETExpression.Operator.AND ||
+                    subexpression2.getOperator() == ETExpression.Operator.OR)
+                {
+                    conditionSet.addConditionSet(toConditionSet(subexpression2));
+                } else {
+                    conditionSet.addCondition(toCondition(subexpression2));
+                }
+
+                subexpressions = subexpression1.getSubexpressions();
+                subexpression1 = subexpressions.get(0);
+                subexpression2 = subexpressions.get(1);
+            } while (subexpression1.getOperator() == ETExpression.Operator.OR);
+            if (subexpression1.getOperator() == ETExpression.Operator.IN ||
+                subexpression1.getOperator() == ETExpression.Operator.AND ||
+                subexpression1.getOperator() == ETExpression.Operator.OR)
+            {
+                conditionSet.addConditionSet(toConditionSet(subexpression1));
+            } else {
+                conditionSet.addCondition(toCondition(subexpression1));
+            }
+            if (subexpression2.getOperator() == ETExpression.Operator.IN ||
+                subexpression2.getOperator() == ETExpression.Operator.AND ||
+                subexpression2.getOperator() == ETExpression.Operator.OR)
             {
                 conditionSet.addConditionSet(toConditionSet(subexpression2));
             } else {
