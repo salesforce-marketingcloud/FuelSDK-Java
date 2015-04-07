@@ -649,9 +649,11 @@ public class ETAudience extends ETRestObject {
           case AND:
             conditionSet.setOperator("AND");
             List<ETExpression> subexpressions = expression.getSubexpressions();
-            ETExpression subexpression1 = subexpressions.get(0);
-            ETExpression subexpression2 = subexpressions.get(1);
+            ETExpression subexpression1 = null;
+            ETExpression subexpression2 = null;
             do {
+                subexpression1 = subexpressions.get(0);
+                subexpression2 = subexpressions.get(1);
                 if (subexpression2.getOperator() == ETExpression.Operator.IN ||
                     subexpression2.getOperator() == ETExpression.Operator.AND ||
                     subexpression2.getOperator() == ETExpression.Operator.OR)
@@ -660,10 +662,7 @@ public class ETAudience extends ETRestObject {
                 } else {
                     conditionSet.addCondition(toCondition(subexpression2));
                 }
-
                 subexpressions = subexpression1.getSubexpressions();
-                subexpression1 = subexpressions.get(0);
-                subexpression2 = subexpressions.get(1);
             } while (subexpression1.getOperator() == ETExpression.Operator.AND);
             if (subexpression1.getOperator() == ETExpression.Operator.IN ||
                 subexpression1.getOperator() == ETExpression.Operator.AND ||
@@ -685,9 +684,11 @@ public class ETAudience extends ETRestObject {
           case OR:
             conditionSet.setOperator("OR");
             subexpressions = expression.getSubexpressions();
-            subexpression1 = subexpressions.get(0);
-            subexpression2 = subexpressions.get(1);
+            subexpression1 = null;
+            subexpression2 = null;
             do {
+                subexpression1 = subexpressions.get(0);
+                subexpression2 = subexpressions.get(1);
                 if (subexpression2.getOperator() == ETExpression.Operator.IN ||
                     subexpression2.getOperator() == ETExpression.Operator.AND ||
                     subexpression2.getOperator() == ETExpression.Operator.OR)
@@ -696,10 +697,7 @@ public class ETAudience extends ETRestObject {
                 } else {
                     conditionSet.addCondition(toCondition(subexpression2));
                 }
-
                 subexpressions = subexpression1.getSubexpressions();
-                subexpression1 = subexpressions.get(0);
-                subexpression2 = subexpressions.get(1);
             } while (subexpression1.getOperator() == ETExpression.Operator.OR);
             if (subexpression1.getOperator() == ETExpression.Operator.IN ||
                 subexpression1.getOperator() == ETExpression.Operator.AND ||
