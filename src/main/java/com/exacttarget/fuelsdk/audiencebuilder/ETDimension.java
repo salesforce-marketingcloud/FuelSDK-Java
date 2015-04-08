@@ -138,13 +138,13 @@ public class ETDimension extends ETRestObject {
             {
                 path = "AudienceBuilder/Dimension/{dimensionID}";
             }
-            return ETAudience.soapRestCall(client,
-                                           ETDimension.class,
-                                           "GET",
-                                           path,
-                                           page,
-                                           pageSize,
-                                           filter);
+            return ETRestObject.soapCall(client,
+                                         ETDimension.class,
+                                         "GET",
+                                         path,
+                                         page,
+                                         pageSize,
+                                         filter);
         }
         return ETRestObject.retrieve(client, type, page, pageSize, filter);
     }
