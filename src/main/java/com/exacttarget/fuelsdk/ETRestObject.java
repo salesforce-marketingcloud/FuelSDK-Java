@@ -704,10 +704,15 @@ public abstract class ETRestObject extends ETApiObject {
                                      String... parameters)
         throws ETSdkException
     {
-        ETFilter filter = ETFilter.parse(parameters);
-        List<APIProperty> properties = toApiProperties(client,
-                                                       ETRestObject.class,
-                                                       filter);
+        List<APIProperty> properties = new ArrayList<APIProperty>();
+        for (String parameter : parameters) {
+            String tokens[] = parameter.split("=");
+            assert tokens.length == 2;
+            APIProperty property = new APIProperty();
+            property.setName(tokens[0]);
+            property.setValue(tokens[1]);
+            properties.add(property);
+        }
         CreateResponse createResponse = soapCall(client,
                                                  method,
                                                  path,
@@ -866,9 +871,9 @@ public abstract class ETRestObject extends ETApiObject {
         return soap.create(createRequest);
     }
 
-    private static <T extends ETRestObject> List<APIProperty> toApiProperties(ETClient client,
-                                                                              Class<T> type,
-                                                                              ETFilter filter)
+    protected static <T extends ETRestObject> List<APIProperty> toApiProperties(ETClient client,
+                                                                                Class<T> type,
+                                                                                ETFilter filter)
         throws ETSdkException
     {
         List<APIProperty> properties = new ArrayList<APIProperty>();
@@ -904,6 +909,39 @@ public abstract class ETRestObject extends ETApiObject {
                 property.setValue(tokens[1]);
                 properties.add(property);
             }
+        }
+
+        String orderby = null;
+        for (String s : filter.getOrderBy()) {
+            if (orderby == null) {
+                orderby = s;
+            } else {
+                orderby += "," + s;
+            }
+            if (!filter.getOrderByAsc()) {
+                orderby += " desc";
+            }
+        }
+        if (orderby != null) {
+            APIProperty property = new APIProperty();
+            property.setName("$orderby");
+            property.setValue(orderby);
+            properties.add(property);
+        }
+
+        String fields = null;
+        for (String s : filter.getProperties()) {
+            if (fields == null) {
+                fields = s;
+            } else {
+                fields += "," + s;
+            }
+        }
+        if (fields != null) {
+            APIProperty property = new APIProperty();
+            property.setName("$fields");
+            property.setValue(fields);
+            properties.add(property);
         }
 
         return properties;
