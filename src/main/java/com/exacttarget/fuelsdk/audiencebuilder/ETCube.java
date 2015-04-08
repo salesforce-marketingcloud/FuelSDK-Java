@@ -39,6 +39,7 @@ import java.util.List;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.ETRestObject;
@@ -107,8 +108,6 @@ public class ETCube extends ETRestObject {
         property.setValue(id);
         properties.add(property);
         if (keys.length > 0) {
-            property = new APIProperty();
-            property.setName("Values");
             String values = null;
             for (String key : keys) {
                 if (values == null) {
@@ -117,6 +116,8 @@ public class ETCube extends ETRestObject {
                     values += "," + key;
                 }
             }
+            property = new APIProperty();
+            property.setName("Values");
             property.setValue(values);
             properties.add(property);
         }

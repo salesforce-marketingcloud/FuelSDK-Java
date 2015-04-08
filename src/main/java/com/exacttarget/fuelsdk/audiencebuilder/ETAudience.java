@@ -45,6 +45,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETDataExtension;
 import com.exacttarget.fuelsdk.ETDataExtensionRow;
@@ -63,7 +64,6 @@ import com.exacttarget.fuelsdk.internal.AudienceBuilderRestCall;
 import com.exacttarget.fuelsdk.internal.CreateOptions;
 import com.exacttarget.fuelsdk.internal.CreateRequest;
 import com.exacttarget.fuelsdk.internal.CreateResponse;
-import com.exacttarget.fuelsdk.internal.CreateResult;
 import com.exacttarget.fuelsdk.internal.Soap;
 
 @RestObject(path = "/internal/v1/AudienceBuilder/Audience",
@@ -321,10 +321,10 @@ public class ETAudience extends ETRestObject {
                 apiProperty.setValue(object.getId());
                 @SuppressWarnings("unchecked")
                 ETResponse<T> r = (ETResponse<T>) ETRestObject.soapCall(client,
-                                                                   object.getClass(),
-                                                                   "DELETE",
-                                                                   "AudienceBuilder/Audience/{audienceDefinitionID}",
-                                                                   Arrays.asList(apiProperty));
+                                                                        object.getClass(),
+                                                                        "DELETE",
+                                                                        "AudienceBuilder/Audience/{audienceDefinitionID}",
+                                                                        Arrays.asList(apiProperty));
                 response.addResult(r.getResult());
             }
             return response;
@@ -383,22 +383,11 @@ public class ETAudience extends ETRestObject {
         Gson gson = getClient().getGson();
         String responsePayload = null;
         if (getClient().getConfiguration().equals("audienceBuilderApi", "soap")) {
-            APIProperty apiProperty = new APIProperty();
-            apiProperty.setName("audienceBuilderPublishId");
-            apiProperty.setValue(publishResponse.getId());
-            // XXX
-            CreateResponse createResponse = ETRestObject.soapCall(getClient(),
-                                                                  "GET",
-                                                                  "AudienceBuilder/Publish/{audienceBuilderPublishId}",
-                                                                  null,
-                                                                  Arrays.asList(apiProperty));
-            assert createResponse != null;
-            assert createResponse.getResults() != null;
-            assert createResponse.getResults().size() == 1;
-            CreateResult createResult = createResponse.getResults().get(0);
-            AudienceBuilderRestCall restResponse =
-                    (AudienceBuilderRestCall) createResult.getObject();
-            responsePayload = restResponse.getPayload();
+            responsePayload = ETRestObject.soapCall(getClient(),
+                                                    "GET",
+                                                    "AudienceBuilder/Publish/{audienceBuilderPublishId}",
+                                                    null,
+                                                    "audienceBuilderPublishId=" + publishResponse.getId());
         } else {
             ETRestConnection connection = getClient().getRestConnection();
             ETRestConnection.Response r = connection.get("/internal/v1/AudienceBuilder/Publish/" + publishResponse.getId());
