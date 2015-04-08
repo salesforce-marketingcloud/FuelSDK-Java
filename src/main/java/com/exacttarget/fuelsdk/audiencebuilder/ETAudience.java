@@ -34,8 +34,6 @@
 
 package com.exacttarget.fuelsdk.audiencebuilder;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -284,11 +282,11 @@ public class ETAudience extends ETRestObject {
             ETResponse<T> response = new ETResponse<T>();
             for (T object : objects) {
                 @SuppressWarnings("unchecked")
-                ETResponse<T> r = (ETResponse<T>) soapRestCall(client,
-                                                               object.getClass(),
-                                                               "POST",
-                                                               "AudienceBuilder/Audience",
-                                                               gson.toJson(object));
+                ETResponse<T> r = (ETResponse<T>) ETRestObject.soapCall(client,
+                                                                        object.getClass(),
+                                                                        "POST",
+                                                                        "AudienceBuilder/Audience",
+                                                                        gson.toJson(object));
                 assert r.getResults().size() == 1;
                 ETResult<T> result = r.getResults().get(0);
                 result.setRequestId(r.getRequestId());
@@ -322,11 +320,11 @@ public class ETAudience extends ETRestObject {
                 apiProperty.setName("audienceDefinitionID");
                 apiProperty.setValue(object.getId());
                 @SuppressWarnings("unchecked")
-                ETResponse<T> r = (ETResponse<T>) soapRestCall(client,
-                                                               object.getClass(),
-                                                               "DELETE",
-                                                               "AudienceBuilder/Audience/{audienceDefinitionID}",
-                                                               Arrays.asList(apiProperty));
+                ETResponse<T> r = (ETResponse<T>) ETRestObject.soapCall(client,
+                                                                   object.getClass(),
+                                                                   "DELETE",
+                                                                   "AudienceBuilder/Audience/{audienceDefinitionID}",
+                                                                   Arrays.asList(apiProperty));
                 response.addResult(r.getResult());
             }
             return response;
@@ -343,10 +341,10 @@ public class ETAudience extends ETRestObject {
         String requestPayload = gson.toJson(request);
         String responsePayload = null;
         if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
-            responsePayload = soapRestCall(client,
-                                           "POST",
-                                           "AudienceBuilder/AudienceCounts",
-                                           requestPayload);
+            responsePayload = ETRestObject.soapCall(client,
+                                                    "POST",
+                                                    "AudienceBuilder/AudienceCounts",
+                                                    requestPayload);
         } else {
             ETRestConnection connection = client.getRestConnection();
             ETRestConnection.Response r = connection.post("/internal/v1/AudienceBuilder/AudienceCounts",
@@ -366,10 +364,10 @@ public class ETAudience extends ETRestObject {
         String requestPayload = gson.toJson(request);
         String responsePayload = null;
         if (getClient().getConfiguration().equals("audienceBuilderApi", "soap")) {
-            responsePayload = soapRestCall(getClient(),
-                                           "POST",
-                                           "AudienceBuilder/Publish",
-                                           requestPayload);
+            responsePayload = ETRestObject.soapCall(getClient(),
+                                                    "POST",
+                                                    "AudienceBuilder/Publish",
+                                                    requestPayload);
         } else {
             ETRestConnection connection = getClient().getRestConnection();
             ETRestConnection.Response r = connection.post("/internal/v1/AudienceBuilder/Publish",
@@ -389,11 +387,11 @@ public class ETAudience extends ETRestObject {
             apiProperty.setName("audienceBuilderPublishId");
             apiProperty.setValue(publishResponse.getId());
             // XXX
-            CreateResponse createResponse = soapRestCall(getClient(),
-                                                         "GET",
-                                                         "AudienceBuilder/Publish/{audienceBuilderPublishId}",
-                                                         null,
-                                                         Arrays.asList(apiProperty));
+            CreateResponse createResponse = ETRestObject.soapCall(getClient(),
+                                                                  "GET",
+                                                                  "AudienceBuilder/Publish/{audienceBuilderPublishId}",
+                                                                  null,
+                                                                  Arrays.asList(apiProperty));
             assert createResponse != null;
             assert createResponse.getResults() != null;
             assert createResponse.getResults().size() == 1;
@@ -744,214 +742,6 @@ public class ETAudience extends ETRestObject {
         }
 
         return stringBuilder.toString();
-    }
-
-    // workaround--do not count on this implementation working past August 2015!
-    private static String soapRestCall(ETClient client,
-                                       String method,
-                                       String path,
-                                       String payload,
-                                       String... parameters)
-        throws ETSdkException
-    {
-        ETFilter filter = ETFilter.parse(parameters);
-        List<APIProperty> properties = toApiProperties(client,
-                                                       ETRestObject.class,
-                                                       filter);
-        CreateResponse createResponse = soapRestCall(client,
-                                                     method,
-                                                     path,
-                                                     payload,
-                                                     properties);
-        assert createResponse != null;
-        assert createResponse.getResults() != null;
-        assert createResponse.getResults().size() == 1;
-        CreateResult createResult = createResponse.getResults().get(0);
-        AudienceBuilderRestCall restResponse =
-                (AudienceBuilderRestCall) createResult.getObject();
-        return restResponse.getPayload();
-    }
-
-    // workaround--do not count on this implementation working past August 2015!
-    private static <T extends ETRestObject> ETResponse<T> soapRestCall(ETClient client,
-                                                                       Class<T> type,
-                                                                       String method,
-                                                                       String path,
-                                                                       String payload)
-        throws ETSdkException
-    {
-        return soapRestCall(client, type, method, path, payload, null);
-    }
-
-    // workaround--do not count on this implementation working past August 2015!
-    protected static <T extends ETRestObject> ETResponse<T> soapRestCall(ETClient client,
-                                                                         Class<T> type,
-                                                                         String method,
-                                                                         String path,
-                                                                         List<APIProperty> properties)
-        throws ETSdkException
-    {
-        return soapRestCall(client, type, method, path, null, properties);
-    }
-
-    // workaround--do not count on this implementation working past August 2015!
-    private static <T extends ETRestObject> ETResponse<T> soapRestCall(ETClient client,
-                                                                       Class<T> type,
-                                                                       String method,
-                                                                       String path,
-                                                                       String payload,
-                                                                       List<APIProperty> properties)
-        throws ETSdkException
-    {
-        CreateResponse createResponse = soapRestCall(client,
-                                                     method,
-                                                     path,
-                                                     payload,
-                                                     properties);
-
-        ETResponse<T> response = new ETResponse<T>();
-        response.setRequestId(createResponse.getRequestID());
-        if (createResponse.getOverallStatus().equals("OK")) {
-            response.setStatus(ETResult.Status.OK);
-        } else if (createResponse.getOverallStatus().equals("Error")) {
-            response.setStatus(ETResult.Status.ERROR);
-        }
-        response.setResponseCode(createResponse.getOverallStatus());
-        response.setResponseMessage(createResponse.getOverallStatus());
-        assert createResponse.getResults() != null;
-        assert createResponse.getResults().size() == 1;
-        AudienceBuilderRestCall restResponse = (AudienceBuilderRestCall)
-                createResponse.getResults().get(0).getObject();
-        if (restResponse != null) {
-            ETResponse<T> r = deserialize(client,
-                                          restResponse.getPayload(),
-                                          type,
-                                          "totalCount", "entities");
-            response.setPage(r.getPage());
-            response.setPageSize(r.getPageSize());
-            response.setTotalCount(r.getTotalCount());
-            response.setMoreResults(r.hasMoreResults());
-            for (ETResult<T> result : r.getResults()) {
-                response.addResult(result);
-            }
-        }
-
-        return response;
-    }
-
-    // workaround--do not count on this implementation working past August 2015!
-    protected static <T extends ETRestObject> ETResponse<T> soapRestCall(ETClient client,
-                                                                         Class<T> type,
-                                                                         String method,
-                                                                         String path,
-                                                                         Integer page,
-                                                                         Integer pageSize,
-                                                                         ETFilter filter)
-        throws ETSdkException
-    {
-        List<APIProperty> properties = toApiProperties(client,
-                                                       type,
-                                                       filter);
-        return soapRestCall(client, type, method, path, page, pageSize, properties);
-    }
-
-    // workaround--do not count on this implementation working past August 2015!
-    private static <T extends ETRestObject> ETResponse<T> soapRestCall(ETClient client,
-                                                                       Class<T> type,
-                                                                       String method,
-                                                                       String path,
-                                                                       Integer page,
-                                                                       Integer pageSize,
-                                                                       List<APIProperty> properties)
-        throws ETSdkException
-    {
-        if (page != null) {
-            APIProperty property = new APIProperty();
-            property.setName("$page");
-            property.setValue(page.toString());
-            properties.add(property);
-        }
-        if (pageSize != null) {
-            APIProperty property = new APIProperty();
-            property.setName("$pageSize");
-            property.setValue(pageSize.toString());
-            properties.add(property);
-        }
-        return soapRestCall(client, type, method, path, null, properties);
-    }
-
-    // workaround--do not count on this implementation working past August 2015!
-    private static CreateResponse soapRestCall(ETClient client,
-                                               String method,
-                                               String path,
-                                               String payload,
-                                               List<APIProperty> properties)
-        throws ETSdkException
-    {
-        ETSoapConnection connection = client.getSoapConnection();
-        Soap soap = connection.getSoap();
-        AudienceBuilderRestCall restRequest = new AudienceBuilderRestCall();
-        restRequest.setMethod(method);
-        restRequest.setURL(path);
-        if (payload != null) {
-            restRequest.setPayload(payload);
-        }
-        if (properties != null) {
-            for (APIProperty property : properties) {
-                restRequest.getParameters().add(property);
-            }
-        }
-        CreateRequest createRequest = new CreateRequest();
-        createRequest.setOptions(new CreateOptions());
-        createRequest.getObjects().add(restRequest);
-        return soap.create(createRequest);
-    }
-
-    private static <T extends ETRestObject> List<APIProperty> toApiProperties(ETClient client,
-                                                                              Class<T> type,
-                                                                              ETFilter filter)
-        throws ETSdkException
-    {
-        List<APIProperty> properties = new ArrayList<APIProperty>();
-
-        ETExpression expression = filter.getExpression();
-        if (expression.getOperator() != null) {
-            java.lang.reflect.Method toFilterString = null;
-            if (type != null) {
-                try {
-                    toFilterString = type.getMethod("toFilterString", ETExpression.class);
-                } catch (NoSuchMethodException ex) {
-                    // there's no toFilterString method on TYPE
-                } catch (SecurityException ex) {
-                    throw new ETSdkException(ex);
-                }
-            }
-
-            if (toFilterString != null) {
-                String s = null;
-
-                try {
-                    s = (String) toFilterString.invoke(null, expression);
-                } catch (Exception ex) {
-                    throw new ETSdkException(ex);
-                }
-
-                try {
-                    s = URLDecoder.decode(s, "UTF-8");
-                } catch (UnsupportedEncodingException ex) {
-                    throw new ETSdkException("error URL decoding " + s, ex);
-                }
-
-                String tokens[] = s.split("=");
-                assert tokens.length == 2;
-                APIProperty property = new APIProperty();
-                property.setName(tokens[0]);
-                property.setValue(tokens[1]);
-                properties.add(property);
-            }
-        }
-
-        return properties;
     }
 
     //

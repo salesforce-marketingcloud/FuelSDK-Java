@@ -120,11 +120,11 @@ public class ETCube extends ETRestObject {
             property.setValue(values);
             properties.add(property);
         }
-        return ETAudience.soapRestCall(client,
-                                      ETCube.class,
-                                      "GET",
-                                      "AudienceBuilder/Hierarchy/{hierarchyId}",
-                                      properties);
+        return ETRestObject.soapCall(client,
+                                     ETCube.class,
+                                     "GET",
+                                     "AudienceBuilder/Hierarchy/{hierarchyId}",
+                                     properties);
     }
 
     public static <T extends ETRestObject> ETResponse<T> create(ETClient client,
