@@ -38,6 +38,7 @@ import java.util.List;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETExpression;
 import com.exacttarget.fuelsdk.ETFilter;
@@ -94,16 +95,8 @@ public class ETDimension extends ETRestObject {
         return key;
     }
 
-    public void setKey(String key) {
-        this.key = key;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public Integer getType() {
@@ -139,27 +132,19 @@ public class ETDimension extends ETRestObject {
     {
         if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
             ETExpression expression = filter.getExpression();
+            String path = "AudienceBuilder/Dimension";
             if (expression.getOperator() == ETExpression.Operator.EQUALS &&
                 expression.getProperty().equals("id"))
             {
-                return ETAudience.soapRestCall(client,
-                                               "GET",
-                                               "AudienceBuilder/Dimension/{dimensionID}",
-                                               null,
-                                               page,
-                                               pageSize,
-                                               filter,
-                                               ETDimension.class);
-            } else {
-                return ETAudience.soapRestCall(client,
-                                               "GET",
-                                               "AudienceBuilder/Dimension",
-                                               null,
-                                               page,
-                                               pageSize,
-                                               filter,
-                                               ETDimension.class);
+                path = "AudienceBuilder/Dimension/{dimensionID}";
             }
+            return ETAudience.soapRestCall(client,
+                                           ETDimension.class,
+                                           "GET",
+                                           path,
+                                           page,
+                                           pageSize,
+                                           filter);
         }
         return ETRestObject.retrieve(client, type, page, pageSize, filter);
     }

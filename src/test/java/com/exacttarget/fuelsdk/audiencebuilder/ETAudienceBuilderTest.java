@@ -38,47 +38,33 @@ import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
+import static org.junit.Assert.*;
 
 import com.exacttarget.fuelsdk.ETClient;
+import com.exacttarget.fuelsdk.ETConfiguration;
 import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.ETResult;
 import com.exacttarget.fuelsdk.ETSdkException;
 
-import static org.junit.Assert.*;
-
-//
-// To test:
-//
-
-// orderby
-
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ETAudienceBuilderTest {
-    //
-    // These tests are highly dependent on the test
-    // environment, so before we run each test,
-    // we check to make sure we're in the right one:
-    //
-
-    private final static String TEST_ENVIRONMENT_CLIENT_ID =
-            "hwja87uzhjmmy8ykxtkesdt4";
-
     private static ETClient client = null;
 
     @BeforeClass
     public static void setUpBeforeClass()
         throws ETSdkException
     {
-        client = new ETClient();
+        ETConfiguration configuration = new ETConfiguration("/fuelsdk-test.properties");
+        configuration.set("clientId", configuration.get("audienceBuilderClientId"));
+        configuration.set("clientSecret", configuration.get("audienceBuilderClientSecret"));
+        configuration.set("soapEndpoint", configuration.get("audienceBuilderSoapEndpoint"));
+        client = new ETClient(configuration);
     }
 
     @Test
     public void _01_TestRetrieveDimensions()
         throws ETSdkException
     {
-        if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
-            return;
-        }
         ETResponse<ETDimension> response = client.retrieve(ETDimension.class);
         assertNotNull(response.getRequestId());
         if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
@@ -97,9 +83,6 @@ public class ETAudienceBuilderTest {
     public void _02_TestRetrieveDimensionsFilteredEquals()
         throws ETSdkException
     {
-        if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
-            return;
-        }
         ETResponse<ETDimension> response = client.retrieve(ETDimension.class,
                                                            "count = 3");
         assertNotNull(response.getRequestId());
@@ -119,9 +102,6 @@ public class ETAudienceBuilderTest {
     public void _03_TestRetrieveDimensionsFilteredNotEquals()
         throws ETSdkException
     {
-        if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
-            return;
-        }
         ETResponse<ETDimension> response = client.retrieve(ETDimension.class,
                                                            "count != 3");
         assertNotNull(response.getRequestId());
@@ -141,9 +121,6 @@ public class ETAudienceBuilderTest {
     public void _04_TestRetrieveDimensionsFilteredLessThan()
         throws ETSdkException
     {
-        if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
-            return;
-        }
         ETResponse<ETDimension> response = client.retrieve(ETDimension.class,
                                                            "count < 3");
         assertNotNull(response.getRequestId());
@@ -163,9 +140,6 @@ public class ETAudienceBuilderTest {
     public void _05_TestRetrieveDimensionsFilteredLessThanOrEquals()
         throws ETSdkException
     {
-        if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
-            return;
-        }
         ETResponse<ETDimension> response = client.retrieve(ETDimension.class,
                                                            "count <= 3");
         assertNotNull(response.getRequestId());
@@ -185,9 +159,6 @@ public class ETAudienceBuilderTest {
     public void _06_TestRetrieveDimensionsFilteredGreaterThan()
         throws ETSdkException
     {
-        if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
-            return;
-        }
         ETResponse<ETDimension> response = client.retrieve(ETDimension.class,
                                                            "count > 3");
         assertNotNull(response.getRequestId());
@@ -207,9 +178,6 @@ public class ETAudienceBuilderTest {
     public void _07_TestRetrieveDimensionsFilteredGreaterThanOrEquals()
         throws ETSdkException
     {
-        if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
-            return;
-        }
         ETResponse<ETDimension> response = client.retrieve(ETDimension.class,
                                                            "count >= 3");
         assertNotNull(response.getRequestId());
@@ -229,9 +197,6 @@ public class ETAudienceBuilderTest {
     public void _08_TestRetrieveDimensionsFilteredIn1()
         throws ETSdkException
     {
-        if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
-            return;
-        }
         ETResponse<ETDimension> response = client.retrieve(ETDimension.class,
                                                            "count in (3, 6)");
         assertNotNull(response.getRequestId());
@@ -251,9 +216,6 @@ public class ETAudienceBuilderTest {
     public void _09_TestRetrieveDimensionsFilteredIn2()
         throws ETSdkException
     {
-        if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
-            return;
-        }
         ETResponse<ETDimension> response = client.retrieve(ETDimension.class,
                                                            "count in (3, 6, 9)");
         assertNotNull(response.getRequestId());
@@ -273,9 +235,6 @@ public class ETAudienceBuilderTest {
     public void _10_TestRetrieveDimensionsFilteredIn3()
         throws ETSdkException
     {
-        if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
-            return;
-        }
         ETResponse<ETDimension> response = client.retrieve(ETDimension.class,
                                                            "count in (3, 6, 9, 12)");
         assertNotNull(response.getRequestId());
@@ -291,16 +250,24 @@ public class ETAudienceBuilderTest {
         assertFalse(response.hasMoreResults());
     }
 
+    //@Test
+    public void _11_TestRetrieveDimensionsOrderBy()
+        throws ETSdkException
+    {
+    }
+
+    //@Test
+    public void _12_TestRetrieveDimensionsFields()
+        throws ETSdkException
+    {
+    }
+
     private static String age = null;
 
     @Test
-    public void _11_TestRetrieveDimension1()
+    public void _13_TestRetrieveDimension1()
         throws ETSdkException
     {
-        if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
-            return;
-        }
-
         //
         // Retrieve "age" dimension and values:
         //
@@ -366,13 +333,9 @@ public class ETAudienceBuilderTest {
     private static String gender = null;
 
     @Test
-    public void _12_TestRetrieveDimension2()
+    public void _14_TestRetrieveDimension2()
         throws ETSdkException
     {
-        if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
-            return;
-        }
-
         //
         // Retrieve "gender" dimension and values:
         //
@@ -412,12 +375,9 @@ public class ETAudienceBuilderTest {
     }
 
     @Test
-    public void _13_TestRetrieveAudienceCount()
+    public void _15_TestRetrieveAudienceCount()
         throws ETSdkException
     {
-        if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
-            return;
-        }
         Integer audienceCount = ETAudience.retrieveAudienceCount(client, age + "='25 - 34'");
         assertEquals((Integer) 2513502, audienceCount);
     }
@@ -425,12 +385,9 @@ public class ETAudienceBuilderTest {
     private static Integer totalCount = null;
 
 //    @Test
-//    public void _14_TestRetrieveAudiences1()
+//    public void _16_TestRetrieveAudiences1()
 //        throws ETSdkException
 //    {
-//        if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
-//            return;
-//        }
 //        ETResponse<ETAudience> response = client.retrieve(ETAudience.class);
 //        assertNotNull(response.getRequestId());
 //        if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
@@ -449,12 +406,9 @@ public class ETAudienceBuilderTest {
     private static ETAudience audience = null;
 
     @Test
-    public void _15_TestCreateAudience()
+    public void _17_TestCreateAudience()
         throws ETSdkException
     {
-        if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
-            return;
-        }
         audience = client.instantiate(ETAudience.class);
         audience.setName("people age 25-34");
         audience.setFilter(age + "='25 - 34'");
@@ -473,7 +427,8 @@ public class ETAudienceBuilderTest {
         assertNotNull(result.getRequestId());
         if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
             assertEquals("OK", result.getResponseCode());
-            assertEquals("Audience created.", result.getResponseMessage());
+            //assertEquals("Audience created.", result.getResponseMessage());
+            assertEquals("OK", result.getResponseMessage());
         } else {
             assertEquals("201", result.getResponseCode());
             assertEquals("Created", result.getResponseMessage());
@@ -483,12 +438,9 @@ public class ETAudienceBuilderTest {
     }
 
 //    @Test
-//    public void _16_TestRetrieveAudiences2()
+//    public void _18_TestRetrieveAudiences2()
 //        throws ETSdkException
 //    {
-//        if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
-//            return;
-//        }
 //        ETResponse<ETAudience> response = client.retrieve(ETAudience.class);
 //        assertNotNull(response.getRequestId());
 //        if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
@@ -504,12 +456,9 @@ public class ETAudienceBuilderTest {
 //    }
 
 //    @Test
-//    public void _17_TestRetrieveAudience1()
+//    public void _19_TestRetrieveAudience1()
 //        throws ETSdkException
 //    {
-//        if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
-//            return;
-//        }
 //        ETResponse<ETAudience> response = client.retrieve(ETAudience.class,
 //                                                          "id=" + id);
 //        assertNotNull(response.getRequestId());
@@ -539,12 +488,9 @@ public class ETAudienceBuilderTest {
 //    }
 
 //    @Test
-//    public void _18_TestUpdateAudience()
+//    public void _20_TestUpdateAudience()
 //        throws ETSdkException
 //    {
-//        if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
-//            return;
-//        }
 //        ETResponse<ETAudience> response = client.update(ETAudience.class,
 //                                                        "id=" + id,
 //                                                        "description='people age 25-34'");
@@ -575,12 +521,9 @@ public class ETAudienceBuilderTest {
 //    }
 
 //    @Test
-//    public void _19_TestRetrieveAudience2()
+//    public void _21_TestRetrieveAudience2()
 //        throws ETSdkException
 //    {
-//        if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
-//            return;
-//        }
 //        ETResponse<ETAudience> response = client.retrieve(ETAudience.class,
 //                                                          "id=" + id);
 //        assertNotNull(response.getRequestId());
@@ -610,13 +553,9 @@ public class ETAudienceBuilderTest {
 //    }
 
     @Test
-    public void _20_TestPublishAudience()
+    public void _22_TestPublishAudience()
         throws ETSdkException
     {
-        if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
-            return;
-        }
-
         audience.publish();
 
         do {
@@ -639,12 +578,9 @@ public class ETAudienceBuilderTest {
     }
 
 //    @Test
-//    public void _21_TestRetrieveAudience3()
+//    public void _23_TestRetrieveAudience3()
 //        throws ETSdkException
 //    {
-//        if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
-//            return;
-//        }
 //        ETResponse<ETAudience> response = client.retrieve(ETAudience.class,
 //                                                          "id=" + id);
 //        assertNotNull(response.getRequestId());
@@ -675,30 +611,21 @@ public class ETAudienceBuilderTest {
 //    }
 
     //@Test
-    public void _22_TestExportDataExtension1()
+    public void _24_TestExportDataExtension1()
         throws ETSdkException
     {
-        if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
-            return;
-        }
     }
 
     //@Test
-    public void _23_TestExportDataExtension2()
+    public void _25_TestExportDataExtension2()
         throws ETSdkException
     {
-        if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
-            return;
-        }
     }
 
     @Test
-    public void _24_TestDeleteAudience()
+    public void _26_TestDeleteAudience()
         throws ETSdkException
     {
-        if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
-            return;
-        }
         ETResponse<ETAudience> response = client.delete(audience);
         assertNull(response.getRequestId());
         assertNull(response.getResponseCode());
@@ -710,12 +637,9 @@ public class ETAudienceBuilderTest {
     }
 
 //    @Test
-//    public void _25_TestRetrieveAudiences3()
+//    public void _27_TestRetrieveAudiences3()
 //        throws ETSdkException
 //    {
-//        if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
-//            return;
-//        }
 //        ETResponse<ETAudience> response = client.retrieve(ETAudience.class);
 //        assertNotNull(response.getRequestId());
 //        if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
@@ -729,15 +653,6 @@ public class ETAudienceBuilderTest {
 //        assertEquals(totalCount, response.getTotalCount());
 //        assertTrue(response.hasMoreResults());
 //    }
-
-    //@Test
-    public void _27_TestCubes()
-        throws ETSdkException
-    {
-        if (!client.getClientId().equals(TEST_ENVIRONMENT_CLIENT_ID)) {
-            return;
-        }
-    }
 
     //@Test
     public void _28_TestCube1()

@@ -45,7 +45,6 @@ import java.net.ProtocolException;
 import java.net.URL;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
 
 import org.apache.log4j.Logger;
@@ -61,8 +60,6 @@ public class ETRestConnection {
     private ETClient client = null;
 
     private String endpoint = null;
-
-    private Gson gson = null;
 
     private boolean isAuthConnection = false;
 
@@ -86,15 +83,6 @@ public class ETRestConnection {
         this.endpoint = endpoint;
 
         this.isAuthConnection = isAuthConnection;
-
-        GsonBuilder gsonBuilder = new GsonBuilder()
-            .excludeFieldsWithoutExposeAnnotation()
-            .setDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-        if (logger.isDebugEnabled()) {
-            gson = gsonBuilder.setPrettyPrinting().create();
-        } else {
-            gson = gsonBuilder.create();
-        }
     }
 
     public Response get(String path)
@@ -169,11 +157,6 @@ public class ETRestConnection {
         return response;
     }
 
-    // XXX protected?
-    public Gson getGson() {
-        return gson;
-    }
-
     private HttpURLConnection sendRequest(String path, Method method)
         throws ETSdkException
     {
@@ -198,6 +181,8 @@ public class ETRestConnection {
     private HttpURLConnection sendRequest(URL url, Method method, String payload)
         throws ETSdkException
     {
+        Gson gson = client.getGson();
+
         logger.debug(method + " " + url);
 
         HttpURLConnection connection = null;
@@ -265,6 +250,8 @@ public class ETRestConnection {
     private String receiveResponse(HttpURLConnection connection)
         throws ETSdkException
     {
+        Gson gson = client.getGson();
+
         InputStream is = null;
         try {
             if (connection.getResponseCode() < 400) {

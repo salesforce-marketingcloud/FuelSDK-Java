@@ -34,18 +34,18 @@
 
 package com.exacttarget.fuelsdk.audiencebuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.exacttarget.fuelsdk.ETClient;
-import com.exacttarget.fuelsdk.ETExpression;
-import com.exacttarget.fuelsdk.ETFilter;
 import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.ETRestObject;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.RestObject;
+import com.exacttarget.fuelsdk.internal.APIProperty;
 
 @RestObject(path = "/internal/v1/AudienceBuilder/Hierarchy",
             primaryKey = "id",
@@ -101,20 +101,30 @@ public class ETCube extends ETRestObject {
                                               String... keys)
         throws ETSdkException
     {
-        ETFilter filter = new ETFilter();
-        ETExpression expression = new ETExpression();
-        expression.setProperty("hierarchyId");
-        expression.setOperator(ETExpression.Operator.EQUALS);
-        expression.setValue(id);
-        filter.setExpression(expression);
-        String responsePayload = ETAudience.soapRestCall(client,
-                                                         "GET",
-                                                         "AudienceBuilder/Hierarchy/{hierarchyId}",
-                                                         null,
-                                                         null,
-                                                         null,
-                                                         filter);
-        return ETAudience.deserialize(client, responsePayload, ETCube.class, "totalCount", "entities");
+        List<APIProperty> properties = new ArrayList<APIProperty>();
+        APIProperty property = new APIProperty();
+        property.setName("hierarchyId");
+        property.setValue(id);
+        properties.add(property);
+        if (keys.length > 0) {
+            property = new APIProperty();
+            property.setName("Values");
+            String values = null;
+            for (String key : keys) {
+                if (values == null) {
+                    values = key;
+                } else {
+                    values += "," + key;
+                }
+            }
+            property.setValue(values);
+            properties.add(property);
+        }
+        return ETAudience.soapRestCall(client,
+                                      ETCube.class,
+                                      "GET",
+                                      "AudienceBuilder/Hierarchy/{hierarchyId}",
+                                      properties);
     }
 
     public static <T extends ETRestObject> ETResponse<T> create(ETClient client,

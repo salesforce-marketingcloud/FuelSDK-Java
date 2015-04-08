@@ -36,6 +36,7 @@ package com.exacttarget.fuelsdk.audiencebuilder;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 
 public class ETDimensionValue {

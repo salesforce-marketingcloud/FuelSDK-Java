@@ -170,13 +170,13 @@ public class ETSegment extends ETRestObject implements Comparable<ETSegment> {
         setFilter(ETFilter.parse(filter));
     }
 
-    //
-    // These are just here so we can construct the JSON requests:
-    //
-
     public int compareTo(ETSegment segment) {
         return new Integer(priority) - new Integer(segment.getPriority());
     }
+
+    //
+    // These are just here so we can construct the JSON requests:
+    //
 
     protected static class Filter {
         @Expose

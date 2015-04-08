@@ -49,9 +49,7 @@ import com.google.gson.annotations.SerializedName;
 import org.apache.log4j.Logger;
 
 import com.exacttarget.fuelsdk.ETRestConnection.Method;
-
 import static com.exacttarget.fuelsdk.ETRestConnection.Method.*;
-
 import com.exacttarget.fuelsdk.ETRestConnection.Response;
 import com.exacttarget.fuelsdk.annotations.RestObject;
 
@@ -236,7 +234,7 @@ public abstract class ETRestObject extends ETApiObject {
         response.setResponseCode(r.getResponseCode().toString());
         response.setResponseMessage(r.getResponseMessage());
 
-        Gson gson = connection.getGson();
+        Gson gson = client.getGson();
         JsonParser jsonParser = new JsonParser();
         JsonObject jsonObject = jsonParser.parse(r.getResponsePayload()).getAsJsonObject();
 
@@ -339,7 +337,7 @@ public abstract class ETRestObject extends ETApiObject {
         // update, or delete them one at a time:
         //
 
-        Gson gson = connection.getGson();
+        Gson gson = client.getGson();
 
         for (T object : objects) {
             switch (method) {
@@ -422,8 +420,59 @@ public abstract class ETRestObject extends ETApiObject {
     }
 
     public String serialize() {
-        Gson gson = getClient().getRestConnection().getGson();
+        Gson gson = getClient().getGson();
         return gson.toJson(this);
+    }
+
+    public static <T extends ETRestObject> T deserialize(ETClient client,
+                                                         String payload,
+                                                         Class<T> type)
+    {
+        Gson gson = client.getGson();
+        JsonParser jsonParser = new JsonParser();
+        JsonObject jsonObject = jsonParser.parse(payload).getAsJsonObject();
+        T object = gson.fromJson(jsonObject, type);
+        object.setClient(client);
+        return object;
+    }
+
+    public static <T extends ETRestObject> ETResponse<T> deserialize(ETClient client,
+                                                                     String payload,
+                                                                     Class<T> type,
+                                                                     String totalCount,
+                                                                     String collection)
+    {
+        ETResponse<T> response = new ETResponse<T>();
+
+        JsonParser jsonParser = new JsonParser();
+        JsonObject jsonObject = jsonParser.parse(payload).getAsJsonObject();
+
+        if (jsonObject.get("page") != null) {
+            response.setPage(jsonObject.get("page").getAsInt());
+            logger.trace("page = " + response.getPage());
+            response.setPageSize(jsonObject.get("pageSize").getAsInt());
+            logger.trace("pageSize = " + response.getPageSize());
+            response.setTotalCount(jsonObject.get(totalCount).getAsInt());
+            logger.trace("totalCount = " + response.getTotalCount());
+
+            if (response.getPage() * response.getPageSize() < response.getTotalCount()) {
+                response.setMoreResults(true);
+            }
+
+            JsonArray elements = jsonObject.get(collection).getAsJsonArray();
+
+            for (JsonElement element : elements) {
+                ETResult<T> result = new ETResult<T>();
+                result.setObject(deserialize(client, element.toString(), type));
+                response.addResult(result);
+            }
+        } else {
+            ETResult<T> result = new ETResult<T>();
+            result.setObject(deserialize(client, jsonObject.toString(), type));
+            response.addResult(result);
+        }
+
+        return response;
     }
 
     protected static String getInternalProperty(Class<? extends ETRestObject> type,

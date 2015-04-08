@@ -43,6 +43,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -81,6 +82,8 @@ public class ETClient {
     private String endpoint = null;
     private String authEndpoint = null;
     private String soapEndpoint = null;
+
+    private Gson gson = null;
 
     private ETRestConnection authConnection = null;
     private ETRestConnection restConnection = null;
@@ -125,6 +128,15 @@ public class ETClient {
             authEndpoint = DEFAULT_AUTH_ENDPOINT;
         }
         soapEndpoint = configuration.get("soapEndpoint");
+
+        GsonBuilder gsonBuilder = new GsonBuilder()
+            .excludeFieldsWithoutExposeAnnotation()
+            .setDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        if (logger.isDebugEnabled()) {
+            gson = gsonBuilder.setPrettyPrinting().create();
+        } else {
+            gson = gsonBuilder.create();
+        }
 
         if (clientId != null && clientSecret != null) {
             authConnection = new ETRestConnection(this, authEndpoint, true);
@@ -184,6 +196,10 @@ public class ETClient {
         return configuration;
     }
 
+    public Gson getGson() {
+        return gson;
+    }
+
     public ETRestConnection getRestConnection() {
         return restConnection;
     }
@@ -239,8 +255,6 @@ public class ETClient {
         if (refreshToken != null) {
             jsonObject.addProperty("refreshToken", refreshToken);
         }
-
-        Gson gson = authConnection.getGson();
 
         String requestPayload = gson.toJson(jsonObject);
 
