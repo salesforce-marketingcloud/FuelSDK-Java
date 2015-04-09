@@ -38,12 +38,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Element;
-import net.sf.ehcache.config.CacheConfiguration;
-import net.sf.ehcache.config.Searchable;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import org.apache.log4j.Logger;
 
@@ -54,6 +53,8 @@ import com.exacttarget.fuelsdk.annotations.SoapObject;
 import com.exacttarget.fuelsdk.ETDataExtensionColumn.Type;
 import com.exacttarget.fuelsdk.internal.APIObject;
 import com.exacttarget.fuelsdk.internal.APIProperty;
+import com.exacttarget.fuelsdk.internal.AudienceBuilderRestCall;
+import com.exacttarget.fuelsdk.internal.CreateResponse;
 import com.exacttarget.fuelsdk.internal.DataExtension;
 import com.exacttarget.fuelsdk.internal.DataExtensionObject;
 
@@ -98,22 +99,6 @@ public class ETDataExtension extends ETSoapObject {
     private Boolean isTestable = null;
 
     private boolean isHydrated = false;
-
-    private static CacheManager cacheManager = null;
-    private static Cache cache = null;
-
-    static {
-        CacheConfiguration cacheConfiguration =
-                new CacheConfiguration("ETDataExtension", 0)
-                    .eternal(false)
-                    .timeToLiveSeconds(1200)
-                    .timeToIdleSeconds(1200);
-        Searchable searchable = new Searchable();
-        cacheConfiguration.addSearchable(searchable);
-        cache = new Cache(cacheConfiguration);
-        cacheManager = CacheManager.create();
-        cacheManager.addCache(cache);
-    }
 
     public ETDataExtension() {}
 
@@ -342,123 +327,88 @@ public class ETDataExtension extends ETSoapObject {
         if (e.getProperty().toLowerCase().equals("key")
                 && e.getOperator() == ETExpression.Operator.EQUALS) {
             dataExtensionKey = e.getValue();
-        } else if (e.getProperty().toLowerCase().equals("name")
-                && e.getOperator() == ETExpression.Operator.EQUALS) {
-            dataExtensionKey = e.getValue();
         } else {
             throw new ETSdkException("invalid data extension filter string");
         }
 
-        String object = "DataExtensionObject[" + dataExtensionKey + "]";
+        List<APIProperty> properties = ETRestObject.toApiProperties(client,
+                                                                    ETRestObject.class,
+                                                                    filter);
 
-        ETResponse<ETDataExtensionRow> response = null;
+        APIProperty property = new APIProperty();
+        property.setName("key");
+        property.setValue(dataExtensionKey);
+        properties.add(property);
 
-        if (client.getConfiguration().equals("enableDataExtensionPagination", "true")) {
-            if (page == null) {
-                page = 1;
-            }
-            if (pageSize == null) {
-                pageSize = ETSoapObject.PAGE_SIZE;
-            }
+        if (page != null) {
+            property = new APIProperty();
+            property.setName("$page");
+            property.setValue(page.toString());
+            properties.add(property);
+        }
+        if (pageSize != null) {
+            property = new APIProperty();
+            property.setName("$pageSize");
+            property.setValue(pageSize.toString());
+            properties.add(property);
+        }
 
-            Integer firstItem = (page - 1) * pageSize;
-            logger.trace("firstItem = " + firstItem);
-            Integer lastItem = (firstItem + pageSize) - 1;
-            logger.trace("lastItem = " + lastItem);
-            Integer firstPage = firstItem / ETSoapObject.PAGE_SIZE;
-            logger.trace("firstPage = " + firstPage);
-            Integer lastPage = lastItem / ETSoapObject.PAGE_SIZE;
-            logger.trace("lastPage = " + lastPage);
+        CreateResponse createResponse = ETRestObject.soapCall(client,
+                                                              "GET",
+                                                              "customobjectdata/key/{key}/rowset",
+                                                              null,
+                                                              properties);
 
-            String key = dataExtensionKey + "#" + filter;
-
-            //
-            // Ensure all pages are cached:
-            //
-
-            boolean allCached = false; // XXX
-//            boolean allCached = true;
-//            for (int i = firstPage; i <= lastPage; i++) {
-//                String k = key + "#" + i;
-//                logger.trace("checking cache for page " + k);
-//                if (cache.get(k) == null) {
-//                    logger.trace("    cache miss for page " + k);
-//                    allCached = false;
-//                    break;
-//                }
-//            }
-
-            //
-            // If all pages are not cached load them into the cache
-            // (we have to start from the first page because multiple
-            // pages of SOAP objects can only be read sequentially):
-            //
-
-            int totalCount = 0;
-
-            if (!allCached) {
-                String k = key + "#0";
-                logger.trace("           loading page " + k);
-                ETResponse<ETDataExtensionRow> r = ETSoapObject.retrieve(client,
-                                                                         object,
-                                                                         filter,
-                                                                         ETDataExtensionRow.class);
-                logger.trace("            loaded page " + k);
-                cache.put(new Element(key + "#0", r));
-                logger.trace("            cached page " + k);
-//                for (int i = 1; i <= lastPage; i++) {
-                int i = 1; // XXX
-                totalCount += r.getResults().size(); // XXX
-                while (r.hasMoreResults()) { // XXX
-                    k = key + "#" + i;
-                    logger.trace("           loading page " + k);
-                    r = ETSoapObject.retrieve(client,
-                                              r.getRequestId(),
-                                              ETDataExtensionRow.class);
-                    logger.trace("            loaded page " + k);
-                    cache.put(new Element(key + "#" + i, r));
-                    logger.trace("            cached page " + k);
-                    i++; // XXX
-                    totalCount += r.getResults().size(); // XXX
-                }
-            }
-
-            //
-            // Return results from the cache:
-            //
-
-            for (int i = 0; i < pageSize; i++) {
-                int j = (firstItem + i) / ETSoapObject.PAGE_SIZE;
-                int k = (firstItem + i) % ETSoapObject.PAGE_SIZE;
-
-                Element element = cache.get(key + "#" + j);
-
-                @SuppressWarnings("unchecked")
-                ETResponse<ETDataExtensionRow> cachedResponse =
-                        (ETResponse<ETDataExtensionRow>) element.getObjectValue();
-
-                if (response == null) {
-                    response = new ETResponse<ETDataExtensionRow>();
-                    response.setRequestId(cachedResponse.getRequestId());
-                    response.setMoreResults(true);
-                }
-                if (k == cachedResponse.getResults().size()) {
-                    response.setMoreResults(false);
-                    break;
-                }
-                response.addResult(cachedResponse.getResults().get(k));
-            }
+        ETResponse<ETDataExtensionRow> response = new ETResponse<ETDataExtensionRow>();
+        response.setRequestId(createResponse.getRequestID());
+        if (createResponse.getOverallStatus().equals("OK")) {
             response.setStatus(ETResult.Status.OK);
-            response.setResponseCode("OK");
-            response.setResponseMessage("OK");
-            response.setPage(page);
-            response.setPageSize(pageSize);
-            response.setTotalCount(totalCount); // XXX
-        } else {
-            response = ETSoapObject.retrieve(client,
-                                             object,
-                                             filter,
-                                             ETDataExtensionRow.class);
+        } else if (createResponse.getOverallStatus().equals("Error")) {
+            response.setStatus(ETResult.Status.ERROR);
+        }
+        response.setResponseCode(createResponse.getOverallStatus());
+        response.setResponseMessage(createResponse.getOverallStatus());
+        assert createResponse.getResults() != null;
+        assert createResponse.getResults().size() == 1;
+        AudienceBuilderRestCall restResponse = (AudienceBuilderRestCall)
+                createResponse.getResults().get(0).getObject();
+
+        String json = restResponse.getPayload();
+
+        JsonParser jsonParser = new JsonParser();
+        JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
+
+        if (jsonObject.get("page") != null) {
+            response.setPage(jsonObject.get("page").getAsInt());
+            logger.trace("page = " + response.getPage());
+            response.setPageSize(jsonObject.get("pageSize").getAsInt());
+            logger.trace("pageSize = " + response.getPageSize());
+            response.setTotalCount(jsonObject.get("count").getAsInt());
+            logger.trace("totalCount = " + response.getTotalCount());
+
+            if (response.getPage() * response.getPageSize() < response.getTotalCount()) {
+                response.setMoreResults(true);
+            }
+
+            JsonElement elements = jsonObject.get("items");
+            if (elements != null) {
+                for (JsonElement element : elements.getAsJsonArray()) {
+                    JsonObject object = element.getAsJsonObject();
+                    ETDataExtensionRow row = new ETDataExtensionRow();
+                    JsonObject keys = object.get("keys").getAsJsonObject();
+                    for (Map.Entry<String, JsonElement> entry : keys.entrySet()) {
+                        row.setColumn(entry.getKey(), entry.getValue().getAsString(), false);
+                    }
+                    JsonObject values = object.get("values").getAsJsonObject();
+                    for (Map.Entry<String, JsonElement> entry : values.entrySet()) {
+                        row.setColumn(entry.getKey(), entry.getValue().getAsString(), false);
+                    }
+                    row.setClient(client);
+                    ETResult<ETDataExtensionRow> result = new ETResult<ETDataExtensionRow>();
+                    result.setObject(row);
+                    response.addResult(result);
+                }
+            }
         }
 
         return response;
