@@ -315,8 +315,6 @@ public class ETDataExtension extends ETSoapObject {
                                                         ETFilter filter)
         throws ETSdkException
     {
-        // XXX if no columns are explicitly requested retrieve all columns
-
         String dataExtensionKey = null;
 
         //
@@ -472,7 +470,7 @@ public class ETDataExtension extends ETSoapObject {
                                                         String... columns)
         throws ETSdkException
     {
-        return select(client, dataExtension, ETFilter.parse(filter), null, null, columns);
+        return select(client, dataExtension, ETFilter.parse(filter), page, pageSize, columns);
     }
 
     public ETResponse<ETDataExtensionRow> select(ETFilter filter)
