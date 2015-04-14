@@ -492,6 +492,9 @@ public class ETClient {
         throws ETSdkException
     {
         ETResponse<T> response = retrieve(type, filter);
+        if (response == null) {
+            return null;
+        }
         return response.getObject();
     }
 
@@ -500,6 +503,9 @@ public class ETClient {
         throws ETSdkException
     {
         ETResponse<T> response = retrieve(type, filter);
+        if (response == null) {
+            return null;
+        }
         return response.getObject();
     }
 
@@ -514,6 +520,9 @@ public class ETClient {
         throws ETSdkException
     {
         ETResponse<T> response = retrieve(type, filter, properties);
+        if (response == null) {
+            return null;
+        }
         return response.getObject();
     }
 
@@ -522,6 +531,9 @@ public class ETClient {
         throws ETSdkException
     {
         ETResponse<T> response = retrieve(type, filter);
+        if (response == null) {
+            return null;
+        }
         return response.getObjects();
     }
 
@@ -530,6 +542,9 @@ public class ETClient {
         throws ETSdkException
     {
         ETResponse<T> response = retrieve(type, filter);
+        if (response == null) {
+            return null;
+        }
         return response.getObjects();
     }
 
@@ -540,6 +555,9 @@ public class ETClient {
         throws ETSdkException
     {
         ETResponse<T> response = retrieve(type, page, pageSize, filter);
+        if (response == null) {
+            return null;
+        }
         return response.getObjects();
     }
 
@@ -550,6 +568,9 @@ public class ETClient {
         throws ETSdkException
     {
         ETResponse<T> response = retrieve(type, page, pageSize, filter);
+        if (response == null) {
+            return null;
+        }
         return response.getObjects();
     }
 
@@ -564,6 +585,9 @@ public class ETClient {
         throws ETSdkException
     {
         ETResponse<T> response = retrieve(type, filter, properties);
+        if (response == null) {
+            return null;
+        }
         return response.getObjects();
     }
 
@@ -580,6 +604,9 @@ public class ETClient {
         throws ETSdkException
     {
         ETResponse<T> response = retrieve(type, filter, page, pageSize, properties);
+        if (response == null) {
+            return null;
+        }
         return response.getObjects();
     }
 
@@ -596,6 +623,9 @@ public class ETClient {
         throws ETSdkException
     {
         ETResponse<T> response = retrieve(type, filter, page, pageSize, properties);
+        if (response == null) {
+            return null;
+        }
         return response.getObjects();
     }
 
