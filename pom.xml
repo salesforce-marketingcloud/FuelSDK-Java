@@ -35,11 +35,6 @@
       <version>1.2.17</version>
     </dependency>
     <dependency>
-      <groupId>net.sf.ehcache</groupId>
-      <artifactId>ehcache</artifactId>
-      <version>2.9.1</version>
-    </dependency>
-    <dependency>
       <groupId>org.apache.cxf</groupId>
       <artifactId>cxf-bundle-minimal</artifactId>
       <version>${cxf.version}</version>
@@ -58,11 +53,6 @@
       <groupId>org.codehaus.mojo</groupId>
       <artifactId>javacc-maven-plugin</artifactId>
       <version>2.6</version>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-log4j12</artifactId>
-      <version>1.7.10</version>
     </dependency>
   </dependencies>
   <build>
