@@ -519,6 +519,7 @@ public class ETAudience extends ETRestObject {
           case LESS_THAN_OR_EQUALS:
           case GREATER_THAN:
           case GREATER_THAN_OR_EQUALS:
+          case LIKE:
             filterDefinition.addCondition(toCondition(expression));
             break;
           case IN:
@@ -542,26 +543,49 @@ public class ETAudience extends ETRestObject {
         switch (operator) {
           case EQUALS:
             condition.setOperator("Equals");
+            condition.setConditionValue(expression.getValue());
             break;
           case NOT_EQUALS:
             condition.setOperator("NotEquals");
+            condition.setConditionValue(expression.getValue());
             break;
           case LESS_THAN:
             condition.setOperator("LessThan");
+            condition.setConditionValue(expression.getValue());
             break;
           case LESS_THAN_OR_EQUALS:
             condition.setOperator("LessThanOrEquals");
+            condition.setConditionValue(expression.getValue());
             break;
           case GREATER_THAN:
             condition.setOperator("GreaterThan");
+            condition.setConditionValue(expression.getValue());
             break;
           case GREATER_THAN_OR_EQUALS:
             condition.setOperator("GreaterThanOrEquals");
+            condition.setConditionValue(expression.getValue());
+            break;
+          case LIKE:
+            //
+            // AudienceBuilder does not support LIKE natively,
+            // so we emulate it using "ExistsIn", "Begins" and
+            // "Ends":
+            //
+            String v = expression.getValue();
+            if (v.startsWith("%") && v.endsWith("%")) {
+                condition.setOperator("ExistsIn");
+                condition.setConditionValue(v.substring(1, v.length() - 1));
+            } else if (v.endsWith("%") && !v.startsWith("%")) {
+                condition.setOperator("Begins");
+                condition.setConditionValue(v.substring(0, v.length() - 1));
+            } else if (v.startsWith("%") && !v.endsWith("%")) {
+                condition.setOperator("Ends");
+                condition.setConditionValue(v.substring(1));
+            }
             break;
           default:
             throw new ETSdkException("invalid operator: " + operator);
         }
-        condition.setConditionValue(expression.getValue());
         return condition;
     }
 

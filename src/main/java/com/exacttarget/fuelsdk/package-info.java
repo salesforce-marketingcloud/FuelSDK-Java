@@ -94,14 +94,6 @@
  * ETClient client = new ETClient(ETConfiguration);
  * </pre>
  *
- * <p>
- * <i>XXX include full list of configuration options</i>
- * </p>
- *
- * <p>
- * <i>XXX include overview of logging options</i>
- * </p>
- *
  * Note: For historical reasons, the Java client library
  * uses the term "Fuel" and "SDK" in several places, e.g., the
  * package name <code>com.exacttarget.fuelsdk</code> and
@@ -114,18 +106,30 @@
  * with the API using its <code>create</code>, <code>retrieve</code>,
  * <code>update</code>, and <code>delete</code> methods.
  *
- * <p>
- * <i>XXX include full list of generic methods and common
- * properties, e.g. id and key</i>
- * </p>
- *
  * In addition, some objects (e.g., <code>ETDataExtension</code>
  * and <code>ETTriggeredEmail</code> contain object native
  * methods (e.g., <code>insert</code>, <code>select</code>,
  * <code>update</code>, and <code>delete</code>
  * for <code>ETDataExtension</code> and <code>send</code> for
- * <code>TriggeredEmail). For information on these
+ * <code>TriggeredEmail</code>). For information on these
  * object native methods please see the class documentation..
+ */
+
+package com.exacttarget.fuelsdk;
+
+/*
+ * <p>
+ * <i>XXX include full list of configuration options</i>
+ * </p>
+ *
+ * <p>
+ * <i>XXX include overview of logging options</i>
+ * </p>
+ *
+ * <p>
+ * <i>XXX include full list of generic methods and common
+ * properties, e.g. id and key</i>
+ * </p>
  *
  * <p>
  * <i>XXX include overview of filter strings</i>
@@ -139,5 +143,3 @@
  * <i>XXX include how to use API passthrough</i>
  * </p>
  */
-
-package com.exacttarget.fuelsdk;

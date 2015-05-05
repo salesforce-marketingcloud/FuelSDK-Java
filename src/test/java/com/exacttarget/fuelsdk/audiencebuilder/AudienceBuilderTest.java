@@ -47,7 +47,7 @@ import com.exacttarget.fuelsdk.ETResult;
 import com.exacttarget.fuelsdk.ETSdkException;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class ETAudienceBuilderTest {
+public class AudienceBuilderTest {
     private static ETClient client = null;
 
     @BeforeClass

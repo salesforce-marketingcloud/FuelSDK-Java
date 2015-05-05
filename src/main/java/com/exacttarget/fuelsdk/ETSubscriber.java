@@ -41,6 +41,11 @@ import com.exacttarget.fuelsdk.annotations.InternalName;
 import com.exacttarget.fuelsdk.annotations.SoapObject;
 import com.exacttarget.fuelsdk.internal.Subscriber;
 
+/**
+ * An <code>ETSubscriber</code> object represents an email subscriber
+ * in the Salesforce Marketing Cloud.
+ */
+
 @SoapObject(internalType = Subscriber.class, unretrievable = {
     "Attributes", "ModifiedDate"
 })
@@ -70,10 +75,12 @@ public class ETSubscriber extends ETSoapObject {
 
     public ETSubscriber() {}
 
+    @Override
     public String getId() {
         return id;
     }
 
+    @Override
     public void setId(String id) {
         this.id = id;
     }
@@ -166,27 +173,6 @@ public class ETSubscriber extends ETSoapObject {
     @Deprecated
     public void setSubscriberKey(String subscriberKey) {
         setKey(subscriberKey);
-    }
-
-    public class Attribute {
-        private String name = null;
-        private String value = null;
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getValue() {
-            return value;
-        }
-
-        public void setValue(String value) {
-            this.value = value;
-        }
     }
 
     public enum Status {
