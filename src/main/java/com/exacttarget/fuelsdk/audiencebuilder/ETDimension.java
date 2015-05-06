@@ -38,7 +38,6 @@ import java.util.List;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETExpression;
 import com.exacttarget.fuelsdk.ETFilter;
@@ -123,11 +122,12 @@ public class ETDimension extends ETRestObject {
         return values;
     }
 
-    public static ETResponse<ETDimension> retrieve(ETClient client,
-                                                   Class<ETDimension> type,
-                                                   Integer page,
-                                                   Integer pageSize,
-                                                   ETFilter filter)
+    @SuppressWarnings("unchecked")
+    public static <T extends ETRestObject> ETResponse<T> retrieve(ETClient client,
+                                                                  Class<T> type,
+                                                                  Integer page,
+                                                                  Integer pageSize,
+                                                                  ETFilter filter)
         throws ETSdkException
     {
         if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
@@ -138,13 +138,13 @@ public class ETDimension extends ETRestObject {
             {
                 path = "AudienceBuilder/Dimension/{dimensionID}";
             }
-            return ETRestObject.soapCall(client,
-                                         ETDimension.class,
-                                         "GET",
-                                         path,
-                                         page,
-                                         pageSize,
-                                         filter);
+            return (ETResponse<T>) ETRestObject.soapCall(client,
+                                                         ETDimension.class,
+                                                         "GET",
+                                                         path,
+                                                         page,
+                                                         pageSize,
+                                                         filter);
         }
         return ETRestObject.retrieve(client, type, page, pageSize, filter);
     }

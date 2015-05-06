@@ -260,11 +260,11 @@ public class ETAudience extends ETRestObject {
         audienceBuild.setAppendedAttributeSetIds(appendedAttributeSetIds);
     }
 
-    public static ETResponse<ETAudience> retrieve(ETClient client,
-                                                  Class<ETAudience> type,
-                                                  Integer page,
-                                                  Integer pageSize,
-                                                  ETFilter filter)
+    public static <T extends ETRestObject> ETResponse<T> retrieve(ETClient client,
+                                                                  Class<T> type,
+                                                                  Integer page,
+                                                                  Integer pageSize,
+                                                                  ETFilter filter)
         throws ETSdkException
     {
         if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
