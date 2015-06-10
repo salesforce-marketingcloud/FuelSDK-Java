@@ -121,6 +121,14 @@ public class ETCube extends ETRestObject {
             property.setValue(values);
             properties.add(property);
         }
+        APIProperty page = new APIProperty();
+        page.setName("page");
+        page.setValue("1");
+        APIProperty pageSize = new APIProperty();
+        pageSize.setName("pageSize");
+        pageSize.setValue("2500");
+        properties.add(page);
+        properties.add(pageSize);
         return ETRestObject.soapCall(client,
                                      ETCube.class,
                                      "GET",
