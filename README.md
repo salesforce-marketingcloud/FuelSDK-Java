@@ -1,5 +1,5 @@
-Fuel Java client library
-========================
+Fuel Java SDK
+=============
 
 Installation
 ------------

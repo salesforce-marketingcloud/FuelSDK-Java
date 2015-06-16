@@ -7,7 +7,7 @@
   <artifactId>fuel-java</artifactId>
   <version>1.0.2</version>
   <packaging>jar</packaging>
-  <name>Fuel Java client library</name>
+  <name>Fuel Java SDK</name>
   <url>http://code.exacttarget.com</url>
   <properties>
     <cxf.version>2.7.5</cxf.version>
