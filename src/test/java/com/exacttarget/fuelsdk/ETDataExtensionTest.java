@@ -36,6 +36,8 @@ package com.exacttarget.fuelsdk;
 
 import java.util.List;
 
+import com.exacttarget.fuelsdk.audiencebuilder.AudienceBuilderTest;
+import org.junit.Assume;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -54,6 +56,8 @@ public class ETDataExtensionTest {
     public static void setUpBeforeClass()
         throws ETSdkException
     {
+        Assume.assumeNotNull(AudienceBuilderTest.class.getResource("/fuelsdk-test.properties"));
+
         client = new ETClient("/fuelsdk-test.properties");
         dataExtensionFolderId = new Integer(client.getConfiguration().get("dataExtensionFolderId"));
     }
