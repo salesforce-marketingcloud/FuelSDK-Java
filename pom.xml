@@ -36,13 +36,6 @@
         <junit.version>4.12</junit.version>
     </properties>
 
-    <scm>
-        <url>https://github.com/viadeo/fuel-java</url>
-        <connection>scm:git:git://github.com/viadeo/fuel-java.git</connection>
-        <developerConnection>scm:git:git@github.com:viadeo/fuel-java.git</developerConnection>
-        <tag>HEAD</tag>
-    </scm>
-
     <dependencies>
         <!-- dependency injection -->
         <dependency>
