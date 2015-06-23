@@ -11,7 +11,7 @@
 
     <groupId>com.exacttarget</groupId>
     <artifactId>fuel-java</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3-SNAPSHOT</version>
 
     <name>Fuel Java SDK</name>
     <url>http://code.exacttarget.com</url>
