@@ -34,17 +34,22 @@
 
 package com.exacttarget.fuelsdk.audiencebuilder;
 
-import org.junit.BeforeClass;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
-import static org.junit.Assert.*;
-
 import com.exacttarget.fuelsdk.ETClient;
 import com.exacttarget.fuelsdk.ETConfiguration;
 import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.ETResult;
 import com.exacttarget.fuelsdk.ETSdkException;
+import org.junit.Assume;
+import org.junit.BeforeClass;
+import org.junit.FixMethodOrder;
+import org.junit.Test;
+import org.junit.runners.MethodSorters;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class AudienceBuilderTest {
@@ -54,6 +59,8 @@ public class AudienceBuilderTest {
     public static void setUpBeforeClass()
         throws ETSdkException
     {
+        Assume.assumeNotNull(AudienceBuilderTest.class.getResource("/fuelsdk-test.properties"));
+
         ETConfiguration configuration = new ETConfiguration("/fuelsdk-test.properties");
         configuration.set("clientId", configuration.get("audienceBuilderClientId"));
         configuration.set("clientSecret", configuration.get("audienceBuilderClientSecret"));
