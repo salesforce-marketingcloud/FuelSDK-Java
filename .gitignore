@@ -1,1 +1,15 @@
-/target
+# OS X
+.DS_Store
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# IntelliJ IDEA
+*.iml
+*.iws
+.idea/
+
+# Maven
+target/
