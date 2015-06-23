@@ -192,6 +192,13 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>2.10.3</version>
+                <configuration>
+                    <sourcepath>
+                         ${basedir}/src/main/java/com/exacttarget/fuelsdk
+                        :${project.build.directory}/generated-sources/cxf
+                        :${project.build.directory}/generated-sources/javacc
+                    </sourcepath>
+                </configuration>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
