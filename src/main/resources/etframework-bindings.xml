@@ -7,8 +7,8 @@
     <jaxb:globalBindings generateElementProperty="false">
       <!-- Map xsd:dateTime to java.util.Date: -->
       <jaxb:javaType name="java.util.Date" xmlType="xsd:dateTime"
-                     parseMethod="org.apache.cxf.tools.common.DataTypeAdapter.parseDateTime"
-                     printMethod="org.apache.cxf.tools.common.DataTypeAdapter.printDateTime"/>
+                     parseMethod="org.apache.cxf.xjc.runtime.DataTypeAdapter.parseDateTime"
+                     printMethod="org.apache.cxf.xjc.runtime.DataTypeAdapter.printDateTime"/>
     </jaxb:globalBindings>
     <!-- Rename HTMLBody property so getter method is getId
          not getID; otherwise, reflection doesn't work. -->
