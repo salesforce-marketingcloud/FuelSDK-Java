@@ -122,10 +122,10 @@ public class ETCube extends ETRestObject {
             properties.add(property);
         }
         APIProperty page = new APIProperty();
-        page.setName("page");
+        page.setName("$page");
         page.setValue("1");
         APIProperty pageSize = new APIProperty();
-        pageSize.setName("pageSize");
+        pageSize.setName("$pageSize");
         pageSize.setValue("2500");
         properties.add(page);
         properties.add(pageSize);
