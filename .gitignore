@@ -2,14 +2,14 @@
 .DS_Store
 
 # Eclipse
-.project
 .classpath
+.project
 .settings/
 
 # IntelliJ IDEA
+.idea/
 *.iml
 *.iws
-.idea/
 
 # Maven
 target/

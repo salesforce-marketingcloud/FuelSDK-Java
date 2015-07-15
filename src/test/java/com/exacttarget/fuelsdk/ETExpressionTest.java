@@ -34,20 +34,20 @@
 
 package com.exacttarget.fuelsdk;
 
-import com.exacttarget.fuelsdk.audiencebuilder.AudienceBuilderTest;
+import java.util.List;
+
 import org.junit.Assume;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import java.util.List;
-
 import static org.junit.Assert.assertEquals;
 
 public class ETExpressionTest {
     @BeforeClass
     public static void setUpBeforeClass()
-            throws ETSdkException {
-        Assume.assumeNotNull(AudienceBuilderTest.class.getResource("/fuelsdk-test.properties"));
+        throws ETSdkException
+    {
+        Assume.assumeNotNull(ETExpressionTest.class
+                .getResource("/fuelsdk-test.properties"));
     }
 
     @Test

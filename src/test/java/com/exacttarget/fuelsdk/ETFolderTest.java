@@ -34,16 +34,14 @@
 
 package com.exacttarget.fuelsdk;
 
-import com.exacttarget.fuelsdk.audiencebuilder.AudienceBuilderTest;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Assume;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -58,8 +56,8 @@ public class ETFolderTest {
     public static void setUpBeforeClass()
         throws ETSdkException
     {
-        Assume.assumeNotNull(AudienceBuilderTest.class.getResource("/fuelsdk-test.properties"));
-
+        Assume.assumeNotNull(ETFolderTest.class
+                .getResource("/fuelsdk-test.properties"));
         client = new ETClient();
     }
 
