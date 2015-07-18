@@ -34,6 +34,7 @@
 
 package com.exacttarget.fuelsdk;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -55,8 +56,15 @@ import com.exacttarget.fuelsdk.internal.TriggeredSend;
 import com.exacttarget.fuelsdk.internal.TriggeredSendDefinition;
 
 /**
- * An <code>ETTriggeredEmail</code> object represents a triggered email
- * in the Salesforce Marketing Cloud.
+ * An <code>ETTriggeredEmail</code> represents a Triggered Email
+ * in the Salesforce Marketing Cloud. Triggered Emails are created
+ * in the Marketing Cloud Email app under the Interactions menu:
+ *
+ * <screenshot>
+ *
+ * Terminology note: Triggered Emails are sometimes referred
+ * to as "Triggered Sends" in the Email app, and the SOAP API
+ * refers to Triggered Emails as "Triggered Send Definitions".
  */
 
 @SoapObject(internalType = TriggeredSendDefinition.class, unretrievable = {
@@ -115,10 +123,12 @@ public class ETTriggeredEmail extends ETSoapObject {
 
     public ETTriggeredEmail() {}
 
+    @Override
     public String getId() {
         return id;
     }
 
+    @Override
     public void setId(String id) {
         this.id = id;
     }
@@ -267,11 +277,23 @@ public class ETTriggeredEmail extends ETSoapObject {
         this.suppressTracking = suppressTracking;
     }
 
+    public ETResponse<ETTriggeredEmail> send(String... addresses)
+        throws ETSdkException
+    {
+        List<ETSubscriber> subscribers = new ArrayList<ETSubscriber>();
+        for (String address : addresses) {
+            ETSubscriber subscriber = new ETSubscriber();
+            subscriber.setKey(address);
+            subscriber.setEmailAddress(address);
+            subscribers.add(subscriber);
+        }
+        return send(subscribers);
+    }
+
     public ETResponse<ETTriggeredEmail> send(ETSubscriber... subscribers)
         throws ETSdkException
     {
         return send(Arrays.asList(subscribers));
-
     }
 
     public ETResponse<ETTriggeredEmail> send(List<ETSubscriber> subscribers)
