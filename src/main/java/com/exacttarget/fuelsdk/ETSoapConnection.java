@@ -51,7 +51,7 @@ import org.apache.cxf.interceptor.LoggingInInterceptor;
 import org.apache.cxf.interceptor.LoggingOutInterceptor;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.transport.http.HTTPConduit;
-
+import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
 import org.apache.log4j.Logger;
 
 import com.exacttarget.fuelsdk.internal.PartnerAPI;
@@ -92,8 +92,32 @@ public class ETSoapConnection {
             soapFactory = SOAPFactory.newInstance();
             soapClient.getRequestContext().put(Message.ENDPOINT_ADDRESS,
                     endpoint);
+            HTTPConduit conduit = (HTTPConduit) soapClient.getConduit();
+            Integer cxfConnectTimeout = null;
+            Integer cxfReceiveTimeout = null;
+            try {
+                cxfConnectTimeout = new Integer(
+                        client.getConfiguration().get("cxfConnectTimeout"));
+            } catch (NumberFormatException ex) {
+                // Ignore--this just means the value specified in
+                // the fuelsdk.properties file is not an integer.
+            }
+            try {
+                cxfReceiveTimeout = new Integer(
+                        client.getConfiguration().get("cxfReceiveTimeout"));
+            } catch (NumberFormatException ex) {
+                // Ignore--this just means the value specified in
+                // the fuelsdk.properties file is not an integer.
+            }
+            HTTPClientPolicy clientPolicy = new HTTPClientPolicy();
+            if (cxfConnectTimeout != null) {
+                clientPolicy.setConnectionTimeout(cxfConnectTimeout);
+            }
+            if (cxfReceiveTimeout != null) {
+                clientPolicy.setReceiveTimeout(cxfReceiveTimeout);
+            }
+            conduit.setClient(clientPolicy);
             if (client.getConfiguration().isTrue("cxfDisableCNCheck")) {
-                HTTPConduit conduit = (HTTPConduit) soapClient.getConduit();
                 TLSClientParameters tlsClientParameters = new TLSClientParameters();
                 tlsClientParameters.setDisableCNCheck(true);
                 conduit.setTlsClientParameters(tlsClientParameters);
