@@ -522,6 +522,7 @@ public class ETAudience extends ETRestObject {
           case LIKE:
             filterDefinition.addCondition(toCondition(expression));
             break;
+          case BETWEEN:
           case IN:
           case AND:
           case OR:
@@ -596,6 +597,21 @@ public class ETAudience extends ETRestObject {
                 new FilterDefinition.ConditionSet();
         ETExpression.Operator operator = expression.getOperator();
         switch (operator) {
+          case BETWEEN:
+            conditionSet.setOperator("Inc");
+            FilterDefinition.Condition condition1 =
+                    new FilterDefinition.Condition();
+            condition1.setId(expression.getProperty());
+            condition1.setOperator("GreaterThanOrEquals");
+            condition1.setConditionValue(expression.getValues().get(0));
+            conditionSet.addCondition(condition1);
+            FilterDefinition.Condition condition2 =
+                    new FilterDefinition.Condition();
+            condition2.setId(expression.getProperty());
+            condition2.setOperator("LessThanOrEquals");
+            condition2.setConditionValue(expression.getValues().get(1));
+            conditionSet.addCondition(condition2);
+            break;
           case IN:
             conditionSet.setOperator("InList");
             for (String value : expression.getValues()) {
