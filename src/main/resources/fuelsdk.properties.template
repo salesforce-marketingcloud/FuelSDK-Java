@@ -50,14 +50,6 @@
 #
 
 #
-# Specifies whether to use the SOAP or REST API for Audience Builder
-# (default rest):
-#
-
-#audienceBuilderApi=rest
-#audienceBuilderApi=soap
-
-#
 # The amount of time in milliseconds that CXF will attempt to
 # establish a connection before it times out (default 30000).
 # (A value of 0 means no timeout.)
