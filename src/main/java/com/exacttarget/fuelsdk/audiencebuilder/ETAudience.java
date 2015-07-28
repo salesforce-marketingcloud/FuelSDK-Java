@@ -633,7 +633,8 @@ public class ETAudience extends ETRestObject {
                 subexpression2 = subexpressions.get(1);
                 if (subexpression2.getOperator() == null) {
                     conditionSet.addConditionSet(toConditionSet(subexpression2.getSubexpressions().get(0)));
-                } else if (subexpression2.getOperator() == ETExpression.Operator.IN ||
+                } else if (subexpression2.getOperator() == ETExpression.Operator.BETWEEN ||
+                           subexpression2.getOperator() == ETExpression.Operator.IN ||
                            subexpression2.getOperator() == ETExpression.Operator.AND ||
                            subexpression2.getOperator() == ETExpression.Operator.OR)
                 {
@@ -645,7 +646,8 @@ public class ETAudience extends ETRestObject {
             } while (subexpression1.getOperator() == ETExpression.Operator.AND);
             if (subexpression1.getOperator() == null) {
                 conditionSet.addConditionSet(toConditionSet(subexpression1.getSubexpressions().get(0)));
-            } else if (subexpression1.getOperator() == ETExpression.Operator.IN ||
+            } else if (subexpression1.getOperator() == ETExpression.Operator.BETWEEN ||
+                       subexpression1.getOperator() == ETExpression.Operator.IN ||
                        subexpression1.getOperator() == ETExpression.Operator.AND ||
                        subexpression1.getOperator() == ETExpression.Operator.OR)
             {
@@ -655,7 +657,8 @@ public class ETAudience extends ETRestObject {
             }
             if (subexpression2.getOperator() == null) {
                 conditionSet.addConditionSet(toConditionSet(subexpression2.getSubexpressions().get(0)));
-            } else if (subexpression2.getOperator() == ETExpression.Operator.IN ||
+            } else if (subexpression2.getOperator() == ETExpression.Operator.BETWEEN ||
+                       subexpression2.getOperator() == ETExpression.Operator.IN ||
                        subexpression2.getOperator() == ETExpression.Operator.AND ||
                        subexpression2.getOperator() == ETExpression.Operator.OR)
             {
@@ -672,7 +675,8 @@ public class ETAudience extends ETRestObject {
             do {
                 subexpression1 = subexpressions.get(0);
                 subexpression2 = subexpressions.get(1);
-                if (subexpression2.getOperator() == ETExpression.Operator.IN ||
+                if (subexpression2.getOperator() == ETExpression.Operator.BETWEEN ||
+                    subexpression2.getOperator() == ETExpression.Operator.IN ||
                     subexpression2.getOperator() == ETExpression.Operator.AND ||
                     subexpression2.getOperator() == ETExpression.Operator.OR)
                 {
@@ -682,7 +686,8 @@ public class ETAudience extends ETRestObject {
                 }
                 subexpressions = subexpression1.getSubexpressions();
             } while (subexpression1.getOperator() == ETExpression.Operator.OR);
-            if (subexpression1.getOperator() == ETExpression.Operator.IN ||
+            if (subexpression1.getOperator() == ETExpression.Operator.BETWEEN ||
+                subexpression1.getOperator() == ETExpression.Operator.IN ||
                 subexpression1.getOperator() == ETExpression.Operator.AND ||
                 subexpression1.getOperator() == ETExpression.Operator.OR)
             {
@@ -690,7 +695,8 @@ public class ETAudience extends ETRestObject {
             } else {
                 conditionSet.addCondition(toCondition(subexpression1));
             }
-            if (subexpression2.getOperator() == ETExpression.Operator.IN ||
+            if (subexpression2.getOperator() == ETExpression.Operator.BETWEEN ||
+                subexpression2.getOperator() == ETExpression.Operator.IN ||
                 subexpression2.getOperator() == ETExpression.Operator.AND ||
                 subexpression2.getOperator() == ETExpression.Operator.OR)
             {
