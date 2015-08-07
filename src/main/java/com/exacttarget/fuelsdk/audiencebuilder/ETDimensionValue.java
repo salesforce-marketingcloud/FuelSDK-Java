@@ -34,12 +34,26 @@
 
 package com.exacttarget.fuelsdk.audiencebuilder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import com.exacttarget.fuelsdk.ETClient;
+import com.exacttarget.fuelsdk.ETFilter;
+import com.exacttarget.fuelsdk.ETResponse;
+import com.exacttarget.fuelsdk.ETRestObject;
+import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.annotations.ExternalName;
+import com.exacttarget.fuelsdk.annotations.RestObject;
+import com.exacttarget.fuelsdk.internal.APIProperty;
 
-public class ETDimensionValue {
+@RestObject(path = "/internal/v1/AudienceBuilder/Dimension/{id}/Values",
+            primaryKey = "id",
+            collection = "entities",
+            totalCount = "totalCount")
+public class ETDimensionValue extends ETRestObject {
     @Expose @SerializedName("pK")
     @ExternalName("key")
     private String key = null;
@@ -49,6 +63,18 @@ public class ETDimensionValue {
     @Expose
     @ExternalName("count")
     private Integer count = null;
+
+    @Override
+    public String getId() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public void setId(String id) {
+        // TODO Auto-generated method stub
+
+    }
 
     public String getKey() {
         return key;
@@ -60,5 +86,42 @@ public class ETDimensionValue {
 
     public Integer getCount() {
         return count;
+    }
+
+    public static <T extends ETRestObject> ETResponse<T> retrieve(ETClient client,
+                                                                  Class<T> type,
+                                                                  Integer page,
+                                                                  Integer pageSize,
+                                                                  ETFilter filter)
+        throws ETSdkException
+    {
+        if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
+            List<APIProperty> properties = new ArrayList<APIProperty>();
+            APIProperty property = new APIProperty();
+            property.setName("DimensionID");
+            property.setValue(filter.getExpression().getValue()); // XXX
+            properties.add(property);
+            if (page != null) {
+                property = new APIProperty();
+                property.setName("$page");
+                property.setValue(page.toString());
+                properties.add(property);
+            }
+            if (pageSize != null) {
+                property = new APIProperty();
+                property.setName("$pageSize");
+                property.setValue(pageSize.toString());
+                properties.add(property);
+            }
+            ETResponse<ETDimensionValue> response =
+                    ETRestObject.soapCall(client,
+                                          ETDimensionValue.class,
+                                          "GET",
+                                          "AudienceBuilder/Dimension/{DimensionID}/Values",
+                                          properties);
+            return (ETResponse<T>) response;
+        }
+        // XXX
+        return ETRestObject.retrieve(client, type, page, pageSize, filter);
     }
 }
