@@ -37,12 +37,16 @@ package com.exacttarget.fuelsdk;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.Assume;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ETFolderTest {
@@ -52,6 +56,8 @@ public class ETFolderTest {
     public static void setUpBeforeClass()
         throws ETSdkException
     {
+        Assume.assumeNotNull(ETFolderTest.class
+                .getResource("/fuelsdk-test.properties"));
         client = new ETClient();
     }
 

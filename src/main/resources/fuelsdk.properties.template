@@ -50,12 +50,36 @@
 #
 
 #
-# Specifies whether to use the SOAP or REST API for Audience Builder
-# (default rest):
+# The amount of time in milliseconds that CXF will attempt to
+# establish a connection before it times out (default 30000).
+# (A value of 0 means no timeout.)
 #
 
-#audienceBuilderApi=rest
-#audienceBuilderApi=soap
+#cxfConnectTimeout=30000 # 30 seconds
+
+#
+# The amount of time in milliseconds that CXF will wait for a
+# response before it times out (default 60000). (A value of 0
+# means no timeout.)
+#
+
+#cxfReceiveTimeout=60000 # 60 seconds
+
+#
+# The amount of time in milliseconds that CXF will attempt to
+# establish a connection before it times out (default 30000).
+# (A value of 0 means no timeout.)
+#
+
+#cxfConnectTimeout=30000 # 30 seconds
+
+#
+# The amount of time in milliseconds that CXF will wait for a
+# response before it times out (default 60000). (A value of 0
+# means no timeout.)
+#
+
+#cxfReceiveTimeout=60000 # 60 seconds
 
 #
 # Disable the SSL certificate Common Name (CN) check in Apache CXF

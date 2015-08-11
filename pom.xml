@@ -1,11 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                             http://maven.apache.org/maven-v4_0_0.xsd">
+                             http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.exacttarget</groupId>
   <artifactId>fuel-java</artifactId>
-  <version>1.0.3</version>
+  <version>1.1.0-pre1</version>
   <packaging>jar</packaging>
   <name>Fuel Java SDK</name>
   <url>http://code.exacttarget.com</url>
@@ -125,11 +126,6 @@
             <exclude>annotations/PrettyPrint.java</exclude>
             <exclude>annotations/RestObject.java</exclude>
             <exclude>annotations/SoapObject.java</exclude>
-            <exclude>audiencebuilder/ETAudience.java</exclude>
-            <exclude>audiencebuilder/ETDimension.java</exclude>
-            <exclude>audiencebuilder/ETDimensionValue.java</exclude>
-            <exclude>audiencebuilder/ETHierarchy.java</exclude>
-            <exclude>audiencebuilder/ETSegment.java</exclude>
           </sourceFileExcludes>
         </configuration>
       </plugin>

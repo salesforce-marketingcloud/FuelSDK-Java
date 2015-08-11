@@ -1,0 +1,98 @@
+<html>
+<body>
+<p>
+The Fuel Java SDK enables developers to easily access the
+Salesforce Marketing Cloud (formerly ExactTarget)
+from the Java platform. Among other things, the Java SDK:
+</p>
+
+<ul>
+<li>
+automatically acquires and refreshes Marketing Cloud access tokens
+</li>
+<li>
+enables developers to access both Marketing Cloud SOAP and REST
+APIs in the same session
+</li>
+<li>
+exposes simplified versions of the most commonly used Marketing
+Cloud objects and methods as Java native objects
+</li>
+<li>
+provides passthroughs so developers can access the full
+REST and SOAP APIs directly when they need to go beyond
+the simplified interfaces
+</li>
+<li>
+adds "sugar" methods for the most commonly used Marketing Cloud
+features that make it easy to use those features (e.g., the SDK
+provides a SQL-like interface to data extensions)
+</li>
+</ul>
+
+<p>
+To use the Java SDK, you first need to instantiate
+an <code>ETClient</code> object:
+</p>
+
+<pre>
+ETClient client = new ETClient();
+</pre>
+
+<p>
+The Java SDK is highly configurable. By default, configuration is
+read from a properties file named <code>fuelsdk.properties</code>,
+which should be located in your class path.
+Alternatively, you can pass in the path of the file to be read as
+an argument to the <code>ETClient</code> constructor:
+</p>
+
+<pre>
+ETClient client = new ETClient("/Users/imurdock/fuel.properties");
+</pre>
+
+<p>
+You can also pass in a programmatically constructed
+<code>ETConfiguration</code> object:
+</p>
+
+<pre>
+ETConfiguration configuration = new ETConfiguration();
+configuration.setClientId("clientIdGoesHere");
+configuration.setClientSecret("clientSecretGoesHere");
+
+ETClient client = new ETClient(ETConfiguration);
+</pre>
+
+<p>
+Once the client has been initialized, you interacted
+with the API using its <code>create</code>, <code>retrieve</code>,
+<code>update</code>, and <code>delete</code> methods.
+</p>
+
+<p>
+In addition, some objects (e.g., <code>ETDataExtension</code>
+and <code>ETTriggeredEmail</code> contain object native
+methods (e.g., <code>insert</code>, <code>select</code>,
+<code>update</code>, and <code>delete</code>
+for <code>ETDataExtension</code> and <code>send</code> for
+<code>TriggeredEmail</code>). For information on these
+object native methods, please see the class documentation.
+</p>
+
+<!--
+XXX include full list of configuration options
+
+XXX include overview of logging options
+
+XXX include full list of generic methods and common properties,
+e.g. id and key
+
+XXX include overview of filter strings
+
+XXX include overview of ETResponse / ETResult
+
+XXX include how to use API passthrough
+-->
+</body>
+</html>

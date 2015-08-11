@@ -36,13 +36,18 @@ package com.exacttarget.fuelsdk;
 
 import java.util.List;
 
+import org.junit.Assume;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
-import static org.junit.Assert.*;
-import static com.exacttarget.fuelsdk.ETResult.Status.*;
+import static com.exacttarget.fuelsdk.ETResult.Status.OK;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ETDataExtensionTest {
@@ -54,8 +59,11 @@ public class ETDataExtensionTest {
     public static void setUpBeforeClass()
         throws ETSdkException
     {
+        Assume.assumeNotNull(ETDataExtensionTest.class
+                .getResource("/fuelsdk-test.properties"));
         client = new ETClient("/fuelsdk-test.properties");
-        dataExtensionFolderId = new Integer(client.getConfiguration().get("dataExtensionFolderId"));
+        dataExtensionFolderId = new Integer(client.getConfiguration()
+                .get("dataExtensionFolderId"));
     }
 
     private static String id = null;
