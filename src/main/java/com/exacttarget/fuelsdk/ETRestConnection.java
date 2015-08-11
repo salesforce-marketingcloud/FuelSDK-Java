@@ -51,7 +51,7 @@ import org.apache.log4j.Logger;
 
 /**
  * An <code>ETRestConnection</code> represents an active
- * connection to the REST API.
+ * connection to the Salesforce Marketing Cloud REST API.
  */
 
 public class ETRestConnection {
@@ -62,12 +62,6 @@ public class ETRestConnection {
     private String endpoint = null;
 
     private boolean isAuthConnection = false;
-
-    public enum Method {
-        GET, POST, PATCH, DELETE
-    }
-
-    private final static int URL_MAX_LENGTH = 2048;
 
     public ETRestConnection(ETClient client, String endpoint)
         throws ETSdkException
@@ -156,6 +150,8 @@ public class ETRestConnection {
         connection.disconnect();
         return response;
     }
+
+    private final static int URL_MAX_LENGTH = 2048;
 
     private HttpURLConnection sendRequest(String path, Method method)
         throws ETSdkException
@@ -272,12 +268,12 @@ public class ETRestConnection {
             }
         } catch (IOException ex) {
             throw new ETSdkException("error reading " + connection.getURL(), ex);
-        }
-
-        try {
-            reader.close();
-        } catch (IOException ex) {
-            throw new ETSdkException("error closing " + connection.getURL(), ex);
+        } finally {
+            try {
+                reader.close();
+            } catch (IOException ex) {
+                throw new ETSdkException("error closing " + connection.getURL(), ex);
+            }
         }
 
         String response = stringBuilder.toString();
@@ -291,6 +287,10 @@ public class ETRestConnection {
         }
 
         return response;
+    }
+
+    public enum Method {
+        GET, POST, PATCH, DELETE
     }
 
     public class Response {
