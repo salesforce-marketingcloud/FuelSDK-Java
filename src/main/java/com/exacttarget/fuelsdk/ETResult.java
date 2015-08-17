@@ -42,15 +42,17 @@ public class ETResult<T extends ETApiObject> extends ETObject {
     }
 
     @PrettyPrint
-    private String requestId = null;
-    @PrettyPrint
     private Status status = null;
+    @PrettyPrint
+    private String requestId = null;
     @PrettyPrint
     private String responseCode = null;
     @PrettyPrint
     private String responseMessage = null;
     @PrettyPrint
     private Integer errorCode = null;
+    @PrettyPrint
+    private String errorMessage = null;
     @PrettyPrint
     private T object = null;
 
@@ -94,6 +96,14 @@ public class ETResult<T extends ETApiObject> extends ETObject {
         this.errorCode = errorCode;
     }
 
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
+
     public T getObject() {
         return object;
     }
@@ -107,13 +117,6 @@ public class ETResult<T extends ETApiObject> extends ETObject {
             return object.getId();
         }
         return null;
-    }
-
-    public void setObjectId(String objectId) {
-        // XXX do we even want / need this?
-        if (object != null) {
-            object.setId(objectId);
-        }
     }
 
     /**
@@ -154,19 +157,10 @@ public class ETResult<T extends ETApiObject> extends ETObject {
 
     /**
      * @deprecated
-     * Use <code>getId</code>.
+     * Use <code>getObjectId</code>.
      */
     @Deprecated
     public String getId() {
         return getObjectId();
-    }
-
-    /**
-     * @deprecated
-     * Use <code>setId</code>.
-     */
-    @Deprecated
-    public void setId(String id) {
-        setObjectId(id);
     }
 }
