@@ -34,6 +34,7 @@
 
 package com.exacttarget.fuelsdk.audiencebuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gson.annotations.Expose;
@@ -43,6 +44,7 @@ import com.exacttarget.fuelsdk.ETExpression;
 import com.exacttarget.fuelsdk.ETFilter;
 import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.ETRestObject;
+import com.exacttarget.fuelsdk.ETResult;
 import com.exacttarget.fuelsdk.ETSdkException;
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.RestObject;
@@ -130,6 +132,8 @@ public class ETDimension extends ETRestObject {
                                                                   ETFilter filter)
         throws ETSdkException
     {
+        ETResponse<T> response = null;
+
         if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
             ETExpression expression = filter.getExpression();
             String path = "AudienceBuilder/Dimension";
@@ -138,15 +142,28 @@ public class ETDimension extends ETRestObject {
             {
                 path = "AudienceBuilder/Dimension/{dimensionID}";
             }
-            return (ETResponse<T>) ETRestObject.soapCall(client,
-                                                         ETDimension.class,
-                                                         "GET",
-                                                         path,
-                                                         page,
-                                                         pageSize,
-                                                         filter);
+            response = (ETResponse<T>) ETRestObject.soapCall(client,
+                                                             ETDimension.class,
+                                                             "GET",
+                                                             path,
+                                                             page,
+                                                             pageSize,
+                                                             filter);
+        } else {
+            response = ETRestObject.retrieve(client,
+                                             type,
+                                             page,
+                                             pageSize,
+                                             filter);
         }
-        return ETRestObject.retrieve(client, type, page, pageSize, filter);
+
+        //
+        // Retrieve all dimension values to preserve backward compatibility:
+        //
+
+        ((ETDimension) response.getObject()).hydrate();
+
+        return response;
     }
 
     public static <T extends ETRestObject> ETResponse<T> create(ETClient client,
@@ -168,6 +185,31 @@ public class ETDimension extends ETRestObject {
         throws ETSdkException
     {
         throw new ETSdkException("unsupported operation: delete");
+    }
+
+    public void hydrate()
+        throws ETSdkException
+    {
+        values = new ArrayList<ETDimensionValue>();
+
+        ETClient client = getClient();
+
+        ETResponse<ETDimensionValue> response = null;
+        int page = 0;
+        do {
+            page++;
+            response = client.retrieve(ETDimensionValue.class,
+                                       page,
+                                       2500,
+                                       "id=" + id);
+            if (response.getStatus() == ETResult.Status.ERROR) {
+                throw new ETSdkException("error retrieving dimension values: "
+                        + response.getResponseMessage());
+            }
+            for (ETDimensionValue value : response.getObjects()) {
+                values.add(value);
+            }
+        } while (response.hasMoreResults());
     }
 
     public static String toFilterString(ETExpression expression)

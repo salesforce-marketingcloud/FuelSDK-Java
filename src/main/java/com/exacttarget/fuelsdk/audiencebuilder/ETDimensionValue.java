@@ -41,6 +41,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import com.exacttarget.fuelsdk.ETClient;
+import com.exacttarget.fuelsdk.ETExpression;
 import com.exacttarget.fuelsdk.ETFilter;
 import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.ETRestObject;
@@ -66,14 +67,12 @@ public class ETDimensionValue extends ETRestObject {
 
     @Override
     public String getId() {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public void setId(String id) {
-        // TODO Auto-generated method stub
-
+        // no-op
     }
 
     public String getKey() {
@@ -88,6 +87,7 @@ public class ETDimensionValue extends ETRestObject {
         return count;
     }
 
+    @SuppressWarnings("unchecked")
     public static <T extends ETRestObject> ETResponse<T> retrieve(ETClient client,
                                                                   Class<T> type,
                                                                   Integer page,
@@ -97,31 +97,46 @@ public class ETDimensionValue extends ETRestObject {
     {
         if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
             List<APIProperty> properties = new ArrayList<APIProperty>();
-            APIProperty property = new APIProperty();
-            property.setName("DimensionID");
-            property.setValue(filter.getExpression().getValue()); // XXX
-            properties.add(property);
-            if (page != null) {
-                property = new APIProperty();
-                property.setName("$page");
-                property.setValue(page.toString());
+            ETExpression expression = filter.getExpression();
+            if (expression.getOperator() == ETExpression.Operator.EQUALS &&
+                expression.getProperty().equals("id"))
+            {
+                APIProperty property = new APIProperty();
+                property.setName("DimensionID");
+                property.setValue(expression.getValue());
                 properties.add(property);
+            } else {
+                throw new ETSdkException("dimension ID not specified");
             }
-            if (pageSize != null) {
-                property = new APIProperty();
-                property.setName("$pageSize");
-                property.setValue(pageSize.toString());
-                properties.add(property);
-            }
-            ETResponse<ETDimensionValue> response =
-                    ETRestObject.soapCall(client,
-                                          ETDimensionValue.class,
-                                          "GET",
-                                          "AudienceBuilder/Dimension/{DimensionID}/Values",
-                                          properties);
-            return (ETResponse<T>) response;
+            return (ETResponse<T>) ETRestObject.soapCall(client,
+                                                         ETDimensionValue.class,
+                                                         "GET",
+                                                         "AudienceBuilder/Dimension/{dimensionID}/Values",
+                                                         page,
+                                                         pageSize,
+                                                         properties);
         }
-        // XXX
         return ETRestObject.retrieve(client, type, page, pageSize, filter);
+    }
+
+    public static <T extends ETRestObject> ETResponse<T> create(ETClient client,
+                                                                List<T> objects)
+        throws ETSdkException
+    {
+        throw new ETSdkException("unsupported operation: create");
+    }
+
+    public static <T extends ETRestObject> ETResponse<T> update(ETClient client,
+                                                                List<T> objects)
+        throws ETSdkException
+    {
+        throw new ETSdkException("unsupported operation: update");
+    }
+
+    public static <T extends ETRestObject> ETResponse<T> delete(ETClient client,
+                                                                List<T> objects)
+        throws ETSdkException
+    {
+        throw new ETSdkException("unsupported operation: delete");
     }
 }
