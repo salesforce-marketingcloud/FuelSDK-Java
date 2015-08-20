@@ -38,11 +38,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import org.apache.log4j.Logger;
 
@@ -53,8 +48,6 @@ import com.exacttarget.fuelsdk.annotations.SoapObject;
 import com.exacttarget.fuelsdk.ETDataExtensionColumn.Type;
 import com.exacttarget.fuelsdk.internal.APIObject;
 import com.exacttarget.fuelsdk.internal.APIProperty;
-import com.exacttarget.fuelsdk.internal.AudienceBuilderRestCall;
-import com.exacttarget.fuelsdk.internal.CreateResponse;
 import com.exacttarget.fuelsdk.internal.DataExtension;
 import com.exacttarget.fuelsdk.internal.DataExtensionObject;
 
@@ -315,7 +308,7 @@ public class ETDataExtension extends ETSoapObject {
                                                         ETFilter filter)
         throws ETSdkException
     {
-        String dataExtensionKey = null;
+        String name = null;
 
         //
         // The data extension can be specified using key or name:
@@ -324,90 +317,75 @@ public class ETDataExtension extends ETSoapObject {
         ETExpression e = ETExpression.parse(dataExtension);
         if (e.getProperty().toLowerCase().equals("key")
                 && e.getOperator() == ETExpression.Operator.EQUALS) {
-            dataExtensionKey = e.getValue();
+            name = e.getValue();
+            // if no columns are explicitly requested
+            // retrieve all columns
+            if (filter.getProperties().isEmpty()) {
+                filter.setProperties(retrieveColumnNames(client, name));
+            }
+        } else if (e.getProperty().toLowerCase().equals("name")
+                && e.getOperator() == ETExpression.Operator.EQUALS) {
+            name = e.getValue();
+            // if no columns are explicitly requested
+            // throw an exception
+            // because we need the key
+            // to retrieve columns
+            if (filter.getProperties().isEmpty()) {
+                throw new ETSdkException("columns must be specified "
+                        + "when retrieving data extensions by name");
+            }
+
         } else {
             throw new ETSdkException("invalid data extension filter string");
         }
 
-        List<APIProperty> properties = ETRestObject.toApiProperties(client,
-                                                                    ETRestObject.class,
-                                                                    filter);
+        ETResponse<ETDataExtensionRow> response =
+                ETSoapObject.retrieve(client,
+                                      "DataExtensionObject[" + name + "]",
+                                      filter,
+                                      ETDataExtensionRow.class);
 
-        APIProperty property = new APIProperty();
-        property.setName("key");
-        property.setValue(dataExtensionKey);
-        properties.add(property);
+        //
+        // XXX reenable support for paginated retrieves via REST API
+        //
 
-        if (page != null) {
-            property = new APIProperty();
-            property.setName("$page");
-            property.setValue(page.toString());
-            properties.add(property);
-        }
-        if (pageSize != null) {
-            property = new APIProperty();
-            property.setName("$pageSize");
-            property.setValue(pageSize.toString());
-            properties.add(property);
-        }
-
-        CreateResponse createResponse = ETRestObject.soapCall(client,
-                                                              "GET",
-                                                              "customobjectdata/key/{key}/rowset",
-                                                              null,
-                                                              properties);
-
-        ETResponse<ETDataExtensionRow> response = new ETResponse<ETDataExtensionRow>();
-        response.setRequestId(createResponse.getRequestID());
-        if (createResponse.getOverallStatus().equals("OK")) {
-            response.setStatus(ETResult.Status.OK);
-        } else if (createResponse.getOverallStatus().equals("Error")) {
-            response.setStatus(ETResult.Status.ERROR);
-        }
-        response.setResponseCode(createResponse.getOverallStatus());
-        response.setResponseMessage(createResponse.getOverallStatus());
-        assert createResponse.getResults() != null;
-        assert createResponse.getResults().size() == 1;
-        AudienceBuilderRestCall restResponse = (AudienceBuilderRestCall)
-                createResponse.getResults().get(0).getObject();
-
-        String json = restResponse.getPayload();
-
-        JsonParser jsonParser = new JsonParser();
-        JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
-
-        if (jsonObject.get("page") != null) {
-            response.setPage(jsonObject.get("page").getAsInt());
-            logger.trace("page = " + response.getPage());
-            response.setPageSize(jsonObject.get("pageSize").getAsInt());
-            logger.trace("pageSize = " + response.getPageSize());
-            response.setTotalCount(jsonObject.get("count").getAsInt());
-            logger.trace("totalCount = " + response.getTotalCount());
-
-            if (response.getPage() * response.getPageSize() < response.getTotalCount()) {
-                response.setMoreResults(true);
-            }
-
-            JsonElement elements = jsonObject.get("items");
-            if (elements != null) {
-                for (JsonElement element : elements.getAsJsonArray()) {
-                    JsonObject object = element.getAsJsonObject();
-                    ETDataExtensionRow row = new ETDataExtensionRow();
-                    JsonObject keys = object.get("keys").getAsJsonObject();
-                    for (Map.Entry<String, JsonElement> entry : keys.entrySet()) {
-                        row.setColumn(entry.getKey(), entry.getValue().getAsString(), false);
-                    }
-                    JsonObject values = object.get("values").getAsJsonObject();
-                    for (Map.Entry<String, JsonElement> entry : values.entrySet()) {
-                        row.setColumn(entry.getKey(), entry.getValue().getAsString(), false);
-                    }
-                    row.setClient(client);
-                    ETResult<ETDataExtensionRow> result = new ETResult<ETDataExtensionRow>();
-                    result.setObject(row);
-                    response.addResult(result);
-                }
-            }
-        }
+//        String json = restResponse.getPayload();
+//
+//        JsonParser jsonParser = new JsonParser();
+//        JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
+//
+//        if (jsonObject.get("page") != null) {
+//            response.setPage(jsonObject.get("page").getAsInt());
+//            logger.trace("page = " + response.getPage());
+//            response.setPageSize(jsonObject.get("pageSize").getAsInt());
+//            logger.trace("pageSize = " + response.getPageSize());
+//            response.setTotalCount(jsonObject.get("count").getAsInt());
+//            logger.trace("totalCount = " + response.getTotalCount());
+//
+//            if (response.getPage() * response.getPageSize() < response.getTotalCount()) {
+//                response.setMoreResults(true);
+//            }
+//
+//            JsonElement elements = jsonObject.get("items");
+//            if (elements != null) {
+//                for (JsonElement element : elements.getAsJsonArray()) {
+//                    JsonObject object = element.getAsJsonObject();
+//                    ETDataExtensionRow row = new ETDataExtensionRow();
+//                    JsonObject keys = object.get("keys").getAsJsonObject();
+//                    for (Map.Entry<String, JsonElement> entry : keys.entrySet()) {
+//                        row.setColumn(entry.getKey(), entry.getValue().getAsString(), false);
+//                    }
+//                    JsonObject values = object.get("values").getAsJsonObject();
+//                    for (Map.Entry<String, JsonElement> entry : values.entrySet()) {
+//                        row.setColumn(entry.getKey(), entry.getValue().getAsString(), false);
+//                    }
+//                    row.setClient(client);
+//                    ETResult<ETDataExtensionRow> result = new ETResult<ETDataExtensionRow>();
+//                    result.setObject(row);
+//                    response.addResult(result);
+//                }
+//            }
+//        }
 
         return response;
     }
@@ -669,34 +647,7 @@ public class ETDataExtension extends ETSoapObject {
             return;
         }
 
-        ETClient client = getClient();
-
-        //
-        // Automatically refresh the token if necessary:
-        //
-
-        client.refreshToken();
-
-        //
-        // Retrieve all columns with CustomerKey = this data extension:
-        //
-
-        ETExpression expression = new ETExpression();
-        expression.setProperty("DataExtension.CustomerKey");
-        expression.setOperator(ETExpression.Operator.EQUALS);
-        expression.addValue(getKey());
-
-        ETFilter filter = new ETFilter();
-        filter.setExpression(expression);
-
-        ETResponse<ETDataExtensionColumn> response =
-                ETDataExtensionColumn.retrieve(client,
-                                               ETDataExtensionColumn.class,
-                                               null, // page
-                                               null, // pageSize
-                                               filter);
-
-        columns = response.getObjects();
+        columns = retrieveColumns(getClient(), getKey());
 
         // XXX deal with partially loaded DataExtension objects too
 
@@ -733,6 +684,49 @@ public class ETDataExtension extends ETSoapObject {
         } while (response.hasMoreResults() == true);
 
         return rows;
+    }
+
+    private static List<ETDataExtensionColumn> retrieveColumns(ETClient client,
+                                                               String key)
+        throws ETSdkException
+    {
+        //
+        // Automatically refresh the token if necessary:
+        //
+
+        client.refreshToken();
+
+        //
+        // Retrieve all column objects with the specified key:
+        //
+
+        ETExpression expression = new ETExpression();
+        expression.setProperty("DataExtension.CustomerKey");
+        expression.setOperator(ETExpression.Operator.EQUALS);
+        expression.addValue(key);
+
+        ETFilter filter = new ETFilter();
+        filter.setExpression(expression);
+
+        ETResponse<ETDataExtensionColumn> response =
+                ETDataExtensionColumn.retrieve(client,
+                                               ETDataExtensionColumn.class,
+                                               null, // page
+                                               null, // pageSize
+                                               filter);
+
+        return response.getObjects();
+    }
+
+    private static List<String> retrieveColumnNames(ETClient client,
+                                                    String key)
+        throws ETSdkException
+    {
+        List<String> names = new ArrayList<String>();
+        for (ETDataExtensionColumn column : retrieveColumns(client, key)) {
+            names.add(column.getName());
+        }
+        return names;
     }
 
     private List<String> getColumnNames()
