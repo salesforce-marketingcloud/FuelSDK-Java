@@ -30,7 +30,7 @@ Installation
 
 * Clone the project from GitHub:
 
-    `git clone git@github.com:ExactTarget/fuel-java.git`
+    `git clone git@github.com:salesforcefuel/FuelSDK-Java.git`
 
 * Generate sources from the ExactTarget WSDL:
 
@@ -46,4 +46,4 @@ Installation
 
 * Add the jar file and dependencies ([Apache CXF](http://cxf.apache.org), [Apache Commons BeanUtils](http://commons.apache.org/proper/commons-beanutils), [Apache log4j 1.x](http://logging.apache.org/log4j/1.2/), and [Google Gson](https://code.google.com/p/google-gson)) to your class path
 
-* Obtain a clientId and clientSecret from App Center (see https://code.exacttarget.com/getting-started/setting-your-development-environment) and place them in `fuelsdk.properties` using `src/main/resources/fuelsdk.properties` as a starting template
+* Obtain a client ID and client secret from App Center (see https://code.exacttarget.com/getting-started/setting-your-development-environment) and place them in `fuelsdk.properties` using `src/main/resources/fuelsdk.properties` as a starting template
