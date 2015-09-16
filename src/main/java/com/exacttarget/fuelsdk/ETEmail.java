@@ -42,8 +42,99 @@ import com.exacttarget.fuelsdk.annotations.SoapObject;
 import com.exacttarget.fuelsdk.internal.Email;
 
 /**
- * An <code>ETEmail</code> object represents an email
- * in the Salesforce Marketing Cloud.
+ * <p>
+ * An <code>ETEmail</code> represents an email in the
+ * Salesforce Marketing Cloud. Emails are managed in the
+ * Marketing Cloud Email app under the "Content" menu:
+ * </p>
+ *
+ * <img src="doc-files/ETEmail1.png" width="100%" />
+ *
+ * <p>
+ * Via the SDK, you can create, retrieve, update, and delete emails.
+ * </p>
+ *
+ * <p>
+ * To create an email:
+ * </p>
+ *
+ * <pre>
+ *ETClient client = new ETClient();
+ *ETEmail email = new ETEmail();
+ *email.setKey("myemail");
+ *email.setName("my email");
+ *email.setSubject("This is my first email");
+ *email.setHtmlBody("&lt;b&gt;This is the HTML body&lt;/b&gt;");
+ *email.setTextBody("This is the text body");
+ *ETResponse&lt;ETEmail&gt; response = client.create(email);
+ *for (ETResult&lt;ETEmail&gt; result : response.getResults()) {
+ *    System.out.println(result);
+ *}
+ * </pre>
+ *
+ * <p>
+ * To retrieve an email:
+ * </p>
+ *
+ * <pre>
+ *ETClient client = new ETClient();
+ *ETResponse&lt;ETEmail&gt; response = client.retrieve(ETEmail.class, "key=myemail");
+ *for (ETResult&lt;ETEmail&gt; result : response.getResults()) {
+ *    System.out.println(result);
+ *}
+ * </pre>
+ *
+ * <p>
+ * To retrieve all emails:
+ * </p>
+ *
+ * <pre>
+ *ETClient client = new ETClient();
+ *ETResponse&lt;ETEmail&gt; response = client.retrieve(ETEmail.class);
+ *for (ETResult&lt;ETEmail&gt; result : response.getResults()) {
+ *    System.out.println(result);
+ *}
+ * </pre>
+ *
+ * <p>
+ * To update an email:
+ * </p>
+ *
+ * <pre>
+ *ETClient client = new ETClient();
+ *ETEmail email = client.retrieveObject(ETEmail.class, "key=myemail");
+ *email.setSubject("This is still my first email");
+ *ETResponse&lt;ETEmail&gt; response = client.update(email);
+ *for (ETResult&lt;ETEmail&gt; result : response.getResults()) {
+ *    System.out.println(result);
+ *}
+ * </pre>
+ *
+ * <p>
+ * To delete an email:
+ * </p>
+ *
+ * <pre>
+ *ETClient client = new ETClient();
+ *ETResponse&lt;ETEmail&gt; response = client.delete(ETEmail.class, "key=myemail");
+ *for (ETResult&lt;ETEmail&gt; result : response.getResults()) {
+ *    System.out.println(result);
+ *}
+ * </pre>
+ *
+ * <p>
+ * Note: You can (and should) reuse <code>ETClient</code> instances,
+ * as instantiating an instance involves authenticating with the
+ * Salesforce Marketing Cloud and is, thus, a heavyweight operation.
+ * </p>
+ *
+ * @see <a href="../../../overview-summary.html#objects">Objects</a>
+ *
+ * @see <a href="../../../overview-summary.html#methods">Methods</a>
+ *
+ * @see <a href="http://help.exacttarget.com/en-US/technical_library/web_service_guide/objects/email/">
+ *               http://help.exacttarget.com/en-US/technical_library/web_service_guide/objects/email/
+ *      </a>
  */
 
 @SoapObject(internalType = Email.class)
@@ -73,14 +164,16 @@ public class ETEmail extends ETSoapObject {
     private Boolean isHtmlPaste = null;
     @ExternalName("type")
     @InternalName("emailType")
-    private String type = null; // XXX enum?
+    private Type type = null;
 
     public ETEmail() {}
 
+    @Override
     public String getId() {
         return id;
     }
 
+    @Override
     public void setId(String id) {
         this.id = id;
     }
@@ -157,11 +250,11 @@ public class ETEmail extends ETSoapObject {
         this.isHtmlPaste = isHtmlPaste;
     }
 
-    public String getType() {
+    public Type getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(Type type) {
         this.type = type;
     }
 
