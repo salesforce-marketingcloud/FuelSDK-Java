@@ -83,6 +83,8 @@ public class ETClient {
     private String authEndpoint = null;
     private String soapEndpoint = null;
 
+    private Boolean autoHydrateObjects = true;
+
     private Gson gson = null;
 
     private ETRestConnection authConnection = null;
@@ -168,6 +170,10 @@ public class ETClient {
                                                   password);
         }
 
+        if (configuration.isFalse("autoHydrateObjects")) {
+            autoHydrateObjects = false;
+        }
+
         if (logger.isTraceEnabled()) {
             logger.trace("ETClient initialized:");
             logger.trace("  clientId = " + clientId);
@@ -177,6 +183,7 @@ public class ETClient {
             logger.trace("  endpoint = " + endpoint);
             logger.trace("  authEndpoint = " + authEndpoint);
             logger.trace("  soapEndpoint = " + soapEndpoint);
+            logger.trace("  autoHydrateObjects = " + autoHydrateObjects);
         }
     }
 
@@ -190,6 +197,10 @@ public class ETClient {
 
     public String getLegacyToken() {
         return accessToken;
+    }
+
+    public Boolean autoHydrateObjects() {
+        return autoHydrateObjects;
     }
 
     public ETConfiguration getConfiguration() {

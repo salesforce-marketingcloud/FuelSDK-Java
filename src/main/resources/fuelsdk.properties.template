@@ -50,6 +50,41 @@
 #
 
 #
+# true if the SDK should automatically hydrate objects that require
+# multiple API calls, false otherwise. Note: If autoHydrateObjects
+# is set to false, you will need to call the appropriate retrieve
+# methods on objects that require multiple API calls to fully
+# populate them. For example, with autoHydrateObjects set to true,
+# you can simply do this to get the lists a subscriber is on:
+#
+#     ETSubscriber subscriber = client.retrieveObject(ETSubscriber.class,
+#                                                     "key=[...]");
+#     for (Subscription subscription : subscriber.getSubscriptions()) {
+#         // [...]
+#     }
+#
+# If autoHydrateObjects is set to false, however, getSubscriptions()
+# will return an empty list unless retrieveSubscriptions() is called
+# first:
+#
+#     ETSubscriber subscriber = client.retrieveObject(ETSubscriber.class,
+#                                                     "key=[...]");
+#     subscriber.retrieveSubscriptions();
+#     for (Subscription subscription : subscriber.getSubscriptions()) {
+#         // [...]
+#     }
+#
+# Note that retrieveSubscriptions() need not be called immediately
+# before getSubscriptions().. For example, you could reduce the
+# number of API calls by calling retrieveSubscriptions()
+# manually if and when a subscriber's subscriptions are updated.
+#
+# Default: true
+#
+
+#autoHydrateObjects=false
+
+#
 # The amount of time in milliseconds that CXF will attempt to
 # establish a connection before it times out (default 30000).
 # (A value of 0 means no timeout.)
