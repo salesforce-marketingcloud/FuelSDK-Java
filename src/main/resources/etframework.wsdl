@@ -2,6 +2,11 @@
   <types>
     <schema elementFormDefault="qualified" targetNamespace="http://exacttarget.com/wsdl/partnerAPI" version="1.0" xmlns="http://www.w3.org/2001/XMLSchema">
       <import id="APIFault" schemaLocation="https://webservice.exacttarget.com/ETFrameworkFault.xsd" namespace="urn:fault.partner.exacttarget.com" />
+      <simpleType name="instanceid">
+        <restriction base="xsd:string">
+          <pattern value="\{[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}\}" />
+        </restriction>
+      </simpleType>
       <complexType name="APIObject">
         <sequence>
           <element name="Client" type="tns:ClientID" minOccurs="0" maxOccurs="1" />
@@ -868,6 +873,7 @@
           <extension base="tns:Options">
             <sequence>
               <element name="Explanation" minOccurs="0" maxOccurs="1" type="xsd:string" />
+              <element name="ProgramActivityInstanceID" minOccurs="0" maxOccurs="1" type="tns:instanceid" />
             </sequence>
           </extension>
         </complexContent>
@@ -919,6 +925,7 @@
             <sequence>
               <element name="Object" type="tns:APIObject" />
               <element name="Task" type="tns:TaskResult" />
+              <element name="ProgramActivityInstanceId" minOccurs="0" maxOccurs="1" type="tns:instanceid" />
             </sequence>
           </extension>
         </complexContent>
@@ -1941,6 +1948,7 @@
             <sequence>
               <element name="URLID" minOccurs="0" maxOccurs="1" type="xsd:int" />
               <element name="URL" minOccurs="0" maxOccurs="1" type="xsd:string" />
+              <element name="URLIDLong" minOccurs="0" maxOccurs="1" type="xsd:long" />
             </sequence>
           </extension>
         </complexContent>
@@ -2275,6 +2283,7 @@
               <element name="UniqueClicks" minOccurs="0" maxOccurs="1" type="xsd:int" />
               <element name="URL" minOccurs="0" maxOccurs="1" type="xsd:string" />
               <element name="Subscribers" minOccurs="0" maxOccurs="unbounded" type="tns:TrackingEvent" />
+              <element name="IDLong" minOccurs="0" maxOccurs="1" type="xsd:long" />
             </sequence>
           </extension>
         </complexContent>
@@ -2342,6 +2351,8 @@
               <element name="IsAlwaysOn" minOccurs="0" maxOccurs="1" type="xsd:boolean" />
               <element name="DisableOnEmailBuildError" minOccurs="0" maxOccurs="1" type="xsd:boolean" />
               <element name="PreHeader" minOccurs="0" maxOccurs="1" type="xsd:string" />
+              <element name="ReplyToAddress" minOccurs="0" maxOccurs="1" type="xsd:string" />
+              <element name="ReplyToDisplayName" minOccurs="0" maxOccurs="1" type="xsd:string" />
             </sequence>
           </extension>
         </complexContent>
@@ -2562,6 +2573,8 @@
               <element name="DataRetentionPeriodLength" minOccurs="0" maxOccurs="1" type="xsd:short" />
               <element name="DataRetentionPeriodUnitOfMeasure" minOccurs="0" maxOccurs="1" type="tns:RecurrenceTypeEnum" />
               <element name="ReplyManagementRuleSet" minOccurs="0" maxOccurs="1" type="tns:APIObject" />
+              <element name="ReplyToAddress" minOccurs="0" maxOccurs="1" type="xsd:string" />
+              <element name="ReplyToDisplayName" minOccurs="0" maxOccurs="1" type="xsd:string" />
             </sequence>
           </extension>
         </complexContent>
@@ -2760,6 +2773,8 @@
               <element name="TimeZone" type="tns:TimeZone" minOccurs="0" maxOccurs="1" />
               <element name="SeedListOccurance" minOccurs="0" maxOccurs="1" type="xsd:int" />
               <element name="PreHeader" minOccurs="0" maxOccurs="1" type="xsd:string" />
+              <element name="ReplyToAddress" minOccurs="0" maxOccurs="1" type="xsd:string" />
+              <element name="ReplyToDisplayName" minOccurs="0" maxOccurs="1" type="xsd:string" />
             </sequence>
           </extension>
         </complexContent>
@@ -3101,6 +3116,7 @@
               <element minOccurs="0" maxOccurs="1" name="IsPrimaryKey" type="xsd:boolean" />
               <element minOccurs="0" maxOccurs="1" name="FieldType" type="tns:DataExtensionFieldType" />
               <element minOccurs="0" maxOccurs="1" name="DataExtension" type="tns:DataExtension" />
+              <element minOccurs="0" maxOccurs="1" name="StorageType" type="tns:DataExtensionFieldStorageType" />
             </sequence>
           </extension>
         </complexContent>
@@ -3115,6 +3131,16 @@
           <enumeration value="Phone" />
           <enumeration value="Decimal" />
           <enumeration value="Locale" />
+          <enumeration value="Base16Encrypted" />
+          <enumeration value="Base16EncryptedEmail" />
+        </restriction>
+      </simpleType>
+      <simpleType name="DataExtensionFieldStorageType">
+        <restriction base="xsd:string">
+          <enumeration value="Unspecified" />
+          <enumeration value="Plain" />
+          <enumeration value="Obfuscated" />
+          <enumeration value="Encrypted" />
         </restriction>
       </simpleType>
       <simpleType name="DateTimeUnitOfMeasure">
@@ -3327,6 +3353,8 @@
               <element name="SourceObject" minOccurs="0" maxOccurs="1" type="tns:APIObject" />
               <element name="DestinationType" minOccurs="0" maxOccurs="1" type="xsd:int" />
               <element name="SubscriptionDefinitionId" minOccurs="0" maxOccurs="1" type="xsd:string" />
+              <element name="EncodingCodePage" minOccurs="0" maxOccurs="1" type="xsd:int" />
+              <element name="SmsMemberSharedShortCodeId" minOccurs="0" maxOccurs="1" type="xsd:string" />
             </sequence>
           </extension>
         </complexContent>
@@ -3381,6 +3409,11 @@
           <extension base="tns:InteractionDefinition" />
         </complexContent>
       </complexType>
+      <complexType name="GroupConnectActivity">
+        <complexContent>
+          <extension base="tns:InteractionDefinition" />
+        </complexContent>
+      </complexType>
       <complexType name="FileTransferActivity">
         <complexContent>
           <extension base="tns:InteractionDefinition" />
@@ -3419,6 +3452,7 @@
             <xsd:sequence>
               <xsd:element name="SendID" minOccurs="0" maxOccurs="1" type="xsd:int" />
               <xsd:element name="Link" minOccurs="0" maxOccurs="1" type="tns:Link" />
+              <xsd:element name="IDLong" minOccurs="0" maxOccurs="1" type="xsd:long" />
             </xsd:sequence>
           </xsd:extension>
         </xsd:complexContent>
@@ -3607,6 +3641,17 @@
               <element name="TargetUpdateType" minOccurs="0" maxOccurs="1" type="xsd:string" />
               <element name="FileSpec" minOccurs="0" maxOccurs="1" type="xsd:string" />
               <element name="FileType" minOccurs="0" maxOccurs="1" type="xsd:string" />
+              <element name="Status" minOccurs="0" maxOccurs="1" type="xsd:string" />
+              <element name="CategoryID" minOccurs="0" maxOccurs="1" type="xsd:int" />
+            </sequence>
+          </extension>
+        </complexContent>
+      </complexType>
+      <complexType name="HiveQueryDefinition">
+        <complexContent>
+          <extension base="tns:InteractionDefinition">
+            <sequence>
+              <element name="QueryDefinition" minOccurs="0" maxOccurs="1" type="xsd:string" />
               <element name="Status" minOccurs="0" maxOccurs="1" type="xsd:string" />
               <element name="CategoryID" minOccurs="0" maxOccurs="1" type="xsd:int" />
             </sequence>
@@ -3802,6 +3847,15 @@
               </element>
               <element name="ScheduledTime" minOccurs="0" maxOccurs="1" type="xsd:dateTime" />
               <element name="AutomationType" minOccurs="0" maxOccurs="1" type="xsd:string" />
+              <element name="UpdateModified" minOccurs="0" maxOccurs="1" type="xsd:boolean" />
+              <element name="LastRunInstanceID" minOccurs="0" maxOccurs="1" type="xsd:string" />
+              <element name="CreatedBy" minOccurs="0" maxOccurs="1" type="xsd:long" />
+              <element name="CategoryID" minOccurs="0" maxOccurs="1" type="xsd:string" />
+              <element name="LastRunTime" minOccurs="0" maxOccurs="1" type="xsd:dateTime" />
+              <element name="LastSaveDate" minOccurs="0" maxOccurs="1" type="xsd:dateTime" />
+              <element name="ModifiedBy" minOccurs="0" maxOccurs="1" type="xsd:long" />
+              <element name="RecurrenceID" minOccurs="0" maxOccurs="1" type="xsd:string" />
+              <element name="LastSavedBy" minOccurs="0" maxOccurs="1" type="xsd:long" />
             </sequence>
           </extension>
         </complexContent>
@@ -3852,12 +3906,11 @@
         <complexContent>
           <extension base="tns:APIObject">
             <sequence>
-              <element name="Name" type="xsd:string" minOccurs="0" maxOccurs="1" />
-              <element name="Description" type="xsd:string" minOccurs="0" maxOccurs="1" />
               <element name="Address" type="xsd:string" minOccurs="1" maxOccurs="1" />
               <element name="Body" type="xsd:string" minOccurs="0" maxOccurs="1" />
               <element name="ChannelType" type="xsd:string" minOccurs="0" maxOccurs="1" />
               <element name="NotificationType" type="xsd:string" minOccurs="0" maxOccurs="1" />
+              <element name="AutomationID" type="xsd:string" minOccurs="0" maxOccurs="1" />
             </sequence>
           </extension>
         </complexContent>
@@ -3935,6 +3988,13 @@
           </extension>
         </complexContent>
       </complexType>
+      <simpleType name="AutomationTestType">
+        <restriction base="xsd:string">
+          <enumeration value="OK" />
+          <enumeration value="UnplannedOutage" />
+          <enumeration value="InMaintenance" />
+        </restriction>
+      </simpleType>
       <simpleType name="AutomationTypes">
         <restriction base="xsd:string">
           <enumeration value="scheduled" />
@@ -3967,6 +4027,15 @@
           <enumeration value="New" />
         </restriction>
       </simpleType>
+      <complexType name="AutomationChain">
+        <complexContent>
+          <extension base="tns:InteractionDefinition">
+            <sequence>
+              <element name="AutomationToChainID" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            </sequence>
+          </extension>
+        </complexContent>
+      </complexType>
       <complexType name="PlatformApplication">
         <complexContent>
           <extension base="tns:APIObject">
@@ -4069,16 +4138,87 @@
           </extension>
         </complexContent>
       </complexType>
-      <complexType name="AudienceBuilderRestCall" ETOnly="true">
+      <complexType name="ImportFileDestination">
         <complexContent>
           <extension base="tns:APIObject">
             <sequence>
-              <element name="URL" minOccurs="1" maxOccurs="1" type="xsd:string" />
-              <element name="Method" minOccurs="1" maxOccurs="1" type="xsd:string" />
-              <element name="Parameters" type="tns:APIProperty" minOccurs="0" maxOccurs="unbounded"></element>
-              <element name="Payload" minOccurs="0" maxOccurs="1" type="xsd:string" />
-              <element name="DataVersion" minOccurs="0" maxOccurs="1" type="xsd:string" />
-              <element name="DateKind" minOccurs="0" maxOccurs="1" type="xsd:string" />
+              <element name="TemplateCustomObject" type="tns:DataExtension" minOccurs="0" maxOccurs="1" />
+              <element name="FileTransferLocation" type="tns:FileTransferLocation" minOccurs="0" maxOccurs="1" />
+              <element name="FileSpec" type="xsd:string" minOccurs="0" maxOccurs="1" />
+              <element name="EncodingCodePage" type="xsd:int" minOccurs="0" maxOccurs="1" />
+              <element name="HasColumnHeader" type="xsd:boolean" minOccurs="0" maxOccurs="1" />
+              <element name="FieldDelimiter" type="xsd:string" minOccurs="0" maxOccurs="1" />
+              <element name="RowDelimiter" type="xsd:string" minOccurs="0" maxOccurs="1" />
+              <element name="NullValue" type="xsd:string" minOccurs="0" maxOccurs="1" />
+              <element name="BooleanFormat" type="xsd:string" minOccurs="0" maxOccurs="1" />
+              <element name="DateTimeFormat" type="xsd:string" minOccurs="0" maxOccurs="1" />
+              <element name="StringIdentifier" type="xsd:string" minOccurs="0" maxOccurs="1" />
+              <element name="EscapeSequence" type="xsd:string" minOccurs="0" maxOccurs="1" />
+            </sequence>
+          </extension>
+        </complexContent>
+      </complexType>
+      <complexType name="ContactEvent">
+        <complexContent>
+          <extension base="tns:APIObject">
+            <sequence>
+              <element name="ContactID" minOccurs="0" maxOccurs="1" type="xsd:long" />
+              <element name="ContactKey" minOccurs="0" maxOccurs="1" type="xsd:string" />
+              <element name="EventDefinitionKey" minOccurs="0" maxOccurs="1" type="xsd:string" />
+              <element name="Data" minOccurs="0" maxOccurs="1">
+                <complexType>
+                  <sequence>
+                    <element name="AttributeSet" type="tns:AttributeSet" minOccurs="0" maxOccurs="unbounded" />
+                  </sequence>
+                </complexType>
+              </element>
+            </sequence>
+          </extension>
+        </complexContent>
+      </complexType>
+      <complexType name="AttributeSet">
+        <complexContent>
+          <extension base="tns:APIObject">
+            <sequence>
+              <element name="Id" minOccurs="0" maxOccurs="1" type="xsd:string" />
+              <element name="Key" minOccurs="0" maxOccurs="1" type="xsd:string" />
+              <element name="Name" minOccurs="0" maxOccurs="1" type="xsd:string" />
+              <element name="Items" minOccurs="0" maxOccurs="1">
+                <complexType>
+                  <sequence>
+                    <element name="Item" type="tns:AttributeValueContainer" minOccurs="0" maxOccurs="unbounded" />
+                  </sequence>
+                </complexType>
+              </element>
+            </sequence>
+          </extension>
+        </complexContent>
+      </complexType>
+      <complexType name="AttributeValueContainer">
+        <sequence>
+          <element name="Values" minOccurs="0">
+            <complexType>
+              <sequence>
+                <element name="Value" type="tns:AttributeValue" minOccurs="0" maxOccurs="unbounded" />
+              </sequence>
+            </complexType>
+          </element>
+        </sequence>
+      </complexType>
+      <complexType name="AttributeValue">
+        <sequence>
+          <element name="Id" minOccurs="0" maxOccurs="1" type="xsd:string" />
+          <element name="Key" minOccurs="0" maxOccurs="1" type="xsd:string" />
+          <element name="Name" minOccurs="0" maxOccurs="1" type="xsd:string" />
+          <element name="Value" minOccurs="0" maxOccurs="1" type="xsd:string" />
+        </sequence>
+      </complexType>
+      <complexType name="ContactEventCreateResult">
+        <complexContent>
+          <extension base="tns:CreateResult">
+            <sequence>
+              <element name="EventInstanceID" minOccurs="0" maxOccurs="1" type="xsd:string" />
+              <element name="AsyncRequestID" minOccurs="0" maxOccurs="1" type="xsd:long" />
             </sequence>
           </extension>
         </complexContent>
