@@ -3391,6 +3391,24 @@
           </extension>
         </complexContent>
       </complexType>
+      <complexType name="FilterActivity">
+        <complexContent>
+          <extension base="tns:InteractionDefinition">
+            <sequence>
+              <element name="FilterActivityID" minOccurs="0" maxOccurs="1" type="xsd:string" />
+              <element name="FilterDefinitionID" minOccurs="0" maxOccurs="1" type="xsd:string" />
+              <element name="DestinationObjectID" minOccurs="0" maxOccurs="1" type="xsd:string" />
+              <element name="DestinationTypeID" minOccurs="0" maxOccurs="1" type="xsd:int" />
+              <element name="SourceObjectID" minOccurs="0" maxOccurs="1" type="xsd:string" />
+              <element name="SourceTypeID" minOccurs="0" maxOccurs="1" type="xsd:int" />
+              <element name="OwnerID" minOccurs="0" maxOccurs="1" type="xsd:string" />
+              <element name="StatusID" minOccurs="0" maxOccurs="1" type="xsd:string" />
+              <element name="CreatedBy" minOccurs="0" maxOccurs="1" type="tns:ClientID" />
+              <element name="ModifiedBy" minOccurs="0" maxOccurs="1" type="tns:ClientID" />
+            </sequence>
+          </extension>
+        </complexContent>
+      </complexType>
       <complexType name="FilterDefinition">
         <complexContent>
           <extension base="tns:APIObject">
