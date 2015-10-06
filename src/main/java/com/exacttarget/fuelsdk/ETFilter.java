@@ -185,8 +185,9 @@ public class ETFilter extends ETObject {
             return Operator.NOT_EQUALS;
           case OR:
             return Operator.OR;
+          default:
+            return null;
         }
-        return null;
     }
 
     /**
