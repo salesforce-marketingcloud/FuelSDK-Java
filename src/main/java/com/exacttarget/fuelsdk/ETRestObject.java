@@ -727,19 +727,6 @@ public abstract class ETRestObject extends ETApiObject {
         return restResponse.getPayload();
     }
 
-    private static <T extends ETRestObject> ETResponse<T> soapCall(ETClient client,
-                                                                   Class<T> type,
-                                                                   String method,
-                                                                   String path,
-                                                                   ETFilter filter)
-        throws ETSdkException
-    {
-        List<APIProperty> properties = toApiProperties(client,
-                                                       type,
-                                                       filter);
-        return soapCall(client, type, method, path, null, properties);
-    }
-
     protected static <T extends ETRestObject> ETResponse<T> soapCall(ETClient client,
                                                                      Class<T> type,
                                                                      String method,

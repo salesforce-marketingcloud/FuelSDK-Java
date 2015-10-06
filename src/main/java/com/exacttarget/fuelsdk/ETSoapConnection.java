@@ -62,6 +62,7 @@ import com.exacttarget.fuelsdk.internal.Soap;
  * connection to the SOAP API.
  */
 
+@SuppressWarnings("restriction")
 public class ETSoapConnection {
     private static Logger logger = Logger.getLogger(ETSoapConnection.class);
 
