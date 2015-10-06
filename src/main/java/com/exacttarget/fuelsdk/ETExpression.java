@@ -59,7 +59,8 @@ public class ETExpression extends ETObject {
         LIKE("like"),
         AND("and"),
         OR("or"),
-        NOT("not");
+        NOT("not"),
+        INC("inc");
         private final String value;
 
         Operator(String value) {
@@ -180,6 +181,7 @@ public class ETExpression extends ETObject {
                 break;
               case AND:
               case OR:
+              case INC:
                 stringBuilder.append(subexpressions.get(0));
                 stringBuilder.append(" ");
                 stringBuilder.append(operator.toString());
