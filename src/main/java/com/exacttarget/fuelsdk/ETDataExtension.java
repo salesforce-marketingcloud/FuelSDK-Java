@@ -91,8 +91,6 @@ public class ETDataExtension extends ETSoapObject {
     @ExternalName("isTestable")
     private Boolean isTestable = null;
 
-    private boolean isHydrated = false;
-
     public ETDataExtension() {}
 
     @Override
@@ -231,6 +229,15 @@ public class ETDataExtension extends ETSoapObject {
 
     public void addColumn(ETDataExtensionColumn column) {
         columns.add(column);
+    }
+
+    public List<String> getColumnNames()
+        throws ETSdkException
+    {
+        if (columns == null) {
+            columns = retrieveColumns();
+        }
+        return getColumnNames(columns);
     }
 
     public Boolean getIsSendable() {
@@ -643,15 +650,53 @@ public class ETDataExtension extends ETSoapObject {
     public void hydrate()
         throws ETSdkException
     {
-        if (isHydrated) {
-            return;
-        }
+        retrieveColumns();
+    }
 
+    public static List<ETDataExtensionColumn> retrieveColumns(ETClient client,
+                                                              String key)
+        throws ETSdkException
+    {
+        //
+        // Automatically refresh the token if necessary:
+        //
+
+        client.refreshToken();
+
+        //
+        // Retrieve all column objects with the specified key:
+        //
+
+        ETExpression expression = new ETExpression();
+        expression.setProperty("DataExtension.CustomerKey");
+        expression.setOperator(ETExpression.Operator.EQUALS);
+        expression.addValue(key);
+
+        ETFilter filter = new ETFilter();
+        filter.setExpression(expression);
+
+        ETResponse<ETDataExtensionColumn> response =
+                ETDataExtensionColumn.retrieve(client,
+                                               ETDataExtensionColumn.class,
+                                               null, // page
+                                               null, // pageSize
+                                               filter);
+
+        return response.getObjects();
+    }
+
+    public List<ETDataExtensionColumn> retrieveColumns()
+        throws ETSdkException
+    {
         columns = retrieveColumns(getClient(), getKey());
+        return columns;
+    }
 
-        // XXX deal with partially loaded DataExtension objects too
-
-        isHydrated = true;
+    private static List<String> retrieveColumnNames(ETClient client,
+                                                    String key)
+        throws ETSdkException
+    {
+        return getColumnNames(retrieveColumns(client, key));
     }
 
     private List<ETDataExtensionRow> getMatchingRows(String filter)
@@ -686,53 +731,7 @@ public class ETDataExtension extends ETSoapObject {
         return rows;
     }
 
-    private static List<ETDataExtensionColumn> retrieveColumns(ETClient client,
-                                                               String key)
-        throws ETSdkException
-    {
-        //
-        // Automatically refresh the token if necessary:
-        //
-
-        client.refreshToken();
-
-        //
-        // Retrieve all column objects with the specified key:
-        //
-
-        ETExpression expression = new ETExpression();
-        expression.setProperty("DataExtension.CustomerKey");
-        expression.setOperator(ETExpression.Operator.EQUALS);
-        expression.addValue(key);
-
-        ETFilter filter = new ETFilter();
-        filter.setExpression(expression);
-
-        ETResponse<ETDataExtensionColumn> response =
-                ETDataExtensionColumn.retrieve(client,
-                                               ETDataExtensionColumn.class,
-                                               null, // page
-                                               null, // pageSize
-                                               filter);
-
-        return response.getObjects();
-    }
-
-    private static List<String> retrieveColumnNames(ETClient client,
-                                                    String key)
-        throws ETSdkException
-    {
-        List<String> names = new ArrayList<String>();
-        for (ETDataExtensionColumn column : retrieveColumns(client, key)) {
-            names.add(column.getName());
-        }
-        return names;
-    }
-
-    private List<String> getColumnNames()
-        throws ETSdkException
-    {
-        hydrate(); // make sure we've retrieved all columns
+    private static List<String> getColumnNames(List<ETDataExtensionColumn> columns) {
         List<String> columnNames = new ArrayList<String>();
         for (ETDataExtensionColumn column : columns) {
             columnNames.add(column.getName());
