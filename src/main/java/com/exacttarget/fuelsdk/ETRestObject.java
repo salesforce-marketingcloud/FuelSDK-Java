@@ -731,6 +731,19 @@ public abstract class ETRestObject extends ETApiObject {
                                                                      Class<T> type,
                                                                      String method,
                                                                      String path,
+                                                                     ETFilter filter)
+        throws ETSdkException
+    {
+        List<APIProperty> properties = toApiProperties(client,
+                                                       type,
+                                                       filter);
+        return soapCall(client, type, method, path, null, properties);
+    }
+
+    protected static <T extends ETRestObject> ETResponse<T> soapCall(ETClient client,
+                                                                     Class<T> type,
+                                                                     String method,
+                                                                     String path,
                                                                      List<APIProperty> properties)
         throws ETSdkException
     {
@@ -815,11 +828,20 @@ public abstract class ETRestObject extends ETApiObject {
                 createResponse.getResults().get(0).getObject();
         RestObject annotations = type.getAnnotation(RestObject.class);
         if (restResponse != null) {
-            ETResponse<T> r = deserialize(client,
-                                          restResponse.getPayload(),
-                                          type,
-                                          annotations.totalCount(),
-                                          annotations.collection());
+            ETResponse<T> r = null;
+            if (annotations != null) {
+                r = deserialize(client,
+                                restResponse.getPayload(),
+                                type,
+                                annotations.totalCount(),
+                                annotations.collection());
+            } else {
+                r = deserialize(client,
+                                restResponse.getPayload(),
+                                type,
+                                null,
+                                null);
+            }
             response.setPage(r.getPage());
             response.setPageSize(r.getPageSize());
             response.setTotalCount(r.getTotalCount());

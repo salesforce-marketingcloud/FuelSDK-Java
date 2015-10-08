@@ -37,6 +37,7 @@ package com.exacttarget.fuelsdk.audiencebuilder;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.exacttarget.fuelsdk.ETClient;
@@ -216,6 +217,117 @@ public class ETDimension extends ETRestObject {
         throws ETSdkException
     {
         return ETAudience.toFilterString(expression);
+    }
+
+    public static ETResponse<ETDimension> search(ETClient client,
+                                                 String... filters)
+        throws ETSdkException
+    {
+        ETResponse<ETDimension> response = null;
+
+        SearchRequest searchRequest = new SearchRequest();
+
+        for (String filter : filters) {
+            searchRequest.add(filter);
+        }
+
+        Gson gson = client.getGson();
+
+        if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
+            ETResponse<SearchResponse> r =
+                    ETRestObject.soapCall(client,
+                                          SearchResponse.class,
+                                          "POST",
+                                          "AudienceBuilder/Dimension/Search",
+                                          gson.toJson(searchRequest));
+
+            //
+            // We have to copy here because unfortunately this
+            // route returns results differently than straight
+            // retrieve :-(
+            //
+
+            response = new ETResponse<ETDimension>();
+            response.setStatus(r.getStatus());
+            response.setRequestId(r.getRequestId());
+            response.setResponseCode(r.getResponseCode());
+            response.setResponseMessage(r.getResponseMessage());
+            response.setMoreResults(r.hasMoreResults());
+            response.setPage(r.getPage());
+            response.setPageSize(r.getPageSize());
+            response.setTotalCount(r.getTotalCount());
+            for (ETDimension dimension : r.getResult().getObject().getResponses()) {
+                ETResult<ETDimension> result = new ETResult<ETDimension>();
+                result.setObject(dimension);
+                response.addResult(result);
+            }
+        } else {
+            throw new ETSdkException("unsupported operation: search"); // XXX
+        }
+
+        return response;
+    }
+
+    protected static class SearchRequest {
+        @Expose
+        @SerializedName("Search")
+        private List<Request> requests = new ArrayList<Request>();
+
+        protected static class Request {
+            @Expose
+            @SerializedName("customObjectName")
+            private String name = null;
+            @Expose
+            @SerializedName("customObjectFieldName")
+            private String fieldName = "name";
+            @Expose
+            @SerializedName("dimensionValues")
+            private List<String> values = new ArrayList<String>();
+
+            public void setName(String name) {
+                this.name = name;
+            }
+
+            public void addValue(String value) {
+                this.values.add(value);
+            }
+        }
+
+        public void add(String filter)
+            throws ETSdkException
+        {
+            ETExpression expression = ETFilter.parse(filter).getExpression();
+            if (expression.getOperator() != ETExpression.Operator.EQUALS &&
+                expression.getOperator() != ETExpression.Operator.IN)
+            {
+                throw new ETSdkException("unsupported operator: " + expression.getOperator());
+            }
+            Request request = new Request();
+            request.setName(expression.getProperty());
+            for (String value : expression.getValues()) {
+                request.addValue(value);
+            }
+            requests.add(request);
+        }
+    }
+
+    protected static class SearchResponse extends ETRestObject {
+        @Expose
+        @SerializedName("results")
+        private List<ETDimension> responses = null;
+
+        @Override
+        public String getId() {
+            return null;
+        }
+
+        @Override
+        public void setId(String id) {
+        }
+
+        public List<ETDimension> getResponses() {
+            return responses;
+        }
     }
 
     /**
