@@ -99,7 +99,7 @@ public class ETCube extends ETRestObject {
 
     public static ETResponse<ETCube> retrieve(ETClient client,
                                               String id,
-                                              String... keys)
+                                              String... names)
         throws ETSdkException
     {
         List<APIProperty> properties = new ArrayList<APIProperty>();
@@ -107,9 +107,9 @@ public class ETCube extends ETRestObject {
         property.setName("hierarchyId");
         property.setValue(id);
         properties.add(property);
-        if (keys.length > 0) {
+        if (names.length > 0) {
             String values = null;
-            for (String key : keys) {
+            for (String key : names) {
                 if (values == null) {
                     values = key;
                 } else {
@@ -117,7 +117,7 @@ public class ETCube extends ETRestObject {
                 }
             }
             property = new APIProperty();
-            property.setName("Values");
+            property.setName("values");
             property.setValue(values);
             properties.add(property);
         }
@@ -131,7 +131,7 @@ public class ETCube extends ETRestObject {
         properties.add(pageSize);
         return ETRestObject.soapCall(client,
                                      ETCube.class,
-                                     "GET",
+                                     "POST",
                                      "AudienceBuilder/Hierarchy/{hierarchyId}",
                                      properties);
     }
