@@ -169,6 +169,8 @@ public class ETFilter extends ETObject {
             return Operator.GREATER_THAN_OR_EQUALS;
           case IN:
             return Operator.IN;
+          case INC:
+            return Operator.INC;
           case IS_NULL:
             return Operator.IS_NULL;
           case IS_NOT_NULL:
@@ -214,6 +216,9 @@ public class ETFilter extends ETObject {
             break;
           case IN:
             expression.setOperator(ETExpression.Operator.IN);
+            break;
+          case INC:
+            expression.setOperator(ETExpression.Operator.INC);
             break;
           case IS_NULL:
             expression.setOperator(ETExpression.Operator.IS_NULL);
@@ -318,7 +323,8 @@ public class ETFilter extends ETObject {
         LIKE("like"),
         AND("and"),
         OR("or"),
-        NOT("not");
+        NOT("not"),
+        INC("inc");
         private final String value;
 
         Operator(String value) {

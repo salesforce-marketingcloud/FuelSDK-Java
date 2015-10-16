@@ -526,6 +526,7 @@ public class ETAudience extends ETRestObject {
           case IN:
           case AND:
           case OR:
+          case INC:
             filterDefinition.addConditionSet(toConditionSet(expression));
             break;
           default:

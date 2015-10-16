@@ -54,6 +54,7 @@ TOKEN [IGNORE_CASE]:
     < AND : "and" >
     | < OR : "or" >
     | < NOT : "not" >
+    | < INC : "inc" >
     | < BETWEEN : "between" >
     | < IN : "in" >
     | < IS : "is" >
@@ -138,6 +139,35 @@ ETExpression AndExpression():
     ETExpression expression2 = null;
 }
 {
+    expression1 = IncExpression()
+    {
+        expression = expression1;
+    }
+    (
+        LOOKAHEAD(<AND>) <AND>
+        expression2 = IncExpression()
+        {
+            expression = new ETExpression();
+            expression.setOperator(ETExpression.Operator.AND);
+            expression.addSubexpression(expression1);
+            expression.addSubexpression(expression2);
+            expression1 = expression;
+        }
+    )*
+
+    {
+        logger.trace("AndExpression: " + expression);
+        return expression;
+    }
+}
+
+ETExpression IncExpression():
+{
+    ETExpression expression = null;
+    ETExpression expression1 = null;
+    ETExpression expression2 = null;
+}
+{
     (
         LOOKAHEAD(SimpleExpression()) expression1 = SimpleExpression()
         | "(" expression1 = OrExpression() ")"
@@ -152,14 +182,14 @@ ETExpression AndExpression():
     }
 
     (
-        LOOKAHEAD(<AND>) <AND>
+        LOOKAHEAD(<INC>) <INC>
         (
             LOOKAHEAD(SimpleExpression()) expression2 = SimpleExpression()
             | "(" expression2 = OrExpression() ")"
         )
         {
             expression = new ETExpression();
-            expression.setOperator(ETExpression.Operator.AND);
+            expression.setOperator(ETExpression.Operator.INC);
             expression.addSubexpression(expression1);
             expression.addSubexpression(expression2);
             expression1 = expression;
@@ -167,7 +197,7 @@ ETExpression AndExpression():
     )*
 
     {
-        logger.trace("AndExpression: " + expression);
+        logger.trace("IncExpression: " + expression);
         return expression;
     }
 }
