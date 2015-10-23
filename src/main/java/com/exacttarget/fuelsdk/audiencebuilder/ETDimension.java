@@ -162,7 +162,14 @@ public class ETDimension extends ETRestObject {
         // Retrieve all dimension values to preserve backward compatibility:
         //
 
-        ((ETDimension) response.getObject()).hydrate();
+        for (T object : response.getObjects()) {
+            ETDimension dimension = (ETDimension) object;
+            // only retrieve the dimension values if this
+            // dimension is not an attribute (type 1 or 4)
+            if (dimension.getType() == 1 || dimension.getType() == 4) {
+                dimension.hydrate();
+            }
+        }
 
         return response;
     }
