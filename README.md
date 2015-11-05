@@ -28,22 +28,32 @@ http://salesforcefuel.github.io/FuelSDK-Java/.
 Installation
 ------------
 
-* Clone the project from GitHub:
+The easiest way to use the Java SDK is via Maven--simply add the following dependency to `pom.xml`:
 
-    `git clone git@github.com:salesforce-marketingcloud/FuelSDK-Java.git`
+    <dependency>
+            <groupId>com.exacttarget</groupId>
+            <artifactId>fuelsdk</artifactId>
+            <version>1.1.0</version>
+    </dependency>
 
-* Generate sources from the ExactTarget WSDL:
+Maven will automatically resolve and download all dependencies for
+you.
 
-    `mvn generate-sources`
+You can also download a jar file from the
+[Releases](https://github.com/salesforce-marketingcloud/FuelSDK-Java/releases)
+page or clone the repository and build a jar file yourself in the
+standard way. If you go this route, you'll need to ensure you have
+manually downloaded and installed all dependencies ([Apache
+CXF](http://cxf.apache.org), [Apache Commons
+BeanUtils](http://commons.apache.org/proper/commons-beanutils),
+[Apache log4j 1.x](http://logging.apache.org/log4j/1.2/), and [Google
+Gson](https://code.google.com/p/google-gson)) to the classpath.
 
-* Import project into Eclipse (optional):
-
-    File -> Import... -> Maven -> Existing Maven Projects
-
-* Build the jar file via the command line:
-
-    `mvn -DskipTests package`
-
-* Add the jar file and dependencies ([Apache CXF](http://cxf.apache.org), [Apache Commons BeanUtils](http://commons.apache.org/proper/commons-beanutils), [Apache log4j 1.x](http://logging.apache.org/log4j/1.2/), and [Google Gson](https://code.google.com/p/google-gson)) to your class path
-
-* Obtain a client ID and client secret from App Center (see https://code.exacttarget.com/getting-started/setting-your-development-environment) and place them in `fuelsdk.properties` using `src/main/resources/fuelsdk.properties` as a starting template
+Once you have the SDK installed, you'll need to obtain a client ID and
+client secret from App Center and place them in `fuelsdk.properties`
+using `src/main/resources/fuelsdk.properties` as a starting template.
+Theses values authenticate you to the Saleforce Marketing Cloud API.
+Please see
+https://code.exacttarget.com/getting-started/setting-your-development-environment
+for more information about how to use App Center to get a client ID
+and client secret.
