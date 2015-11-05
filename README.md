@@ -1,9 +1,9 @@
-Fuel Java SDK
-=============
+Salesforce Marketing Cloud Java SDK
+===================================
 
-The Fuel Java SDK enables developers to easily access the
-Salesforce Marketing Cloud (formerly ExactTarget)
-from the Java platform. Among other things, the Java SDK:
+The Salesforce Marketing Cloud Java SDK enables developers to easily
+access the Salesforce Marketing Cloud (formerly ExactTarget) via the
+Java platform. Among other things, the SDK:
 
 * automatically acquires and refreshes Marketing Cloud
   access tokens
