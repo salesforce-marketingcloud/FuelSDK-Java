@@ -30,7 +30,7 @@ Installation
 
 * Clone the project from GitHub:
 
-    `git clone git@github.com:salesforcefuel/FuelSDK-Java.git`
+    `git clone git@github.com:salesforce-marketingcloud/FuelSDK-Java.git`
 
 * Generate sources from the ExactTarget WSDL:
 
