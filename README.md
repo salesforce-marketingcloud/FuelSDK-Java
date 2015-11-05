@@ -28,7 +28,7 @@ the Javadocs at http://salesforce-marketingcloud.github.io/FuelSDK-Java/.
 Installation
 ------------
 
-The easiest way to use the Java SDK is via Maven--simply add the following dependency to `pom.xml`:
+The easiest way to use the Java SDK is via Maven&mdash;simply add the following dependency to `pom.xml`:
 
     <dependency>
             <groupId>com.exacttarget</groupId>
