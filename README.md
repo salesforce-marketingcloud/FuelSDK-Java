@@ -31,9 +31,9 @@ Installation
 The easiest way to use the Java SDK is via Maven&mdash;simply add the following dependency to `pom.xml`:
 
     <dependency>
-            <groupId>com.exacttarget</groupId>
-            <artifactId>fuelsdk</artifactId>
-            <version>1.1.0</version>
+      <groupId>com.exacttarget</groupId>
+      <artifactId>fuelsdk</artifactId>
+      <version>1.1.0</version>
     </dependency>
 
 Maven will automatically resolve and download all dependencies for you.
