@@ -47,11 +47,7 @@ import org.apache.log4j.Logger;
  * are guaranteed to have the following properties, which
  * is enforced via abstract getter and setter methods:
  *
- * id -
- * key -
- * name -
- * createdDate -
- * modifiedDate -
+ * - id
  *
  * Typically, a specific API object will extend either
  * <code>ETRestObject</code> or <code>ETSoapObject</code>

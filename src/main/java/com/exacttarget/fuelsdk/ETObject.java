@@ -49,7 +49,6 @@ import com.exacttarget.fuelsdk.annotations.PrettyPrint;
 
 public abstract class ETObject {
     private ETClient client = null;
-    // XXX support configurable values
     private Boolean toStringMultiLine = true;
     private Integer toStringMultiLineIndentAmount = 4;
     private Boolean toStringSpaceAroundEquals = toStringMultiLine;
