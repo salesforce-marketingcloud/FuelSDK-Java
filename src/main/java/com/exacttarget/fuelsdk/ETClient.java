@@ -264,9 +264,7 @@ public class ETClient {
         jsonObject.addProperty("clientSecret", clientSecret);
         jsonObject.addProperty("accessType", "offline");
         
-        if (configuration.isFalse("useRefreshToken")) {
-            //Do nothing
-        }else if(refreshToken != null) {
+        if (refreshToken != null && !configuration.isFalse("useRefreshToken")) {
             jsonObject.addProperty("refreshToken", refreshToken);
         }
 
