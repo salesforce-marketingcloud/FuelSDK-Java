@@ -154,13 +154,13 @@ public class ETClientTest {
     private void assertIsDataExtensionFolder(ETResponse<ETFolder> response) {
         assertEquals(1, response.getObjects().size());
         ETFolder folder = response.getObjects().get(0);
-        assertEquals("94511", folder.getId()); // XXX make configurable
+        assertEquals("967", folder.getId()); // XXX make configurable
         assertEquals("dataextension_default", folder.getKey());
         assertEquals("Data Extensions", folder.getName());
         assertEquals("", folder.getDescription());
-        assertEquals("2014-08-10T23:50:00.833", // XXX make configurable
+        assertEquals("2012-08-14T13:44:10.247", // XXX make configurable
                 dateFormat.format(folder.getCreatedDate()));
-        assertEquals("2014-08-10T23:50:00.833", // XXX make configurable
+        assertEquals("2012-08-14T13:44:10.247", // XXX make configurable
                 dateFormat.format(folder.getModifiedDate()));
         assertEquals("dataextension", folder.getContentType());
         assertNull(folder.getParentFolderKey());
