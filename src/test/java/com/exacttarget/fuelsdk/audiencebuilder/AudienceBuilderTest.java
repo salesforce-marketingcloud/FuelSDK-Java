@@ -46,6 +46,10 @@ import com.exacttarget.fuelsdk.ETResponse;
 import com.exacttarget.fuelsdk.ETResult;
 import com.exacttarget.fuelsdk.ETSdkException;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class AudienceBuilderTest {
     private static ETClient client = null;
@@ -63,7 +67,7 @@ public class AudienceBuilderTest {
 
     @Test
     public void _01_TestRetrieveDimensions()
-        throws ETSdkException
+            throws ETSdkException
     {
         ETResponse<ETDimension> response = client.retrieve(ETDimension.class);
         assertNotNull(response.getRequestId());
@@ -75,16 +79,16 @@ public class AudienceBuilderTest {
         assertEquals("OK", response.getResponseMessage());
         assertEquals((Integer) 1, response.getPage());
         assertEquals((Integer) 50, response.getPageSize());
-        assertEquals((Integer) 719, response.getTotalCount());
+        assertEquals((Integer) 726, response.getTotalCount());
         assertTrue(response.hasMoreResults());
     }
 
     @Test
     public void _02_TestRetrieveDimensionsFilteredEquals()
-        throws ETSdkException
+            throws ETSdkException
     {
         ETResponse<ETDimension> response = client.retrieve(ETDimension.class,
-                                                           "count = 3");
+                "count = 3");
         assertNotNull(response.getRequestId());
         if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
             assertEquals("OK", response.getResponseCode());
@@ -100,10 +104,10 @@ public class AudienceBuilderTest {
 
     @Test
     public void _03_TestRetrieveDimensionsFilteredNotEquals()
-        throws ETSdkException
+            throws ETSdkException
     {
         ETResponse<ETDimension> response = client.retrieve(ETDimension.class,
-                                                           "count != 3");
+                "count != 3");
         assertNotNull(response.getRequestId());
         if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
             assertEquals("OK", response.getResponseCode());
@@ -113,16 +117,16 @@ public class AudienceBuilderTest {
         assertEquals("OK", response.getResponseMessage());
         assertEquals((Integer) 1, response.getPage());
         assertEquals((Integer) 50, response.getPageSize());
-        assertEquals((Integer) 225, response.getTotalCount());
+        assertEquals((Integer) 230, response.getTotalCount());
         assertTrue(response.hasMoreResults());
     }
 
     @Test
     public void _04_TestRetrieveDimensionsFilteredLessThan()
-        throws ETSdkException
+            throws ETSdkException
     {
         ETResponse<ETDimension> response = client.retrieve(ETDimension.class,
-                                                           "count < 3");
+                "count < 3");
         assertNotNull(response.getRequestId());
         if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
             assertEquals("OK", response.getResponseCode());
@@ -131,17 +135,17 @@ public class AudienceBuilderTest {
         }
         assertEquals("OK", response.getResponseMessage());
         assertEquals((Integer) 1, response.getPage());
-        assertEquals((Integer) 41, response.getPageSize());
-        assertEquals((Integer) 41, response.getTotalCount());
+        assertEquals((Integer) 42, response.getPageSize());
+        assertEquals((Integer) 42, response.getTotalCount());
         assertFalse(response.hasMoreResults());
     }
 
     @Test
     public void _05_TestRetrieveDimensionsFilteredLessThanOrEquals()
-        throws ETSdkException
+            throws ETSdkException
     {
         ETResponse<ETDimension> response = client.retrieve(ETDimension.class,
-                                                           "count <= 3");
+                "count <= 3");
         assertNotNull(response.getRequestId());
         if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
             assertEquals("OK", response.getResponseCode());
@@ -151,16 +155,16 @@ public class AudienceBuilderTest {
         assertEquals("OK", response.getResponseMessage());
         assertEquals((Integer) 1, response.getPage());
         assertEquals((Integer) 50, response.getPageSize());
-        assertEquals((Integer) 51, response.getTotalCount());
+        assertEquals((Integer) 52, response.getTotalCount());
         assertTrue(response.hasMoreResults());
     }
 
     @Test
     public void _06_TestRetrieveDimensionsFilteredGreaterThan()
-        throws ETSdkException
+            throws ETSdkException
     {
         ETResponse<ETDimension> response = client.retrieve(ETDimension.class,
-                                                           "count > 3");
+                "count > 3");
         assertNotNull(response.getRequestId());
         if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
             assertEquals("OK", response.getResponseCode());
@@ -170,16 +174,16 @@ public class AudienceBuilderTest {
         assertEquals("OK", response.getResponseMessage());
         assertEquals((Integer) 1, response.getPage());
         assertEquals((Integer) 50, response.getPageSize());
-        assertEquals((Integer) 184, response.getTotalCount());
+        assertEquals((Integer) 188, response.getTotalCount());
         assertTrue(response.hasMoreResults());
     }
 
     @Test
     public void _07_TestRetrieveDimensionsFilteredGreaterThanOrEquals()
-        throws ETSdkException
+            throws ETSdkException
     {
         ETResponse<ETDimension> response = client.retrieve(ETDimension.class,
-                                                           "count >= 3");
+                "count >= 3");
         assertNotNull(response.getRequestId());
         if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
             assertEquals("OK", response.getResponseCode());
@@ -189,16 +193,16 @@ public class AudienceBuilderTest {
         assertEquals("OK", response.getResponseMessage());
         assertEquals((Integer) 1, response.getPage());
         assertEquals((Integer) 50, response.getPageSize());
-        assertEquals((Integer) 194, response.getTotalCount());
+        assertEquals((Integer) 198, response.getTotalCount());
         assertTrue(response.hasMoreResults());
     }
 
     @Test
     public void _08_TestRetrieveDimensionsFilteredIn1()
-        throws ETSdkException
+            throws ETSdkException
     {
         ETResponse<ETDimension> response = client.retrieve(ETDimension.class,
-                                                           "count in (3, 6)");
+                "count in (3, 6)");
         assertNotNull(response.getRequestId());
         if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
             assertEquals("OK", response.getResponseCode());
@@ -214,10 +218,10 @@ public class AudienceBuilderTest {
 
     @Test
     public void _09_TestRetrieveDimensionsFilteredIn2()
-        throws ETSdkException
+            throws ETSdkException
     {
         ETResponse<ETDimension> response = client.retrieve(ETDimension.class,
-                                                           "count in (3, 6, 9)");
+                "count in (3, 6, 9)");
         assertNotNull(response.getRequestId());
         if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
             assertEquals("OK", response.getResponseCode());
@@ -233,10 +237,10 @@ public class AudienceBuilderTest {
 
     @Test
     public void _10_TestRetrieveDimensionsFilteredIn3()
-        throws ETSdkException
+            throws ETSdkException
     {
         ETResponse<ETDimension> response = client.retrieve(ETDimension.class,
-                                                           "count in (3, 6, 9, 12)");
+                "count in (3, 6, 9, 12)");
         assertNotNull(response.getRequestId());
         if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
             assertEquals("OK", response.getResponseCode());
@@ -252,13 +256,13 @@ public class AudienceBuilderTest {
 
     //@Test
     public void _11_TestRetrieveDimensionsOrderBy()
-        throws ETSdkException
+            throws ETSdkException
     {
     }
 
     //@Test
     public void _12_TestRetrieveDimensionsFields()
-        throws ETSdkException
+            throws ETSdkException
     {
     }
 
@@ -266,14 +270,14 @@ public class AudienceBuilderTest {
 
     @Test
     public void _13_TestRetrieveDimension1()
-        throws ETSdkException
+            throws ETSdkException
     {
         //
         // Retrieve "age" dimension and values:
         //
 
         ETResponse<ETDimension> response = client.retrieve(ETDimension.class,
-                                                           "id=528"); // age
+                "id=528"); // age
         if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
             assertEquals("OK", response.getResponseCode());
         } else {
@@ -285,47 +289,60 @@ public class AudienceBuilderTest {
         assertEquals("528", dimension.getId());
         assertEquals((Integer) 1, dimension.getType());
         assertEquals("d4493c60-24e8-453a-b0bc-bf111c10aa42",
-                     dimension.getFieldId());
+                dimension.getFieldId());
         assertEquals("name",
-                     dimension.getFieldName());
+                dimension.getFieldName());
         assertEquals((Integer) 9, dimension.getCount());
         assertEquals(9, dimension.getValues().size());
-        ETDimensionValue value1 = dimension.getValues().get(0);
+
+        List<ETDimensionValue> values = dimension.getValues();
+        Collections.sort(values, COMPARE_BY_KEY);
+
+        ETDimensionValue value1 = values.get(1);
         assertEquals("1", value1.getKey());
         assertEquals("less than 14", value1.getName());
         assertEquals((Integer) 0, value1.getCount());
-        ETDimensionValue value2 = dimension.getValues().get(1);
+
+        ETDimensionValue value2 = values.get(3);
         assertEquals("3", value2.getKey());
         assertEquals("18 24", value2.getName());
         assertEquals((Integer) 2475583, value2.getCount());
-        ETDimensionValue value3 = dimension.getValues().get(2);
+
+        ETDimensionValue value3 = values.get(7);
         assertEquals("7", value3.getKey());
         assertEquals("55 - 64", value3.getName());
         assertEquals((Integer) 2167700, value3.getCount());
-        ETDimensionValue value4 = dimension.getValues().get(3);
+
+        ETDimensionValue value4 = values.get(0);
         assertEquals("-1", value4.getKey());
         assertEquals("no age available", value4.getName());
         assertEquals((Integer) 197084, value4.getCount());
-        ETDimensionValue value5 = dimension.getValues().get(4);
+
+        ETDimensionValue value5 = values.get(2);
         assertEquals("2", value5.getKey());
         assertEquals("14 - 17", value5.getName());
         assertEquals((Integer) 1230269, value5.getCount());
-        ETDimensionValue value6 = dimension.getValues().get(5);
+
+        ETDimensionValue value6 = values.get(8);
         assertEquals("8", value6.getKey());
         assertEquals("65+", value6.getName());
         assertEquals((Integer) 1066716, value6.getCount());
-        ETDimensionValue value7 = dimension.getValues().get(6);
+
+        ETDimensionValue value7 = values.get(6);
         assertEquals("6", value7.getKey());
         assertEquals("45 - 54", value7.getName());
         assertEquals((Integer) 2165739, value7.getCount());
-        ETDimensionValue value8 = dimension.getValues().get(7);
+
+        ETDimensionValue value8 = values.get(4);
         assertEquals("4", value8.getKey());
         assertEquals("25 - 34", value8.getName());
         assertEquals((Integer) 2513502, value8.getCount());
-        ETDimensionValue value9 = dimension.getValues().get(8);
+
+        ETDimensionValue value9 = values.get(5);
         assertEquals("5", value9.getKey());
         assertEquals("35 - 44", value9.getName());
         assertEquals((Integer) 2167923, value9.getCount());
+
         // save fieldId for later
         age = dimension.getFieldId();
     }
@@ -334,14 +351,14 @@ public class AudienceBuilderTest {
 
     @Test
     public void _14_TestRetrieveDimension2()
-        throws ETSdkException
+            throws ETSdkException
     {
         //
         // Retrieve "gender" dimension and values:
         //
 
         ETResponse<ETDimension> response = client.retrieve(ETDimension.class,
-                                                           "id=278"); // gender
+                "id=278"); // gender
         if (client.getConfiguration().equals("audienceBuilderApi", "soap")) {
             assertEquals("OK", response.getResponseCode());
         } else {
@@ -349,24 +366,32 @@ public class AudienceBuilderTest {
         }
         assertEquals("OK", response.getResponseMessage());
         assertEquals(1, response.getObjects().size());
+
         ETDimension dimension = response.getObject();
+
         assertEquals("278", dimension.getId());
         assertEquals((Integer) 1, dimension.getType());
         assertEquals("b8b49d1a-74a4-4fb1-b92d-0aed1ab522a3",
-                     dimension.getFieldId());
+                dimension.getFieldId());
         assertEquals("name",
-                     dimension.getFieldName());
+                dimension.getFieldName());
         assertEquals((Integer) 3, dimension.getCount());
         assertEquals(3, dimension.getValues().size());
-        ETDimensionValue value1 = dimension.getValues().get(0);
+
+        List<ETDimensionValue> values = dimension.getValues();
+        Collections.sort(values, COMPARE_BY_KEY);
+
+        ETDimensionValue value1 = values.get(2);
         assertEquals("Unknown", value1.getKey());
         assertEquals("unknown", value1.getName());
         assertEquals((Integer) 119415, value1.getCount());
-        ETDimensionValue value2 = dimension.getValues().get(1);
+
+        ETDimensionValue value2 = values.get(1);
         assertEquals("M", value2.getKey());
         assertEquals("male", value2.getName());
         assertEquals((Integer) 6959736, value2.getCount());
-        ETDimensionValue value3 = dimension.getValues().get(2);
+
+        ETDimensionValue value3 = values.get(0);
         assertEquals("F", value3.getKey());
         assertEquals("female", value3.getName());
         assertEquals((Integer) 6961047, value3.getCount());
@@ -376,7 +401,7 @@ public class AudienceBuilderTest {
 
     @Test
     public void _15_TestRetrieveAudienceCount()
-        throws ETSdkException
+            throws ETSdkException
     {
         Integer audienceCount = ETAudience.retrieveAudienceCount(client, age + "='25 - 34'");
         assertEquals((Integer) 2513502, audienceCount);
@@ -407,7 +432,7 @@ public class AudienceBuilderTest {
 
     @Test
     public void _17_TestCreateAudience()
-        throws ETSdkException
+            throws ETSdkException
     {
         audience = client.instantiate(ETAudience.class);
         audience.setName("people age 25-34");
@@ -554,7 +579,7 @@ public class AudienceBuilderTest {
 
     @Test
     public void _22_TestPublishAudience()
-        throws ETSdkException
+            throws ETSdkException
     {
         audience.publish();
 
@@ -572,7 +597,7 @@ public class AudienceBuilderTest {
                     + audience.getSubscribersCopied()
                     + " copied.");
         } while (!audience.getStatus().equals("READY") &&
-                 !audience.getStatus().equals("ERROR"));
+                !audience.getStatus().equals("ERROR"));
 
         // XXX this doesn't actually test anything..
     }
@@ -612,19 +637,19 @@ public class AudienceBuilderTest {
 
     //@Test
     public void _24_TestExportDataExtension1()
-        throws ETSdkException
+            throws ETSdkException
     {
     }
 
     //@Test
     public void _25_TestExportDataExtension2()
-        throws ETSdkException
+            throws ETSdkException
     {
     }
 
     @Test
     public void _26_TestDeleteAudience()
-        throws ETSdkException
+            throws ETSdkException
     {
         ETResponse<ETAudience> response = client.delete(audience);
         assertNull(response.getRequestId());
@@ -656,15 +681,21 @@ public class AudienceBuilderTest {
 
     //@Test
     public void _28_TestCube1()
-        throws ETSdkException
+            throws ETSdkException
     {
 
     }
 
     //@Test
     public void _29_TestCube2()
-        throws ETSdkException
+            throws ETSdkException
     {
 
     }
+
+    private static final Comparator<ETDimensionValue> COMPARE_BY_KEY = new Comparator<ETDimensionValue>() {
+        public int compare(ETDimensionValue o1, ETDimensionValue o2) {
+            return o1.getKey().compareTo(o2.getKey());
+        }
+    };
 }

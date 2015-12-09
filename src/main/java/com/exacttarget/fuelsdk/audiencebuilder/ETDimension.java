@@ -208,7 +208,7 @@ public class ETDimension extends ETRestObject {
             page++;
             response = client.retrieve(ETDimensionValue.class,
                                        page,
-                                       2500,
+                                       100000,
                                        "id=" + id);
             if (response.getStatus() == ETResult.Status.ERROR) {
                 throw new ETSdkException("error retrieving dimension values: "
