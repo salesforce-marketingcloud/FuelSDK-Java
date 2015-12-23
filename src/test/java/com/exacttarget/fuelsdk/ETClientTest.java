@@ -38,6 +38,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 import org.junit.Assume;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
@@ -46,6 +47,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 public class ETClientTest {
+    ETClient client;
+
     @BeforeClass
     public static void setUpBeforeClass()
         throws ETSdkException
@@ -54,12 +57,16 @@ public class ETClientTest {
                 .getResource("/fuelsdk-test.properties"));
     }
 
+    @Before
+    public void setup() throws ETSdkException {
+        client = new ETClient("/fuelsdk-test.properties");
+    }
+
     @Test
     @SuppressWarnings("deprecation")
     public void testBackwardCompatibility1()
         throws ETSdkException
     {
-        ETClient client = new ETClient();
         ETFilter filter = new ETFilter();
         filter.setProperty("key");
         filter.setOperator(ETFilter.Operator.EQUALS);
@@ -74,7 +81,6 @@ public class ETClientTest {
     public void testBackwardCompatibility2()
         throws ETSdkException
     {
-        ETClient client = new ETClient();
         ETFilter filter = new ETFilter();
         filter.setProperty("key");
         filter.setOperator(ETFilter.Operator.EQUALS);
@@ -102,7 +108,6 @@ public class ETClientTest {
     public void testBackwardCompatibility3()
         throws ETSdkException
     {
-        ETClient client = new ETClient();
         ETFilter filter = new ETFilter();
         filter.setProperty("key");
         filter.setOperator(ETFilter.Operator.EQUALS);
@@ -131,7 +136,6 @@ public class ETClientTest {
     public void testBackwardCompatibility4()
         throws ETSdkException
     {
-        ETClient client = new ETClient();
         ETFilter filter = new ETFilter();
         filter.setProperty("key");
         filter.setOperator(ETFilter.Operator.EQUALS);
@@ -166,13 +170,19 @@ public class ETClientTest {
     private void assertIsDataExtensionFolder(ETResponse<ETFolder> response) {
         assertEquals(1, response.getObjects().size());
         ETFolder folder = response.getObjects().get(0);
-        assertEquals("94511", folder.getId()); // XXX make configurable
+        String folderId = client.getConfiguration()
+                .get("dataExtensionFolderId");
+        assertEquals(folderId, folder.getId());
         assertEquals("dataextension_default", folder.getKey());
         assertEquals("Data Extensions", folder.getName());
         assertEquals("", folder.getDescription());
-        assertEquals("2014-08-10T23:50:00.833", // XXX make configurable
+        String folderCreatedDate = client.getConfiguration()
+                .get("dataExtensionFolderfolderCreatedDate");
+        assertEquals(folderCreatedDate,
                 dateFormat.format(folder.getCreatedDate()));
-        assertEquals("2014-08-10T23:50:00.833", // XXX make configurable
+        String folderModifiedDate = client.getConfiguration()
+                .get("dataExtensionFolderfolderModifiedDate");
+        assertEquals(folderModifiedDate,
                 dateFormat.format(folder.getModifiedDate()));
         assertEquals("dataextension", folder.getContentType());
         assertNull(folder.getParentFolderKey());
