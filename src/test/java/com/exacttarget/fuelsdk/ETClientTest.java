@@ -47,7 +47,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 public class ETClientTest {
-    ETClient client;
+    static ETClient client;
 
     @BeforeClass
     public static void setUpBeforeClass()
@@ -55,10 +55,6 @@ public class ETClientTest {
     {
         Assume.assumeNotNull(ETClientTest.class
                 .getResource("/fuelsdk-test.properties"));
-    }
-
-    @Before
-    public void setup() throws ETSdkException {
         client = new ETClient("/fuelsdk-test.properties");
     }
 
