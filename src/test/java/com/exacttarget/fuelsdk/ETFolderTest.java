@@ -58,7 +58,7 @@ public class ETFolderTest {
     {
         Assume.assumeNotNull(ETFolderTest.class
                 .getResource("/fuelsdk-test.properties"));
-        client = new ETClient();
+        client = new ETClient("/fuelsdk-test.properties");
     }
 
     @Test
@@ -290,7 +290,7 @@ public class ETFolderTest {
         folder2.setDescription("test2");
         folder2.setContentType("dataextension");
         folder2.setParentFolderKey("dataextension_default");
-        List<ETFolder> folders = new ArrayList<ETFolder>();
+        List<ETFolder> folders = new ArrayList<>();
         folders.add(folder1);
         folders.add(folder2);
         ETResponse<ETFolder> response = client.create(folders);
@@ -347,7 +347,7 @@ public class ETFolderTest {
         folder1.setKey("test1");
         ETFolder folder2 = new ETFolder();
         folder2.setKey("test2");
-        List<ETFolder> folders = new ArrayList<ETFolder>();
+        List<ETFolder> folders = new ArrayList<>();
         folders.add(folder1);
         folders.add(folder2);
         ETResponse<ETFolder> response = client.delete(folders);
