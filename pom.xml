@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Xlint="http://www.w3.org/2001/XMLSchema"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                              http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.exacttarget</groupId>
   <artifactId>fuelsdk</artifactId>
-  <version>1.1.0</version>
+  <version>1.1.1</version>
   <name>Salesforce Marketing Cloud Java SDK</name>
   <description>Salesforce Marketing Cloud Java SDK</description>
   <url>https://github.com/salesforce-marketingcloud/FuelSDK-Java</url>
@@ -158,6 +158,11 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-gpg-plugin</artifactId>
         <version>1.5</version>
+        <configuration>
+          <gpgArguments>
+            <gpgArgument>--no-tty</gpgArgument>
+          </gpgArguments>
+        </configuration>
         <executions>
           <execution>
             <id>sign-artifacts</id>
@@ -290,6 +295,23 @@
             </lifecycleMappingMetadata>
           </configuration>
         </plugin>
+
+<!--
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.1</version>
+          <configuration>
+            <source>1.8</source>
+            <target>1.8</target>
+            <compilerArguments>
+              &lt;!&ndash;<Werror/>&ndash;&gt;
+              <Xlint:all/>
+            </compilerArguments>
+          </configuration>
+        </plugin>
+-->
+
       </plugins>
     </pluginManagement>
   </build>
