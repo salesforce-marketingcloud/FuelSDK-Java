@@ -173,11 +173,11 @@ public class ETClientTest {
         assertEquals("Data Extensions", folder.getName());
         assertEquals("", folder.getDescription());
         String folderCreatedDate = client.getConfiguration()
-                .get("dataExtensionFolderfolderCreatedDate");
+                .get("dataExtensionFolderCreatedDate");
         assertEquals(folderCreatedDate,
                 dateFormat.format(folder.getCreatedDate()));
         String folderModifiedDate = client.getConfiguration()
-                .get("dataExtensionFolderfolderModifiedDate");
+                .get("dataExtensionFolderModifiedDate");
         assertEquals(folderModifiedDate,
                 dateFormat.format(folder.getModifiedDate()));
         assertEquals("dataextension", folder.getContentType());
