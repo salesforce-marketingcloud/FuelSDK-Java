@@ -206,7 +206,7 @@ public class ETDataExtensionTest {
         throws ETSdkException
     {
         ETResponse<ETDataExtensionRow> response = dataExtension.select();
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, testRecords.length, populateDefautExpectedSequence());
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, testRecords.length, false, populateDefautExpectedSequence());
     }
 
     @Test
@@ -215,7 +215,7 @@ public class ETDataExtensionTest {
     {
         ETResponse<ETDataExtensionRow> response = ETDataExtension.select(client,
                                                                          "key=" + DE_KEY);
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, testRecords.length, populateDefautExpectedSequence());
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, testRecords.length, false, populateDefautExpectedSequence());
     }
 
     @Test
@@ -223,7 +223,7 @@ public class ETDataExtensionTest {
         throws ETSdkException
     {
         ETResponse<ETDataExtensionRow> response = dataExtension.select("LastName");
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, testRecords.length, populateDefautExpectedSequence());
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, testRecords.length, false, populateDefautExpectedSequence());
     }
 
     @Test
@@ -233,7 +233,7 @@ public class ETDataExtensionTest {
         ETResponse<ETDataExtensionRow> response = ETDataExtension.select(client,
                                                                          "key=" + DE_KEY,
                                                                          "LastName");
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, testRecords.length, populateDefautExpectedSequence());
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, testRecords.length, false, populateDefautExpectedSequence());
     }
 
     @Test
@@ -243,7 +243,7 @@ public class ETDataExtensionTest {
         ETResponse<ETDataExtensionRow> response = dataExtension.select("LastName",
                                                                        "FirstName",
                                                                        "EmailAddress");
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, testRecords.length, populateDefautExpectedSequence());
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, testRecords.length, false, populateDefautExpectedSequence());
     }
 
     @Test
@@ -255,7 +255,7 @@ public class ETDataExtensionTest {
                                                                          "LastName",
                                                                          "FirstName",
                                                                          "EmailAddress");
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, testRecords.length, populateDefautExpectedSequence());
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, testRecords.length, false, populateDefautExpectedSequence());
     }
 
     @Test
@@ -263,7 +263,7 @@ public class ETDataExtensionTest {
         throws ETSdkException
     {
         ETResponse<ETDataExtensionRow> response = dataExtension.select("ORDER BY FirstName");
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, testRecords.length, 1, 0, 3, 2);
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, testRecords.length, false, 1, 0, 3, 2);
     }
 
     @Test
@@ -273,7 +273,7 @@ public class ETDataExtensionTest {
         ETResponse<ETDataExtensionRow> response = ETDataExtension.select(client,
                                                                          "key=" + DE_KEY,
                                                                          "ORDER BY FirstName");
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, testRecords.length, 1, 0, 3, 2);
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, testRecords.length, false, 1, 0, 3, 2);
     }
 
     @Test(expected=ETSdkException.class)
@@ -282,7 +282,7 @@ public class ETDataExtensionTest {
     {
         ETResponse<ETDataExtensionRow> response = dataExtension.select("LastName",
                                                                        "ORDER BY FirstName");
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, testRecords.length, 1, 0, 3, 2);
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, testRecords.length, false, 1, 0, 3, 2);
     }
 
     @Test
@@ -291,7 +291,7 @@ public class ETDataExtensionTest {
     {
         ETResponse<ETDataExtensionRow> response = dataExtension.select("firstname", "lastname",
                 "ORDER BY firstname");
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, testRecords.length, 1, 0, 3, 2);
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, testRecords.length, false, 1, 0, 3, 2);
     }
 
     @Test(expected=ETSdkException.class)
@@ -302,7 +302,7 @@ public class ETDataExtensionTest {
                                                                          "key=" + DE_KEY,
                                                                          "LastName",
                                                                          "ORDER BY FirstName");
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, testRecords.length, 1, 0, 3, 2);
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, testRecords.length, false, 1, 0, 3, 2);
     }
 
     @Test
@@ -313,7 +313,7 @@ public class ETDataExtensionTest {
                 "key=" + DE_KEY,
                 "FirstName", "LastName",
                 "ORDER BY FirstName");
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, testRecords.length, 1, 0, 3, 2);
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, testRecords.length, false, 1, 0, 3, 2);
     }
 
     @Test
@@ -324,7 +324,7 @@ public class ETDataExtensionTest {
                                                                        "FirstName",
                                                                        "EmailAddress",
                                                                        "ORDER BY FirstName");
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, testRecords.length, 1, 0, 3, 2);
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, testRecords.length, false, 1, 0, 3, 2);
     }
 
     @Test
@@ -337,7 +337,7 @@ public class ETDataExtensionTest {
                                                                          "FirstName",
                                                                          "EmailAddress",
                                                                          "ORDER BY FirstName");
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, testRecords.length, 1, 0, 3, 2);
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, testRecords.length, false, 1, 0, 3, 2);
     }
 
     @Test
@@ -346,12 +346,11 @@ public class ETDataExtensionTest {
     {
         int pageSize = 2;
         int pageNumber = 1;
-
-        ETResponse<ETDataExtensionRow> response1 = dataExtension.select(pageNumber, pageSize);
-        testSelectFiltered(response1, pageNumber, pageSize, testRecords.length, 0, 1);
+        ETResponse<ETDataExtensionRow> response = dataExtension.select(pageNumber, pageSize);
+        testSelectFiltered(response, pageNumber, pageSize, testRecords.length, true, 0, 1);
         pageNumber++;
-        ETResponse<ETDataExtensionRow> response2 = dataExtension.select(pageNumber, pageSize);
-        testSelectFiltered(response2, pageNumber, pageSize, testRecords.length, 2, 3);
+        response = dataExtension.select(pageNumber, pageSize);
+        testSelectFiltered(response, pageNumber, pageSize, testRecords.length, false, 2, 3);
     }
 
     @Test
@@ -360,13 +359,13 @@ public class ETDataExtensionTest {
     {
         int pageSize = 2;
         int pageNumber = 1;
-        ETResponse<ETDataExtensionRow> response1 = ETDataExtension.select(client,
+        ETResponse<ETDataExtensionRow> response = ETDataExtension.select(client,
                 "key=" + DE_KEY, pageNumber, pageSize);
-        testSelectFiltered(response1, pageNumber, pageSize, testRecords.length, 0, 1);
+        testSelectFiltered(response, pageNumber, pageSize, testRecords.length, true, 0, 1);
         pageNumber++;
-        ETResponse<ETDataExtensionRow> response2 = ETDataExtension.select(client,
+        response = ETDataExtension.select(client,
                 "key=" + DE_KEY, pageNumber, pageSize);
-        testSelectFiltered(response2, pageNumber, pageSize, testRecords.length, 2, 3);
+        testSelectFiltered(response, pageNumber, pageSize, testRecords.length, false, 2, 3);
     }
 
     @Test
@@ -375,11 +374,11 @@ public class ETDataExtensionTest {
     {
         int pageSize = 2;
         int pageNumber = 1;
-        ETResponse<ETDataExtensionRow> response1 = dataExtension.select(pageNumber, pageSize, "LastName");
-        testSelectFiltered(response1, pageNumber, pageSize, testRecords.length, 0, 1);
+        ETResponse<ETDataExtensionRow> response = dataExtension.select(pageNumber, pageSize, "LastName");
+        testSelectFiltered(response, pageNumber, pageSize, testRecords.length, true, 0, 1);
         pageNumber++;
-        ETResponse<ETDataExtensionRow> response2 = dataExtension.select(pageNumber, pageSize, "LastName");
-        testSelectFiltered(response2, pageNumber, pageSize, testRecords.length, 2, 3);
+        response = dataExtension.select(pageNumber, pageSize, "LastName");
+        testSelectFiltered(response, pageNumber, pageSize, testRecords.length, false, 2, 3);
     }
 
     @Test
@@ -388,13 +387,13 @@ public class ETDataExtensionTest {
     {
         int pageSize = 2;
         int pageNumber = 1;
-        ETResponse<ETDataExtensionRow> response1 = ETDataExtension.select(client,
+        ETResponse<ETDataExtensionRow> response = ETDataExtension.select(client,
                 "key=" + DE_KEY, pageNumber, pageSize, "LastName");
-        testSelectFiltered(response1, pageNumber, pageSize, testRecords.length, 0, 1);
+        testSelectFiltered(response, pageNumber, pageSize, testRecords.length, true, 0, 1);
         pageNumber++;
-        ETResponse<ETDataExtensionRow> response2 = ETDataExtension.select(client,
+        response = ETDataExtension.select(client,
                 "key=" + DE_KEY, pageNumber, pageSize, "LastName");
-        testSelectFiltered(response2, pageNumber, pageSize, testRecords.length, 2, 3);
+        testSelectFiltered(response, pageNumber, pageSize, testRecords.length, false, 2, 3);
     }
 
     @Test
@@ -403,17 +402,17 @@ public class ETDataExtensionTest {
     {
         int pageSize = 2;
         int pageNumber = 1;
-        ETResponse<ETDataExtensionRow> response1 = dataExtension.select(pageNumber, pageSize,
+        ETResponse<ETDataExtensionRow> response = dataExtension.select(pageNumber, pageSize,
                                                                         "LastName",
                                                                         "FirstName",
                                                                         "EmailAddress");
-        testSelectFiltered(response1, pageNumber, pageSize, testRecords.length, 0, 1);
+        testSelectFiltered(response, pageNumber, pageSize, testRecords.length, true, 0, 1);
         pageNumber++;
-        ETResponse<ETDataExtensionRow> response2 = dataExtension.select(pageNumber, pageSize,
+        response = dataExtension.select(pageNumber, pageSize,
                                                                         "LastName",
                                                                         "FirstName",
                                                                         "EmailAddress");
-        testSelectFiltered(response2, pageNumber, pageSize, testRecords.length, 2, 3);
+        testSelectFiltered(response, pageNumber, pageSize, testRecords.length, false, 2, 3);
     }
 
     @Test
@@ -422,13 +421,13 @@ public class ETDataExtensionTest {
     {
         int pageSize = 2;
         int pageNumber = 1;
-        ETResponse<ETDataExtensionRow> response1 = ETDataExtension.select(client,
+        ETResponse<ETDataExtensionRow> response = ETDataExtension.select(client,
                 "key=" + DE_KEY, pageNumber, pageSize, "LastName", "FirstName", "EmailAddress");
-        testSelectFiltered(response1, pageNumber, pageSize, testRecords.length, 0, 1);
+        testSelectFiltered(response, pageNumber, pageSize, testRecords.length, true, 0, 1);
         pageNumber++;
-        ETResponse<ETDataExtensionRow> response2 = ETDataExtension.select(client,
+        response = ETDataExtension.select(client,
                 "key=" + DE_KEY, pageNumber, pageSize, "LastName", "FirstName", "EmailAddress");
-        testSelectFiltered(response2, pageNumber, pageSize, testRecords.length, 2, 3);
+        testSelectFiltered(response, pageNumber, pageSize, testRecords.length, false, 2, 3);
     }
 
     @Test
@@ -436,7 +435,7 @@ public class ETDataExtensionTest {
         throws ETSdkException
     {
         ETResponse<ETDataExtensionRow> response = dataExtension.select("LastName=Flintstone");
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 3, 1, 2, 3);
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 3, false, 1, 2, 3);
     }
 
     @Test
@@ -446,7 +445,7 @@ public class ETDataExtensionTest {
         ETResponse<ETDataExtensionRow> response = ETDataExtension.select(client,
                                                                          "key=" + DE_KEY,
                                                                          "LastName=Flintstone");
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 3, 1, 2, 3);
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 3, false, 1, 2, 3);
     }
 
     @Test
@@ -455,7 +454,7 @@ public class ETDataExtensionTest {
     {
         ETResponse<ETDataExtensionRow> response = dataExtension.select("LastName=Flintstone",
                                                                        "LastName");
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 3, 1, 2, 3);
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 3, false, 1, 2, 3);
     }
 
     @Test
@@ -466,7 +465,7 @@ public class ETDataExtensionTest {
                                                                          "key=" + DE_KEY,
                                                                          "LastName=Flintstone",
                                                                          "LastName");
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 3, 1, 2, 3);
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 3, false, 1, 2, 3);
     }
 
     @Test
@@ -477,7 +476,7 @@ public class ETDataExtensionTest {
                                                                        "LastName",
                                                                        "FirstName",
                                                                        "EmailAddress");
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 3, 1, 2, 3);
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 3, false, 1, 2, 3);
     }
 
     @Test
@@ -490,7 +489,7 @@ public class ETDataExtensionTest {
                                                                          "LastName",
                                                                          "FirstName",
                                                                          "EmailAddress");
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 3, 1, 2, 3);
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 3, false, 1, 2, 3);
     }
 
     @Test
@@ -498,7 +497,7 @@ public class ETDataExtensionTest {
         throws ETSdkException
     {
         ETResponse<ETDataExtensionRow> response = dataExtension.select("LastName != Flintstone");
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 1, 0);
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 1, false, 0);
     }
 
     @Test
@@ -508,7 +507,7 @@ public class ETDataExtensionTest {
         ETResponse<ETDataExtensionRow> response = ETDataExtension.select(client,
                                                                          "key=" + DE_KEY,
                                                                          "LastName != Flintstone");
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 1, 0);
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 1, false, 0);
     }
 
     @Test
@@ -516,7 +515,7 @@ public class ETDataExtensionTest {
         throws ETSdkException
     {
         ETResponse<ETDataExtensionRow> response = dataExtension.select("Age < 36");
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 2, 2, 3);
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 2, false, 2, 3);
     }
 
     @Test
@@ -526,7 +525,7 @@ public class ETDataExtensionTest {
         ETResponse<ETDataExtensionRow> response = ETDataExtension.select(client,
                                                                          "key=" + DE_KEY,
                                                                          "Age < 36");
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 2, 2, 3);
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 2, false, 2, 3);
     }
 
     @Test
@@ -534,7 +533,7 @@ public class ETDataExtensionTest {
         throws ETSdkException
     {
         ETResponse<ETDataExtensionRow> response = dataExtension.select("Age <= 36");
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 3, 1, 2, 3);
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 3, false, 1, 2, 3);
     }
 
     @Test
@@ -544,7 +543,7 @@ public class ETDataExtensionTest {
         ETResponse<ETDataExtensionRow> response = ETDataExtension.select(client,
                                                                          "key=" + DE_KEY,
                                                                          "Age <= 36");
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 3, 1, 2, 3);
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 3, false, 1, 2, 3);
     }
 
     @Test
@@ -552,7 +551,7 @@ public class ETDataExtensionTest {
         throws ETSdkException
     {
         ETResponse<ETDataExtensionRow> response = dataExtension.select("Age > 36");
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 1, 0);
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 1, false, 0);
     }
 
     @Test
@@ -562,7 +561,7 @@ public class ETDataExtensionTest {
         ETResponse<ETDataExtensionRow> response = ETDataExtension.select(client,
                                                                          "key=" + DE_KEY,
                                                                          "Age > 36");
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 1, 0);
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 1, false, 0);
     }
 
     @Test
@@ -570,7 +569,7 @@ public class ETDataExtensionTest {
         throws ETSdkException
     {
         ETResponse<ETDataExtensionRow> response = dataExtension.select("Age >= 36");
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 2, 0, 1);
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 2, false, 0, 1);
     }
 
     @Test
@@ -580,7 +579,7 @@ public class ETDataExtensionTest {
         ETResponse<ETDataExtensionRow> response = ETDataExtension.select(client,
                                                                          "key=" + DE_KEY,
                                                                          "Age >= 36");
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 2, 0, 1);
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 2, false, 0, 1);
     }
 
     @Test
@@ -588,7 +587,7 @@ public class ETDataExtensionTest {
         throws ETSdkException
     {
         ETResponse<ETDataExtensionRow> response = dataExtension.select("Age in (34, 35)");
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 1, 2);
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 1, false, 2);
     }
 
     @Test
@@ -598,7 +597,7 @@ public class ETDataExtensionTest {
         ETResponse<ETDataExtensionRow> response = ETDataExtension.select(client,
                                                                          "key=" + DE_KEY,
                                                                          "Age in (34, 35)");
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 1, 2);
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 1, false, 2);
     }
 
     @Test
@@ -606,7 +605,7 @@ public class ETDataExtensionTest {
         throws ETSdkException
     {
         ETResponse<ETDataExtensionRow> response = dataExtension.select("Age in (34, 35, 36)");
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 2, 1, 2);
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 2, false, 1, 2);
     }
 
     @Test
@@ -616,7 +615,7 @@ public class ETDataExtensionTest {
         ETResponse<ETDataExtensionRow> response = ETDataExtension.select(client,
                                                                          "key=" + DE_KEY,
                                                                          "Age in (34, 35, 36)");
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 2, 1, 2);
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 2, false, 1, 2);
     }
 
     @Test
@@ -624,7 +623,7 @@ public class ETDataExtensionTest {
         throws ETSdkException
     {
         ETResponse<ETDataExtensionRow> response = dataExtension.select("Age in (34, 35, 36, 37)");
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 2, 1, 2);
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 2, false, 1, 2);
     }
 
     @Test
@@ -634,7 +633,7 @@ public class ETDataExtensionTest {
         ETResponse<ETDataExtensionRow> response = ETDataExtension.select(client,
                                                                          "key=" + DE_KEY,
                                                                          "Age in (34, 35, 36, 37)");
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 2, 1, 2);
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 2, false, 1, 2);
     }
 
     @Test
@@ -642,7 +641,7 @@ public class ETDataExtensionTest {
         throws ETSdkException
     {
         ETResponse<ETDataExtensionRow> response = dataExtension.select("Age between 30 and 40");
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 2, 1, 2);
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 2, false, 1, 2);
     }
 
     @Test
@@ -652,7 +651,7 @@ public class ETDataExtensionTest {
         ETResponse<ETDataExtensionRow> response = ETDataExtension.select(client,
                                                                          "key=" + DE_KEY,
                                                                          "Age between 30 and 40");
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 2, 1, 2);
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 2, false, 1, 2);
     }
 
     @Ignore
@@ -661,7 +660,7 @@ public class ETDataExtensionTest {
     {
         // TODO - check why the service returns "Error: Object reference not set to an instance of an object."
         ETResponse<ETDataExtensionRow> response = dataExtension.select("LastName like 'Flint%'");
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 3, 1, 2, 3);
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 3, false, 1, 2, 3);
     }
 
     @Ignore
@@ -672,7 +671,7 @@ public class ETDataExtensionTest {
         ETResponse<ETDataExtensionRow> response = ETDataExtension.select(client,
                                                                          "key=" + DE_KEY,
                                                                          "LastName like 'Flint%'");
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 3, 1, 2, 3);
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 3, false, 1, 2, 3);
     }
 
     @Test
@@ -680,7 +679,7 @@ public class ETDataExtensionTest {
         throws ETSdkException
     {
         ETResponse<ETDataExtensionRow> response = dataExtension.select("LastName='Flintstone' and FirstName = 'Wilma'");
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 1, 2);
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 1, false, 2);
     }
 
     @Test
@@ -690,7 +689,7 @@ public class ETDataExtensionTest {
         ETResponse<ETDataExtensionRow> response = ETDataExtension.select(client,
                                                                          "key=" + DE_KEY,
                                                                          "LastName='Flintstone' and FirstName = 'Wilma'");
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 1, 2);
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, 1, false, 2);
     }
 
     @Test
@@ -700,17 +699,17 @@ public class ETDataExtensionTest {
         int pageSize = 1;
         int pageNumber = 1;
 
-        ETResponse<ETDataExtensionRow> response1 = dataExtension.select(pageNumber, pageSize,
+        ETResponse<ETDataExtensionRow> response = dataExtension.select(pageNumber, pageSize,
                                                                         "LastName='Flintstone'");
-        testSelectFiltered(response1, pageNumber, pageSize, 3, 1);
+        testSelectFiltered(response, pageNumber, pageSize, 3, true, 1);
         pageNumber++;
-        ETResponse<ETDataExtensionRow> response2 = dataExtension.select(pageNumber, pageSize,
+        response = dataExtension.select(pageNumber, pageSize,
                                                                         "LastName='Flintstone'");
-        testSelectFiltered(response2, pageNumber, pageSize, 3, 2);
+        testSelectFiltered(response, pageNumber, pageSize, 3, true, 2);
         pageNumber++;
-        ETResponse<ETDataExtensionRow> response3 = dataExtension.select(pageNumber, pageSize,
+        response = dataExtension.select(pageNumber, pageSize,
                 "LastName='Flintstone'");
-        testSelectFiltered(response3, pageNumber, pageSize, 3, 3);
+        testSelectFiltered(response, pageNumber, pageSize, 3, false, 3);
     }
 
     @Test
@@ -720,13 +719,17 @@ public class ETDataExtensionTest {
         int pageSize = 1;
         int pageNumber = 1;
 
-        ETResponse<ETDataExtensionRow> response1 = ETDataExtension.select(client,
+        ETResponse<ETDataExtensionRow> response = ETDataExtension.select(client,
                 "key=" + DE_KEY, pageNumber, pageSize, "LastName='Flintstone'");
-        testSelectFiltered(response1, pageNumber, pageSize, 3, 1);
+        testSelectFiltered(response, pageNumber, pageSize, 3, true, 1);
         pageNumber++;
-        ETResponse<ETDataExtensionRow> response2 = ETDataExtension.select(client,
+        response = ETDataExtension.select(client,
                 "key=" + DE_KEY, pageNumber, pageSize, "LastName='Flintstone'");
-        testSelectFiltered(response2, pageNumber, pageSize, 3, 2);
+        testSelectFiltered(response, pageNumber, pageSize, 3, true, 2);
+        pageNumber++;
+        response = ETDataExtension.select(client,
+                "key=" + DE_KEY, pageNumber, pageSize, "LastName='Flintstone'");
+        testSelectFiltered(response, pageNumber, pageSize, 3, false, 3);
     }
 
     @Test
@@ -736,13 +739,17 @@ public class ETDataExtensionTest {
         int pageSize = 1;
         int pageNumber = 1;
 
-        ETResponse<ETDataExtensionRow> response1 = dataExtension.select(pageNumber, pageSize,
+        ETResponse<ETDataExtensionRow> response = dataExtension.select(pageNumber, pageSize,
                 "LastName=Flintstone", "LastName");
-        testSelectFiltered(response1, pageNumber, pageSize, 3, 1);
+        testSelectFiltered(response, pageNumber, pageSize, 3, true, 1);
         pageNumber++;
-        ETResponse<ETDataExtensionRow> response2 = dataExtension.select(pageNumber, pageSize,
+        response = dataExtension.select(pageNumber, pageSize,
                 "LastName=Flintstone", "LastName");
-        testSelectFiltered(response2, pageNumber, pageSize, 3, 2);
+        testSelectFiltered(response, pageNumber, pageSize, 3, true, 2);
+        pageNumber++;
+        response = ETDataExtension.select(client,
+                "key=" + DE_KEY, pageNumber, pageSize, "LastName='Flintstone'");
+        testSelectFiltered(response, pageNumber, pageSize, 3, false, 3);
     }
 
     @Test
@@ -752,93 +759,99 @@ public class ETDataExtensionTest {
         int pageSize = 1;
         int pageNumber = 1;
 
-        ETResponse<ETDataExtensionRow> response1 = ETDataExtension.select(client,
+        ETResponse<ETDataExtensionRow> response = ETDataExtension.select(client,
                 "key=" + DE_KEY, pageNumber, pageSize, "LastName=Flintstone", "LastName");
-        testSelectFiltered(response1, pageNumber, pageSize, 3, 1);
+        testSelectFiltered(response, pageNumber, pageSize, 3, true, 1);
         pageNumber++;
-        ETResponse<ETDataExtensionRow> response2 = ETDataExtension.select(client,
+        response = ETDataExtension.select(client,
                 "key=" + DE_KEY, pageNumber, pageSize, "LastName=Flintstone", "LastName");
-        testSelectFiltered(response2, pageNumber, pageSize, 3, 2);
+        testSelectFiltered(response, pageNumber, pageSize, 3, true, 2);
+        pageNumber++;
+        response = ETDataExtension.select(client,
+                "key=" + DE_KEY, pageNumber, pageSize, "LastName=Flintstone", "LastName");
+        testSelectFiltered(response, pageNumber, pageSize, 3, false, 3);
     }
 
     @Test
     public void _55_TestSelectFilteredPaginatedMultipleColumnsSpecified()
         throws ETSdkException
     {
-        ETResponse<ETDataExtensionRow> response1 = dataExtension.select(1, 1,
-                                                                        "LastName=Flintstone",
-                                                                        "LastName",
-                                                                        "FirstName",
-                                                                        "EmailAddress");
-        ETResponse<ETDataExtensionRow> response2 = dataExtension.select(2, 1,
-                                                                        "LastName=Flintstone",
-                                                                        "LastName",
-                                                                        "FirstName",
-                                                                        "EmailAddress");
-        testSelectFilteredPaginatedMultipleColumnsSpecified(response1, response2);
+        int pageSize = 1;
+        int pageNumber = 1;
+
+        ETResponse<ETDataExtensionRow> response = dataExtension.select(pageNumber, pageSize,
+                "LastName=Flintstone", "LastName", "FirstName", "EmailAddress");
+        testSelectFiltered(response, pageNumber, pageSize, 3, true, 1);
+        pageNumber++;
+        response = dataExtension.select(pageNumber, pageSize,
+                "LastName=Flintstone", "LastName", "FirstName", "EmailAddress");
+        testSelectFiltered(response, pageNumber, pageSize, 3, true, 2);
+        pageNumber++;
+        response = dataExtension.select(pageNumber, pageSize,
+                "LastName=Flintstone", "LastName", "FirstName", "EmailAddress");
+        testSelectFiltered(response, pageNumber, pageSize, 3, false, 3);
     }
 
     @Test
     public void _56_TestSelectFilteredPaginatedMultipleColumnsSpecifiedStatic()
         throws ETSdkException
     {
-        ETResponse<ETDataExtensionRow> response1 = ETDataExtension.select(client,
-                                                                          "key=" + DE_KEY,
-                                                                          1, 1,
-                                                                          "LastName=Flintstone",
-                                                                          "LastName",
-                                                                          "FirstName",
-                                                                          "EmailAddress");
-        ETResponse<ETDataExtensionRow> response2 = ETDataExtension.select(client,
-                                                                          "key=" + DE_KEY,
-                                                                          2, 1,
-                                                                          "LastName=Flintstone",
-                                                                          "LastName",
-                                                                          "FirstName",
-                                                                          "EmailAddress");
-        testSelectFilteredPaginatedMultipleColumnsSpecified(response1, response2);
+        int pageSize = 1;
+        int pageNumber = 1;
+
+        ETResponse<ETDataExtensionRow> response = ETDataExtension.select(client,
+                "key=" + DE_KEY, pageNumber, pageSize, "LastName=Flintstone", "LastName", "FirstName", "EmailAddress");
+        testSelectFiltered(response, pageNumber, pageSize, 3, true, 1);
+        pageNumber++;
+        response = ETDataExtension.select(client,
+                "key=" + DE_KEY, pageNumber, pageSize, "LastName=Flintstone", "LastName", "FirstName", "EmailAddress");
+        testSelectFiltered(response, pageNumber, pageSize, 3, true, 2);
+        pageNumber++;
+        response = ETDataExtension.select(client,
+                "key=" + DE_KEY, pageNumber, pageSize, "LastName=Flintstone", "LastName", "FirstName", "EmailAddress");
+        testSelectFiltered(response, pageNumber, pageSize, 3, false, 3);
     }
 
     @Test
+    @SuppressWarnings("deprecation")
     public void _57_TestSelectDeprecated1()
         throws ETSdkException
     {
-        @SuppressWarnings("deprecation")
-        ETResponse<ETDataExtensionRow> response1 = dataExtension.select("LastName=Flintstone",
-                                                                        1, 1,
-                                                                        "LastName",
-                                                                        "FirstName",
-                                                                        "EmailAddress");
-        @SuppressWarnings("deprecation")
-        ETResponse<ETDataExtensionRow> response2 = dataExtension.select("LastName=Flintstone",
-                                                                        2, 1,
-                                                                        "LastName",
-                                                                        "FirstName",
-                                                                        "EmailAddress");
-        testSelectFilteredPaginatedMultipleColumnsSpecified(response1, response2);
+        int pageSize = 1;
+        int pageNumber = 1;
+
+        ETResponse<ETDataExtensionRow> response = dataExtension.select("LastName=Flintstone",
+                pageNumber, pageSize, "LastName", "FirstName", "EmailAddress");
+        testSelectFiltered(response, pageNumber, pageSize, 3, true, 1);
+        pageNumber++;
+        response = dataExtension.select("LastName=Flintstone",
+                pageNumber, pageSize, "LastName", "FirstName", "EmailAddress");
+        testSelectFiltered(response, pageNumber, pageSize, 3, true, 2);
+        pageNumber++;
+        response = dataExtension.select("LastName=Flintstone",
+                pageNumber, pageSize, "LastName", "FirstName", "EmailAddress");
+        testSelectFiltered(response, pageNumber, pageSize, 3, false, 3);
     }
 
     @Test
+    @SuppressWarnings("deprecation")
     public void _58_TestSelectDeprecatedStatic1()
         throws ETSdkException
     {
-        @SuppressWarnings("deprecation")
-        ETResponse<ETDataExtensionRow> response1 = ETDataExtension.select(client,
-                                                                          "key=" + DE_KEY,
-                                                                          "LastName=Flintstone",
-                                                                          1, 1,
-                                                                          "LastName",
-                                                                          "FirstName",
-                                                                          "EmailAddress");
-        @SuppressWarnings("deprecation")
-        ETResponse<ETDataExtensionRow> response2 = ETDataExtension.select(client,
-                                                                          "key=" + DE_KEY,
-                                                                          "LastName=Flintstone",
-                                                                          2, 1,
-                                                                          "LastName",
-                                                                          "FirstName",
-                                                                          "EmailAddress");
-        testSelectFilteredPaginatedMultipleColumnsSpecified(response1, response2);
+        int pageSize = 1;
+        int pageNumber = 1;
+
+        ETResponse<ETDataExtensionRow> response = ETDataExtension.select(client,
+                "key=" + DE_KEY, "LastName=Flintstone", pageNumber, pageSize, "LastName", "FirstName", "EmailAddress");
+        testSelectFiltered(response, pageNumber, pageSize, 3, true, 1);
+        pageNumber++;
+        response = ETDataExtension.select(client,
+                "key=" + DE_KEY, "LastName=Flintstone", pageNumber, pageSize, "LastName", "FirstName", "EmailAddress");
+        testSelectFiltered(response, pageNumber, pageSize, 3, true, 2);
+        pageNumber++;
+        response = ETDataExtension.select(client,
+                "key=" + DE_KEY, "LastName=Flintstone", pageNumber, pageSize, "LastName", "FirstName", "EmailAddress");
+        testSelectFiltered(response, pageNumber, pageSize, 3, false, 3);
     }
 
     @Test
@@ -849,7 +862,7 @@ public class ETDataExtensionTest {
                                                                        "firstname",
                                                                        "emailaddress",
                                                                        "order by firstname");
-        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, testRecords.length, 1, 0, 3, 2);
+        testSelectFiltered(response, 1, ETDataExtension.DEFAULT_PAGE_SIZE, testRecords.length, false, 1, 0, 3, 2);
     }
 
     @Test
@@ -1118,9 +1131,9 @@ public class ETDataExtensionTest {
     }
 
     private void testSelectFiltered(ETResponse<ETDataExtensionRow> response,
-                                    Integer currentPage, Integer pageSize, Integer totalResults,
+                                    Integer currentPage, Integer pageSize, Integer totalResults, boolean hasMoreResults,
                                     int ... expectedSequence) {
-        testGeneralDataRowResponse(response, currentPage, pageSize, totalResults, (totalResults > (currentPage * pageSize)));
+        testGeneralDataRowResponse(response, currentPage, pageSize, totalResults, hasMoreResults);
         List<ETDataExtensionRow> rows = response.getObjects();
         assertEquals(expectedSequence.length, rows.size());
         int i = 0;
@@ -1130,25 +1143,6 @@ public class ETDataExtensionTest {
             assertEquals(testRow, row1);
         }
     }
-
-    private void testSelectFilteredPaginatedMultipleColumnsSpecified(ETResponse<ETDataExtensionRow> response1,
-                                                                     ETResponse<ETDataExtensionRow> response2)
-    {
-        ETDataExtensionRow testRow;
-        testGeneralDataRowResponse(response1, 1, 1, 3, true);
-        List<ETDataExtensionRow> rows1 = response1.getObjects();
-        assertEquals(1, rows1.size());
-        ETDataExtensionRow row1 = rows1.get(0);
-        testRow = getTestETDataExtensionRow(testRecords, 1);
-        assertEquals(testRow, row1);
-        testGeneralDataRowResponse(response2, 2, 1, 3, true);
-        List<ETDataExtensionRow> rows2 = response2.getObjects();
-        assertEquals(1, rows2.size());
-        ETDataExtensionRow row2 = rows2.get(0);
-        testRow = getTestETDataExtensionRow(testRecords, 2);
-        assertEquals(testRow, row2);
-    }
-
 
     // Setup methods
     private static ETDataExtensionColumn createETDataExtensionColumn(String name, ETDataExtensionColumn.Type type, Integer size, boolean primaryKey, boolean required) {
