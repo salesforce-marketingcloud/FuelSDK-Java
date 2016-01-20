@@ -34,17 +34,14 @@
 
 package com.exacttarget.fuelsdk;
 
-import java.util.*;
-
 import org.junit.*;
 import org.junit.runners.MethodSorters;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
-import static com.exacttarget.fuelsdk.ETResult.Status.OK;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import static org.junit.Assert.*;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ETDataExtensionTest {
@@ -108,7 +105,7 @@ public class ETDataExtensionTest {
         assertFalse(response.hasMoreResults());
         assertEquals(1, response.getResults().size());
         ETResult<ETDataExtension> result = response.getResult();
-        testGeneralResultInfo(result, OK, "OK", "Data Extension created.");
+        testGeneralResultInfo(result, ETResult.Status.OK, "OK", "Data Extension created.");
         assertNull(result.getErrorCode());
         assertNotNull(result.getObjectId());
         ETDataExtension de = result.getObject();
@@ -168,7 +165,7 @@ public class ETDataExtensionTest {
         assertFalse(response.hasMoreResults());
         assertEquals(1, response.getResults().size());
         ETResult<ETDataExtensionRow> result = response.getResult();
-        testGeneralResultInfo(result, OK, "OK", "Created DataExtensionObject");
+        testGeneralResultInfo(result, ETResult.Status.OK, "OK", "Created DataExtensionObject");
         assertNull(result.getErrorCode());
         assertNull(result.getObjectId());
         ETDataExtensionRow r = result.getObject();
@@ -193,7 +190,7 @@ public class ETDataExtensionTest {
 
         for (int i = 0; i < rows.length; i++) {
             ETResult<ETDataExtensionRow> result1 = response.getResults().get(i);
-            testGeneralResultInfo(result1, OK, "OK", "Created DataExtensionObject");
+            testGeneralResultInfo(result1, ETResult.Status.OK, "OK", "Created DataExtensionObject");
             assertNull(result1.getErrorCode());
             assertNull(result1.getObjectId());
             ETDataExtensionRow r1 = result1.getObject();
@@ -884,14 +881,10 @@ public class ETDataExtensionTest {
         row.setColumn("FirstName", "IAN");
         ETResponse<ETDataExtensionRow> response = dataExtension.update(row);
         // TODO - check why is this response not paged???
-        testGeneralResponseInfo(response, OK, "OK", "OK");
-        assertNull(response.getPage());
-        assertNull(response.getPageSize());
-        assertNull(response.getTotalCount());
-        assertFalse(response.hasMoreResults());
+        testGeneralDataRowResponse(response, null, null, null, false);
         assertEquals(1, response.getResults().size());
         ETResult<ETDataExtensionRow> result = response.getResult();
-        testGeneralResultInfo(result, OK, "OK", "Updated DataExtensionObject");
+        testGeneralResultInfo(result, ETResult.Status.OK, "OK", "Updated DataExtensionObject");
         assertNull(result.getObjectId());
         ETDataExtensionRow r = result.getObject();
         assertEquals("1", r.getColumn("CustomerID"));
@@ -914,14 +907,10 @@ public class ETDataExtensionTest {
         row2.setColumn("FirstName", "WILMA");
         ETResponse<ETDataExtensionRow> response = dataExtension.update(row1, row2);
         // TODO - check why is this response not paged???
-        testGeneralResponseInfo(response, OK, "OK", "OK");
-        assertNull(response.getPage());
-        assertNull(response.getPageSize());
-        assertNull(response.getTotalCount());
-        assertFalse(response.hasMoreResults());
+        testGeneralDataRowResponse(response, null, null, null, false);
         assertEquals(2, response.getResults().size());
         ETResult<ETDataExtensionRow> result1 = response.getResults().get(0);
-        testGeneralResultInfo(result1, OK, "OK", "Updated DataExtensionObject");
+        testGeneralResultInfo(result1, ETResult.Status.OK, "OK", "Updated DataExtensionObject");
         assertNull(result1.getErrorCode());
         assertNull(result1.getObjectId());
         ETDataExtensionRow r1 = result1.getObject();
@@ -933,7 +922,7 @@ public class ETDataExtensionTest {
         assertNull(r1.getColumn("EmailAddress"));
         ETResult<ETDataExtensionRow> result2 = response.getResults().get(1);
         assertNull(result2.getRequestId());
-        assertEquals(OK, result2.getStatus());
+        assertEquals(ETResult.Status.OK, result2.getStatus());
         assertEquals("OK", result2.getResponseCode());
         assertEquals("Updated DataExtensionObject", result2.getResponseMessage());
         assertNull(result2.getErrorCode());
@@ -962,7 +951,7 @@ public class ETDataExtensionTest {
         assertEquals(3, response.getResults().size());
         ETResult<ETDataExtensionRow> result1 = response.getResults().get(0);
         assertNull(result1.getRequestId());
-        assertEquals(OK, result1.getStatus());
+        assertEquals(ETResult.Status.OK, result1.getStatus());
         assertEquals("OK", result1.getResponseCode());
         assertEquals("Updated DataExtensionObject", result1.getResponseMessage());
         assertNull(result1.getErrorCode());
@@ -976,7 +965,7 @@ public class ETDataExtensionTest {
         assertEquals(null, r1.getColumn("EmailAddress"));
         ETResult<ETDataExtensionRow> result2 = response.getResults().get(1);
         assertNull(result2.getRequestId());
-        assertEquals(OK, result2.getStatus());
+        assertEquals(ETResult.Status.OK, result2.getStatus());
         assertEquals("OK", result2.getResponseCode());
         assertEquals("Updated DataExtensionObject", result2.getResponseMessage());
         assertNull(result2.getErrorCode());
@@ -1014,7 +1003,7 @@ public class ETDataExtensionTest {
         assertEquals(1, response.getResults().size());
         ETResult<ETDataExtensionRow> result = response.getResult();
         assertNull(result.getRequestId());
-        assertEquals(OK, result.getStatus());
+        assertEquals(ETResult.Status.OK, result.getStatus());
         assertEquals("OK", result.getResponseCode());
         assertEquals("Deleted DataExtensionObject", result.getResponseMessage());
         assertNull(result.getErrorCode());
