@@ -36,6 +36,7 @@ package com.exacttarget.fuelsdk;
 
 import java.util.Date;
 import java.util.List;
+import java.util.ArrayList;
 
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.InternalName;
