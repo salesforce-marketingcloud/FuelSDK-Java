@@ -35,13 +35,20 @@
 package com.exacttarget.fuelsdk;
 
 import java.util.Date;
+import java.util.List;
 
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.InternalName;
 import com.exacttarget.fuelsdk.annotations.SoapObject;
+import com.exacttarget.fuelsdk.internal.APIObject;
+import com.exacttarget.fuelsdk.internal.Attribute;
 import com.exacttarget.fuelsdk.internal.Subscriber;
 
 /**
+ * This is to fix a bug in FuelSDK that does not allow Attributes to Subscriber.
+ *
+ * @author hahnj
+ *
  * An <code>ETSubscriber</code> object represents an email subscriber
  * in the Salesforce Marketing Cloud.
  */
@@ -68,8 +75,8 @@ public class ETSubscriber extends ETSoapObject {
     private Status status = null;
     @ExternalName("unsubscribedDate")
     private Date unsubscribedDate = null;
-//    @ExternalName("attributes")
-//    private List<Attribute> attributes = null;
+    //@ExternalName("attributes")
+    private List<Attribute> attributes = null;
 //    @ExternalName("lists")
 //    private List<ETList> lists = null;
 
@@ -141,13 +148,13 @@ public class ETSubscriber extends ETSoapObject {
         this.unsubscribedDate = unsubscribedDate;
     }
 
-//    public List<Attribute> getAttributes() {
-//        return attributes;
-//    }
-//
-//    public void setAttributes(List<Attribute> attributes) {
-//        this.attributes = attributes;
-//    }
+    public List<Attribute> getAttributes() {
+        if (attributes == null) {
+            attributes = new ArrayList<Attribute>();
+        }
+        return this.attributes;
+    }
+
 //
 //    public List<ETList> getLists() {
 //        return lists;
@@ -173,6 +180,17 @@ public class ETSubscriber extends ETSoapObject {
     @Deprecated
     public void setSubscriberKey(String subscriberKey) {
         setKey(subscriberKey);
+    }
+
+    /**
+     * This is a workaround way to fix a bug to add attributes to Subscriber.
+     * The correct way to fix this is to fix the internal mapping for toInternal()
+     */
+    @Override
+    public APIObject toInternal() throws ETSdkException {
+        Subscriber subscriber = (Subscriber)super.toInternal();
+        subscriber.getAttributes().addAll(getAttributes());
+        return subscriber;
     }
 
     public enum Status {
