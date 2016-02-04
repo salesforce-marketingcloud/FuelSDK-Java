@@ -34,6 +34,7 @@
 
 package com.exacttarget.fuelsdk;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import com.exacttarget.fuelsdk.annotations.ExternalName;
@@ -70,6 +71,8 @@ public class ETList extends ETSoapObject {
     private Classification classification = null;
     @ExternalName("type")
     private Type type = null;
+    @ExternalName("subscribers")
+    protected java.util.List<ETSubscriber> subscribers;
 
     public ETList() {}
 
@@ -179,6 +182,13 @@ public class ETList extends ETSoapObject {
     @Deprecated
     public void setCategoryId(Integer categoryId) {
         setFolderId(categoryId);
+    }
+    
+    public java.util.List<ETSubscriber> getSubscribers() {
+        if (subscribers == null) {
+            subscribers = new ArrayList<ETSubscriber>();
+        }
+        return this.subscribers;
     }
 
     public enum Classification {

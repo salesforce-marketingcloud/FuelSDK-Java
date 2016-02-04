@@ -34,7 +34,9 @@
 
 package com.exacttarget.fuelsdk;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.InternalName;
@@ -68,10 +70,8 @@ public class ETSubscriber extends ETSoapObject {
     private Status status = null;
     @ExternalName("unsubscribedDate")
     private Date unsubscribedDate = null;
-//    @ExternalName("attributes")
-//    private List<Attribute> attributes = null;
-//    @ExternalName("lists")
-//    private List<ETList> lists = null;
+    @ExternalName("lists")
+    private List<ETSubscriberList> lists = null;
 
     public ETSubscriber() {}
 
@@ -141,21 +141,12 @@ public class ETSubscriber extends ETSoapObject {
         this.unsubscribedDate = unsubscribedDate;
     }
 
-//    public List<Attribute> getAttributes() {
-//        return attributes;
-//    }
-//
-//    public void setAttributes(List<Attribute> attributes) {
-//        this.attributes = attributes;
-//    }
-//
-//    public List<ETList> getLists() {
-//        return lists;
-//    }
-//
-//    public void setLists(List<ETList> lists) {
-//        this.lists = lists;
-//    }
+    public List<ETSubscriberList> getLists() {
+	   if (lists == null) {
+		   lists = new ArrayList<ETSubscriberList>();
+	   }
+	   return lists;
+    }
 
     /**
      * @deprecated
