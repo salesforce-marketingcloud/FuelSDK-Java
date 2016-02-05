@@ -58,7 +58,7 @@ public class ETFolderTest {
     {
         Assume.assumeNotNull(ETFolderTest.class
                 .getResource("/fuelsdk-test.properties"));
-        client = new ETClient();
+        client = new ETClient("/fuelsdk-test.properties");
     }
 
     @Test

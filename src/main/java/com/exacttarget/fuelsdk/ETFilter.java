@@ -83,7 +83,7 @@ public class ETFilter extends ETObject {
     }
 
     public void addProperty(String property) {
-        this.properties.add(property);
+        this.properties.add(property.toLowerCase());
     }
 
     public static ETFilter parse(String... s)

@@ -96,7 +96,7 @@ public class ETObjectTest {
         assertNull(testObject.setModified("test", true));
         List<String> modified = testObject.getAllModified();
         assertEquals(1, modified.size());
-        assertEquals("test", modified.get(0));
+        assertTrue(modified.contains("test"));
     }
 
     @Test
@@ -106,8 +106,8 @@ public class ETObjectTest {
         assertNull(testObject.setModified("test2", true));
         List<String> modified = testObject.getAllModified();
         assertEquals(2, modified.size());
-        assertEquals("test1", modified.get(0));
-        assertEquals("test2", modified.get(1));
+        assertTrue(modified.contains("test1"));
+        assertTrue(modified.contains("test2"));
     }
 
     @Test
@@ -118,9 +118,9 @@ public class ETObjectTest {
         assertNull(testObject.setModified("test3", true));
         List<String> modified = testObject.getAllModified();
         assertEquals(3, modified.size());
-        assertEquals("test1", modified.get(0));
-        assertEquals("test2", modified.get(1));
-        assertEquals("test3", modified.get(2));
+        assertTrue(modified.contains("test1"));
+        assertTrue(modified.contains("test2"));
+        assertTrue(modified.contains("test3"));
     }
 
     @Test
@@ -131,8 +131,8 @@ public class ETObjectTest {
         assertNull(testObject.setModified("test3", true));
         List<String> modified = testObject.getAllModified();
         assertEquals(2, modified.size());
-        assertEquals("test1", modified.get(0));
-        assertEquals("test3", modified.get(1));
+        assertTrue(modified.contains("test1"));
+        assertTrue(modified.contains("test3"));
     }
 
     @Test
@@ -143,14 +143,14 @@ public class ETObjectTest {
         assertNull(testObject.setModified("test3", true));
         List<String> modified = testObject.getAllModified();
         assertEquals(3, modified.size());
-        assertEquals("test1", modified.get(0));
-        assertEquals("test2", modified.get(1));
-        assertEquals("test3", modified.get(2));
+        assertTrue(modified.contains("test1"));
+        assertTrue(modified.contains("test2"));
+        assertTrue(modified.contains("test3"));
         assertTrue(testObject.setModified("test2", false));
         modified = testObject.getAllModified();
         assertEquals(2, modified.size());
-        assertEquals("test1", modified.get(0));
-        assertEquals("test3", modified.get(1));
+        assertTrue(modified.contains("test1"));
+        assertTrue(modified.contains("test3"));
     }
 
     class TestObject extends ETApiObject {
