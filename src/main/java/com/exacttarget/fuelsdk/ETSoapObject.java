@@ -273,15 +273,15 @@ public abstract class ETSoapObject extends ETApiObject {
         if (logger.isTraceEnabled()) {
             logger.trace("RetrieveRequest:");
             logger.trace("  objectType = " + retrieveRequest.getObjectType());
-            String line = null;
+            StringBuilder line = new StringBuilder("  properties = { ");
             for (String property : retrieveRequest.getProperties()) {
-                if (line == null) {
-                    line = "  properties = { " + property;
-                } else {
-                    line += ", " + property;
-                }
+                line.append(property).append(", ");
             }
-            logger.trace(line + " }");
+            if (retrieveRequest.getProperties().size() > 0) {
+                line.setLength(line.length() - 2);
+            }
+            line.append(" }");
+            logger.trace(line.toString());
             if (filter != null) {
                 logger.trace("  filter = " + toFilterPart(expression));
             }
