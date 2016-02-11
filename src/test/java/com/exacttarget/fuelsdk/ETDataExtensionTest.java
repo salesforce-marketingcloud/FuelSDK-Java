@@ -1373,7 +1373,7 @@ public class ETDataExtensionTest {
     public void _49_TestSelectFilteredAnd()
         throws ETSdkException
     {
-        ETResponse<ETDataExtensionRow> response = dataExtension.select("LastName=Flintstone and FirstName = 'Wilma'");
+        ETResponse<ETDataExtensionRow> response = dataExtension.select("LastName = 'Flintstone' and FirstName = 'Wilma'");
         testSelectFilteredAnd(response);
     }
 
@@ -1383,7 +1383,7 @@ public class ETDataExtensionTest {
     {
         ETResponse<ETDataExtensionRow> response = ETDataExtension.select(client,
                                                                          "key=test1",
-                                                                         "LastName=Flintstone and FirstName = 'Wilma'");
+                                                                         "LastName = 'Flintstone' and FirstName = 'Wilma'");
         testSelectFilteredAnd(response);
     }
 
@@ -1901,5 +1901,13 @@ public class ETDataExtensionTest {
         assertEquals("OK", result.getResponseCode());
         assertEquals("Data Extension deleted.", result.getResponseMessage());
         assertNull(result.getErrorCode());
+    }
+    
+    @Test
+    public void _70_TestSelectFilteredByDateTime()
+        throws ETSdkException
+    {
+        @SuppressWarnings("unused")
+        ETResponse<ETDataExtensionRow> response = dataExtension.select("EventDate > '2016-01-01T01:01:01Z'");
     }
 }
