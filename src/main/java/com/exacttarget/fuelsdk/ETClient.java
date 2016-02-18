@@ -240,10 +240,10 @@ public class ETClient {
     public synchronized String requestToken()
         throws ETSdkException
     {
-        return requestToken(null, false);
+        return requestToken(null);
     }
 
-    public synchronized String requestToken(String refreshToken, Boolean isRefresh)
+    public synchronized String requestToken(String refreshToken)
         throws ETSdkException
     {
         if (clientId == null || clientSecret == null) {
@@ -263,7 +263,7 @@ public class ETClient {
         jsonObject.addProperty("clientId", clientId);
         jsonObject.addProperty("clientSecret", clientSecret);
         jsonObject.addProperty("accessType", "offline");
-        if (refreshToken != null && isRefresh) {
+        if (refreshToken != null) {
             jsonObject.addProperty("refreshToken", refreshToken);
         }
 
@@ -345,7 +345,7 @@ public class ETClient {
             }
         }
 
-        requestToken(refreshToken, true);
+        requestToken(refreshToken);
 
         soapConnection.setAccessToken(accessToken);
 

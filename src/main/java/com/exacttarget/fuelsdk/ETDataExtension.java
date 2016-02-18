@@ -36,18 +36,16 @@ package com.exacttarget.fuelsdk;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import com.exacttarget.fuelsdk.ETDataExtensionColumn.Type;
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.InternalName;
 import com.exacttarget.fuelsdk.annotations.RestObject;
 import com.exacttarget.fuelsdk.annotations.SoapObject;
+import com.exacttarget.fuelsdk.ETDataExtensionColumn.Type;
 import com.exacttarget.fuelsdk.internal.APIObject;
 import com.exacttarget.fuelsdk.internal.APIProperty;
 import com.exacttarget.fuelsdk.internal.DataExtension;
@@ -66,7 +64,6 @@ import com.exacttarget.fuelsdk.internal.DataExtensionObject;
     "ID", "Fields"
 })
 public class ETDataExtension extends ETSoapObject {
-	static final int DEFAULT_PAGE_SIZE = 2500;
     private static Logger logger = Logger.getLogger(ETDataExtension.class);
 
     @ExternalName("id")
@@ -354,37 +351,6 @@ public class ETDataExtension extends ETSoapObject {
                                       "DataExtensionObject[" + name + "]",
                                       filter,
                                       ETDataExtensionRow.class);
-        
-        List<ETResult<ETDataExtensionRow>> rowSet = sortRowSet(response.getResults(), filter);
-
-        List<ETResult<ETDataExtensionRow>> paginatedRowSet;
-        if (page == null) {
-            page = response.getPage();
-            if (page == null) {
-                page = 1;
-            }
-        }
-        int iPage = page;
-        if (pageSize == null) {
-            pageSize = response.getPageSize();
-            if (pageSize == null) {
-                pageSize = DEFAULT_PAGE_SIZE;
-            }
-        }
-        int iPageSize = pageSize;
-        int pageStart = (iPage - 1) * iPageSize;
-        int pageEnd = pageStart + iPageSize;
-        if (pageStart < rowSet.size()) {
-            if (pageEnd > rowSet.size()) {
-                pageEnd = rowSet.size();
-            }
-        } else {
-            pageEnd = pageStart;
-        }
-        paginatedRowSet = rowSet.subList(pageStart, pageEnd);
-
-        response = createResponse(response, paginatedRowSet, page, pageSize, pageEnd, rowSet.size());
-        logger.debug("final response: " + response);
 
         //
         // XXX reenable support for paginated retrieves via REST API
@@ -429,52 +395,6 @@ public class ETDataExtension extends ETSoapObject {
 //        }
 
         return response;
-    }
-    
-    private static List<ETResult<ETDataExtensionRow>> sortRowSet(List<ETResult<ETDataExtensionRow>> rowSet, ETFilter filter) throws ETSdkException {
-        logger.debug("rowSet: " + rowSet);
-        logger.debug("filter: " + filter);
-        if (filter.getOrderBy() != null && filter.getOrderBy().size() > 0) {
-            // Sort the results
-            final String orderByColumn = filter.getOrderBy().get(0).toLowerCase();
-            List<String> list = filter.getProperties();
-            if (list.contains(orderByColumn)) {
-                final boolean sortAsc = filter.getOrderByAsc();
-                List<ETResult<ETDataExtensionRow>> sortedRowSet = rowSet;
-                Collections.sort(sortedRowSet, new Comparator<ETResult<ETDataExtensionRow>>() {
-                    public int compare(ETResult<ETDataExtensionRow> o1, ETResult<ETDataExtensionRow> o2) {
-                        if (o1.getObject().getColumn(orderByColumn) == null) {
-                            return 0;
-                        }
-                        int result = o1.getObject().getColumn(orderByColumn).compareTo(o2.getObject().getColumn(orderByColumn));
-                        return (sortAsc ? result : -result);
-                    }
-                });
-                rowSet = sortedRowSet;
-                logger.debug("sortedRowSet: " + sortedRowSet);
-            } else {
-                throw new ETSdkException("Can't order by '" + orderByColumn + "' as it is not in selected columns list: "
-                        + list);
-            }
-        }
-        return rowSet;
-    }
-
-    private static ETResponse<ETDataExtensionRow> createResponse(ETResponse<ETDataExtensionRow> response,
-                                                                 List<ETResult<ETDataExtensionRow>> paginatedRowSet,
-                                                                 Integer page, Integer pageSize, Integer pageEnd,
-                                                                 Integer totalCount) {
-        ETResponse<ETDataExtensionRow> pr = new ETResponse<ETDataExtensionRow>();
-        pr.setResponseCode(response.getResponseCode());
-        pr.setResponseMessage(response.getResponseMessage());
-        pr.setStatus(response.getStatus());
-        pr.setPage(page);
-        pr.setPageSize(pageSize);
-        pr.setTotalCount(totalCount);
-        pr.setMoreResults((pageEnd < totalCount));
-        pr.setRequestId(response.getRequestId());
-        pr.getResults().addAll(paginatedRowSet);
-        return pr;
     }
 
     public static ETResponse<ETDataExtensionRow> select(ETClient client,
