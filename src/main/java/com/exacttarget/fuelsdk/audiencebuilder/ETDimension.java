@@ -35,7 +35,9 @@
 package com.exacttarget.fuelsdk.audiencebuilder;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
@@ -82,6 +84,11 @@ public class ETDimension extends ETRestObject {
     @Expose
     @ExternalName("values")
     private List<ETDimensionValue> values = null;
+    
+    //declared these variables, so that they can accessed in anonymous class
+    private ETResponse<ETDimensionValue> response = null;
+    private int i=0;
+    private int k = 0;
 
     @Override
     public String getId() {
@@ -202,7 +209,7 @@ public class ETDimension extends ETRestObject {
 
         ETClient client = getClient();
 
-        ETResponse<ETDimensionValue> response = null;
+        response = null;
         int page = 0;
         do {
             page++;
@@ -214,9 +221,22 @@ public class ETDimension extends ETRestObject {
                 throw new ETSdkException("error retrieving dimension values: "
                         + response.getResponseMessage());
             }
-            for (ETDimensionValue value : response.getObjects()) {
-                values.add(value);
-            }
+            k = (response.getObjects().size()>25?response.getObjects().size()/25:2);
+            for ( i = 0; i <= (response.getObjects().size()/k); i++){
+            	try {
+            		//this hashmap keeps track of all the thread, that has been defined anonymously
+            		Map<Integer, Thread> threadMapper = new HashMap<Integer, Thread>();
+            		threadMapper.put(new Integer(i),new Thread(){
+						public void run(){            	
+						for (int j =  ETDimension.this.i*ETDimension.this.k; j < ((ETDimension.this.i + 1)*ETDimension.this.k < response.getObjects().size()?(ETDimension.this.i + 1)*ETDimension.this.k : response.getObjects().size()); j++) {
+					        values.add(ETDimension.this.response.getObjects().get(j));
+					    }}});
+            		threadMapper.get(i).start();
+            		threadMapper.get(i).join();            		
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}                 
+            	}
         } while (response.hasMoreResults());
     }
 
