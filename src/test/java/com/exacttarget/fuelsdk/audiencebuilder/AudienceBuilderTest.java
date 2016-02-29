@@ -58,13 +58,10 @@ public class AudienceBuilderTest {
     public static void setUpBeforeClass()
         throws ETSdkException
     {
-        /*ETConfiguration configuration = new ETConfiguration("/fuelsdk-test.properties");
+        ETConfiguration configuration = new ETConfiguration("/fuelsdk-test.properties");
         configuration.set("clientId", configuration.get("audienceBuilderClientId"));
         configuration.set("clientSecret", configuration.get("audienceBuilderClientSecret"));
-        configuration.set("soapEndpoint", configuration.get("audienceBuilderSoapEndpoint"));*/
-    	ETConfiguration configuration = new ETConfiguration();//"/fuelsdk.properties");//new ETConfiguration();
-		configuration.setClientId("wj77x5nf1m59acvojg1e7xej");
-		configuration.setClientSecret("j5KEZoTGAD9ktAuqz2pY79sU");
+        configuration.set("soapEndpoint", configuration.get("audienceBuilderSoapEndpoint"));
         client = new ETClient(configuration);
     }
 

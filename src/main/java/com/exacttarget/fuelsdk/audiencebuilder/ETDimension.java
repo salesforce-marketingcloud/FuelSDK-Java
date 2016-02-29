@@ -35,9 +35,7 @@
 package com.exacttarget.fuelsdk.audiencebuilder;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.annotations.Expose;
@@ -84,11 +82,6 @@ public class ETDimension extends ETRestObject {
     @Expose
     @ExternalName("values")
     private List<ETDimensionValue> values = null;
-    
-    //These member variables do not require to have getter and setter methods. 
-    //These have been declared as member variable so that anonymous class has an access to it.
-    ETResponse<ETDimensionValue> response = null;
-    int i = 0;
 
     @Override
     public String getId() {
@@ -209,7 +202,7 @@ public class ETDimension extends ETRestObject {
 
         ETClient client = getClient();
 
-        //ETResponse<ETDimensionValue> response = null;
+        ETResponse<ETDimensionValue> response = null;
         int page = 0;
         do {
             page++;
@@ -221,23 +214,9 @@ public class ETDimension extends ETRestObject {
                 throw new ETSdkException("error retrieving dimension values: "
                         + response.getResponseMessage());
             }
-            //changed this for loop to spawn thread, each thread processes 1000 objects
-            for ( i = 0; i < response.getObjects().size()/1000; i++){
-            	try {
-            		//this hashmap keeps track of all the thread, that has been defined anonymously
-            		Map<Integer, Thread> threadMapper = new HashMap<Integer, Thread>();
-            		threadMapper.put(new Integer(i),new Thread(){
-						public void run(){            	
-						for (int j =  ETDimension.this.i*1000; j < (ETDimension.this.i + 1)*1000; j++) {
-					        values.add(ETDimension.this.response.getObjects().get(j));
-					        System.out.println("values of j " + j + "       " + i);
-					    }}});
-            		threadMapper.get(i).start();
-            		threadMapper.get(i).join();            		
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}                 
-            	}
+            for (ETDimensionValue value : response.getObjects()) {
+                values.add(value);
+            }
         } while (response.hasMoreResults());
     }
 

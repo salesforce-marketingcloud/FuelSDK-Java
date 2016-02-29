@@ -28,8 +28,8 @@
 # [2] https://help.exacttarget.com/en-US/documentation/exacttarget/admin/users/
 #
 
-username=nto-amagar
-password=f$3KQj^8n4P@G!7
+#username=
+#password=
 
 #
 # API endpoint URLs (the defaults should work in most cases--note
@@ -41,7 +41,7 @@ password=f$3KQj^8n4P@G!7
 #soapEndpoint=
 
 #soapEndpoint=https://webservice.exacttarget.com/Service.asmx
-soapEndpoint=https://webservice.s4.exacttarget.com/Service.asmx
+#soapEndpoint=https://webservice.s4.exacttarget.com/Service.asmx
 #soapEndpoint=https://webservice.s6.exacttarget.com/Service.asmx
 #soapEndpoint=https://webservice.s7.exacttarget.com/Service.asmx
 
@@ -55,7 +55,7 @@ soapEndpoint=https://webservice.s4.exacttarget.com/Service.asmx
 #
 
 #audienceBuilderApi=rest
-audienceBuilderApi=soap
+#audienceBuilderApi=soap
 
 #
 # The amount of time in milliseconds that CXF will attempt to
