@@ -240,10 +240,10 @@ public class ETClient {
     public synchronized String requestToken()
         throws ETSdkException
     {
-        return requestToken(null, false);
+        return requestToken(null);
     }
 
-    public synchronized String requestToken(String refreshToken, Boolean isRefresh)
+    public synchronized String requestToken(String refreshToken)
         throws ETSdkException
     {
         if (clientId == null || clientSecret == null) {
@@ -262,9 +262,9 @@ public class ETClient {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("clientId", clientId);
         jsonObject.addProperty("clientSecret", clientSecret);
-        jsonObject.addProperty("accessType", "offline");
-        if (refreshToken != null && isRefresh==true) {
-            jsonObject.addProperty("refreshToken", refreshToken);
+        jsonObject.addProperty("accessType", (configuration.get("accessType") != null ? configuration.get("accessType") :"online"));
+        if (configuration.get("accessType") != null && configuration.get("accessType").equals("offline") && refreshToken != null){
+        	jsonObject.addProperty("refreshToken", refreshToken);
         }
 
         String requestPayload = gson.toJson(jsonObject);
@@ -304,7 +304,10 @@ public class ETClient {
             this.legacyToken = jsonElement.getAsString();
         }
         logger.debug("  legacyToken: " + this.legacyToken);
-        this.refreshToken = jsonObject.get("refreshToken").getAsString();
+        if (jsonObject.get("refreshToken") != null){
+        	this.refreshToken = jsonObject.get("refreshToken").getAsString();
+        }
+        
         logger.debug("  refreshToken: " + this.refreshToken);
 
         //
@@ -345,7 +348,7 @@ public class ETClient {
             }
         }
 
-        requestToken(refreshToken, true);
+        requestToken(refreshToken);
 
         soapConnection.setAccessToken(accessToken);
 
