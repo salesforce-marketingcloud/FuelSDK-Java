@@ -814,14 +814,14 @@ public abstract class ETRestObject extends ETApiObject {
                                                  properties);
 
         ETResponse<T> response = new ETResponse<T>();
-        response.setRequestId(createResponse.getRequestID());
+        /*response.setRequestId(createResponse.getRequestID());
         if (createResponse.getOverallStatus().equals("OK")) {
             response.setStatus(ETResult.Status.OK);
         } else if (createResponse.getOverallStatus().equals("Error")) {
             response.setStatus(ETResult.Status.ERROR);
         }
         response.setResponseCode(createResponse.getOverallStatus());
-        response.setResponseMessage(createResponse.getOverallStatus());
+        response.setResponseMessage(createResponse.getOverallStatus());*/
         assert createResponse.getResults() != null;
         assert createResponse.getResults().size() == 1;
         AudienceBuilderRestCall restResponse = (AudienceBuilderRestCall)
