@@ -113,3 +113,10 @@
 #
 
 #requestLegacyToken=true
+
+#
+# Request the refresh token from the authentication service based on access type. Online access neglect refreshToken (default
+# online):
+#
+
+#accessType=online
