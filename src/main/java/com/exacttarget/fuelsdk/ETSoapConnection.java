@@ -88,6 +88,7 @@ public class ETSoapConnection {
             PartnerAPI service = new PartnerAPI();
             soap = service.getSoap();
             soapClient = ClientProxy.getClient(soap);
+            soapClient.getInInterceptors().add(new ClearAttachmentsOutInterceptor());
             Endpoint soapEndpoint = soapClient.getEndpoint();
             soapFactory = SOAPFactory.newInstance();
             soapClient.getRequestContext().put(Message.ENDPOINT_ADDRESS,

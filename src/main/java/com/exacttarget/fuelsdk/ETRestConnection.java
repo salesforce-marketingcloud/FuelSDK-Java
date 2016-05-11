@@ -82,73 +82,89 @@ public class ETRestConnection {
     public Response get(String path)
         throws ETSdkException
     {
-        Response response = new Response();
-        HttpURLConnection connection = sendRequest(path, Method.GET);
-        String json = receiveResponse(connection);
-        response.setRequestId(connection.getHeaderField("X-Mashery-Message-ID"));
+        HttpURLConnection connection = null;
         try {
+            Response response = new Response();
+            connection = sendRequest(path, Method.GET);
+            String json = receiveResponse(connection);
+            response.setRequestId(connection.getHeaderField("X-Mashery-Message-ID"));
             response.setResponseCode(connection.getResponseCode());
             response.setResponseMessage(connection.getResponseMessage());
+            response.setResponsePayload(json);
+            return response;
         } catch (IOException ex) {
             throw new ETSdkException(ex);
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
         }
-        response.setResponsePayload(json);
-        connection.disconnect();
-        return response;
     }
 
     public Response post(String path, String payload)
         throws ETSdkException
     {
-        Response response = new Response();
-        HttpURLConnection connection = sendRequest(path, Method.POST, payload);
-        String json = receiveResponse(connection);
-        response.setRequestId(connection.getHeaderField("X-Mashery-Message-ID"));
+        HttpURLConnection connection = null;
         try {
+            Response response = new Response();
+            connection = sendRequest(path, Method.POST, payload);
+            String json = receiveResponse(connection);
+            response.setRequestId(connection.getHeaderField("X-Mashery-Message-ID"));
             response.setResponseCode(connection.getResponseCode());
             response.setResponseMessage(connection.getResponseMessage());
+            response.setResponsePayload(json);
+            return response;
         } catch (IOException ex) {
             throw new ETSdkException(ex);
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
         }
-        response.setResponsePayload(json);
-        connection.disconnect();
-        return response;
     }
 
     public Response patch(String path, String payload)
         throws ETSdkException
     {
-        Response response = new Response();
-        HttpURLConnection connection = sendRequest(path, Method.PATCH, payload);
-        String json = receiveResponse(connection);
-        response.setRequestId(connection.getHeaderField("X-Mashery-Message-ID"));
+        HttpURLConnection connection = null;
         try {
+            Response response = new Response();
+            connection = sendRequest(path, Method.PATCH, payload);
+            String json = receiveResponse(connection);
+            response.setRequestId(connection.getHeaderField("X-Mashery-Message-ID"));
             response.setResponseCode(connection.getResponseCode());
             response.setResponseMessage(connection.getResponseMessage());
+            response.setResponsePayload(json);
+            return response;
         } catch (IOException ex) {
             throw new ETSdkException(ex);
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
         }
-        response.setResponsePayload(json);
-        connection.disconnect();
-        return response;
     }
 
     public Response delete(String path)
         throws ETSdkException
     {
-        Response response = new Response();
-        HttpURLConnection connection = sendRequest(path, Method.DELETE);
-        String json = receiveResponse(connection);
-        response.setRequestId(connection.getHeaderField("X-Mashery-Message-ID"));
+        HttpURLConnection connection = null;
         try {
+            Response response = new Response();
+            connection = sendRequest(path, Method.DELETE);
+            String json = receiveResponse(connection);
+            response.setRequestId(connection.getHeaderField("X-Mashery-Message-ID"));
             response.setResponseCode(connection.getResponseCode());
             response.setResponseMessage(connection.getResponseMessage());
+            response.setResponsePayload(json);
+            return response;
         } catch (IOException ex) {
             throw new ETSdkException(ex);
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
         }
-        response.setResponsePayload(json);
-        connection.disconnect();
-        return response;
     }
 
     private final static int URL_MAX_LENGTH = 2048;
@@ -225,12 +241,21 @@ public class ETRestConnection {
                     logger.debug(line);
                 }
             }
+            OutputStream os = null;
             try {
-                OutputStream os = connection.getOutputStream();
+                os = connection.getOutputStream();
                 os.write(payload.getBytes());
                 os.flush();
             } catch (IOException ex) {
                 throw new ETSdkException("error writing " + url, ex);
+            } finally {
+                if (os != null) {
+                    try {
+                        os.close();
+                    } catch (IOException ex) {
+                        throw new ETSdkException("error closing connection after writing " + url, ex);
+                    }
+                }
             }
         }
 
