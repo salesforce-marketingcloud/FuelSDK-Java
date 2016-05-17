@@ -41,6 +41,7 @@ import java.util.List;
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.InternalName;
 import com.exacttarget.fuelsdk.annotations.SoapObject;
+import com.exacttarget.fuelsdk.internal.Attribute;
 import com.exacttarget.fuelsdk.internal.Subscriber;
 
 /**
@@ -72,6 +73,8 @@ public class ETSubscriber extends ETSoapObject {
     private Date unsubscribedDate = null;
     @ExternalName("lists")
     private List<ETSubscriberList> lists = null;
+    @ExternalName("attributes")
+    protected List<Attribute> attributes;
 
     public ETSubscriber() {}
 
@@ -147,6 +150,16 @@ public class ETSubscriber extends ETSoapObject {
 	   }
 	   return lists;
     }
+    
+    /**
+     * Gets the value of the attributes property.
+     */
+    public List<Attribute> getAttributes() {
+        if (attributes == null) {
+            attributes = new ArrayList<Attribute>();
+        }
+        return this.attributes;
+    }		
 
     /**
      * @deprecated
