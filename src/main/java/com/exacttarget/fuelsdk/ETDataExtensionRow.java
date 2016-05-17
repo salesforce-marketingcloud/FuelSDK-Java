@@ -117,4 +117,22 @@ public class ETDataExtensionRow extends ETSoapObject {
             setColumn(column.getKey(), column.getValue());
         }
     }
+    
+    public boolean equals(Object obj) {
+        if (obj == null)    return false;
+        if (!obj.getClass().equals(getClass())) {
+            return false;
+        }
+        // Note: We are using compared object as a source of columns
+        // This way we can use it to check for any changes that may apply from this to original object
+        ETDataExtensionRow src, target;
+        src = (ETDataExtensionRow) obj;
+        target = this;
+        for (String column : src.getColumnNames()) {
+            if (!src.getColumn(column).equals(target.getColumn(column))) {
+                return false;
+            }
+        }
+        return true;
+    }	 
 }

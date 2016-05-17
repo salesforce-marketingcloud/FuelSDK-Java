@@ -13,3 +13,4 @@
 
 # Maven
 target/
+/bin/
