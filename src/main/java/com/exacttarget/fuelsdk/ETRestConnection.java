@@ -211,12 +211,14 @@ public class ETRestConnection {
           case GET:
             connection.setDoInput(true);
             connection.setRequestProperty("Accept", "application/json");
+            connection.setRequestProperty("User-Agent", "FuelSDK-Java");
             break;
           case POST:
           case PATCH:
           case DELETE:
             connection.setDoOutput(true);
             connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("User-Agent", "FuelSDK-Java");
             break;
           default:
             throw new ETSdkException("unsupported request method: " + method.toString());
