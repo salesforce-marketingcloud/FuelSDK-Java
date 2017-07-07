@@ -44,6 +44,8 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 
+import java.nio.charset.Charset;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 
@@ -104,23 +106,7 @@ public class ETRestConnection {
     public Response post(String path, String payload)
         throws ETSdkException
     {
-        HttpURLConnection connection = null;
-        try {
-            Response response = new Response();
-            connection = sendRequest(path, Method.POST, payload);
-            String json = receiveResponse(connection);
-            response.setRequestId(connection.getHeaderField("X-Mashery-Message-ID"));
-            response.setResponseCode(connection.getResponseCode());
-            response.setResponseMessage(connection.getResponseMessage());
-            response.setResponsePayload(json);
-            return response;
-        } catch (IOException ex) {
-            throw new ETSdkException(ex);
-        } finally {
-            if (connection != null) {
-                connection.disconnect();
-            }
-        }
+        return post(path,payload,null);
     }
 
     public Response patch(String path, String payload)
@@ -181,16 +167,22 @@ public class ETRestConnection {
     private HttpURLConnection sendRequest(String path, Method method, String payload)
         throws ETSdkException
     {
+        return sendRequest(path, method, payload, null);
+    }
+
+    private HttpURLConnection sendRequest(String path, Method method, String payload, Charset charset)
+            throws ETSdkException
+    {
         URL url = null;
         try {
             url = new URL(endpoint + path);
         } catch (MalformedURLException ex) {
             throw new ETSdkException(endpoint + path + ": bad URL", ex);
         }
-        return sendRequest(url, method, payload);
+        return sendRequest(url, method, payload, charset);
     }
 
-    private HttpURLConnection sendRequest(URL url, Method method, String payload)
+    private HttpURLConnection sendRequest(URL url, Method method, String payload, Charset charset)
         throws ETSdkException
     {
         Gson gson = client.getGson();
@@ -246,7 +238,7 @@ public class ETRestConnection {
             OutputStream os = null;
             try {
                 os = connection.getOutputStream();
-                os.write(payload.getBytes());
+                os.write(charset != null ? payload.getBytes(charset) : payload.getBytes());
                 os.flush();
             } catch (IOException ex) {
                 throw new ETSdkException("error writing " + url, ex);
@@ -314,6 +306,28 @@ public class ETRestConnection {
         }
 
         return response;
+    }
+
+    public Response post(String path, String payload, Charset charset)
+            throws ETSdkException
+    {
+        HttpURLConnection connection = null;
+        try {
+            Response response = new Response();
+            connection = sendRequest(path, Method.POST, payload, charset);
+            String json = receiveResponse(connection);
+            response.setRequestId(connection.getHeaderField("X-Mashery-Message-ID"));
+            response.setResponseCode(connection.getResponseCode());
+            response.setResponseMessage(connection.getResponseMessage());
+            response.setResponsePayload(json);
+            return response;
+        } catch (IOException ex) {
+            throw new ETSdkException(ex);
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
+        }
     }
 
     public enum Method {
