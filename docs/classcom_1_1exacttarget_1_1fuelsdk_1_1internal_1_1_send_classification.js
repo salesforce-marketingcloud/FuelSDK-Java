@@ -1,0 +1,28 @@
+var classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_send_classification =
+[
+    [ "getArchiveEmail", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_send_classification.html#a133b1ee19c9ce3f04eeeb1872b2a8c4d", null ],
+    [ "getDeliveryProfile", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_send_classification.html#aa641b086476a9c75da392a6ae209a72a", null ],
+    [ "getDescription", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_send_classification.html#a3eaad9fa84459b3e35071b7c202df293", null ],
+    [ "getHonorPublicationListOptOutsForTransactionalSends", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_send_classification.html#acea825386de063462ece198ad283c681", null ],
+    [ "getName", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_send_classification.html#aeda31d836b7a5550b1f0eefed5e3c7b2", null ],
+    [ "getSendClassificationType", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_send_classification.html#a18cf68972cfeb07308752fc609246d91", null ],
+    [ "getSenderProfile", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_send_classification.html#abe5298e61a0ba027956b79003d5dbe57", null ],
+    [ "getSendPriority", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_send_classification.html#a760ecc1322f6d8e7e484450a8a9f344e", null ],
+    [ "setArchiveEmail", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_send_classification.html#a17e0cbfb11e16ea2b7b03ff9f9c53640", null ],
+    [ "setDeliveryProfile", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_send_classification.html#a8391ddeb2351439616897e41855dac42", null ],
+    [ "setDescription", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_send_classification.html#aa46996efa26ee17da4c979b3a2767eb5", null ],
+    [ "setHonorPublicationListOptOutsForTransactionalSends", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_send_classification.html#a596ff642caa0513feaf3cbbf6e5c68eb", null ],
+    [ "setName", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_send_classification.html#a3cea304cec7d0cf4bd3e820669ebdf83", null ],
+    [ "setSendClassificationType", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_send_classification.html#a93aa9390e9f6596763c6d4422a6493df", null ],
+    [ "setSenderProfile", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_send_classification.html#a2cac1ee54f179e39cc5a74354e278d5c", null ],
+    [ "setSendPriority", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_send_classification.html#a48d5e474b2f1d527ec5f34ab8b9b4bf6", null ],
+    [ "toString", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_send_classification.html#a1ded0545f53907ef9edf1326baaf23ad", null ],
+    [ "archiveEmail", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_send_classification.html#a4c3884888fbfa6b2a6436ff5068927b7", null ],
+    [ "deliveryProfile", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_send_classification.html#a658211228f1ff2cd390311e554425c16", null ],
+    [ "description", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_send_classification.html#aed55e266fea426816f70510fb112d6ca", null ],
+    [ "honorPublicationListOptOutsForTransactionalSends", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_send_classification.html#a124a6984d02e2cf08e3adefc853010b7", null ],
+    [ "name", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_send_classification.html#a106020429b1a452a44aa902f335f9bb3", null ],
+    [ "sendClassificationType", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_send_classification.html#a57ee8e117e341f4104699d2c92ca5724", null ],
+    [ "senderProfile", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_send_classification.html#ab7e6cfd1f491a3d351685a19ddd4bef3", null ],
+    [ "sendPriority", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_send_classification.html#a57ce109903e4248adb27d9b1501a91aa", null ]
+];

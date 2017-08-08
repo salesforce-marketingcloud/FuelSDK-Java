@@ -7,6 +7,10 @@ import org.apache.cxf.xjc.runtime.JAXBToStringStyle;
 
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 
+/**
+ * An <code>ETApiProperty</code> represents API property name value pair in 
+ * the Salesforce Marketing Cloud API.   
+ */
 public class ETApiProperty {
 
 	@ExternalName("Name")

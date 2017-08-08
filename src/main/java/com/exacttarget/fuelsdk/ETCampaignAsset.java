@@ -66,42 +66,72 @@ public class ETCampaignAsset extends ETRestObject {
     @ExternalName("objectId")
     private String objectId = null;
 
+    /** 
+    * @return The Identifier of the ETCampaignAsset object.
+    */    
     public String getId() {
         return id;
     }
 
+    /** 
+    * @param id     The Identifier of the ETCampaignAsset object.
+    */    
     public void setId(String id) {
         this.id = id;
     }
 
-    public String getCampaignId() {
+    /** 
+    * @return The Campaign Identifier of the ETCampaignAsset object.
+    */    
+   public String getCampaignId() {
         return campaignId;
     }
 
-    public void setCampaignId(String campaignId) {
+    /** 
+    * @param campaignId     The Identifier of the ETCampaignAsset object.
+    */    
+   public void setCampaignId(String campaignId) {
         this.campaignId = campaignId;
     }
 
+    /** 
+    * @return     The created date of the ETCampaignAsset object.
+    */
     public Date getCreatedDate() {
         return createdDate;
     }
 
+    /** 
+    * @param createdDate        The created date of the ETCampaignAsset object.
+    */
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
 
-    public String getType() {
+   /** 
+    * @return The type of the ETCampaignAsset object.
+    */    
+      public String getType() {
         return type;
     }
 
+    /** 
+    * @param type        The type of the ETCampaignAsset object.
+    */
     public void setType(String type) {
         this.type = type;
     }
 
-    public String getObjectId() {
+    /** 
+    * @return The Object Identifier of the ETCampaignAsset object.
+    */    
+     public String getObjectId() {
         return objectId;
     }
 
+   /** 
+    * @param objectId        The Object Identifier of the ETCampaignAsset object.
+    */
     public void setObjectId(String objectId) {
         this.objectId = objectId;
     }

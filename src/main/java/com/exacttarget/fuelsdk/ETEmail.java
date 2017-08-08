@@ -166,94 +166,165 @@ public class ETEmail extends ETSoapObject {
     @InternalName("emailType")
     private Type type = null;
 
+    /** 
+    * Class constructor, Initializes a new instance of the class.
+    */    
     public ETEmail() {}
 
+    /** 
+    * @return The Identifier of the ETEmail object.
+    */    
     @Override
     public String getId() {
         return id;
     }
 
+    /** 
+    * @param id     The Identifier of the ETEmail object.
+    */    
     @Override
     public void setId(String id) {
         this.id = id;
     }
 
+    /** 
+    * @return       The Customer Key of the ETEmail object.
+    */     
     public String getKey() {
         return key;
     }
 
+    /** 
+    * @param key    The Customer Key of the ETEmail object.
+    */      
     public void setKey(String key) {
         this.key = key;
     }
 
+    /** 
+    * @return     The name of the ETEmail object.
+    */     
     public String getName() {
         return name;
     }
 
+    /** 
+    * @param name   The name of the ETEmail object.
+    */     
     public void setName(String name) {
         this.name = name;
     }
 
+    /** 
+    * @return     The created date of the ETEmail object.
+    */
     public Date getCreatedDate() {
         return createdDate;
     }
 
+    /** 
+    * @param createdDate        The created date of the ETEmail object.
+    */
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
 
+    /** 
+    * @return     The modified date of the ETEmail object.
+    */
     public Date getModifiedDate() {
         return modifiedDate;
     }
 
+    /** 
+    * @param modifiedDate       The modified date of the ETEmail object.
+    */    
     public void setModifiedDate(Date modifiedDate) {
         this.modifiedDate = modifiedDate;
     }
 
+    /** 
+    * @return     The folder Id(category Id) of the ETEmail object.
+    */
     public Integer getFolderId() {
         return folderId;
     }
 
+    /** 
+    * @param folderId   The folder Id(category Id) of the ETEmail object.
+    */
     public void setFolderId(Integer folderId) {
         this.folderId = folderId;
     }
 
+    /** 
+    * @return     The subject of the ETEmail object.
+    */    
     public String getSubject() {
         return subject;
     }
 
+    /** 
+    * @param subject       The subject of the ETEmail object.
+    */
     public void setSubject(String subject) {
         this.subject = subject;
     }
 
+    /** 
+    * @return     The HTML body of the ETEmail object.
+    */    
     public String getHtmlBody() {
         return htmlBody;
     }
 
+    /** 
+    * @param htmlBody       The HTML body of the ETEmail object.
+    */
     public void setHtmlBody(String htmlBody) {
         this.htmlBody = htmlBody;
     }
 
+    /** 
+    * @return     The text body of the ETEmail object.
+    */    
     public String getTextBody() {
         return textBody;
     }
 
+    /** 
+    * @param textBody           The text body of the ETEmail object.
+    */
     public void setTextBody(String textBody) {
         this.textBody = textBody;
     }
 
+    /** 
+    * @return     Returns true if it is HTML paste, false otherwise.
+    */    
     public Boolean getIsHtmlPaste() {
         return isHtmlPaste;
     }
 
+    /** 
+    * @param isHtmlPaste           Sets if it is HTML paste or not.
+    */
     public void setIsHtmlPaste(Boolean isHtmlPaste) {
         this.isHtmlPaste = isHtmlPaste;
     }
 
+    /** 
+    * @return key       The type of the ETEmail object.
+    * @see              Type
+    */
     public Type getType() {
         return type;
     }
 
+    /** 
+    * @param type           The type of the ETEmail object.
+    * @see                  Type
+    */
     public void setType(Type type) {
         this.type = type;
     }
@@ -293,10 +364,14 @@ public class ETEmail extends ETSoapObject {
     public void setCategoryId(Integer categoryId) {
         setFolderId(categoryId);
     }
-
+    
+    /**
+     *  Email Types that can be used
+     */
     public enum Type {
         HTML("HTML"),
-        TEXT("Text");
+        TEXT("Text"),
+        Normal("Normal");
         private final String value;
 
         Type(String value) {

@@ -56,9 +56,9 @@ public class ETFolderTest {
     public static void setUpBeforeClass()
         throws ETSdkException
     {
-        Assume.assumeNotNull(ETFolderTest.class
-                .getResource("/fuelsdk-test.properties"));
-        client = new ETClient();
+//        Assume.assumeNotNull(ETFolderTest.class
+//                .getResource("/fuelsdk.properties"));
+        client = new ETClient("fuelsdk.properties");
     }
 
     @Test

@@ -34,18 +34,39 @@
 
 package com.exacttarget.fuelsdk;
 
+/**
+ * An <code>ETSdkException</code> object represents any Exception that can happen 
+ * in the Salesforce Marketing Cloud.
+ */
+
 @SuppressWarnings("serial")
 public class ETSdkException extends Exception {
+    /** 
+    * Class constructor, Initializes a new instance of the class.
+    */
     public ETSdkException() {}
 
+    /** 
+    * Class constructor, Initializes a new instance of the class.
+    * @param ex    The Exception object
+    */    
     public ETSdkException(Exception ex) {
         super(ex);
     }
 
+    /** 
+    * Class constructor, Initializes a new instance of the class.
+    * @param message    The exception message
+    */    
     public ETSdkException(String message) {
         super(message);
     }
 
+    /** 
+    * Class constructor, Initializes a new instance of the class.
+    * @param message    The exception message
+    * @param cause      The cause or reason for this exception
+    */    
     public ETSdkException(String message, Throwable cause) {
         super(message, cause);
     }

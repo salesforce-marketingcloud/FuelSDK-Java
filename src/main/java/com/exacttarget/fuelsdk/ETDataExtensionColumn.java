@@ -82,118 +82,207 @@ public class ETDataExtensionColumn extends ETSoapObject {
     @ExternalName("scale")
     private Integer scale = null;
 
+    /** 
+    * Class constructor, Initializes a new instance of the class.
+    */    
     public ETDataExtensionColumn() {}
 
+    /** 
+    * @return The Identifier of the ETDataExtensionColumn object.
+    */    
     @Override
     public String getId() {
         return id;
     }
 
+    /** 
+    * @param id     The Identifier of the ETDataExtensionColumn object.
+    */    
     @Override
     public void setId(String id) {
         this.id = id;
     }
 
+    /** 
+    * @return       The Customer Key of the ETDataExtensionColumn object.
+    */     
     public String getKey() {
         return key;
     }
 
+    /** 
+    * @param key    The Customer Key of the ETDataExtensionColumn object.
+    */      
     public void setKey(String key) {
         this.key = key;
     }
 
+    /** 
+    * @return     The name of the ETDataExtensionColumn object.
+    */     
     public String getName() {
         return name;
     }
 
+    /** 
+    * @param name   The name of the ETDataExtensionColumn object.
+    */     
     public void setName(String name) {
         this.name = name.toLowerCase();
     }
 
+    /** 
+    * @return     The description of the ETDataExtensionColumn.
+    */    
     public String getDescription() {
         return description;
     }
 
+    /** 
+    * @param description    The description of the ETDataExtensionColumn.
+    */    
     public void setDescription(String description) {
         this.description = description;
     }
 
+    /** 
+    * @return     The created date of the ETDataExtensionColumn object.
+    */
     public Date getCreatedDate() {
         return createdDate;
     }
 
+    /** 
+    * @param createdDate        The created date of the ETDataExtensionColumn object.
+    */
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
 
+    /** 
+    * @return     The modified date of the ETDataExtensionColumn object.
+    */
     public Date getModifiedDate() {
         return modifiedDate;
     }
 
+    /** 
+    * @param modifiedDate       The modified date of the ETDataExtensionColumn object.
+    */    
     public void setModifiedDate(Date modifiedDate) {
         this.modifiedDate = modifiedDate;
     }
 
+    /** 
+    * @return     The data extension of the ETDataExtensionColumn object.
+    */
     public ETDataExtension getDataExtension() {
         return dataExtension;
     }
 
+    /** 
+    * @param dataExtension       The data extension of the ETDataExtensionColumn object.
+    */    
     public void setDataExtension(ETDataExtension dataExtension) {
         this.dataExtension = dataExtension;
     }
 
+    /** 
+    * @return key       The type of the ETDataExtensionColumn object.
+    * @see              Type
+    */
     public Type getType() {
         return type;
     }
 
+    /** 
+    * @param type           The type of the ETDataExtensionColumn object.
+    * @see                  Type
+    */
     public void setType(Type type) {
         this.type = type;
     }
 
+    /** 
+    * @return     The default value of the ETDataExtensionColumn object.
+    */
     public String getDefaultValue() {
         return defaultValue;
     }
 
+    /** 
+    * @param defaultValue       The default value of the ETDataExtensionColumn object.
+    */    
     public void setDefaultValue(String defaultValue) {
         this.defaultValue = defaultValue;
     }
 
+    /** 
+    * @return     true if the Data Extension Column is primary key, false otherwise.
+    */
     public Boolean getIsPrimaryKey() {
         return isPrimaryKey;
     }
 
+    /** 
+    * @param isPrimaryKey    true if the Data Extension Column is primary key, false otherwise.
+    */    
     public void setIsPrimaryKey(Boolean isPrimaryKey) {
         this.isPrimaryKey = isPrimaryKey;
     }
 
+    /** 
+    * @return     true if the Data Extension Column is required, false otherwise.
+    */
     public Boolean getIsRequired() {
         return isRequired;
     }
 
+    /** 
+    * @param isRequired    true if the Data Extension Column is required, false otherwise.
+    */    
     public void setIsRequired(Boolean isRequired) {
         this.isRequired = isRequired;
     }
 
+    /** 
+    * @return     The length of the ETDataExtensionColumn.
+    */
     public Integer getLength() {
         return length;
     }
 
+    /** 
+    * @param length    The length of the ETDataExtensionColumn.
+    */    
     public void setLength(Integer length) {
         this.length = length;
     }
 
+    /** 
+    * @return     The precision of the ETDataExtensionColumn.
+    */
     public Integer getPrecision() {
         return precision;
     }
 
+    /** 
+    * @param precision    The precision of the ETDataExtensionColumn.
+    */    
     public void setPrecision(Integer precision) {
         this.precision = precision;
     }
 
+    /** 
+    * @return     The scale of the ETDataExtensionColumn.
+    */
     public Integer getScale() {
         return scale;
     }
 
+    /** 
+    * @param scale    The scale of the ETDataExtensionColumn.
+    */    
     public void setScale(Integer scale) {
         this.scale = scale;
     }
@@ -216,6 +305,9 @@ public class ETDataExtensionColumn extends ETSoapObject {
         setKey(customerKey);
     }
 
+    /**
+     *  Data Extension Column Types that can be used
+     */
     public enum Type {
         BOOLEAN("Boolean"),
         DATE("Date"),

@@ -57,35 +57,63 @@ public class ETDataExtensionRow extends ETSoapObject {
     @InternalName("properties")
     private Map<String, String> columns = new HashMap<String, String>();
 
+    /** 
+    * Class constructor, Initializes a new instance of the class.
+    */    
     public ETDataExtensionRow() {}
 
+    /** 
+    * @return The Identifier of the ETDataExtensionRow object.
+    */    
     @Override
     public String getId() {
         // no ID on this object type
         return null;
     }
 
+    /** 
+    * @param id     The Identifier of the ETDataExtensionRow object.
+    */    
     @Override
     public void setId(String id) {
         // no ID on this object type
     }
 
+    /** 
+    * @return       The data extension key(Customer Key) of the ETDataExtensionRow object.
+    */     
     public String getDataExtensionKey() {
         return dataExtensionKey;
     }
 
+    /** 
+    * @param dataExtensionKey    The data extension key(Customer Key) of the ETDataExtensionRow object.
+    */      
     public void setDataExtensionKey(String dataExtensionKey) {
         this.dataExtensionKey = dataExtensionKey;
     }
 
+    /** 
+    * @param name   The column name of the ETDataExtensionRow object.
+    * @return       The value on the column of the ETDataExtensionRow object.
+    */    
     public String getColumn(String name) {
         return columns.get(name.toLowerCase());
     }
 
+    /** 
+    * @param name       The column name of the ETDataExtensionRow object.
+    * @param value      The value on the column of the ETDataExtensionRow object.
+    */    
     public void setColumn(String name, String value) {
         setColumn(name, value, true);
     }
 
+    /** 
+    * @param name           The column name of the ETDataExtensionRow object.
+    * @param value          The value on the column of the ETDataExtensionRow object.
+    * @param setModified    To set if the value is modified or not.
+    */    
     public void setColumn(String name, String value, boolean setModified) {
         if (setModified) {
             setModified(name, true);
@@ -93,6 +121,9 @@ public class ETDataExtensionRow extends ETSoapObject {
         columns.put(name.toLowerCase(), value);
     }
 
+    /** 
+    * @return       The set of column names of the ETDataExtensionRow object.
+    */     
     public Set<String> getColumnNames() {
         return columns.keySet();
     }

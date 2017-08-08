@@ -74,64 +74,112 @@ public class ETFolder extends ETSoapObject {
     @ExternalName("allowChildren")
     private Boolean allowChildren = null;
 
+    /** 
+    * Class constructor, Initializes a new instance of the class.
+    */
     public ETFolder() {}
 
+    /** 
+    * @return The Identifier of the ETFolder object.
+    */
     public String getId() {
         return id;
     }
 
+    /** 
+    * @param id     The Identifier of the ETFolder object.
+    */    
     public void setId(String id) {
         this.id = id;
     }
 
+    /** 
+    * @return       The Customer Key of the ETFolder object.
+    */
     public String getKey() {
         return key;
     }
 
+    /** 
+    * @param key    The Customer Key of the ETFolder object.
+    */    
     public void setKey(String key) {
         this.key = key;
     }
 
+    /** 
+    * @return     The name of the ETFolder object.
+    */
     public String getName() {
         return name;
     }
 
+    /** 
+    * @param name   The name of the ETFolder object.
+    */    
     public void setName(String name) {
         this.name = name;
     }
 
+    /** 
+    * @return     The description of the ETFolder object.
+    */     
     public String getDescription() {
         return description;
     }
 
+    /** 
+    * @param description    The description of the ETFolder object.
+    */     
     public void setDescription(String description) {
         this.description = description;
     }
 
+    /** 
+    * @return     The created date of the ETFolder object.
+    */    
     public Date getCreatedDate() {
         return createdDate;
     }
 
+    /** 
+    * @param createdDate        The created date of the ETFolder object.
+    */    
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
 
+    /** 
+    * @return     The modified date of the ETFolder object.
+    */    
     public Date getModifiedDate() {
         return modifiedDate;
     }
 
+    /** 
+    * @param modifiedDate       The modified date of the ETFolder object.
+    */    
     public void setModifiedDate(Date modifiedDate) {
         this.modifiedDate = modifiedDate;
     }
 
+    /** 
+    * @return     The content type of the ETFolder object.
+    */
     public String getContentType() {
         return contentType;
     }
 
+    /** 
+    * @param contentType    The content type of the ETFolder object.
+    */    
     public void setContentType(String contentType) {
         this.contentType = contentType;
     }
-
+    
+    /** 
+    * @return     The parent folder's customer key of the ETFolder object.
+    */
     public String getParentFolderKey() {
         if (parentFolder == null) {
             return null;
@@ -139,33 +187,54 @@ public class ETFolder extends ETSoapObject {
         return parentFolder.getKey();
     }
 
+    /** 
+    * @param parentFolderKey    The parent folder's customer key of the ETFolder object.
+    */    
     public void setParentFolderKey(String parentFolderKey) {
         if (parentFolder == null) {
             parentFolder = new ETFolder();
         }
         parentFolder.setKey(parentFolderKey);
     }
-
+    
+    /** 
+    * @return     Returns true if the ETFolder object is active, false otherwise.
+    */ 
     public Boolean getIsActive() {
         return isActive;
     }
 
+    /** 
+    * @param isActive    Sets whether ETFolder object is active or inactive.
+    */    
     public void setIsActive(Boolean isActive) {
         this.isActive = isActive;
     }
 
+    /** 
+    * @return     Returns true if the ETFolder object is editable, false otherwise.
+    */     
     public Boolean getIsEditable() {
         return isEditable;
     }
 
+    /** 
+    * @param isEditable    Sets if the ETFolder object is editable or not.
+    */    
     public void setIsEditable(Boolean isEditable) {
         this.isEditable = isEditable;
     }
 
+    /** 
+    * @return     Returns true if the ETFolder object allows children, false otherwise.
+    */
     public Boolean getAllowChildren() {
         return allowChildren;
     }
 
+    /** 
+    * @param allowChildren    Sets if the ETFolder object allows children or not.
+    */    
     public void setAllowChildren(Boolean allowChildren) {
         this.allowChildren = allowChildren;
     }

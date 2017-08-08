@@ -75,6 +75,12 @@ public class ETSoapConnection {
     private SOAPFactory soapFactory = null;
     private SOAPElement accessTokenElement = null;
 
+    /** 
+    * Class constructor, Initializes a new instance of the class.
+     * @param client    The ETClient object
+     * @param endpoint  The endpoint URL
+     * @throws com.exacttarget.fuelsdk.ETSdkException
+    */
     public ETSoapConnection(ETClient client, String endpoint)
         throws ETSdkException
     {
@@ -137,6 +143,14 @@ public class ETSoapConnection {
         }
     }
 
+    /** 
+    * Class constructor, Initializes a new instance of the class.
+     * @param client        The ETClient object
+     * @param endpoint      The endpoint URL
+     * @param username      The username
+     * @param password      The password
+     * @throws com.exacttarget.fuelsdk.ETSdkException
+    */
     public ETSoapConnection(ETClient client, String endpoint,
                             String username,
                             String password)
@@ -173,6 +187,13 @@ public class ETSoapConnection {
         }
     }
 
+    /** 
+    * Class constructor, Initializes a new instance of the class.
+     * @param client        The ETClient object
+     * @param endpoint      The endpoint URL
+     * @param accessToken   The access token
+     * @throws com.exacttarget.fuelsdk.ETSdkException
+    */
     public ETSoapConnection(ETClient client, String endpoint, String accessToken)
         throws ETSdkException
     {
@@ -195,14 +216,24 @@ public class ETSoapConnection {
         }
     }
 
+    /**
+     * @return  The Soap object
+     */
     public Soap getSoap() {
         return soap;
     }
 
+    /**
+     * @return  The end point URL
+     */
     public String getEndpoint() {
         return endpoint;
     }
 
+    /**
+     * @param accessToken       The access token
+     * @throws ETSdkException 
+     */
     public void setAccessToken(String accessToken)
         throws ETSdkException
     {

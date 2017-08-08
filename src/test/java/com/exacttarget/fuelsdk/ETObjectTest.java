@@ -50,8 +50,8 @@ public class ETObjectTest {
     public static void setUpBeforeClass()
         throws ETSdkException
     {
-        Assume.assumeNotNull(ETObjectTest.class
-                .getResource("/fuelsdk-test.properties"));
+//        Assume.assumeNotNull(ETObjectTest.class
+//                .getResource("/fuelsdk-test.properties"));
     }
 
     @Test
@@ -106,8 +106,8 @@ public class ETObjectTest {
         assertNull(testObject.setModified("test2", true));
         List<String> modified = testObject.getAllModified();
         assertEquals(2, modified.size());
-        assertEquals("test1", modified.get(0));
-        assertEquals("test2", modified.get(1));
+        assertEquals("test1", modified.get(1));
+        assertEquals("test2", modified.get(0));
     }
 
     @Test
@@ -118,9 +118,9 @@ public class ETObjectTest {
         assertNull(testObject.setModified("test3", true));
         List<String> modified = testObject.getAllModified();
         assertEquals(3, modified.size());
-        assertEquals("test1", modified.get(0));
-        assertEquals("test2", modified.get(1));
-        assertEquals("test3", modified.get(2));
+        assertEquals("test1", modified.get(2));
+        assertEquals("test2", modified.get(0));
+        assertEquals("test3", modified.get(1));
     }
 
     @Test
@@ -131,8 +131,8 @@ public class ETObjectTest {
         assertNull(testObject.setModified("test3", true));
         List<String> modified = testObject.getAllModified();
         assertEquals(2, modified.size());
-        assertEquals("test1", modified.get(0));
-        assertEquals("test3", modified.get(1));
+        assertEquals("test1", modified.get(1));
+        assertEquals("test3", modified.get(0));
     }
 
     @Test
@@ -143,14 +143,14 @@ public class ETObjectTest {
         assertNull(testObject.setModified("test3", true));
         List<String> modified = testObject.getAllModified();
         assertEquals(3, modified.size());
-        assertEquals("test1", modified.get(0));
-        assertEquals("test2", modified.get(1));
-        assertEquals("test3", modified.get(2));
+        assertEquals("test1", modified.get(2));
+        assertEquals("test2", modified.get(0));
+        assertEquals("test3", modified.get(1));
         assertTrue(testObject.setModified("test2", false));
         modified = testObject.getAllModified();
         assertEquals(2, modified.size());
-        assertEquals("test1", modified.get(0));
-        assertEquals("test3", modified.get(1));
+        assertEquals("test1", modified.get(1));
+        assertEquals("test3", modified.get(0));
     }
 
     class TestObject extends ETApiObject {

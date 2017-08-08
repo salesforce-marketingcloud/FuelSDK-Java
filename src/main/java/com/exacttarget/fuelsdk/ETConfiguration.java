@@ -48,8 +48,15 @@ public class ETConfiguration {
 
     private Properties properties = new Properties();
 
+    /** 
+    * Class constructor, Initializes a new instance of the class.
+    */    
     public ETConfiguration() {}
 
+    /** 
+    * Class constructor, Initializes a new instance of ETConfiguration.
+    * @param file   The properties file name.
+    */    
     public ETConfiguration(String file)
         throws ETSdkException
     {
@@ -74,14 +81,27 @@ public class ETConfiguration {
         }
     }
 
+    /** 
+    * @param key          The key of a property.
+    * @return             The value of the key.
+    */    
     public String get(String key) {
         return properties.getProperty(key);
     }
 
+    /** 
+    * @param key        The key of a property.
+    * @param value      The value of the key.
+    */    
     public void set(String key, String value) {
         properties.setProperty(key, value);
     }
 
+    /** 
+    * @param key        The key of a property.
+    * @param value      The value of the key.
+    * @return           true if the value of the key matches, false otherwise.
+    */    
     public boolean equals(String key, String value) {
         String v = get(key);
         if (v == null) {
@@ -90,6 +110,11 @@ public class ETConfiguration {
         return v.equals(value);
     }
 
+    /** 
+    * @param key        The key of a property.
+    * @param value      The value of the key.
+    * @return           true if the value of the key does not match, false otherwise.
+    */    
     public boolean notEquals(String key, String value) {
         String v = get(key);
         if (v == null) {
@@ -98,6 +123,10 @@ public class ETConfiguration {
         return !v.equals(value);
     }
 
+    /** 
+    * @param key        The key of a property.
+    * @return           true if and only if the value associated with the key is true and not null, false otherwise.
+    */    
     public boolean isTrue(String key) {
         // XXX deal with the case where key is unspecified
         String value = get(key);
@@ -107,6 +136,10 @@ public class ETConfiguration {
         return false;
     }
 
+    /** 
+    * @param key        The key of a property.
+    * @return           true if and only if the value associated with the key is false and not null, false otherwise.
+    */    
     public boolean isFalse(String key) {
         // XXX deal with the case where key is unspecified
         String value = get(key);

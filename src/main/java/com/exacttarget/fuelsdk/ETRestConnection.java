@@ -63,12 +63,25 @@ public class ETRestConnection {
 
     private boolean isAuthConnection = false;
 
+    /** 
+    * Class constructor, Initializes a new instance of the class.
+     * @param client    The ETClient object
+     * @param endpoint  The endpoint URL
+     * @throws com.exacttarget.fuelsdk.ETSdkException
+    */
     public ETRestConnection(ETClient client, String endpoint)
         throws ETSdkException
     {
         this(client, endpoint, false);
     }
 
+    /** 
+    * Class constructor, Initializes a new instance of the class.
+     * @param client    The ETClient object
+     * @param endpoint  The endpoint URL
+     * @param isAuthConnection      true is it is an auth connection, false otherwise
+     * @throws com.exacttarget.fuelsdk.ETSdkException
+    */
     public ETRestConnection(ETClient client, String endpoint, boolean isAuthConnection)
         throws ETSdkException
     {
@@ -79,6 +92,10 @@ public class ETRestConnection {
         this.isAuthConnection = isAuthConnection;
     }
 
+    /**
+     * @param   path    The path to GET the response
+     * @return  The Response object
+     */
     public Response get(String path)
         throws ETSdkException
     {
@@ -101,6 +118,10 @@ public class ETRestConnection {
         }
     }
 
+    /**
+     * @param   path    The path to POST or create
+     * @return  The Response object
+     */
     public Response post(String path, String payload)
         throws ETSdkException
     {
@@ -123,6 +144,10 @@ public class ETRestConnection {
         }
     }
 
+    /**
+     * @param   path    The path to PATCH or update
+     * @return  The Response object
+     */
     public Response patch(String path, String payload)
         throws ETSdkException
     {
@@ -145,6 +170,10 @@ public class ETRestConnection {
         }
     }
 
+    /**
+     * @param   path    The path to DELETE
+     * @return  The Response object
+     */
     public Response delete(String path)
         throws ETSdkException
     {
@@ -316,44 +345,74 @@ public class ETRestConnection {
         return response;
     }
 
+    /**
+     *  types of HTTP method that can be used for CRUD operation
+     */
     public enum Method {
         GET, POST, PATCH, DELETE
     }
-
+    
+    /**
+     * A <code>Response</code> represents salesforce marketing cloud REST API response.
+     */
     public class Response {
         private String requestId = null;
         private Integer responseCode = null;
         private String responseMessage = null;
         private String responsePayload = null;
 
+        /** 
+        * @return The Request Identifier of the Response object.
+        */    
         public String getRequestId() {
             return requestId;
         }
 
+        /** 
+        * @param    requestId    The Request Identifier of the Response object.
+        */    
         public void setRequestId(String requestId) {
             this.requestId = requestId;
         }
 
+        /** 
+        * @return The response code of the Response object.
+        */    
         public Integer getResponseCode() {
             return responseCode;
         }
 
+        /** 
+        * @param responseCode   The response code of the Response object.
+        */    
         public void setResponseCode(Integer responseCode) {
             this.responseCode = responseCode;
         }
 
+        /** 
+        * @return The response message of the Response object.
+        */    
         public String getResponseMessage() {
             return responseMessage;
         }
 
+        /** 
+        * @param  responseMessage   The response message of the Response object.
+        */    
         public void setResponseMessage(String responseMessage) {
             this.responseMessage = responseMessage;
         }
 
+        /** 
+        * @return The response payload of the Response object.
+        */    
         public String getResponsePayload() {
             return responsePayload;
         }
 
+        /** 
+        * @param  responsePayload   The response payload of the Response object.
+        */    
         public void setResponsePayload(String responsePayload) {
             this.responsePayload = responsePayload;
         }

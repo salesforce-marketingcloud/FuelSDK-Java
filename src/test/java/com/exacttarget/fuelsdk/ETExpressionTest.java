@@ -46,8 +46,8 @@ public class ETExpressionTest {
     public static void setUpBeforeClass()
         throws ETSdkException
     {
-        Assume.assumeNotNull(ETExpressionTest.class
-                .getResource("/fuelsdk-test.properties"));
+//        Assume.assumeNotNull(ETExpressionTest.class
+//                .getResource("/fuelsdk-test.properties"));
     }
 
     @Test

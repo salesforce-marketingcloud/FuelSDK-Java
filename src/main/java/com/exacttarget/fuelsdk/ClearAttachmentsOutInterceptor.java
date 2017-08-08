@@ -11,10 +11,16 @@ import org.apache.cxf.phase.Phase;
  * to ease garbage collection.
  */
 public class ClearAttachmentsOutInterceptor extends AbstractSoapInterceptor {
+    /** 
+    * Class constructor.
+    */
     public ClearAttachmentsOutInterceptor() {
         super(Phase.SETUP_ENDING);
     }
 
+    /** 
+    * @param message     The SOAP message to handle.
+    */
     public void handleMessage(SoapMessage message) throws Fault {
         message.getExchange()
                .getOutMessage()

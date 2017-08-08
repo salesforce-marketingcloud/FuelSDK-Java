@@ -74,76 +74,137 @@ public class ETList extends ETSoapObject {
     @ExternalName("subscribers")
     protected java.util.List<ETSubscriber> subscribers;
 
+    /** 
+    * Class constructor.
+    */
     public ETList() {}
 
+    /** 
+    * @return The Identifier of the ETList.
+    */
     public String getId() {
         return id;
     }
 
+    /** 
+    * @param id     The Identifier of the ETList.
+    */
     public void setId(String id) {
         this.id = id;
     }
 
+    /** 
+    * @return       The Customer Key of the ETList.
+    */    
     public String getKey() {
         return key;
     }
 
+    /** 
+    * @param key    The Customer Key of the ETList.
+    */    
     public void setKey(String key) {
         this.key = key;
     }
 
+    /** 
+    * @return     The list name of the ETList.
+    */    
     public String getName() {
         return name;
     }
 
+    /** 
+    * @param name   The list name of the ETList.
+    */    
     public void setName(String name) {
         this.name = name;
     }
 
+    /** 
+    * @return     The description of the ETList.
+    */    
     public String getDescription() {
         return description;
     }
 
+    /** 
+    * @param description    The description of the ETList.
+    */    
     public void setDescription(String description) {
         this.description = description;
     }
 
+    /** 
+    * @return     The created date of the ETList.
+    */    
     public Date getCreatedDate() {
         return createdDate;
     }
 
+    /** 
+    * @param createdDate        The created date of the ETList.
+    */    
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
 
+    /** 
+    * @return     The modified date of the ETList.
+    */    
     public Date getModifiedDate() {
         return modifiedDate;
     }
 
+    /** 
+    * @param modifiedDate       The modified date of the ETList.
+    */    
     public void setModifiedDate(Date modifiedDate) {
         this.modifiedDate = modifiedDate;
     }
 
+    /** 
+    * @return     The folder Id(category) of the ETList.
+    */    
     public Integer getFolderId() {
         return folderId;
     }
 
+    /** 
+    * @param folderId   The folder Id(category) of the ETList.
+    */    
     public void setFolderId(Integer folderId) {
         this.folderId = folderId;
     }
 
+    /** 
+    * @return                   The classification of the ETList.
+    * @see                      Classification
+    */    
     public Classification getClassification() {
         return classification;
     }
 
+    /** 
+    * @param classification     The classification of the ETList.
+    * @see                      Classification
+    */    
     public void setClassification(Classification classification) {
         this.classification = classification;
     }
 
+    /** 
+    * @return key       The type of the ETList.
+    * @see              Type
+    */    
     public Type getType() {
         return type;
     }
 
+    /** 
+    * @param type           The type of the ETList.
+    * @see                  Type
+    */    
     public void setType(Type type) {
         this.type = type;
     }
@@ -184,6 +245,11 @@ public class ETList extends ETSoapObject {
         setFolderId(categoryId);
     }
     
+    /** 
+    * @return           The ArrayList of Subscribers of the ETList.
+    * @see              ETSubscriber
+    * @see              ArrayList
+    */    
     public java.util.List<ETSubscriber> getSubscribers() {
         if (subscribers == null) {
             subscribers = new ArrayList<ETSubscriber>();
@@ -191,6 +257,9 @@ public class ETList extends ETSoapObject {
         return this.subscribers;
     }
 
+    /**
+     *  List Classification that can be used
+     */
     public enum Classification {
         EXACT_TARGET_LIST("ExactTargetList"),
         PUBLICATION_LIST("PublicationList"),
@@ -206,6 +275,9 @@ public class ETList extends ETSoapObject {
         }
     }
 
+    /**
+     *  List Types that can be used
+     */
     public enum Type {
         GLOBAL_UNSUBSCRIBE("GlobalUnsubscribe"),
         MASTER("Master"),
