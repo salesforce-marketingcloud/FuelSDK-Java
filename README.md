@@ -25,7 +25,7 @@ Java platform. Among other things, the SDK:
 For more information about the Java SDK and how to use it, please see
 the Javadocs at http://salesforce-marketingcloud.github.io/FuelSDK-Java/.
 
-New Features in Version 1.2.0
+# New Features in Version 1.2.0
 * Project tree structure 
     * Source Packages       : SDK package (src/main/java/com/exacttarget/fuelsdk/)
     * Test Packages         : JUnit test package (src/test/java/com/exacttarget/fuelsdk/)
@@ -48,7 +48,7 @@ The easiest way to install the Java SDK is via Maven&mdash;simply add the follow
     <dependency>
       <groupId>com.exacttarget</groupId>
       <artifactId>fuelsdk</artifactId>
-      <version>1.1.0</version>
+      <version>1.2.0</version>
     </dependency>
 
 Maven will automatically resolve, download, and install all dependencies for you.
