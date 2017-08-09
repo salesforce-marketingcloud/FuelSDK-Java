@@ -56,62 +56,107 @@ public class ETResult<T extends ETApiObject> extends ETObject {
     @PrettyPrint
     private T object = null;
 
+    /** 
+    * @return The Status of the ETResult object.
+    */    
     public Status getStatus() {
         return status;
     }
 
+    /** 
+    * @param    status   The Status of the ETResult object.
+    */    
     public void setStatus(Status status) {
         this.status = status;
     }
 
+    /** 
+    * @return The Request Identifier of the ETResult object.
+    */    
     public String getRequestId() {
         return requestId;
     }
 
+    /** 
+    * @param    requestId    The Request Identifier of the ETResult object.
+    */    
     public void setRequestId(String requestId) {
         this.requestId = requestId;
     }
 
+    /** 
+    * @return The response code of the ETResult object.
+    */    
     public String getResponseCode() {
         return responseCode;
     }
 
+    /** 
+    * @param responseCode   The response code of the ETResult object.
+    */    
     public void setResponseCode(String responseCode) {
         this.responseCode = responseCode;
     }
 
+    /** 
+    * @return The response message of the ETResult object.
+    */    
     public String getResponseMessage() {
         return responseMessage;
     }
 
+    /** 
+    * @param  responseMessage   The response message of the ETResult object.
+    */    
     public void setResponseMessage(String responseMessage) {
         this.responseMessage = responseMessage;
     }
 
+    /** 
+    * @return The error code of the ETResult object.
+    */    
     public Integer getErrorCode() {
         return errorCode;
     }
 
+    /** 
+    * @param  errorCode   The error code of the ETResult object.
+    */    
     public void setErrorCode(Integer errorCode) {
         this.errorCode = errorCode;
     }
 
+    /** 
+    * @return The error message of the ETResult object.
+    */    
     public String getErrorMessage() {
         return errorMessage;
     }
 
+    /** 
+    * @param  errorMessage   The error message of the ETResult object.
+    */    
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
     }
 
+    /** 
+    * @return The Object of generic type.
+    */    
     public T getObject() {
         return object;
     }
 
+    /** 
+    * @param object The Object of generic type.
+    */    
     public void setObject(T object) {
         this.object = object;
     }
 
+    /** 
+    * @return The Object Identifier of the ETResult object.
+    */    
     public String getObjectId() {
         if (object != null) {
             return object.getId();

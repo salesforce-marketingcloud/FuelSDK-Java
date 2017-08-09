@@ -50,6 +50,7 @@ import com.exacttarget.fuelsdk.internal.CreateOptions;
 import com.exacttarget.fuelsdk.internal.CreateRequest;
 import com.exacttarget.fuelsdk.internal.CreateResponse;
 import com.exacttarget.fuelsdk.internal.CreateResult;
+import com.exacttarget.fuelsdk.internal.SendClassification;
 import com.exacttarget.fuelsdk.internal.Soap;
 import com.exacttarget.fuelsdk.internal.Subscriber;
 import com.exacttarget.fuelsdk.internal.TriggeredSend;
@@ -120,143 +121,252 @@ public class ETTriggeredEmail extends ETSoapObject {
 //    private Boolean refreshContent = null;
     @ExternalName("suppressTracking")
     private Boolean suppressTracking = null;
+    
+    @ExternalName("sendClassification")
+    @InternalName("sendClassification")
+    private SendClassification sendClassification = null;    
 
+    /** 
+    * Class constructor, Initializes a new instance of the class.
+    */    
     public ETTriggeredEmail() {}
 
+    /** 
+    * @return The Identifier of the ETTriggeredEmail object.
+    */    
     @Override
     public String getId() {
         return id;
     }
 
+    /** 
+    * @param id     The Identifier of the ETTriggeredEmail object.
+    */    
     @Override
     public void setId(String id) {
         this.id = id;
     }
 
+    /** 
+    * @return       The Customer Key of the ETTriggeredEmail object.
+    */     
     public String getKey() {
         return key;
     }
 
+    /** 
+    * @param key    The Customer Key of the ETTriggeredEmail object.
+    */      
     public void setKey(String key) {
         this.key = key;
     }
 
+    /** 
+    * @return     The name of the ETTriggeredEmail object.
+    */     
     public String getName() {
         return name;
     }
 
+    /** 
+    * @param name   The name of the ETTriggeredEmail object.
+    */     
     public void setName(String name) {
         this.name = name;
     }
 
+    /** 
+    * @return     The description of the ETTriggeredEmail object.
+    */    
     public String getDescription() {
         return description;
     }
 
+    /** 
+    * @param description    The description of the ETTriggeredEmail object.
+    */    
     public void setDescription(String description) {
         this.description = description;
     }
 
+    /** 
+    * @return     The created date of the ETTriggeredEmail object.
+    */
     public Date getCreatedDate() {
         return createdDate;
     }
 
+    /** 
+    * @param createdDate        The created date of the ETTriggeredEmail object.
+    */
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
 
+    /** 
+    * @return     The modified date of the ETTriggeredEmail object.
+    */
     public Date getModifiedDate() {
         return modifiedDate;
     }
 
+    /** 
+    * @param modifiedDate       The modified date of the ETTriggeredEmail object.
+    */    
     public void setModifiedDate(Date modifiedDate) {
         this.modifiedDate = modifiedDate;
     }
 
+    /** 
+    * @return     The folder Id(category Id) of the ETTriggeredEmail object.
+    */
     public Integer getFolderId() {
         return folderId;
     }
 
+    /** 
+    * @param folderId   The folder Id(category Id) of the ETTriggeredEmail object.
+    */
     public void setFolderId(Integer folderId) {
         this.folderId = folderId;
     }
 
+    /** 
+    * @return     The subject of the ETTriggeredEmail object.
+    */    
     public ETEmail getEmail() {
         return email;
     }
 
+    /** 
+    * @param email       The subject of the ETTriggeredEmail object.
+    */
     public void setEmail(ETEmail email) {
         this.email = email;
     }
 
+    /** 
+    * @return     The ETList of the ETTriggeredEmail object.
+    */    
     public ETList getList() {
         return list;
     }
 
+    /** 
+    * @param list       The ETList of the ETTriggeredEmail object.
+    */
     public void setList(ETList list) {
         this.list = list;
     }
 
+    /** 
+    * @return     The ETDataExtension of the ETTriggeredEmail object.
+    */    
     public ETDataExtension getDataExtension() {
         return dataExtension;
     }
 
+    /** 
+    * @param dataExtension       The ETDataExtension of the ETTriggeredEmail object.
+    */
     public void setDataExtension(ETDataExtension dataExtension) {
         this.dataExtension = dataExtension;
     }
 
+    /** 
+    * @return     The subject of the ETTriggeredEmail object.
+    */    
     public String getSubject() {
         return subject;
     }
 
+    /** 
+    * @param subject       The subject of the ETTriggeredEmail object.
+    */
     public void setSubject(String subject) {
         this.subject = subject;
     }
 
+    /** 
+    * @return     The priority of the ETTriggeredEmail object.
+    */    
     public String getPriority() {
         return priority;
     }
 
+    /** 
+    * @param priority       The priority of the ETTriggeredEmail object.
+    */
     public void setPriority(String priority) {
         this.priority = priority;
     }
 
+    /** 
+    * @return The Status of the ETTriggeredEmail object.
+    */    
     public Status getStatus() {
         return status;
     }
 
+    /** 
+    * @param    status   The Status of the ETTriggeredEmail object.
+    */    
     public void setStatus(Status status) {
         this.status = status;
     }
 
+    /** 
+    * @return    true if auto add subscribers, false otherwise.
+    */    
     public Boolean getAutoAddSubscribers() {
         return autoAddSubscribers;
     }
 
+    /** 
+    * @param  autoAddSubscribers  true if auto add subscribers, false otherwise.
+    */    
     public void setAutoAddSubscribers(Boolean autoAddSubscribers) {
         this.autoAddSubscribers = autoAddSubscribers;
     }
 
+    /** 
+    * @return    true if auto update subscribers, false otherwise.
+    */    
     public Boolean getAutoUpdateSubscribers() {
         return autoUpdateSubscribers;
     }
 
+    /** 
+    * @param autoUpdateSubscribers    true if auto update subscribers, false otherwise.
+    */    
     public void setAutoUpdateSubscribers(Boolean autoUpdateSubscribers) {
         this.autoUpdateSubscribers = autoUpdateSubscribers;
     }
 
+    /** 
+    * @return    true if ETTriggeredEmail is multi part, false otherwise.
+    */    
     public Boolean getIsMultipart() {
         return isMultipart;
     }
 
+    /** 
+    * @param    isMultipart    true if ETTriggeredEmail is multi part, false otherwise.
+    */    
     public void setIsMultipart(Boolean isMultipart) {
         this.isMultipart = isMultipart;
     }
 
+    /** 
+    * @return    true if wrapped, false otherwise.
+    */    
     public Boolean getIsWrapped() {
         return isWrapped;
     }
 
+    /** 
+    * @param    isWrapped    true if wrapped, false otherwise.
+    */    
     public void setIsWrapped(Boolean isWrapped) {
         this.isWrapped = isWrapped;
     }
@@ -269,14 +379,38 @@ public class ETTriggeredEmail extends ETSoapObject {
 //        this.refreshContent = refreshContent;
 //    }
 
+    /** 
+    * @return    true if suppress tracking, false otherwise.
+    */    
     public Boolean getSuppressTracking() {
         return suppressTracking;
     }
 
+    /** 
+    * @param    suppressTracking    true if suppress tracking, false otherwise.
+    */    
     public void setSuppressTracking(Boolean suppressTracking) {
         this.suppressTracking = suppressTracking;
     }
+    
+    /** 
+    * @return    The send classification of the ETTriggeredEmail object.
+    */    
+    public SendClassification getSendClassification() {
+        return sendClassification;
+    }
 
+    /** 
+    * @param    sendClassification   The send classification of the ETTriggeredEmail object.
+    */    
+    public void setSendClassification(SendClassification sendClassification) {
+        this.sendClassification = sendClassification;
+    }    
+
+    /** 
+    * @param    addresses   The addresses to where the triggered email will be send.
+    * @return   ETResponse of type ETTriggeredEmail
+    */    
     public ETResponse<ETTriggeredEmail> send(String... addresses)
         throws ETSdkException
     {
@@ -290,12 +424,20 @@ public class ETTriggeredEmail extends ETSoapObject {
         return send(subscribers);
     }
 
+    /** 
+    * @param    subscribers   The subscribers to whom the triggered email will be send.
+    * @return   ETResponse of type ETTriggeredEmail
+    */    
     public ETResponse<ETTriggeredEmail> send(ETSubscriber... subscribers)
         throws ETSdkException
     {
         return send(Arrays.asList(subscribers));
     }
 
+    /** 
+    * @param    subscribers   The List of subscribers to whom the triggered email will be send.
+    * @return   ETResponse of type ETTriggeredEmail
+    */    
     public ETResponse<ETTriggeredEmail> send(List<ETSubscriber> subscribers)
         throws ETSdkException
     {
@@ -419,6 +561,9 @@ public class ETTriggeredEmail extends ETSoapObject {
         setFolderId(categoryId);
     }
 
+    /**
+     *  Various Status that can be used
+     */
     public enum Status {
         ACTIVE("Active"),
         CANCELED("Canceled"),

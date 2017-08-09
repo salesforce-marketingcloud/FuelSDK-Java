@@ -2023,11 +2023,15 @@
       </complexType>
       <element name="Subscriber" type="tns:Subscriber" />
       <complexType name="Attribute">
+        <complexContent>
+        <extension base="tns:APIObject">
         <sequence>
           <element name="Name" type="xsd:string" />
           <element name="Value" type="xsd:string" />
           <element name="Compression" minOccurs="0" maxOccurs="1" type="tns:CompressionConfiguration" />
         </sequence>
+      </extension>
+      </complexContent>
       </complexType>
       <complexType name="CompressionConfiguration">
         <sequence>

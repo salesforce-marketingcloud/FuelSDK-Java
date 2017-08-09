@@ -62,23 +62,42 @@ public abstract class ETApiObject extends ETObject {
 
     private Map<String, Boolean> isModified = new HashMap<String, Boolean>();
 
+    /** 
+    * @return The Identifier of the ETApiObject.
+    */
     public abstract String getId();
+
+    /** 
+    * @param id     The Identifier of the ETApiObject.
+    */
     public abstract void setId(String id);
 
     //public abstract void hydrate();
     //public abstract Boolean isHydrated();
     //public abstract void refresh();
 
+    /** 
+    * @param property       The property of the ETApiObject.
+    * @return               true if the property is modified, false otherwise.
+    */
     public Boolean getModified(String property) {
         logger.trace("isModified[" + property + "] = " + isModified.get(property));
         return isModified.get(property);
     }
 
+    /** 
+    * @param property       The property of the ETApiObject.
+    * @param value          The Boolean value of the property.
+    * @return               previous value associated with the property or null if there was no mapping.
+    */
     public Boolean setModified(String property, Boolean value) {
         logger.trace("isModified[" + property + "] = " + value);
         return isModified.put(property, value);
     }
 
+    /** 
+    * @return The List of properties whose values are true.
+    */
     public List<String> getAllModified() {
         List<String> modified = new ArrayList<String>();
         for (Map.Entry<String, Boolean> entry : isModified.entrySet()) {

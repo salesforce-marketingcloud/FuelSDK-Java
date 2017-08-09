@@ -55,9 +55,9 @@ public class ETConfigurationTest {
     public static void setUpBeforeClass()
         throws ETSdkException
     {
-        Assume.assumeNotNull(ETConfigurationTest.class
-                .getResource("/fuelsdk-test.properties"));
-        configuration = new ETConfiguration("/fuelsdk-test.properties");
+//        Assume.assumeNotNull(ETConfigurationTest.class
+//                .getResource("/fuelsdk-test.properties"));
+        configuration = new ETConfiguration("fuelsdk.properties");
     }
 
     @Test
@@ -73,7 +73,7 @@ public class ETConfigurationTest {
         throws ETSdkException
     {
         @SuppressWarnings("deprecation")
-        String s = configuration.getClientId();
+        String s = configuration.get("clientId");//getClientId();
         assertEquals(clientId, s);
     }
 
@@ -90,7 +90,7 @@ public class ETConfigurationTest {
         throws ETSdkException
     {
         @SuppressWarnings("deprecation")
-        String s = configuration.getClientSecret();
+        String s = configuration.get("clientSecret");//getClientSecret();
         assertEquals(clientSecret, s);
     }
 
@@ -106,7 +106,7 @@ public class ETConfigurationTest {
         throws ETSdkException
     {
         @SuppressWarnings("deprecation")
-        String s = configuration.getEndpoint();
+        String s = configuration.get("endpoint");//getEndpoint();
         assertEquals(endpoint, s);
     }
 
@@ -122,7 +122,7 @@ public class ETConfigurationTest {
         throws ETSdkException
     {
         @SuppressWarnings("deprecation")
-        String s = configuration.getAuthEndpoint();
+        String s = configuration.get("authEndpoint");//getAuthEndpoint();
         assertEquals(authEndpoint, s);
     }
 
@@ -138,7 +138,7 @@ public class ETConfigurationTest {
         throws ETSdkException
     {
         @SuppressWarnings("deprecation")
-        String s = configuration.getSoapEndpoint();
+        String s = configuration.get("soapEndpoint");//getSoapEndpoint();
         assertEquals(soapEndpoint, s);
     }
 }

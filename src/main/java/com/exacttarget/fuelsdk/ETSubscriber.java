@@ -72,94 +72,159 @@ public class ETSubscriber extends ETSoapObject {
     @ExternalName("unsubscribedDate")
     private Date unsubscribedDate = null;
     @ExternalName("lists")
-    private List<ETSubscriberList> lists = null;
+    protected List<ETSubscriberList> lists = null;
     @ExternalName("attributes")
-    protected List<Attribute> attributes;
+    @InternalName("attributes")
+    protected List<ETProfileAttribute> attributes = null;
 
+    /** 
+    * Class constructor, Initializes a new instance of the class.
+    */
     public ETSubscriber() {}
 
+    /** 
+    * @return The Identifier of the ETSubscriber object.
+    */    
     @Override
     public String getId() {
         return id;
     }
 
+    /** 
+    * @param id     The Identifier of the ETSubscriber object.
+    */    
     @Override
     public void setId(String id) {
         this.id = id;
     }
 
+    /** 
+    * @return       The Customer Key of the ETSubscriber object.
+    */     
     public String getKey() {
         return key;
     }
 
+    /** 
+    * @param key    The Customer Key of the ETSubscriber object.
+    */      
     public void setKey(String key) {
         this.key = key;
     }
 
+    /** 
+    * @return     The created date of the ETSubscriber object.
+    */
     public Date getCreatedDate() {
         return createdDate;
     }
 
+    /** 
+    * @param createdDate        The created date of the ETSubscriber object.
+    */
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
 
+    /** 
+    * @return     The modified date of the ETSubscriber object.
+    */
     public Date getModifiedDate() {
         return modifiedDate;
     }
 
+    /** 
+    * @param modifiedDate       The modified date of the ETSubscriber object.
+    */    
     public void setModifiedDate(Date modifiedDate) {
         this.modifiedDate = modifiedDate;
     }
 
+    /** 
+    * @return The email address of the ETSubscriber object.
+    */    
     public String getEmailAddress() {
         return emailAddress;
     }
 
+    /** 
+    * @param emailAddress     The email address of the ETSubscriber object.
+    */    
     public void setEmailAddress(String emailAddress) {
         this.emailAddress = emailAddress;
     }
 
+    /** 
+    * @return The preferred email type of the ETSubscriber object.
+    * {@link ETEmail.Type}
+    */    
     public ETEmail.Type getPreferredEmailType() {
         return preferredEmailType;
     }
 
+    /** 
+    * @param preferredEmailType     The preferred email type of the ETSubscriber object.
+    * {@link ETEmail.Type}
+    */    
     public void setPreferredEmailType(ETEmail.Type preferredEmailType) {
         this.preferredEmailType = preferredEmailType;
     }
 
+    /** 
+    * @return The Status of the ETSubscriber object.
+    * {@link ETSubscriber.Status}
+    */    
     public Status getStatus() {
         return status;
     }
 
+    /** 
+    * @param status     The status of the ETSubscriber object.
+    * {@link ETSubscriber.Status}
+    */    
     public void setStatus(Status status) {
         this.status = status;
     }
 
+    /** 
+    * @return The unsubscribed date of the ETSubscriber object.
+    */    
     public Date getUnsubscribedDate() {
         return unsubscribedDate;
     }
 
+    /** 
+    * @param unsubscribedDate     The unsubscribed date of the ETSubscriber object.
+    */    
     public void setUnsubscribedDate(Date unsubscribedDate) {
         this.unsubscribedDate = unsubscribedDate;
     }
 
+    /** 
+    * @return The List of {@link ETSubscriberList} of this ETSubscriber object.
+    */    
     public List<ETSubscriberList> getLists() {
 	   if (lists == null) {
 		   lists = new ArrayList<ETSubscriberList>();
 	   }
 	   return lists;
     }
-    
+
     /**
-     * Gets the value of the attributes property.
+     * @return  Gets the List of the attributes property.
      */
-    public List<Attribute> getAttributes() {
+    public List<ETProfileAttribute> getAttributes() {
         if (attributes == null) {
-            attributes = new ArrayList<Attribute>();
+            attributes = new ArrayList<ETProfileAttribute>();
         }
         return this.attributes;
     }		
+    
+    public void setAttributes(List<ETProfileAttribute> attribs) {
+//        if (attributes == null)
+//            attributes = new ArrayList<Attribute>();
+        this.attributes = attribs;
+    }    
 
     /**
      * @deprecated
@@ -179,6 +244,9 @@ public class ETSubscriber extends ETSoapObject {
         setKey(subscriberKey);
     }
 
+    /**
+     *  Subscriber Status that can be used
+     */
     public enum Status {
         ACTIVE("Active"),
         BOUNCED("Bounced"),

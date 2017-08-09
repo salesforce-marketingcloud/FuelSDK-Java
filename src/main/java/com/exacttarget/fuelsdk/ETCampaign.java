@@ -76,66 +76,114 @@ public class ETCampaign extends ETRestObject {
     @ExternalName("favorite")
     private Boolean favorite = null;
 
+    /** 
+    * @return The Identifier of the ETCampaign object.
+    */    
     public String getId() {
         return id;
     }
 
+    /** 
+    * @param id     The Identifier of the ETCampaign object.
+    */    
     public void setId(String id) {
         this.id = id;
     }
 
+    /** 
+    * @return     The name of the ETCampaign object.
+    */     
     public String getName() {
         return name;
     }
 
+    /** 
+    * @param name   The name of the ETCampaign object.
+    */     
     public void setName(String name) {
         this.name = name;
     }
 
+    /** 
+    * @return     The description of the ETCampaign object.
+    */    
     public String getDescription() {
         return description;
     }
 
+    /** 
+    * @param description    The description of the ETCampaign object.
+    */    
     public void setDescription(String description) {
         this.description = description;
     }
 
+    /** 
+    * @return     The created date of the ETCampaign object.
+    */
     public Date getCreatedDate() {
         return createdDate;
     }
 
+    /** 
+    * @param createdDate        The created date of the ETCampaign object.
+    */
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
 
+    /** 
+    * @return     The modified date of the ETCampaign object.
+    */
     public Date getModifiedDate() {
         return modifiedDate;
     }
 
+    /** 
+    * @param modifiedDate       The modified date of the ETCampaign object.
+    */    
     public void setModifiedDate(Date modifiedDate) {
         this.modifiedDate = modifiedDate;
     }
 
+    /** 
+    * @return     The campaign code of the ETCampaign object.
+    */     
     public String getCode() {
         return code;
     }
 
+    /** 
+    * @param code       The campaign code of the ETCampaign object.
+    */    
     public void setCode(String code) {
         this.code = code;
     }
 
+    /** 
+    * @return     The color of the ETCampaign object.
+    */     
     public String getColor() {
         return color;
     }
 
+    /** 
+    * @param color       The color of the ETCampaign object.
+    */    
     public void setColor(String color) {
         this.color = color;
     }
 
+    /** 
+    * @return     True if it is a favorite campaign, false otherwise.
+    */     
     public Boolean getFavorite() {
         return favorite;
     }
 
+    /** 
+    * @param favorite       Sets if it is a favorite campaign.
+    */    
     public void setFavorite(Boolean favorite) {
         this.favorite = favorite;
     }

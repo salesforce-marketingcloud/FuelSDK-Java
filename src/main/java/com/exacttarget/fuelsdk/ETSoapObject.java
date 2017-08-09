@@ -104,12 +104,29 @@ import com.exacttarget.fuelsdk.internal.UpdateResult;
 public abstract class ETSoapObject extends ETApiObject {
     private static Logger logger = Logger.getLogger(ETSoapObject.class);
 
+    /**
+     * The page size
+     */
     public final static int PAGE_SIZE = 2500;
 
+    /** 
+    * Class constructor, Initializes a new instance of the class.
+    */
     public ETSoapObject() {
         registerConverters();
     }
 
+    /**
+     * 
+     * @param <T>           The type which extends from ETSoapObject
+     * @param client        The ETClient object
+     * @param type          The class type to retrieve
+     * @param page          The page number
+     * @param pageSize      The page size
+     * @param filter        The ETFilter object
+     * @return              The ETResponse object of type T which extends from ETSoapObject
+     * @throws ETSdkException 
+     */
     public static <T extends ETSoapObject> ETResponse<T> retrieve(ETClient client,
                                                                   Class<T> type,
                                                                   Integer page,
@@ -131,15 +148,21 @@ public abstract class ETSoapObject extends ETApiObject {
         return retrieve(client, null, filter, type);
     }
 
-    //
-    // ETSoapObject has additional retrieve methods that take the
-    // SOAP object name and request ID for continuing requests.
-    // In most cases, the SOAP object name is the same as the
-    // internal class name, but in a few cases, it is not (e.g.,
-    // DataExtensionObjects require the name of
-    // the data extension in brackets: DataExtensionObject[foo]).
-    //
-
+    /**
+     * ETSoapObject has additional retrieve methods that take the
+     * SOAP object name and request ID for continuing requests.
+     * In most cases, the SOAP object name is the same as the
+     * internal class name, but in a few cases, it is not (e.g.,
+     * DataExtensionObjects require the name of
+     * the data extension in brackets: DataExtensionObject[foo]).
+     * @param <T>           The type which extends from ETSoapObject
+     * @param client        The ETClient object
+     * @param soapObjectName The object name to retrieve for SOAP
+     * @param filter        The ETFilter object
+     * @param type          The class type to retrieve
+     * @return              The ETResponse object of type T which extends from ETSoapObject
+     * @throws ETSdkException 
+     */
     protected static <T extends ETSoapObject> ETResponse<T> retrieve(ETClient client,
                                                                      String soapObjectName,
                                                                      ETFilter filter,
@@ -149,6 +172,15 @@ public abstract class ETSoapObject extends ETApiObject {
         return retrieve(client, soapObjectName, filter, null, type);
     }
 
+    /**
+     * 
+     * @param <T>           The type which extends from ETSoapObject
+     * @param client        The ETClient object
+     * @param type          The class type to retrieve
+     * @param continueRequest The continue request
+     * @return              The ETResponse object of type T which extends from ETSoapObject
+     * @throws ETSdkException 
+     */
     protected static <T extends ETSoapObject> ETResponse<T> retrieve(ETClient client,
                                                                      String continueRequest,
                                                                      Class<T> type)
@@ -157,6 +189,17 @@ public abstract class ETSoapObject extends ETApiObject {
         return retrieve(client, null, new ETFilter(), continueRequest, type);
     }
 
+    /**
+     * 
+     * @param <T>           The type which extends from ETSoapObject
+     * @param client        The ETClient object
+     * @param soapObjectName The object name to retrieve for SOAP
+     * @param filter        The ETFilter object
+     * @param continueRequest The continue request
+     * @param type          The class type to retrieve
+     * @return              The ETResponse object of type T which extends from ETSoapObject
+     * @throws ETSdkException 
+     */
     protected static <T extends ETSoapObject> ETResponse<T> retrieve(ETClient client,
                                                                      String soapObjectName,
                                                                      ETFilter filter,
@@ -358,6 +401,13 @@ public abstract class ETSoapObject extends ETApiObject {
         return response;
     }
 
+    /**
+     * @param <T>                   The type which extends from ETSoapObject
+     * @param client                The ETClient object
+     * @param objects               The List of objects to create
+     * @return                      The ETResponse object of type T which extends from ETSoapObject
+     * @throws ETSdkException 
+     */
     public static <T extends ETSoapObject> ETResponse<T> create(ETClient client,
                                                                 List<T> objects)
         throws ETSdkException
@@ -479,6 +529,13 @@ public abstract class ETSoapObject extends ETApiObject {
         return response;
     }
 
+    /**
+     * @param <T>                   The type which extends from ETSoapObject
+     * @param client                The ETClient object
+     * @param objects               The List of objects to update
+     * @return                      The ETResponse object of type T which extends from ETSoapObject
+     * @throws ETSdkException 
+     */
     public static <T extends ETSoapObject> ETResponse<T> update(ETClient client,
                                                                 List<T> objects)
         throws ETSdkException
@@ -599,6 +656,13 @@ public abstract class ETSoapObject extends ETApiObject {
         return response;
     }
 
+    /**
+     * @param <T>                   The type which extends from ETSoapObject
+     * @param client                The ETClient object
+     * @param objects               The List of objects to delete
+     * @return                      The ETResponse object of type T which extends from ETSoapObject
+     * @throws ETSdkException 
+     */
     public static <T extends ETSoapObject> ETResponse<T> delete(ETClient client,
                                                                 List<T> objects)
         throws ETSdkException
@@ -617,6 +681,14 @@ public abstract class ETSoapObject extends ETApiObject {
         return delete(client, internalObjects, true);
     }
 
+    /**
+     * @param <T>                   The type which extends from ETSoapObject
+     * @param client                The ETClient object
+     * @param objects               The List of APIObjects to delete
+     * @param internal              true if it is internal, false otherwise
+     * @return                      The ETResponse object of type T which extends from ETSoapObject
+     * @throws ETSdkException 
+     */
     protected static <T extends ETSoapObject> ETResponse<T> delete(ETClient client,
                                                                    List<APIObject> objects,
                                                                    boolean internal)
@@ -805,6 +877,11 @@ public abstract class ETSoapObject extends ETApiObject {
 
     public class ExternalObjectConverter implements Converter {
         @SuppressWarnings("rawtypes")
+        /**
+         * @param type      The class type to convert
+         * @param value     The value to convert
+         * @return          The converted object
+         */
         public Object convert(Class type, Object value) {
             ETSoapObject externalObject = null;
             try {
@@ -823,6 +900,11 @@ public abstract class ETSoapObject extends ETApiObject {
 
     public class InternalObjectConverter implements Converter {
         @SuppressWarnings("rawtypes")
+        /**
+         * @param type      The class type to convert
+         * @param value     The value to convert
+         * @return          The converted object
+         */
         public Object convert(Class type, Object value) {
             APIObject internalObject = null;
             try {
@@ -836,6 +918,11 @@ public abstract class ETSoapObject extends ETApiObject {
 
     public class DataExtensionRowConverter implements Converter {
         @SuppressWarnings({ "rawtypes", "unchecked" })
+        /**
+         * @param type      The class type to convert
+         * @param value     The value to convert
+         * @return          The converted object
+         */
         public Object convert(Class type, Object value) {
             if (type == Map.class) {
                 // we're converting from internal to external
@@ -864,11 +951,22 @@ public abstract class ETSoapObject extends ETApiObject {
 
     public class EnumConverter implements Converter {
         @SuppressWarnings({ "rawtypes", "unchecked" })
+        /**
+         * @param type      The class type to convert
+         * @param value     The value to convert
+         * @return          The converted object
+         */
         public Object convert(Class type, Object value) {
             return Enum.valueOf(type, value.toString());
         }
     }
 
+    /**
+     * 
+     * @param internalObject  The internal APIObject
+     * @return The ETSoapObject that is create from the internal APIObject parameter
+     * @throws ETSdkException 
+     */
     public ETSoapObject fromInternal(APIObject internalObject)
         throws ETSdkException
     {
@@ -1015,6 +1113,11 @@ public abstract class ETSoapObject extends ETApiObject {
         return externalObject;
     }
 
+    /**
+     * 
+     * @return The internal APIObject
+     * @throws ETSdkException 
+     */
     public APIObject toInternal()
         throws ETSdkException
     {
@@ -1307,6 +1410,11 @@ public abstract class ETSoapObject extends ETApiObject {
         return internalProperties;
     }
 
+    /**
+     * 
+     * @param expression The ETExpression to create FilterPart
+     * @return The FilterPart object, can be SimpleFilterPart or ComplexFilterPart
+     */
     public static FilterPart toFilterPart(ETExpression expression) {
         ETExpression.Operator operator = expression.getOperator();
         if (operator == null) {

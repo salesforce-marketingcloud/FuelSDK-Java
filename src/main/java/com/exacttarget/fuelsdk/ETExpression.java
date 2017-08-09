@@ -42,9 +42,16 @@ import org.apache.log4j.Logger;
 
 import com.exacttarget.fuelsdk.annotations.PrettyPrint;
 
+/**
+ * An <code>ETExpression</code> object represents an expression using property/value
+ * in the Salesforce Marketing Cloud.
+ */
 public class ETExpression extends ETObject {
     private static Logger logger = Logger.getLogger(ETExpression.class);
 
+    /**
+     *  Operator that can be used on ETExpression
+     */
     public enum Operator {
         EQUALS("="),
         NOT_EQUALS("!="),
@@ -89,26 +96,44 @@ public class ETExpression extends ETObject {
     @PrettyPrint
     private List<ETExpression> subexpressions = new ArrayList<ETExpression>();
 
+    /** 
+    * @return     The property of the ETExpression object.
+    */    
     public String getProperty() {
         return property;
     }
 
+    /** 
+    * @param property       The property of the ETExpression object.
+    */
     public void setProperty(String property) {
         this.property = property;
     }
 
+    /** 
+    * @return     The operator of the ETExpression object.
+    */    
     public Operator getOperator() {
         return operator;
     }
 
+    /** 
+    * @param operator       The operator of the ETExpression object.
+    */
     public void setOperator(Operator operator) {
         this.operator = operator;
     }
 
+    /** 
+    * @param operator       The operator of the ETExpression object.
+    */
     public void setOperator(String operator) {
         this.operator = Operator.fromValue(operator);
     }
 
+    /** 
+    * @return     The value of the ETExpression object.
+    */    
     public String getValue() {
         if (values.size() > 1) {
             logger.warn("getValue() called on expression with values > 1");
@@ -116,27 +141,48 @@ public class ETExpression extends ETObject {
         return values.get(0);
     }
 
+    /** 
+    * @return     The list of values of the ETExpression object.
+    */    
     public List<String> getValues() {
         return values;
     }
 
+    /** 
+    * clears the previous value and assigns the new one.
+    * @param value       The value of the ETExpression object.
+    */
     public void setValue(String value) {
         values.clear();
         values.add(value);
     }
 
+    /** 
+    * adds the new value with previous values.
+    * @param value       The value of the ETExpression object.
+    */
     public void addValue(String value) {
         values.add(value);
     }
 
+    /** 
+    * @return     The list of subexpression of the ETExpression object.
+    */    
     public List<ETExpression> getSubexpressions() {
         return subexpressions;
     }
 
+    /** 
+    * @param expression       The subexpression of the ETExpression object.
+    */
     public void addSubexpression(ETExpression expression) {
         subexpressions.add(expression);
     }
 
+    /** 
+     * parse the String to create ETExpression object.
+    * @param s       The String to be parsed to create the ETExpression object.
+    */
     public static ETExpression parse(String s)
         throws ETSdkException
     {
@@ -151,6 +197,9 @@ public class ETExpression extends ETObject {
         return expression;
     }
 
+    /** 
+    * @return     The String representing the ETExpression object.
+    */    
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();

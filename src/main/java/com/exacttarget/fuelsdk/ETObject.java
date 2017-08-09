@@ -57,6 +57,7 @@ public abstract class ETObject {
 
     /**
      * Gets the client handle associated with this object.
+     * @return  The ETClient object
      */
     public ETClient getClient() {
         return client;
@@ -64,11 +65,15 @@ public abstract class ETObject {
 
     /**
      * Sets the client handle associated with this object.
+     * @param client    The ETClient object
      */
     public void setClient(ETClient client) {
         this.client = client;
     }
 
+    /** 
+    * @return     The String representing the ETObject.
+    */    
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
@@ -151,6 +156,10 @@ public abstract class ETObject {
         return stringBuilder.toString();
     }
 
+    /** 
+    * @param      property  The property name.
+    * @return     The Field of the ETObject.
+    */    
     protected Field getField(String property) {
         for (Field field : getAllFields()) {
             ExternalName externalName =
@@ -162,6 +171,12 @@ public abstract class ETObject {
         return null;
     }
 
+    /** 
+    * @param type   The class type whose Field will be retrieved.
+    * @param name   The name of the Field to be retrieved.
+    * @return       The Field of the class type.
+    * @throws       com.exacttarget.fuelsdk.ETSdkException
+    */    
     protected static Field getField(Class<?> type, String name)
         throws ETSdkException
     {
@@ -186,10 +201,17 @@ public abstract class ETObject {
         return field;
     }
 
+    /** 
+    * @return     The List of Field.
+    */    
     protected List<Field> getAllFields() {
         return getAllFields(getClass());
     }
 
+    /** 
+    * @param type   The class type whose Fields will be retrieved.
+    * @return       The List of Field of the class type.
+    */    
     protected static List<Field> getAllFields(Class<?> type) {
         List<Field> fields = new ArrayList<Field>();
 

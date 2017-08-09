@@ -63,6 +63,17 @@ import com.exacttarget.fuelsdk.annotations.RestObject;
 public abstract class ETRestObject extends ETApiObject {
     private static Logger logger = Logger.getLogger(ETRestObject.class);
 
+    /**
+     * 
+     * @param <T>           The type which extends from ETRestObject
+     * @param client        The ETClient object
+     * @param type          The class type to retrieve
+     * @param page          The page number
+     * @param pageSize      The page size
+     * @param filter        The ETFilter object
+     * @return              The ETResponse object of type T which extends from ETRestObject
+     * @throws ETSdkException 
+     */
     public static <T extends ETRestObject> ETResponse<T> retrieve(ETClient client,
                                                                   Class<T> type,
                                                                   Integer page,
@@ -274,6 +285,13 @@ public abstract class ETRestObject extends ETApiObject {
         return response;
     }
 
+    /**
+     * @param <T>                   The type which extends from ETRestObject
+     * @param client                The ETClient object
+     * @param objects               The List of objects to create
+     * @return                      The ETResponse object of type T which extends from ETRestObject
+     * @throws ETSdkException 
+     */
     public static <T extends ETRestObject> ETResponse<T> create(ETClient client,
                                                                 List<T> objects)
         throws ETSdkException
@@ -281,6 +299,13 @@ public abstract class ETRestObject extends ETApiObject {
         return createUpdateDelete(client, POST, objects);
     }
 
+    /**
+     * @param <T>                   The type which extends from ETRestObject
+     * @param client                The ETClient object
+     * @param objects               The List of objects to update
+     * @return                      The ETResponse object of type T which extends from ETRestObject
+     * @throws ETSdkException 
+     */
     public static <T extends ETRestObject> ETResponse<T> update(ETClient client,
                                                                 List<T> objects)
         throws ETSdkException
@@ -288,6 +313,14 @@ public abstract class ETRestObject extends ETApiObject {
         return createUpdateDelete(client, PATCH, objects);
     }
 
+    /**
+     * 
+     * @param <T>                   The type which extends from ETRestObject
+     * @param client                The ETClient object
+     * @param objects               The List of objects to delete
+     * @return                      The ETResponse object of type T which extends from ETRestObject
+     * @throws ETSdkException 
+     */
     public static <T extends ETRestObject> ETResponse<T> delete(ETClient client,
                                                                 List<T> objects)
         throws ETSdkException
@@ -421,11 +454,23 @@ public abstract class ETRestObject extends ETApiObject {
         return response;
     }
 
+    /**
+     * 
+     * @return The serialized JSON response.
+     */
     public String serialize() {
         Gson gson = getClient().getGson();
         return gson.toJson(this);
     }
 
+    /**
+     * 
+     * @param <T>               The type which extends from ETRestObject
+     * @param client            The ETClient object
+     * @param payload           The payload to deserialize
+     * @param type              The class type to deserialize
+     * @return                  The ETResponse object of type T which extends from ETRestObject
+     */
     public static <T extends ETRestObject> T deserialize(ETClient client,
                                                          String payload,
                                                          Class<T> type)
@@ -438,6 +483,16 @@ public abstract class ETRestObject extends ETApiObject {
         return object;
     }
 
+    /**
+     * 
+     * @param <T>               The type which extends from ETRestObject
+     * @param client            The ETClient object
+     * @param payload           The payload to deserialize
+     * @param type              The class type to deserialize
+     * @param totalCount        The total count 
+     * @param collection        The collection
+     * @return                  The ETResponse object of type T which extends from ETRestObject
+     */
     public static <T extends ETRestObject> ETResponse<T> deserialize(ETClient client,
                                                                      String payload,
                                                                      Class<T> type,
@@ -543,12 +598,25 @@ public abstract class ETRestObject extends ETApiObject {
         }
     }
 
+    /**
+     * 
+     * @param expression    The ETExpression object as filter
+     * @return              Converted filter string
+     * @throws ETSdkException 
+     */
     public static String toFilterString(ETExpression expression)
         throws ETSdkException
     {
         return toFilterString(expression, true);
     }
 
+    /**
+     * 
+     * @param expression    The ETExpression object as filter
+     * @param first         whether to put $filter at first or not
+     * @return              Converted filter string
+     * @throws ETSdkException 
+     */
     private static String toFilterString(ETExpression expression, boolean first)
         throws ETSdkException
     {

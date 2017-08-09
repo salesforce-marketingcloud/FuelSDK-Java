@@ -40,6 +40,10 @@ import java.util.List;
 
 import com.exacttarget.fuelsdk.annotations.PrettyPrint;
 
+/**
+ * An <code>ETFilter</code> object represents a filter that can be used to filter properties
+ * in the Salesforce Marketing Cloud.
+ */
 public class ETFilter extends ETObject {
     @PrettyPrint
     private ETExpression expression = new ETExpression();
@@ -50,42 +54,73 @@ public class ETFilter extends ETObject {
     @PrettyPrint
     private Boolean orderByAsc = true;
 
+    /** 
+    * @return     The ETExpression of the ETFilter object.
+    */    
     public ETExpression getExpression() {
         return expression;
     }
 
+    /** 
+    * @param    expression    The ETExpression of the ETFilter object.
+    */    
     public void setExpression(ETExpression expression) {
         this.expression = expression;
     }
 
+    /** 
+    * @return     The list of order by String of the ETFilter object.
+    */    
     public List<String> getOrderBy() {
         return orderBy;
     }
 
+    /** 
+    * @param    orderBy     The list of order by String to set of the ETFilter object.
+    */    
     public void setOrderBy(List<String> orderBy) {
         this.orderBy = orderBy;
     }
 
+    /** 
+    * @return     true if order by ascending, false otherwise. by default true.
+    */    
     public Boolean getOrderByAsc() {
         return orderByAsc;
     }
 
+    /** 
+    * @param    orderByAsc     true if order by ascending, false otherwise. by default true.
+    */    
     public void setOrderByAsc(Boolean orderByAsc) {
         this.orderByAsc = orderByAsc;
     }
 
+    /** 
+    * @return     The list of properties of the ETFilter object.
+    */    
     public List<String> getProperties() {
         return properties;
     }
 
+    /** 
+    * @param properties       The list of properties to set for the ETFilter object.
+    */
     public void setProperties(List<String> properties) {
         this.properties = properties;
     }
 
+    /** 
+    * @param property       The property of the ETFilter object.
+    */
     public void addProperty(String property) {
         this.properties.add(property);
     }
 
+    /** 
+     * parse the String to create ETFilter object.
+    * @param s       The String to be parsed to create the ETFilter object.
+    */
     public static ETFilter parse(String... s)
         throws ETSdkException
     {
@@ -107,6 +142,7 @@ public class ETFilter extends ETObject {
                         // Order by clause:
                         //
 
+                        //t = t.toLowerCase();
                         String tokens[] = t.substring(9).split(" ");
 
                         if (tokens.length > 1

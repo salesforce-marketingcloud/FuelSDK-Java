@@ -1,0 +1,28 @@
+var classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_validation_result =
+[
+    [ "getCheckTime", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_validation_result.html#ab3b97dce2ce84d4bf65596fe19deeada", null ],
+    [ "getCheckTimeUTC", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_validation_result.html#a80f02c4d2cb7383592a7c2d704df38cd", null ],
+    [ "getIsResultValid", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_validation_result.html#ab91a0e391b2d3ae95d586125c4b162cc", null ],
+    [ "getIsSpam", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_validation_result.html#aea87e375e3a50559665b9b9a43d24cd6", null ],
+    [ "getMessage", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_validation_result.html#a5d921f1499296264140942b6264e45f7", null ],
+    [ "getScore", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_validation_result.html#a0f09fd2cd7b588fe9803a2ae55e1d7ed", null ],
+    [ "getSubscriber", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_validation_result.html#a436ddbb5d2f3b2cb0e0d748a82ca0cee", null ],
+    [ "getThreshold", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_validation_result.html#a24d9cabbd9dd55c54906f216ac948e2b", null ],
+    [ "setCheckTime", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_validation_result.html#aa4f173e5fe6f1e854f822dca7dae2839", null ],
+    [ "setCheckTimeUTC", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_validation_result.html#a282dd2e54785f4e72b581f6ed73258d4", null ],
+    [ "setIsResultValid", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_validation_result.html#ae72e637b7d64f12c5c893594c18f9c90", null ],
+    [ "setIsSpam", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_validation_result.html#ac8726b4af69ac341715fdef6dd79ebf5", null ],
+    [ "setMessage", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_validation_result.html#a337ffe61466c4ca829fcd012cc7c6bd2", null ],
+    [ "setScore", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_validation_result.html#a38e842beff2b0797323a7c55a1b8b62e", null ],
+    [ "setSubscriber", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_validation_result.html#a608bf521e5f08ffc6f478da37e488604", null ],
+    [ "setThreshold", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_validation_result.html#a97145c1ba22e1b86c452af0e8f7352bc", null ],
+    [ "toString", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_validation_result.html#a5e286754e7dfb8ac5490de6c14d5ae88", null ],
+    [ "checkTime", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_validation_result.html#ac136a040e312a960474cc6c31eed5371", null ],
+    [ "checkTimeUTC", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_validation_result.html#a6d0d55ee408c76184d80c25738929208", null ],
+    [ "isResultValid", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_validation_result.html#af9a3337bb95b3c807da4dc9b182f1c97", null ],
+    [ "isSpam", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_validation_result.html#aa8381e1013db24c28fdedd433d20652c", null ],
+    [ "message", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_validation_result.html#a7a5c6bf91d88ed65550ebb8bedc876f4", null ],
+    [ "score", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_validation_result.html#a6b477afd4997aa35ccda7ec64455dacf", null ],
+    [ "subscriber", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_validation_result.html#a778aaa69439d30df3852309b9f35284d", null ],
+    [ "threshold", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_validation_result.html#ad377d3d13f024346e4db01a97e293a41", null ]
+];

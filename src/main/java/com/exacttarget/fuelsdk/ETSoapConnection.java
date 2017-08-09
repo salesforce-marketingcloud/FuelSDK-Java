@@ -36,6 +36,9 @@ package com.exacttarget.fuelsdk;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Arrays;
 
 import javax.xml.namespace.QName;
 import javax.xml.soap.SOAPElement;
@@ -75,6 +78,12 @@ public class ETSoapConnection {
     private SOAPFactory soapFactory = null;
     private SOAPElement accessTokenElement = null;
 
+    /** 
+    * Class constructor, Initializes a new instance of the class.
+     * @param client    The ETClient object
+     * @param endpoint  The endpoint URL
+     * @throws com.exacttarget.fuelsdk.ETSdkException
+    */
     public ETSoapConnection(ETClient client, String endpoint)
         throws ETSdkException
     {
@@ -111,6 +120,7 @@ public class ETSoapConnection {
                 // the fuelsdk.properties file is not an integer.
             }
             HTTPClientPolicy clientPolicy = new HTTPClientPolicy();
+            //clientPolicy.setBrowserType("FuelSDK-Java-1.2.0");
             if (cxfConnectTimeout != null) {
                 clientPolicy.setConnectionTimeout(cxfConnectTimeout);
             }
@@ -124,6 +134,10 @@ public class ETSoapConnection {
                 conduit.setTlsClientParameters(tlsClientParameters);
             }
             soapClient.getRequestContext().put(Message.ENCODING, "UTF-8");
+//            Map<String, List<String>> httpheaders = new HashMap<String, List<String>>();
+//            httpheaders.put("User-Agent", Arrays.asList("FuelSDK-Java-v1.2.0"));
+            soapClient.getRequestContext().put("User-Agent", "FuelSDK-Java-v1.2.0");
+            
             LoggingInInterceptor loggingInInterceptor =
                     new LoggingInInterceptor();
             loggingInInterceptor.setPrettyLogging(true);
@@ -137,6 +151,14 @@ public class ETSoapConnection {
         }
     }
 
+    /** 
+    * Class constructor, Initializes a new instance of the class.
+     * @param client        The ETClient object
+     * @param endpoint      The endpoint URL
+     * @param username      The username
+     * @param password      The password
+     * @throws com.exacttarget.fuelsdk.ETSdkException
+    */
     public ETSoapConnection(ETClient client, String endpoint,
                             String username,
                             String password)
@@ -173,6 +195,13 @@ public class ETSoapConnection {
         }
     }
 
+    /** 
+    * Class constructor, Initializes a new instance of the class.
+     * @param client        The ETClient object
+     * @param endpoint      The endpoint URL
+     * @param accessToken   The access token
+     * @throws com.exacttarget.fuelsdk.ETSdkException
+    */
     public ETSoapConnection(ETClient client, String endpoint, String accessToken)
         throws ETSdkException
     {
@@ -195,14 +224,24 @@ public class ETSoapConnection {
         }
     }
 
+    /**
+     * @return  The Soap object
+     */
     public Soap getSoap() {
         return soap;
     }
 
+    /**
+     * @return  The end point URL
+     */
     public String getEndpoint() {
         return endpoint;
     }
 
+    /**
+     * @param accessToken       The access token
+     * @throws ETSdkException 
+     */
     public void setAccessToken(String accessToken)
         throws ETSdkException
     {

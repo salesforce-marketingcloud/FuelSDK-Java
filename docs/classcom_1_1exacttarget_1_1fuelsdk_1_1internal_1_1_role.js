@@ -1,0 +1,25 @@
+var classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_role =
+[
+    [ "getDescription", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_role.html#ae4f2fcf14e3885c9074026880dfeaa48", null ],
+    [ "getForceInheritance", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_role.html#a661cf4c0a5f1710dc9ec495e9b9997eb", null ],
+    [ "getIsPrivate", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_role.html#aa6d5eb4cc398b8628e856fa65a90b29b", null ],
+    [ "getIsSystemDefined", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_role.html#a819b8f002f810a223be7672c2295578e", null ],
+    [ "getName", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_role.html#a1e31b490e3124ceb566492827b9e14e4", null ],
+    [ "getPermissions", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_role.html#ae56d71b5622c8339176287b7d1677366", null ],
+    [ "getPermissionSets", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_role.html#a367ce5bf90c524578a48edadb808b31f", null ],
+    [ "setDescription", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_role.html#a5eb5cedb9c48b30a94e8897c0cd0c3e5", null ],
+    [ "setForceInheritance", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_role.html#abf55656b54427dba350f9bda7b0478bf", null ],
+    [ "setIsPrivate", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_role.html#a4dd3d1325617c0ca99ce1890dbc3e683", null ],
+    [ "setIsSystemDefined", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_role.html#a1111fd393ed4cc8969a81e2993c7262d", null ],
+    [ "setName", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_role.html#a5533e5521830548f0ebfe9d0d15fa360", null ],
+    [ "setPermissions", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_role.html#a0024176ad0d0405f68324663ad659edd", null ],
+    [ "setPermissionSets", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_role.html#a8f01df54b2407b0226986cc804b6735b", null ],
+    [ "toString", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_role.html#af4226dcbd656e6d10c6ba88accd069ca", null ],
+    [ "description", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_role.html#a32c33d76e8ed5172bd861901410fb41f", null ],
+    [ "forceInheritance", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_role.html#a3bbe1ff0fcec4304e7b634c11a73764a", null ],
+    [ "isPrivate", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_role.html#a76a54909c2520b916cc2a3e240f892d2", null ],
+    [ "isSystemDefined", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_role.html#af19fdd7faba9dd81519106dd93b2ae39", null ],
+    [ "name", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_role.html#a7499118d10dd3900aa89d78ee52fab36", null ],
+    [ "permissions", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_role.html#a625b936182af1c996035858ffe05f6af", null ],
+    [ "permissionSets", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_role.html#a08c5e73b324fd37fae764efc291a0662", null ]
+];

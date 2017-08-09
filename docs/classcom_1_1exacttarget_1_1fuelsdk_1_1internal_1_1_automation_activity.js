@@ -1,0 +1,28 @@
+var classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_automation_activity =
+[
+    [ "getActivityObject", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_automation_activity.html#a68f6e6ea226ad1a53967e45b191042e6", null ],
+    [ "getAutomation", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_automation_activity.html#aa9516fc8c9838bb573affd34ce86984f", null ],
+    [ "getAutomationTask", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_automation_activity.html#a253988713e5c464a8e71361eeefb6733", null ],
+    [ "getDefinition", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_automation_activity.html#a818fabaf6fa390670d054529c3f9d3ed", null ],
+    [ "getDescription", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_automation_activity.html#a78242b6dcabce054a77a1521441c5855", null ],
+    [ "getIsActive", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_automation_activity.html#afabc90e31b2667093c1745092c58b3f4", null ],
+    [ "getName", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_automation_activity.html#a98d676d2327d45c7f508bf79eb763b3d", null ],
+    [ "getSequence", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_automation_activity.html#af68901116298db8bb1254daa18b641ca", null ],
+    [ "setActivityObject", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_automation_activity.html#a42f8e769a7cc036962f72b65e45bb790", null ],
+    [ "setAutomation", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_automation_activity.html#ac2e3858b86ae0c8e3d625aa57493d599", null ],
+    [ "setAutomationTask", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_automation_activity.html#a51fdd6284fc742d8ee6b097963883d4b", null ],
+    [ "setDefinition", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_automation_activity.html#a291e3a76e4a7b10a4732ac0884cdbd50", null ],
+    [ "setDescription", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_automation_activity.html#af96fafbccc5d0264c0e65162e3fa55fc", null ],
+    [ "setIsActive", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_automation_activity.html#a1d25fa5bac0bf5c6fe46f1bee2b822b7", null ],
+    [ "setName", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_automation_activity.html#a7e11973cd224c662d0f969adbf78be63", null ],
+    [ "setSequence", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_automation_activity.html#acc912c0e55ea59b1fd0e31844bb85975", null ],
+    [ "toString", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_automation_activity.html#a6b3f53a4d1efb41d2b57b107960af2ab", null ],
+    [ "activityObject", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_automation_activity.html#a4c62558fefd2d8f551c0f6c3d8641522", null ],
+    [ "automation", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_automation_activity.html#a39a9b2478afa385b2087364f8ba5bd66", null ],
+    [ "automationTask", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_automation_activity.html#a300046116b5733274e54592b7ae29c69", null ],
+    [ "definition", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_automation_activity.html#a31242419cbf41ba94db72d8c940af459", null ],
+    [ "description", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_automation_activity.html#a74e208a077ee32ae1ce6ddb03569a14a", null ],
+    [ "isActive", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_automation_activity.html#ad7de9ff75e19b22a5c5ecb00d943ffdb", null ],
+    [ "name", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_automation_activity.html#a03ae68e057ddb2901a05b8e4d5cc1756", null ],
+    [ "sequence", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_automation_activity.html#ac14a57f687b629f01df4b63f55660552", null ]
+];

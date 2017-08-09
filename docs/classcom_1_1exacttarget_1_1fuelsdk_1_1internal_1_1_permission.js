@@ -1,0 +1,25 @@
+var classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_permission =
+[
+    [ "getDescription", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_permission.html#a94c1c1cd8bdfb64a3fd9637c4e027027", null ],
+    [ "getIsAllowed", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_permission.html#a6deff0c5e67dd10292bf1343c840a9af", null ],
+    [ "getIsDenied", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_permission.html#a459fa24ccb8b979c8486affb283bdcb4", null ],
+    [ "getIsShareable", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_permission.html#ae354dc17132e3c847cd67aeac970f4cf", null ],
+    [ "getName", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_permission.html#a60caa4ecf70579592e8367d5038a9b96", null ],
+    [ "getObjectType", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_permission.html#afdfc0eef7424f7aac96715cb595dc846", null ],
+    [ "getOperation", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_permission.html#acca48feb560fa63d0078ec122a1ecc08", null ],
+    [ "setDescription", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_permission.html#a3c8740adfdcf1573f2c018c49a662faa", null ],
+    [ "setIsAllowed", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_permission.html#a1e5c7a170f368f9f7c031ab53172531f", null ],
+    [ "setIsDenied", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_permission.html#a0734ea4d68286e4842304c0e444cdcfb", null ],
+    [ "setIsShareable", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_permission.html#a3dfb15b6df77f685041f49f0f796c01f", null ],
+    [ "setName", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_permission.html#a8255f1e1aec769d530f2ba7799f8c96b", null ],
+    [ "setObjectType", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_permission.html#a4232630e328791fa629108fa08c04851", null ],
+    [ "setOperation", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_permission.html#a7f783ff19ba5501f7de2fe118769ab93", null ],
+    [ "toString", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_permission.html#a8b0aaf8a13d63e3b098fd8e78f5bfb39", null ],
+    [ "description", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_permission.html#a8754371c56d4b8883edbe4012cd2bbde", null ],
+    [ "isAllowed", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_permission.html#a23cb032828003466ceda771d19f96148", null ],
+    [ "isDenied", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_permission.html#a86b61cdc62d9430f713f05eeb90b98e3", null ],
+    [ "isShareable", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_permission.html#a88991964038ff1874e6597d160cc9781", null ],
+    [ "name", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_permission.html#a79c2ac84ad08d272653e29bf01aac615", null ],
+    [ "objectType", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_permission.html#a7cc9ff9fabdb370ad3f691e8ebb78479", null ],
+    [ "operation", "classcom_1_1exacttarget_1_1fuelsdk_1_1internal_1_1_permission.html#a8d787c375aad811f5155bf7c7f32aafb", null ]
+];
