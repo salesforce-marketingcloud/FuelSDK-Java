@@ -46,7 +46,7 @@ Installation
 The easiest way to install the Java SDK is via Maven&mdash;simply add the following dependency to your project's `pom.xml`:
 
     <dependency>
-      <groupId>com.exacttarget</groupId>
+      <groupId>com.github.salesforce-marketingcloud</groupId>
       <artifactId>fuelsdk</artifactId>
       <version>1.2.0</version>
     </dependency>
