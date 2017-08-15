@@ -18,5 +18,5 @@
      - ETSubscriberTest.java
      - ETTriggeredTest.java
 
-* API docs : added API documentation using doxygen documentation framework. (under docs/ directory)
-
+* API docs : added API documentation using javadoc documentation framework. (under docs/ directory)
+http://salesforce-marketingcloud.github.io/FuelSDK-Java/
