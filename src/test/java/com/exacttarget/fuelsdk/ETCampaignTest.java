@@ -42,13 +42,13 @@ public class ETCampaignTest {
     {
 //        try {
             ETResponse<ETCampaign> response = client.retrieve(ETCampaign.class);
-            System.out.println("resp="+ response.toString());
+//            System.out.println("resp="+ response.toString());
             assertEquals(response.getResponseCode(), "200");
             assertEquals(response.getResponseMessage(), "OK");
             assertNotNull(response.getRequestId());            
             
             ETResult<ETCampaign> result = response.getResult();
-            System.out.println("res="+ result.toString());
+//            System.out.println("res="+ result.toString());
             //assertEquals(result.getObjectId(), cid);
 //        } catch (ETSdkException ex) {
 //            ex.printStackTrace();
@@ -61,13 +61,13 @@ public class ETCampaignTest {
     {
 //        try {
             ETResponse<ETCampaign> response = client.retrieve(ETCampaign.class, "id="+cid);
-            System.out.println("resp="+ response.toString());
+//            System.out.println("resp="+ response.toString());
             assertEquals(response.getResponseCode(), "200");
             assertEquals(response.getResponseMessage(), "OK");
             assertNotNull(response.getRequestId());
             
             ETResult<ETCampaign> result = response.getResult();
-            System.out.println("res="+ result.toString());
+//            System.out.println("res="+ result.toString());
             assertEquals(result.getObjectId(), cid);
 //        } catch (ETSdkException ex) {
 //            ex.printStackTrace();
@@ -81,7 +81,7 @@ public class ETCampaignTest {
         try{
             String name = "JavaSDK";
             String desc = "Campaign created from Fuel Java SDK";
-            System.out.println("in create: uniq="+unique);
+//            System.out.println("in create: uniq="+unique);
             
             etc = new ETCampaign();
             etc.setName(name);
@@ -91,17 +91,17 @@ public class ETCampaignTest {
     //        etts.setClient(client);
 
             ETResponse<ETCampaign> response = client.create(etc);
-            System.out.println("resp="+ response.toString());
+//            System.out.println("resp="+ response.toString());
 //            assertEquals(response.getResponseCode(), "200");
 //            assertEquals(response.getResponseMessage(), "OK");
 //            assertNotNull(response.getRequestId());            
 
             ETResult<ETCampaign> result = response.getResult();
-            System.out.println("res="+ result.toString());
+//            System.out.println("res="+ result.toString());
             cidCreate = result.getObjectId();
 //            cidCreate = result.getField("");
-            System.out.println("cid="+cidCreate);
-            System.out.println(unique + "===" + result.getObject().getCode());
+//            System.out.println("cid="+cidCreate);
+//            System.out.println(unique + "===" + result.getObject().getCode());
             
             assertEquals(result.getResponseCode(), "200");
             assertEquals(result.getResponseMessage(), "OK");
@@ -120,16 +120,16 @@ public class ETCampaignTest {
     public void deleteCampaign() throws ETSdkException
     {
         try{
-            System.out.println("on delete: cid="+cidCreate);
-            System.out.println(junit.runner.Version.id());
+//            System.out.println("on delete: cid="+cidCreate);
+//            System.out.println(junit.runner.Version.id());
             etc = new ETCampaign();
             etc.setId(cidCreate);
             
             ETResponse<ETCampaign> response = client.delete(etc);
-            System.out.println("resp="+ response.toString());
+//            System.out.println("resp="+ response.toString());
             
             ETResult<ETCampaign> result = response.getResult();
-            System.out.println("res="+ result.toString());            
+//            System.out.println("res="+ result.toString());            
             
             assertEquals(result.getResponseCode(), "200");
             assertEquals(result.getResponseMessage(), "OK");

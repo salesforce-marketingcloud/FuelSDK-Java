@@ -175,7 +175,6 @@ public abstract class ETObject {
     * @param type   The class type whose Field will be retrieved.
     * @param name   The name of the Field to be retrieved.
     * @return       The Field of the class type.
-    * @throws       com.exacttarget.fuelsdk.ETSdkException
     */    
     protected static Field getField(Class<?> type, String name)
         throws ETSdkException

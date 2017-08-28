@@ -25,20 +25,26 @@ Java platform. Among other things, the SDK:
 For more information about the Java SDK and how to use it, please see
 the Javadocs at http://salesforce-marketingcloud.github.io/FuelSDK-Java/.
 
-# New Features in Version 1.2.0
-* Project tree structure 
-    * Source Packages       : SDK package (src/main/java/com/exacttarget/fuelsdk/)
-    * Test Packages         : JUnit test package (src/test/java/com/exacttarget/fuelsdk/)
-    * Annotation Packages   : The annotation package (src/main/java/com/exacttarget/fuelsdk/annotations/)
-    * Documentation		: SDK API HTML documentation (docs/)
-
+# New Features in Version 1.2.1
 * New addition to the source packages
-    - Added ETProfileAttribute.java to create new Subcriber
-    - Added SendClassification on ETTriggeredEmail to create new Triggered Send Definition
+    - Added support for Sendable Data Extension. Two new properties (SendableSubscriberField, SendableDataExtensionField) are added to ETDataExtension class to support Sendable Data Extension. 
+      IsSendable property need to be set true. Code snippet to create sendable data extension:
+<pre>
+        ETDataExtension dataExtension = new ETDataExtension();
+        dataExtension.setKey(UUID.randomUUID().toString());
+        dataExtension.setName(UUID.randomUUID().toString());
+        dataExtension.setIsSendable(true);
+        Attribute at = new Attribute();
+        at.setName("Subscriber Key");
+        at.setValue(null);
+        dataExtension.setSendableSubscriberField(at);
+        dataExtension.addColumn("EmailAddress", ETDataExtensionColumn.Type.EMAIL_ADDRESS, 100, null, null, true, true, null);
+        dataExtension.addColumn("FirstName", ETDataExtensionColumn.Type.TEXT);
+        dataExtension.setSendableDataExtensionField(dataExtension.getColumn("EmailAddress"));
+        ETResponse<ETDataExtension> response = client.create(dataExtension);
+</pre>
 
-* JUnit test case : This covers basic happy path testing. All the test cases use “ET” classes. Advanced and more comprehensive test cases will be added in future releases. Added new JUnit test cases.
-
-* API docs : added API documentation using doxygen documentation framework. (under docs/ directory)
+* JUnit test case : Test cases added to DataExtension to test sendable data extension.
 
 Installation
 ------------
@@ -46,9 +52,9 @@ Installation
 The easiest way to install the Java SDK is via Maven&mdash;simply add the following dependency to your project's `pom.xml`:
 
     <dependency>
-      <groupId>com.exacttarget</groupId>
+      <groupId>com.github.salesforce-marketingcloud</groupId>
       <artifactId>fuelsdk</artifactId>
-      <version>1.2.0</version>
+      <version>1.2.1</version>
     </dependency>
 
 Maven will automatically resolve, download, and install all dependencies for you.

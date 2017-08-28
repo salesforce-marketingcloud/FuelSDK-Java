@@ -48,6 +48,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import static com.exacttarget.fuelsdk.ETResult.Status.OK;
+import com.exacttarget.fuelsdk.internal.Attribute;
+import java.util.UUID;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class ETDataExtensionTest {
@@ -64,10 +66,11 @@ public class ETDataExtensionTest {
         client = new ETClient("fuelsdk.properties");
         dataExtensionFolderId = new Integer(client.getConfiguration()
                 .get("dataExtensionFolderId"));
-        System.out.println("folder="+dataExtensionFolderId);
+//        System.out.println("folder="+dataExtensionFolderId);
     }
 
     private static String id = null;
+    private static String sdeid = null;
 
     @Test
     public void _01_TestCreateSingle()
@@ -83,6 +86,57 @@ public class ETDataExtensionTest {
         dataExtension.addColumn("Age", ETDataExtensionColumn.Type.NUMBER);
         dataExtension.addColumn("EmailAddress", ETDataExtensionColumn.Type.EMAIL_ADDRESS);
         ETResponse<ETDataExtension> response = client.create(dataExtension);
+        //System.out.println("resp="+response);
+        assertNotNull(response.getRequestId());
+        assertEquals(OK, response.getStatus());
+        assertEquals("OK", response.getResponseCode());
+        assertEquals("OK", response.getResponseMessage());
+        assertNull(response.getPage());
+        assertNull(response.getPageSize());
+        assertNull(response.getTotalCount());
+        assertFalse(response.hasMoreResults());
+        assertEquals(1, response.getResults().size());
+        ETResult<ETDataExtension> result = response.getResult();
+        assertNull(result.getRequestId());
+        assertEquals(OK, result.getStatus());
+        assertEquals("OK", result.getResponseCode());
+        assertEquals("Data Extension created.", result.getResponseMessage());
+        assertNull(result.getErrorCode());
+        assertNotNull(result.getObjectId());
+        ETDataExtension de = result.getObject();
+        assertNotNull(de.getId());
+        assertEquals("test1", de.getKey());
+        assertEquals("test1", de.getName());
+        assertNull(de.getDescription());
+        assertNull(de.getFolderId());
+//        assertNull(de.getIsSendable());
+        assertNull(de.getIsTestable());
+        // save the ID for use in subsequent tests
+        id = result.getObjectId();
+        //System.out.println("id="+id);
+    }
+   /* 
+    @Test
+    public void _001_TestCreateSendable()
+        throws ETSdkException
+    {
+        ETDataExtension sendableDataExtension = new ETDataExtension();
+        sendableDataExtension.setKey("sendtest1");
+        sendableDataExtension.setName("sendtest1");
+        sendableDataExtension.setIsSendable(true);
+        Attribute at = new Attribute();
+        at.setName("Subscriber Key");
+        at.setValue(null);
+        sendableDataExtension.setSendableSubscriberField(at);
+        
+//        sendableDataExtension.addColumn("CustomerID", true);
+//        sendableDataExtension.addColumn("FullName");
+//        sendableDataExtension.addColumn("FirstName");
+//        sendableDataExtension.addColumn("LastName");
+//        sendableDataExtension.addColumn("Age", ETDataExtensionColumn.Type.NUMBER);
+        sendableDataExtension.addColumn("EmailAddress", ETDataExtensionColumn.Type.EMAIL_ADDRESS, 100, null, null, true, true, "");
+        sendableDataExtension.addColumn("FirstName", ETDataExtensionColumn.Type.TEXT);
+        ETResponse<ETDataExtension> response = client.create(sendableDataExtension);
         assertNotNull(response.getRequestId());
         assertEquals(OK, response.getStatus());
         assertEquals("OK", response.getResponseCode());
@@ -109,7 +163,7 @@ public class ETDataExtensionTest {
         assertNull(de.getIsTestable());
         // save the ID for use in subsequent tests
         id = result.getObjectId();
-    }
+    }    */
 
     private static ETDataExtension dataExtension = null;
 
@@ -140,7 +194,7 @@ public class ETDataExtensionTest {
         assertEquals("test1", de.getName());
         assertEquals("", de.getDescription());
 //        assertEquals(dataExtensionFolderId, de.getFolderId());
-        assertEquals(false, de.getIsSendable());
+//        assertEquals(false, de.getIsSendable());
         assertEquals(false, de.getIsTestable());
         // save the object for use in subsequent tests
         dataExtension = de;
@@ -1913,4 +1967,119 @@ public class ETDataExtensionTest {
         @SuppressWarnings("unused")
         ETResponse<ETDataExtensionRow> response = dataExtension.select("EventDate > '2016-01-01T01:01:01Z'");
     }
+    
+    @Test
+    public void _71_createSendableDataExtension() throws ETSdkException
+    {
+        ETDataExtension dataExtension = new ETDataExtension();
+        dataExtension.setKey(UUID.randomUUID().toString());
+        dataExtension.setName(UUID.randomUUID().toString());
+        dataExtension.setIsSendable(true);
+
+        Attribute at = new Attribute();
+        at.setName("Subscriber Key");
+        at.setValue(null);
+        dataExtension.setSendableSubscriberField(at);
+
+        dataExtension.addColumn("EmailAddress", ETDataExtensionColumn.Type.EMAIL_ADDRESS, 100, null, null, true, true, null);
+        dataExtension.addColumn("FirstName", ETDataExtensionColumn.Type.TEXT);
+
+        dataExtension.setSendableDataExtensionField(dataExtension.getColumn("EmailAddress"));
+
+        ETResponse<ETDataExtension> response = client.create(dataExtension);
+        System.out.println("Resp="+response);
+
+        assertNotNull(response.getRequestId());
+        assertEquals(OK, response.getStatus());
+        assertEquals("OK", response.getResponseCode());
+        assertEquals("OK", response.getResponseMessage());
+
+        ETResult<ETDataExtension> result = response.getResult();
+        assertNull(result.getRequestId());
+        assertEquals(OK, result.getStatus());
+        assertEquals("OK", result.getResponseCode());
+        assertEquals("Data Extension created.", result.getResponseMessage());
+        assertNull(result.getErrorCode());
+        assertNotNull(result.getObjectId());
+
+        sdeid = result.getObjectId();
+        System.out.println("id="+sdeid);
+    }    
+    
+    @Test
+    public void _72_getSendableDataExtension() throws ETSdkException
+    {
+        ETFilter etf = new ETFilter();
+        etf.addProperty("id");
+        etf.addProperty("key");
+        etf.addProperty("name");
+        etf.addProperty("description");
+        etf.addProperty("folderId");
+        etf.addProperty("isSendable");
+        etf.addProperty("isTestable");
+
+        ETExpression exp = new ETExpression();
+        exp.setProperty("id");
+        exp.setOperator("=");
+        exp.setValue(sdeid);
+        etf.setExpression(exp);         
+        
+        ETResponse<ETDataExtension> response = client.retrieve(ETDataExtension.class, etf);
+        System.out.println("resp="+response);
+        
+        assertNotNull(response.getRequestId());
+        assertEquals(response.getResponseCode(), "OK");
+        assertEquals(response.getResponseMessage(), "OK");
+        
+        ETResult<ETDataExtension> result = response.getResult();
+        System.out.println("res="+ result.toString());
+        
+        assertEquals(result.getObject().getId(), sdeid);  
+        assertTrue(result.getObject().getIsSendable());        
+    }    
+    
+    @Test
+    public void _73_updateSendableDataExtension() throws ETSdkException
+    {
+        ETDataExtension etsde = new ETDataExtension();
+        etsde.setId(sdeid);
+        etsde.setIsSendable(true);
+       
+        
+        etsde.setSendableDataExtensionField(etsde.getColumn("FirstName"));
+        
+        ETResponse<ETDataExtension> response = client.update(etsde);
+        System.out.println("resp="+ response.toString());
+        assertNotNull(response.getRequestId());
+        assertEquals(response.getResponseCode(), "OK");
+        assertEquals(response.getResponseMessage(), "OK");
+        
+        ETResult<ETDataExtension> result = response.getResult();
+        System.out.println("res="+ result.toString());
+        assertEquals(result.getResponseCode(), "OK");
+        assertEquals(result.getResponseMessage(), "Data Extension updated.");        
+        
+        assertEquals(result.getObject().getId(), sdeid);  
+        assertTrue(result.getObject().getIsSendable());
+    }    
+    
+    @Test
+    public void _74_deleteSendableDataExtension() throws ETSdkException
+    {
+        ETDataExtension etsde = new ETDataExtension();
+        etsde.setId(sdeid);        
+        
+        ETResponse<ETDataExtension> response = client.delete(etsde);   
+        System.out.println("resp="+ response.toString());
+        assertNotNull(response.getRequestId());
+        assertEquals(response.getResponseCode(), "OK");
+        assertEquals(response.getResponseMessage(), "OK");        
+
+        ETResult<ETDataExtension> result = response.getResult();
+        System.out.println("res="+ result.toString());
+
+        assertEquals(result.getResponseCode(), "OK");
+        assertEquals(result.getResponseMessage(), "Data Extension deleted.");        
+    }    
+    
 }

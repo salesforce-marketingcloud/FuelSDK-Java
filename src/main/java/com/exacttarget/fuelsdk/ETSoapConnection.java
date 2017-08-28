@@ -59,6 +59,10 @@ import org.apache.log4j.Logger;
 
 import com.exacttarget.fuelsdk.internal.PartnerAPI;
 import com.exacttarget.fuelsdk.internal.Soap;
+import java.util.logging.Level;
+import javax.xml.bind.JAXBException;
+import org.apache.cxf.jaxb.JAXBDataBinding;
+import org.apache.cxf.transport.http.Headers;
 
 /**
  * An <code>ETSoapConnection</code> represents an active
@@ -98,6 +102,8 @@ public class ETSoapConnection {
             soap = service.getSoap();
             soapClient = ClientProxy.getClient(soap);
             soapClient.getInInterceptors().add(new ClearAttachmentsOutInterceptor());
+            soapClient.getOutInterceptors().add(new ClearAttachmentsOutInterceptor());  //
+
             Endpoint soapEndpoint = soapClient.getEndpoint();
             soapFactory = SOAPFactory.newInstance();
             soapClient.getRequestContext().put(Message.ENDPOINT_ADDRESS,
@@ -120,7 +126,7 @@ public class ETSoapConnection {
                 // the fuelsdk.properties file is not an integer.
             }
             HTTPClientPolicy clientPolicy = new HTTPClientPolicy();
-            //clientPolicy.setBrowserType("FuelSDK-Java-1.2.0");
+            //clientPolicy.setBrowserType("FuelSDK-Java-1.2.0-SOAP_policy");
             if (cxfConnectTimeout != null) {
                 clientPolicy.setConnectionTimeout(cxfConnectTimeout);
             }
@@ -134,9 +140,6 @@ public class ETSoapConnection {
                 conduit.setTlsClientParameters(tlsClientParameters);
             }
             soapClient.getRequestContext().put(Message.ENCODING, "UTF-8");
-//            Map<String, List<String>> httpheaders = new HashMap<String, List<String>>();
-//            httpheaders.put("User-Agent", Arrays.asList("FuelSDK-Java-v1.2.0"));
-            soapClient.getRequestContext().put("User-Agent", "FuelSDK-Java-v1.2.0");
             
             LoggingInInterceptor loggingInInterceptor =
                     new LoggingInInterceptor();
@@ -217,7 +220,7 @@ public class ETSoapConnection {
             }
 
             headers.add(new Header(new QName(null, "fueloauth"), accessTokenElement));
-
+            
             soapClient.getRequestContext().put(Header.HEADER_LIST, headers);
         } catch (SOAPException ex) {
             throw new ETSdkException("could not initialize SOAP proxy", ex);
@@ -231,6 +234,16 @@ public class ETSoapConnection {
         return soap;
     }
 
+    public Soap getSoap(String m) {
+        soapClient.getRequestContext().put("HTTP_HEADER_USER_AGENT", "FuelSDK-Java-v1.2.1-SOAP-"+m);
+        return soap;
+    }
+    
+    public Soap getSoap(String m, String o) {
+        soapClient.getRequestContext().put("HTTP_HEADER_USER_AGENT", "FuelSDK-Java-v1.2.1-SOAP-"+m+"-"+o);
+        return soap;
+    }    
+    
     /**
      * @return  The end point URL
      */

@@ -72,7 +72,6 @@ public abstract class ETRestObject extends ETApiObject {
      * @param pageSize      The page size
      * @param filter        The ETFilter object
      * @return              The ETResponse object of type T which extends from ETRestObject
-     * @throws ETSdkException 
      */
     public static <T extends ETRestObject> ETResponse<T> retrieve(ETClient client,
                                                                   Class<T> type,
@@ -290,7 +289,6 @@ public abstract class ETRestObject extends ETApiObject {
      * @param client                The ETClient object
      * @param objects               The List of objects to create
      * @return                      The ETResponse object of type T which extends from ETRestObject
-     * @throws ETSdkException 
      */
     public static <T extends ETRestObject> ETResponse<T> create(ETClient client,
                                                                 List<T> objects)
@@ -304,7 +302,6 @@ public abstract class ETRestObject extends ETApiObject {
      * @param client                The ETClient object
      * @param objects               The List of objects to update
      * @return                      The ETResponse object of type T which extends from ETRestObject
-     * @throws ETSdkException 
      */
     public static <T extends ETRestObject> ETResponse<T> update(ETClient client,
                                                                 List<T> objects)
@@ -319,7 +316,6 @@ public abstract class ETRestObject extends ETApiObject {
      * @param client                The ETClient object
      * @param objects               The List of objects to delete
      * @return                      The ETResponse object of type T which extends from ETRestObject
-     * @throws ETSdkException 
      */
     public static <T extends ETRestObject> ETResponse<T> delete(ETClient client,
                                                                 List<T> objects)
@@ -602,7 +598,6 @@ public abstract class ETRestObject extends ETApiObject {
      * 
      * @param expression    The ETExpression object as filter
      * @return              Converted filter string
-     * @throws ETSdkException 
      */
     public static String toFilterString(ETExpression expression)
         throws ETSdkException
@@ -615,7 +610,6 @@ public abstract class ETRestObject extends ETApiObject {
      * @param expression    The ETExpression object as filter
      * @param first         whether to put $filter at first or not
      * @return              Converted filter string
-     * @throws ETSdkException 
      */
     private static String toFilterString(ETExpression expression, boolean first)
         throws ETSdkException
