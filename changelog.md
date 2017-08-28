@@ -1,3 +1,10 @@
+## Version 1.2.1 - 08/28/2017 ##
+
+* New addition to the source packages
+    - Added support for Sendable Data Extension. Two new properties (SendableSubscriberField, SendableDataExtensionField) are added to ETDataExtension class to support Sendable Data Extension. 
+
+* JUnit test case : Test cases added to DataExtension to test sendable data extension.
+
 ## Version 1.2.0 - 08/08/2017 ##
 * Project tree structure 
     * Source Packages       : SDK package (src/main/java/com/exacttarget/fuelsdk/)
@@ -20,3 +27,4 @@
 
 * API docs : added API documentation using javadoc documentation framework. (under docs/ directory)
 http://salesforce-marketingcloud.github.io/FuelSDK-Java/
+

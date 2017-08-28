@@ -51,6 +51,7 @@ import com.exacttarget.fuelsdk.annotations.SoapObject;
 import com.exacttarget.fuelsdk.ETDataExtensionColumn.Type;
 import com.exacttarget.fuelsdk.internal.APIObject;
 import com.exacttarget.fuelsdk.internal.APIProperty;
+import com.exacttarget.fuelsdk.internal.Attribute;
 import com.exacttarget.fuelsdk.internal.DataExtension;
 import com.exacttarget.fuelsdk.internal.DataExtensionObject;
 
@@ -64,7 +65,7 @@ import com.exacttarget.fuelsdk.internal.DataExtensionObject;
             collection = "items",
             totalCount = "count")
 @SoapObject(internalType = DataExtension.class, unretrievable = {
-    "ID", "Fields"
+    "ID", "Fields", "SendableDataExtensionField", "SendableSubscriberField"
 })
 public class ETDataExtension extends ETSoapObject {
 	static final int DEFAULT_PAGE_SIZE = 2500;
@@ -94,7 +95,15 @@ public class ETDataExtension extends ETSoapObject {
     private Boolean isSendable = null;
     @ExternalName("isTestable")
     private Boolean isTestable = null;
+    
+    @ExternalName("sendableDataExtensionField")
+    private ETDataExtensionColumn sendableDataExtensionField;
+    
+    @ExternalName("sendableSubscriberField")
+    private Attribute sendableSubscriberField;
 
+    
+    
     /** 
     * Class constructor, Initializes a new instance of the class.
     */    
@@ -200,6 +209,35 @@ public class ETDataExtension extends ETSoapObject {
         this.folderId = folderId;
     }
 
+    /**
+     * @return the sendableSubscriberField
+     */
+    public Attribute getSendableSubscriberField() {
+        return sendableSubscriberField;
+    }
+
+    /**
+     * @param sendableSubscriberField the sendableSubscriberField to set
+     */
+    public void setSendableSubscriberField(Attribute sendableSubscriberField) {
+        this.sendableSubscriberField = sendableSubscriberField;
+    }
+
+    /**
+     * @return the sendableDataExtensionField
+     */
+    public ETDataExtensionColumn getSendableDataExtensionField() {
+        return sendableDataExtensionField;
+    }
+
+    /**
+     * @param sendableDataExtensionField the sendableDataExtensionField to set
+     */
+    public void setSendableDataExtensionField(ETDataExtensionColumn sendableDataExtensionField) {
+        this.sendableDataExtensionField = sendableDataExtensionField;
+    }    
+    
+    
     /**
      * @return  The List of all ETDataExtensionColumn
      */
@@ -392,7 +430,7 @@ public class ETDataExtension extends ETSoapObject {
     public void setCategoryId(Integer categoryId) {
         setFolderId(categoryId);
     }
-
+    
     /**
      *
      * @param client        The ETClient object

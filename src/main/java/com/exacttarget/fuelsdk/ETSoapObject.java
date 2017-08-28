@@ -275,7 +275,8 @@ public abstract class ETSoapObject extends ETApiObject {
         // Perform the SOAP retrieve:
         //
 
-        Soap soap = connection.getSoap();
+        //Soap soap = connection.getSoap();
+        Soap soap = null;
 
         RetrieveRequest retrieveRequest = new RetrieveRequest();
 
@@ -284,8 +285,10 @@ public abstract class ETSoapObject extends ETApiObject {
             // to the name of the internal class representing the object:
             if (soapObjectName != null) {
                 retrieveRequest.setObjectType(soapObjectName);
+                soap = connection.getSoap("retrieve", soapObjectName);
             } else {
                 retrieveRequest.setObjectType(internalType.getSimpleName());
+                soap = connection.getSoap("retrieve", internalType.getSimpleName());
             }
             retrieveRequest.getProperties().addAll(internalProperties);
 
@@ -435,14 +438,18 @@ public abstract class ETSoapObject extends ETApiObject {
         // Perform the SOAP create:
         //
 
-        Soap soap = connection.getSoap();
-
+//        Soap soap = connection.getSoap();
+//        Soap soap = connection.getSoap("create");
+        String obj = "";
+        
         CreateRequest createRequest = new CreateRequest();
         createRequest.setOptions(new CreateOptions());
         for (T object : objects) {
             object.setClient(client);
             createRequest.getObjects().add(object.toInternal());
+            obj += object.getClass().getSimpleName().substring(2);
         }
+        Soap soap = connection.getSoap("create", obj);
 
         if (logger.isTraceEnabled()) {
             logger.trace("CreateRequest:");
@@ -563,14 +570,18 @@ public abstract class ETSoapObject extends ETApiObject {
         // Perform the SOAP update:
         //
 
-        Soap soap = connection.getSoap();
+//        Soap soap = connection.getSoap();
+//        Soap soap = connection.getSoap("update");
+        String obj = "";
 
         UpdateRequest updateRequest = new UpdateRequest();
         updateRequest.setOptions(new UpdateOptions());
         for (T object : objects) {
             object.setClient(client);
             updateRequest.getObjects().add(object.toInternal());
+            obj += object.getClass().getSimpleName().substring(2);
         }
+        Soap soap = connection.getSoap("update", obj);
 
         if (logger.isTraceEnabled()) {
             logger.trace("UpdateRequest:");
@@ -716,8 +727,12 @@ public abstract class ETSoapObject extends ETApiObject {
         //
         // Perform the SOAP delete:
         //
+        String obj = "";
+        for (APIObject object : objects)
+            obj += object.getClass().getSimpleName();//.substring(2);
 
-        Soap soap = connection.getSoap();
+        Soap soap = connection.getSoap("delete", obj);
+        
 
         DeleteRequest deleteRequest = new DeleteRequest();
         deleteRequest.setOptions(new DeleteOptions());
@@ -783,7 +798,12 @@ public abstract class ETSoapObject extends ETApiObject {
                 ETDataExtension.class);
         convertUtils.register(new InternalObjectConverter(),
                 DataExtension.class);
-
+        
+//        convertUtils.register(new ExternalObjectConverter(),
+//                ETSendableDataExtension.class);
+        convertUtils.register(new ExternalObjectConverter(),
+                ETProfileAttribute.class);
+        
         // ETDataExtensionColumn
         convertUtils.register(new ExternalObjectConverter(),
                 ETDataExtensionColumn.class);
@@ -853,8 +873,10 @@ public abstract class ETSoapObject extends ETApiObject {
         // ETSubscriber.Attribute
         convertUtils.register(new EnumConverter(),
                 ETSubscriber.Status.class);
-        convertUtils.register(new EnumConverter(),
-                Attribute.class);
+//        convertUtils.register(new EnumConverter(),
+//                Attribute.class);
+//        convertUtils.register(new InternalObjectConverter(),
+//                Attribute.class);
 
         // ETSubscriber.Status
         convertUtils.register(new EnumConverter(),
@@ -1246,6 +1268,7 @@ public abstract class ETSoapObject extends ETApiObject {
                                       internalFieldName,
                                       externalFieldValue);
             } catch (Exception ex) {
+                //ex.printStackTrace();
                 throw new ETSdkException("could not set property \""
                         + internalFieldName
                         + "\" of object "
