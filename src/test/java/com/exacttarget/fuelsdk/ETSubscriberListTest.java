@@ -13,7 +13,6 @@ import org.junit.*;
 import org.junit.runners.*;
 import static org.junit.Assert.*;
 
-
 public class ETSubscriberListTest {
     private static ETClient client = null;
     private ETSubscriber etsub = null;
