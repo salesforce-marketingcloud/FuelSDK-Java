@@ -48,10 +48,11 @@ public class ETExtractDescription extends ETSoapObject{
             System.out.println("hello world");
             ETClient client = new ETClient("fuelsdk.properties");
             
-            ETResponse<ETExtractDescription> response = client.retrieve(ETExtractDescription.class);
-            System.out.println("resp="+ response.toString());            
+//            ETResponse<ETExtractDescription> response = client.retrieve(ETExtractDescription.class);
+//            System.out.println("resp="+ response.toString());  
+            
         } catch (ETSdkException ex) {
-            ex.printStackTrace();
+            //ex.printStackTrace();
         }
     }    
 
