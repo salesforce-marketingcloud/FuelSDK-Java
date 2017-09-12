@@ -9,6 +9,7 @@ import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.InternalName;
 import com.exacttarget.fuelsdk.annotations.SoapObject;
 import com.exacttarget.fuelsdk.internal.ExtractDescription;
+import java.util.List;
 
 @SoapObject(internalType = ExtractDescription.class)
 public class ETExtractDescription extends ETSoapObject{
@@ -48,11 +49,17 @@ public class ETExtractDescription extends ETSoapObject{
             System.out.println("hello world");
             ETClient client = new ETClient("fuelsdk.properties");
             
-//            ETResponse<ETExtractDescription> response = client.retrieve(ETExtractDescription.class);
-//            System.out.println("resp="+ response.toString());  
+            ETResponse<ETExtractDescription> response = client.retrieve(ETExtractDescription.class);
+            //System.out.println("resp="+ response.toString());  
+            
+            //List<ETResult<ETExtractDescription>> result = response.getResults();// client.retrieve(ETExtractDescription.class);
+            for(ETResult<ETExtractDescription> r : response.getResults()){
+                System.out.print("ID="+ r.getObject().getId());  
+                System.out.println(", Name="+ r.getObject().getName());  
+            }
             
         } catch (ETSdkException ex) {
-            //ex.printStackTrace();
+            ex.printStackTrace();
         }
     }    
 

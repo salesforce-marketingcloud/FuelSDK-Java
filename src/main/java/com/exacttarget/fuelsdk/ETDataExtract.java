@@ -17,143 +17,229 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author sharif.ahmed
- */
+
 public class ETDataExtract {
     private ETClient client;
     private Soap soap;
+    public HashMap<String, String> extractType;
+    
+    private String deCustomerKey;
+    private String asyncID;
+    private boolean hasColumnHeaders;
+    private String startDate;
+    private String endDate;
+    private String outputFileName;
+    
+    
     public ETDataExtract(){
         try {
             client = new ETClient("fuelsdk.properties");
-            //PartnerAPI service = new PartnerAPI();
-            soap = client.getSoapConnection().getSoap();            
+            extractType = new HashMap<String, String>();
+            soap = client.getSoapConnection().getSoap("Extract");            
+            
+            asyncID = "0";
+            hasColumnHeaders = true;
+            startDate = "2017-06-01 12:00:00 AM";
+            endDate = "2017-08-01 12:00:00 AM";
+            populateExtractType();
+            
         } catch (ETSdkException ex) {
             Logger.getLogger(ETDataExtract.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
-    public void testDataExtract2() throws ETSdkException
+    private void populateExtractType() throws ETSdkException{
+        ETResponse<ETExtractDescription> response = client.retrieve(ETExtractDescription.class);
+        for(ETResult<ETExtractDescription> r : response.getResults()){
+            //System.out.print("ID="+ r.getObject().getId());  
+            //System.out.println(", Name="+ r.getObject().getName()); 
+            extractType.put(r.getObject().getName(), r.getObject().getId());
+        }    
+    }
+    
+    public ExtractResponseMsg dataExtract(String extractName) throws ETSdkException
     {
+        validate();
+        return performDataExtract(extractName);
+    }
+    
+    public ExtractResponseMsg performDataExtract(String extractName)
+    {
+        
         ArrayList<ExtractParameter> extractParameters = new ArrayList();
         
         ExtractParameter extractParam = null;
         extractParam = new ExtractParameter();
+        
         extractParam.setName("DECustomerKey");
-        extractParam.setValue("017dce26-b61f-43c2-bb15-0e46de82d177");
+        extractParam.setValue(this.getDeCustomerKey());
         extractParameters.add(extractParam);
     
         extractParam = new ExtractParameter();
         extractParam.setName("HasColumnHeaders");
-        extractParam.setValue("true");
+        extractParam.setValue(isHasColumnHeaders()+"");
         extractParameters.add(extractParam);
 
         extractParam = new ExtractParameter();
         extractParam.setName("_AsyncID");
-        extractParam.setValue("0");
+        extractParam.setValue(this.getAsyncID());
         extractParameters.add(extractParam);
 
         extractParam = new ExtractParameter();
         extractParam.setName("OutputFileName");
-        extractParam.setValue("output_java.csv");
-        extractParameters.add(extractParam);
-
-        extractParam = new ExtractParameter();
-        String datePattern = "MM/dd/yyyy KK:mm a";
-        extractParam = new ExtractParameter();
-        extractParam.setName("StartDate");
-        Calendar start = Calendar.getInstance();
-        start.set(2017, 06, 01, 0, 0);
-        SimpleDateFormat dateFormat = new SimpleDateFormat(datePattern);
-        String cd1 = dateFormat.format(start.getTime());
-        extractParam.setValue(cd1);
-        extractParameters.add(extractParam);
+        extractParam.setValue(this.getOutputFileName());
+        extractParameters.add(extractParam);  
         
         extractParam = new ExtractParameter();
+        extractParam.setName("StartDate");
+        extractParam.setValue(this.getStartDate());
+        extractParameters.add(extractParam);  
+
+        extractParam = new ExtractParameter();
         extractParam.setName("EndDate");
-        Calendar end = Calendar.getInstance();
-        end.set(2017, 9, 01, 0, 0);
-        String cd2 = dateFormat.format(end.getTime());
-        extractParam.setValue(cd2);
-        extractParameters.add(extractParam);       
+        extractParam.setValue(this.getEndDate());
+        extractParameters.add(extractParam);    
         
         ExtractRequest.Parameters eparams = new ExtractRequest.Parameters();
         eparams.getParameter().addAll(extractParameters);
         
         ExtractRequest request = new ExtractRequest();
         request.setOptions(new ExtractOptions());
-        request.setID("30a3fe6a-ea7f-447f-bf67-5b09992dcf5c");
+        request.setID(extractType.get(extractName));
         request.setParameters(eparams);
         
         ExtractRequestMsg erm = new ExtractRequestMsg();
-        erm.getRequests().add(request);
+        erm.getRequests().add(request);  
         
         ExtractResponseMsg resp = soap.extract(erm);
-        System.out.println("req id="+resp.getRequestID());
-        System.out.println("status="+resp.getOverallStatus());  
-        for(Iterator<ExtractResponseMsg.Results> it = resp.getResults().iterator(); it.hasNext();) {
-            ExtractResponseMsg.Results res = it.next();
-            System.out.println("res type="+res.getExtractResult());
-            //System.out.println("res xml="+res.getResultDetailXML());
-        }    
-        
-        
+        return resp;
     }
     
-    public void testDataExtract() throws ETSdkException
+    private void validate() throws ETSdkException
     {
-    
-            //ArrayList<ExtractParameter> eparams = new ArrayList<ExtractParameter>();
-            ExtractParameter[] eparam = new ExtractParameter[6];
-            for(int i=0; i<6; i++)
-                eparam[i] = new ExtractParameter();
-            
-            eparam[0].setName("DECustomerKey");eparam[0].setValue("017dce26-b61f-43c2-bb15-0e46de82d177");
-            eparam[1].setName("HasColumnHeaders");eparam[1].setValue("true");
-            eparam[2].setName("_AsyncID");eparam[2].setValue("0");
-            eparam[3].setName("OutputFileName");eparam[3].setValue("sharif_java.csv");
-            eparam[4].setName("StartDate");eparam[4].setValue("06/01/2017 12:00:00 AM");
-            eparam[5].setName("EndDate");eparam[5].setValue("08/01/2017 12:00:00 AM");
-            
-            ExtractRequest.Parameters eparams = new ExtractRequest.Parameters();
-            eparams.getParameter().addAll(Arrays.asList(eparam));
-            //for(int i=0; i<6; i++)
-            //    eparams.getParameter().add(eparam[i]);
-
-            ExtractRequest er = new ExtractRequest();
-            er.setID("30a3fe6a-ea7f-447f-bf67-5b09992dcf5c");//extractTypes[extractType];
-            er.setParameters(eparams);
-            er.setOptions( new ExtractOptions() );
-            
-            ExtractRequestMsg erm = new ExtractRequestMsg();
-            erm.getRequests().add(er);
-            
-            client.refreshToken();
-            Soap s = client.getSoapConnection().getSoap();
-            ExtractResponseMsg resp = s.extract(erm);
-            
-            System.out.println("req id="+resp.getRequestID());
-            System.out.println("status="+resp.getOverallStatus());
-            for(Iterator<ExtractResponseMsg.Results> it = resp.getResults().iterator(); it.hasNext();) {
-                ExtractResponseMsg.Results res = it.next();
-                System.out.println("res type="+res.getExtractResult());
-                //System.out.println("res xml="+res.getResultDetailXML());
-            }    
+        if(this.getDeCustomerKey()==null || this.getOutputFileName()==null)
+            throw new ETSdkException("Customer Key and Output file name needs to be set.");
+        String ext = this.getOutputFileName().toLowerCase();
+        if(!ext.endsWith(".csv") && !ext.endsWith(".zip"))
+            throw new ETSdkException("Invalid file extension. Only csv or zip allowed.");
     }
     
-    public static void main(String[] args){
-        try {
-            ETDataExtract etde = new ETDataExtract();
-            etde.testDataExtract2();
-        } catch (ETSdkException ex) {
-            Logger.getLogger(ETDataExtract.class.getName()).log(Level.SEVERE, null, ex);
-            ex.printStackTrace();
-        }
+    /**
+     * @return the client
+     */
+    public ETClient getClient() {
+        return client;
+    }
+
+    /**
+     * @param client the client to set
+     */
+    public void setClient(ETClient client) {
+        this.client = client;
+    }
+
+    /**
+     * @return the soap
+     */
+    public Soap getSoap() {
+        return soap;
+    }
+
+    /**
+     * @param soap the soap to set
+     */
+    public void setSoap(Soap soap) {
+        this.soap = soap;
+    }
+
+    /**
+     * @return the deCustomerKey
+     */
+    public String getDeCustomerKey() {
+        return deCustomerKey;
+    }
+
+    /**
+     * @param deCustomerKey the deCustomerKey to set
+     */
+    public void setDeCustomerKey(String deCustomerKey) {
+        this.deCustomerKey = deCustomerKey;
+    }
+
+    /**
+     * @return the asyncID
+     */
+    public String getAsyncID() {
+        return asyncID;
+    }
+
+    /**
+     * @param asyncID the asyncID to set
+     */
+    public void setAsyncID(String asyncID) {
+        this.asyncID = asyncID;
+    }
+
+    /**
+     * @return the hasColumnHeaders
+     */
+    public boolean isHasColumnHeaders() {
+        return hasColumnHeaders;
+    }
+
+    /**
+     * @param hasColumnHeaders the hasColumnHeaders to set
+     */
+    public void setHasColumnHeaders(boolean hasColumnHeaders) {
+        this.hasColumnHeaders = hasColumnHeaders;
+    }
+
+    /**
+     * @return the startDate
+     */
+    public String getStartDate() {
+        return startDate;
+    }
+
+    /**
+     * @param startDate the startDate to set
+     */
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    /**
+     * @return the endDate
+     */
+    public String getEndDate() {
+        return endDate;
+    }
+
+    /**
+     * @param endDate the endDate to set
+     */
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
+    /**
+     * @return the outputFileName
+     */
+    public String getOutputFileName() {
+        return outputFileName;
+    }
+
+    /**
+     * @param outputFileName the outputFileName to set
+     */
+    public void setOutputFileName(String outputFileName) {
+        this.outputFileName = outputFileName;
     }
     
 }
