@@ -12,10 +12,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-/**
- *
- * @author sharif.ahmed
- */
+
 public class ETTriggeredSendSummaryTest {
     
     private static ETClient client = null;
