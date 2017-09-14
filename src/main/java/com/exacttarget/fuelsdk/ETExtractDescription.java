@@ -44,7 +44,7 @@ public class ETExtractDescription extends ETSoapObject{
         this.parameters = parameters;
     }
     
-    public static void main( String[] args ){
+/*    public static void main( String[] args ){
         try {
             System.out.println("hello world");
             ETClient client = new ETClient("fuelsdk.properties");
@@ -62,7 +62,7 @@ public class ETExtractDescription extends ETSoapObject{
             ex.printStackTrace();
         }
     }    
-
+*/
     /**
      * @return the id
      */
