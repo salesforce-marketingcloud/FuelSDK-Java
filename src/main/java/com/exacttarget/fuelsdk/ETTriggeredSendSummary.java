@@ -55,11 +55,17 @@ public class ETTriggeredSendSummary extends ETSoapObject{
     @ExternalName("queued")
     private Long queued;    
 
+    /** 
+    * @return The Identifier of the ETTriggeredSendSummary object.
+    */     
     @Override
     public String getId() {
         return id;
     }
 
+    /** 
+    * @param id     The Identifier of the ETTriggeredSendSummary object.
+    */    
     @Override
     public void setId(String id) {
         this.id = id;
@@ -275,17 +281,5 @@ public class ETTriggeredSendSummary extends ETSoapObject{
     public void setQueued(Long queued) {
         this.queued = queued;
     }
-    
-//    public static void main( String[] args ){
-//        try {
-//            System.out.println("hello world");
-//            ETClient client = new ETClient("fuelsdk.properties");
-//            
-//            ETResponse<ETTriggeredSendSummary> response = client.retrieve(ETTriggeredSendSummary.class);
-//            System.out.println("resp="+ response.toString());            
-//        } catch (ETSdkException ex) {
-//            Logger.getLogger(ETTriggeredSendSummary.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//    }
     
 }

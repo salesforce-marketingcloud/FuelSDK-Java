@@ -10,16 +10,9 @@ import com.exacttarget.fuelsdk.internal.ExtractParameter;
 import com.exacttarget.fuelsdk.internal.ExtractRequest;
 import com.exacttarget.fuelsdk.internal.ExtractRequestMsg;
 import com.exacttarget.fuelsdk.internal.ExtractResponseMsg;
-import com.exacttarget.fuelsdk.internal.ExtractResult;
-import com.exacttarget.fuelsdk.internal.PartnerAPI;
 import com.exacttarget.fuelsdk.internal.Soap;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -28,6 +21,7 @@ public class ETDataExtract {
     private ETClient client;
     private Soap soap;
     public HashMap<String, String> extractType;
+    public HashMap<String, String> parameters;
     
     private String deCustomerKey;
     private String asyncID;
@@ -41,6 +35,8 @@ public class ETDataExtract {
         try {
             client = new ETClient("fuelsdk.properties");
             extractType = new HashMap<String, String>();
+            parameters = new HashMap<String, String>();
+
             soap = client.getSoapConnection().getSoap("Extract");            
             
             asyncID = "0";
@@ -67,6 +63,32 @@ public class ETDataExtract {
     {
         validate();
         return performDataExtract(extractName);
+    }
+    
+    public ExtractResponseMsg doDataExtract(String extractName)
+    {
+        ArrayList<ExtractParameter> extractParameters = new ArrayList();
+        ExtractParameter extractParam = null;
+        
+        for(String key: parameters.keySet()){
+            extractParam = new ExtractParameter();
+            extractParam.setName(key);
+            extractParam.setValue(parameters.get(key));
+            extractParameters.add(extractParam);
+        }
+        ExtractRequest.Parameters eparams = new ExtractRequest.Parameters();
+        eparams.getParameter().addAll(extractParameters);        
+
+        ExtractRequest request = new ExtractRequest();
+        request.setOptions(new ExtractOptions());
+        request.setID(extractType.get(extractName));
+        request.setParameters(eparams);
+
+        ExtractRequestMsg erm = new ExtractRequestMsg();
+        erm.getRequests().add(request);  
+        
+        ExtractResponseMsg resp = soap.extract(erm);
+        return resp;
     }
     
     public ExtractResponseMsg performDataExtract(String extractName)
