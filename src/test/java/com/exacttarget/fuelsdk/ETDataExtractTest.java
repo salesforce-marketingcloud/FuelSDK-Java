@@ -38,8 +38,8 @@ public class ETDataExtractTest {
         unique = UUID.randomUUID().toString();
     }    
     
-    @Test
-    public void doDataExtract() throws ETSdkException
+/*    @Test
+    public void performDataExtract() throws ETSdkException
     {
         try {
             ETDataExtract etde = new ETDataExtract();
@@ -62,6 +62,29 @@ public class ETDataExtractTest {
             ex.printStackTrace();
         }        
     }    
+*/    
+    @Test
+    public void doDataExtract() throws ETSdkException
+    {
+        ETDataExtract etde = new ETDataExtract();
+        etde.parameters.put("DECustomerKey", deCustKey);
+        etde.parameters.put("HasColumnHeaders", true+"");
+        etde.parameters.put("_AsyncID", "0");
+        etde.parameters.put("OutputFileName", "java-"+unique+".csv");
+        etde.parameters.put("StartDate", "2017-06-01 12:00:00 AM");
+        etde.parameters.put("EndDate", "2017-08-01 12:00:00 AM");
+
+        ExtractResponseMsg resp = etde.doDataExtract(extractName);
+        assertNotNull(resp.getRequestID());
+        assertEquals(resp.getOverallStatus(), "OK");
+
+        for(ExtractResponseMsg.Results r: resp.getResults()){
+            ExtractResult er = r.getExtractResult();
+            assertEquals(er.getRequest().getID(), etde.extractType.get(extractName));
+            System.out.println("id="+er.getRequest().getID());
+        }
+    }     
+    
     
 /*    public void testDataExtract2() throws ETSdkException
     {
