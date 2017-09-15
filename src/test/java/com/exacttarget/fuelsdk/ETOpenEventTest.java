@@ -12,10 +12,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class ETUnsubEventTest {
-    private ETClient client = null;
+public class ETOpenEventTest {
+    private ETClient client = null;    
     
-    public ETUnsubEventTest() throws ETSdkException {
+    public ETOpenEventTest() throws ETSdkException {
         client = new ETClient("fuelsdk.properties");
     }
     
@@ -39,7 +39,7 @@ public class ETUnsubEventTest {
     // The methods must be annotated with annotation @Test. For example:
     //
      @Test
-     public void getAllUnsubs() throws ETSdkException {
+     public void getAllOpens() throws ETSdkException {
         ETResponse<ETUnsubEvent> response = client.retrieve(ETUnsubEvent.class);
         System.out.println("resp="+ response.toString());    
         assertEquals(response.getResponseCode(), "OK");

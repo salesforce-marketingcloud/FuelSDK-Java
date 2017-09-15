@@ -12,10 +12,12 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-public class ETUnsubEventTest {
-    private ETClient client = null;
+
+public class ETSentEventTest {
+    private ETClient client = null;    
+    private String email = "smunuswami@salesforce.com";
     
-    public ETUnsubEventTest() throws ETSdkException {
+    public ETSentEventTest() throws ETSdkException {
         client = new ETClient("fuelsdk.properties");
     }
     
@@ -39,12 +41,25 @@ public class ETUnsubEventTest {
     // The methods must be annotated with annotation @Test. For example:
     //
      @Test
-     public void getAllUnsubs() throws ETSdkException {
-        ETResponse<ETUnsubEvent> response = client.retrieve(ETUnsubEvent.class);
+     public void getAllSents() throws ETSdkException {
+        ETResponse<ETSentEvent> response = client.retrieve(ETSentEvent.class);
         System.out.println("resp="+ response.toString());    
         assertEquals(response.getResponseCode(), "OK");
         assertEquals(response.getResponseMessage(), "OK");
         assertEquals(response.getStatus().toString(), "OK");   
         assertNotNull(response.getRequestId());         
      }
+     
+     @Test
+     public void getOneSent() throws ETSdkException {
+        ETResponse<ETSentEvent> response = client.retrieve(ETSentEvent.class, "subscriberKey="+email);
+        System.out.println("resp="+ response.toString());  
+        assertEquals(response.getResponseCode(), "OK");
+        assertEquals(response.getResponseMessage(), "OK");
+        assertEquals(response.getStatus().toString(), "OK");   
+        
+        ETResult<ETSentEvent> result = response.getResult();
+        System.out.println("res="+ result.toString());     
+        assertEquals(result.getObject().getSubscriberKey(), email);   
+     }     
 }
