@@ -8,28 +8,16 @@ package com.exacttarget.fuelsdk;
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.InternalName;
 import com.exacttarget.fuelsdk.annotations.SoapObject;
-import com.exacttarget.fuelsdk.internal.BounceEvent;
+import com.exacttarget.fuelsdk.internal.ClickEvent;
 import com.exacttarget.fuelsdk.internal.EventType;
 import java.util.Date;
 
-@SoapObject(internalType = BounceEvent.class)
-public class ETBounceEvent  extends ETSoapObject{
+@SoapObject(internalType = ClickEvent.class)
+public class ETClickEvent extends ETSoapObject{
 
     @InternalName("objectID")    
     private String id;
 
-    @InternalName("smtpCode")
-    private String smtpCode;
-    
-    @ExternalName("bounceCategory")
-    private String bounceCategory;
-    
-    @InternalName("smtpReason")
-    private String smtpReason;
-    
-    @ExternalName("bounceType")
-    private String bounceType;
-    
     @ExternalName("sendID")
     private Integer sendID;
     
@@ -46,11 +34,17 @@ public class ETBounceEvent  extends ETSoapObject{
     private String triggeredSendDefinitionObjectID;
     
     @ExternalName("batchID")
-    private Integer batchID;
+    private Integer batchID;   
+    
+    @ExternalName("urlid")
+    private Integer urlid;
+    
+    @ExternalName("url")
+    private String url;
     
     /**
      * @return the id
-     */
+     */    
     @Override
     public String getId() {
         return id;
@@ -62,62 +56,6 @@ public class ETBounceEvent  extends ETSoapObject{
     @Override
     public void setId(String id) {
         this.id = id;
-    }
-
-    /**
-     * @return the smtpCode
-     */
-    public String getSmtpCode() {
-        return smtpCode;
-    }
-
-    /**
-     * @param smtpCode the smtpCode to set
-     */
-    public void setSmtpCode(String smtpCode) {
-        this.smtpCode = smtpCode;
-    }
-
-    /**
-     * @return the bounceCategory
-     */
-    public String getBounceCategory() {
-        return bounceCategory;
-    }
-
-    /**
-     * @param bounceCategory the bounceCategory to set
-     */
-    public void setBounceCategory(String bounceCategory) {
-        this.bounceCategory = bounceCategory;
-    }
-
-    /**
-     * @return the smtpReason
-     */
-    public String getSmtpReason() {
-        return smtpReason;
-    }
-
-    /**
-     * @param smtpReason the smtpReason to set
-     */
-    public void setSmtpReason(String smtpReason) {
-        this.smtpReason = smtpReason;
-    }
-
-    /**
-     * @return the bounceType
-     */
-    public String getBounceType() {
-        return bounceType;
-    }
-
-    /**
-     * @param bounceType the bounceType to set
-     */
-    public void setBounceType(String bounceType) {
-        this.bounceType = bounceType;
     }
 
     /**
@@ -203,5 +141,45 @@ public class ETBounceEvent  extends ETSoapObject{
     public void setBatchID(Integer batchID) {
         this.batchID = batchID;
     }
+
+    /**
+     * @return the urlid
+     */
+    public Integer getUrlid() {
+        return urlid;
+    }
+
+    /**
+     * @param urlid the urlid to set
+     */
+    public void setUrlid(Integer urlid) {
+        this.urlid = urlid;
+    }
+
+    /**
+     * @return the url
+     */
+    public String getUrl() {
+        return url;
+    }
+
+    /**
+     * @param url the url to set
+     */
+    public void setUrl(String url) {
+        this.url = url;
+    }
+    
+/*    public static void main( String[] args ){
+        try {
+            System.out.println("hello world");
+            ETClient client = new ETClient("fuelsdk.properties");
+            
+            ETResponse<ETClickEvent> response = client.retrieve(ETClickEvent.class);
+            System.out.println("resp="+ response.toString());  
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }     */
     
 }
