@@ -10,10 +10,7 @@ import static org.junit.Assert.assertNotNull;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-/**
- *
- * @author sharif.ahmed
- */
+
 public class ETResultMessageTest {
     
     private static ETClient client = null;
