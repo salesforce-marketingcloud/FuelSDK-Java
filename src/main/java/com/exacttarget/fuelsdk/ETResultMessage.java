@@ -8,9 +8,20 @@ package com.exacttarget.fuelsdk;
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.InternalName;
 import com.exacttarget.fuelsdk.annotations.SoapObject;
+import com.exacttarget.fuelsdk.internal.APIObject;
+import com.exacttarget.fuelsdk.internal.CreateRequest;
+import com.exacttarget.fuelsdk.internal.CreateResponse;
+import com.exacttarget.fuelsdk.internal.CreateOptions;
 import com.exacttarget.fuelsdk.internal.ResultMessage;
+import com.exacttarget.fuelsdk.internal.SMSTriggeredSend;
+import com.exacttarget.fuelsdk.internal.SMSTriggeredSendDefinition;
+import com.exacttarget.fuelsdk.internal.Soap;
+import com.exacttarget.fuelsdk.internal.Subscriber;
+import java.rmi.RemoteException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  *
@@ -268,25 +279,41 @@ public class ETResultMessage extends ETSoapObject{
         this.modifiedDate = modifiedDate;
     }
 
+    public static void testCreateSMSTriggeresSend() throws Exception {
+            ETClient client = new ETClient("fuelsdk.properties");
+            Soap stub = client.getSoapConnection().getSoap();
+            SMSTriggeredSend smsTriggeredSend = null;
+            smsTriggeredSend = new SMSTriggeredSend();
+            SMSTriggeredSendDefinition smsTriggeredSendDefinition = new SMSTriggeredSendDefinition();
+            smsTriggeredSendDefinition.setCustomerKey("CustomerKey of Defintion"); //Defined in UI
+            Subscriber subscriber = new Subscriber();
+            subscriber.setSubscriberKey(UUID.randomUUID().toString()); //Unique Identifier for SMS Number
+            smsTriggeredSend.setNumber("3174891157");   //SMS Number
+            smsTriggeredSend.setMessage("Welcome To ET");
+            smsTriggeredSend.setSubscriber(subscriber);   //Set Subscriber to SMSTriggeredSend
+            smsTriggeredSend.setSMSTriggeredSendDefinition(smsTriggeredSendDefinition);  //Set Defintion
+            CreateRequest createRequest = new CreateRequest();
+            createRequest.setOptions(new CreateOptions());
+            APIObject[] apiObjects = {smsTriggeredSend};
+            createRequest.getObjects().addAll(Arrays.asList(apiObjects));
+            CreateResponse createResponse = stub.create(createRequest);
+            if (createResponse != null) 
+                System.out.println("OverallStatus ::: " + createResponse);
+    }    
+    
+    
     public static void main( String[] args ){
         try {
-            System.out.println("hello world");
-            ETClient client = new ETClient("fuelsdk.properties");
+//            System.out.println("hello world");
+//            ETClient client = new ETClient("fuelsdk.properties");
+//            
+//            ETResponse<ETResultMessage> response = client.retrieve(ETResultMessage.class);
+//            System.out.println("resp="+ response.toString());  
             
-            ETResponse<ETResultMessage> response = client.retrieve(ETResultMessage.class);
-            System.out.println("resp="+ response.toString());  
+
+            testCreateSMSTriggeresSend();
             
-//            List<ETResult<ETResultMessage>> result = response.getResults();// client.retrieve(ETExtractDescription.class);
-//            for(ETResult<ETResultMessage> r : response.getResults()){
-//                System.out.println("R="+r);
-//                System.out.print("ID="+ r.getObject().getId());
-//                System.out.println(", XML="+ r.getObject().getResultDetailXML());
-//            }
-            //ETResultMessage etrm = response.getObject();
-            //System.out.println("obj="+etrm);
-            
-            
-        } catch (ETSdkException ex) {
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     } 
