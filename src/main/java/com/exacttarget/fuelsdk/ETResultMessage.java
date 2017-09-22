@@ -25,12 +25,12 @@ import java.util.UUID;
 
 /**
  *
- * @author sharif.ahmed
+ * An <code>ETResultMessage</code> object represents a message containing results of async call.
  */
+
 @SoapObject(internalType = ResultMessage.class)
 public class ETResultMessage extends ETSoapObject{
 
-//    @ExternalName("id")
     @InternalName("objectID")    
     private String id;
     
@@ -278,46 +278,5 @@ public class ETResultMessage extends ETSoapObject{
     public void setModifiedDate(Date modifiedDate) {
         this.modifiedDate = modifiedDate;
     }
-
-    public static void testCreateSMSTriggeresSend() throws Exception {
-            ETClient client = new ETClient("fuelsdk.properties");
-            Soap stub = client.getSoapConnection().getSoap();
-            SMSTriggeredSend smsTriggeredSend = null;
-            smsTriggeredSend = new SMSTriggeredSend();
-            SMSTriggeredSendDefinition smsTriggeredSendDefinition = new SMSTriggeredSendDefinition();
-            smsTriggeredSendDefinition.setCustomerKey("CustomerKey of Defintion"); //Defined in UI
-            Subscriber subscriber = new Subscriber();
-            subscriber.setSubscriberKey(UUID.randomUUID().toString()); //Unique Identifier for SMS Number
-            smsTriggeredSend.setNumber("3174891157");   //SMS Number
-            smsTriggeredSend.setMessage("Welcome To ET");
-            smsTriggeredSend.setSubscriber(subscriber);   //Set Subscriber to SMSTriggeredSend
-            smsTriggeredSend.setSMSTriggeredSendDefinition(smsTriggeredSendDefinition);  //Set Defintion
-            CreateRequest createRequest = new CreateRequest();
-            createRequest.setOptions(new CreateOptions());
-            APIObject[] apiObjects = {smsTriggeredSend};
-            createRequest.getObjects().addAll(Arrays.asList(apiObjects));
-            CreateResponse createResponse = stub.create(createRequest);
-            if (createResponse != null) 
-                System.out.println("OverallStatus ::: " + createResponse);
-    }    
-    
-    
-    public static void main( String[] args ){
-        try {
-//            System.out.println("hello world");
-//            ETClient client = new ETClient("fuelsdk.properties");
-//            
-//            ETResponse<ETResultMessage> response = client.retrieve(ETResultMessage.class);
-//            System.out.println("resp="+ response.toString());  
-            
-
-            testCreateSMSTriggeresSend();
-            
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    } 
-
-
     
 }
