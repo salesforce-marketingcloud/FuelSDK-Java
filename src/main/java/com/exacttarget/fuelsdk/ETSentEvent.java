@@ -12,6 +12,9 @@ import com.exacttarget.fuelsdk.internal.EventType;
 import com.exacttarget.fuelsdk.internal.SentEvent;
 import java.util.Date;
 
+/**
+ * An <code>ETSentEvent</code> object represents information pertaining to the sent events of an email message in the Salesforce Marketing Cloud.
+ */
 @SoapObject(internalType = SentEvent.class)
 public class ETSentEvent extends ETSoapObject{
     @InternalName("objectID")    

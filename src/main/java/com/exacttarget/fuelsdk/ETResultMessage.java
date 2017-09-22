@@ -25,7 +25,7 @@ import java.util.UUID;
 
 /**
  *
- * An <code>ETResultMessage</code> object represents a message containing results of async call.
+ * An <code>ETResultMessage</code> object represents a message containing results of async call in the Salesforce Marketing Cloud.
  */
 
 @SoapObject(internalType = ResultMessage.class)

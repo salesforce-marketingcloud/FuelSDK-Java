@@ -12,6 +12,10 @@ import com.exacttarget.fuelsdk.internal.BounceEvent;
 import com.exacttarget.fuelsdk.internal.EventType;
 import java.util.Date;
 
+/**
+ * An <code>ETBounceEvent</code> object represents information pertaining to the specific event of an email message bounce.
+ */
+
 @SoapObject(internalType = BounceEvent.class)
 public class ETBounceEvent  extends ETSoapObject{
 

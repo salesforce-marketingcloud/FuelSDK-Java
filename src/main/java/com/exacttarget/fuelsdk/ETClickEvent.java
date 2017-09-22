@@ -12,6 +12,9 @@ import com.exacttarget.fuelsdk.internal.ClickEvent;
 import com.exacttarget.fuelsdk.internal.EventType;
 import java.util.Date;
 
+/**
+ * An <code>ETClickEvent</code> object represents information pertaining to the click events of an email message  in the Salesforce Marketing Cloud.
+ */
 @SoapObject(internalType = ClickEvent.class)
 public class ETClickEvent extends ETSoapObject{
 

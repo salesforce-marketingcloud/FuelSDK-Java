@@ -11,6 +11,10 @@ import com.exacttarget.fuelsdk.annotations.SoapObject;
 import com.exacttarget.fuelsdk.internal.ContentArea;
 import com.exacttarget.fuelsdk.internal.LayoutType;
 
+/**
+ * An <code>ETContentArea</code> object represents represents a defined section of reusable content in the Salesforce Marketing Cloud.
+ * One or many ContentAreas can be defined for an Email object. A ContentArea is always acted upon in the context of an Email object.
+ */
 @SoapObject(internalType = ContentArea.class)
 public class ETContentArea extends ETSoapObject{
     @InternalName("objectID")    

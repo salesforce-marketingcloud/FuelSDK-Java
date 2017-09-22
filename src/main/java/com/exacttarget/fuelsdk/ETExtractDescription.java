@@ -12,21 +12,18 @@ import com.exacttarget.fuelsdk.internal.ExtractDescription;
 import com.exacttarget.fuelsdk.internal.ExtractParameterDescription;
 import java.util.List;
 
+/**
+ * An <code>ETExtractDescription</code> object represents information describing a specific data extract in the Salesforce Marketing Cloud.
+ */
 @SoapObject(internalType = ExtractDescription.class)
 public class ETExtractDescription extends ETSoapObject{
 
-//    @ExternalName("")
-//    private String customerKey;
     @ExternalName("id")
     @InternalName("objectID")
     private String id = null;    
 
     @ExternalName("name")
     private String name;
-//    @ExternalName("configurationPage")
-//    protected String configurationPage;
-//    @ExternalName("packageKey")
-//    protected String packageKey;
     
     @ExternalName("parameters")
     private ExtractDescription.Parameters parameters;
@@ -45,30 +42,6 @@ public class ETExtractDescription extends ETSoapObject{
         this.parameters = parameters;
     }
     
-    public static void main( String[] args ){
-        try {
-            System.out.println("hello world");
-            ETClient client = new ETClient("fuelsdk.properties");
-            
-            ETResponse<ETExtractDescription> response = client.retrieve(ETExtractDescription.class);
-            //System.out.println("resp="+ response.toString());  
-            
-            //List<ETResult<ETExtractDescription>> result = response.getResults();// client.retrieve(ETExtractDescription.class);
-            for(ETResult<ETExtractDescription> r : response.getResults()){
-                System.out.print("ID="+ r.getObject().getId());  
-                System.out.println(", Name="+ r.getObject().getName());  
-                
-                for( ExtractParameterDescription p: r.getObject().parameters.getParameter() ){
-                    System.out.println("param name="+ p.getName() + ", param type="+p.getDataType());  
-                }
-
-            }
-            
-        } catch (ETSdkException ex) {
-            ex.printStackTrace();
-        }
-    }    
-
     /**
      * @return the id
      */
@@ -96,4 +69,28 @@ public class ETExtractDescription extends ETSoapObject{
     public void setName(String name) {
         this.name = name;
     }
+    
+ /*   public static void main( String[] args ){
+        try {
+            System.out.println("hello world");
+            ETClient client = new ETClient("fuelsdk.properties");
+            
+            ETResponse<ETExtractDescription> response = client.retrieve(ETExtractDescription.class);
+            //System.out.println("resp="+ response.toString());  
+            
+            //List<ETResult<ETExtractDescription>> result = response.getResults();// client.retrieve(ETExtractDescription.class);
+            for(ETResult<ETExtractDescription> r : response.getResults()){
+                System.out.print("ID="+ r.getObject().getId());  
+                System.out.println(", Name="+ r.getObject().getName());  
+                
+                for( ExtractParameterDescription p: r.getObject().parameters.getParameter() ){
+                    System.out.println("param name="+ p.getName() + ", param type="+p.getDataType());  
+                }
+
+            }
+            
+        } catch (ETSdkException ex) {
+            ex.printStackTrace();
+        }
+    }   */    
 }

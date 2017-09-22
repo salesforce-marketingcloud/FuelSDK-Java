@@ -12,6 +12,9 @@ import com.exacttarget.fuelsdk.internal.EventType;
 import com.exacttarget.fuelsdk.internal.OpenEvent;
 import java.util.Date;
 
+/**
+ * An <code>ETOpenEvent</code> object represents information pertaining to the open events of an email message in the Salesforce Marketing Cloud.
+ */
 @SoapObject(internalType = OpenEvent.class)
 public class ETOpenEvent extends ETSoapObject{
 

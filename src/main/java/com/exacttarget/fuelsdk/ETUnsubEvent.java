@@ -13,6 +13,9 @@ import com.exacttarget.fuelsdk.internal.List;
 import com.exacttarget.fuelsdk.internal.UnsubEvent;
 import java.util.Date;
 
+/**
+ * An <code>ETUnsubEvent</code> object represents information pertaining to the unsubscribe events of an email message in the Salesforce Marketing Cloud.
+ */
 @SoapObject(internalType = UnsubEvent.class)
 public class ETUnsubEvent extends ETSoapObject{
     @InternalName("objectID")    
