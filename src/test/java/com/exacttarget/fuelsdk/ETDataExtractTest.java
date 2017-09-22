@@ -27,8 +27,11 @@ import org.junit.Test;
 public class ETDataExtractTest {
     private static ETClient client = null;
     private static String unique = "";
+    private static SimpleDateFormat sdf;
     
     private String extractName = "Data Extension Extract";
+    private String extractName2 = "Tracking Extract";
+
     private String deCustKey = "017dce26-b61f-43c2-bb15-0e46de82d177";
     
     
@@ -36,18 +39,19 @@ public class ETDataExtractTest {
     public static void setUpClass() throws ETSdkException {
         client = new ETClient("fuelsdk.properties");
         unique = UUID.randomUUID().toString();
+        sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm aa");
     }    
-    
-/*    @Test
-    public void performDataExtract() throws ETSdkException
+    /*
+   @Test
+    public void ExtractDataExtensionTest() throws Exception
     {
         try {
             ETDataExtract etde = new ETDataExtract();
             //etde.testDataExtract2();
             
-            etde.setDeCustomerKey(deCustKey);
-            etde.setOutputFileName("java-"+unique+".csv");
-            ExtractResponseMsg resp = etde.dataExtract(extractName);
+            etde.setDECustomerKey(deCustKey);
+            etde.setOutputFileName("java-DE-"+unique+".csv");
+            ExtractResponseMsg resp = etde.extractDataExtension();
             assertNotNull(resp.getRequestID());
             assertEquals(resp.getOverallStatus(), "OK");
             
@@ -62,27 +66,37 @@ public class ETDataExtractTest {
             ex.printStackTrace();
         }        
     }    
-*/    
+  */
     @Test
-    public void doDataExtract() throws ETSdkException
+    public void ExtractTrackingDataTest() throws Exception
     {
-        ETDataExtract etde = new ETDataExtract();
-        etde.parameters.put("DECustomerKey", deCustKey);
-        etde.parameters.put("HasColumnHeaders", true+"");
-        etde.parameters.put("_AsyncID", "0");
-        etde.parameters.put("OutputFileName", "java-"+unique+".csv");
-        etde.parameters.put("StartDate", "2017-06-01 12:00:00 AM");
-        etde.parameters.put("EndDate", "2017-08-01 12:00:00 AM");
+            ETDataExtract etde = new ETDataExtract();
+            String start = "2017-05-01 12:00 AM";
+            String end = "2017-09-01 12:00 AM";
 
-        ExtractResponseMsg resp = etde.doDataExtract(extractName);
-        assertNotNull(resp.getRequestID());
-        assertEquals(resp.getOverallStatus(), "OK");
-
-        for(ExtractResponseMsg.Results r: resp.getResults()){
-            ExtractResult er = r.getExtractResult();
-            assertEquals(er.getRequest().getID(), etde.extractType.get(extractName));
-            System.out.println("id="+er.getRequest().getID());
-        }
+        
+            etde.setOutputFileName("java-track-"+unique+".csv");
+//            etde.setDECustomerKey(deCustKey);
+            etde.setStartDate(sdf.parse(start));
+            etde.setEndDate(sdf.parse(end));
+            ExtractResponseMsg resp = etde.extractTrackingData();
+            assertNotNull(resp.getRequestID());
+            assertEquals(resp.getOverallStatus(), "OK");
+            System.out.println("req id="+resp.getRequestID());
+            System.out.println("status="+resp.getOverallStatus());
+            
+//            for(ExtractResponseMsg.Results r: resp.getResults()){
+//                ExtractResult er = r.getExtractResult();
+//                assertEquals(er.getRequest().getID(), etde.extractType.get(extractName2));
+//                System.out.println("id="+er.getRequest().getID());
+//                System.out.println("res type="+res.getExtractResult());
+//            }
+            
+            for(Iterator<ExtractResponseMsg.Results> it = resp.getResults().iterator(); it.hasNext();) {
+                ExtractResponseMsg.Results res = it.next();
+                System.out.println("res type="+res.getExtractResult());
+                //System.out.println("res xml="+res.getResultDetailXML());
+            }             
     }     
     
     
