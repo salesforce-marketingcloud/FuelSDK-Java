@@ -180,7 +180,7 @@ public class ETDataExtract
             throw new ETSdkException("Output file name can not be empty or null.");
         String ext = this.getOutputFileName().toLowerCase();
         if(!ext.endsWith(".zip"))
-            throw new ETSdkException("Invalid file extension. Only csv or zip allowed.");
+            throw new ETSdkException("Invalid file extension. Only zip allowed.");
         
     }
     
