@@ -91,12 +91,6 @@ public class ETDataExtractTest {
                 //System.out.println("res type="+res.getExtractResult());
             }
             
-//            for(Iterator<ExtractResponseMsg.Results> it = resp.getResults().iterator(); it.hasNext();) {
-//                ExtractResponseMsg.Results res = it.next();
-//                System.out.println("res type="+res.getExtractResult());
-//                
-//                //System.out.println("res xml="+res.getResultDetailXML());
-//            }             
     }     
 
 }
