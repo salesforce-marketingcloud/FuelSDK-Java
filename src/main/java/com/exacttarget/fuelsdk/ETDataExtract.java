@@ -435,42 +435,5 @@ public class ETDataExtract
     public void setHasColumnHeaders(boolean HasColumnHeaders) {
         this.HasColumnHeaders = HasColumnHeaders;
     }
-
-    /*
-    public static void main(String[] args){
-        try {
-            
-            ETDataExtract etde = new ETDataExtract();
-            String deCustKey = "017dce26-b61f-43c2-bb15-0e46de82d177";
-//            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm aa");
-//            
-//            Class obj = ETDataExtract.class;
-//            Object ins = obj.newInstance();
-//            Field field = obj.getDeclaredField("StartDate");
-//            Object value = field.get(ins);
-//            Type t = field.getType(); 
-//            if(t.getTypeName().equals("java.util.Date"))
-//                System.out.println("name="+field.getName()+", value="+value);
-//            if(value instanceof Date)
-//                System.out.println("name="+field.getName()+", value="+sdf.format(value));
-            
-            etde.setDECustomerKey(deCustKey);
-            etde.setOutputFileName("java-new.csv");
-            ExtractResponseMsg resp = etde.extractDataExtension();            
-            
-            System.out.println("req id="+resp.getRequestID());
-            System.out.println("status="+resp.getOverallStatus());
-            for(Iterator<ExtractResponseMsg.Results> it = resp.getResults().iterator(); it.hasNext();) {
-                ExtractResponseMsg.Results res = it.next();
-                System.out.println("res type="+res.getExtractResult());
-                //System.out.println("res xml="+res.getResultDetailXML());
-            }             
-            
-        } catch (Exception ex) {
-            Logger.getLogger(ETDataExtract.class.getName()).log(Level.SEVERE, null, ex);
-            ex.printStackTrace();
-        } 
-    }
-   */ 
     
 }
