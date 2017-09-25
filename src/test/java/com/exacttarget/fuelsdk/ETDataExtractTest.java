@@ -45,7 +45,7 @@ public class ETDataExtractTest {
     public void ExtractDataExtensionTest() throws Exception
     {
         try {
-            ETDataExtract etde = new ETDataExtract();
+            ETDataExtract etde = new ETDataExtract(client);
             //etde.testDataExtract2();
             
             etde.setDECustomerKey(deCustKey);
@@ -69,12 +69,12 @@ public class ETDataExtractTest {
     @Test
     public void ExtractTrackingDataTest() throws Exception
     {
-            ETDataExtract etde = new ETDataExtract();
+            ETDataExtract etde = new ETDataExtract(client);
             String start = "2017-05-01 12:00 AM";
             String end = "2017-09-01 12:00 AM";
 
         
-            etde.setOutputFileName("java-track-"+unique+".csv");
+            etde.setOutputFileName("java-track-"+unique+".zip");
 //            etde.setDECustomerKey(deCustKey);
             etde.setStartDate(sdf.parse(start));
             etde.setEndDate(sdf.parse(end));
