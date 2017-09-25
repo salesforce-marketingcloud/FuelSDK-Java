@@ -28,11 +28,11 @@ import java.util.logging.Logger;
 
 public class ETDataExtract 
 {
-    private ETClient client;
+//    private ETClient client;
     private Soap soap;
     
     public HashMap<String, String> extractType;
-    private SimpleDateFormat sdf;
+    private SimpleDateFormat dateFormat;
     
     private Date StartDate; 
     private Date EndDate; 
@@ -54,15 +54,16 @@ public class ETDataExtract
     
     /** 
     * Class constructor, Initializes a new instance of the class.
+    * @param client         the ETCleint object
     */     
-    public ETDataExtract()
+    public ETDataExtract(ETClient client)
     {
         try {
-            client = new ETClient("fuelsdk.properties");
+            //client = new ETClient("fuelsdk.properties");
             extractType = new HashMap<String, String>();
             
             soap = client.getSoapConnection().getSoap("Extract");  
-            sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm aa");
+            dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm aa");
             
             ExtractBounces = false;
             ExtractClicks = true;
@@ -76,7 +77,7 @@ public class ETDataExtract
             HasColumnHeaders = true;
             _AsyncID = "0";            
             
-            populateExtractType();
+            populateExtractType(client);
             
         } catch (Exception ex) {
             Logger.getLogger(ETDataExtract.class.getName()).log(Level.SEVERE, null, ex);
@@ -107,8 +108,8 @@ public class ETDataExtract
         validate();
 
         String dateInString = "2017-08-01 12:00 AM";
-        StartDate = sdf.parse(dateInString);         
-        EndDate = sdf.parse(dateInString);  
+        StartDate = dateFormat.parse(dateInString);         
+        EndDate = dateFormat.parse(dateInString);  
         
         String[] paramNames = { "DECustomerKey", "HasColumnHeaders", "_AsyncID", "OutputFileName", "StartDate", "EndDate" };
         return performDataExtract("Data Extension Extract", paramNames);
@@ -139,11 +140,8 @@ public class ETDataExtract
             extractParam = new ExtractParameter();
 
             extractParam.setName(field.getName());
-            System.out.println("name="+field.getName());
-            System.out.println("value="+value);
             if(value instanceof Date){
-                extractParam.setValue(sdf.format(value));            
-                System.out.println("value="+sdf.format(value));
+                extractParam.setValue(dateFormat.format(value));            
             }
             else if(value != null)
                 extractParam.setValue(value.toString());
@@ -182,13 +180,13 @@ public class ETDataExtract
         if(this.getOutputFileName()==null || this.getOutputFileName().trim()=="")
             throw new ETSdkException("Output file name can not be empty or null.");
         String ext = this.getOutputFileName().toLowerCase();
-        if(!ext.endsWith(".csv") && !ext.endsWith(".zip"))
+        if(!ext.endsWith(".zip"))
             throw new ETSdkException("Invalid file extension. Only csv or zip allowed.");
         
     }
     
     
-    private void populateExtractType() throws ETSdkException
+    private void populateExtractType(ETClient client) throws ETSdkException
     {
         ETResponse<ETExtractDescription> response = client.retrieve(ETExtractDescription.class);
         for(ETResult<ETExtractDescription> r : response.getResults()){
@@ -198,33 +196,33 @@ public class ETDataExtract
     
 
     
-    /**
-     * @return the client
-     */
-    public ETClient getClient() {
-        return client;
-    }
+//    /**
+//     * @return the client
+//     */
+//    public ETClient getClient() {
+//        return client;
+//    }
+//
+//    /**
+//     * @param client the client to set
+//     */
+//    public void setClient(ETClient client) {
+//        this.client = client;
+//    }
 
-    /**
-     * @param client the client to set
-     */
-    public void setClient(ETClient client) {
-        this.client = client;
-    }
-
-    /**
-     * @return the soap
-     */
-    public Soap getSoap() {
-        return soap;
-    }
-
-    /**
-     * @param soap the soap to set
-     */
-    public void setSoap(Soap soap) {
-        this.soap = soap;
-    }
+//    /**
+//     * @return the soap
+//     */
+//    public Soap getSoap() {
+//        return soap;
+//    }
+//
+//    /**
+//     * @param soap the soap to set
+//     */
+//    public void setSoap(Soap soap) {
+//        this.soap = soap;
+//    }
 
     /**
      * @return the outputFileName
