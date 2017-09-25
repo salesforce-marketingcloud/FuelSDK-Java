@@ -173,16 +173,4 @@ public class ETClickEvent extends ETSoapObject{
         this.url = url;
     }
     
-/*    public static void main( String[] args ){
-        try {
-            System.out.println("hello world");
-            ETClient client = new ETClient("fuelsdk.properties");
-            
-            ETResponse<ETClickEvent> response = client.retrieve(ETClickEvent.class);
-            System.out.println("resp="+ response.toString());  
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }     */
-    
 }

@@ -174,16 +174,4 @@ public class ETUnsubEvent extends ETSoapObject{
         this.list = list;
     }
     
-/*    public static void main( String[] args ){
-        try {
-            System.out.println("hello world");
-            ETClient client = new ETClient("fuelsdk.properties");
-            
-            ETResponse<ETUnsubEvent> response = client.retrieve(ETUnsubEvent.class);
-            System.out.println("resp="+ response.toString());  
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }     */
-    
 }

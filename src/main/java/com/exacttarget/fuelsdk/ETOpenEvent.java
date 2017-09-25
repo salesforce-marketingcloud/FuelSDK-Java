@@ -140,15 +140,4 @@ public class ETOpenEvent extends ETSoapObject{
         this.batchID = batchID;
     }
     
-/*    public static void main( String[] args ){
-        try {
-            System.out.println("hello world");
-            ETClient client = new ETClient("fuelsdk.properties");
-            
-            ETResponse<ETOpenEvent> response = client.retrieve(ETOpenEvent.class);
-            System.out.println("resp="+ response.toString());  
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    } */
 }
