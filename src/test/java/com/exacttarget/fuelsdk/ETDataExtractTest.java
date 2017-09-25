@@ -46,7 +46,6 @@ public class ETDataExtractTest {
     {
         try {
             ETDataExtract etde = new ETDataExtract(client);
-            //etde.testDataExtract2();
             
             etde.setDECustomerKey(deCustKey);
             etde.setOutputFileName("java-DE-"+unique+".csv");
@@ -61,7 +60,6 @@ public class ETDataExtractTest {
             }
             
         } catch (ETSdkException ex) {
-            //Logger.getLogger(ETDataExtract.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
         }        
     }    
@@ -75,7 +73,6 @@ public class ETDataExtractTest {
 
         
             etde.setOutputFileName("java-track-"+unique+".zip");
-//            etde.setDECustomerKey(deCustKey);
             etde.setStartDate(sdf.parse(start));
             etde.setEndDate(sdf.parse(end));
             ExtractResponseMsg resp = etde.extractTrackingData();
@@ -88,7 +85,6 @@ public class ETDataExtractTest {
                 ExtractResult er = r.getExtractResult();
                 assertEquals(er.getRequest().getID(), etde.extractType.get(extractName2));
                 System.out.println("id="+er.getRequest().getID());
-                //System.out.println("res type="+res.getExtractResult());
             }
             
     }     
