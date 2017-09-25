@@ -28,7 +28,6 @@ import java.util.logging.Logger;
 
 public class ETDataExtract 
 {
-//    private ETClient client;
     private Soap soap;
     
     public HashMap<String, String> extractType;
