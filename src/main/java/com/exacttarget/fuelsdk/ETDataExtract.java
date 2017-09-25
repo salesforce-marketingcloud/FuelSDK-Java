@@ -59,7 +59,6 @@ public class ETDataExtract
     public ETDataExtract(ETClient client)
     {
         try {
-            //client = new ETClient("fuelsdk.properties");
             extractType = new HashMap<String, String>();
             
             soap = client.getSoapConnection().getSoap("Extract");  
@@ -193,36 +192,6 @@ public class ETDataExtract
             extractType.put(r.getObject().getName(), r.getObject().getId());
         }    
     }    
-    
-
-    
-//    /**
-//     * @return the client
-//     */
-//    public ETClient getClient() {
-//        return client;
-//    }
-//
-//    /**
-//     * @param client the client to set
-//     */
-//    public void setClient(ETClient client) {
-//        this.client = client;
-//    }
-
-//    /**
-//     * @return the soap
-//     */
-//    public Soap getSoap() {
-//        return soap;
-//    }
-//
-//    /**
-//     * @param soap the soap to set
-//     */
-//    public void setSoap(Soap soap) {
-//        this.soap = soap;
-//    }
 
     /**
      * @return the outputFileName

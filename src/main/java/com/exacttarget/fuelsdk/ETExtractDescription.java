@@ -69,28 +69,5 @@ public class ETExtractDescription extends ETSoapObject{
     public void setName(String name) {
         this.name = name;
     }
-    
- /*   public static void main( String[] args ){
-        try {
-            System.out.println("hello world");
-            ETClient client = new ETClient("fuelsdk.properties");
-            
-            ETResponse<ETExtractDescription> response = client.retrieve(ETExtractDescription.class);
-            //System.out.println("resp="+ response.toString());  
-            
-            //List<ETResult<ETExtractDescription>> result = response.getResults();// client.retrieve(ETExtractDescription.class);
-            for(ETResult<ETExtractDescription> r : response.getResults()){
-                System.out.print("ID="+ r.getObject().getId());  
-                System.out.println(", Name="+ r.getObject().getName());  
-                
-                for( ExtractParameterDescription p: r.getObject().parameters.getParameter() ){
-                    System.out.println("param name="+ p.getName() + ", param type="+p.getDataType());  
-                }
 
-            }
-            
-        } catch (ETSdkException ex) {
-            ex.printStackTrace();
-        }
-    }   */    
 }
