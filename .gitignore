@@ -1,6 +1,7 @@
 # OS X
 .DS_Store
 fuelsdk.properties
+log4j.properties
 settings.xml
 
 # Eclipse
@@ -16,3 +17,4 @@ settings.xml
 # Maven
 target/
 /bin/
+/nbproject/

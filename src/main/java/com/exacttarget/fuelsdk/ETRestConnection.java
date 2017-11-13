@@ -267,11 +267,11 @@ public class ETRestConnection {
             connection.setRequestProperty("Authorization", "Bearer " + client.refreshToken());
         }
 
-        try {
-            connection.connect();
-        } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(ETRestConnection.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+//            connection.connect();
+//        } catch (IOException ex) {
+//            java.util.logging.Logger.getLogger(ETRestConnection.class.getName()).log(Level.SEVERE, null, ex);
+//        }
         
         
         if (logger.isDebugEnabled()) {
