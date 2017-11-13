@@ -126,7 +126,6 @@ public class ETSoapConnection {
                 // the fuelsdk.properties file is not an integer.
             }
             HTTPClientPolicy clientPolicy = new HTTPClientPolicy();
-            //clientPolicy.setBrowserType("FuelSDK-Java-1.2.0-SOAP_policy");
             if (cxfConnectTimeout != null) {
                 clientPolicy.setConnectionTimeout(cxfConnectTimeout);
             }
@@ -235,12 +234,12 @@ public class ETSoapConnection {
     }
 
     public Soap getSoap(String m) {
-        soapClient.getRequestContext().put("HTTP_HEADER_USER_AGENT", "FuelSDK-Java-v1.2.1-SOAP-"+m);
+        soapClient.getRequestContext().put("HTTP_HEADER_USER_AGENT", "FuelSDK-Java-v1.2.2-SOAP-"+m);
         return soap;
     }
     
     public Soap getSoap(String m, String o) {
-        soapClient.getRequestContext().put("HTTP_HEADER_USER_AGENT", "FuelSDK-Java-v1.2.1-SOAP-"+m+"-"+o);
+        soapClient.getRequestContext().put("HTTP_HEADER_USER_AGENT", "FuelSDK-Java-v1.2.2-SOAP-"+m+"-"+o);
         return soap;
     }    
     
