@@ -27,7 +27,12 @@ the Javadocs at http://salesforce-marketingcloud.github.io/FuelSDK-Java/.
 
 # New Features in Version 1.2.2
 * New addition to the source packages
-    - Added support for Content Area, Data Extract, Extract Description, Result Message, Triggered Send Summary. 
+    - Content Area
+    - Data Extract
+    - Extract Description
+    - Result Message
+    - Triggered Send Summary
+
 * JUnit test case : Test cases added to test Content Area, Data Extract, Result Message, Triggered Send Summary.
 
 Installation
