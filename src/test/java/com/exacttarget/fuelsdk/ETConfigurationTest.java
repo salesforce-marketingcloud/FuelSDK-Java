@@ -141,18 +141,4 @@ public class ETConfigurationTest {
         String s = configuration.get("soapEndpoint");//getSoapEndpoint();
         assertEquals(soapEndpoint, s);
     }
-    
-    @Test
-    public void _11_TestCreateConfig()
-        throws ETSdkException
-    {
-        ETConfiguration config = new ETConfiguration();
-        config.set("clientId", "eooqap5vfm9vjonc5uw5iavg");
-        config.set("clientSecret", "VZVCdjRjlW52BvDK5PTTjSGN");
-        config.set("authEndpoint", "https://auth-qa.exacttargetapis.com");
-
-        ETClient client = new ETClient(config);
-        assertNotNull(client);
-    }    
-    
 }
