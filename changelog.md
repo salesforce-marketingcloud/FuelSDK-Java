@@ -1,8 +1,3 @@
-## Version 1.2.2 - 11/13/2017 ##
-* New addition to the source packages
-    - Added support for Content Area, Data Extract, Extract Description, Result Message, Triggered Send Summary.
-* JUnit test case : Test cases added to test Content Area, Data Extract, Result Message, Triggered Send Summary.
-
 ## Version 1.2.1 - 08/28/2017 ##
 
 * New addition to the source packages
