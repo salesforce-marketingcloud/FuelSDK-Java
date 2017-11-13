@@ -25,26 +25,10 @@ Java platform. Among other things, the SDK:
 For more information about the Java SDK and how to use it, please see
 the Javadocs at http://salesforce-marketingcloud.github.io/FuelSDK-Java/.
 
-# New Features in Version 1.2.1
+# New Features in Version 1.2.2
 * New addition to the source packages
-    - Added support for Sendable Data Extension. Two new properties (SendableSubscriberField, SendableDataExtensionField) are added to ETDataExtension class to support Sendable Data Extension. 
-      IsSendable property need to be set true. Code snippet to create sendable data extension:
-<pre>
-        ETDataExtension dataExtension = new ETDataExtension();
-        dataExtension.setKey(UUID.randomUUID().toString());
-        dataExtension.setName(UUID.randomUUID().toString());
-        dataExtension.setIsSendable(true);
-        Attribute at = new Attribute();
-        at.setName("Subscriber Key");
-        at.setValue(null);
-        dataExtension.setSendableSubscriberField(at);
-        dataExtension.addColumn("EmailAddress", ETDataExtensionColumn.Type.EMAIL_ADDRESS, 100, null, null, true, true, null);
-        dataExtension.addColumn("FirstName", ETDataExtensionColumn.Type.TEXT);
-        dataExtension.setSendableDataExtensionField(dataExtension.getColumn("EmailAddress"));
-        ETResponse<ETDataExtension> response = client.create(dataExtension);
-</pre>
-
-* JUnit test case : Test cases added to DataExtension to test sendable data extension.
+    - Added support for Content Area, Data Extract, Extract Description, Result Message, Triggered Send Summary. 
+* JUnit test case : Test cases added to test Content Area, Data Extract, Result Message, Triggered Send Summary.
 
 Installation
 ------------
@@ -54,7 +38,7 @@ The easiest way to install the Java SDK is via Maven&mdash;simply add the follow
     <dependency>
       <groupId>com.github.salesforce-marketingcloud</groupId>
       <artifactId>fuelsdk</artifactId>
-      <version>1.2.1</version>
+      <version>1.2.2</version>
     </dependency>
 
 Maven will automatically resolve, download, and install all dependencies for you.

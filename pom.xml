@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.salesforce-marketingcloud</groupId>
   <artifactId>fuelsdk</artifactId>
-  <version>1.2.1</version>
+  <version>1.2.2</version>
   <name>Salesforce Marketing Cloud Java SDK</name>
   <description>Salesforce Marketing Cloud Java SDK</description>
   <url>https://github.com/salesforce-marketingcloud/FuelSDK-Java</url>
@@ -26,7 +26,6 @@
     <connection>scm:git:git@github.com:salesforce-marketingcloud/FuelSDK-Java</connection>
     <developerConnection>scm:git:git@github.com:salesforce-marketingcloud/FuelSDK-Java</developerConnection>
     <url>git@github.com:salesforce-marketingcloud/FuelSDK-Java</url>
-    <tag>fuelsdk-1.2.1</tag>
   </scm>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
