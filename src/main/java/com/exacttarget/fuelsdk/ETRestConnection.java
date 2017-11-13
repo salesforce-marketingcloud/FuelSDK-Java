@@ -240,7 +240,7 @@ public class ETRestConnection {
         try {
             connection = (HttpURLConnection) url.openConnection();
             
-            connection.setRequestProperty("User-Agent", "FuelSDK-Java-v1.2.1-REST-"+method+"-"+object);
+            connection.setRequestProperty("User-Agent", "FuelSDK-Java-v1.2.2-REST-"+method+"-"+object);
             connection.setRequestMethod(method.toString());
         } catch (ProtocolException ex) {
             throw new ETSdkException("error setting request method: " + method.toString(), ex);
@@ -267,13 +267,6 @@ public class ETRestConnection {
             connection.setRequestProperty("Authorization", "Bearer " + client.refreshToken());
         }
 
-        try {
-            connection.connect();
-        } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(ETRestConnection.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
         if (logger.isDebugEnabled()) {
             for (String key : connection.getRequestProperties().keySet()) {
                 logger.debug(key + ": " + connection.getRequestProperty(key));

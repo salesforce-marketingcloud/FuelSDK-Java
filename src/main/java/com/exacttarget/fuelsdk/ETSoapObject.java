@@ -77,6 +77,7 @@ import com.exacttarget.fuelsdk.internal.DeleteResult;
 import com.exacttarget.fuelsdk.internal.FilterPart;
 import com.exacttarget.fuelsdk.internal.Email;
 import com.exacttarget.fuelsdk.internal.EmailType;
+import com.exacttarget.fuelsdk.internal.ExtractDescription;
 import com.exacttarget.fuelsdk.internal.ListClassificationEnum;
 import com.exacttarget.fuelsdk.internal.ListTypeEnum;
 import com.exacttarget.fuelsdk.internal.LogicalOperators;
@@ -809,6 +810,12 @@ public abstract class ETSoapObject extends ETApiObject {
                 ETDataExtensionColumn.class);
         convertUtils.register(new InternalObjectConverter(),
                 DataExtensionField.class);
+
+        // ETExtractDescription
+        convertUtils.register(new ExternalObjectConverter(),
+                ETExtractDescription.class);
+        convertUtils.register(new InternalObjectConverter(),
+                ExtractDescription.class);
 
         // ETDataExtensionColumnType
         convertUtils.register(new EnumConverter(),
