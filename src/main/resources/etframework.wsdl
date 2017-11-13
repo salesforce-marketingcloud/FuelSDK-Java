@@ -1366,7 +1366,15 @@
           <sequence>
             <element name="OverallStatus" type="xsd:string" />
             <element name="RequestID" minOccurs="0" maxOccurs="1" type="xsd:string" />
-            <element name="Results" minOccurs="0" maxOccurs="unbounded" type="tns:ExtractResult" />
+            <!-- <element name="Results" minOccurs="0" maxOccurs="unbounded" type="tns:ExtractResult" />    -->
+            <element name="Results" minOccurs="0" maxOccurs="unbounded" >
+                <complexType>
+                    <sequence>
+                        <element name="ExtractResult" minOccurs="0" maxOccurs="1" type="tns:ExtractResult" />
+                    </sequence>
+                </complexType>
+            </element>            
+            
           </sequence>
         </complexType>
       </element>

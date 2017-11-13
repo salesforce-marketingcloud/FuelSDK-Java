@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
-                             http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.github.salesforce-marketingcloud</groupId>
   <artifactId>fuelsdk</artifactId>
@@ -29,6 +26,7 @@
     <connection>scm:git:git@github.com:salesforce-marketingcloud/FuelSDK-Java</connection>
     <developerConnection>scm:git:git@github.com:salesforce-marketingcloud/FuelSDK-Java</developerConnection>
     <url>git@github.com:salesforce-marketingcloud/FuelSDK-Java</url>
+    <tag>fuelsdk-1.2.1</tag>
   </scm>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -275,7 +273,7 @@
                     </goals>
                   </pluginExecutionFilter>
                   <action>
-                    <ignore></ignore>
+                    <ignore />
                   </action>
                 </pluginExecution>
               </pluginExecutions>
