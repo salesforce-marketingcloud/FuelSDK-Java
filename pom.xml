@@ -26,7 +26,6 @@
     <connection>scm:git:git@github.com:salesforce-marketingcloud/FuelSDK-Java</connection>
     <developerConnection>scm:git:git@github.com:salesforce-marketingcloud/FuelSDK-Java</developerConnection>
     <url>git@github.com:salesforce-marketingcloud/FuelSDK-Java</url>
-    <tag>fuelsdk-1.2.1</tag>
   </scm>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
