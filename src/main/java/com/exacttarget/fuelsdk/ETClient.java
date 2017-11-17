@@ -55,7 +55,7 @@ import org.apache.log4j.Logger;
  * client library.
  */
 
-public class ETClient {
+public class ETClient implements IETClient {
     private static Logger logger = Logger.getLogger(ETClient.class);
 
     private static final String DEFAULT_PROPERTIES_FILE_NAME =
@@ -75,13 +75,6 @@ public class ETClient {
 
     private String clientId = null;
     private String clientSecret = null;
-
-    private String username = null;
-    private String password = null;
-
-    private String endpoint = null;
-    private String authEndpoint = null;
-    private String soapEndpoint = null;
 
     private Boolean autoHydrateObjects = true;
 
@@ -129,18 +122,18 @@ public class ETClient {
         clientId = configuration.get("clientId");
         clientSecret = configuration.get("clientSecret");
 
-        username = configuration.get("username");
-        password = configuration.get("password");
+        String username = configuration.get("username");
+        String password = configuration.get("password");
 
-        endpoint = configuration.get("endpoint");
+        String endpoint = configuration.get("endpoint");
         if (endpoint == null) {
             endpoint = DEFAULT_ENDPOINT;
         }
-        authEndpoint = configuration.get("authEndpoint");
+        String authEndpoint = configuration.get("authEndpoint");
         if (authEndpoint == null) {
             authEndpoint = DEFAULT_AUTH_ENDPOINT;
         }
-        soapEndpoint = configuration.get("soapEndpoint");
+        String soapEndpoint = configuration.get("soapEndpoint");
 
         GsonBuilder gsonBuilder = new GsonBuilder()
             .excludeFieldsWithoutExposeAnnotation()
@@ -250,6 +243,7 @@ public class ETClient {
      * 
      * @return      The ETRestConnection
      */
+    @Override
     public ETRestConnection getRestConnection() {
         return restConnection;
     }

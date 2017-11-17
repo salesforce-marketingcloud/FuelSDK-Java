@@ -58,7 +58,7 @@ import org.apache.log4j.Logger;
  * connection to the Salesforce Marketing Cloud REST API.
  */
 
-public class ETRestConnection {
+public class ETRestConnection implements IETRestConnection {
     private static Logger logger = Logger.getLogger(ETRestConnection.class);
 
     private ETClient client = null;
@@ -100,6 +100,7 @@ public class ETRestConnection {
      * @param   path    The path to GET the response
      * @return  The Response object
      */
+    @Override
     public Response get(String path)
         throws ETSdkException
     {
@@ -126,6 +127,7 @@ public class ETRestConnection {
      * @param   path    The path to POST or create
      * @return  The Response object
      */
+    @Override
     public Response post(String path, String payload)
         throws ETSdkException
     {
@@ -152,6 +154,7 @@ public class ETRestConnection {
      * @param   path    The path to PATCH or update
      * @return  The Response object
      */
+    @Override
     public Response patch(String path, String payload)
         throws ETSdkException
     {
@@ -178,6 +181,7 @@ public class ETRestConnection {
      * @param   path    The path to DELETE
      * @return  The Response object
      */
+    @Override
     public Response delete(String path)
         throws ETSdkException
     {
