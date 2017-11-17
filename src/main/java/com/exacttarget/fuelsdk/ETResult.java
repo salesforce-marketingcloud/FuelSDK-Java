@@ -36,6 +36,10 @@ package com.exacttarget.fuelsdk;
 
 import com.exacttarget.fuelsdk.annotations.PrettyPrint;
 
+/**
+ * An <code>ETResult</code> object represents result from the SOAP/REST response 
+ * in the Salesforce Marketing Cloud.
+ */
 public class ETResult<T extends ETApiObject> extends ETObject {
     public enum Status {
         OK, ERROR

@@ -21,8 +21,9 @@ public class ClearAttachmentsOutInterceptor extends AbstractSoapInterceptor {
     * Class constructor.
     */
     public ClearAttachmentsOutInterceptor() {
-//        super(Phase.SETUP_ENDING);
+        //super(Phase.SETUP_ENDING);
         super(Phase.POST_LOGICAL);
+        //super(Phase.POST_MARSHAL);
 
     }
 
@@ -43,4 +44,13 @@ public class ClearAttachmentsOutInterceptor extends AbstractSoapInterceptor {
             throw new Fault(ce);
         }
     }
+    
+    /**
+     *
+     * @param message
+     */
+/*    @Override
+    public void handleFault(SoapMessage message) {
+        System.out.println("mess="+message);
+    } */   
 }
