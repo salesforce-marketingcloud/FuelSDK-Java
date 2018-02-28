@@ -92,7 +92,7 @@ public class ETClientTest {
     public void testBackwardCompatibility2()
         throws ETSdkException
     {
-        ETClient client = new ETClient("/fuelsdk.properties");
+        ETClient client = new ETClient("fuelsdk.properties");
         ETFilter filter = new ETFilter();
 //        filter.setProperty("key");
 //        filter.setOperator(ETFilter.Operator.EQUALS);
@@ -128,7 +128,7 @@ public class ETClientTest {
     public void testBackwardCompatibility3()
         throws ETSdkException
     {
-        ETClient client = new ETClient("/fuelsdk.properties");
+        ETClient client = new ETClient("fuelsdk.properties");
         ETFilter filter = new ETFilter();
 //        filter.setProperty("key");
 //        filter.setOperator(ETFilter.Operator.EQUALS);
@@ -165,7 +165,7 @@ public class ETClientTest {
     public void testBackwardCompatibility4()
         throws ETSdkException
     {
-        ETClient client = new ETClient("/fuelsdk.properties");
+        ETClient client = new ETClient("fuelsdk.properties");
         ETFilter filter = new ETFilter();
 //        filter.setProperty("key");
 //        filter.setOperator(ETFilter.Operator.EQUALS);
