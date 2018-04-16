@@ -226,8 +226,6 @@ public class ETRestConnection {
     private HttpURLConnection sendRequest(URL url, Method method, String payload)
         throws ETSdkException
     {
-        Gson gson = client.getGson();
-
         logger.debug(method + " " + url);
         String[] token = url.getPath().split("/");
         String object = "";
@@ -274,14 +272,8 @@ public class ETRestConnection {
         }
 
         if (payload != null) {
-            if (logger.isDebugEnabled()) {
-                JsonParser jsonParser = new JsonParser();
-                String payloadPrettyPrinted =
-                        gson.toJson(jsonParser.parse(payload));
-                for (String line : payloadPrettyPrinted.split("\\n")) {
-                    logger.debug(line);
-                }
-            }
+            debugResponse(payload);
+
             OutputStream os = null;
             try {
                 os = connection.getOutputStream();
@@ -312,7 +304,6 @@ public class ETRestConnection {
     private String receiveResponse(HttpURLConnection connection)
         throws ETSdkException
     {
-        Gson gson = client.getGson();
 
         InputStream is = null;
         try {
@@ -326,33 +317,52 @@ public class ETRestConnection {
         }
 
         StringBuilder stringBuilder = new StringBuilder();
-        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
-        try {
-            String line = null;
-            while ((line = reader.readLine()) != null) {
-                stringBuilder.append(line);
+
+        if (is != null)
+        {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            try
+            {
+                String line = null;
+                while ((line = reader.readLine()) != null)
+                {
+                    stringBuilder.append(line);
+                }
             }
-        } catch (IOException ex) {
-            throw new ETSdkException("error reading " + connection.getURL(), ex);
-        } finally {
-            try {
-                reader.close();
-            } catch (IOException ex) {
-                throw new ETSdkException("error closing " + connection.getURL(), ex);
+            catch (IOException ex)
+            {
+                throw new ETSdkException("error reading " + connection.getURL(), ex);
+            }
+            finally
+            {
+                try
+                {
+                    reader.close();
+                }
+                catch (IOException ex)
+                {
+                    throw new ETSdkException("error closing " + connection.getURL(), ex);
+                }
             }
         }
 
         String response = stringBuilder.toString();
 
+        debugResponse(response);
+
+        return response;
+    }
+
+    private void debugResponse(String response)
+    {
         if (logger.isDebugEnabled()) {
+            Gson gson = client.getGson();
             JsonParser jsonParser = new JsonParser();
             String responsePrettyPrinted = gson.toJson(jsonParser.parse(response));
             for (String line : responsePrettyPrinted.split("\\n")) {
                 logger.debug(line);
             }
         }
-
-        return response;
     }
 
     /**
