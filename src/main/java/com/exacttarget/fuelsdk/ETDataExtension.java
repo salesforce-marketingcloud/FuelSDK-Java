@@ -913,6 +913,13 @@ public class ETDataExtension extends ETSoapObject {
             //
 
             DataExtensionObject internalRow = new DataExtensionObject();
+
+            if (row.getDataExtensionKey() == null) {
+                internalRow.setCustomerKey(key);
+            } else {
+                internalRow.setCustomerKey(row.getDataExtensionKey());
+            }
+
             DataExtensionObject.Keys keys = new DataExtensionObject.Keys();
             hydrate(); // make sure we've retrieved all columns
             for (ETDataExtensionColumn column : columns) {
