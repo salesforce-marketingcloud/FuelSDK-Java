@@ -33,11 +33,18 @@
 
 #
 # API endpoint URLs (the defaults should work in most cases--note
-# that soapEndpoint must be specified if using username/password):
+# that soapEndpoint must be specified if using username/password),
+# otherwise it should just be omitted.
+# endpoint and authEndpoint will be defaulted if omitted.
 #
 
 #endpoint=
+# Default: https://www.exacttargetapis.com
+
+
 #authEndpoint=
+# Default: https://auth.exacttargetapis.com
+
 #soapEndpoint=
 
 #soapEndpoint=https://webservice.exacttarget.com/Service.asmx
