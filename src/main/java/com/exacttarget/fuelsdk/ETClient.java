@@ -60,10 +60,6 @@ public class ETClient {
 
     private static final String DEFAULT_PROPERTIES_FILE_NAME =
             "fuelsdk.properties";
-    private static final String DEFAULT_ENDPOINT =
-            "https://www.exacttargetapis.com";
-    private static final String DEFAULT_AUTH_ENDPOINT =
-            "https://auth.exacttargetapis.com";
     private static final String PATH_REQUESTTOKEN =
             "/v1/requestToken";
     private static final String PATH_REQUESTTOKEN_LEGACY =
@@ -131,16 +127,17 @@ public class ETClient {
 
         username = configuration.get("username");
         password = configuration.get("password");
-
-        endpoint = configuration.get("endpoint");
-        if (endpoint == null) {
-            endpoint = DEFAULT_ENDPOINT;
-        }
         authEndpoint = configuration.get("authEndpoint");
-        if (authEndpoint == null) {
-            authEndpoint = DEFAULT_AUTH_ENDPOINT;
-        }
+        endpoint = configuration.get("endpoint");
         soapEndpoint = configuration.get("soapEndpoint");
+
+        if (authEndpoint == null) {
+            throw new ETSdkException("must specify 'authEndpoint' in configuration file");
+        }
+
+        if (endpoint == null) {
+            throw new ETSdkException("must specify 'endpoint' in configuration file");
+        }
 
         GsonBuilder gsonBuilder = new GsonBuilder()
             .excludeFieldsWithoutExposeAnnotation()
