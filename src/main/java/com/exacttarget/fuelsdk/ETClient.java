@@ -131,11 +131,11 @@ public class ETClient {
         endpoint = configuration.get("endpoint");
         soapEndpoint = configuration.get("soapEndpoint");
 
-        if (authEndpoint == null) {
+        if (authEndpoint == null || authEndpoint.trim().equals("")) {
             throw new ETSdkException("must specify 'authEndpoint' in configuration file");
         }
 
-        if (endpoint == null) {
+        if (endpoint == null || endpoint.trim().equals("")) {
             throw new ETSdkException("must specify 'endpoint' in configuration file");
         }
 

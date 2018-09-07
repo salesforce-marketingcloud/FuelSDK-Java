@@ -34,6 +34,7 @@
 
 package com.exacttarget.fuelsdk;
 
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Properties;
@@ -44,54 +45,53 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-class ETConfigurationStub extends ETConfiguration {
-
-    private Properties properties = new Properties();
-
-    public ETConfigurationStub(String type) {
-        properties.setProperty("clientId", "acbcd");
-        properties.setProperty("clientSecret", "acbcd");
-
-        if (!type.equals("noendpoint.properties")) {
-            properties.setProperty("endpoint", "http://apiurl");
-        }
-
-        if (!type.equals("noauthendpoint.properties")) {
-            properties.setProperty("authEndpoint", "http://authurl");
-        }
-    }
-
-    /**
-     * @param key          The key of a property.
-     * @return             The value of the key.
-     */
-    @Override
-    public String get(String key) {
-        return properties.getProperty(key);
-    }
-}
-
 public class ETClientTest {
 
     @Test
-    public void testNoDefaultForEndpoint()
+    public void testNoDefaultForEndpoint() throws ETSdkException
     {
-        ETConfigurationStub stubConfig = new ETConfigurationStub("noendpoint.properties");
+        URL fileToRead = ETClientTest.class.getClassLoader().getResource("noendpoint.properties");
+        ETConfiguration stubConfig = new ETConfiguration(fileToRead.getFile());
         try {
             ETClient client = new ETClient(stubConfig);
         } catch (ETSdkException e) {
-            assertEquals(e.getMessage(), "must specify 'endpoint' in configuration file");
+            assertEquals("must specify 'endpoint' in configuration file", e.getMessage());
         }
     }
 
     @Test
-    public void testNoDefaultForAuthEndpoint()
+    public void testNoDefaultForEmptyEndpoint() throws ETSdkException
     {
-        ETConfigurationStub stubConfig = new ETConfigurationStub("noauthendpoint.properties");
+        URL fileToRead = ETClientTest.class.getClassLoader().getResource("emptyendpoint.properties");
+        ETConfiguration stubConfig = new ETConfiguration(fileToRead.getFile());
         try {
             ETClient client = new ETClient(stubConfig);
         } catch (ETSdkException e) {
-            assertEquals(e.getMessage(), "must specify 'authEndpoint' in configuration file");
+            assertEquals("must specify 'endpoint' in configuration file", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testNoDefaultForAuthEndpoint() throws ETSdkException
+    {
+        URL fileToRead = ETClientTest.class.getClassLoader().getResource("noauthendpoint.properties");
+        ETConfiguration stubConfig = new ETConfiguration(fileToRead.getFile());
+        try {
+            ETClient client = new ETClient(stubConfig);
+        } catch (ETSdkException e) {
+            assertEquals("must specify 'authEndpoint' in configuration file", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testNoDefaultForEmptyAuthEndpoint() throws ETSdkException
+    {
+        URL fileToRead = ETClientTest.class.getClassLoader().getResource("emptyauthendpoint.properties");
+        ETConfiguration stubConfig = new ETConfiguration(fileToRead.getFile());
+        try {
+            ETClient client = new ETClient(stubConfig);
+        } catch (ETSdkException e) {
+            assertEquals("must specify 'authEndpoint' in configuration file", e.getMessage());
         }
     }
 
