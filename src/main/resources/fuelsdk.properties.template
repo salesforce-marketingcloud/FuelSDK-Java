@@ -32,18 +32,13 @@
 #password=
 
 #
-# API endpoint URLs (the defaults should work in most cases--note
-# that soapEndpoint must be specified if using username/password):
+# API endpoint URLs (note that soapEndpoint must be specified if using username/password),
+# endpoint and authEndpoint properties are required.
 #
 
 #endpoint=
 #authEndpoint=
 #soapEndpoint=
-
-#soapEndpoint=https://webservice.exacttarget.com/Service.asmx
-#soapEndpoint=https://webservice.s4.exacttarget.com/Service.asmx
-#soapEndpoint=https://webservice.s6.exacttarget.com/Service.asmx
-#soapEndpoint=https://webservice.s7.exacttarget.com/Service.asmx
 
 #
 # Configuration:

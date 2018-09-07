@@ -36,33 +36,63 @@ package com.exacttarget.fuelsdk;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Properties;
 
-import org.junit.Assume;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-public class ETClientTest {
-    
-/*    public static void main(String[] args){
-        ETClientTest etc = new ETClientTest();
-        try{
-            etc.testBackwardCompatibility1();
-        }catch(ETSdkException ex){
-            ex.printStackTrace();
+class ETConfigurationStub extends ETConfiguration {
+
+    private Properties properties = new Properties();
+
+    public ETConfigurationStub(String type) {
+        properties.setProperty("clientId", "acbcd");
+        properties.setProperty("clientSecret", "acbcd");
+
+        if (!type.equals("noendpoint.properties")) {
+            properties.setProperty("endpoint", "http://apiurl");
         }
-    
+
+        if (!type.equals("noauthendpoint.properties")) {
+            properties.setProperty("authEndpoint", "http://authurl");
+        }
     }
-*/    
-    @BeforeClass
-    public static void setUpBeforeClass()
-        throws ETSdkException
+
+    /**
+     * @param key          The key of a property.
+     * @return             The value of the key.
+     */
+    @Override
+    public String get(String key) {
+        return properties.getProperty(key);
+    }
+}
+
+public class ETClientTest {
+
+    @Test
+    public void testNoDefaultForEndpoint()
     {
- //       Assume.assumeNotNull(ETClientTest.class
- //               .getResource("/fuelsdk.properties"));
+        ETConfigurationStub stubConfig = new ETConfigurationStub("noendpoint.properties");
+        try {
+            ETClient client = new ETClient(stubConfig);
+        } catch (ETSdkException e) {
+            assertEquals(e.getMessage(), "must specify 'endpoint' in configuration file");
+        }
+    }
+
+    @Test
+    public void testNoDefaultForAuthEndpoint()
+    {
+        ETConfigurationStub stubConfig = new ETConfigurationStub("noauthendpoint.properties");
+        try {
+            ETClient client = new ETClient(stubConfig);
+        } catch (ETSdkException e) {
+            assertEquals(e.getMessage(), "must specify 'authEndpoint' in configuration file");
+        }
     }
 
     @Test
