@@ -165,6 +165,8 @@ public class ETEmail extends ETSoapObject {
     @ExternalName("type")
     @InternalName("emailType")
     private Type type = null;
+    @ExternalName("status")
+    private String status;
 
     /** 
     * Class constructor, Initializes a new instance of the class.
@@ -327,6 +329,14 @@ public class ETEmail extends ETSoapObject {
     */
     public void setType(Type type) {
         this.type = type;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     /**
