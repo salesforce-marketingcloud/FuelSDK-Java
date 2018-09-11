@@ -39,8 +39,8 @@ public class ETClickEvent extends ETSoapObject{
     @ExternalName("batchID")
     private Integer batchID;   
     
-    @ExternalName("urlid")
-    private Integer urlid;
+    @ExternalName("urlId")
+    private Integer urlId;
     
     @ExternalName("url")
     private String url;
@@ -148,15 +148,15 @@ public class ETClickEvent extends ETSoapObject{
     /**
      * @return the urlid
      */
-    public Integer getUrlid() {
-        return urlid;
+    public Integer getUrlId() {
+        return urlId;
     }
 
     /**
-     * @param urlid the urlid to set
+     * @param urlId the urlid to set
      */
-    public void setUrlid(Integer urlid) {
-        this.urlid = urlid;
+    public void setUrlId(Integer urlId) {
+        this.urlId = urlId;
     }
 
     /**
