@@ -32,5 +32,4 @@
       <jaxb:property name="urlIdLong" />
     </jaxb:bindings>
   </jaxb:bindings>
-  </jaxb:bindings>
 </jaxb:bindings>
