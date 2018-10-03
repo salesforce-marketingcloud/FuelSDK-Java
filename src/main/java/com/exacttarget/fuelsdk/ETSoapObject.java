@@ -125,6 +125,7 @@ public abstract class ETSoapObject extends ETApiObject {
      * @param page          The page number
      * @param pageSize      The page size
      * @param filter        The ETFilter object
+     * @param continueRequest The continue request
      * @return              The ETResponse object of type T which extends from ETSoapObject
      * @throws ETSdkException 
      */
@@ -132,7 +133,8 @@ public abstract class ETSoapObject extends ETApiObject {
                                                                   Class<T> type,
                                                                   Integer page,
                                                                   Integer pageSize,
-                                                                  ETFilter filter)
+                                                                  ETFilter filter,
+                                                                  String continueRequest)
         throws ETSdkException
     {
         if (page != null) {
@@ -146,7 +148,7 @@ public abstract class ETSoapObject extends ETApiObject {
             throw new ETSdkException("order by argument not supported on this object type");
         }
 
-        return retrieve(client, null, filter, type);
+        return retrieve(client, null, filter, type, continueRequest);
     }
 
     /**
@@ -161,16 +163,18 @@ public abstract class ETSoapObject extends ETApiObject {
      * @param soapObjectName The object name to retrieve for SOAP
      * @param filter        The ETFilter object
      * @param type          The class type to retrieve
+     * @param continueRequest The continue request
      * @return              The ETResponse object of type T which extends from ETSoapObject
      * @throws ETSdkException 
      */
     protected static <T extends ETSoapObject> ETResponse<T> retrieve(ETClient client,
                                                                      String soapObjectName,
                                                                      ETFilter filter,
-                                                                     Class<T> type)
+                                                                     Class<T> type,
+                                                                     String continueRequest)
         throws ETSdkException
     {
-        return retrieve(client, soapObjectName, filter, null, type);
+        return retrieve(client, soapObjectName, filter, continueRequest, type);
     }
 
     /**
@@ -313,6 +317,7 @@ public abstract class ETSoapObject extends ETApiObject {
             }
         } else {
             if (continueRequest != null) {
+                soap = connection.getSoap();
                 retrieveRequest.setContinueRequest(continueRequest);
             }
         }

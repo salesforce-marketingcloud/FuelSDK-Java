@@ -515,7 +515,8 @@ public class ETDataExtension extends ETSoapObject {
                 ETSoapObject.retrieve(client,
                                       "DataExtensionObject[" + name + "]",
                                       filter,
-                                      ETDataExtensionRow.class);
+                                      ETDataExtensionRow.class,
+                                      null);
         
         List<ETResult<ETDataExtensionRow>> rowSet = sortRowSet(response.getResults(), filter);
         
@@ -1010,7 +1011,8 @@ public class ETDataExtension extends ETSoapObject {
                                                ETDataExtensionColumn.class,
                                                null, // page
                                                null, // pageSize
-                                               filter);
+                                               filter,
+                                               null); // continueRequest
 
         return response.getObjects();
     }
