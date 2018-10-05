@@ -99,7 +99,7 @@ public class ETClient {
     private long tokenExpirationTime = 0;
     private static long soapEndpointExpiration = 0;
     private static String fetchedSoapEndpoint = null;
-    private static final long cacheDurationInMillis = 1000 * 60 * 15;
+    private static final long cacheDurationInMillis = 1000 * 60 * 10; // 10 minutes
 
     /** 
     * Class constructor, Initializes a new instance of the class.
