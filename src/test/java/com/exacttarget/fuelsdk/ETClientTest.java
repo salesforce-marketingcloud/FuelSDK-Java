@@ -34,6 +34,7 @@
 
 package com.exacttarget.fuelsdk;
 
+import java.lang.reflect.Field;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -196,6 +197,25 @@ public class ETClientTest {
         assertNull(folder.getIsActive());
         assertNull(folder.getIsEditable());
         assertNull(folder.getAllowChildren());
+    }
+
+    @Test
+    public void testSoapEndpointCaching()
+            throws ETSdkException, NoSuchFieldException, IllegalAccessException {
+        ETClient client1 = new ETClient("fuelsdk.properties");
+        ETClient client2 = new ETClient("fuelsdk.properties");
+
+        Field instance1SoapEndpointExpirationField = client1.getClass().getDeclaredField("soapEndpointExpiration");
+        instance1SoapEndpointExpirationField.setAccessible(true);
+        long instance1SoapEndpointExpiration = instance1SoapEndpointExpirationField.getLong(null);
+
+        Field instance2SoapEndpointExpirationField = client2.getClass().getDeclaredField("soapEndpointExpiration");
+        instance2SoapEndpointExpirationField.setAccessible(true);
+        long instance2SoapEndpointExpiration = instance2SoapEndpointExpirationField.getLong(null);
+
+        assertTrue(instance1SoapEndpointExpiration > 0);
+        assertTrue(instance2SoapEndpointExpiration > 0);
+        assertEquals(instance1SoapEndpointExpiration, instance2SoapEndpointExpiration);
     }
 
     //
