@@ -205,17 +205,35 @@ public class ETClientTest {
         ETClient client1 = new ETClient("fuelsdk.properties");
         ETClient client2 = new ETClient("fuelsdk.properties");
 
-        Field instance1SoapEndpointExpirationField = client1.getClass().getDeclaredField("soapEndpointExpiration");
-        instance1SoapEndpointExpirationField.setAccessible(true);
-        long instance1SoapEndpointExpiration = instance1SoapEndpointExpirationField.getLong(null);
+        long instance1SoapEndpointExpiration = getInstanceSoapEndpointExpiration(client1);
+        String instance1FetchedSoapEndpoint = getFetchedSoapEndpoint(client1);
 
-        Field instance2SoapEndpointExpirationField = client2.getClass().getDeclaredField("soapEndpointExpiration");
-        instance2SoapEndpointExpirationField.setAccessible(true);
-        long instance2SoapEndpointExpiration = instance2SoapEndpointExpirationField.getLong(null);
+        long instance2SoapEndpointExpiration = getInstanceSoapEndpointExpiration(client2);
+        String instance2FetchedSoapEndpoint = getFetchedSoapEndpoint(client2);
 
-        assertTrue(instance1SoapEndpointExpiration > 0);
-        assertTrue(instance2SoapEndpointExpiration > 0);
-        assertEquals(instance1SoapEndpointExpiration, instance2SoapEndpointExpiration);
+        // check if cache was used
+        if(instance1FetchedSoapEndpoint != null && instance2FetchedSoapEndpoint != null) {
+            assertTrue(instance1SoapEndpointExpiration > 0);
+            assertTrue(instance2SoapEndpointExpiration > 0);
+            assertEquals(instance1SoapEndpointExpiration, instance2SoapEndpointExpiration);
+        }
+        else
+        {
+            assertTrue(instance1SoapEndpointExpiration == 0);
+            assertTrue(instance2SoapEndpointExpiration == 0);
+        }
+    }
+
+    private String getFetchedSoapEndpoint(ETClient client) throws NoSuchFieldException, IllegalAccessException {
+        Field field = client.getClass().getDeclaredField("fetchedSoapEndpoint");
+        field.setAccessible(true);
+        return (String) field.get(null);
+    }
+
+    private long getInstanceSoapEndpointExpiration(ETClient client) throws NoSuchFieldException, IllegalAccessException {
+        Field field = client.getClass().getDeclaredField("soapEndpointExpiration");
+        field.setAccessible(true);
+        return field.getLong(null);
     }
 
     //
