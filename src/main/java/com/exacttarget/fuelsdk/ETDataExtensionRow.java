@@ -42,6 +42,7 @@ import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.InternalName;
 import com.exacttarget.fuelsdk.annotations.SoapObject;
 import com.exacttarget.fuelsdk.internal.DataExtensionObject;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * An <code>ETDataExtensionRow</code> object represents a
@@ -123,7 +124,8 @@ public class ETDataExtensionRow extends ETSoapObject {
 
     /** 
     * @return       The set of column names of the ETDataExtensionRow object.
-    */     
+    */
+    @JsonIgnore
     public Set<String> getColumnNames() {
         return columns.keySet();
     }

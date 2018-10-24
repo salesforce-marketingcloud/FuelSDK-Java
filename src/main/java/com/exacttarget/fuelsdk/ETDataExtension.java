@@ -485,15 +485,14 @@ public class ETDataExtension extends ETSoapObject {
         //
         // The data extension can be specified using key or name:
         //
-
         ETExpression e = ETExpression.parse(dataExtension);
         if (e.getProperty().toLowerCase().equals("key")
                 && e.getOperator() == ETExpression.Operator.EQUALS) {
-            name = e.getValue();
+            String key = e.getValue();
             // if no columns are explicitly requested
             // retrieve all columns
             if (filter.getProperties().isEmpty()) {
-                filter.setProperties(retrieveColumnNames(client, name));
+                filter.setProperties(retrieveColumnNames(client, key));
             }
         } else if (e.getProperty().toLowerCase().equals("name")
                 && e.getOperator() == ETExpression.Operator.EQUALS) {
