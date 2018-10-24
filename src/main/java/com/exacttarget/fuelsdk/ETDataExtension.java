@@ -261,24 +261,24 @@ public class ETDataExtension extends ETSoapObject {
     /** 
     * @param name       The column name of the ETDataExtension object.
     */    
-    public void addColumn(String name) {
-        addColumn(name, null, null, null, null, null, null, null);
+    public ETDataExtensionColumn addColumn(String name) {
+        return addColumn(name, null, null, null, null, null, null, null);
     }
 
     /** 
     * @param name       The column name of the ETDataExtension object.
     * @param type       The ETDataExtensionColumn type
     */    
-    public void addColumn(String name, Type type) {
-        addColumn(name, type, null, null, null, null, null, null);
+    public ETDataExtensionColumn addColumn(String name, Type type) {
+        return addColumn(name, type, null, null, null, null, null, null);
     }
 
     /** 
     * @param name           The column name of the ETDataExtension object.
     * @param isPrimaryKey   true if the column is primary key, false otherwise.
     */    
-    public void addColumn(String name, Boolean isPrimaryKey) {
-        addColumn(name, null, null, null, null, isPrimaryKey, null, null);
+    public ETDataExtensionColumn addColumn(String name, Boolean isPrimaryKey) {
+        return addColumn(name, null, null, null, null, isPrimaryKey, null, null);
     }
 
     /** 
@@ -286,8 +286,8 @@ public class ETDataExtension extends ETSoapObject {
     * @param type       The ETDataExtensionColumn type
     * @param isPrimaryKey   true if the column is primary key, false otherwise.
     */    
-    public void addColumn(String name, Type type, Boolean isPrimaryKey) {
-        addColumn(name, type, null, null, null, isPrimaryKey, null, null);
+    public ETDataExtensionColumn addColumn(String name, Type type, Boolean isPrimaryKey) {
+        return addColumn(name, type, null, null, null, isPrimaryKey, null, null);
     }
 
     /** 
@@ -300,7 +300,7 @@ public class ETDataExtension extends ETSoapObject {
     * @param isRequired     true if the column is required, false otherwise.
     * @param defaultValue   The default value of the column
     */    
-    public void addColumn(String name,
+    public ETDataExtensionColumn addColumn(String name,
                           Type type,
                           Integer length,
                           Integer precision,
@@ -345,6 +345,7 @@ public class ETDataExtension extends ETSoapObject {
         }
         column.setDefaultValue(defaultValue);
         addColumn(column);
+        return column;
     }
 
     /** 
@@ -482,6 +483,10 @@ public class ETDataExtension extends ETSoapObject {
     {
         String name = null;
 
+        if (filter == null) {
+            filter = new ETFilter();
+        }
+
         //
         // The data extension can be specified using key or name:
         //
@@ -489,8 +494,11 @@ public class ETDataExtension extends ETSoapObject {
         if (e.getProperty().toLowerCase().equals("key")
                 && e.getOperator() == ETExpression.Operator.EQUALS) {
             String key = e.getValue();
-            // if no columns are explicitly requested
-            // retrieve all columns
+
+            ETDataExtension etDataExtension = getDataExtensionByKey(key, client);
+            name = etDataExtension.getName();
+
+            // if no columns are explicitly requested retrieve all columns
             if (filter.getProperties().isEmpty()) {
                 filter.setProperties(retrieveColumnNames(client, key));
             }
@@ -591,6 +599,32 @@ public class ETDataExtension extends ETSoapObject {
 
         return response;
     }
+
+    public static ETDataExtension getDataExtensionByKey(String key, ETClient client) throws ETSdkException {
+        client.refreshToken();
+
+        ETExpression expression = new ETExpression();
+        expression.setProperty("DataExtension.CustomerKey");
+        expression.setOperator(ETExpression.Operator.EQUALS);
+        expression.addValue(key);
+
+        ETFilter keyFilter = new ETFilter();
+        keyFilter.setExpression(expression);
+
+        ETResponse<ETDataExtension> response =
+                ETDataExtension.retrieve(client,
+                        ETDataExtension.class,
+                        null, // page
+                        null, // pageSize
+                        keyFilter,
+                        null); // continueRequest
+
+        if (response.getObjects().isEmpty()) {
+            throw new ETSdkException("Could not find a data extension with the key: " + key);
+        }
+        return response.getObjects().get(0);
+    }
+
     private static List<ETResult<ETDataExtensionRow>> sortRowSet(List<ETResult<ETDataExtensionRow>> rowSet, ETFilter filter) throws ETSdkException {
         logger.debug("rowSet: " + rowSet);
         logger.debug("filter: " + filter);
