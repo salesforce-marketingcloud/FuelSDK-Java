@@ -192,21 +192,26 @@ public class ETClient {
     }
 
     private void FetchSoapEndpoint() {
-        if ((soapEndpoint == null || soapEndpoint.equals("")) || (System.currentTimeMillis() > soapEndpointExpiration) && fetchedSoapEndpoint != null) {
+        if (soapEndpoint == null || soapEndpoint.equals("")) {
             //
             // If a SOAP endpoint isn't specified automatically determine it:
             //
             try {
-                ETRestConnection.Response response = restConnection.get(PATH_ENDPOINTS_SOAP);
-                if (response.getResponseCode() == 200) {
-                    String responsePayload = response.getResponsePayload();
-                    JsonParser jsonParser = new JsonParser();
-                    JsonObject jsonObject = jsonParser.parse(responsePayload).getAsJsonObject();
-                    soapEndpoint = jsonObject.get("url").getAsString();
-                    fetchedSoapEndpoint = soapEndpoint;
-                    soapEndpointExpiration = System.currentTimeMillis() + cacheDurationInMillis;
-                } else {
-                    soapEndpoint = DEFAULT_SOAP_ENDPOINT;
+                if(System.currentTimeMillis() > soapEndpointExpiration || fetchedSoapEndpoint == null) {
+                    ETRestConnection.Response response = restConnection.get(PATH_ENDPOINTS_SOAP);
+                    if (response.getResponseCode() == 200) {
+                        String responsePayload = response.getResponsePayload();
+                        JsonParser jsonParser = new JsonParser();
+                        JsonObject jsonObject = jsonParser.parse(responsePayload).getAsJsonObject();
+                        soapEndpoint = jsonObject.get("url").getAsString();
+                        fetchedSoapEndpoint = soapEndpoint;
+                        soapEndpointExpiration = System.currentTimeMillis() + cacheDurationInMillis;
+                    } else {
+                        soapEndpoint = DEFAULT_SOAP_ENDPOINT;
+                    }
+                }
+                else {
+                    soapEndpoint = fetchedSoapEndpoint;
                 }
             }
             catch(ETSdkException ex) {
