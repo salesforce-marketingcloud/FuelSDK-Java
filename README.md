@@ -27,6 +27,7 @@ the Javadocs at http://salesforce-marketingcloud.github.io/FuelSDK-Java/.
 
 New Features in Version 1.3.2 
 ------------
+* Added support for your tenant’s endpoints - [More Details](https://developer.salesforce.com/docs/atlas.en-us.mc-apis.meta/mc-apis/your-subdomain-tenant-specific-endpoints.htm)
 * REST, Auth endpoints are configurable. If not specified in the fuelsdk.properties file,
 they are defaulted to "https://www.exacttargetapis.com" for REST and 
 "https://auth.exacttargetapis.com" for Auth.
