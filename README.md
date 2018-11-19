@@ -25,12 +25,15 @@ Java platform. Among other things, the SDK:
 For more information about the Java SDK and how to use it, please see
 the Javadocs at http://salesforce-marketingcloud.github.io/FuelSDK-Java/.
 
-New Features in Version 1.2.2
+New Features in Version 1.3.2 
 ------------
-* Content Area
-* Data Extract
-* Result Message
-* Triggered Send Summary
+* Added support for your tenant’s endpoints - [More Details](https://developer.salesforce.com/docs/atlas.en-us.mc-apis.meta/mc-apis/your-subdomain-tenant-specific-endpoints.htm)
+* REST, Auth endpoints are configurable. If not specified in the fuelsdk.properties file,
+they are defaulted to "https://www.exacttargetapis.com" for REST and 
+"https://auth.exacttargetapis.com" for Auth.
+* SOAP endpoint is also configurable. If not specified in the fuelsdk.properties file, 
+it is defaulted to "https://webservice.exacttarget.com/service.asmx"
+* Removed the legacyToken query string parameter support.
 
 
 Installation
@@ -41,7 +44,7 @@ The easiest way to install the Java SDK is via Maven&mdash;simply add the follow
     <dependency>
       <groupId>com.github.salesforce-marketingcloud</groupId>
       <artifactId>fuelsdk</artifactId>
-      <version>1.2.2</version>
+      <version>1.3.2</version>
     </dependency>
 
 Maven will automatically resolve, download, and install all dependencies for you.

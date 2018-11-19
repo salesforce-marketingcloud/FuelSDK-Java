@@ -66,10 +66,10 @@ public class ETClient {
             "https://auth.exacttargetapis.com";
     private static final String PATH_REQUESTTOKEN =
             "/v1/requestToken";
-    private static final String PATH_REQUESTTOKEN_LEGACY =
-            "/v1/requestToken?legacy=1";
     private static final String PATH_ENDPOINTS_SOAP =
             "/platform/v1/endpoints/soap";
+    private static final String DEFAULT_SOAP_ENDPOINT =
+            "https://webservice.exacttarget.com/Service.asmx";
 
     private ETConfiguration configuration = null;
 
@@ -97,6 +97,9 @@ public class ETClient {
     private String refreshToken = null;
 
     private long tokenExpirationTime = 0;
+    private static long soapEndpointExpiration = 0;
+    private static String fetchedSoapEndpoint = null;
+    private static final long cacheDurationInMillis = 1000 * 60 * 10; // 10 minutes
 
     /** 
     * Class constructor, Initializes a new instance of the class.
@@ -155,17 +158,7 @@ public class ETClient {
             authConnection = new ETRestConnection(this, authEndpoint, true);
             requestToken();
             restConnection = new ETRestConnection(this, endpoint);
-            if (soapEndpoint == null) {
-                //
-                // If a SOAP endpoint isn't specified automatically determine it:
-                //
-
-                ETRestConnection.Response response = restConnection.get(PATH_ENDPOINTS_SOAP);
-                String responsePayload = response.getResponsePayload();
-                JsonParser jsonParser = new JsonParser();
-                JsonObject jsonObject = jsonParser.parse(responsePayload).getAsJsonObject();
-                soapEndpoint = jsonObject.get("url").getAsString();
-            }
+            FetchSoapEndpoint();
             soapConnection = new ETSoapConnection(this, soapEndpoint, accessToken);
         } else {
             if (username == null || password == null) {
@@ -195,6 +188,35 @@ public class ETClient {
             logger.trace("  authEndpoint = " + authEndpoint);
             logger.trace("  soapEndpoint = " + soapEndpoint);
             logger.trace("  autoHydrateObjects = " + autoHydrateObjects);
+        }
+    }
+
+    private void FetchSoapEndpoint() {
+        if (soapEndpoint == null || soapEndpoint.equals("")) {
+            //
+            // If a SOAP endpoint isn't specified automatically determine it:
+            //
+            try {
+                if(System.currentTimeMillis() > soapEndpointExpiration || fetchedSoapEndpoint == null) {
+                    ETRestConnection.Response response = restConnection.get(PATH_ENDPOINTS_SOAP);
+                    if (response.getResponseCode() == 200) {
+                        String responsePayload = response.getResponsePayload();
+                        JsonParser jsonParser = new JsonParser();
+                        JsonObject jsonObject = jsonParser.parse(responsePayload).getAsJsonObject();
+                        soapEndpoint = jsonObject.get("url").getAsString();
+                        fetchedSoapEndpoint = soapEndpoint;
+                        soapEndpointExpiration = System.currentTimeMillis() + cacheDurationInMillis;
+                    } else {
+                        soapEndpoint = DEFAULT_SOAP_ENDPOINT;
+                    }
+                }
+                else {
+                    soapEndpoint = fetchedSoapEndpoint;
+                }
+            }
+            catch(ETSdkException ex) {
+                soapEndpoint = DEFAULT_SOAP_ENDPOINT;
+            }
         }
     }
 
@@ -323,11 +345,8 @@ public class ETClient {
         String requestPayload = gson.toJson(jsonObject);
 
         ETRestConnection.Response response = null;
-        if (configuration.isTrue("requestLegacyToken")) {
-            response = authConnection.post(PATH_REQUESTTOKEN_LEGACY, requestPayload);
-        } else {
-            response = authConnection.post(PATH_REQUESTTOKEN, requestPayload);
-        }
+
+        response = authConnection.post(PATH_REQUESTTOKEN, requestPayload);
 
         if (response.getResponseCode() != HttpURLConnection.HTTP_OK) {
             throw new ETSdkException("error obtaining access token "

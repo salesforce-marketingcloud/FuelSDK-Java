@@ -34,6 +34,7 @@
 
 package com.exacttarget.fuelsdk;
 
+import java.lang.reflect.Field;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
@@ -196,6 +197,43 @@ public class ETClientTest {
         assertNull(folder.getIsActive());
         assertNull(folder.getIsEditable());
         assertNull(folder.getAllowChildren());
+    }
+
+    @Test
+    public void testSoapEndpointCaching()
+            throws ETSdkException, NoSuchFieldException, IllegalAccessException {
+        ETClient client1 = new ETClient("fuelsdk.properties");
+        ETClient client2 = new ETClient("fuelsdk.properties");
+
+        long instance1SoapEndpointExpiration = getInstanceSoapEndpointExpiration(client1);
+        String instance1FetchedSoapEndpoint = getFetchedSoapEndpoint(client1);
+
+        long instance2SoapEndpointExpiration = getInstanceSoapEndpointExpiration(client2);
+        String instance2FetchedSoapEndpoint = getFetchedSoapEndpoint(client2);
+
+        // check if cache was used
+        if(instance1FetchedSoapEndpoint != null && instance2FetchedSoapEndpoint != null) {
+            assertTrue(instance1SoapEndpointExpiration > 0);
+            assertTrue(instance2SoapEndpointExpiration > 0);
+            assertEquals(instance1SoapEndpointExpiration, instance2SoapEndpointExpiration);
+        }
+        else
+        {
+            assertTrue(instance1SoapEndpointExpiration == 0);
+            assertTrue(instance2SoapEndpointExpiration == 0);
+        }
+    }
+
+    private String getFetchedSoapEndpoint(ETClient client) throws NoSuchFieldException, IllegalAccessException {
+        Field field = client.getClass().getDeclaredField("fetchedSoapEndpoint");
+        field.setAccessible(true);
+        return (String) field.get(null);
+    }
+
+    private long getInstanceSoapEndpointExpiration(ETClient client) throws NoSuchFieldException, IllegalAccessException {
+        Field field = client.getClass().getDeclaredField("soapEndpointExpiration");
+        field.setAccessible(true);
+        return field.getLong(null);
     }
 
     //
