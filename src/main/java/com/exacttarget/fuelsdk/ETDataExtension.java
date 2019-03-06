@@ -34,26 +34,16 @@
 
 package com.exacttarget.fuelsdk;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.log4j.Logger;
-
 import com.exacttarget.fuelsdk.ETDataExtensionColumn.Type;
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.InternalName;
 import com.exacttarget.fuelsdk.annotations.RestObject;
 import com.exacttarget.fuelsdk.annotations.SoapObject;
-import com.exacttarget.fuelsdk.ETDataExtensionColumn.Type;
-import com.exacttarget.fuelsdk.internal.APIObject;
-import com.exacttarget.fuelsdk.internal.APIProperty;
-import com.exacttarget.fuelsdk.internal.Attribute;
-import com.exacttarget.fuelsdk.internal.DataExtension;
-import com.exacttarget.fuelsdk.internal.DataExtensionObject;
+import com.exacttarget.fuelsdk.internal.*;
+import org.apache.log4j.Logger;
+
+import java.util.*;
+import java.util.List;
 
 /**
  * An <code>ETDataExtension</code> object represents a data extension
@@ -465,20 +455,52 @@ public class ETDataExtension extends ETSoapObject {
     }
 
     /**
-     *
      * @param client        The ETClient object
-     * @param dataExtension The data extension 
+     * @param dataExtension The data extension
+     * @param continueRequest Null if first request, request id for additional data
+     * @param filter        The ETFilter to be used to select rows
+     * @return The ETResponse of ETDataExtensionRow
+     * @throws ETSdkException
+     */
+    public static ETResponse<ETDataExtensionRow> select(ETClient client,
+                                                        String dataExtension,
+                                                        String continueRequest,
+                                                        ETFilter filter) throws ETSdkException {
+        return select(client, dataExtension, null, null, filter, continueRequest);
+    }
+
+    /**
+     * @param client        The ETClient object
+     * @param dataExtension The data extension
      * @param page          The page number
      * @param pageSize      The page size
-     * @param filter        The ETFilter to be used to select rows 
-     * @return              The ETResponse of ETDataExtensionRow 
+     * @param filter        The ETFilter to be used to select rows
+     * @return The ETResponse of ETDataExtensionRow
      * @throws ETSdkException
      */
     public static ETResponse<ETDataExtensionRow> select(ETClient client,
                                                         String dataExtension,
                                                         Integer page,
                                                         Integer pageSize,
-                                                        ETFilter filter)
+                                                        ETFilter filter) throws ETSdkException {
+        return select(client, dataExtension, page, pageSize, filter, null);
+    }
+
+    /**
+     * @param client        The ETClient object
+     * @param dataExtension The data extension
+     * @param page          The page number
+     * @param pageSize      The page size
+     * @param filter        The ETFilter to be used to select rows
+     * @return The ETResponse of ETDataExtensionRow
+     * @throws ETSdkException
+     */
+    public static ETResponse<ETDataExtensionRow> select(ETClient client,
+                                                        String dataExtension,
+                                                        Integer page,
+                                                        Integer pageSize,
+                                                        ETFilter filter,
+                                                        String continueRequest)
         throws ETSdkException
     {
         String name = null;
@@ -523,7 +545,7 @@ public class ETDataExtension extends ETSoapObject {
                                       "DataExtensionObject[" + name + "]",
                                       filter,
                                       ETDataExtensionRow.class,
-                                      null);
+                        continueRequest);
         
         List<ETResult<ETDataExtensionRow>> rowSet = sortRowSet(response.getResults(), filter);
         
