@@ -9,6 +9,7 @@ import java.util.*;
 import com.exacttarget.fuelsdk.annotations.*;
 import com.exacttarget.fuelsdk.internal.*;
 
+import org.joda.time.DateTime;
 import org.junit.*;
 import org.junit.runners.*;
 import static org.junit.Assert.*;
@@ -22,12 +23,76 @@ public class ETSubscriberTest
     private static String unique = "";
     private String email = "sharif.ahmed@salesforce.com";
     private String sid = "247972618";
+    //private String testSubscriberId = "242583795";
+    private String testSubscriberId = "242584399";
+
+    private ETClient defClient;
+    String[] subscriberProperties = { "id", "key", "emailAddress", "status", "preferredEmailType" };
 
     @BeforeClass
     public static void setUpBeforeClass() throws ETSdkException
     {
         client = new ETClient("fuelsdk.properties");
         unique = UUID.randomUUID().toString();
+    }
+
+    @Test
+    public void testGapBug() throws ETSdkException
+    {
+        testGetSubscriberEmail(testSubscriberId, "");
+    }
+
+//    private ETClient getClient() throws ETSdkException {
+//        if (defClient == null) {
+//            System.out.println("Creating client");
+//            String clientId = config.getClientIds().get("PARENT");
+//            String clientSecret = config.getClientSecret().get("PARENT");
+//            ETConfiguration configuration = new ETConfiguration();
+//            configuration.set("clientId", clientId);
+//            configuration.set("clientSecret", clientSecret);
+//            configuration.set("cxfReceiveTimeout", "120000");
+//            configuration.set("cxfConnectTimeout", "120000");
+//            configuration.set("accessType", "offline");
+//            defClient = new ETClient(configuration);
+//        }
+//        return defClient;
+//    }
+
+    @Test
+    public void testGapBugPerformance()
+    {
+        for (int i = 0; i < 4000; i++) {
+            long before = DateTime.now().getMillis();
+            long after = 0;
+            try{
+                //ETResponse<ETSubscriber> response = client.retrieve(ETSubscriber.class, filter);
+                //result = response.getResult();
+                testGetSubscriberEmail(testSubscriberId, "");
+                after = DateTime.now().getMillis();
+                System.out.println("Successful fuelsdk call, took "+ (after-before));
+            }
+            catch(ETSdkException e){
+                System.out.println(e);
+                after = DateTime.now().getMillis();
+                System.out.println("Exception in fuelsdk call, took "+ (after-before));
+            }
+        }
+    }
+
+
+    public String testGetSubscriberEmail(String subscriberId, String brandMarket) throws ETSdkException {
+        //ETClient client = getClient();
+        ETExpression expression = new ETExpression();
+        expression.setProperty("id");
+        expression.setOperator(ETExpression.Operator.EQUALS);
+        expression.addValue(subscriberId);
+        ETFilter filter = new ETFilter();
+        for (String property : subscriberProperties) {
+            filter.addProperty(property);
+        }
+        filter.setExpression(expression);
+        ETSubscriber sub = client.retrieveObject(ETSubscriber.class, filter);
+        return sub.getEmailAddress();
     }
 
     @Test
@@ -50,7 +115,7 @@ public class ETSubscriberTest
         ETResult<ETSubscriber> result = response.getResult();
         System.out.println("res="+ result.toString());
     }
-    
+
     @Test
     @SuppressWarnings("deprecation")    
     public void getSubscriber() throws ETSdkException
