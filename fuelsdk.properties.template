@@ -1,4 +1,7 @@
 clientId=xxxxxxx
 clientSecret=###########################
 authEndpoint=https://auth.exacttargetapis.com
+endpoint=https://########.rest.marketingcloudapis.com
+soapEndpoint=https://########.soap.marketingcloudapis.com/service.asmx
+useOAuth2Authentication=false
 dataExtensionFolderId=
