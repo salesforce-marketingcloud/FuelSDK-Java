@@ -329,9 +329,6 @@ public class ETClient {
             // no-op
             return null;
         }
-
-        logger.debug("requesting OAuth2 access token...");
-
         //
         // Construct the JSON payload.
         //
@@ -365,11 +362,8 @@ public class ETClient {
 
         JsonParser jsonParser = new JsonParser();
         jsonObject = jsonParser.parse(responsePayload).getAsJsonObject();
-        logger.debug("received OAuth2 token:");
         this.accessToken = jsonObject.get("access_token").getAsString();
-        logger.debug("  accessToken: " + this.accessToken);
         this.expiresIn = jsonObject.get("expires_in").getAsInt();
-        logger.debug("  expiresIn: " + this.expiresIn);
         this.endpoint = jsonObject.get("rest_instance_url").getAsString();
         this.soapEndpoint = jsonObject.get("soap_instance_url").getAsString() + "service.asmx";
 
@@ -380,8 +374,6 @@ public class ETClient {
         //
 
         tokenExpirationTime = System.currentTimeMillis() + (expiresIn * 1000);
-
-        logger.debug("access OAuth2 token expires at " + new Date(tokenExpirationTime));
 
         return accessToken;
     }
