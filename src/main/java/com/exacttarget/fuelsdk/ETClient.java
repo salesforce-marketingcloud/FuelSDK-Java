@@ -103,6 +103,8 @@ public class ETClient {
     private static String fetchedSoapEndpoint = null;
     private static final long cacheDurationInMillis = 1000 * 60 * 10; // 10 minutes
     private boolean useOAuth2Authentication;
+    private String accountId;
+    private String scope;
 
     /** 
     * Class constructor, Initializes a new instance of the class.
@@ -158,6 +160,8 @@ public class ETClient {
         }
 
         useOAuth2Authentication = configuration.isTrue("useOAuth2Authentication") ? true : false;
+        accountId = configuration.get("accountId");
+        scope = configuration.get("scope");
 
         if (clientId != null && clientSecret != null) {
             authConnection = new ETRestConnection(this, authEndpoint, true);
@@ -337,6 +341,14 @@ public class ETClient {
         jsonObject.addProperty("client_id", clientId);
         jsonObject.addProperty("client_secret", clientSecret);
         jsonObject.addProperty("grant_type", "client_credentials");
+        if(accountId != null && accountId.length() > 0)
+        {
+            jsonObject.addProperty("account_id", accountId);
+        }
+        if(scope != null && scope.length() > 0)
+        {
+            jsonObject.addProperty("scope", scope);
+        }
 
         String requestPayload = gson.toJson(jsonObject);
 
