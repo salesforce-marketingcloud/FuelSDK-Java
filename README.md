@@ -30,6 +30,19 @@ New Features in Version 1.4.0
 * Added support for OAuth2 authentication - [More Details](https://developer.salesforce.com/docs/atlas.en-us.mc-app-development.meta/mc-app-development/integration-considerations.htm)
 * To enable OAuth2 authentication, set `useOAuth2Authentication=true` in the fuelsdk.properties file.
 
+  Sample Config for OAuth2:
+
+```
+clientId=<CLIENT_ID>
+clientSecret=<CLIENT_SECRET>
+authEndpoint=<AUTH TENANT SPECIFIC ENDPOINT>
+endpoint=<REST TENANT SPECIFIC ENDPOINT>
+soapEndpoint=<SOAP TENANT SPECIFIC ENDPOINT>
+useOAuth2Authentication=true
+accountId=<TARGET_ACCOUNT_ID>
+scope=<PERMISSION_LIST>
+```
+
 Installation
 ------------
 
