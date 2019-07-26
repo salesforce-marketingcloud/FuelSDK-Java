@@ -41,6 +41,9 @@ import java.text.SimpleDateFormat;
 import org.junit.Assume;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import javax.swing.border.EtchedBorder;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
@@ -192,6 +195,34 @@ public class ETClientTest {
             assertTrue(instance1SoapEndpointExpiration == 0);
             assertTrue(instance2SoapEndpointExpiration == 0);
         }
+    }
+
+    @Test
+    public void isNullOrBlankOrEmpty_shouldReturnTrue_whenInputIsNullPointer(){
+
+        String nullPointer = null;
+        assertTrue(ETClient.isNullOrBlankOrEmpty(nullPointer));
+    }
+
+    @Test
+    public void isNullOrBlankOrEmpty_shouldReturnTrue_whenInputIsBlankString(){
+
+        String blankString = "    ";
+        assertTrue(ETClient.isNullOrBlankOrEmpty(blankString));
+    }
+
+    @Test
+    public void isNullOrBlankOrEmpty_shouldReturnTrue_whenInputIsEmptyString(){
+
+        String emptyString = "";
+        assertTrue(ETClient.isNullOrBlankOrEmpty(emptyString));
+    }
+
+    @Test
+    public void isNullOrBlankOrEmpty_shouldReturnFalse_whenInputIsNotNullOrBlankOrEmptyString(){
+
+        String notNullOrBlankOrEmptyString = "NotNullOrBlankOrEmptyString";
+        assertFalse(ETClient.isNullOrBlankOrEmpty(notNullOrBlankOrEmptyString));
     }
 
     private String getFetchedSoapEndpoint(ETClient client) throws NoSuchFieldException, IllegalAccessException {
