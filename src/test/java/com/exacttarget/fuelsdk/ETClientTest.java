@@ -47,24 +47,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 public class ETClientTest {
-    
-/*    public static void main(String[] args){
-        ETClientTest etc = new ETClientTest();
-        try{
-            etc.testBackwardCompatibility1();
-        }catch(ETSdkException ex){
-            ex.printStackTrace();
-        }
-    
-    }
-*/    
-    @BeforeClass
-    public static void setUpBeforeClass()
-        throws ETSdkException
-    {
- //       Assume.assumeNotNull(ETClientTest.class
- //               .getResource("/fuelsdk.properties"));
-    }
 
     @Test
     @SuppressWarnings("deprecation")
@@ -73,11 +55,8 @@ public class ETClientTest {
     {
         ETClient client = new ETClient("fuelsdk.properties");
         ETFilter filter = new ETFilter();
-//        filter.setProperty("key");
-//        filter.setOperator(ETFilter.Operator.EQUALS);
-//        filter.addValue("dataextension_default");
-        
         ETExpression exp = new ETExpression();
+
         exp.setProperty("key");
         exp.setOperator(ETExpression.Operator.EQUALS);
         exp.addValue("dataextension_default");
@@ -95,11 +74,8 @@ public class ETClientTest {
     {
         ETClient client = new ETClient("fuelsdk.properties");
         ETFilter filter = new ETFilter();
-//        filter.setProperty("key");
-//        filter.setOperator(ETFilter.Operator.EQUALS);
-//        filter.addValue("dataextension_default");
-        
         ETExpression exp = new ETExpression();
+
         exp.setProperty("key");
         exp.setOperator(ETExpression.Operator.EQUALS);
         exp.addValue("dataextension_default");
@@ -131,11 +107,8 @@ public class ETClientTest {
     {
         ETClient client = new ETClient("fuelsdk.properties");
         ETFilter filter = new ETFilter();
-//        filter.setProperty("key");
-//        filter.setOperator(ETFilter.Operator.EQUALS);
-//        filter.addValue("dataextension_default");
-
         ETExpression exp = new ETExpression();
+
         exp.setProperty("key");
         exp.setOperator(ETExpression.Operator.EQUALS);
         exp.addValue("dataextension_default");
@@ -168,11 +141,8 @@ public class ETClientTest {
     {
         ETClient client = new ETClient("fuelsdk.properties");
         ETFilter filter = new ETFilter();
-//        filter.setProperty("key");
-//        filter.setOperator(ETFilter.Operator.EQUALS);
-//        filter.addValue("dataextension_default");
-        
         ETExpression exp = new ETExpression();
+
         exp.setProperty("key");
         exp.setOperator(ETExpression.Operator.EQUALS);
         exp.addValue("dataextension_default");
@@ -236,25 +206,15 @@ public class ETClientTest {
         return field.getLong(null);
     }
 
-    //
-    // XXX make these available to all tests
-    //
-
     private DateFormat dateFormat =
             new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 
     private void assertIsDataExtensionFolder(ETResponse<ETFolder> response) {
         assertEquals(1, response.getObjects().size());
         ETFolder folder = response.getObjects().get(0);
-//        assertEquals("94511", folder.getId()); // XXX make configurable
         assertEquals("dataextension_default", folder.getKey());
         assertEquals("Data Extensions", folder.getName());
         assertEquals("", folder.getDescription());
-//        assertEquals("2014-08-10T23:50:00.833", // XXX make configurable
-//                dateFormat.format(folder.getCreatedDate()));
-//        assertEquals("2014-08-10T23:50:00.833", // XXX make configurable
-//                dateFormat.format(folder.getModifiedDate()));
-//        assertEquals("dataextension", folder.getContentType());
         assertNull(folder.getParentFolderKey());
         assertTrue(folder.getIsActive());
         assertFalse(folder.getIsEditable());
