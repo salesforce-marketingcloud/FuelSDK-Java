@@ -234,12 +234,12 @@ public class ETSoapConnection {
     }
 
     public Soap getSoap(String m) {
-        soapClient.getRequestContext().put("HTTP_HEADER_USER_AGENT", "FuelSDK-Java-v1.4.0-SOAP-"+m);
+        soapClient.getRequestContext().put("HTTP_HEADER_USER_AGENT", "FuelSDK-Java-v1.5.0-SOAP-"+m);
         return soap;
     }
     
     public Soap getSoap(String m, String o) {
-        soapClient.getRequestContext().put("HTTP_HEADER_USER_AGENT", "FuelSDK-Java-v1.4.0-SOAP-"+m+"-"+o);
+        soapClient.getRequestContext().put("HTTP_HEADER_USER_AGENT", "FuelSDK-Java-v1.5.0-SOAP-"+m+"-"+o);
         return soap;
     }    
     

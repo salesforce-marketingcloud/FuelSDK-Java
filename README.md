@@ -25,6 +25,32 @@ Java platform. Among other things, the SDK:
 For more information about the Java SDK and how to use it, please see
 the Javadocs at http://salesforce-marketingcloud.github.io/FuelSDK-Java/.
 
+New Features in Version 1.5.0
+------------
+* Added Refresh Token support for OAuth2 authentication
+* Added Web/Public App support for OAuth2 authentication
+
+   More details on Access Tokens for Web/Public Apps can be found [here](https://developer.salesforce.com/docs/atlas.en-us.mc-app-development.meta/mc-app-development/access-token-app.htm)
+
+  Sample Config for OAuth2:
+  
+  ```
+  clientId=<CLIENT_ID>
+  clientSecret=<CLIENT_SECRET>
+  authEndpoint=<AUTH TENANT SPECIFIC ENDPOINT>
+  endpoint=<REST TENANT SPECIFIC ENDPOINT>
+  soapEndpoint=<SOAP TENANT SPECIFIC ENDPOINT>
+  useOAuth2Authentication=true
+  accountId=<TARGET_ACCOUNT_ID>
+  scope=<PERMISSION_LIST>
+  applicationType=<APPLICATION_TYPE>
+  redirectURI=<REDIRECT_URI_FOR_PUBLIC/WEB_APP>
+  authorizationCode=<AUTHORIZATION_CODE_FOR_PUBLIC/WEB_APP>
+  ```
+  
+* applicationType can have one of the following values: `server`, `public`, `web`. The default value of applicationType is `server`.
+
+
 New Features in Version 1.4.0
 ------------
 * Added support for OAuth2 authentication - [More Details](https://developer.salesforce.com/docs/atlas.en-us.mc-app-development.meta/mc-app-development/integration-considerations.htm)
@@ -51,7 +77,7 @@ The easiest way to install the Java SDK is via Maven&mdash;simply add the follow
     <dependency>
       <groupId>com.github.salesforce-marketingcloud</groupId>
       <artifactId>fuelsdk</artifactId>
-      <version>1.4.0</version>
+      <version>1.5.0</version>
     </dependency>
 
 Maven will automatically resolve, download, and install all dependencies for you.

@@ -94,6 +94,15 @@ public class ETClient {
     private String accessToken = null;
     private int expiresIn = 0;
     private String legacyToken = null;
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
     private String refreshToken = null;
 
     private long tokenExpirationTime = 0;
@@ -101,8 +110,6 @@ public class ETClient {
     private static String fetchedSoapEndpoint = null;
     private static final long cacheDurationInMillis = 1000 * 60 * 10; // 10 minutes
     private boolean useOAuth2Authentication;
-    private String accountId;
-    private String scope;
 
     private String applicationType;
     private String authorizationCode;
@@ -158,9 +165,7 @@ public class ETClient {
             gson = gsonBuilder.create();
         }
 
-        useOAuth2Authentication = configuration.isTrue("useOAuth2Authentication") ? true : false;
-        accountId = configuration.get("accountId");
-        scope = configuration.get("scope");
+        useOAuth2Authentication = configuration.isTrue("useOAuth2Authentication");
 
         applicationType = configuration.get("applicationType");
         authorizationCode = configuration.get("authorizationCode");
@@ -168,16 +173,17 @@ public class ETClient {
 
         if(isNullOrBlankOrEmpty(applicationType)){
             applicationType = "server";
+            configuration.set("applicationType", "server");
         }
 
-        if(applicationType == "public" || applicationType == "web"){
+        if(applicationType.equals("public") || applicationType.equals("web")){
             if (isNullOrBlankOrEmpty(authorizationCode) || isNullOrBlankOrEmpty(redirectURI)){
                 throw new ETSdkException("AuthorizationCode or RedirectURI is null: For Public/Web Apps, " +
                         "authorizationCode and redirectURI must be provided in config file");
             }
         }
 
-        if(applicationType == "public"){
+        if(applicationType.equals("public")){
             if(isNullOrBlankOrEmpty(clientId)){
                 throw new ETSdkException("ClientId is null: clientId must be provided in config file");
             }
@@ -347,7 +353,7 @@ public class ETClient {
     private synchronized String requestOAuth2Token()
         throws ETSdkException
     {
-        JsonObject payload = createPayload();
+        JsonObject payload = createPayload(configuration);
         ETRestConnection.Response response = authConnection.post(PATH_OAUTH2TOKEN, gson.toJson(payload));
 
         if (response.getResponseCode() != HttpURLConnection.HTTP_OK) {
@@ -377,32 +383,32 @@ public class ETClient {
         return accessToken;
     }
 
-    private JsonObject createPayload() {
+    JsonObject createPayload(ETConfiguration configuration) {
         JsonObject payload = new JsonObject();
 
-        payload.addProperty("client_id", clientId);
+        payload.addProperty("client_id", configuration.get("clientId"));
 
-        if(applicationType != "public"){
-            payload.addProperty("client_secret", clientSecret);
+        if(configuration.get("applicationType").equals("web") || configuration.get("applicationType").equals("server")){
+            payload.addProperty("client_secret", configuration.get("clientSecret"));
         }
         if(!isNullOrBlankOrEmpty(refreshToken)){
             payload.addProperty("grant_type", "refresh_token");
             payload.addProperty("refresh_token", refreshToken);
         }
-        else if(applicationType == "public" || applicationType == "web"){
+        else if(configuration.get("applicationType").equals("public") || configuration.get("applicationType").equals("web")){
             payload.addProperty("grant_type", "authorization_code");
-            payload.addProperty("code", authorizationCode);
-            payload.addProperty("redirect_uri", redirectURI);
+            payload.addProperty("code", configuration.get("authorizationCode"));
+            payload.addProperty("redirect_uri", configuration.get("redirectURI"));
         }
         else{
             payload.addProperty("grant_type", "client_credentials");
         }
 
-        if(!isNullOrBlankOrEmpty(accountId)){
-            payload.addProperty("account_id", accountId);
+        if(!isNullOrBlankOrEmpty(configuration.get("accountId"))){
+            payload.addProperty("account_id", configuration.get("accountId"));
         }
-        if(!isNullOrBlankOrEmpty(scope)){
-            payload.addProperty("scope", scope);
+        if(!isNullOrBlankOrEmpty(configuration.get("scope"))){
+            payload.addProperty("scope", configuration.get("scope"));
         }
 
         return payload;

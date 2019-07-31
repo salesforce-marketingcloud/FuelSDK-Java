@@ -38,25 +38,26 @@ import java.lang.reflect.Field;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-import org.junit.Assume;
+import com.google.gson.JsonObject;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import javax.swing.border.EtchedBorder;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class ETClientTest {
+
+    private static ETClient client;
+
+    @BeforeClass
+    public static void setUpClass() throws ETSdkException {
+        client = new ETClient("fuelsdk.properties");
+    }
 
     @Test
     @SuppressWarnings("deprecation")
     public void testBackwardCompatibility1()
         throws ETSdkException
     {
-        ETClient client = new ETClient("fuelsdk.properties");
         ETFilter filter = new ETFilter();
         ETExpression exp = new ETExpression();
 
@@ -75,17 +76,16 @@ public class ETClientTest {
     public void testBackwardCompatibility2()
         throws ETSdkException
     {
-        ETClient client = new ETClient("fuelsdk.properties");
         ETFilter filter = new ETFilter();
         ETExpression exp = new ETExpression();
 
         exp.setProperty("key");
         exp.setOperator(ETExpression.Operator.EQUALS);
         exp.addValue("dataextension_default");
-        
+
         filter.setExpression(exp);
         filter.addProperty("key");
-        
+
         ETResponse<ETFolder> response = client.retrieve(ETFolder.class,
                                                         filter);//,"key");
         assertEquals(1, response.getObjects().size());
@@ -108,18 +108,17 @@ public class ETClientTest {
     public void testBackwardCompatibility3()
         throws ETSdkException
     {
-        ETClient client = new ETClient("fuelsdk.properties");
         ETFilter filter = new ETFilter();
         ETExpression exp = new ETExpression();
 
         exp.setProperty("key");
         exp.setOperator(ETExpression.Operator.EQUALS);
         exp.addValue("dataextension_default");
-        
+
         filter.setExpression(exp);
         filter.addProperty("key");
         filter.addProperty("name");
-        
+
         ETResponse<ETFolder> response = client.retrieve(ETFolder.class,
                                                         filter);//,"key","name");
         assertEquals(1, response.getObjects().size());
@@ -142,19 +141,18 @@ public class ETClientTest {
     public void testBackwardCompatibility4()
         throws ETSdkException
     {
-        ETClient client = new ETClient("fuelsdk.properties");
         ETFilter filter = new ETFilter();
         ETExpression exp = new ETExpression();
 
         exp.setProperty("key");
         exp.setOperator(ETExpression.Operator.EQUALS);
         exp.addValue("dataextension_default");
-        
+
         filter.setExpression(exp);
         filter.addProperty("key");
         filter.addProperty("name");
         filter.addProperty("description");
-        
+
         ETResponse<ETFolder> response = client.retrieve(ETFolder.class,
                                                         filter);//,"key","name", "description");
         assertEquals(1, response.getObjects().size());
@@ -223,6 +221,101 @@ public class ETClientTest {
 
         String notNullOrBlankOrEmptyString = "NotNullOrBlankOrEmptyString";
         assertFalse(ETClient.isNullOrBlankOrEmpty(notNullOrBlankOrEmptyString));
+    }
+
+    @Test
+    public void createPayload_shouldReturnPayloadWithPublicAppAttributes_whenApplicationTypeIsPublic(){
+        ETConfiguration configuration = client.getConfiguration();
+
+        configuration.set("applicationType", "public");
+        configuration.set("redirectURI", "redirectURI");
+        configuration.set("authorizationCode", "authorizationCode");
+
+        JsonObject payload = client.createPayload(configuration);
+
+        assertEquals(configuration.get("clientId"), payload.get("client_id").getAsString());
+        assertEquals(configuration.get("redirectURI"), payload.get("redirect_uri").getAsString());
+        assertEquals(configuration.get("authorizationCode"), payload.get("code").getAsString());
+        assertEquals("authorization_code", payload.get("grant_type").getAsString());
+    }
+
+    @Test
+    public void createPayload_shouldReturnPayloadWithNoClientSecret_whenApplicationTypeIsPublic(){
+        ETConfiguration configuration = client.getConfiguration();
+
+        configuration.set("applicationType", "public");
+        configuration.set("redirectURI", "redirectURI");
+        configuration.set("authorizationCode", "authorizationCode");
+
+        JsonObject payload = client.createPayload(configuration);
+
+        assertNull(payload.get("client_secret"));
+    }
+
+    @Test
+    public void createPayload_shouldReturnPayloadWithWebAppAttributes_whenApplicationTypeIsWeb(){
+        ETConfiguration configuration = client.getConfiguration();
+
+        configuration.set("applicationType", "web");
+        configuration.set("redirectURI", "redirectURI");
+        configuration.set("authorizationCode", "authorizationCode");
+
+        JsonObject payload = client.createPayload(configuration);
+
+        assertEquals(configuration.get("clientId"), payload.get("client_id").getAsString());
+        assertEquals(configuration.get("clientSecret"), payload.get("client_secret").getAsString());
+        assertEquals(configuration.get("redirectURI"), payload.get("redirect_uri").getAsString());
+        assertEquals(configuration.get("authorizationCode"), payload.get("code").getAsString());
+        assertEquals("authorization_code", payload.get("grant_type").getAsString());
+    }
+
+    @Test
+    public void createPayload_shouldReturnPayloadWithServerAppAttributes_whenApplicationTypeIsServer(){
+        ETConfiguration configuration = client.getConfiguration();
+
+        configuration.set("applicationType", "server");
+
+        JsonObject payload = client.createPayload(configuration);
+
+        assertEquals(configuration.get("clientId"), payload.get("client_id").getAsString());
+        assertEquals(configuration.get("clientSecret"), payload.get("client_secret").getAsString());
+        assertEquals("client_credentials", payload.get("grant_type").getAsString());
+    }
+
+    @Test
+    public void createPayload_shouldReturnPayloadWithServerAppAttributes_whenApplicationTypeIsNotPassedInConfig(){
+        ETConfiguration configuration = client.getConfiguration();
+
+        JsonObject payload = client.createPayload(configuration);
+
+        assertEquals(configuration.get("clientId"), payload.get("client_id").getAsString());
+        assertEquals(configuration.get("clientSecret"), payload.get("client_secret").getAsString());
+        assertEquals("client_credentials", payload.get("grant_type").getAsString());
+    }
+
+    @Test
+    public void createPayload_shouldReturnPayloadWithNoRedirectURIandAuthCode_whenApplicationTypeIsServer(){
+        ETConfiguration configuration = client.getConfiguration();
+
+        configuration.set("applicationType", "server");
+
+        JsonObject payload = client.createPayload(configuration);
+
+        assertNull(payload.get("redirect_uri"));
+        assertNull(payload.get("code"));
+    }
+
+    @Test
+    public void createPayload_shouldReturnPayloadWithRefreshToken_whenClientHasRefreshToken() throws ETSdkException {
+        ETClient client = new ETClient("fuelsdk.properties");
+        ETConfiguration configuration = client.getConfiguration();
+
+        client.setRefreshToken("refreshToken");
+
+        JsonObject payload = client.createPayload(configuration);
+
+        assertEquals(client.getRefreshToken(), payload.get("refresh_token").getAsString());
+        assertEquals("refresh_token", payload.get("grant_type").getAsString());
     }
 
     private String getFetchedSoapEndpoint(ETClient client) throws NoSuchFieldException, IllegalAccessException {
