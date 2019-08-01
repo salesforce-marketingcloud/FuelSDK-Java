@@ -192,10 +192,9 @@ public class ETClient {
             if(isNullOrBlankOrEmpty(clientId) || isNullOrBlankOrEmpty(clientSecret)){
                 throw new ETSdkException("ClientId or ClientSecret is null: clientId and clientSecret must be provided in config file");
             }
-            else{
-                buildClients();
-            }
         }
+
+        buildClients();
 
         if (configuration.isFalse("autoHydrateObjects")) {
             autoHydrateObjects = false;
