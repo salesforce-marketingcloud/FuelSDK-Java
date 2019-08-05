@@ -219,8 +219,8 @@ public class ETClient {
         soapConnection = new ETSoapConnection(this, soapEndpoint, accessToken);
     }
 
-    public static boolean isNullOrBlankOrEmpty(String applicationType) {
-        return applicationType == null || StringUtils.isBlank(applicationType) || StringUtils.isEmpty(applicationType);
+    public static boolean isNullOrBlankOrEmpty(String str) {
+        return str == null || StringUtils.isBlank(str) || StringUtils.isEmpty(str);
     }
 
     private void fetchSoapEndpoint() {
