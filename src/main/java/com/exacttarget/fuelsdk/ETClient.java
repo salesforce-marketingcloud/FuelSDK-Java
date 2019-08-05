@@ -387,14 +387,16 @@ public class ETClient {
 
         payload.addProperty("client_id", configuration.get("clientId"));
 
-        if(configuration.get("applicationType").equals("web") || configuration.get("applicationType").equals("server")){
+        String applicationType = configuration.get("applicationType");
+
+        if(applicationType.equals("web") || applicationType.equals("server")){
             payload.addProperty("client_secret", configuration.get("clientSecret"));
         }
         if(!isNullOrBlankOrEmpty(refreshToken)){
             payload.addProperty("grant_type", "refresh_token");
             payload.addProperty("refresh_token", refreshToken);
         }
-        else if(configuration.get("applicationType").equals("public") || configuration.get("applicationType").equals("web")){
+        else if(applicationType.equals("public") || applicationType.equals("web")){
             payload.addProperty("grant_type", "authorization_code");
             payload.addProperty("code", configuration.get("authorizationCode"));
             payload.addProperty("redirect_uri", configuration.get("redirectURI"));
