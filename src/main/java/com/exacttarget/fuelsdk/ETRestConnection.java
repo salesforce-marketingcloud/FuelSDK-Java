@@ -240,7 +240,7 @@ public class ETRestConnection {
         try {
             connection = (HttpURLConnection) url.openConnection();
             
-            connection.setRequestProperty("User-Agent", "FuelSDK-Java-v1.3.2-REST-"+method+"-"+object);
+            connection.setRequestProperty("User-Agent", "FuelSDK-Java-v1.4.0-REST-"+method+"-"+object);
             connection.setRequestMethod(method.toString());
         } catch (ProtocolException ex) {
             throw new ETSdkException("error setting request method: " + method.toString(), ex);

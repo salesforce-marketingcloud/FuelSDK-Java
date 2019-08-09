@@ -66,6 +66,8 @@ public class ETClient {
             "https://auth.exacttargetapis.com";
     private static final String PATH_REQUESTTOKEN =
             "/v1/requestToken";
+    private static final String PATH_OAUTH2TOKEN =
+            "/v2/token";
     private static final String PATH_ENDPOINTS_SOAP =
             "/platform/v1/endpoints/soap";
     private static final String DEFAULT_SOAP_ENDPOINT =
@@ -100,6 +102,9 @@ public class ETClient {
     private static long soapEndpointExpiration = 0;
     private static String fetchedSoapEndpoint = null;
     private static final long cacheDurationInMillis = 1000 * 60 * 10; // 10 minutes
+    private boolean useOAuth2Authentication;
+    private String accountId;
+    private String scope;
 
     /** 
     * Class constructor, Initializes a new instance of the class.
@@ -154,11 +159,15 @@ public class ETClient {
             gson = gsonBuilder.create();
         }
 
+        useOAuth2Authentication = configuration.isTrue("useOAuth2Authentication") ? true : false;
+        accountId = configuration.get("accountId");
+        scope = configuration.get("scope");
+
         if (clientId != null && clientSecret != null) {
             authConnection = new ETRestConnection(this, authEndpoint, true);
             requestToken();
             restConnection = new ETRestConnection(this, endpoint);
-            FetchSoapEndpoint();
+            fetchSoapEndpoint();
             soapConnection = new ETSoapConnection(this, soapEndpoint, accessToken);
         } else {
             if (username == null || password == null) {
@@ -191,7 +200,11 @@ public class ETClient {
         }
     }
 
-    private void FetchSoapEndpoint() {
+    private void fetchSoapEndpoint() {
+        if(useOAuth2Authentication) {
+            return;
+        }
+
         if (soapEndpoint == null || soapEndpoint.equals("")) {
             //
             // If a SOAP endpoint isn't specified automatically determine it:
@@ -313,6 +326,70 @@ public class ETClient {
         return requestToken(null);
     }
 
+    private synchronized String requestOAuth2Token()
+        throws ETSdkException
+    {
+        if (clientId == null || clientSecret == null) {
+            // no-op
+            return null;
+        }
+        //
+        // Construct the JSON payload.
+        //
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("client_id", clientId);
+        jsonObject.addProperty("client_secret", clientSecret);
+        jsonObject.addProperty("grant_type", "client_credentials");
+        if(accountId != null && accountId.length() > 0)
+        {
+            jsonObject.addProperty("account_id", accountId);
+        }
+        if(scope != null && scope.length() > 0)
+        {
+            jsonObject.addProperty("scope", scope);
+        }
+
+        String requestPayload = gson.toJson(jsonObject);
+
+        ETRestConnection.Response response = null;
+
+        response = authConnection.post(PATH_OAUTH2TOKEN, requestPayload);
+
+        if (response.getResponseCode() != HttpURLConnection.HTTP_OK) {
+            throw new ETSdkException("error obtaining OAuth2 access token "
+                    + "("
+                    + response.getResponseCode()
+                    + " "
+                    + response.getResponseMessage()
+                    + ")");
+        }
+
+        //
+        // Parse the JSON response into the appropriate instance
+        // variables:
+        //
+
+        String responsePayload = response.getResponsePayload();
+
+        JsonParser jsonParser = new JsonParser();
+        jsonObject = jsonParser.parse(responsePayload).getAsJsonObject();
+        this.accessToken = jsonObject.get("access_token").getAsString();
+        this.expiresIn = jsonObject.get("expires_in").getAsInt();
+        this.endpoint = jsonObject.get("rest_instance_url").getAsString();
+        this.soapEndpoint = jsonObject.get("soap_instance_url").getAsString() + "service.asmx";
+
+        //
+        // Calculate the token expiration time. As before,
+        // System.currentTimeMills() is in milliseconds so
+        // we multiply expiresIn by 1000:
+        //
+
+        tokenExpirationTime = System.currentTimeMillis() + (expiresIn * 1000);
+
+        return accessToken;
+    }
+
     /**
      * 
      * @param refreshToken          The refresh token
@@ -321,6 +398,10 @@ public class ETClient {
     public synchronized String requestToken(String refreshToken)
         throws ETSdkException
     {
+        if(useOAuth2Authentication){
+            return requestOAuth2Token();
+        }
+
         if (clientId == null || clientSecret == null) {
             // no-op
             return null;
@@ -418,15 +499,13 @@ public class ETClient {
             }
 
             logger.debug("refreshing access token...");
-
-            if (refreshToken == null) {
-                throw new ETSdkException("refreshToken == null");
-            }
         }
 
         requestToken(refreshToken);
 
-        soapConnection.setAccessToken(accessToken);
+        if(soapConnection != null) {
+            soapConnection.setAccessToken(accessToken);
+        }
 
         return accessToken;
     }
