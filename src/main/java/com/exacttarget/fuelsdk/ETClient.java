@@ -48,6 +48,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
 /**
@@ -78,9 +79,6 @@ public class ETClient {
     private String clientId = null;
     private String clientSecret = null;
 
-    private String username = null;
-    private String password = null;
-
     private String endpoint = null;
     private String authEndpoint = null;
     private String soapEndpoint = null;
@@ -96,6 +94,15 @@ public class ETClient {
     private String accessToken = null;
     private int expiresIn = 0;
     private String legacyToken = null;
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
     private String refreshToken = null;
 
     private long tokenExpirationTime = 0;
@@ -103,10 +110,12 @@ public class ETClient {
     private static String fetchedSoapEndpoint = null;
     private static final long cacheDurationInMillis = 1000 * 60 * 10; // 10 minutes
     private boolean useOAuth2Authentication;
-    private String accountId;
-    private String scope;
 
-    /** 
+    private String applicationType;
+    private String authorizationCode;
+    private String redirectURI;
+
+    /**
     * Class constructor, Initializes a new instance of the class.
     */
     public ETClient()
@@ -137,9 +146,6 @@ public class ETClient {
         clientId = configuration.get("clientId");
         clientSecret = configuration.get("clientSecret");
 
-        username = configuration.get("username");
-        password = configuration.get("password");
-
         endpoint = configuration.get("endpoint");
         if (endpoint == null) {
             endpoint = DEFAULT_ENDPOINT;
@@ -159,29 +165,36 @@ public class ETClient {
             gson = gsonBuilder.create();
         }
 
-        useOAuth2Authentication = configuration.isTrue("useOAuth2Authentication") ? true : false;
-        accountId = configuration.get("accountId");
-        scope = configuration.get("scope");
+        useOAuth2Authentication = configuration.isTrue("useOAuth2Authentication");
 
-        if (clientId != null && clientSecret != null) {
-            authConnection = new ETRestConnection(this, authEndpoint, true);
-            requestToken();
-            restConnection = new ETRestConnection(this, endpoint);
-            fetchSoapEndpoint();
-            soapConnection = new ETSoapConnection(this, soapEndpoint, accessToken);
-        } else {
-            if (username == null || password == null) {
-                throw new ETSdkException("must specify either " +
-                        "clientId/clientSecret or username/password");
-            }
-            if (soapEndpoint == null) {
-                throw new ETSdkException("must specify soapEndpoint " +
-                        "when authenticating with username/password");
-            }
-            soapConnection = new ETSoapConnection(this, soapEndpoint,
-                                                  username,
-                                                  password);
+        applicationType = configuration.get("applicationType");
+        authorizationCode = configuration.get("authorizationCode");
+        redirectURI = configuration.get("redirectURI");
+
+        if(isNullOrBlankOrEmpty(applicationType)){
+            applicationType = "server";
+            configuration.set("applicationType", "server");
         }
+
+        if(applicationType.equals("public") || applicationType.equals("web")){
+            if (isNullOrBlankOrEmpty(authorizationCode) || isNullOrBlankOrEmpty(redirectURI)){
+                throw new ETSdkException("AuthorizationCode or RedirectURI is null: For Public/Web Apps, " +
+                        "authorizationCode and redirectURI must be provided in config file");
+            }
+        }
+
+        if(applicationType.equals("public")){
+            if(isNullOrBlankOrEmpty(clientId)){
+                throw new ETSdkException("ClientId is null: clientId must be provided in config file");
+            }
+        }
+        else{
+            if(isNullOrBlankOrEmpty(clientId) || isNullOrBlankOrEmpty(clientSecret)){
+                throw new ETSdkException("ClientId or ClientSecret is null: clientId and clientSecret must be provided in config file");
+            }
+        }
+
+        buildClients();
 
         if (configuration.isFalse("autoHydrateObjects")) {
             autoHydrateObjects = false;
@@ -191,13 +204,23 @@ public class ETClient {
             logger.trace("ETClient initialized:");
             logger.trace("  clientId = " + clientId);
             logger.trace("  clientSecret = *");
-            logger.trace("  username = " + username);
-            logger.trace("  password = *");
             logger.trace("  endpoint = " + endpoint);
             logger.trace("  authEndpoint = " + authEndpoint);
             logger.trace("  soapEndpoint = " + soapEndpoint);
             logger.trace("  autoHydrateObjects = " + autoHydrateObjects);
         }
+    }
+
+    private void buildClients() throws ETSdkException {
+        authConnection = new ETRestConnection(this, authEndpoint, true);
+        requestToken();
+        restConnection = new ETRestConnection(this, endpoint);
+        fetchSoapEndpoint();
+        soapConnection = new ETSoapConnection(this, soapEndpoint, accessToken);
+    }
+
+    public static boolean isNullOrBlankOrEmpty(String str) {
+        return str == null || StringUtils.isBlank(str) || StringUtils.isEmpty(str);
     }
 
     private void fetchSoapEndpoint() {
@@ -329,32 +352,8 @@ public class ETClient {
     private synchronized String requestOAuth2Token()
         throws ETSdkException
     {
-        if (clientId == null || clientSecret == null) {
-            // no-op
-            return null;
-        }
-        //
-        // Construct the JSON payload.
-        //
-
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("client_id", clientId);
-        jsonObject.addProperty("client_secret", clientSecret);
-        jsonObject.addProperty("grant_type", "client_credentials");
-        if(accountId != null && accountId.length() > 0)
-        {
-            jsonObject.addProperty("account_id", accountId);
-        }
-        if(scope != null && scope.length() > 0)
-        {
-            jsonObject.addProperty("scope", scope);
-        }
-
-        String requestPayload = gson.toJson(jsonObject);
-
-        ETRestConnection.Response response = null;
-
-        response = authConnection.post(PATH_OAUTH2TOKEN, requestPayload);
+        JsonObject payload = createPayload(configuration);
+        ETRestConnection.Response response = authConnection.post(PATH_OAUTH2TOKEN, gson.toJson(payload));
 
         if (response.getResponseCode() != HttpURLConnection.HTTP_OK) {
             throw new ETSdkException("error obtaining OAuth2 access token "
@@ -364,34 +363,60 @@ public class ETClient {
                     + response.getResponseMessage()
                     + ")");
         }
-
-        //
-        // Parse the JSON response into the appropriate instance
-        // variables:
-        //
+        JsonParser jsonParser = new JsonParser();
 
         String responsePayload = response.getResponsePayload();
+        JsonObject jsonObject = jsonParser.parse(responsePayload).getAsJsonObject();
 
-        JsonParser jsonParser = new JsonParser();
-        jsonObject = jsonParser.parse(responsePayload).getAsJsonObject();
         this.accessToken = jsonObject.get("access_token").getAsString();
-        this.expiresIn = jsonObject.get("expires_in").getAsInt();
         this.endpoint = jsonObject.get("rest_instance_url").getAsString();
         this.soapEndpoint = jsonObject.get("soap_instance_url").getAsString() + "service.asmx";
 
-        //
-        // Calculate the token expiration time. As before,
-        // System.currentTimeMills() is in milliseconds so
-        // we multiply expiresIn by 1000:
-        //
-
+        this.expiresIn = jsonObject.get("expires_in").getAsInt();
         tokenExpirationTime = System.currentTimeMillis() + (expiresIn * 1000);
+
+        if(jsonObject.has("refresh_token")){
+            this.refreshToken = jsonObject.get("refresh_token").getAsString();
+        }
 
         return accessToken;
     }
 
+    JsonObject createPayload(ETConfiguration configuration) {
+        JsonObject payload = new JsonObject();
+
+        payload.addProperty("client_id", configuration.get("clientId"));
+
+        String applicationType = configuration.get("applicationType");
+
+        if(applicationType.equals("web") || applicationType.equals("server")){
+            payload.addProperty("client_secret", configuration.get("clientSecret"));
+        }
+        if(!isNullOrBlankOrEmpty(refreshToken)){
+            payload.addProperty("grant_type", "refresh_token");
+            payload.addProperty("refresh_token", refreshToken);
+        }
+        else if(applicationType.equals("public") || applicationType.equals("web")){
+            payload.addProperty("grant_type", "authorization_code");
+            payload.addProperty("code", configuration.get("authorizationCode"));
+            payload.addProperty("redirect_uri", configuration.get("redirectURI"));
+        }
+        else{
+            payload.addProperty("grant_type", "client_credentials");
+        }
+
+        if(!isNullOrBlankOrEmpty(configuration.get("accountId"))){
+            payload.addProperty("account_id", configuration.get("accountId"));
+        }
+        if(!isNullOrBlankOrEmpty(configuration.get("scope"))){
+            payload.addProperty("scope", configuration.get("scope"));
+        }
+
+        return payload;
+    }
+
     /**
-     * 
+     *
      * @param refreshToken          The refresh token
      * @return                      The request token
      */

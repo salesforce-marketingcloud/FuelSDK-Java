@@ -38,32 +38,19 @@ import java.lang.reflect.Field;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-import org.junit.Assume;
+import com.google.gson.JsonObject;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+
+import static org.junit.Assert.*;
 
 public class ETClientTest {
-    
-/*    public static void main(String[] args){
-        ETClientTest etc = new ETClientTest();
-        try{
-            etc.testBackwardCompatibility1();
-        }catch(ETSdkException ex){
-            ex.printStackTrace();
-        }
-    
-    }
-*/    
+
+    private static ETClient client;
+
     @BeforeClass
-    public static void setUpBeforeClass()
-        throws ETSdkException
-    {
- //       Assume.assumeNotNull(ETClientTest.class
- //               .getResource("/fuelsdk.properties"));
+    public static void setUpClass() throws ETSdkException {
+        client = new ETClient("fuelsdk.properties");
     }
 
     @Test
@@ -71,13 +58,9 @@ public class ETClientTest {
     public void testBackwardCompatibility1()
         throws ETSdkException
     {
-        ETClient client = new ETClient("fuelsdk.properties");
         ETFilter filter = new ETFilter();
-//        filter.setProperty("key");
-//        filter.setOperator(ETFilter.Operator.EQUALS);
-//        filter.addValue("dataextension_default");
-        
         ETExpression exp = new ETExpression();
+
         exp.setProperty("key");
         exp.setOperator(ETExpression.Operator.EQUALS);
         exp.addValue("dataextension_default");
@@ -93,20 +76,16 @@ public class ETClientTest {
     public void testBackwardCompatibility2()
         throws ETSdkException
     {
-        ETClient client = new ETClient("fuelsdk.properties");
         ETFilter filter = new ETFilter();
-//        filter.setProperty("key");
-//        filter.setOperator(ETFilter.Operator.EQUALS);
-//        filter.addValue("dataextension_default");
-        
         ETExpression exp = new ETExpression();
+
         exp.setProperty("key");
         exp.setOperator(ETExpression.Operator.EQUALS);
         exp.addValue("dataextension_default");
-        
+
         filter.setExpression(exp);
         filter.addProperty("key");
-        
+
         ETResponse<ETFolder> response = client.retrieve(ETFolder.class,
                                                         filter);//,"key");
         assertEquals(1, response.getObjects().size());
@@ -129,21 +108,17 @@ public class ETClientTest {
     public void testBackwardCompatibility3()
         throws ETSdkException
     {
-        ETClient client = new ETClient("fuelsdk.properties");
         ETFilter filter = new ETFilter();
-//        filter.setProperty("key");
-//        filter.setOperator(ETFilter.Operator.EQUALS);
-//        filter.addValue("dataextension_default");
-
         ETExpression exp = new ETExpression();
+
         exp.setProperty("key");
         exp.setOperator(ETExpression.Operator.EQUALS);
         exp.addValue("dataextension_default");
-        
+
         filter.setExpression(exp);
         filter.addProperty("key");
         filter.addProperty("name");
-        
+
         ETResponse<ETFolder> response = client.retrieve(ETFolder.class,
                                                         filter);//,"key","name");
         assertEquals(1, response.getObjects().size());
@@ -166,22 +141,18 @@ public class ETClientTest {
     public void testBackwardCompatibility4()
         throws ETSdkException
     {
-        ETClient client = new ETClient("fuelsdk.properties");
         ETFilter filter = new ETFilter();
-//        filter.setProperty("key");
-//        filter.setOperator(ETFilter.Operator.EQUALS);
-//        filter.addValue("dataextension_default");
-        
         ETExpression exp = new ETExpression();
+
         exp.setProperty("key");
         exp.setOperator(ETExpression.Operator.EQUALS);
         exp.addValue("dataextension_default");
-        
+
         filter.setExpression(exp);
         filter.addProperty("key");
         filter.addProperty("name");
         filter.addProperty("description");
-        
+
         ETResponse<ETFolder> response = client.retrieve(ETFolder.class,
                                                         filter);//,"key","name", "description");
         assertEquals(1, response.getObjects().size());
@@ -224,6 +195,129 @@ public class ETClientTest {
         }
     }
 
+    @Test
+    public void isNullOrBlankOrEmpty_shouldReturnTrue_whenInputIsNullPointer(){
+
+        String nullPointer = null;
+        assertTrue(ETClient.isNullOrBlankOrEmpty(nullPointer));
+    }
+
+    @Test
+    public void isNullOrBlankOrEmpty_shouldReturnTrue_whenInputIsBlankString(){
+
+        String blankString = "    ";
+        assertTrue(ETClient.isNullOrBlankOrEmpty(blankString));
+    }
+
+    @Test
+    public void isNullOrBlankOrEmpty_shouldReturnTrue_whenInputIsEmptyString(){
+
+        String emptyString = "";
+        assertTrue(ETClient.isNullOrBlankOrEmpty(emptyString));
+    }
+
+    @Test
+    public void isNullOrBlankOrEmpty_shouldReturnFalse_whenInputIsNotNullOrBlankOrEmptyString(){
+
+        String notNullOrBlankOrEmptyString = "NotNullOrBlankOrEmptyString";
+        assertFalse(ETClient.isNullOrBlankOrEmpty(notNullOrBlankOrEmptyString));
+    }
+
+    @Test
+    public void createPayload_shouldReturnPayloadWithPublicAppAttributes_whenApplicationTypeIsPublic(){
+        ETConfiguration configuration = client.getConfiguration();
+
+        configuration.set("applicationType", "public");
+        configuration.set("redirectURI", "redirectURI");
+        configuration.set("authorizationCode", "authorizationCode");
+
+        JsonObject payload = client.createPayload(configuration);
+
+        assertEquals(configuration.get("clientId"), payload.get("client_id").getAsString());
+        assertEquals(configuration.get("redirectURI"), payload.get("redirect_uri").getAsString());
+        assertEquals(configuration.get("authorizationCode"), payload.get("code").getAsString());
+        assertEquals("authorization_code", payload.get("grant_type").getAsString());
+    }
+
+    @Test
+    public void createPayload_shouldReturnPayloadWithNoClientSecret_whenApplicationTypeIsPublic(){
+        ETConfiguration configuration = client.getConfiguration();
+
+        configuration.set("applicationType", "public");
+        configuration.set("redirectURI", "redirectURI");
+        configuration.set("authorizationCode", "authorizationCode");
+
+        JsonObject payload = client.createPayload(configuration);
+
+        assertNull(payload.get("client_secret"));
+    }
+
+    @Test
+    public void createPayload_shouldReturnPayloadWithWebAppAttributes_whenApplicationTypeIsWeb(){
+        ETConfiguration configuration = client.getConfiguration();
+
+        configuration.set("applicationType", "web");
+        configuration.set("redirectURI", "redirectURI");
+        configuration.set("authorizationCode", "authorizationCode");
+
+        JsonObject payload = client.createPayload(configuration);
+
+        assertEquals(configuration.get("clientId"), payload.get("client_id").getAsString());
+        assertEquals(configuration.get("clientSecret"), payload.get("client_secret").getAsString());
+        assertEquals(configuration.get("redirectURI"), payload.get("redirect_uri").getAsString());
+        assertEquals(configuration.get("authorizationCode"), payload.get("code").getAsString());
+        assertEquals("authorization_code", payload.get("grant_type").getAsString());
+    }
+
+    @Test
+    public void createPayload_shouldReturnPayloadWithServerAppAttributes_whenApplicationTypeIsServer(){
+        ETConfiguration configuration = client.getConfiguration();
+
+        configuration.set("applicationType", "server");
+
+        JsonObject payload = client.createPayload(configuration);
+
+        assertEquals(configuration.get("clientId"), payload.get("client_id").getAsString());
+        assertEquals(configuration.get("clientSecret"), payload.get("client_secret").getAsString());
+        assertEquals("client_credentials", payload.get("grant_type").getAsString());
+    }
+
+    @Test
+    public void createPayload_shouldReturnPayloadWithServerAppAttributes_whenApplicationTypeIsNotPassedInConfig(){
+        ETConfiguration configuration = client.getConfiguration();
+
+        JsonObject payload = client.createPayload(configuration);
+
+        assertEquals(configuration.get("clientId"), payload.get("client_id").getAsString());
+        assertEquals(configuration.get("clientSecret"), payload.get("client_secret").getAsString());
+        assertEquals("client_credentials", payload.get("grant_type").getAsString());
+    }
+
+    @Test
+    public void createPayload_shouldReturnPayloadWithNoRedirectURIandAuthCode_whenApplicationTypeIsServer(){
+        ETConfiguration configuration = client.getConfiguration();
+
+        configuration.set("applicationType", "server");
+
+        JsonObject payload = client.createPayload(configuration);
+
+        assertNull(payload.get("redirect_uri"));
+        assertNull(payload.get("code"));
+    }
+
+    @Test
+    public void createPayload_shouldReturnPayloadWithRefreshToken_whenClientHasRefreshToken() throws ETSdkException {
+        ETClient client = new ETClient("fuelsdk.properties");
+        ETConfiguration configuration = client.getConfiguration();
+
+        client.setRefreshToken("refreshToken");
+
+        JsonObject payload = client.createPayload(configuration);
+
+        assertEquals(client.getRefreshToken(), payload.get("refresh_token").getAsString());
+        assertEquals("refresh_token", payload.get("grant_type").getAsString());
+    }
+
     private String getFetchedSoapEndpoint(ETClient client) throws NoSuchFieldException, IllegalAccessException {
         Field field = client.getClass().getDeclaredField("fetchedSoapEndpoint");
         field.setAccessible(true);
@@ -236,25 +330,15 @@ public class ETClientTest {
         return field.getLong(null);
     }
 
-    //
-    // XXX make these available to all tests
-    //
-
     private DateFormat dateFormat =
             new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 
     private void assertIsDataExtensionFolder(ETResponse<ETFolder> response) {
         assertEquals(1, response.getObjects().size());
         ETFolder folder = response.getObjects().get(0);
-//        assertEquals("94511", folder.getId()); // XXX make configurable
         assertEquals("dataextension_default", folder.getKey());
         assertEquals("Data Extensions", folder.getName());
         assertEquals("", folder.getDescription());
-//        assertEquals("2014-08-10T23:50:00.833", // XXX make configurable
-//                dateFormat.format(folder.getCreatedDate()));
-//        assertEquals("2014-08-10T23:50:00.833", // XXX make configurable
-//                dateFormat.format(folder.getModifiedDate()));
-//        assertEquals("dataextension", folder.getContentType());
         assertNull(folder.getParentFolderKey());
         assertTrue(folder.getIsActive());
         assertFalse(folder.getIsEditable());
