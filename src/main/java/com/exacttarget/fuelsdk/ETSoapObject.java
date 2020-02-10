@@ -346,7 +346,14 @@ public abstract class ETSoapObject extends ETApiObject {
 
         RetrieveRequestMsg retrieveRequestMsg = new RetrieveRequestMsg();
         retrieveRequestMsg.setRetrieveRequest(retrieveRequest);
-
+        
+        if (soapObjectName != null) {
+                retrieveRequest.setObjectType(soapObjectName);
+                soap = connection.getSoap("retrieve", soapObjectName);
+            } else {
+                retrieveRequest.setObjectType(internalType.getSimpleName());
+                soap = connection.getSoap("retrieve", internalType.getSimpleName());
+            }
         RetrieveResponseMsg retrieveResponseMsg = soap.retrieve(retrieveRequestMsg);
 
         if (logger.isTraceEnabled()) {
