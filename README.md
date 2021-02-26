@@ -25,6 +25,12 @@ Java platform. Among other things, the SDK:
 For more information about the Java SDK and how to use it, please see
 the Javadocs at http://salesforce-marketingcloud.github.io/FuelSDK-Java/.
 
+New Features in Version 1.5.1
+------------
+* Added Support for Java 11
+
+
+
 New Features in Version 1.5.0
 ------------
 * Added Refresh Token support for OAuth2 authentication
