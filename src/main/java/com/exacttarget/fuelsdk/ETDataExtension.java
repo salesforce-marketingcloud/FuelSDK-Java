@@ -361,7 +361,7 @@ public class ETDataExtension extends ETSoapObject {
     public List<String> getColumnNames()
         throws ETSdkException
     {
-        if (columns == null) {
+        if (columns == null || columns.isEmpty()) {
             columns = retrieveColumns();
         }
         return getColumnNames(columns);
