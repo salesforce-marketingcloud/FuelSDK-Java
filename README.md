@@ -1,4 +1,4 @@
-Salesforce Marketing Cloud Java SDK
+Salesforce Marketing Cloud Java SDK - TEST
 ===================================
 
 The Salesforce Marketing Cloud Java SDK enables developers to easily
