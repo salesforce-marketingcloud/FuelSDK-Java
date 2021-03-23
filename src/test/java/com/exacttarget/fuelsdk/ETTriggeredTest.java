@@ -5,15 +5,17 @@
  */
 package com.exacttarget.fuelsdk;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.UUID;
 
 import com.exacttarget.fuelsdk.internal.*;
-import com.exacttarget.fuelsdk.annotations.*;
-import java.util.*;
+import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 import org.junit.BeforeClass;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -220,6 +222,62 @@ public class ETTriggeredTest {
             Logger.getLogger(ETTriggeredTest.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
         }        
+    }
+
+    @Test
+    public void fuelSdkSendEmailWithValidEmail()
+    {
+        try
+        {
+            ETTriggeredEmail triggeredSendDefinition = new ETTriggeredEmail();
+            triggeredSendDefinition.setCustomerKey(tsName);
+            triggeredSendDefinition.setClient(client);
+
+            ETSubscriber subscriber = new ETSubscriber();
+            subscriber.setEmailAddress("jane.doe@gmail.com");
+            subscriber.setSubscriberKey("jane.doe@gmail.com");
+            
+            List<ETSubscriber> subscribers = new ArrayList<ETSubscriber>();
+            subscribers.add(subscriber);
+            ETResponse<ETTriggeredEmail> createResponse = triggeredSendDefinition
+                    .send(subscribers);
+            System.out.println("TEST");
+
+            assertEquals(createResponse.getResponseCode(), "OK");
+            assertEquals(createResponse.getResponseMessage(), "TriggeredSendDefinition deleted");
+
+        }
+        catch (Exception ex)
+        {
+            fail(ex.toString());
+        }
+    }
+
+    @Test
+    public void fuelSdkSendEmailWithInValidEmail()
+    {
+        try
+        {
+            ETTriggeredEmail triggeredSendDefinition = new ETTriggeredEmail();
+            triggeredSendDefinition.setCustomerKey(tsName);
+            triggeredSendDefinition.setClient(client);
+
+            ETSubscriber subscriber = new ETSubscriber();
+            subscriber.setEmailAddress("jane.doe+spam@gmail.com");
+            subscriber.setSubscriberKey("jane.doe+spam@gmail.com");
+
+            List<ETSubscriber> subscribers = new ArrayList<ETSubscriber>();
+            subscribers.add(subscriber);
+            ETResponse<ETTriggeredEmail> createResponse = triggeredSendDefinition
+                    .send(subscribers);
+
+            assertEquals(createResponse.getResponseCode(), "Error");
+
+        }
+        catch (Exception ex)
+        {
+            fail(ex.toString());
+        }
     }
     
 /*    public static void main(String[] args){
