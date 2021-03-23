@@ -241,10 +241,8 @@ public class ETTriggeredTest {
             subscribers.add(subscriber);
             ETResponse<ETTriggeredEmail> createResponse = triggeredSendDefinition
                     .send(subscribers);
-            System.out.println("TEST");
 
             assertEquals(createResponse.getResponseCode(), "OK");
-            assertEquals(createResponse.getResponseMessage(), "TriggeredSendDefinition deleted");
 
         }
         catch (Exception ex)
