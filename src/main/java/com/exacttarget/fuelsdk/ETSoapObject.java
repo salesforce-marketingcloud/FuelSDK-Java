@@ -164,7 +164,7 @@ public abstract class ETSoapObject extends ETApiObject {
      * @return              The ETResponse object of type T which extends from ETSoapObject
      * @throws ETSdkException 
      */
-    protected static <T extends ETSoapObject> ETResponse<T> retrieve(ETClient client,
+    public static <T extends ETSoapObject> ETResponse<T> retrieve(ETClient client,
                                                                      String soapObjectName,
                                                                      ETFilter filter,
                                                                      Class<T> type)
