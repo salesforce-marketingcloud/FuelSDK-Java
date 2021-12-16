@@ -36,7 +36,8 @@ package com.exacttarget.fuelsdk;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import com.exacttarget.fuelsdk.annotations.PrettyPrint;
 
 /**
@@ -44,7 +45,7 @@ import com.exacttarget.fuelsdk.annotations.PrettyPrint;
  * in the Salesforce Marketing Cloud.
  */
 public class ETResponse<T extends ETApiObject> extends ETObject {
-    private static Logger logger = Logger.getLogger(ETResponse.class);
+    private static Logger logger = LogManager.getLogger(ETResponse.class);
 
     @PrettyPrint
     private ETResult<T> batchResult = null;

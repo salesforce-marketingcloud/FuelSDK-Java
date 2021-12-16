@@ -51,7 +51,8 @@ import java.util.Map;
 import java.util.logging.Level;
 import org.apache.commons.lang.StringUtils;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * An <code>ETRestConnection</code> represents an active
@@ -59,7 +60,7 @@ import org.apache.log4j.Logger;
  */
 
 public class ETRestConnection {
-    private static Logger logger = Logger.getLogger(ETRestConnection.class);
+    private static Logger logger = LogManager.getLogger(ETRestConnection.class);
 
     private ETClient client = null;
 

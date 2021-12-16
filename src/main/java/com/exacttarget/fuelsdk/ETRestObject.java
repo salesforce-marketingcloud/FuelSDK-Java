@@ -46,7 +46,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.annotations.SerializedName;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.exacttarget.fuelsdk.ETRestConnection.Method;
 
@@ -61,7 +62,7 @@ import com.exacttarget.fuelsdk.annotations.RestObject;
  */
 
 public abstract class ETRestObject extends ETApiObject {
-    private static Logger logger = Logger.getLogger(ETRestObject.class);
+    private static Logger logger = LogManager.getLogger(ETRestObject.class);
 
     /**
      * 

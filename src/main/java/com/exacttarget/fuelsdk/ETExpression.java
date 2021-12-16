@@ -38,7 +38,8 @@ import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.exacttarget.fuelsdk.annotations.PrettyPrint;
 
@@ -47,7 +48,7 @@ import com.exacttarget.fuelsdk.annotations.PrettyPrint;
  * in the Salesforce Marketing Cloud.
  */
 public class ETExpression extends ETObject {
-    private static Logger logger = Logger.getLogger(ETExpression.class);
+    private static Logger logger = LogManager.getLogger(ETExpression.class);
 
     /**
      *  Operator that can be used on ETExpression
