@@ -49,8 +49,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.log4j.Logger;
 
 /**
  * <code>ETClient</code> is the central object in the Java
@@ -58,7 +57,7 @@ import org.apache.logging.log4j.Logger;
  */
 
 public class ETClient {
-    private static Logger logger = LogManager.getLogger(ETClient.class);
+    private static Logger logger = Logger.getLogger(ETClient.class);
 
     private static final String DEFAULT_PROPERTIES_FILE_NAME =
             "fuelsdk.properties";

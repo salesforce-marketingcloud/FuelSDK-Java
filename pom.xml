@@ -37,7 +37,7 @@
     <gson.version>2.3.1</gson.version>
     <junit.version>4.12</junit.version>
     <lang.version>2.6</lang.version>
-    <log4j.version>1.2.17</log4j.version>
+    <log4j.version>2.16.0</log4j.version>
     <javax.jaxb.version>2.3.0</javax.jaxb.version>
     <com.sun.jaxb.version>2.3.0</com.sun.jaxb.version>
     <com.sun.saaj.version>1.5.0</com.sun.saaj.version>
@@ -134,8 +134,8 @@
     </dependency>
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-core</artifactId>
-      <version>2.16.0</version>
+      <artifactId>log4j-1.2-api</artifactId>
+      <version>${log4j.version}</version>
     </dependency>
     <dependency>
       <groupId>org.hamcrest</groupId>

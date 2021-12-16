@@ -55,8 +55,7 @@ import org.apache.cxf.interceptor.LoggingOutInterceptor;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.transport.http.HTTPConduit;
 import org.apache.cxf.transports.http.configuration.HTTPClientPolicy;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.log4j.Logger;
 
 import com.exacttarget.fuelsdk.internal.PartnerAPI;
 import com.exacttarget.fuelsdk.internal.Soap;
@@ -71,7 +70,7 @@ import org.apache.cxf.transport.http.Headers;
  */
 
 public class ETSoapConnection {
-    private static Logger logger = LogManager.getLogger(ETSoapConnection.class);
+    private static Logger logger = Logger.getLogger(ETSoapConnection.class);
 
     private static final String WSSE_NAMESPACE_URI =
             "http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd";

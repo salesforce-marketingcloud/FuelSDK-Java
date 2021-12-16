@@ -51,8 +51,6 @@ import org.apache.commons.beanutils.ConversionException;
 import org.apache.commons.beanutils.ConvertUtilsBean;
 import org.apache.commons.beanutils.Converter;
 import org.apache.commons.beanutils.PropertyUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import com.exacttarget.fuelsdk.annotations.ExternalName;
 import com.exacttarget.fuelsdk.annotations.InternalName;
@@ -97,14 +95,14 @@ import com.exacttarget.fuelsdk.internal.UpdateOptions;
 import com.exacttarget.fuelsdk.internal.UpdateRequest;
 import com.exacttarget.fuelsdk.internal.UpdateResponse;
 import com.exacttarget.fuelsdk.internal.UpdateResult;
-
+import org.apache.log4j.Logger;
 /**
  * An <code>ETSoapObject</code> represents an object
  * available via the SOAP API.
  */
 
 public abstract class ETSoapObject extends ETApiObject {
-    private static Logger logger = LogManager.getLogger(ETSoapObject.class);
+    private static Logger logger = Logger.getLogger(ETSoapObject.class);
 
     /**
      * The page size
