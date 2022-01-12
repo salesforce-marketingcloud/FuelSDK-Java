@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="info" strict="true" name="XMLConfigTest"
+               packages="org.apache.logging.log4j.test">
+  <!-- <Properties>
+    <Property name="filename">target/test.log</Property>
+  </Properties> -->
+
+  <!-- <Filter type="ThresholdFilter" level="trace"/> -->
+ 
+  <Appenders>
+    <Appender type="Console" name="A1">
+        <Layout type="PatternLayout" pattern="xml----%d %-5p %c: %m%n" />
+        <Filters>
+            <Filter type="ThresholdFilter" level="trace" />
+        </Filters>
+    </Appender>
+
+    <Appender type="File" name="FILE" fileName="c://Logging/fuelsdk.log">
+        <Layout type="PatternLayout">
+            <Pattern>xml----%d %-5p %c: %m%n</Pattern>
+        </Layout>
+        <Filters>
+            <Filter type="ThresholdFilter" level="trace" />
+        </Filters>
+    </Appender>
+
+  </Appenders>
+ 
+  <Loggers>
+    <Root level="info">
+      <AppenderRef ref="A1"/>
+      <!-- <AppenderRef ref="FILE"/> -->
+    </Root>
+
+  <!-- Fuel Java SDK: -->
+    <!-- <Logger name="com.exacttarget.fuelsdk" level="trace" additivity="false">
+      <AppenderRef ref="A1"/>
+      <AppenderRef ref="FILE"/>
+    </Logger> -->
+
+    <!-- <Logger name="com.exacttarget.fuelsdk.ETApiObject" level="TRACE" additivity="false"/> -->
+    <!-- <Logger name="com.exacttarget.fuelsdk.ETExpressionParser" level="TRACE" additivity="false"/> -->
+    <!-- <Logger name="com.exacttarget.fuelsdk.ETClient" level="debug" additivity="false">
+      <AppenderRef ref="A1"/>
+      <AppenderRef ref="FILE"/>
+    </Logger> -->
+    <!-- <Logger name="com.exacttarget.fuelsdk.ETConfiguration" level="DEBUG" additivity="false"/> -->
+    <!-- <Logger name="com.exacttarget.fuelsdk.ETDataExtension" level="DEBUG" additivity="false"/> -->
+    <!-- <Logger name="com.exacttarget.fuelsdk.ETExpression" level="DEBUG" additivity="false"/> -->
+    <!-- <Logger name="com.exacttarget.fuelsdk.ETRestConnection" level="DEBUG" additivity="false"/> -->
+    <!-- <Logger name="com.exacttarget.fuelsdk.ETRestObject" level="DEBUG" additivity="false"/> -->
+    <!-- <Logger name="com.exacttarget.fuelsdk.ETSoapConnection" level="DEBUG" additivity="false"/> -->
+    <!-- <Logger name="com.exacttarget.fuelsdk.ETSoapObject" level="DEBUG" additivity="false"/> -->
+    <!-- <Logger name="com.exacttarget.fuelsdk.ETTriggeredEmail" level="DEBUG" additivity="false"/> -->
+
+<!-- Apache CXF: -->
+<!-- Apache CXF's INFO level logging is a bit chatty: -->
+    <Logger name="org.apache.cxf" level="warn" additivity="false">
+      <AppenderRef ref="A1"/>
+      <AppenderRef ref="FILE"/>
+    </Logger> -->
+    <!-- <Logger name="org.apache.cxf" level="info" additivity="false" /> -->
+
+<!-- Apache BeanUtils: -->
+    <!-- <Logger name="org.apache.commons.beanutils" level="info" additivity="false" /> -->
+
+  </Loggers>
+ 
+</Configuration>
