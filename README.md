@@ -27,7 +27,7 @@ the Javadocs at http://salesforce-marketingcloud.github.io/FuelSDK-Java/.
 
 New Features in Version 1.6.0
 ------------
-* This version upgrades SDK to use log4j version 2.3.2 that contains fix for [Security Vulnerability CVE-2021-44832](https://logging.apache.org/log4j/2.x/security.html#CVE-2021-44832). Log4j upgrade introduces breaking changes to the way log4j is configured. This version of SDK is using Log4j2 bridge to help with version migration. If client overrides log4j properties they might need to be converted to the new log4j2 format. Please see this link for more details on migrating to log4j v2: https://logging.apache.org/log4j/log4j-2.3.2/manual/migration.html.
+* This version upgrades the SDK to use Log4j version 2.3.2 which contains a fix for [Security Vulnerability CVE-2021-44832](https://logging.apache.org/log4j/2.x/security.html#CVE-2021-44832). The Log4j upgrade introduces breaking changes to the way Log4j is configured. This version of the SDK is using the Log4j2 bridge to help with version migration. If you override Log4j properties they might need to be converted to the new Log4j2 format. Please see this link for more details on migrating to Log4j v2: https://logging.apache.org/log4j/log4j-2.3.2/manual/migration.html.
 
 New Features in Version 1.5.1
 ------------

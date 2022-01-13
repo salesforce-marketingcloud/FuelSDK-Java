@@ -50,7 +50,7 @@
 <!-- Apache CXF's INFO level logging is a bit chatty: -->
     <Logger name="org.apache.cxf" level="warn" additivity="false">
       <AppenderRef ref="A1"/>
-      <AppenderRef ref="FILE"/>
+        <!-- <AppenderRef ref="FILE"/> -->
     </Logger> -->
     <!-- <Logger name="org.apache.cxf" level="info" additivity="false" /> -->
 
