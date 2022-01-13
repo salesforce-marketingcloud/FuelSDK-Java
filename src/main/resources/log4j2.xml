@@ -1,15 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="info" strict="true" name="XMLConfigTest"
-               packages="org.apache.logging.log4j.test">
-  <!-- <Properties>
-    <Property name="filename">target/test.log</Property>
-  </Properties> -->
-
-  <!-- <Filter type="ThresholdFilter" level="trace"/> -->
- 
+<Configuration strict="true">
   <Appenders>
     <Appender type="Console" name="A1">
-        <Layout type="PatternLayout" pattern="xml----%d %-5p %c: %m%n" />
+        <Layout type="PatternLayout" pattern="%d %-5p %c: %m%n" />
         <Filters>
             <Filter type="ThresholdFilter" level="trace" />
         </Filters>
@@ -17,7 +10,7 @@
 
     <Appender type="File" name="FILE" fileName="c://Logging/fuelsdk.log">
         <Layout type="PatternLayout">
-            <Pattern>xml----%d %-5p %c: %m%n</Pattern>
+            <Pattern>%d %-5p %c: %m%n</Pattern>
         </Layout>
         <Filters>
             <Filter type="ThresholdFilter" level="trace" />
