@@ -110,6 +110,7 @@ public class ETRestConnection {
             String json = receiveResponse(connection);
             response.setRequestId(connection.getHeaderField("X-Mashery-Message-ID"));
             response.setResponseCode(connection.getResponseCode());
+            response.setHeaders(connection.getHeaderFields());
             response.setResponseMessage(connection.getResponseMessage());
             response.setResponsePayload(json);
             return response;
@@ -136,6 +137,7 @@ public class ETRestConnection {
             String json = receiveResponse(connection);
             response.setRequestId(connection.getHeaderField("X-Mashery-Message-ID"));
             response.setResponseCode(connection.getResponseCode());
+            response.setHeaders(connection.getHeaderFields());
             response.setResponseMessage(connection.getResponseMessage());
             response.setResponsePayload(json);
             return response;
@@ -162,6 +164,7 @@ public class ETRestConnection {
             String json = receiveResponse(connection);
             response.setRequestId(connection.getHeaderField("X-Mashery-Message-ID"));
             response.setResponseCode(connection.getResponseCode());
+            response.setHeaders(connection.getHeaderFields());
             response.setResponseMessage(connection.getResponseMessage());
             response.setResponsePayload(json);
             return response;
@@ -188,6 +191,7 @@ public class ETRestConnection {
             String json = receiveResponse(connection);
             response.setRequestId(connection.getHeaderField("X-Mashery-Message-ID"));
             response.setResponseCode(connection.getResponseCode());
+            response.setHeaders(connection.getHeaderFields());
             response.setResponseMessage(connection.getResponseMessage());
             response.setResponsePayload(json);
             return response;
@@ -368,6 +372,7 @@ public class ETRestConnection {
     public class Response {
         private String requestId = null;
         private Integer responseCode = null;
+        private Map<String, List<String>> headers = null;
         private String responseMessage = null;
         private String responsePayload = null;
 
@@ -399,7 +404,21 @@ public class ETRestConnection {
             this.responseCode = responseCode;
         }
 
-        /** 
+        /**
+         * @return The response headers of the Response object.
+         */
+        public Map<String, List<String>> getHeaders() {
+            return headers;
+        }
+
+        /**
+         * @param headers The response headers of the Response object.
+         */
+        public void setHeaders(Map<String, List<String>> headers) {
+            this.headers = headers;
+        }
+
+        /**
         * @return The response message of the Response object.
         */    
         public String getResponseMessage() {
