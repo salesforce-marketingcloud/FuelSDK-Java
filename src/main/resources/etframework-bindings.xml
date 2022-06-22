@@ -20,5 +20,16 @@
     <jaxb:bindings node="//xsd:complexType[@name='Email']//xsd:element[@name='HTMLBody']">
       <jaxb:property name="htmlBody" />
     </jaxb:bindings>
+    <!-- Rename URL, URLID, URLIDLong properties so getter methods are getUrl, getUrlId and 
+         getUrlIdLong; otherwise, reflection doesn't work. -->
+    <jaxb:bindings node="//xsd:complexType[@name='ClickEvent']//xsd:element[@name='URL']">
+      <jaxb:property name="url" />
+    </jaxb:bindings>
+    <jaxb:bindings node="//xsd:complexType[@name='ClickEvent']//xsd:element[@name='URLID']">
+      <jaxb:property name="urlId" />
+    </jaxb:bindings>
+    <jaxb:bindings node="//xsd:complexType[@name='ClickEvent']//xsd:element[@name='URLIDLong']">
+      <jaxb:property name="urlIdLong" />
+    </jaxb:bindings>
   </jaxb:bindings>
 </jaxb:bindings>
