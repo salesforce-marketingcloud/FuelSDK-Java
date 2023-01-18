@@ -316,7 +316,8 @@ public class ETDataExtensionColumn extends ETSoapObject {
         LOCALE("Locale"),
         NUMBER("Number"),
         PHONE("Phone"),
-        TEXT("Text");
+        TEXT("Text"),
+        BASE_16_ENCRYPTED_EMAIL("Base16EncryptedEmail");
         private final String value;
 
         Type(String value) {
