@@ -750,7 +750,7 @@ public class ETDataExtension extends ETSoapObject {
         if (filter.getProperties().isEmpty()) {
             filter.setProperties(getColumnNames());
         }
-        return ETDataExtension.select(getClient(), "key=" + getKey(), page, pageSize, filter);
+        return ETDataExtension.select(getClient(), "key=\"" + getKey() + "\"", page, pageSize, filter);
     }
 
     /**
@@ -801,7 +801,7 @@ public class ETDataExtension extends ETSoapObject {
         if (f.getProperties().isEmpty()) {
             f.setProperties(getColumnNames());
         }
-        return ETDataExtension.select(getClient(), "key=" + getKey(), page, pageSize, f);
+        return ETDataExtension.select(getClient(), "key=\"" + getKey() + "\"", page, pageSize, f);
     }
 
     /**
